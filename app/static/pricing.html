@@ -124,7 +124,7 @@
     .tier-tagline { font-size: 0.84rem; color: #6B5E4F; min-height: 38px; margin-bottom: 16px; line-height: 1.5; }
     .tier-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
     .tier-price { font-family: 'Cormorant Garamond', serif; font-size: 2.7rem; font-weight: 700; color: var(--gold-dark, #8B6914) !important; }
-    .tier-strike { font-size: 1.15rem; color: #9C8F80; text-decoration: line-through; font-weight: 400; }
+    .tier-strike { display: none !important; font-size: 1.15rem; color: #9C8F80; font-weight: 400; }
     .tier-billing { font-size: 0.74rem; color: #7A6F62; margin-bottom: 22px; text-transform: uppercase; letter-spacing: 0.06em; }
 
     .tier-features { list-style: none; padding: 0; margin: 0 0 28px 0; flex: 1; display: flex; flex-direction: column; gap: 11px; font-size: 0.86rem; color: #523E28; line-height: 1.5; }
@@ -696,9 +696,9 @@
           sovereign: { name: 'Premium Numerology Report', price: '₹1,050', note: 'An extensive report bringing together the supported calculations, detailed interpretations, relevant comparisons and personalised recommendations available for the selected product.' }
         },
         USD: {
-          tripwire: { name: 'Basic Numerology Report', price: '$5.00', strike: '$15.00', note: 'A concise report presenting your calculated results, the method used and an initial interpretation of the key findings.' },
-          master:   { name: 'Advanced Numerology Report', price: '$14.00', strike: '$45.00', note: 'A more detailed report providing expanded interpretations, relevant number relationships and additional analysis supported by the selected product.' },
-          sovereign:{ name: 'Premium Numerology Report', price: '$28.00', strike: '$75.00', note: 'An extensive report bringing together the supported calculations, detailed interpretations, relevant comparisons and personalised recommendations available for the selected product.' }
+          tripwire: { name: 'Basic Numerology Report', price: '$5.00', note: 'A concise report presenting your calculated results, the method used and an initial interpretation of the key findings.' },
+          master:   { name: 'Advanced Numerology Report', price: '$14.00', note: 'A more detailed report providing expanded interpretations, relevant number relationships and additional analysis supported by the selected product.' },
+          sovereign:{ name: 'Premium Numerology Report', price: '$28.00', note: 'An extensive report bringing together the supported calculations, detailed interpretations, relevant comparisons and personalised recommendations available for the selected product.' }
         },
         featuresTripwire: [
           '3-Page Executive Life Matrix Brief',
@@ -732,9 +732,9 @@
           sovereign: { name: 'Premium Compatibility Report', price: '₹1,050', note: '32-Page Master Life & Marriage Synchronization' }
         },
         USD: {
-          tripwire: { name: 'Basic Compatibility Report', price: '$6.00', strike: '$15.00', note: '3-Page Quick Action Guide · Single Root 6' },
-          master:   { name: 'Advanced Compatibility Report', price: '$24.00', strike: '$60.00', note: '12-Page Complete Dual-System Synthesis' },
-          sovereign:{ name: 'Premium Compatibility Report', price: '$150.00', strike: '$330.00', note: '32-Page Master Life & Marriage Synchronization' }
+          tripwire: { name: 'Basic Compatibility Report', price: '$6.00', note: '3-Page Quick Action Guide · Single Root 6' },
+          master:   { name: 'Advanced Compatibility Report', price: '$24.00', note: '12-Page Complete Dual-System Synthesis' },
+          sovereign:{ name: 'Premium Compatibility Report', price: '$150.00', note: '32-Page Master Life & Marriage Synchronization' }
         },
         featuresTripwire: [
           'Thought-Action Relationship Plane Audit',
@@ -746,7 +746,7 @@
           'Full 12-Page Master Dossier with Gold Seals',
           '81-Pair Cosmic Synergy & Lo Shu 3×3 Grid',
           'Ishta Devata Sadhana & Consecrated Beej Mantra',
-          'Prescribed Crystal Attunement & Sacred Yantra',
+          '7-Layer Holistic Remedial Protocols & Sacred Yantra',
           'Annual Transit & Relationship Milestone Windows'
         ],
         featuresSovereign: [
@@ -767,9 +767,9 @@
           sovereign: { name: 'Premium Business Name Report', price: '₹1,050', note: '32-Page Full Commercial Architecture Blueprint' }
         },
         USD: {
-          tripwire: { name: 'Basic Business Name Report', price: '$5.00', strike: '$14.00', note: '3-Page Rapid Financial Action Brief' },
-          master:   { name: 'Advanced Business Name Report', price: '$23.00', strike: '$50.00', note: '12-Page Enterprise & Trade Synthesis' },
-          sovereign:{ name: 'Premium Business Name Report', price: '$140.00', strike: '$320.00', note: '32-Page Full Commercial Architecture Blueprint' }
+          tripwire: { name: 'Basic Business Name Report', price: '$5.00', note: '3-Page Rapid Financial Action Brief' },
+          master:   { name: 'Advanced Business Name Report', price: '$23.00', note: '12-Page Enterprise & Trade Synthesis' },
+          sovereign:{ name: 'Premium Business Name Report', price: '$140.00', note: '32-Page Full Commercial Architecture Blueprint' }
         },
         featuresTripwire: [
           'Missing Number 5 & Cash Drainage Audit',
@@ -802,9 +802,9 @@
           sovereign: { name: 'Premium Life Path Report', price: '₹1,050', note: '32-Page Executive Life Transformation' }
         },
         USD: {
-          tripwire: { name: 'Basic Life Path Report', price: '$10.00', strike: '$28.00', note: '3-Page Executive Elevation Brief' },
-          master:   { name: 'Advanced Life Path Report', price: '$28.00', strike: '$64.00', note: '12-Page Executive Dual-System Synthesis' },
-          sovereign:{ name: 'Premium Life Path Report', price: '$190.00', strike: '$370.00', note: '32-Page Executive Life Transformation' }
+          tripwire: { name: 'Basic Life Path Report', price: '$10.00', note: '3-Page Executive Elevation Brief' },
+          master:   { name: 'Advanced Life Path Report', price: '$28.00', note: '12-Page Executive Dual-System Synthesis' },
+          sovereign:{ name: 'Premium Life Path Report', price: '$190.00', note: '32-Page Executive Life Transformation' }
         },
         featuresTripwire: [
           'Executive Alignment & Office Politics Neutralization',
@@ -837,9 +837,9 @@
           sovereign: { name: 'Premium Relocation Numerology Report', price: '₹1,050', note: '32-Page Full International Living Roadmap' }
         },
         USD: {
-          tripwire: { name: 'Basic Relocation Numerology Report', price: '$5.00', strike: '$14.00', note: '3-Page Foreign Movement Timing Guide' },
-          master:   { name: 'Advanced Relocation Numerology Report', price: '$24.00', strike: '$60.00', note: '12-Page Overseas Relocation Synthesis' },
-          sovereign:{ name: 'Premium Relocation Numerology Report', price: '$150.00', strike: '$330.00', note: '32-Page Full International Living Roadmap' }
+          tripwire: { name: 'Basic Relocation Numerology Report', price: '$5.00', note: '3-Page Foreign Movement Timing Guide' },
+          master:   { name: 'Advanced Relocation Numerology Report', price: '$24.00', note: '12-Page Overseas Relocation Synthesis' },
+          sovereign:{ name: 'Premium Relocation Numerology Report', price: '$150.00', note: '32-Page Full International Living Roadmap' }
         },
         featuresTripwire: [
           'Favorable Visa Lodgment & Submission Windows',
@@ -872,9 +872,9 @@
           sovereign: { name: 'Premium Life Purpose Report', price: '₹1,050', note: '32-Page Full Spiritual Transformation' }
         },
         USD: {
-          tripwire: { name: 'Basic Life Purpose Report', price: '$12.00', strike: '$30.00', note: '3-Page Life Calling & Clarity Guide' },
-          master:   { name: 'Advanced Life Purpose Report', price: '$30.00', strike: '$75.00', note: '12-Page Soul Path & Sadhana Synthesis' },
-          sovereign:{ name: 'Premium Life Purpose Report', price: '$120.00', strike: '$210.00', note: '32-Page Full Spiritual Transformation' }
+          tripwire: { name: 'Basic Life Purpose Report', price: '$12.00', note: '3-Page Life Calling & Clarity Guide' },
+          master:   { name: 'Advanced Life Purpose Report', price: '$30.00', note: '12-Page Soul Path & Sadhana Synthesis' },
+          sovereign:{ name: 'Premium Life Purpose Report', price: '$120.00', note: '32-Page Full Spiritual Transformation' }
         },
         featuresTripwire: [
           'Life Purpose & Core Natal Mission Alignment',
@@ -907,9 +907,9 @@
           sovereign: { name: 'Charm AI Power Pack', price: '₹1,050', note: '35 Questions + Transit Timing Radar' }
         },
         USD: {
-          tripwire: { name: 'Charm AI Starter Pack', price: '$5.00', strike: '$14.00', note: '5 In-Depth Question Predictions · Root 5' },
-          master:   { name: 'Charm AI + 12-Page Dossier', price: '$24.00', strike: '$60.00', note: '12-Page Dossier + 25 AI Questions · Best Value' },
-          sovereign:{ name: 'Charm AI Power Pack', price: '$24.00', strike: '$48.00', note: '35 Questions + Transit Timing Radar' }
+          tripwire: { name: 'Charm AI Starter Pack', price: '$5.00', note: '5 In-Depth Question Predictions · Root 5' },
+          master:   { name: 'Charm AI + 12-Page Dossier', price: '$24.00', note: '12-Page Dossier + 25 AI Questions · Best Value' },
+          sovereign:{ name: 'Charm AI Power Pack', price: '$24.00', note: '35 Questions + Transit Timing Radar' }
         },
         featuresTripwire: [
           '5 Targeted Charm AI Predictions across any life area',
@@ -941,7 +941,7 @@
         },
         USD: {
           tripwire: { name: 'Personalised One-on-One Consultation', price: 'Enquiry', strike: '', note: 'Scope, fee and availability discussed personally' },
-          master:   { name: 'Corporate Brand Alignment (B2B)', price: '$140.00', strike: '$320.00', note: 'GST Entity, Brand Matrix & Co-Founder Synastry' },
+          master:   { name: 'Corporate Brand Alignment (B2B)', price: '$140.00', note: 'GST Entity, Brand Matrix & Co-Founder Synastry' },
           sovereign:{ name: 'Personalised Consultation Advisory', price: 'Enquiry', strike: '', note: 'Direct advisory with scope and fee discussed personally' }
         },
         featuresTripwire: [
