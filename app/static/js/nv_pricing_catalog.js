@@ -287,7 +287,7 @@
         "2 Complete 3-Page Basic PDF Reports",
         "Choose any two topics across Love, Money, Work, or Growth",
         "Full calculation breakdown and method explanations",
-        "Instant PDF download upon completion"
+        "Ready within minutes in your account dashboard"
       ],
       "active": false,
       "status": "paused_for_mvp"
@@ -499,7 +499,7 @@
         "2 Complete 3-Page Basic PDF Reports",
         "Choose any two topics across Love, Money, Work, or Growth",
         "Full calculation breakdown and method explanations",
-        "Instant PDF download upon completion"
+        "Ready within minutes in your account dashboard"
       ]
     },
     "discovery_bundle": {
@@ -622,7 +622,7 @@
       "2 Complete 3-Page Basic PDF Reports",
       "Choose any two topics across Love, Money, Work, or Growth",
       "Full calculation breakdown and practical remedies",
-      "Instant on-screen digital access in 10-15 seconds plus permanent PDF download"
+      "Ready within minutes in your account dashboard with archival PDF download"
     ]
   },
   "discovery_bundle": {
@@ -638,7 +638,7 @@
     "deliverables": [
       "3 Complete 12-Page Advanced Master Reports",
       "Choose any three topics from the entire catalogue",
-      "3-Year Macro Dasha Radar & 12 Personal Months for each topic",
+      "Enabled Numbers in Depth & Auspicious Initiation Windows for each topic",
       "7-Layer safe planetary remedy protocols for selected domains"
     ]
   },
@@ -655,7 +655,7 @@
     "deliverables": [
       "5 Complete 12-Page Advanced Master Reports",
       "Complete multi-domain lifetime clarity across Love, Career, Wealth & Family",
-      "3-Year Macro Dasha Radar & 12 Personal Months for each domain",
+      "Enabled Numbers in Depth & Auspicious Initiation Windows for each domain",
       "7-Layer safe planetary remedy protocols & auspicious timing windows"
     ]
   },

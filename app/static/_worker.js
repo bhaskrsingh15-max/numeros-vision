@@ -1156,6 +1156,10 @@ async function dispatchReportJob(jobId, env) {
     } else {
       generatorUrl = requireSecret(env, 'PDF_SERVICE_URL');
     }
+    generatorUrl = generatorUrl.replace(/\/+$/, '');
+    if (!generatorUrl.endsWith('/internal/v1/render-pdf')) {
+      generatorUrl = `${generatorUrl}/internal/v1/render-pdf`;
+    }
 
     const genResp = await fetch(generatorUrl, {
       method: 'POST',

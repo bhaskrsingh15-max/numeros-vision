@@ -42,10 +42,10 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "country": "India",
         "currency": "INR",
         "currency_symbol": "₹",
-        "price_name": "₹199",
-        "price_brand": "₹1,050",
-        "price_dasha": "₹510",
-        "price_consult": "₹1,050",
+        "price_name": "₹1,050",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Silicon Valley of India",
         "dominant_theme": "Tech Innovation, Startups & Venture Capital",
         "history_note": "Transitioning from Bangalore (29/11/2 Moon) to Bengaluru (33/6 Venus) transformed the city from a quiet garden retirement town into India's capital of innovation, luxury, and unicorn venture wealth.",
@@ -60,10 +60,10 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "country": "India",
         "currency": "INR",
         "currency_symbol": "₹",
-        "price_name": "₹199",
-        "price_brand": "₹1,050",
-        "price_dasha": "₹510",
-        "price_consult": "₹1,050",
+        "price_name": "₹1,050",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Financial Capital & Entertainment Hub",
         "dominant_theme": "BSE/NSE Capital Turnover, Media Scale & Maritime Trade",
         "history_note": "Under Bombay (17/8 Saturn), the city was shaped by heavy manual labor and textile mills. Shifting to Mumbai (18/9 Mars) unleashed explosive financial speed, Bollywood grandeur, and decisive executive momentum.",
@@ -78,10 +78,10 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "country": "India",
         "currency": "INR",
         "currency_symbol": "₹",
-        "price_name": "₹199",
-        "price_brand": "₹1,050",
-        "price_dasha": "₹510",
-        "price_consult": "₹1,050",
+        "price_name": "₹1,050",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Power Axis & Sovereign Governance",
         "dominant_theme": "Institutional Authority, Real Estate & Statecraft",
         "history_note": "Delhi operates on the dual axis of historic executive force (Delhi 18/9 Mars) and diplomatic policy (New Delhi 34/7 Ketu), serving as the epicenter of sovereign contracts and enterprise leadership.",
@@ -97,9 +97,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "AED",
         "currency_symbol": "AED",
         "price_name": "69 AED",
-        "price_brand": "321 AED",
-        "price_dasha": "141 AED",
-        "price_consult": "555 AED",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Global Trade, Wealth & Expat Gateway",
         "dominant_theme": "International Aviation, Luxury Real Estate & Tax-Free Capital",
         "history_note": "Chaldean Compound 14 (Mercury 5) governs movement of goods, rapid financial turnover, and global fortune, explaining Dubai's transformation into the world crossroads of commerce and investment.",
@@ -115,9 +115,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "GBP",
         "currency_symbol": "£",
         "price_name": "£15",
-        "price_brand": "£69",
-        "price_dasha": "£33",
-        "price_consult": "£114",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Global Banking & Legal Center",
         "dominant_theme": "Fintech Disruption, International Law & Legacy Capital",
         "history_note": "London adds to Compound 31, reducing to 4 (Rahu / Uranus). Number 31/4 governs global financial networks, legal frameworks, and unconventional innovative enterprises operating across time zones.",
@@ -133,9 +133,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Commercial & Media Epicenter",
         "dominant_theme": "Wall Street Markets, Venture Ambition & Media Dominance",
         "history_note": "New York totals Compound 28 (reducing to 1 Sun). Known as 'The Struggling Pioneer', 28 grants towering leadership and financial triumph, but tests individuals with high competitive friction and intense pace.",
@@ -151,9 +151,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "SGD",
         "currency_symbol": "S$",
         "price_name": "S$24",
-        "price_brand": "S$114",
-        "price_dasha": "S$42",
-        "price_consult": "S$195",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Asia-Pacific Wealth & Maritime Gateway",
         "dominant_theme": "Precision Banking, Clean Governance & Global Trade",
         "history_note": "Singapore totals Compound 35, reducing to 8 (Saturn). Saturn represents disciplined infrastructure, incorruptible law, precision shipping, and compounding institutional wealth.",
@@ -169,9 +169,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Global AI & Technology Epicenter",
         "dominant_theme": "AI Disruption, Venture Capital & Frontier Innovation",
         "history_note": "San Francisco totals Compound 42, reducing to 6 (Venus). Compound 42 is one of the most auspicious creative wealth numbers in Chaldean lore, fueling generative technology and global venture funds.",
@@ -187,9 +187,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "CAD",
         "currency_symbol": "C$",
         "price_name": "C$24",
-        "price_brand": "C$114",
-        "price_dasha": "C$42",
-        "price_consult": "C$195",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Financial Capital of Canada",
         "dominant_theme": "Banking, Tech Corridors & Global Talent Immigration",
         "history_note": "Toronto totals Compound 36, reducing to 9 (Mars). Mars grants strong commercial execution, rapid construction expansion, and energetic business turnover across the Bay Street financial district.",
@@ -205,9 +205,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Entertainment Capital & Creative Empire",
         "dominant_theme": "Media Production, Cultural Illumination & Global Branding",
         "history_note": "Los Angeles totals Compound 38, reducing to Master Number 11 (Moon/Vision). Known as the visionary artist frequency, Master 11 governs storytelling, Hollywood motion pictures, and iconic global personalities.",
@@ -223,9 +223,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Midwest Financial & Mercantile Powerhouse",
         "dominant_theme": "Commodity Exchanges (CME), Manufacturing & Architectural Scale",
         "history_note": "Chicago totals Compound 23, reducing to 5 (Mercury). Known as 'The Royal Star of the Lion', 23 is one of the most fortunate wealth numbers, bringing rapid commercial velocity and enduring resilience.",
@@ -241,9 +241,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Global Energy Capital & Aerospace Innovation",
         "dominant_theme": "Energy Infrastructure, Texas Medical Center & Aerospace",
         "history_note": "Houston totals Compound 37, reducing to 1 (Sun). Compound 37 is highly auspicious in Chaldean numerology, attracting fruitful partnerships, executive authority, and large-scale industrial enterprise.",
@@ -259,9 +259,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Silicon Desert & Sunbelt Growth Corridor",
         "dominant_theme": "Semiconductor Manufacturing, Real Estate & Aerospace",
         "history_note": "Phoenix totals Compound 36, reducing to 9 (Mars). Mars brings relentless physical drive, solar momentum, and rapid construction expansion across the Arizona desert basin.",
@@ -277,9 +277,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Historic Sovereign Core & Life Sciences Hub",
         "dominant_theme": "Cell & Gene Therapy (Cellicon Valley), Higher Education & Legal Institutions",
         "history_note": "Philadelphia totals Compound 45, reducing to 9 (Mars). Compound 45 combines foundation (4) and trade (5) into resolute executive power (9), fostering foundational American laws and medical breakthroughs.",
@@ -295,9 +295,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Military City USA & Cyber Logistics Axis",
         "dominant_theme": "Defense Contracting, Healthcare Systems & Cross-Border Logistics",
         "history_note": "San Antonio totals Compound 39, reducing to 3 (Jupiter). Jupiter brings broad expansion, institutional honor, education, and resilient civic growth across regional corridors.",
@@ -313,9 +313,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Biotech Coastal Axis & Pacific Defense Hub",
         "dominant_theme": "Genomics Innovation, Naval Defense & Clean Tech Enterprise",
         "history_note": "San Diego totals Compound 29, reducing to Master Number 11 (Moon/Vision). Number 29/11 unites maritime intuition with deep scientific foresight, creating a global cluster for life sciences and ocean technology.",
@@ -331,9 +331,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Private Equity, Telecom & Corporate Relocation Capital",
         "dominant_theme": "Asset Management, Fortune 500 Headquarters & Real Estate Wealth",
         "history_note": "Dallas totals Compound 15, reducing to 6 (Venus). Compound 15 is known as 'The Magician' in Chaldean lore, possessing hypnotic commercial magnetism, luxury attraction, and immense financial expansion.",
@@ -349,9 +349,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Global Startup Mecca & Creative Tech Capital",
         "dominant_theme": "Frontier Software, Hardware Scaling & Disruptive Culture",
         "history_note": "Austin totals Compound 20, reducing to 2 (Moon). Known as 'The Awakening' or 'The Call', 20 brings sudden evolutionary shifts, community convergence, and inspirational collective movements.",
@@ -367,9 +367,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Heart of Silicon Valley Engineering & Hardware",
         "dominant_theme": "Semiconductors, Cloud Infrastructure & Deep Tech Patents",
         "history_note": "San Jose totals Compound 25, reducing to 7 (Ketu / Neptune). Compound 25 is the quintessential number of intellectual depth, research mastery, and analytical breakthrough through empirical experience.",
@@ -385,9 +385,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Cloud Infrastructure, Global Commerce & Aerospace",
         "dominant_theme": "Enterprise Cloud (AWS/Azure), Global Logistics & Frontier Biotech",
         "history_note": "Seattle totals Compound 25, reducing to 7 (Ketu / Neptune). Governed by deep analytical strategy and maritime mystery, 25 creates intellectual monopolies that organize global commerce and cloud computing.",
@@ -403,9 +403,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Academic Royalty, Life Sciences & Venture Capital",
         "dominant_theme": "Biomedical R&D, MIT/Harvard Deep Tech Spinouts & Asset Management",
         "history_note": "Boston totals Compound 28, reducing to 1 (Sun). Known as 'The Pioneer', 28 is the vibration of institutional preeminence and historic leadership, generating enduring medical and scientific breakthroughs.",
@@ -421,9 +421,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Gateway to the Americas, Crypto & Luxury Real Estate",
         "dominant_theme": "Cross-Border Wealth, Fintech Disruption & International Hospitality",
         "history_note": "Miami totals Master Number 11 (Moon/Vision). Master 11 carries luminous magnetic charisma and high financial velocity, transforming Miami into a premier international destination for global capital and crypto finance.",
@@ -439,9 +439,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Fortune 500 Capital & Southeast Economic Engine",
         "dominant_theme": "Corporate Headquarters, Global Logistics & Entertainment Production",
         "history_note": "Atlanta totals Compound 19, reducing to 1 (Sun). Revered in Chaldean numerology as 'The Prince of Heaven', 19 is considered the most fortunate number for victory, wealth expansion, and institutional dominance.",
@@ -457,9 +457,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Aerospace, Frontier Energy & Mountain Enterprise",
         "dominant_theme": "Commercial Spaceflight, Telecom Scaling & Outdoor Tech",
         "history_note": "Denver totals Compound 27, reducing to 9 (Mars). Known as 'The Sceptre', 27 combines Moon (2) and Ketu (7) into resolute Mars (9) command, representing rugged courage and frontier technological leadership.",
@@ -475,9 +475,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Federal Power, Sovereign Law & Global Defense",
         "dominant_theme": "Government Contracting, National Security Tech & International Policy",
         "history_note": "Washington totals Compound 40, reducing to 4 (Rahu / Uranus). Number 40/4 governs global institutional systems, sovereign governance, defense frameworks, and multi-billion-dollar enterprise contracts.",
@@ -493,9 +493,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Global Entertainment, Hospitality & High-Stakes Capital",
         "dominant_theme": "Luxury Hospitality, World Gaming & High-Velocity Tourism",
         "history_note": "Las Vegas totals Compound 25, reducing to 7 (Ketu / Neptune). Compound 25 governs calculated risk, sensory spectacles, and deep psychological understanding, explaining its global gaming and entertainment magnetism.",
@@ -511,9 +511,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "USD",
         "currency_symbol": "$",
         "price_name": "$19",
-        "price_brand": "$96",
-        "price_dasha": "$39",
-        "price_consult": "$150",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "East Coast Commercial Banking & Fintech Hub",
         "dominant_theme": "Commercial Banking (BofA/Wells Fargo), Energy Innovation & Logistics",
         "history_note": "Charlotte totals Compound 34, reducing to 7 (Ketu / Neptune). Compound 34 represents structured institutional mastery and analytical banking foresight, making Charlotte the second-largest banking center in the United States.",
@@ -530,9 +530,9 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
         "currency": "AUD",
         "currency_symbol": "A$",
         "price_name": "A$24",
-        "price_brand": "A$114",
-        "price_dasha": "A$51",
-        "price_consult": "A$222",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Financial & Harbor Gateway of Oceania",
         "dominant_theme": "Harbor Commerce, Solar Expansion & Wealth Management",
         "history_note": "Sydney totals Compound 19, reducing to 1 (Sun). Known as 'The Prince of Heaven', 19 is one of the highest triumph vibrations in Chaldean numerology, attracting fortune, international acclaim, and radiant optimism.",
@@ -602,10 +602,10 @@ def get_city_profile(city_slug: str) -> Dict[str, Any]:
         "country": "Global",
         "currency": "INR",
         "currency_symbol": "₹",
-        "price_name": "₹199",
-        "price_brand": "₹1,050",
-        "price_dasha": "₹510",
-        "price_consult": "₹1,050",
+        "price_name": "₹1,050",
+        "price_brand": "Coming soon",
+        "price_dasha": "Coming soon",
+        "price_consult": "Coming soon",
         "tagline": "Metropolitan Consultation & Name Balancing Hub",
         "dominant_theme": f"Commercial Growth & {math['energy']}",
         "history_note": f"{title_name} totals Chaldean Compound {math['compound']}, reducing to {math['root']} ({math['planet']}). In classical numerology, this vibration governs {math['energy'].lower()}.",
@@ -634,7 +634,7 @@ def render_city_html(city: Dict[str, Any]) -> str:
                 "image": "https://numerosvision.com/logos/nv-logo-mark.svg",
                 "url": f"https://numerosvision.com/local/{slug}",
                 "telephone": "+91-80-4100-8888",
-                "priceRange": f"{city['price_name']} - {city['price_consult']}",
+                "priceRange": "₹199 - ₹1,050",
                 "address": {
                     "@type": "PostalAddress",
                     "addressLocality": name,
@@ -1161,32 +1161,30 @@ def render_city_html(city: Dict[str, Any]) -> str:
 
       <div class="prod-grid">
         <article class="prod-card">
-          <span class="prod-badge hot">Most Popular</span>
-          <h3>Personal Name Balancing</h3>
-          <p>Calibrate your personal and professional name to balance {name}'s {math['planet']} current. Fine-tune your signature baseline and mobile vibration to anchor wealth retention.</p>
+          <span class="prod-badge hot">32-Page Sovereign Pack</span>
+          <h3>Premium Sovereign Blueprint</h3>
+          <p>Includes full Chaldean &amp; Pythagorean name balancing to harmonize with {name}'s {math['planet']} current, signature baseline, mobile vibration, and 10-year timing radar.</p>
           <div class="prod-foot">
             <span class="prod-price">{city['price_name']}</span>
-            <a href="/pricing" class="prod-btn">Balance Name →</a>
+            <a href="/pricing" class="prod-btn">Get Blueprint →</a>
           </div>
         </article>
 
         <article class="prod-card">
-          <span class="prod-badge">Corporate & Commercial</span>
+          <span class="prod-badge">Corporate &amp; Commercial</span>
           <h3>Corporate Brand Alignment</h3>
           <p>For {name} enterprises, startups, and agencies: Align registered company names, trademark sound vibrations, and launch dates with auspicious wealth numbers.</p>
           <div class="prod-foot">
-            <span class="prod-price">{city['price_brand']}</span>
-            <a href="/tools/business-alignment" class="prod-btn">Audit Brand →</a>
+            <span class="prod-price">Coming soon</span>
           </div>
         </article>
 
         <article class="prod-card">
-          <span class="prod-badge">Career & Growth</span>
+          <span class="prod-badge">Career &amp; Growth</span>
           <h3>Executive Career Dasha</h3>
-          <p>Planning promotion, funding, or executive transitions? Discover exact 3-year planetary Dasha timing windows for maximum return on capital in {name}.</p>
+          <p>Dedicated standalone promotion, funding, and executive transition timing advisory in {name}.</p>
           <div class="prod-foot">
-            <span class="prod-price">{city['price_dasha']}</span>
-            <a href="/pricing" class="prod-btn">Get Blueprint →</a>
+            <span class="prod-price">Coming soon</span>
           </div>
         </article>
 
@@ -1195,8 +1193,7 @@ def render_city_html(city: Dict[str, Any]) -> str:
           <h3>Private 1-on-1 Session</h3>
           <p>Direct 45-minute confidential video session with a senior numerological master. Complete birth chart, Lo Shu grid remedies, and strategic counsel tailored to {name}.</p>
           <div class="prod-foot">
-            <span class="prod-price">{city['price_consult']}</span>
-            <a href="/pricing" class="prod-btn">Book Session →</a>
+            <span class="prod-price">Coming soon</span>
           </div>
         </article>
       </div>
@@ -1441,7 +1438,7 @@ def render_city_html(city: Dict[str, Any]) -> str:
           </div>
         </div>
         <a href="/pricing" style="display:inline-block; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; padding:9px 18px; border-radius:6px; text-decoration:none; font-weight:700; font-size:0.84rem;">
-          ANVEIL EVERY CHARM ✦ Explore Personalized Blueprint ({city['price_name']}) →
+          ANVEIL EVERY CHARM ✦ Get Premium Sovereign Blueprint ({city['price_name']}) →
         </a>
       `;
     }}

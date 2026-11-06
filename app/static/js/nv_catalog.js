@@ -67,7 +67,7 @@
           '2 Complete 3-Page Basic PDF Reports',
           'Choose any two topics across Love, Money, Work, or Growth',
           'Full calculation breakdown and practical remedies',
-          'Instant on-screen digital access in 10-15 seconds plus permanent PDF download'
+          'Ready within minutes in your account dashboard with archival PDF download'
         ]
       },
       discovery_bundle: {
@@ -84,8 +84,8 @@
         deliverables: [
           '3 Complete 12-Page Advanced Master Reports',
           'Choose any three topics from the entire catalogue',
-          '3-Year Macro Dasha Radar & 12 Personal Months for each topic',
-          '7-Layer safe planetary remedy protocols for selected domains'
+          'Enabled Numbers in Depth & Auspicious Initiation Windows for each topic',
+          'Vedic Gharelu remedies & Kua directional protocols for selected domains'
         ]
       },
       comprehensive_bundle: {
@@ -101,9 +101,9 @@
         pages: 12,
         deliverables: [
           '5 Complete 12-Page Advanced Master Reports',
-          'Complete multi-domain lifetime clarity across Love, Career, Wealth & Family',
-          '3-Year Macro Dasha Radar & 12 Personal Months for each domain',
-          '7-Layer safe planetary remedy protocols & auspicious timing windows'
+          'Complete multi-domain clarity across Love, Career, Wealth & Family',
+          'Enabled Numbers in Depth & Auspicious Initiation Windows for each domain',
+          'Vedic Gharelu remedies & Kua directional protocols'
         ]
       }
     },
@@ -179,7 +179,7 @@
   const NVCatalog = {
     currency: PACKS_JSON.currency,
     packsJson: PACKS_JSON,
-    deliveryPromise: 'Instant on-screen digital access in 10-15 seconds plus permanent PDF download and email delivery.',
+    deliveryPromise: 'Your personalized PDF report is ready within minutes in your account dashboard.',
     investmentNotice: '100% One-Time Investment · Zero Auto-Debit · Zero Recurring Fees',
     sacredRootNotice: 'Publication fees reduce to sacred harmonic root numbers (1, 3, 5, or 6) aligned with planetary vibrations.',
     freeAllowanceNotice: '3 free exploratory inquiries after verified sign-up.',

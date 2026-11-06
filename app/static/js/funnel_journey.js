@@ -322,7 +322,7 @@
                   </span>
                 </div>
                 <div style="font-size:0.72rem;color:var(--text-muted, #7A654D);margin-top:2px;">
-                  One-time purchase · Instant PDF download
+                  One-time purchase · Ready within minutes
                 </div>
               </div>
 

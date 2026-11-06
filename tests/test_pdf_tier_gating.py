@@ -34,10 +34,14 @@ BASIC_FORBIDDEN_KEYWORDS = [
 ]
 
 ADVANCED_FORBIDDEN_KEYWORDS = [
+    "Section 3: Missing Numbers Deep Void Diagnosis",
+    "Section 4: Name Balancing, Acoustic Spelling",
     "Section 11: The 81-Pair Archetype Matrix",
     "Section 12: Signature Architecture & Graphology Audit",
+    "Section 12: Dual-System Synthesis",
     "Section 13: 10-Year Macro Planetary Timing Radar",
     "Section 14: Karmic Debt Diagnosis",
+    "Section 15: Full Name Balancing",
     "Section 15: Rudraksha, Mantra & Spiritual Sadhana",
     "Section 16: Health, Vitality & Ayurvedic Constitution",
     "Section 17: Real Estate, Property & Vastu Blueprint",

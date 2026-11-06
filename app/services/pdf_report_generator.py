@@ -527,6 +527,7 @@ class NumerosPdfReportBuilder:
 
     def _normalize_topic(self, topic: str) -> str:
         t = (topic or "").lower().strip()
+        is_advanced_only = self.tier in ("advanced", "report_advanced", "master", "report_master")
         if any(k in t for k in ("present", "lo_shu", "loshu")):
             return "present_numbers"
         elif any(k in t for k in ("love", "romance", "marriage", "partner", "spouse", "companionship")):
@@ -535,6 +536,11 @@ class NumerosPdfReportBuilder:
             return "career_wealth"
         elif any(k in t for k in ("health", "vitality", "ayurved")):
             return "health_vitality"
+        elif is_advanced_only:
+            # In the 12-page Advanced Master Dossier (Rs 510), Enabled/Present Numbers in Depth
+            # is the default analytical focus; Missing Numbers in Depth and Full Name Balancing
+            # are exclusively in the 32-page Premium Sovereign Blueprint (Rs 1,050).
+            return "present_numbers"
         elif any(k in t for k in ("name", "spelling", "acoustic")):
             return "name_balancing"
         elif any(k in t for k in ("vastu", "spatial", "feng_shui", "property")):
@@ -1152,8 +1158,13 @@ class NumerosPdfReportBuilder:
             self.story.append(t_toc)
             self.story.append(Spacer(1, 14))
 
+        timing_clause = (
+            "10-year macro planetary timing radar"
+            if is_premium_tier
+            else "auspicious initiation windows and Personal Year cycles"
+        )
         exec_summary_p = Paragraph(
-            f"<b>NV THINK™ Executive Charter:</b> This dossier is prepared for <b>{d['seeker_name']}</b> (DOB: 28-11-1981). Combining Driver 1 (Sun), Conductor 4 (Rahu), and Chaldean 32/5 (Mercury), this report decodes your chart through the 7 stages of intelligence: from deterministic mathematical logic to behavioral observations, psychological motivations, and responsible 5-year Dasha timing.",
+            f"<b>NV THINK™ Executive Charter:</b> This dossier is prepared for <b>{d['seeker_name']}</b> (DOB: 28-11-1981). Combining Driver 1 (Sun), Conductor 4 (Rahu), and Chaldean 32/5 (Mercury), this report decodes your chart through the 7 stages of intelligence: from deterministic mathematical logic to behavioral observations, psychological motivations, and {timing_clause}.",
             s['CalloutText']
         )
         self.story.append(exec_summary_p)
