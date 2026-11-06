@@ -1422,7 +1422,8 @@
               localStorage.setItem('nv_user_invoices', JSON.stringify(invs));
             } catch (e) {}
 
-            window.location.href = `/dashboard/?paid=true&unlocked=${encodeURIComponent(planKey)}&payment_id=${encodeURIComponent(inv.payment_id || '')}&name=${encodeURIComponent(name)}&dob=${encodeURIComponent(dob)}&email=${encodeURIComponent(email)}`;
+            sessionStorage.setItem('nv_pending_subject', JSON.stringify({ name, dob, email, phone, planId: planKey }));
+            window.location.href = '/dashboard/';
           }
         });
       };

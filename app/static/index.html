@@ -4827,7 +4827,8 @@
             } catch (e) {}
 
             // Redirect cleanly to Dashboard with unlocked dossier and verified receipt ready!
-            window.location.href = `/dashboard/?paid=true&unlocked=${encodeURIComponent(planKey)}&payment_id=${encodeURIComponent(inv.payment_id || '')}&name=${encodeURIComponent(name)}&dob=${encodeURIComponent(dob)}&email=${encodeURIComponent(email)}`;
+            sessionStorage.setItem('nv_pending_subject', JSON.stringify({ name, dob, email, phone, planId: planKey }));
+            window.location.href = '/dashboard/';
           }
         });
         return;
@@ -4844,7 +4845,8 @@
           onSuccess: function(inv) {
             console.log('Payment verified, invoice generated:', inv.invoice_id);
             // Redirect cleanly to Dashboard with unlocked dossier and verified receipt ready!
-            window.location.href = `/dashboard/?paid=true&unlocked=${encodeURIComponent(planKey)}&payment_id=${encodeURIComponent(inv.payment_id || '')}&name=${encodeURIComponent(name)}&dob=${encodeURIComponent(dob)}&email=${encodeURIComponent(email)}`;
+            sessionStorage.setItem('nv_pending_subject', JSON.stringify({ name, dob, email, phone, planId: planKey }));
+            window.location.href = '/dashboard/';
           }
         });
         return;

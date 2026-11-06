@@ -196,7 +196,7 @@ async function runAuthTests() {
       },
       body: JSON.stringify({ credential: 'fake_unverified_token_12345' })
     });
-    const res = await worker.fetch(req, baseEnv);
+    const res = await worker.fetch(req, { ...baseEnv, GOOGLE_CLIENT_ID: 'test-google-client-id' });
     if (res.status !== 401) throw new Error(`Expected 401, got ${res.status}`);
   });
 

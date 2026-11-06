@@ -693,8 +693,8 @@
         const sessionToken = (data && data.session_token) ? data.session_token : ('gauth_' + Date.now());
         const goldenId = (data && data.golden_profile_id) ? data.golden_profile_id : ('NV-USR-' + Math.floor(100000 + Math.random() * 900000));
 
-        localStorage.setItem('nv_user_session', sessionToken);
-        localStorage.setItem('nv_golden_id', goldenId);
+        // session handled via HttpOnly __Host-nv_session cookie
+        
         if (data && data.profile) {
           const synced = syncGuestCalculationToProfile(data.profile);
           localStorage.setItem('nv_user_profile', JSON.stringify(synced));
@@ -735,9 +735,7 @@
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.detail || 'Google authentication failed.');
 
-        if (data.session_token) localStorage.setItem('nv_user_session', data.session_token);
-        if (data.golden_profile_id) localStorage.setItem('nv_golden_id', data.golden_profile_id);
-        if (data.profile) {
+                        if (data.profile) {
           const synced = syncGuestCalculationToProfile(data.profile);
           localStorage.setItem('nv_user_profile', JSON.stringify(synced));
           if (synced.name) localStorage.setItem('nv_user_name', synced.name);
@@ -791,9 +789,7 @@
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.detail || 'Invalid login credentials.');
 
-        if (data.session_token) localStorage.setItem('nv_user_session', data.session_token);
-        if (data.golden_profile_id) localStorage.setItem('nv_golden_id', data.golden_profile_id);
-        if (data.profile) {
+                        if (data.profile) {
           const synced = syncGuestCalculationToProfile(data.profile);
           localStorage.setItem('nv_user_profile', JSON.stringify(synced));
           if (synced.name) localStorage.setItem('nv_user_name', synced.name);
@@ -906,31 +902,18 @@
       }
 
       if (loggedInOnServer && data) {
-        if (data.session_token) localStorage.setItem('nv_user_session', data.session_token);
-        if (data.golden_profile_id) localStorage.setItem('nv_golden_id', data.golden_profile_id);
-        if (data.profile) {
+                        if (data.profile) {
           const synced = syncGuestCalculationToProfile(data.profile);
           localStorage.setItem('nv_user_profile', JSON.stringify(synced));
           if (synced.name) localStorage.setItem('nv_user_name', synced.name);
           if (synced.dob) localStorage.setItem('nv_user_dob', synced.dob);
         }
         window.location.href = data.redirect_url || '/dashboard/';
-      } else if (code === '123456' || code === window._activeLoginOtp || code.length === 6) {
-        // Fallback local session
-        localStorage.setItem('nv_user_session', 'nv_sess_' + Date.now());
-        localStorage.setItem('nv_golden_id', 'NV-USR-' + Math.floor(100000 + Math.random()*900000));
-        localStorage.setItem('nv_user_profile', JSON.stringify({
-          name: ident.split('@')[0],
-          email: ident.includes('@') ? ident : '',
-          phone: !ident.includes('@') ? ident : '',
-          tier: 'free'
-        }));
-        window.location.href = '/dashboard/';
       } else {
         btn.disabled = false;
-        btn.innerHTML = 'Verify OTP &amp; Sign In ✦';
+        btn.innerHTML = 'Verify OTP &amp; Sign In ➔';
         alertBox.style.cssText = 'display:block; background:#FDEDEC; color:#C0392B; border:1px solid #E6B0AA; padding:8px 12px; border-radius:8px; font-size:0.75rem; margin-bottom:10px;';
-        alertBox.textContent = 'Invalid verification code. Please enter 123456 or the code sent to your device.';
+        alertBox.textContent = (data && data.error) || 'Invalid verification code. Please request a new code or try again.';
       }
     }
   </script>

@@ -67,8 +67,360 @@ const memoryStore = {
   users: new Map(),
   sessions: new Map(),
   otpChallenges: new Map(),
-  creditLedger: new Map()
+  creditLedger: new Map(),
+  orders: new Map(),
+  payments: new Map(),
+  subjects: new Map(),
+  entitlements: new Map(),
+  auditLog: new Map(),
+  reportJobs: new Map(),
+  voucherLedger: new Map(),
+  refunds: new Map()
 };
+
+function base64UrlToUint8Array(base64Url) {
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const pad = base64.length % 4;
+  const padded = pad ? base64 + '='.repeat(4 - pad) : base64;
+  const binary = atob(padded);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
+
+let cachedGoogleJwks = null;
+let cachedGoogleJwksExpiresAt = 0;
+
+async function getGoogleJwks() {
+  const now = Date.now();
+  if (cachedGoogleJwks && now < cachedGoogleJwksExpiresAt) {
+    return cachedGoogleJwks;
+  }
+  const certsResp = await fetch('https://www.googleapis.com/oauth2/v3/certs');
+  if (!certsResp.ok) throw new Error('Failed to fetch Google JWKS public certificates');
+  const certs = await certsResp.json();
+  cachedGoogleJwks = certs;
+  cachedGoogleJwksExpiresAt = now + 3600 * 1000; // 1-hour cache
+  return certs;
+}
+
+function getSessionToken(request, env) {
+  const hostCookie = getCookie(request, '__Host-nv_session');
+  if (hostCookie) return hostCookie;
+  if (env && env.ENVIRONMENT === 'local') {
+    return getCookie(request, 'nv_session');
+  }
+  return null;
+}
+
+async function verifyGoogleIdToken(credential, env) {
+  if (!credential || typeof credential !== 'string') {
+    return { valid: false, error: 'Google ID token credential is required.' };
+  }
+  const parts = credential.split('.');
+  if (parts.length !== 3) {
+    return { valid: false, error: 'Malformed Google ID token.' };
+  }
+
+  let header = null;
+  let payload = null;
+  try {
+    header = JSON.parse(new TextDecoder().decode(base64UrlToUint8Array(parts[0])));
+    payload = JSON.parse(new TextDecoder().decode(base64UrlToUint8Array(parts[1])));
+  } catch (e) {
+    return { valid: false, error: 'Failed to decode Google ID token.' };
+  }
+
+  // 1. Issuer Verification
+  const validIssuers = ['accounts.google.com', 'https://accounts.google.com'];
+  if (!validIssuers.includes(payload.iss)) {
+    return { valid: false, error: 'Google ID token issuer invalid.' };
+  }
+
+  // 2. Audience Verification (Must match configured GOOGLE_CLIENT_ID)
+  if (!env.GOOGLE_CLIENT_ID) {
+    return { valid: false, error: 'GOOGLE_CLIENT_ID is not configured in server environment.' };
+  }
+  if (payload.aud !== env.GOOGLE_CLIENT_ID) {
+    return { valid: false, error: 'Google ID token audience mismatch.' };
+  }
+
+  // 3. Expiry Verification
+  const nowSec = Math.floor(Date.now() / 1000);
+  if (!payload.exp || payload.exp < nowSec) {
+    return { valid: false, error: 'Google ID token has expired.' };
+  }
+
+  // 4. Email Verified Check
+  if (payload.email_verified !== true && payload.email_verified !== 'true') {
+    return { valid: false, error: 'Google email is not verified.' };
+  }
+  if (!payload.email) {
+    return { valid: false, error: 'Google ID token missing email claim.' };
+  }
+
+  // 5. Signature Verification against Google's Public JWKS Keys
+  try {
+    const certs = await getGoogleJwks();
+    const jwk = certs.keys?.find(k => k.kid === header.kid);
+    if (!jwk) {
+      return { valid: false, error: `Google public key not found for kid: ${header.kid}` };
+    }
+
+    const key = await crypto.subtle.importKey(
+      'jwk',
+      jwk,
+      { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+      false,
+      ['verify']
+    );
+
+    const dataBytes = new TextEncoder().encode(`${parts[0]}.${parts[1]}`);
+    const sigBytes = base64UrlToUint8Array(parts[2]);
+
+    const isSigValid = await crypto.subtle.verify(
+      'RSASSA-PKCS1-v1_5',
+      key,
+      sigBytes,
+      dataBytes
+    );
+
+    if (!isSigValid) {
+      return { valid: false, error: 'Google ID token cryptographic signature verification failed.' };
+    }
+  } catch (err) {
+    console.error('[Google_JWKS_Verify_Error]', err);
+    return { valid: false, error: 'Google token signature verification failed: ' + err.message };
+  }
+
+  return { valid: true, payload };
+}
+
+async function authenticateUser(request, env) {
+  const sessionToken = getSessionToken(request, env);
+  if (!sessionToken) return null;
+  const tokenHash = await sha256Hex(sessionToken);
+  const now = Date.now();
+  if (env.DB) {
+    return await env.DB.prepare(
+      'SELECT s.id as session_id, s.expires_at, u.id as user_id, u.email, u.phone_hash, u.created_at FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token_hash = ? AND s.expires_at > ?'
+    ).bind(tokenHash, now).first();
+  } else {
+    const sess = memoryStore.sessions.get(tokenHash);
+    if (sess && sess.expires_at > now) {
+      return { user_id: sess.user_id, expires_at: sess.expires_at, email: sess.email || null };
+    }
+    return null;
+  }
+}
+
+const PACK_CATALOG = {
+  version: "2.1.0",
+  currency: "INR",
+  core_reports: {
+    report_basic: {
+      pack_id: "report_basic",
+      name: "Basic Report",
+      pages: 3,
+      price_inr: 199,
+      amount_paise: 19900,
+      status: "active"
+    },
+    report_advanced: {
+      pack_id: "report_advanced",
+      name: "Advanced Report",
+      pages: 12,
+      price_inr: 510,
+      amount_paise: 51000,
+      status: "active"
+    },
+    report_premium: {
+      pack_id: "report_premium",
+      name: "Premium Dossier",
+      pages: 32,
+      price_inr: 1050,
+      amount_paise: 105000,
+      status: "active"
+    }
+  },
+  charm_ai: {
+    charm_free: {
+      pack_id: "charm_free",
+      name: "Free Preview",
+      price_inr: 0,
+      amount_paise: 0,
+      questions_count: 3,
+      status: "active"
+    },
+    charm_single: {
+      pack_id: "charm_single",
+      name: "Charm AI Starter Pack",
+      price_inr: 199,
+      amount_paise: 19900,
+      questions_count: 5,
+      status: "active"
+    },
+    charm_multi: {
+      pack_id: "charm_multi",
+      name: "Multi-Reading Pack",
+      price_inr: 399,
+      amount_paise: 39900,
+      questions_count: 10,
+      status: "inactive"
+    },
+    charm_extended: {
+      pack_id: "charm_extended",
+      name: "Extended Reading Pack",
+      price_inr: 699,
+      amount_paise: 69900,
+      questions_count: 25,
+      status: "inactive"
+    }
+  },
+  bundles: {
+    starter_bundle: {
+      pack_id: "starter_bundle",
+      name: "Starter Bundle",
+      price_inr: 339,
+      amount_paise: 33900,
+      status: "inactive"
+    },
+    discovery_bundle: {
+      pack_id: "discovery_bundle",
+      name: "Discovery Bundle",
+      price_inr: 1299,
+      amount_paise: 129900,
+      status: "inactive"
+    },
+    comprehensive_bundle: {
+      pack_id: "comprehensive_bundle",
+      name: "Comprehensive Bundle",
+      price_inr: 1999,
+      amount_paise: 199900,
+      status: "inactive"
+    }
+  }
+};
+
+function getPackById(packId) {
+  if (!packId || typeof packId !== 'string') return null;
+  const p = packId.trim().toLowerCase();
+  if (PACK_CATALOG.core_reports[p]) return PACK_CATALOG.core_reports[p];
+  if (PACK_CATALOG.charm_ai[p]) return PACK_CATALOG.charm_ai[p];
+  if (PACK_CATALOG.bundles[p]) return PACK_CATALOG.bundles[p];
+  const aliases = {
+    'basic': 'report_basic',
+    'report_essential': 'report_basic',
+    'advanced': 'report_advanced',
+    'report_master': 'report_advanced',
+    'premium': 'report_premium',
+    'report_divine': 'report_premium',
+    'starter_5q': 'charm_single'
+  };
+  const resolved = aliases[p];
+  if (resolved) {
+    return PACK_CATALOG.core_reports[resolved] || PACK_CATALOG.charm_ai[resolved] || PACK_CATALOG.bundles[resolved];
+  }
+  return null;
+}
+
+/**
+ * SHARED IDEMPOTENT ORDER FULFILLMENT
+ * Used by both /api/v1/payments/verify and /api/v1/payments/webhook.
+ * Reads pack and subject strictly from D1 order. Fulfills even if status is EXPIRED (late UPI).
+ */
+async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now, source) {
+  if (order.status === 'PAID') {
+    return { alreadyFulfilled: true, orderId: order.id, packId: order.pack_id, subjectId: order.subject_id };
+  }
+
+  const pack = getPackById(order.pack_id);
+
+  if (env.DB) {
+    // 1. Update order status to PAID
+    await env.DB.prepare("UPDATE orders SET status = 'PAID', updated_at = ? WHERE id = ?").bind(now, order.id).run();
+
+    // 2. Record payment in payments table
+    const pmtId = 'pmt_' + now + '_' + getRandomHex(4);
+    await env.DB.prepare(
+      "INSERT INTO payments (id, order_id, rzp_payment_id, amount_paise, status, method, captured_at) VALUES (?, ?, ?, ?, 'CAPTURED', ?, ?)"
+    ).bind(pmtId, order.id, paymentId, amountPaise || order.amount_paise, method || 'online', now).run();
+
+    // 3. Grant entitlement strictly using pack and subject from D1 order
+    const entId = 'ent_' + now + '_' + getRandomHex(4);
+    await env.DB.prepare(
+      "INSERT OR IGNORE INTO entitlements (id, user_id, subject_id, pack_id, order_id, granted_at) VALUES (?, ?, ?, ?, ?, ?)"
+    ).bind(entId, order.user_id, order.subject_id, order.pack_id, order.id, now).run();
+
+    // 4. Credit ledger accounting for Charm AI packs
+    if (pack && pack.questions_count) {
+      const crdId = 'crd_' + now + '_' + getRandomHex(4);
+      const prevBalRow = await env.DB.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').bind(order.user_id).first();
+      const newBal = ((prevBalRow && prevBalRow.bal) ? prevBalRow.bal : 0) + pack.questions_count;
+      await env.DB.prepare(
+        'INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      ).bind(crdId, order.user_id, pack.questions_count, 'pack_purchase', 'order_' + order.id, newBal, now).run();
+    }
+
+    // 5. Voucher ledger allocation for bundles
+    if (pack && pack.voucher_allocation) {
+      for (let i = 0; i < (pack.voucher_allocation.basic_vouchers || 0); i++) {
+        await env.DB.prepare(
+          "INSERT INTO voucher_ledger (id, user_id, order_id, voucher_type, status, created_at) VALUES (?, ?, ?, 'basic_voucher', 'ACTIVE', ?)"
+        ).bind('vch_' + now + '_' + getRandomHex(4), order.user_id, order.id, now).run();
+      }
+      for (let i = 0; i < (pack.voucher_allocation.advanced_vouchers || 0); i++) {
+        await env.DB.prepare(
+          "INSERT INTO voucher_ledger (id, user_id, order_id, voucher_type, status, created_at) VALUES (?, ?, ?, 'advanced_voucher', 'ACTIVE', ?)"
+        ).bind('vch_' + now + '_' + getRandomHex(4), order.user_id, order.id, now).run();
+      }
+    }
+
+    // 6. Queue report generation job
+    const jobId = 'job_' + now + '_' + getRandomHex(4);
+    await env.DB.prepare(
+      "INSERT INTO report_jobs (id, user_id, subject_id, pack_id, order_id, status, created_at) VALUES (?, ?, ?, ?, ?, 'QUEUED', ?)"
+    ).bind(jobId, order.user_id, order.subject_id, order.pack_id, order.id, now).run();
+
+    // 7. Audit log recording
+    await env.DB.prepare(
+      "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'order_paid_fulfilled', 'orders', ?, ?, ?)"
+    ).bind('aud_' + now + '_' + getRandomHex(4), source || 'system', order.id, JSON.stringify({ paymentId, amountPaise: amountPaise || order.amount_paise, source }), now).run();
+  } else {
+    order.status = 'PAID';
+    order.updated_at = now;
+    memoryStore.payments.set(paymentId, { id: 'pmt_' + now, order_id: order.id, rzp_payment_id: paymentId, status: 'CAPTURED', captured_at: now });
+    memoryStore.entitlements.set(`${order.user_id}_${order.subject_id}_${order.pack_id}`, {
+      user_id: order.user_id,
+      subject_id: order.subject_id,
+      pack_id: order.pack_id,
+      order_id: order.id,
+      granted_at: now
+    });
+    if (pack && pack.questions_count) {
+      memoryStore.creditLedger.set('order_' + order.id, {
+        user_id: order.user_id,
+        delta: pack.questions_count,
+        reason: 'pack_purchase',
+        ref_id: 'order_' + order.id
+      });
+    }
+    const jobId = 'job_' + now + '_' + getRandomHex(4);
+    memoryStore.reportJobs.set(jobId, {
+      id: jobId,
+      user_id: order.user_id,
+      subject_id: order.subject_id,
+      pack_id: order.pack_id,
+      order_id: order.id,
+      status: 'QUEUED',
+      created_at: now
+    });
+  }
+
+  return { alreadyFulfilled: false, orderId: order.id, packId: order.pack_id, subjectId: order.subject_id };
+}
 
 /**
  * NUMEROS VISION — CLOUDFLARE PAGES EDGE WORKER
@@ -434,7 +786,7 @@ export default {
           status: 200,
           headers: {
             ...corsHeaders,
-            'Set-Cookie': `nv_session=${rawToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`
+            'Set-Cookie': `__Host-nv_session=${rawToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`
           }
         });
       } catch (err) {
@@ -454,49 +806,24 @@ export default {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
       try {
+        if (!env.GOOGLE_CLIENT_ID) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Google Identity authentication is not configured in this environment.'
+          }), { status: 503, headers: corsHeaders });
+        }
         const body = await request.json().catch(() => ({}));
         const credential = body.credential || body.id_token;
 
-        if (!credential) {
+        const verifyResult = await verifyGoogleIdToken(credential, env);
+        if (!verifyResult.valid) {
           return new Response(JSON.stringify({
             success: false,
-            error: 'Google ID token credential is required.'
-          }), { status: 400, headers: corsHeaders });
-        }
-
-        // Server-side verification via Google TokenInfo API
-        let tokenInfo = null;
-        try {
-          const gResp = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
-          if (gResp.ok) {
-            tokenInfo = await gResp.json();
-          }
-        } catch (gErr) {
-          console.error('[Google_TokenInfo_Error]', gErr);
-        }
-
-        if (!tokenInfo || !tokenInfo.email) {
-          return new Response(JSON.stringify({
-            success: false,
-            error: 'Invalid or expired Google ID token.'
+            error: verifyResult.error
           }), { status: 401, headers: corsHeaders });
         }
 
-        const validIssuers = ['accounts.google.com', 'https://accounts.google.com'];
-        if (!validIssuers.includes(tokenInfo.iss)) {
-          return new Response(JSON.stringify({
-            success: false,
-            error: 'Google ID token issuer invalid.'
-          }), { status: 401, headers: corsHeaders });
-        }
-
-        if (env.GOOGLE_CLIENT_ID && tokenInfo.aud !== env.GOOGLE_CLIENT_ID) {
-          return new Response(JSON.stringify({
-            success: false,
-            error: 'Google ID token audience mismatch.'
-          }), { status: 401, headers: corsHeaders });
-        }
-
+        const tokenInfo = verifyResult.payload;
         const verifiedEmail = tokenInfo.email.toLowerCase().trim();
         const verifiedName = tokenInfo.name || verifiedEmail.split('@')[0];
         const now = Date.now();
@@ -547,25 +874,25 @@ export default {
 
         return new Response(JSON.stringify({
           success: true,
-          authenticated: true,
+          verified: true,
           user: {
             id: userId,
             email: verifiedEmail,
-            name: verifiedName
+            has_phone: false
           },
           redirect_url: '/dashboard/'
         }), {
           status: 200,
           headers: {
             ...corsHeaders,
-            'Set-Cookie': `nv_session=${rawToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`
+            'Set-Cookie': `__Host-nv_session=${rawToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`
           }
         });
       } catch (err) {
-        return new Response(JSON.stringify({ success: false, error: err.message }), {
-          status: 500,
-          headers: corsHeaders
-        });
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Google authentication processing error: ' + err.message
+        }), { status: 500, headers: corsHeaders });
       }
     }
 
@@ -897,306 +1224,753 @@ export default {
       }
     }
 
-    // 7. ROUTE: PAYMENTS API (/api/v1/payments/*) — RAZORPAY STANDARD INTEGRATION
-    if ((url.pathname === '/api/create-order' || url.pathname === '/api/v1/payments/create-order') && request.method === 'POST') {
+    // 7. ROUTE: PAYMENTS API (/api/v1/payments/*) - SERVER AUTHORITY & D1 SETTLEMENT
+
+    // 7a. ROUTE: CREATE ORDER (/api/v1/payments/create-order & legacy /api/create-order)
+    if ((url.pathname === '/api/v1/payments/create-order' || url.pathname === '/api/create-order') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
-      const body = await request.json().catch(() => ({}));
-      const plan = body.plan || body.plan_id || 'report_advanced';
-      const MVP_PRICES = {
-        'report_basic': 199,
-        'report_essential': 199,
-        'report_advanced': 510,
-        'report_master': 510,
-        'report_premium': 1050,
-        'report_divine': 1050,
-        'charm_single': 199,
-        'charm_starter': 199,
-        'starter_5q': 199
-      };
-      const amountInr = MVP_PRICES[plan] || parseInt(body.amount_inr || body.amount, 10) || 510;
-      const amountPaise = amountInr * 100;
-      const custName = (body.customer_name || 'Valued Seeker').trim();
-      const custEmail = (body.customer_email || '').trim().toLowerCase();
-      const custPhone = (body.customer_phone || '').trim();
-      const lockedDob = (body.locked_dob || body.dob || '').trim();
-      const subjectHash = (body.subject_hash || (custName + '_' + lockedDob).toLowerCase().replace(/[^a-z0-9]/g, '_'));
 
-      // Razorpay Credentials strictly loaded from Cloudflare environment secrets
+      if (url.pathname === '/api/create-order') {
+        corsHeaders['X-API-Deprecated'] = '/api/create-order is retired. Use /api/v1/payments/create-order';
+      }
+
+      // 1. Session verification
+      const user = await authenticateUser(request, env);
+      if (!user) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Authentication required. Please sign in to initiate checkout.'
+        }), { status: 401, headers: corsHeaders });
+      }
+
+      const body = await request.json().catch(() => ({}));
+      const packId = (body.packId || body.pack_id || body.plan || body.plan_id || '').trim();
+      let subjectId = (body.subjectId || body.subject_id || '').trim();
+      const customerName = (body.name || body.customer_name || 'Valued Seeker').trim();
+      const customerDob = (body.dob || body.locked_dob || '').trim();
+      const now = Date.now();
+
+      // 2. Deterministic pack lookup
+      const pack = getPackById(packId);
+      if (!pack || pack.status !== 'active') {
+        return new Response(JSON.stringify({
+          success: false,
+          error: `Invalid or inactive pack "${packId}".`
+        }), { status: 400, headers: corsHeaders });
+      }
+
+      const amountPaise = pack.amount_paise;
+      const currency = 'INR';
+
+      // 3. Subject verification or creation
+      if (subjectId) {
+        let subject = null;
+        if (env.DB) {
+          subject = await env.DB.prepare('SELECT id, user_id, name, created_at FROM subjects WHERE id = ? AND user_id = ?').bind(subjectId, user.user_id).first();
+        } else {
+          subject = memoryStore.subjects.get(subjectId);
+          if (subject && subject.user_id !== user.user_id) subject = null;
+        }
+        if (!subject) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Subject not found or does not belong to authenticated user.'
+          }), { status: 403, headers: corsHeaders });
+        }
+      } else if (customerDob) {
+        const dobHash = await sha256Hex(customerDob);
+        if (env.DB) {
+          let subject = await env.DB.prepare('SELECT id FROM subjects WHERE user_id = ? AND dob_hash = ?').bind(user.user_id, dobHash).first();
+          if (!subject) {
+            subjectId = 'sbj_' + now + '_' + getRandomHex(4);
+            await env.DB.prepare(
+              'INSERT INTO subjects (id, user_id, name, dob_hash, dob_enc, created_at) VALUES (?, ?, ?, ?, ?, ?)'
+            ).bind(subjectId, user.user_id, customerName, dobHash, customerDob, now).run();
+          } else {
+            subjectId = subject.id;
+          }
+        } else {
+          subjectId = 'sbj_' + now + '_' + getRandomHex(4);
+          memoryStore.subjects.set(subjectId, { id: subjectId, user_id: user.user_id, name: customerName, dob_hash: dobHash, created_at: now });
+        }
+      } else {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Either subjectId or customer Date of Birth (dob) is required.'
+        }), { status: 400, headers: corsHeaders });
+      }
+
+      // 4. Pending order expiration check (~30 minutes window)
+      const THIRTY_MINUTES_MS = 30 * 60 * 1000;
+      let existingOrder = null;
+
+      if (env.DB) {
+        existingOrder = await env.DB.prepare(
+          "SELECT id, rzp_order_id, status, created_at FROM orders WHERE user_id = ? AND subject_id = ? AND pack_id = ? AND status IN ('CREATED', 'pending') ORDER BY created_at DESC LIMIT 1"
+        ).bind(user.user_id, subjectId, pack.pack_id).first();
+
+        if (existingOrder) {
+          const ageMs = now - existingOrder.created_at;
+          if (ageMs > THIRTY_MINUTES_MS) {
+            await env.DB.prepare("UPDATE orders SET status = 'EXPIRED', updated_at = ? WHERE id = ?").bind(now, existingOrder.id).run();
+            await env.DB.prepare(
+              "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'order_expired', 'orders', ?, ?, ?)"
+            ).bind('aud_' + now + '_' + getRandomHex(4), user.user_id, existingOrder.id, JSON.stringify({ reason: 'auto_expired_30m', ageMs }), now).run();
+            existingOrder = null;
+          }
+        }
+      } else {
+        for (const ord of memoryStore.orders.values()) {
+          if (ord.user_id === user.user_id && ord.subject_id === subjectId && ord.pack_id === pack.pack_id && (ord.status === 'CREATED' || ord.status === 'pending')) {
+            const ageMs = now - ord.created_at;
+            if (ageMs > THIRTY_MINUTES_MS) {
+              ord.status = 'EXPIRED';
+            } else {
+              existingOrder = ord;
+            }
+          }
+        }
+      }
+
+      // 5. Razorpay Credentials check
       const rzpKeyId = env.RAZORPAY_KEY_ID;
       const rzpSecret = env.RAZORPAY_KEY_SECRET;
 
       if (!rzpKeyId || !rzpSecret || rzpKeyId.includes('REPLACE_ME') || rzpKeyId.includes('PLACEHOLDER')) {
         return new Response(JSON.stringify({
-          status: 'error',
+          success: false,
           code: 'GATEWAY_CONFIG_MISSING',
-          message: 'Payment gateway credentials are not configured in the server environment.'
+          error: 'Payment gateway credentials are not configured in the server environment.'
         }), { status: 500, headers: corsHeaders });
       }
 
-      let orderId = null;
+      let internalOrderId = 'ord_' + now + '_' + getRandomHex(4);
+      let rzpOrderId = null;
 
-      try {
-        const authHeader = 'Basic ' + btoa(`${rzpKeyId}:${rzpSecret}`);
-        const rzpReq = await fetch('https://api.razorpay.com/v1/orders', {
-          method: 'POST',
-          headers: {
-            'Authorization': authHeader,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            amount: amountPaise,
-            currency: 'INR',
-            receipt: `nv_rcpt_${Date.now()}`,
-            notes: {
-              plan: plan,
-              name: custName,
-              email: custEmail,
-              phone: custPhone,
-              locked_dob: lockedDob,
-              subject_hash: subjectHash
-            }
-          })
-        });
+      if (existingOrder && existingOrder.rzp_order_id) {
+        internalOrderId = existingOrder.id;
+        rzpOrderId = existingOrder.rzp_order_id;
+      } else {
+        try {
+          const authHeader = 'Basic ' + btoa(`${rzpKeyId.trim()}:${rzpSecret.trim()}`);
+          const rzpReq = await fetch('https://api.razorpay.com/v1/orders', {
+            method: 'POST',
+            headers: {
+              'Authorization': authHeader,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              amount: amountPaise,
+              currency: 'INR',
+              receipt: `nv_rcpt_${internalOrderId}`,
+              notes: {
+                pack_id: pack.pack_id,
+                user_id: user.user_id,
+                subject_id: subjectId
+              }
+            })
+          });
 
-        if (rzpReq.ok) {
-          const rzpData = await rzpReq.json();
-          if (rzpData.id) {
-            orderId = rzpData.id;
+          if (rzpReq.ok) {
+            const rzpData = await rzpReq.json();
+            rzpOrderId = rzpData.id;
+          } else {
+            const errData = await rzpReq.json().catch(() => ({}));
+            return new Response(JSON.stringify({
+              success: false,
+              error: errData?.error?.description || 'Failed to create order with Razorpay.',
+              details: errData
+            }), { status: rzpReq.status || 400, headers: corsHeaders });
           }
-        } else {
-          const errData = await rzpReq.json().catch(() => ({}));
-          const errDesc = (errData && errData.error && errData.error.description) || 'Razorpay order creation failed';
-          const isAuth = rzpReq.status === 401 || errDesc.toLowerCase().includes('auth');
+        } catch (apiErr) {
           return new Response(JSON.stringify({
-            status: 'error',
-            code: isAuth ? 'RAZORPAY_AUTH_FAILED' : 'RAZORPAY_ORDER_FAILED',
-            message: isAuth 
-              ? 'Razorpay API authentication failed (HTTP 401). Please check server RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET.' 
-              : errDesc,
-            details: errData
-          }), { status: rzpReq.status || 400, headers: corsHeaders });
+            success: false,
+            error: 'Unable to reach payment gateway to create order.'
+          }), { status: 502, headers: corsHeaders });
         }
-      } catch (apiErr) {
-        return new Response(JSON.stringify({
-          status: 'error',
-          code: 'GATEWAY_NETWORK_ERROR',
-          message: 'Unable to reach payment gateway to create order.'
-        }), { status: 502, headers: corsHeaders });
-      }
 
-      if (!orderId) {
-        return new Response(JSON.stringify({
-          status: 'error',
-          code: 'ORDER_CREATION_FAILED',
-          message: 'Failed to obtain an authentic order ID from the payment gateway.'
-        }), { status: 502, headers: corsHeaders });
+        if (env.DB) {
+          await env.DB.prepare(
+            'INSERT INTO orders (id, user_id, subject_id, pack_id, amount_paise, currency, rzp_order_id, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+          ).bind(internalOrderId, user.user_id, subjectId, pack.pack_id, amountPaise, currency, rzpOrderId, 'CREATED', now, now).run();
+
+          await env.DB.prepare(
+            "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'order_created', 'orders', ?, ?, ?)"
+          ).bind('aud_' + now + '_' + getRandomHex(4), user.user_id, internalOrderId, JSON.stringify({ rzpOrderId, packId: pack.pack_id, amountPaise }), now).run();
+        } else {
+          memoryStore.orders.set(internalOrderId, {
+            id: internalOrderId,
+            user_id: user.user_id,
+            subject_id: subjectId,
+            pack_id: pack.pack_id,
+            amount_paise: amountPaise,
+            currency,
+            rzp_order_id: rzpOrderId,
+            status: 'CREATED',
+            created_at: now,
+            updated_at: now
+          });
+        }
       }
 
       return new Response(JSON.stringify({
-        status: 'created',
-        order_id: orderId,
+        success: true,
+        orderId: internalOrderId,
+        rzpOrderId: rzpOrderId,
         amount: amountPaise,
-        amount_inr: amountInr,
         currency: 'INR',
-        key_id: rzpKeyId,
-        key: rzpKeyId,
-        plan: plan
+        keyId: rzpKeyId,
+        pack: {
+          pack_id: pack.pack_id,
+          name: pack.name,
+          price_inr: pack.price_inr
+        },
+        subjectId: subjectId
       }), { status: 200, headers: corsHeaders });
     }
 
-    if ((url.pathname === '/api/verify-payment' || url.pathname === '/api/v1/payments/verify' || url.pathname === '/api/v1/payments/verify-payment') && request.method === 'POST') {
+    // 7b. ROUTE: VERIFY PAYMENT (/api/v1/payments/verify & legacy /api/verify-payment)
+    if ((url.pathname === '/api/v1/payments/verify' || url.pathname === '/api/verify-payment' || url.pathname === '/api/v1/payments/verify-payment') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
+
+      if (url.pathname === '/api/verify-payment') {
+        corsHeaders['X-API-Deprecated'] = '/api/verify-payment is retired. Use /api/v1/payments/verify';
+      }
+
       const body = await request.json().catch(() => ({}));
-      const orderId = body.razorpay_order_id || ('order_' + Date.now());
-      const paymentId = body.razorpay_payment_id || ('pay_' + Date.now());
-      const signature = body.razorpay_signature || '';
-      const plan = body.plan || body.plan_id || 'report_master';
-      const email = (body.email || body.customer_email || '').trim().toLowerCase();
-      const name = (body.customer_name || 'Valued Seeker').trim();
-      const phone = (body.customer_phone || '').trim();
-      const lockedDob = (body.locked_dob || body.dob || '').trim();
-      const subjectHash = (body.subject_hash || (name + '_' + lockedDob).toLowerCase().replace(/[^a-z0-9]/g, '_'));
+      const rzpOrderId = (body.razorpay_order_id || body.order_id || '').trim();
+      const rzpPaymentId = (body.razorpay_payment_id || body.payment_id || '').trim();
+      const signature = (body.razorpay_signature || body.signature || '').trim().toLowerCase();
 
       const rzpSecret = env.RAZORPAY_KEY_SECRET;
       if (!rzpSecret) {
         return new Response(JSON.stringify({
-          status: 'error',
-          message: 'Payment gateway secret not configured on server.'
+          success: false,
+          error: 'Payment gateway secret not configured on server.'
         }), { status: 500, headers: corsHeaders });
       }
 
-      let isSigValid = false;
-      let genSig = "";
-      const cleanOrderId = (orderId || "").trim();
-      const cleanPaymentId = (paymentId || "").trim();
-      const cleanSig = (signature || "").trim().toLowerCase();
-
-      if (cleanSig && cleanOrderId && cleanPaymentId) {
-        try {
-          const encoder = new TextEncoder();
-          const keyData = encoder.encode(rzpSecret.trim());
-          const msgData = encoder.encode(`${cleanOrderId}|${cleanPaymentId}`);
-          const cryptoKey = await crypto.subtle.importKey(
-            "raw",
-            keyData,
-            { name: "HMAC", hash: "SHA-256" },
-            false,
-            ["sign"]
-          );
-          const sigBuffer = await crypto.subtle.sign("HMAC", cryptoKey, msgData);
-          const hashArray = Array.from(new Uint8Array(sigBuffer));
-          genSig = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-          if (timingSafeEqual(genSig.toLowerCase(), cleanSig)) {
-            isSigValid = true;
-          }
-        } catch (e) {
-          console.error("[HMAC_Verification_Error]", e);
-        }
-      }
-
-      // Mandatory check: Signature mismatch fails in every environment (zero bypass)
-      if (!isSigValid) {
-        const keyLast4 = (env.RAZORPAY_KEY_ID || "").trim().slice(-4);
-        console.warn(`[PAYMENT_VERIFY_DIAGNOSTIC] Key ID tail: ***${keyLast4} | Expected sig length: ${genSig.length} | Received sig length: ${cleanSig.length}`);
+      if (!rzpOrderId || !rzpPaymentId || !signature) {
         return new Response(JSON.stringify({
-          status: "error",
-          message: "Invalid payment signature. Verification failed."
+          success: false,
+          error: 'Missing required payment verification parameters (order_id, payment_id, signature).'
         }), { status: 400, headers: corsHeaders });
       }
 
-      const currentYear = new Date().getFullYear();
-      const invId = 'NV-REC-' + currentYear + '-' + Math.floor(100000 + Math.random() * 900000);
-      const amount = (plan === 'report_essential' || plan === 'starter_5q') ? 199 : ((plan === 'report_master' || plan === 'report_advanced') ? 510 : 1050);
-      const reportUrl = plan.includes('consult') ? '/consultation/' : '/sample-report/?tier=master';
+      // HMAC-SHA256 signature verification in constant time
+      let isSigValid = false;
+      let genSig = '';
+      try {
+        const encoder = new TextEncoder();
+        const keyData = encoder.encode(rzpSecret.trim());
+        const msgData = encoder.encode(`${rzpOrderId}|${rzpPaymentId}`);
+        const cryptoKey = await crypto.subtle.importKey(
+          'raw',
+          keyData,
+          { name: 'HMAC', hash: 'SHA-256' },
+          false,
+          ['sign']
+        );
+        const sigBuffer = await crypto.subtle.sign('HMAC', cryptoKey, msgData);
+        genSig = Array.from(new Uint8Array(sigBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        if (timingSafeEqual(genSig.toLowerCase(), signature)) {
+          isSigValid = true;
+        }
+      } catch (e) {
+        console.error('[HMAC_Verification_Error]', e);
+      }
 
-      // Dispatch payment notification email to support@numerosvision.com
-      const web3Key = env.WEB3FORMS_ACCESS_KEY;
-      if (web3Key) {
-        try {
-          await fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              access_key: web3Key,
-              subject: `✦ Verified Payment & Receipt [${invId}]: ₹${amount} from ${name}`,
-              from_name: 'Numeros Vision Payment Desk',
-              to: 'support@numerosvision.com',
-              invoice_id: invId,
-              customer_name: name,
-              customer_email: email,
-              customer_phone: phone,
-              plan_id: plan,
-              amount: `₹${amount}`,
-              order_id: orderId,
-              payment_id: paymentId,
-              unlocked_report_url: `https://numerosvision.com${reportUrl}`
-            })
-          });
-        } catch (e) {}
+      if (!isSigValid) {
+        const keyLast4 = (env.RAZORPAY_KEY_ID || '').trim().slice(-4);
+        console.warn(`[PAYMENT_VERIFY_DIAGNOSTIC] Key ID tail: ***${keyLast4} | Expected sig length: ${genSig.length} | Received sig length: ${signature.length}`);
+        return new Response(JSON.stringify({
+          status: 'error',
+          success: false,
+          error: 'Invalid payment signature. Verification failed.'
+        }), { status: 400, headers: corsHeaders });
+      }
+
+      // Find order in D1
+      const now = Date.now();
+      let order = null;
+      if (env.DB) {
+        order = await env.DB.prepare('SELECT * FROM orders WHERE rzp_order_id = ?').bind(rzpOrderId).first();
+      } else {
+        for (const ord of memoryStore.orders.values()) {
+          if (ord.rzp_order_id === rzpOrderId) { order = ord; break; }
+        }
+      }
+
+      if (order) {
+        await fulfillPaidOrder(order, rzpPaymentId, order.amount_paise, 'online', env, now, 'checkout_verify');
       }
 
       return new Response(JSON.stringify({
         status: 'verified',
-        invoice_id: invId,
-        payment_id: paymentId,
-        order_id: orderId,
-        premium_token: 'tok_' + Math.random().toString(36).substring(2),
-        plan: plan,
-        locked_dob: lockedDob,
-        subject_hash: subjectHash,
-        report_url: reportUrl,
-        unlocked: true
+        verified: true,
+        success: true,
+        orderId: order ? order.id : null,
+        packId: order ? order.pack_id : null,
+        subjectId: order ? order.subject_id : null,
+        reportStatus: 'preparing',
+        message: 'Your payment has been verified. Your personalized report is being prepared.'
       }), { status: 200, headers: corsHeaders });
     }
 
-    // 7b. ROUTE: RAZORPAY WEBHOOK (/api/v1/payments/webhook) — EDGE WEBHOOK VERIFICATION
+    // 7c. ROUTE: PAYMENT STATUS POLLING (/api/v1/payments/status)
+    if (url.pathname === '/api/v1/payments/status' && request.method === 'GET') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      };
+
+      const orderId = (url.searchParams.get('orderId') || url.searchParams.get('order_id') || '').trim();
+      const rzpOrderId = (url.searchParams.get('rzpOrderId') || url.searchParams.get('rzp_order_id') || '').trim();
+
+      if (!orderId && !rzpOrderId) {
+        return new Response(JSON.stringify({
+          error: 'Either orderId or rzpOrderId parameter is required.'
+        }), { status: 400, headers: corsHeaders });
+      }
+
+      let order = null;
+      if (env.DB) {
+        if (orderId) {
+          order = await env.DB.prepare('SELECT * FROM orders WHERE id = ?').bind(orderId).first();
+        } else {
+          order = await env.DB.prepare('SELECT * FROM orders WHERE rzp_order_id = ?').bind(rzpOrderId).first();
+        }
+      } else {
+        for (const ord of memoryStore.orders.values()) {
+          if ((orderId && ord.id === orderId) || (rzpOrderId && ord.rzp_order_id === rzpOrderId)) {
+            order = ord;
+            break;
+          }
+        }
+      }
+
+      if (!order) {
+        return new Response(JSON.stringify({
+          error: 'Order not found.'
+        }), { status: 404, headers: corsHeaders });
+      }
+
+      const now = Date.now();
+      const THIRTY_MINUTES_MS = 30 * 60 * 1000;
+
+      if (order.status === 'PAID') {
+        return new Response(JSON.stringify({
+          orderId: order.id,
+          rzpOrderId: order.rzp_order_id,
+          status: 'paid',
+          packId: order.pack_id,
+          subjectId: order.subject_id,
+          reportStatus: 'preparing',
+          message: 'Your personalized report is being prepared. It will be available shortly.'
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      if ((order.status === 'CREATED' || order.status === 'pending') && (now - order.created_at > THIRTY_MINUTES_MS)) {
+        if (env.DB) {
+          await env.DB.prepare("UPDATE orders SET status = 'EXPIRED', updated_at = ? WHERE id = ?").bind(now, order.id).run();
+        } else {
+          order.status = 'EXPIRED';
+        }
+        return new Response(JSON.stringify({
+          orderId: order.id,
+          status: 'expired',
+          message: 'Order has expired after 30 minutes. Please retry.'
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      return new Response(JSON.stringify({
+        orderId: order.id,
+        rzpOrderId: order.rzp_order_id,
+        status: order.status.toLowerCase(),
+        packId: order.pack_id
+      }), { status: 200, headers: corsHeaders });
+    }
+
+    // 7d. ROUTE: ONE-TIME DOB CORRECTION (/api/v1/subjects/correct-dob)
+    if (url.pathname === '/api/v1/subjects/correct-dob' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      };
+
+      const user = await authenticateUser(request, env);
+      if (!user) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Authentication required.'
+        }), { status: 401, headers: corsHeaders });
+      }
+
+      const body = await request.json().catch(() => ({}));
+      const subjectId = (body.subjectId || body.subject_id || '').trim();
+      const newDob = (body.newDob || body.dob || '').trim();
+      const newName = (body.newName || body.name || '').trim();
+
+      if (!subjectId || !newDob) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'subjectId and newDob are required.'
+        }), { status: 400, headers: corsHeaders });
+      }
+
+      let subject = null;
+      if (env.DB) {
+        subject = await env.DB.prepare('SELECT id, user_id, name, dob_hash, created_at FROM subjects WHERE id = ? AND user_id = ?').bind(subjectId, user.user_id).first();
+      } else {
+        subject = memoryStore.subjects.get(subjectId);
+        if (subject && subject.user_id !== user.user_id) subject = null;
+      }
+
+      if (!subject) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Subject not found or does not belong to user.'
+        }), { status: 404, headers: corsHeaders });
+      }
+
+      const now = Date.now();
+      const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
+      if (now - subject.created_at > TWENTY_FOUR_HOURS_MS) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'DOB correction window has expired. Corrections are only permitted within 24 hours of creation.'
+        }), { status: 400, headers: corsHeaders });
+      }
+
+      // Check for buy-download-correct-download abuse: Block if report is already COMPLETED or DOWNLOADED
+      let completedReport = null;
+      if (env.DB) {
+        completedReport = await env.DB.prepare(
+          "SELECT id, status FROM report_jobs WHERE user_id = ? AND subject_id = ? AND status IN ('COMPLETED', 'DOWNLOADED', 'completed', 'downloaded')"
+        ).bind(user.user_id, subjectId).first();
+      } else if (memoryStore.reportJobs) {
+        for (const job of memoryStore.reportJobs.values()) {
+          if (job.user_id === user.user_id && job.subject_id === subjectId && (job.status === 'COMPLETED' || job.status === 'DOWNLOADED')) {
+            completedReport = job;
+            break;
+          }
+        }
+      }
+
+      if (completedReport) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Date of birth cannot be corrected after a personalized report has been generated or downloaded.'
+        }), { status: 400, headers: corsHeaders });
+      }
+
+      let alreadyCorrected = false;
+      if (env.DB) {
+        const prevCorrection = await env.DB.prepare(
+          "SELECT id FROM audit_log WHERE resource_type = 'subjects' AND resource_id = ? AND action = 'subject_dob_corrected'"
+        ).bind(subjectId).first();
+        if (prevCorrection) alreadyCorrected = true;
+      } else {
+        if (subject.corrected) alreadyCorrected = true;
+      }
+
+      if (alreadyCorrected) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Date of birth can only be corrected once.'
+        }), { status: 400, headers: corsHeaders });
+      }
+
+      const newDobHash = await sha256Hex(newDob);
+      const updatedName = newName || subject.name;
+
+      if (env.DB) {
+        await env.DB.prepare(
+          'UPDATE subjects SET dob_hash = ?, dob_enc = ?, name = ? WHERE id = ?'
+        ).bind(newDobHash, newDob, updatedName, subjectId).run();
+
+        // Invalidate old report jobs in progress and queue fresh job if entitlement exists
+        await env.DB.prepare(
+          "UPDATE report_jobs SET status = 'CANCELLED' WHERE user_id = ? AND subject_id = ? AND status IN ('QUEUED', 'PROCESSING')"
+        ).bind(user.user_id, subjectId).run();
+
+        const ent = await env.DB.prepare(
+          "SELECT pack_id, order_id FROM entitlements WHERE user_id = ? AND subject_id = ?"
+        ).bind(user.user_id, subjectId).first();
+
+        if (ent) {
+          const newJobId = 'job_' + now + '_' + getRandomHex(4);
+          await env.DB.prepare(
+            "INSERT INTO report_jobs (id, user_id, subject_id, pack_id, order_id, status, created_at) VALUES (?, ?, ?, ?, ?, 'QUEUED', ?)"
+          ).bind(newJobId, user.user_id, subjectId, ent.pack_id, ent.order_id || null, now).run();
+        }
+
+        await env.DB.prepare(
+          "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'subject_dob_corrected', 'subjects', ?, ?, ?)"
+        ).bind('aud_' + now + '_' + getRandomHex(4), user.user_id, subjectId, JSON.stringify({ old_dob_hash: subject.dob_hash, new_dob: newDob, name: updatedName }), now).run();
+      } else {
+        subject.dob_hash = newDobHash;
+        subject.name = updatedName;
+        subject.corrected = true;
+        for (const job of memoryStore.reportJobs.values()) {
+          if (job.user_id === user.user_id && job.subject_id === subjectId && (job.status === 'QUEUED' || job.status === 'PROCESSING')) {
+            job.status = 'CANCELLED';
+          }
+        }
+        const newJobId = 'job_' + now + '_' + getRandomHex(4);
+        memoryStore.reportJobs.set(newJobId, {
+          id: newJobId,
+          user_id: user.user_id,
+          subject_id: subjectId,
+          pack_id: 'report_basic',
+          status: 'QUEUED',
+          created_at: now
+        });
+      }
+
+      return new Response(JSON.stringify({
+        success: true,
+        message: 'Date of birth corrected successfully.',
+        subject: {
+          id: subjectId,
+          name: updatedName,
+          dob: newDob
+        }
+      }), { status: 200, headers: corsHeaders });
+    }
+
+    // 7e. ROUTE: RAZORPAY WEBHOOK (/api/v1/payments/webhook & legacy /api/webhook)
     if ((url.pathname === '/api/v1/payments/webhook' || url.pathname === '/api/webhook') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'https://numerosvision.com'
       };
+
+      if (url.pathname === '/api/webhook') {
+        corsHeaders['X-API-Deprecated'] = '/api/webhook is retired. Use /api/v1/payments/webhook';
+      }
+
       const rawBody = await request.text();
       const signature = request.headers.get('X-Razorpay-Signature') || request.headers.get('x-razorpay-signature') || '';
-      const webhookSecret = env.RAZORPAY_WEBHOOK_SECRET || env.RAZORPAY_KEY_SECRET;
+      const webhookSecret = env.RAZORPAY_WEBHOOK_SECRET;
+
       if (!webhookSecret) {
         return new Response(JSON.stringify({ status: 'error', message: 'Webhook secret not configured on server' }), { status: 500, headers: corsHeaders });
       }
 
-      if (webhookSecret && signature && !webhookSecret.includes('REPLACE')) {
-        try {
-          const encoder = new TextEncoder();
-          const keyData = encoder.encode(webhookSecret);
-          const msgData = encoder.encode(rawBody);
-          const cryptoKey = await crypto.subtle.importKey(
-            'raw',
-            keyData,
-            { name: 'HMAC', hash: 'SHA-256' },
-            false,
-            ['sign']
-          );
-          const sigBuffer = await crypto.subtle.sign('HMAC', cryptoKey, msgData);
-          const hashArray = Array.from(new Uint8Array(sigBuffer));
-          const generatedSig = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      // 1. Signature Verification with constant-time comparison
+      let isSigValid = false;
+      try {
+        const encoder = new TextEncoder();
+        const keyData = encoder.encode(webhookSecret.trim());
+        const msgData = encoder.encode(rawBody);
+        const cryptoKey = await crypto.subtle.importKey(
+          'raw',
+          keyData,
+          { name: 'HMAC', hash: 'SHA-256' },
+          false,
+          ['sign']
+        );
+        const sigBuffer = await crypto.subtle.sign('HMAC', cryptoKey, msgData);
+        const generatedSig = Array.from(new Uint8Array(sigBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 
-          if (generatedSig.toLowerCase() !== signature.toLowerCase()) {
-            return new Response(JSON.stringify({ status: 'error', message: 'Invalid webhook signature' }), { status: 400, headers: corsHeaders });
-          }
-        } catch (sigErr) {
-          console.warn('Webhook HMAC error:', sigErr);
+        if (timingSafeEqual(generatedSig.toLowerCase(), (signature || '').trim().toLowerCase())) {
+          isSigValid = true;
         }
+      } catch (sigErr) {
+        console.warn('Webhook HMAC verification error:', sigErr);
+      }
+
+      if (!isSigValid) {
+        return new Response(JSON.stringify({ status: 'error', message: 'Invalid webhook signature' }), { status: 400, headers: corsHeaders });
       }
 
       let payload = {};
       try {
         payload = JSON.parse(rawBody);
-      } catch (e) {}
+      } catch (e) {
+        return new Response(JSON.stringify({ status: 'error', message: 'Malformed JSON payload' }), { status: 400, headers: corsHeaders });
+      }
 
-      const event = payload.event || 'unknown';
-      return new Response(JSON.stringify({
-        status: 'success',
-        event: event,
-        received_at: new Date().toISOString()
-      }), { status: 200, headers: corsHeaders });
+      const event = payload.event || '';
+      const eventId = payload.event_id || ('evt_' + (payload.created_at || Date.now()) + '_' + getRandomHex(4));
+      const now = Date.now();
+
+      // 2. Idempotency Check
+      if (env.DB) {
+        const existingEvent = await env.DB.prepare('SELECT event_id FROM webhook_events WHERE event_id = ?').bind(eventId).first();
+        if (existingEvent) {
+          return new Response(JSON.stringify({ status: 'success', message: 'Event already processed' }), { status: 200, headers: corsHeaders });
+        }
+        const payloadHash = await sha256Hex(rawBody);
+        await env.DB.prepare(
+          'INSERT INTO webhook_events (event_id, type, payload_hash, received_at) VALUES (?, ?, ?, ?)'
+        ).bind(eventId, event, payloadHash, now).run();
+      }
+
+      // 3. Event Processing
+      if (event === 'order.paid' || event === 'payment.captured') {
+        const paymentEntity = payload.payload?.payment?.entity || {};
+        const orderEntity = payload.payload?.order?.entity || {};
+        const rzpOrderId = paymentEntity.order_id || orderEntity.id;
+        const paymentId = paymentEntity.id;
+        const amountPaise = paymentEntity.amount;
+        const currency = paymentEntity.currency;
+
+        let order = null;
+        if (env.DB) {
+          order = await env.DB.prepare('SELECT * FROM orders WHERE rzp_order_id = ?').bind(rzpOrderId).first();
+        } else {
+          for (const ord of memoryStore.orders.values()) {
+            if (ord.rzp_order_id === rzpOrderId) { order = ord; break; }
+          }
+        }
+
+        // Returns 200 for unknown orders (logged)
+        if (!order) {
+          console.warn(`[Webhook_Unknown_Order] Order ${rzpOrderId} not found in database. Logged.`);
+          if (env.DB) {
+            await env.DB.prepare(
+              "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'webhook', 'webhook_unknown_order', 'orders', ?, ?, ?)"
+            ).bind('aud_' + now + '_' + getRandomHex(4), rzpOrderId || 'unknown', JSON.stringify({ event, paymentId, amountPaise }), now).run();
+          }
+          return new Response(JSON.stringify({ status: 'ok', warning: 'unknown_order_logged' }), { status: 200, headers: corsHeaders });
+        }
+
+        // Tolerates out-of-order events: if order already paid, return 200 idempotently
+        if (order.status === 'PAID') {
+          console.info(`[Webhook] Order ${order.id} is already marked PAID. Idempotent skip.`);
+          return new Response(JSON.stringify({ status: 'ok', message: 'order_already_paid' }), { status: 200, headers: corsHeaders });
+        }
+
+        // Amount & currency verification
+        if (currency !== 'INR' || amountPaise !== order.amount_paise) {
+          console.error(`[Webhook_Amount_Mismatch] Expected INR ${order.amount_paise}, got ${currency} ${amountPaise}`);
+          if (env.DB) {
+            await env.DB.prepare(
+              "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'webhook', 'payment_amount_mismatch', 'orders', ?, ?, ?)"
+            ).bind('aud_' + now + '_' + getRandomHex(4), order.id, JSON.stringify({ expected: order.amount_paise, received: amountPaise, currency }), now).run();
+          }
+          return new Response(JSON.stringify({ status: 'ignored_due_to_amount_mismatch' }), { status: 200, headers: corsHeaders });
+        }
+
+        // Fulfill payment (handles CREATED, pending, or EXPIRED late UPI payments)
+        const fulfillRes = await fulfillPaidOrder(order, paymentId, amountPaise, paymentEntity.method || 'card', env, now, 'webhook');
+        return new Response(JSON.stringify({
+          status: 'success',
+          message: fulfillRes.alreadyFulfilled ? 'order_already_paid' : 'order_paid_fulfilled',
+          note: order.status === 'EXPIRED' ? 'late_upi_settlement_on_expired_order' : undefined
+        }), { status: 200, headers: corsHeaders });
+      } else if (event === 'payment.failed') {
+        const paymentEntity = payload.payload?.payment?.entity || {};
+        const rzpOrderId = paymentEntity.order_id;
+        if (env.DB && rzpOrderId) {
+          const order = await env.DB.prepare('SELECT id, status FROM orders WHERE rzp_order_id = ?').bind(rzpOrderId).first();
+          if (order && order.status !== 'PAID') {
+            await env.DB.prepare("UPDATE orders SET status = 'FAILED', updated_at = ? WHERE id = ?").bind(now, order.id).run();
+            await env.DB.prepare(
+              "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'webhook', 'payment_failed', 'orders', ?, ?, ?)"
+            ).bind('aud_' + now + '_' + getRandomHex(4), order.id, JSON.stringify({ reason: paymentEntity.error_description }), now).run();
+          }
+        }
+        return new Response(JSON.stringify({ status: 'success', message: 'payment_failed_recorded' }), { status: 200, headers: corsHeaders });
+      } else if (event === 'refund.processed') {
+        const refundEntity = payload.payload?.refund?.entity || {};
+        const paymentEntity = payload.payload?.payment?.entity || {};
+        const rzpPaymentId = refundEntity.payment_id || paymentEntity.id;
+        let order = null;
+        let pmt = null;
+
+        if (env.DB && rzpPaymentId) {
+          pmt = await env.DB.prepare('SELECT id, order_id FROM payments WHERE rzp_payment_id = ?').bind(rzpPaymentId).first();
+          if (pmt) {
+            order = await env.DB.prepare('SELECT id, user_id, subject_id, pack_id FROM orders WHERE id = ?').bind(pmt.order_id).first();
+          }
+        } else if (memoryStore.payments) {
+          pmt = memoryStore.payments.get(rzpPaymentId);
+          if (pmt && memoryStore.orders) {
+            order = memoryStore.orders.get(pmt.order_id);
+          }
+        }
+
+        if (order && pmt) {
+          const refId = 'ref_' + now + '_' + getRandomHex(4);
+          const refundAmount = refundEntity.amount || 0;
+
+          if (env.DB) {
+            // 1. Record refund in refunds table
+            await env.DB.prepare(
+              "INSERT INTO refunds (id, payment_id, order_id, user_id, rzp_refund_id, amount_paise, reason, status, created_at, processed_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'PROCESSED', ?, ?)"
+            ).bind(refId, pmt.id, order.id, order.user_id, refundEntity.id, refundAmount, refundEntity.notes?.reason || 'user_request', now, now).run();
+
+            // 2. Mark order as REFUNDED
+            await env.DB.prepare("UPDATE orders SET status = 'REFUNDED', updated_at = ? WHERE id = ?").bind(now, order.id).run();
+
+            // 3. Revoke entitlement
+            await env.DB.prepare("DELETE FROM entitlements WHERE user_id = ? AND subject_id = ? AND pack_id = ?").bind(order.user_id, order.subject_id, order.pack_id).run();
+
+            // 4. Revoke vouchers in voucher_ledger
+            await env.DB.prepare("UPDATE voucher_ledger SET status = 'REFUNDED' WHERE order_id = ?").bind(order.id).run();
+
+            // 5. Claw back Charm credits in credit_ledger if granted
+            const creditGrant = await env.DB.prepare(
+              "SELECT delta FROM credit_ledger WHERE user_id = ? AND ref_id = ?"
+            ).bind(order.user_id, 'order_' + order.id).first();
+            if (creditGrant && creditGrant.delta > 0) {
+              const prevBalRow = await env.DB.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').bind(order.user_id).first();
+              const newBal = ((prevBalRow && prevBalRow.bal) ? prevBalRow.bal : 0) - creditGrant.delta;
+              await env.DB.prepare(
+                'INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+              ).bind('crd_' + now + '_' + getRandomHex(4), order.user_id, -creditGrant.delta, 'refund_reversal', 'refund_' + refId, newBal, now).run();
+            }
+
+            // 6. Audit log
+            await env.DB.prepare(
+              "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'webhook', 'refund_processed_revoked', 'refunds', ?, ?, ?)"
+            ).bind('aud_' + now + '_' + getRandomHex(4), refId, JSON.stringify({ orderId: order.id, amount: refundAmount, revokedEntitlement: true, revokedVouchers: true }), now).run();
+          } else {
+            order.status = 'REFUNDED';
+            memoryStore.entitlements.delete(`${order.user_id}_${order.subject_id}_${order.pack_id}`);
+            const crd = memoryStore.creditLedger.get('order_' + order.id);
+            if (crd) {
+              memoryStore.creditLedger.set('refund_' + refId, {
+                user_id: order.user_id,
+                delta: -crd.delta,
+                reason: 'refund_reversal',
+                ref_id: 'refund_' + refId
+              });
+            }
+          }
+        }
+        return new Response(JSON.stringify({ status: 'success', message: 'refund_processed' }), { status: 200, headers: corsHeaders });
+      }
+
+      return new Response(JSON.stringify({ status: 'success', event: event }), { status: 200, headers: corsHeaders });
     }
 
-    // 7c. ROUTE: PRICING CATALOG (/api/v1/pricing-catalog & /api/v1/payments/pricing-catalog)
+    // 7f. ROUTE: PRICING CATALOG (/api/v1/pricing-catalog & /api/v1/payments/pricing-catalog)
     if ((url.pathname === '/api/v1/pricing-catalog' || url.pathname === '/api/v1/payments/pricing-catalog') && request.method === 'GET') {
       const corsHeaders = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'https://numerosvision.com'
       };
-      return new Response(JSON.stringify({
-        currency: 'INR',
-        report_tiers: {
-          basic: { id: 'report_basic', name: 'Basic Report', price_inr: 199, pages: 3 },
-          advanced: { id: 'report_advanced', name: 'Advanced Dossier', price_inr: 510, pages: 12 },
-          premium: { id: 'report_premium', name: 'Premium Blueprint', price_inr: 1050, pages: 32 }
-        },
-        bundles: {
-          starter_bundle: { id: 'starter_bundle', name: 'Starter Bundle', price_inr: 349, reports: 2 },
-          discovery_bundle: { id: 'discovery_bundle', name: 'Discovery Bundle', price_inr: 499, reports: 3 },
-          comprehensive_bundle: { id: 'comprehensive_bundle', name: 'Comprehensive Bundle', price_inr: 999, reports: 3 }
-        },
-        charm_ai: {
-          charm_single: { id: 'charm_single', name: 'Single Reading', price_inr: 199, questions: 3 },
-          charm_multi: { id: 'charm_multi', name: 'Multi-Reading Pack', price_inr: 399, questions: 10 },
-          charm_extended: { id: 'charm_extended', name: 'Extended Pack', price_inr: 699, questions: 25 }
-        }
-      }), { status: 200, headers: corsHeaders });
+      return new Response(JSON.stringify(PACK_CATALOG), { status: 200, headers: corsHeaders });
     }
 
-    // Fallback: Transparently serve static assets via Cloudflare Pages Asset Engine
-    
     // ── ROUTE: IDENTITY SIGNUP & REGISTRATION (/api/v1/identity/signup & /api/v1/auth/signup) ──
     if ((url.pathname === '/api/v1/identity/signup' || url.pathname === '/api/v1/auth/signup') && request.method === 'POST') {
       const corsHeaders = {
@@ -1294,7 +2068,7 @@ export default {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
 
-      const sessionToken = getCookie(request, 'nv_session');
+      const sessionToken = getSessionToken(request, env);
       if (!sessionToken) {
         return new Response(JSON.stringify({
           authenticated: false,
@@ -1325,7 +2099,7 @@ export default {
           status: 401,
           headers: {
             ...corsHeaders,
-            'Set-Cookie': 'nv_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0'
+            'Set-Cookie': '__Host-nv_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0'
           }
         });
       }
@@ -1361,7 +2135,7 @@ export default {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
-      const sessionToken = getCookie(request, 'nv_session');
+      const sessionToken = getSessionToken(request, env);
       if (sessionToken) {
         const tokenHash = await sha256Hex(sessionToken);
         if (env.DB) {
@@ -1379,7 +2153,7 @@ export default {
         status: 200,
         headers: {
           ...corsHeaders,
-          'Set-Cookie': 'nv_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0'
+          'Set-Cookie': '__Host-nv_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0'
         }
       });
     }

@@ -1,13 +1,12 @@
 /**
  * NUMEROS VISION — PRODUCTION PAYMENT GATEWAY CONTROLLER
  * Supports Razorpay (UPI, Google Pay, PhonePe, Cards, Netbanking) & Direct Invoicing
- * Version: 2.0.0
+ * Version: 2.1.0 (Commit 4 - Server-Authoritative Orders & Pre-Payment Confirmation)
  */
 
 (function(window) {
   'use strict';
 
-  // Ensure Razorpay SDK is loaded
   function loadRazorpaySdk() {
     return new Promise((resolve) => {
       if (window.Razorpay) {
@@ -25,7 +24,6 @@
     });
   }
 
-  // Pre-load SDK on idle
   if (typeof window !== 'undefined') {
     if (window.requestIdleCallback) {
       window.requestIdleCallback(() => loadRazorpaySdk());
@@ -36,358 +34,306 @@
 
   const NumerosPay = {
     /**
+     * Show pre-payment DOB confirmation modal before opening checkout.
+     */
+    showDobConfirmationModal(opts, onConfirmed) {
+      const modalId = 'nvDobConfirmModal';
+      let existingModal = document.getElementById(modalId);
+      if (existingModal) existingModal.remove();
+
+      const customerName = (opts.customer_name || opts.name || 'Valued Seeker').trim();
+      const customerDob = (opts.customer_dob || opts.dob || opts.locked_dob || '').trim();
+
+      const modal = document.createElement('div');
+      modal.id = modalId;
+      modal.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(42,32,20,0.65); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:9999999; padding:16px;';
+
+      modal.innerHTML = `
+        <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:14px; max-width:440px; width:100%; padding:24px; box-shadow:0 12px 36px rgba(0,0,0,0.25); font-family:system-ui,-apple-system,sans-serif; color:#523E28;">
+          <h3 style="margin:0 0 10px 0; color:#8B6914; font-size:1.15rem; font-weight:700; display:flex; align-items:center; gap:8px;">
+            <span>🔒</span> Confirm Seeker Details
+          </h3>
+          <p style="font-size:0.82rem; line-height:1.45; margin:0 0 14px 0; color:#7A654D;">
+            Your calculations, personal dasha timing, and executive blueprints are deterministically bound to your exact Date of Birth.
+          </p>
+          <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:12px; margin-bottom:14px; font-size:0.86rem;">
+            <div style="margin-bottom:6px;"><strong style="color:#8B6914;">Full Name:</strong> <span style="font-weight:600;">${customerName}</span></div>
+            <div><strong style="color:#8B6914;">Date of Birth:</strong> <span style="font-weight:700; color:#16835B;">${customerDob || 'Not specified'}</span></div>
+          </div>
+          <div style="font-size:0.73rem; color:#8B6914; margin-bottom:18px; line-height:1.35; background:#FFF9E6; padding:8px 10px; border-radius:6px; border-left:3px solid #C9A227;">
+            ⚠️ <em>Please review carefully. A one-time DOB correction is permitted within 24 hours of registration.</em>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button id="nvCancelConfirmBtn" type="button" style="background:#F7F3EA; border:1px solid #7A654D; color:#523E28; padding:8px 14px; border-radius:8px; font-size:0.82rem; cursor:pointer; font-weight:600;">
+              Edit Details
+            </button>
+            <button id="nvProceedConfirmBtn" type="button" style="background:#8B6914; border:none; color:#FFFFFF; padding:8px 18px; border-radius:8px; font-size:0.82rem; cursor:pointer; font-weight:700; box-shadow:0 2px 6px rgba(139,105,20,0.3);">
+              Confirm &amp; Proceed to Pay →
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      document.getElementById('nvCancelConfirmBtn').onclick = () => {
+        modal.remove();
+        if (opts.onFailure) opts.onFailure({ status: 'cancelled_by_user' });
+      };
+
+      document.getElementById('nvProceedConfirmBtn').onclick = () => {
+        modal.remove();
+        try {
+          sessionStorage.removeItem('nv_pending_subject');
+        } catch (e) {}
+        onConfirmed();
+      };
+    },
+
+    /**
      * Launch payment checkout for any report or consultation.
-     * @param {Object} opts
-     * @param {string} opts.plan_id - e.g. 'report_master', 'report_advanced', 'consultation_video'
-     * @param {string} [opts.plan_name] - Human-readable label
-     * @param {number} opts.amount_inr - Amount in INR (flat/all-inclusive)
-     * @param {string} opts.customer_name - Full name
-     * @param {string} opts.customer_email - Email address
-     * @param {string} [opts.customer_phone] - Phone / WhatsApp
-     * @param {Function} [opts.onSuccess] - Callback with invoice details
-     * @param {Function} [opts.onFailure] - Callback on error or dismissal
      */
     async openCheckout(opts) {
-      const planId = opts.plan_id || 'report_master';
-      const planName = opts.plan_name || 'Personal Numerology Dossier';
-      const amountInr = opts.amount_inr || 1050;
-      const customerName = (opts.customer_name || '').trim();
-      const customerEmail = (opts.customer_email || '').trim();
-      const customerPhone = (opts.customer_phone || '').trim();
+      const planId = opts.plan_id || opts.pack_id || opts.plan || 'report_basic';
+      const customerName = (opts.customer_name || opts.name || '').trim();
+      const customerEmail = (opts.customer_email || opts.email || '').trim();
+      const customerPhone = (opts.customer_phone || opts.phone || '').trim();
+      let customerDob = (opts.customer_dob || opts.dob || opts.locked_dob || '').trim();
 
-      if (!customerName || !customerEmail) {
-        alert('Please enter your full name and email address to proceed.');
-        return;
+      // If DOB not provided directly, check sessionStorage
+      if (!customerDob) {
+        try {
+          const pending = JSON.parse(sessionStorage.getItem('nv_pending_subject') || '{}');
+          if (pending.dob) customerDob = pending.dob;
+        } catch (e) {}
       }
 
-      // Step 1: Create Order via Backend or Edge API
+      // Pre-payment DOB confirmation screen
+      if (customerDob) {
+        opts.customer_dob = customerDob;
+        NumerosPay.showDobConfirmationModal(opts, () => {
+          NumerosPay._executeOrderCreationAndCheckout(opts);
+        });
+      } else {
+        NumerosPay._executeOrderCreationAndCheckout(opts);
+      }
+    },
+
+    async _executeOrderCreationAndCheckout(opts) {
+      const planId = opts.plan_id || opts.pack_id || opts.plan || 'report_basic';
+      const customerName = (opts.customer_name || opts.name || 'Valued Seeker').trim();
+      const customerEmail = (opts.customer_email || opts.email || '').trim();
+      const customerPhone = (opts.customer_phone || opts.phone || '').trim();
+      const customerDob = (opts.customer_dob || opts.dob || opts.locked_dob || '').trim();
+      const subjectId = opts.subjectId || opts.subject_id || '';
+
+      // Step 1: Create Order via Canonical Edge API (/api/v1/payments/create-order)
       let orderData = null;
       try {
-        // Preferred standard endpoint: /api/create-order
-        let orderRes = await fetch('/api/create-order', {
+        const orderRes = await fetch('/api/v1/payments/create-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            amount: amountInr * 100, // paise (Minimum 100 paise)
-            amount_inr: amountInr,
-            currency: 'INR',
-            receipt: 'nv_' + planId + '_' + Date.now(),
-            plan: planId,
-            plan_id: planId,
-            customer_name: customerName,
-            customer_email: customerEmail,
-            customer_phone: customerPhone
+            packId: planId,
+            subjectId: subjectId,
+            name: customerName,
+            dob: customerDob,
+            email: customerEmail,
+            phone: customerPhone
           })
         });
 
-        if (!orderRes.ok) {
-          // Fallback to /api/v1/payments/create-order
-          orderRes = await fetch('/api/v1/payments/create-order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              amount: amountInr * 100,
-              amount_inr: amountInr,
-              currency: 'INR',
-              receipt: 'nv_' + planId + '_' + Date.now(),
-              plan: planId,
-              plan_id: planId,
-              customer_name: customerName,
-              customer_email: customerEmail,
-              customer_phone: customerPhone
-            })
-          });
-        }
-
-        if (orderRes && orderRes.ok) {
+        if (orderRes.ok) {
           orderData = await orderRes.json();
         } else {
           const errData = await orderRes.json().catch(() => ({}));
           console.warn('Order creation failed on backend:', errData);
-          const msg = (errData && errData.message) || 'Unable to create payment order. Please check your Razorpay API Key ID and Secret.';
-          alert('Razorpay Payment Notice:\n\n' + msg);
+          if (orderRes.status === 401) {
+            // Unauthenticated: store pending state in sessionStorage and redirect to login
+            sessionStorage.setItem('nv_pending_subject', JSON.stringify({
+              name: customerName,
+              dob: customerDob,
+              email: customerEmail,
+              phone: customerPhone,
+              planId: planId
+            }));
+            window.location.href = '/login.html?returnTo=/dashboard/';
+            return;
+          }
+          const msg = (errData && errData.error) || 'Unable to create payment order.';
+          alert('Payment Notice:
+
+' + msg);
           if (opts.onFailure) opts.onFailure(errData);
           return;
         }
       } catch (err) {
         console.warn('Backend order creation network exception:', err);
+        alert('Network Notice:
+
+Unable to reach payment gateway. Please verify your connection.');
+        if (opts.onFailure) opts.onFailure(err);
+        return;
       }
 
-      if (!orderData || !orderData.order_id || orderData.order_id.startsWith('order_MOCK_') || orderData.order_id.startsWith('order_LIVE_')) {
-        alert('Razorpay Payment Notice:\n\nOrder creation could not be completed on the payment gateway.\nPlease verify your active Razorpay Key ID and Secret in settings.');
+      if (!orderData || !orderData.rzpOrderId) {
+        alert('Payment Notice:
+
+Failed to obtain a valid order ID from the payment gateway.');
         if (opts.onFailure) opts.onFailure({ error: 'Order creation failed' });
         return;
       }
 
-      const orderId = orderData.order_id;
-      const keyId = orderData && (orderData.key_id || orderData.key);
-      const isLiveGatewayConfigured = keyId && !keyId.includes('PLACEHOLDER') && !keyId.includes('REPLACE_ME');
-
-      // Step 2: Try Opening Live Razorpay Checkout
-      const isSdkReady = await loadRazorpaySdk();
-
-      if (isSdkReady && window.Razorpay && isLiveGatewayConfigured) {
-        const rzpOptions = {
-          key: keyId,
-          amount: amountInr * 100, // paise
-          currency: 'INR',
-          name: 'NUMEROS VISION',
-          description: planName,
-          image: '/logos/nv-logo-mark.svg',
-          // Only send order_id to Razorpay if it is an authentic Razorpay order generated by API
-          remember_customer: false,
-      order_id: (orderId && !orderId.startsWith('order_MOCK_') && !orderId.startsWith('order_LIVE_')) ? orderId : undefined,
-          prefill: {
-            name: customerName,
-            email: customerEmail,
-            contact: customerPhone
-          },
-          theme: {
-            color: '#C9A227',
-            backdrop_color: 'rgba(28, 37, 38, 0.85)'
-          },
-          handler: async function(response) {
-            // Payment verified at gateway
-            await NumerosPay._completePaymentVerification({
-              order_id: response.razorpay_order_id || orderId,
-              payment_id: response.razorpay_payment_id || ('pay_' + Date.now()),
-              signature: response.razorpay_signature || '',
-              plan_id: planId,
-              plan_name: planName,
-              amount_inr: amountInr,
-              customer_name: customerName,
-              customer_email: customerEmail,
-              customer_phone: customerPhone,
-              customer_dob: opts.customer_dob || opts.locked_dob || opts.dob || '',
-              profile_id: opts.profile_id || '',
-              gateway: 'Razorpay',
-              onSuccess: opts.onSuccess
-            });
-          },
-          modal: {
-            ondismiss: function() {
-              if (opts.onFailure) opts.onFailure({ cancelled: true });
-            }
-          }
-        };
-
-        const rzp = new window.Razorpay(rzpOptions);
-        rzp.on('payment.failed', function(response) {
-          console.warn('Razorpay payment failed:', response.error);
-          const desc = response.error ? response.error.description : '';
-          const reason = response.error ? (response.error.reason || response.error.code || '') : '';
-          
-          if (desc.includes('went wrong') || reason.includes('BAD_REQUEST') || reason.includes('auth')) {
-            alert(
-              'Razorpay Gateway Configuration Notice:\n\n' +
-              'The Razorpay API Key ID configured for this account is invalid, deactivated, or expired.\n\n' +
-              'Please generate a fresh Key ID & Key Secret from your Razorpay Dashboard (Settings → API Keys) and add them to your environment configuration.'
-            );
-          } else {
-            alert('Payment Failed: ' + (desc || 'Transaction cancelled or failed.'));
-          }
-          if (opts.onFailure) opts.onFailure(response.error);
-        });
-        rzp.open();
+      // Step 2: Ensure Razorpay SDK is ready
+      await loadRazorpaySdk();
+      if (!window.Razorpay) {
+        alert('Payment gateway SDK could not be loaded. Please disable ad-blockers and refresh.');
+        if (opts.onFailure) opts.onFailure({ error: 'SDK load failed' });
         return;
       }
 
-      // Step 3: Strict Gateway Enforcement (Zero Mock Payments)
-      // All paid packages must complete authentic Razorpay verification.
-      alert(
-        'Payment Gateway Notice:\n\n' +
-        'Unable to open Razorpay Checkout modal for ' + planName + '.\n' +
-        'Please verify your internet connection or try again in a few moments.\n' +
-        'If this persists, contact support@numerosvision.com.'
-      );
-      if (opts.onFailure) opts.onFailure({ error: 'Gateway modal launch failed' });
-      return;
+      // Step 3: Launch Razorpay Standard Checkout Modal
+      const options = {
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency || 'INR',
+        name: 'NUMEROS VISION',
+        description: orderData.pack ? orderData.pack.name : 'Personal Numerology Dossier',
+        image: '/apple-touch-icon.png',
+        order_id: orderData.rzpOrderId,
+        prefill: {
+          name: customerName,
+          email: customerEmail,
+          contact: customerPhone
+        },
+        theme: {
+          color: '#8B6914'
+        },
+        handler: async function(response) {
+          await NumerosPay._completePaymentVerification({
+            order_id: response.razorpay_order_id || orderData.rzpOrderId,
+            payment_id: response.razorpay_payment_id,
+            signature: response.razorpay_signature,
+            plan_id: planId,
+            plan_name: orderData.pack ? orderData.pack.name : 'Numerology Report',
+            amount_inr: (orderData.amount / 100),
+            customer_name: customerName,
+            customer_email: customerEmail,
+            customer_phone: customerPhone,
+            customer_dob: customerDob,
+            subject_id: orderData.subjectId,
+            onSuccess: opts.onSuccess
+          });
+        },
+        modal: {
+          ondismiss: function() {
+            if (opts.onFailure) opts.onFailure({ status: 'dismissed' });
+          }
+        }
+      };
+
+      try {
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function(resp) {
+          alert('Payment Failed: ' + (resp.error ? resp.error.description : 'Transaction not completed.'));
+          if (opts.onFailure) opts.onFailure(resp.error);
+        });
+        rzp.open();
+      } catch (sdkErr) {
+        console.error('Error invoking Razorpay instance:', sdkErr);
+        if (opts.onFailure) opts.onFailure(sdkErr);
+      }
     },
 
     /**
-     * Records invoice, dispatches emails to support@numerosvision.com & customer,
-     * stores in user history and opens receipt confirmation.
+     * Server-side signature verification & report preparation notice.
      */
     async _completePaymentVerification(params) {
-      let invoiceData = null;
-
-      // 1. Call Backend / Edge Verification Endpoint (HMAC-SHA256 signature verification)
       try {
-        let verifyRes = await fetch('/api/verify-payment', {
+        const verifyRes = await fetch('/api/v1/payments/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             razorpay_order_id: params.order_id,
             razorpay_payment_id: params.payment_id,
-            razorpay_signature: params.signature,
-            plan: params.plan_id,
-            plan_id: params.plan_id,
-            email: params.customer_email,
-            customer_name: params.customer_name,
-            customer_phone: params.customer_phone
+            razorpay_signature: params.signature
           })
         });
 
         if (!verifyRes.ok) {
-          // Fallback to /api/v1/payments/verify
-          verifyRes = await fetch('/api/v1/payments/verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              razorpay_order_id: params.order_id,
-              razorpay_payment_id: params.payment_id,
-              razorpay_signature: params.signature,
-              plan: params.plan_id,
-              plan_id: params.plan_id,
-              email: params.customer_email,
-              customer_name: params.customer_name,
-              customer_phone: params.customer_phone
-            })
-          });
+          const errData = await verifyRes.json().catch(() => ({}));
+          console.error('[Payment_Verify_Failed]', errData);
+          alert('Security Verification Notice:
+
+Payment verification failed on the server. Please contact support.');
+          return;
         }
 
-        if (verifyRes.ok) {
-          const vData = await verifyRes.json();
-          if (vData.invoice_id) {
-            invoiceData = { invoice_id: vData.invoice_id };
-          }
-        } else {
-          // In test mode or transient server sync, log verification notice and honor authentic payment
-          const errRes = await verifyRes.json().catch(() => ({}));
-          console.warn('Backend verification notice:', errRes);
-        }
-      } catch (err) {
-        console.warn('Verification network exception:', err);
-      }
+        const verifyData = await verifyRes.json();
 
-      // 2. Also register in Billing API if invoiceData not returned yet
-      if (!invoiceData || !invoiceData.invoice_id) {
-        try {
-          const bRes = await fetch('/api/v1/billing/create', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              order_id: params.order_id,
-              payment_id: params.payment_id,
-              customer_name: params.customer_name,
-              customer_email: params.customer_email,
-              customer_phone: params.customer_phone,
-              plan_id: params.plan_id,
-              amount_inr: params.amount_inr,
-              payment_method: 'UPI / Razorpay Online'
-            })
-          });
-          if (bRes.ok) {
-            const bData = await bRes.json();
-            invoiceData = bData.invoice;
-          }
-        } catch (bErr) {}
-      }
-
-      // 3. Fallback invoice structure if offline
-      if (!invoiceData || !invoiceData.invoice_id) {
-        const currentYear = new Date().getFullYear();
-        invoiceData = {
-          invoice_id: 'NV-REC-' + currentYear + '-' + Math.floor(100000 + Math.random() * 900000),
-          order_id: params.order_id,
+        // Show official report preparation modal
+        NumerosPay.showReportPreparingModal({
           payment_id: params.payment_id,
-          customer_name: params.customer_name,
-          customer_email: params.customer_email,
-          customer_phone: params.customer_phone,
-          service_id: params.plan_id,
-          service_name: params.plan_name,
+          order_id: params.order_id,
+          plan_name: params.plan_name,
           amount_inr: params.amount_inr,
-          total_paid: params.amount_inr,
-          locked_dob: params.customer_dob || '',
-          profile_id: params.profile_id || '',
-          status: 'PAID',
-          created_at: new Date().toISOString(),
-          report_url: params.plan_id.includes('consult') ? '/consultation/' : '/sample-report/?tier=master'
-        };
+          customer_email: params.customer_email
+        });
+
+        if (params.onSuccess) params.onSuccess(verifyData);
+      } catch (err) {
+        console.error('[Payment_Verification_Exception]', err);
+        alert('Verification Notice:
+
+Unable to verify payment signature with server. Please refresh your dashboard.');
       }
-
-      // 4. Save to client localStorage for instant persistence across pages
-      try {
-        const existingInvoices = JSON.parse(localStorage.getItem('nv_user_invoices') || '[]');
-        existingInvoices.unshift(invoiceData);
-        localStorage.setItem('nv_user_invoices', JSON.stringify(existingInvoices));
-        localStorage.setItem('nv_plan_unlocked_' + params.plan_id, 'true');
-        localStorage.setItem('nv_user_email', params.customer_email);
-        localStorage.setItem('nv_user_name', params.customer_name);
-        localStorage.setItem('nv_premium_token', params.payment_id);
-        localStorage.setItem('nv_active_tier', params.plan_id);
-        localStorage.setItem('nv_payment_verified', 'true');
-        localStorage.setItem('nv_charm_credits', '25');
-      } catch (e) {}
-
-      // 5. Open Universal Success Modal
-      NumerosPay.showSuccessModal(invoiceData);
-
-      if (params.onSuccess) params.onSuccess(invoiceData);
     },
 
     /**
-     * Displays confirmation popup with links to unlocked report and official receipt.
+     * Displays modal showing report being prepared.
      */
-    showSuccessModal(inv) {
+    showReportPreparingModal(inv) {
       let modal = document.getElementById('nvPaymentSuccessModal');
       if (!modal) {
         modal = document.createElement('div');
         modal.id = 'nvPaymentSuccessModal';
-        modal.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.65); z-index:999999; display:flex; justify-content:center; align-items:center; padding:16px; box-sizing:border-box;';
+        modal.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(42,32,20,0.7); backdrop-filter:blur(5px); display:flex; align-items:center; justify-content:center; z-index:9999999; padding:16px;';
         document.body.appendChild(modal);
       }
 
-      let reportLink = '/dashboard/';
-      if (inv.service_id && inv.service_id.includes('consult')) {
-        reportLink = '/consultation/';
-      } else if (inv.plan_id === 'report_basic' || inv.service_id === 'report_basic' || inv.plan_id === 'report_essential') {
-        reportLink = '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
-      } else if (inv.plan_id === 'report_advanced' || inv.service_id === 'report_advanced' || inv.plan_id === 'report_master') {
-        reportLink = '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
-      } else if (inv.plan_id === 'report_premium' || inv.service_id === 'report_premium' || inv.plan_id === 'report_divine') {
-        reportLink = '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
-      } else {
-        reportLink = '/dashboard/';
-      }
-
       modal.innerHTML = `
-        <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:14px; max-width:540px; width:100%; padding:32px; box-shadow:0 12px 40px rgba(0,0,0,0.25); font-family:'Inter',sans-serif; text-align:center; position:relative;">
-          <div style="display:inline-flex; align-items:center; justify-content:center; width:56px; height:56px; background:#eef8f2; border:2px solid #16835B; border-radius:50%; margin-bottom:16px;">
-            <span style="font-size:1.8rem; color:#16835B; font-weight:bold;">✓</span>
+        <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:14px; max-width:440px; width:100%; padding:26px; text-align:center; box-shadow:0 12px 36px rgba(0,0,0,0.25); font-family:system-ui,-apple-system,sans-serif; color:#523E28;">
+          <div style="width:56px; height:56px; background:#FAF3E0; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 14px auto; font-size:1.6rem; color:#8B6914;">
+            ⏳
           </div>
-          <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:#8B6914; margin:0 0 8px 0; font-weight:700;">Payment Confirmed</h3>
-          <p style="font-size:0.92rem; color:#1C2526; line-height:1.6; margin:0 0 16px 0;">
-            Thank you, <strong>${inv.customer_name}</strong>. Your payment of <strong style="color:#16835B;">₹${Number(inv.total_paid || inv.amount_inr).toLocaleString('en-IN')}</strong> for <strong>${inv.service_name}</strong> has been received and verified.
+          <h3 style="margin:0 0 8px 0; color:#8B6914; font-size:1.2rem; font-weight:700;">
+            Payment Confirmed
+          </h3>
+          <p style="font-size:0.86rem; color:#7A654D; margin:0 0 16px 0; line-height:1.45;">
+            Your payment of <strong>₹${inv.amount_inr}</strong> has been verified. Your personalized executive report is now being prepared by the calculation engine.
           </p>
-
-          <div style="background:#FFFFFF; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:12px; margin-bottom:20px; font-size:0.82rem; text-align:left;">
+          <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:12px; margin-bottom:18px; text-align:left; font-size:0.80rem; line-height:1.5;">
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-              <span style="color:#7A654D;">Official Receipt No:</span>
-              <strong style="color:#8B6914; font-family:monospace;">${inv.invoice_id}</strong>
+              <span style="color:#7A654D;">Order Reference:</span>
+              <strong style="color:#523E28;">${inv.order_id}</strong>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-              <span style="color:#7A654D;">Transaction ID:</span>
+              <span style="color:#7A654D;">Payment ID:</span>
               <code style="font-size:0.75rem;">${inv.payment_id}</code>
             </div>
             <div style="display:flex; justify-content:space-between;">
-              <span style="color:#7A654D;">Receipt Dispatched To:</span>
-              <strong style="color:#523E28;">${inv.customer_email}</strong>
+              <span style="color:#7A654D;">Status:</span>
+              <strong style="color:#16835B;">Report Being Prepared</strong>
             </div>
           </div>
 
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <a href="${reportLink}" style="background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF; text-decoration:none; padding:13px 24px; border-radius:8px; font-weight:700; font-size:0.94rem; display:block; box-shadow:0 4px 14px rgba(201,162,39,0.25);">
-              Open Your Unlocked Paid Dossier 🌟
+          <div style="display:flex; gap:10px;">
+            <a href="/dashboard/" style="flex:1; background:#8B6914; color:#FFFFFF; text-decoration:none; padding:11px 16px; border-radius:8px; font-weight:700; font-size:0.86rem; display:inline-block;">
+              Go to Dashboard →
             </a>
-            <div style="display:flex; gap:10px;">
-              <a href="/dashboard/" style="flex:1; background:#FFFFFF; border:1.5px solid #C9A227; color:#8B6914; text-decoration:none; padding:10px 16px; border-radius:8px; font-weight:700; font-size:0.84rem; display:inline-block;">
-                Go to Dashboard 📜
-              </a>
-              <button type="button" onclick="document.getElementById('nvPaymentSuccessModal').style.display='none'" style="flex:1; background:#F4EFE6; border:none; color:#523E28; padding:10px 16px; border-radius:8px; font-weight:600; font-size:0.84rem; cursor:pointer;">
-                Close
-              </button>
-            </div>
+            <button type="button" onclick="document.getElementById('nvPaymentSuccessModal').style.display='none'" style="flex:1; background:#F4EFE6; border:none; color:#523E28; padding:11px 16px; border-radius:8px; font-weight:600; font-size:0.86rem; cursor:pointer;">
+              Close
+            </button>
           </div>
         </div>
       `;
