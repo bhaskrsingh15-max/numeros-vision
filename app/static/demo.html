@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z2E6416W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3Z2E6416W7', {
+      send_page_view: true,
+      cookie_flags: 'SameSite=Lax;Secure'
+    });
+  </script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+
+  <!-- Standardized Favicon & Brand Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="/logos/nv-logo-mark.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+
+  <title>Numeros Vision — Full Platform Demo</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap"/>
+  <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0"/>
+  <style>
+    :root {
+      --bg: #FFFDF7;
+      --bg-mid: #F7F3EA;
+      --surface: #FFFFFF;
+      --gold: #C9A227;
+      --gold-l: #E2B84B;
+      --gold-dark: #8B6914;
+      --emerald: #16835B;
+      --text: #523E28;
+      --muted: #7A654D;
+      --border: rgba(180, 155, 110, 0.25);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+    /* HEADER */
+    .demo-header { text-align: center; padding: 56px 20px 40px; border-bottom: 1px solid var(--border); background: var(--bg-mid); }
+    .demo-header .eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; color: var(--gold-dark); text-transform: uppercase; font-weight: 700; margin-bottom: 16px; }
+    .demo-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400; line-height: 1.2; margin-bottom: 12px; color: var(--gold-dark); }
+    .demo-header h1 span { color: var(--gold); }
+    .demo-header .sub { font-size: 0.92rem; color: var(--muted); max-width: 580px; margin: 0 auto 28px; line-height: 1.75; }
+    .badge-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .badge { padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border); font-size: 0.72rem; color: var(--gold-dark); background: #FFFFFF; font-weight: 600; box-shadow: 0 2px 6px rgba(180, 155, 110, 0.08); }
+    .badge.live { background: rgba(22, 131, 91, 0.12); border-color: rgba(22, 131, 91, 0.35); color: var(--emerald); font-weight: 700; }
+
+    /* NAV TABS */
+    .tabs { display: flex; gap: 6px; padding: 16px 20px; overflow-x: auto; border-bottom: 1px solid var(--border); background: rgba(255, 253, 247, 0.95); backdrop-filter: blur(16px); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 16px rgba(180, 155, 110, 0.06); }
+    .tab { padding: 9px 18px; border-radius: 10px; border: 1px solid transparent; font-size: 0.8rem; cursor: pointer; white-space: nowrap; color: var(--muted); transition: all 0.2s; font-weight: 500; }
+    .tab:hover { background: var(--bg-mid); color: var(--text); }
+    .tab.active { background: rgba(201, 162, 39, 0.12); border-color: var(--border); color: var(--gold-dark); font-weight: 700; }
+
+    /* DEMO SECTIONS */
+    .section { display: none; max-width: var(--nv-container-max, 1240px); margin: 0 auto; padding: var(--nv-section-py, clamp(48px, 6vw, 76px)) var(--nv-container-pad, clamp(16px, 3.5vw, 24px)); box-sizing: border-box; }
+    .section.active { display: block; }
+    .section-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold-dark); font-weight: 700; margin-bottom: 8px; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 500; margin-bottom: 8px; color: var(--gold-dark); }
+    .section-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.75; margin-bottom: 28px; max-width: 660px; }
+
+    /* IFRAME CONTAINER */
+    .iframe-wrap { border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: #FFFFFF;
+                   box-shadow: 0 24px 60px rgba(180, 155, 110, 0.16), 0 0 0 1px rgba(201, 162, 39, 0.12); }
+    .browser-bar { background: var(--bg-mid); padding: 12px 18px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
+    .dots { display: flex; gap: 6px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dot.r { background: #E5534B; } .dot.y { background: #E2B84B; } .dot.g { background: #16835B; }
+    .url-bar { flex: 1; background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px; font-size: 0.78rem; color: var(--muted); }
+    .open-btn { padding: 6px 14px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border: none; border-radius: 8px; color: #FFFDF7; font-size: 0.74rem; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 2px 8px rgba(139, 105, 20, 0.25); }
+    .open-btn:hover { opacity: 0.92; }
+    iframe { width: 100%; height: 640px; border: none; display: block; background: #FFFDF7; }
+
+    /* FEATURE CALLOUTS */
+    .callouts { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 24px; }
+    .callout { padding: 18px; border-radius: 14px; border: 1px solid var(--border); background: var(--surface); box-shadow: 0 4px 12px rgba(180, 155, 110, 0.06); }
+    .callout-icon { font-size: 1.3rem; margin-bottom: 8px; }
+    .callout-title { font-size: 0.85rem; font-weight: 700; color: var(--gold-dark); margin-bottom: 4px; }
+    .callout-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.65; }
+
+    /* STATS BAND */
+    .stats-band { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 40px 0; }
+    .stat { text-align: center; padding: 22px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); box-shadow: 0 4px 14px rgba(180, 155, 110, 0.06); }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; color: var(--gold-dark); font-weight: 600; }
+    .stat-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 700; margin-top: 4px; }
+
+    /* MOBILE PREVIEW */
+    .mobile-wrap { display: flex; justify-content: center; }
+    .phone-frame { width: 375px; border-radius: 40px; overflow: hidden; border: 8px solid rgba(180, 155, 110, 0.35);
+                   box-shadow: 0 32px 80px rgba(180, 155, 110, 0.22); background: #FFFFFF; }
+    .phone-notch { height: 28px; background: #EFE9DB; display: flex; align-items: center; justify-content: center; }
+    .notch-bar { width: 90px; height: 6px; border-radius: 3px; background: rgba(180, 155, 110, 0.5); }
+    .phone-frame iframe { width: 375px; height: 667px; border: none; display: block; background: #FFFDF7; }
+
+    /* LAUNCH SECTION */
+    .launch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+    .launch-card { padding: 22px; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); box-shadow: 0 4px 14px rgba(180, 155, 110, 0.06); }
+    .launch-card.done { border-color: rgba(22, 131, 91, 0.35); }
+    .launch-card.todo { border-color: rgba(201, 162, 39, 0.4); }
+    .launch-card.blocked { border-color: rgba(184, 58, 46, 0.25); }
+    .lc-status { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; margin-bottom: 8px; }
+    .lc-status.done { color: var(--emerald); } .lc-status.todo { color: var(--gold-dark); } .lc-status.blocked { color: #B83A2E; }
+    .lc-title { font-size: 0.95rem; font-weight: 700; color: var(--gold-dark); margin-bottom: 6px; }
+    .lc-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.65; }
+    .lc-action { display: inline-block; margin-top: 10px; padding: 8px 16px; border-radius: 8px; font-size: 0.74rem; font-weight: 700; text-decoration: none; }
+    .lc-action.gold { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #FFFDF7; }
+    .lc-action.ghost { border: 1px solid var(--border); color: var(--gold-dark); background: var(--bg-mid); }
+
+    footer { text-align: center; padding: 32px 20px; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--muted); background: var(--bg-mid); }
+    footer a { color: var(--gold-dark); text-decoration: none; font-weight: 600; }
+  </style>
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
+  <!-- Google Fonts for Unified Master Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KW6GQRVZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Master Unified Site Header -->
+  <header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links matching Master Roadmap IA -->
+      <nav aria-label="Main Navigation">
+                <ul class="nv-nav-menu" id="nvNavMenu">
+          <!-- 1. Home -->
+          <li class="nv-nav-item">
+            <a href="/" class="nv-nav-link" title="Numeros Vision Home">Home</a>
+          </li>
+
+          <!-- 1. About Us -->
+          <li class="nv-nav-item">
+            <a href="/about/" class="nv-nav-link" title="About Numeros Vision | Our Approach to Numerology" data-canonical="https://numerosvision.com/about/">About Us</a>
+          </li>
+
+          <!-- 2. Calculators (Accordion / Dropdown) -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/tools/baby-naming" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/tools/name-numerology" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/tools/mobile-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/tools/compatibility-calculator" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Compatibility Synastry &amp; Synastry</span></a></li>
+              <li><a href="/tools/business-numerology" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/tools/life-path-calculator" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/tools/lo-shu-grid" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/tools/vehicle-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/tools/property-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/tools/blessing-years" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+
+          <!-- 2. Charm AI -->
+          <li class="nv-nav-item nv-nav-charm-highlight">
+            <a href="/charm_ai.html" class="nv-nav-link" title="Charm AI" style="display:inline-flex; align-items:center; gap:8px;">
+              <span class="nv-charm-medallion-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#FFFFFF" stroke-width="2.4" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></span> <span style="font-weight:700;">Charm AI</span>
+            </a>
+          </li>
+
+          <!-- 3. Reports & Consultations -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Reports</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/reports/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
+              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Insights -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Insights</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
+              <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
+              <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
+              <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
+              <li><a href="/blog/gemstone-remedies" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Pricing -->
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+
+          <!-- 6. Contact Us -->
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+
+          <!-- 7. PWA Download / Install App on Mobile & Tablet ONLY -->
+          <li class="nv-nav-item nv-pwa-menu-item" id="nvPwaDrawerItem" style="display:none; margin: 8px 0; width: 100%; box-sizing: border-box;">
+            <button type="button" class="nv-nav-link nv-pwa-install-trigger-btn" onclick="triggerPwaInstall(event)" style="background: rgba(201,162,39,0.12); border: 1.5px solid rgba(201,162,39,0.38); border-radius: 999px; padding: 10px 18px; font-weight: 600; color: #8B6914; display: flex; align-items: center; justify-content: space-between; width: 100%; cursor: pointer; text-align: left; box-sizing: border-box;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <span class="nv-sub-icon" style="font-size: 1.15rem;">📲</span>
+                <span>Install / Download App</span>
+              </span>
+              <span class="nv-sub-tag" style="background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #fff; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; font-weight: 700; text-transform: uppercase;">PWA</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/#birth-profile" class="nv-btn-cta">Discover My Numbers ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+  <script>
+        function toggleMobileNav(e) {
+      if (window.nvToggleMaster && typeof window.nvToggleMaster === 'function') {
+        return window.nvToggleMaster(e || window.event);
+      }
+      var evt = e || window.event;
+      if (evt && evt.stopPropagation) evt.stopPropagation();
+      var menu = document.getElementById('nvNavMenu') || document.getElementById('nv-nav-menu') || document.querySelector('.nv-nav-menu');
+      var btn = document.querySelector('.nv-mobile-toggle');
+      var header = document.querySelector('.nv-header');
+      if (menu) {
+        var isOpen = menu.classList.toggle('active');
+        if (btn) {
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          btn.innerHTML = isOpen ? '✕' : '☰';
+        }
+        if (header) {
+          header.classList.toggle('menu-open', isOpen);
+        }
+        document.body.classList.toggle('nv-nav-open', isOpen);
+        var backdrop = document.getElementById('nv-drawer-backdrop');
+        if (backdrop) {
+          backdrop.classList.toggle('active', isOpen);
+        }
+      }
+    }
+      
+  </script>
+
+
+<!-- HEADER -->
+<div class="demo-header">
+  <div style="margin-bottom: 16px;">
+    <img src="/logos/nv-logo-stacked.svg" alt="Numeros Vision — ANVEIL EVERY CHARM" style="height:92px;display:inline-block;" />
+  </div>
+  <div class="eyebrow">✦ Full Platform Demo</div>
+  <h1>Numeros Vision<br/><span>ANVEIL EVERY CHARM</span></h1>
+  <p class="sub">Complete interactive demo — click any tab below to preview each section of the platform live inside this page. All pages are served from your local server at <strong>http://localhost:8000</strong>.</p>
+  <div class="badge-row">
+    <div class="badge live">🟢 Server Live — v3.2.0</div>
+    <div class="badge">9 Routes · 200 OK</div>
+    <div class="badge">4 Tool Pages</div>
+    <div class="badge">3 Blog Posts</div>
+    <div class="badge">6 Engines</div>
+    <div class="badge">1,781 Knowledge Nodes</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active"    onclick="show(0)">🏠 Homepage</div>
+  <div class="tab"           onclick="show(1)">💬 Charm AI</div>
+  <div class="tab"           onclick="show(2)">🔢 Life Path</div>
+  <div class="tab"           onclick="show(3)">⬡ Lo Shu Grid</div>
+  <div class="tab"           onclick="show(4)">🍀 Lucky Number</div>
+  <div class="tab"           onclick="show(5)">📛 Name Numerology</div>
+  <div class="tab"           onclick="show(6)">📰 Blog</div>
+  <div class="tab"           onclick="show(7)">💳 Premium Plans</div>
+  <div class="tab"           onclick="show(8)">📱 Mobile View</div>
+  <div class="tab"           onclick="show(9)">🚀 Launch Status</div>
+</div>
+
+<!-- SCREEN 0: HOMEPAGE -->
+<div class="section active" id="s0">
+  <div class="section-label">Screen 1 of 9</div>
+  <div class="section-title">Homepage — Numeros Vision</div>
+  <div class="section-desc">The main landing page featuring the Master NV Monogram Seal nav logo, Master NV Seal watermark in the hero, brand seal centerpiece, tagline "ANVEIL EVERY CHARM", and the AI chat section below the fold.</div>
+  <div class="iframe-wrap">
+    <div class="browser-bar">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <div class="url-bar">http://localhost:8000/</div>
+      <a href="http://localhost:8000/" target="_blank" class="open-btn">↗ Open</a>
+    </div>
+    <iframe src="http://localhost:8000/" loading="lazy"></iframe>
+  </div>
+  <div class="callouts">
+    <div class="callout"><div class="callout-icon">✨</div><div class="callout-title">Master NV Seal Nav Logo</div><div class="callout-desc">Master NV vector seal in the navigation bar — single Jupiter Gold ring and Emerald/Gold monogram.</div></div>
+    <div class="callout"><div class="callout-icon">⚜️</div><div class="callout-title">Master NV Watermark</div><div class="callout-desc">Master NV monogram watermark behind the hero text — subtle luxury depth without distraction.</div></div>
+    <div class="callout"><div class="callout-icon">✦</div><div class="callout-title">Hero NV Seal</div><div class="callout-desc">Master NV Monogram Seal centered above the headline as the primary brand anchor.</div></div>
+    <div class="callout"><div class="callout-icon">🛡️</div><div class="callout-title">Confidential Privacy Shield</div><div class="callout-desc">BANNED regex strips all engine names (Planetary Conjunctions, Harmonic Matrix, Lo Shu, Vedic Numerology) from every AI response.</div></div>
+  </div>
+</div>
+
+<!-- SCREEN 1: CHARM AI -->
+<div class="section" id="s1">
+  <div class="section-label">Screen 2 of 9</div>
+  <div class="section-title">Charm AI Chat</div>
+  <div class="section-desc">The free Charm AI numerology chat. Enter name + DOB in the profile form to activate your celestial profile, then ask any question in plain language. Voice input enabled. Responses are in pure layman language — zero technical terms shown.</div>
+  <div class="iframe-wrap">
+    <div class="browser-bar">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <div class="url-bar">http://localhost:8000/#charm-ai</div>
+      <a href="http://localhost:8000/#charm-ai" target="_blank" class="open-btn">↗ Open</a>
+    </div>
+    <iframe src="http://localhost:8000/#charm-ai" loading="lazy"></iframe>
+  </div>
+  <div class="callouts">
+    <div class="callout"><div class="callout-icon">🎤</div><div class="callout-title">Voice Input</div><div class="callout-desc">Web Speech API mic button — en-IN locale, speak your question naturally.</div></div>
+    <div class="callout"><div class="callout-icon">🧠</div><div class="callout-title">Multidimensional Synthesis Engine</div><div class="callout-desc">Core Matrix · Lo Shu · Planetary Conjunctions · Harmonic Matrix · Vedic Numerology · Birth Epoch Verification all run in parallel, results correlated silently.</div></div>
+    <div class="callout"><div class="callout-icon">📖</div><div class="callout-title">1,781 Knowledge Nodes</div><div class="callout-desc">AI grounded in verified numerology passages — pure mathematical precision, every claim traceable.</div></div>
+    <div class="callout"><div class="callout-icon">🌐</div><div class="callout-title">Humanised Language</div><div class="callout-desc">"A shift is coming in your career energy" — never "dasha period shows retrograde transit".</div></div>
+  </div>
+</div>
+
+<!-- SCREEN 2: LIFE PATH -->
+<div class="section" id="s2">
+  <div class="section-label">Screen 3 of 9</div>
+  <div class="section-title">Life Path Number Calculator</div>
+  <div class="section-desc">Free SEO tool page. Enter any date of birth to calculate Life Path Number, lucky day, lucky colours, power gemstone, and 2026 personal year guidance. Full JSON-LD Article schema for Google indexing.</div>
+  <div class="iframe-wrap">
+    <div class="browser-bar">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <div class="url-bar">http://localhost:8000/tools/life-path-calculator</div>
+      <a href="http://localhost:8000/tools/life-path-calculator" target="_blank" class="open-btn">↗ Open</a>
+    </div>
+    <iframe src="http://localhost:8000/tools/life-path-calculator" loading="lazy"></iframe>
+  </div>
+  <div class="callouts">
+    <div class="callout"><div class="callout-icon">🔢</div><div class="callout-title">All 9 Numbers + Masters</div><div class="callout-desc">Handles 1–9 and Master Numbers 11, 22 correctly with unique meanings for each.</div></div>
+    <div class="callout"><div class="callout-icon">🎯</div><div class="callout-title">SEO Target</div><div class="callout-desc">"life path number calculator" — high-volume, low-competition keyword with instant rich snippet potential.</div></div>
+    <div class="callout"><div class="callout-icon">📋</div><div class="callout-title">FAQ Schema</div><div class="callout-desc">5 FAQ items with JSON-LD structured data — eligible for Google FAQ rich results.</div></div>
+    <div class="callout"><div class="callout-icon">📣</div><div class="callout-title">CTA to Premium</div><div class="callout-desc">Every result shows a CTA to Charm AI premium — free tool converts visitors to subscribers.</div></div>
+  </div>
+</div>
+
+<!-- SCREEN 3: LO SHU GRID -->
+<div class="section" id="s3">
+  <div class="section-label">Screen 4 of 9</div>
+  <div class="section-title">Lo Shu Grid Calculator</div>
+  <div class="section-desc">Generates a live interactive 3×3 Lo Shu Grid from date of birth. Shows which numbers are present (highlighted gold), repeated (shown with × count), or missing. Includes Planes of Expression analysis and missing number Planetary &amp; elemental remedies.</div>
+  <div class="iframe-wrap">
+    <div class="browser-bar">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <div class="url-bar">http://localhost:8000/tools/lo-shu-grid</div>
+      <a href="http://localhost:8000/tools/lo-shu-grid" target="_blank" class="open-btn">↗ Open</a>
+    </div>
+    <iframe src="http://localhost:8000/tools/lo-shu-grid" loading="lazy"></iframe>
+  </div>
+  <div class="callouts">
+    <div class="callout"><div class="callout-icon">⬡</div><div class="callout-title">Live Grid Render</div><div class="callout-desc">JavaScript renders the authentic Lo Shu grid with correct 4-9-2 / 3-5-7 / 8-1-6 layout.</div></div>
+    <div class="callout"><div class="callout-icon">📐</div><div class="callout-title">6 Planes Analysed</div><div class="callout-desc">Mental, Emotional, Practical rows + Thought, Will, Action columns — each rated Strong/Moderate/Developing/Inactive.</div></div>
+    <div class="callout"><div class="callout-icon">💊</div><div class="callout-title">Missing Number Remedies</div><div class="callout-desc">Each missing number shows a specific Core Matrix crystal remedy and daily practice to strengthen that energy.</div></div>
+    <div class="callout"><div class="callout-icon">🎯</div><div class="callout-title">SEO Target</div><div class="callout-desc">"lo shu grid calculator free" — under-served keyword, high intent.</div></div>
+  </div>
+</div>
+
+<!-- SCREEN 4: LUCKY NUMBER -->
+<div class="section" id="s4">
+  <div class="section-label">Screen 5 of 9</div>
+  <div class="section-title">Lucky Number Calculator</div>
+  <div class="section-desc">Calculates Psychic (primary), Destiny, and Personal Year lucky numbers as a set. Shows lucky day, power hour, gemstone, colours, 2026 personal guidance, and name energy alignment check.</div>
+  <div class="iframe-wrap">
+    <div class="browser-bar">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <div class="url-bar">http://localhost:8000/tools/lucky-number</div>
+      <a href="http://localhost:8000/tools/lucky-number" target="_blank" class="open-btn">↗ Open</a>
+    </div>
+    <iframe src="http://localhost:8000/tools/lucky-number" loading="lazy"></iframe>
+  </div>
+  <div class="callouts">
+    <div class="callout"><div class="callout-icon">🍀</div><div class="callout-title">Lucky Set (3 Numbers)</div><div class="callout-desc">Psychic + Destiny + Personal Year displayed as a pill set — primary number enlarged.</div></div>
+    <div class="callout"><div class="callout-icon">⏰</div><div class="callout-title">Power Hour</div><div class="callout-desc">Best time of day to take important actions based on planetary ruler of your primary number.</div></div>
+    <div class="callout"><div class="callout-icon">📅</div><div class="callout-title">2026 Guidance</div><div class="callout-desc">Unique, layman-language guidance for 2026 for each of the 9 primary numbers.</div></div>
+    <div class="callout"><div class="callout-icon">📛</div><div class="callout-title">Name Energy Check</div><div class="callout-desc">Optional: if name entered, shows Chaldean value and whether name aligns or creates growth tension.</div></div>
+  </div>
+</div>
+
+<!-- SCREEN 5: NAME NUMEROLOGY -->
+<div class="section" id="s5">
+  <div class="section-label">Screen 6 of 9</div>
+  <div class="section-title">Name Numerology Calculator</div>
+  <div class="section-desc">Full Chaldean + Pythagorean dual-system analysis. Calculates Expression, Soul Urge, and Personality Numbers with a live letter-by-letter grid (vowels highlighted gold). Shows Life Path alignment verdict when DOB is also entered.</div>
+  <div class="iframe-wrap">
+    <div class="browser-bar">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <div class="url-bar">http://localhost:8000/tools/name-numerology</div>
+      <a href="http://localhost:8000/tools/name-numerology" target="_blank" class="open-btn">↗ Open</a>
+    </div>
+    <iframe src="http://localhost:8000/tools/name-numerology" loading="lazy"></iframe>
+  </div>
+  <div class="callouts">
+    <div class="callout"><div class="callout-icon">🔤</div><div class="callout-title">Letter Grid</div><div class="callout-desc">Every letter displayed with its numerical value — vowels (Soul Urge) highlighted gold, consonants (Personality) dimmed.</div></div>
+    <div class="callout"><div class="callout-icon">⚖️</div><div class="callout-title">3 System Modes</div><div class="callout-desc">Chaldean only · Pythagorean only · Both side-by-side with cross-system agreement indicator.</div></div>
+    <div class="callout"><div class="callout-icon">🔗</div><div class="callout-title">Life Path Alignment</div><div class="callout-desc">Compares name numbers to Life Path — shows emerald "supports" or gold "growth opportunity" verdict.</div></div>
+    <div class="callout"><div class="callout-icon">💡</div><div class="callout-title">Deep Soul Insights</div><div class="callout-desc">Unique Expression and Soul Urge insight text for each of the 9 numbers — layman, vivid, personal.</div></div>
+  </div>
+</div>
+
+<!-- SCREEN 6: BLOG -->
+<div class="section" id="s6">
+  <div class="section-label">Screen 7 of 9</div>
+  <div class="section-title">SEO Blog — 3 Articles</div>
+  <div class="section-desc">Three long-form SEO blog posts targeting high-volume keywords. Each has Article JSON-LD schema, internal links to tool pages, and CTAs to Charm AI. Click any article link to preview.</div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
+    <div style="border:1px solid var(--border);border-radius:14px;padding:18px;background:var(--surface);cursor:pointer;" onclick="document.getElementById('blog-frame').src='http://localhost:8000/blog/what-is-numerology'">
+      <div style="font-size:0.62rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:8px;">Numerology Guide</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:6px;color:var(--gold-dark);font-weight:600;">What is Numerology?</div>
+      <div style="font-size:0.75rem;color:var(--muted);">The Complete Beginner's Guide — Number grid, calculation walkthrough, 4 systems explained.</div>
+      <div style="margin-top:10px;font-size:0.7rem;color:var(--gold);">↗ Preview →</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:14px;padding:18px;background:var(--surface);cursor:pointer;" onclick="document.getElementById('blog-frame').src='http://localhost:8000/blog/life-path-numbers-explained'">
+      <div style="font-size:0.62rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:8px;">Deep Dive</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:6px;color:var(--gold-dark);font-weight:600;">Life Path 1–9 Explained</div>
+      <div style="font-size:0.75rem;color:var(--muted);">Each number with traits, careers, lucky elements, compatibility, and 2026 theme.</div>
+      <div style="margin-top:10px;font-size:0.7rem;color:var(--gold);">↗ Preview →</div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:14px;padding:18px;background:var(--surface);cursor:pointer;" onclick="document.getElementById('blog-frame').src='http://localhost:8000/blog/gemstone-remedies'">
+      <div style="font-size:0.62rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:8px;">Planetary &amp; Elemental Remedies</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;margin-bottom:6px;color:var(--gold-dark);font-weight:600;">Crystal Remedies Guide</div>
+      <div style="font-size:0.75rem;color:var(--muted);">Ruby, Pearl, Emerald, Blue Sapphire — finger, day, mantra, substitutes, precautions.</div>
+      <div style="margin-top:10px;font-size:0.7rem;color:var(--gold);">↗ Preview →</div>
+    </div>
+  </div>
+
+  <div class="iframe-wrap">
+    <div class="browser-bar">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <div class="url-bar">Click a post above to preview it here</div>
+      <a href="http://localhost:8000/blog/what-is-numerology" target="_blank" class="open-btn">↗ Open</a>
+    </div>
+    <iframe id="blog-frame" src="http://localhost:8000/blog/what-is-numerology" loading="lazy"></iframe>
+  </div>
+</div>
+
+<!-- SCREEN 7: PREMIUM PLANS -->
+<div class="section" id="s7">
+  <div class="section-label">Screen 8 of 9</div>
+  <div class="section-title">Premium Plans — Razorpay Integration</div>
+  <div class="section-desc">The monetisation layer. Four plans wired to Razorpay. Click "Get Premium" on the homepage to open the plans modal. In test mode — no real payments processed. Switch to live keys when ready to launch.</div>
+  <div class="iframe-wrap">
+    <div class="browser-bar">
+      <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <div class="url-bar">http://localhost:8000/#plans</div>
+      <a href="http://localhost:8000/#plans" target="_blank" class="open-btn">↗ Open</a>
+    </div>
+    <iframe src="http://localhost:8000/#plans" loading="lazy"></iframe>
+  </div>
+  <div class="callouts">
+    <div class="callout"><div class="callout-icon">💰</div><div class="callout-title">₹199 Basic Report</div><div class="callout-desc">Unlimited AI chat + Personal Blueprint + 6-step questionnaire + voice input.</div></div>
+    <div class="callout"><div class="callout-icon">⭐</div><div class="callout-title">₹510 Advanced Master Dossier</div><div class="callout-desc">All Premium features + 1 free phone consultation per year + VIP WhatsApp access.</div></div>
+    <div class="callout"><div class="callout-icon">📞</div><div class="callout-title">₹1,050 Premium Sovereign Blueprint</div><div class="callout-desc">45-minute 1-on-1 session with a numerology expert.</div></div>
+    <div class="callout"><div class="callout-icon">🎥</div><div class="callout-title">₹199 Charm AI Starter Pack</div><div class="callout-desc">60-minute video session — share screen, show charts, deeper analysis.</div></div>
+  </div>
+</div>
+
+<!-- SCREEN 8: MOBILE -->
+<div class="section" id="s8">
+  <div class="section-label">Screen 9 of 9</div>
+  <div class="section-title">Mobile View — iPhone 13 (390×844)</div>
+  <div class="section-desc">The full PWA experience on mobile. Installable on Android and iOS. Responsive design — all sections adapt to small screens. Voice input works on mobile Chrome.</div>
+  <div class="mobile-wrap">
+    <div class="phone-frame">
+      <div class="phone-notch"><div class="notch-bar"></div></div>
+      <iframe src="http://localhost:8000/" loading="lazy"></iframe>
+    </div>
+  </div>
+  <div class="callouts" style="margin-top:24px;">
+    <div class="callout"><div class="callout-icon">📲</div><div class="callout-title">PWA Installable</div><div class="callout-desc">Add to Home Screen on Android Chrome — launches as standalone app with Orrery icon.</div></div>
+    <div class="callout"><div class="callout-icon">📶</div><div class="callout-title">Service Worker</div><div class="callout-desc">Offline-capable — app shell cached, works without network after first load.</div></div>
+    <div class="callout"><div class="callout-icon">🎤</div><div class="callout-title">Voice on Mobile</div><div class="callout-desc">Web Speech API works on Chrome for Android — tap mic, speak, AI responds.</div></div>
+    <div class="callout"><div class="callout-icon">⚡</div><div class="callout-title">Play Store Ready</div><div class="callout-desc">TWA (Trusted Web Activity) setup planned — submit to Play Store via Bubblewrap.</div></div>
+  </div>
+</div>
+
+<!-- SCREEN 9: LAUNCH STATUS -->
+<div class="section" id="s9">
+  <div class="section-label">Launch Dashboard</div>
+  <div class="section-title">Platform Launch Status</div>
+  <div class="section-desc">Everything built, everything working. Two items need your input before going live — WhatsApp number and Razorpay live keys. Deployment takes ~15 minutes to production once you provide these.</div>
+
+  <div class="stats-band">
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">Routes Live</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Tool Pages</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Blog Posts</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">AI Engines</div></div>
+  </div>
+
+  <div class="launch-grid">
+    <div class="launch-card done">
+      <div class="lc-status done">✅ Complete</div>
+      <div class="lc-title">Core Computation Architecture</div>
+      <div class="lc-desc">6-engine calculation core (Core Matrix · Lo Shu · Planetary Conjunctions · Harmonic Matrix · Vedic Numerology · Birth Epoch Verification), multi-layer hermetic grounding, consensus correlation — fully operational.</div>
+    </div>
+    <div class="launch-card done">
+      <div class="lc-status done">✅ Complete</div>
+      <div class="lc-title">PWA Frontend</div>
+      <div class="lc-desc">Chat, voice, birth profile, premium flow, questionnaire, blueprint, service worker, PWA manifest, offline support.</div>
+    </div>
+    <div class="launch-card done">
+      <div class="lc-status done">✅ Complete</div>
+      <div class="lc-title">Payments (Test Mode)</div>
+      <div class="lc-desc">Razorpay wired for all 4 plans. HMAC-SHA256 signature verification. Premium token system. Switch to live keys when ready.</div>
+    </div>
+    <div class="launch-card done">
+      <div class="lc-status done">✅ Complete</div>
+      <div class="lc-title">Brand Identity</div>
+      <div class="lc-desc">3 scientific logos (Orrery, Sri Yantra, Astrolabe), Instagram post + story templates, brand guidelines document.</div>
+    </div>
+    <div class="launch-card done">
+      <div class="lc-status done">✅ Complete</div>
+      <div class="lc-title">SEO Foundation</div>
+      <div class="lc-desc">4 tool pages + 3 blog posts, sitemap.xml, robots.txt, JSON-LD structured data, canonical tags, FAQ schema.</div>
+    </div>
+    <div class="launch-card done">
+      <div class="lc-status done">✅ Complete</div>
+      <div class="lc-title">Security</div>
+      <div class="lc-desc">Enterprise Shielded Security, privacy protection, rate limiting, HMAC payment verification, TLS-ready.</div>
+    </div>
+    <div class="launch-card done">
+      <div class="lc-status done">✅ Complete</div>
+      <div class="lc-title">Encrypted Storage Schema</div>
+      <div class="lc-desc">8-table production schema — enterprise partitioned and ready to deploy with automated migration.</div>
+    </div>
+    <div class="launch-card todo">
+      <div class="lc-status todo">⏳ Needs Your Input</div>
+      <div class="lc-title">WhatsApp Number</div>
+      <div class="lc-desc">Replace placeholder 919999999999 in bookings.py with your real WhatsApp Business number (with country code).</div>
+      <a href="http://localhost:8000/" class="lc-action ghost">Update in system configuration</a>
+    </div>
+    <div class="launch-card todo">
+      <div class="lc-status todo">⏳ Needs Your Input</div>
+      <div class="lc-title">Razorpay Live Keys</div>
+      <div class="lc-desc">Set RAZORPAY_KEY_ID + RAZORPAY_KEY_SECRET env vars from your Razorpay dashboard to switch from test to live mode.</div>
+      <a href="https://dashboard.razorpay.com/app/keys" target="_blank" class="lc-action gold">Open Razorpay Dashboard →</a>
+    </div>
+    <div class="launch-card blocked">
+      <div class="lc-status blocked">🔴 Blocked on Domain</div>
+      <div class="lc-title">Cloud Deployment</div>
+      <div class="lc-desc">Cloud deployment configuration ready to execute. Blocked until you confirm: use cloud staging URL or point numerosvision.com?</div>
+    </div>
+    <div class="launch-card blocked">
+      <div class="lc-status blocked">🔴 Blocked on Deployment</div>
+      <div class="lc-title">Play Store TWA</div>
+      <div class="lc-desc">Bubblewrap setup ready. Requires live HTTPS domain + keystore SHA256 fingerprint. After cloud deployment is done.</div>
+    </div>
+  </div>
+</div>
+
+  <!-- Master Unified Site Footer -->
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <!-- Brand Summary Column -->
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+
+        <!-- Column 1: Working Calculators -->
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year 2026</a></li>
+            <li><a href="/calculators/">View All Calculators →</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Intelligence & Plans -->
+        <div class="nv-footer-col">
+          <h4>Intelligence &amp; Plans</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
+            <li><a href="/sample">Sample Dossier</a></li>
+            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation/">1-on-1 Consultation</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Wisdom & Governance -->
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/insights/">Insights Learning Hub</a></li>
+            <li><a href="/about/">About Numeros Vision</a></li>
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="mailto:support@numerosvision.com">support@numerosvision.com</a></li>
+            <li><a href="/practitioner">Practitioner Portal</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/disclaimer/">Disclaimer</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+<!-- Bottom Bar -->
+      <div class="nv-footer-bottom">
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: ANVEIL EVERY CHARM.</div>
+        <div class="nv-footer-legal-inline">
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/disclaimer/">Disclaimer</a>
+          <a href="/cookie-policy/">Cookie Policy</a>
+          <a href="/refund-policy/">Refund Policy</a>
+          <a href="/accessibility/">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const tabs = document.querySelectorAll('.tab');
+  function show(i) {
+    sections.forEach((s,j) => s.classList.toggle('active', j===i));
+    tabs.forEach((t,j) => t.classList.toggle('active', j===i));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+  <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
+  <nav class="nv-sticky-bottom-nav" aria-label="Mobile and Tablet Sticky Navigation">
+    <a href="/" class="nv-bottom-nav-item" data-nav="home" title="Home">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/calculators/" class="nv-bottom-nav-item" data-nav="calculate" title="Calculate">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Calculate</span>
+    </a>
+    <a href="/charm_ai.html" class="nv-bottom-nav-item nv-bottom-nav-center" data-nav="charm" title="Charm AI">
+      <div class="nv-bottom-center-btn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#FFFFFF" stroke-width="2.2" style="display:block; stroke:#FFFFFF !important; transform:none !important;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z" stroke="#FFFFFF"/></svg>
+      </div>
+      <span>Charm AI</span>
+    </a>
+    <a href="/reports_catalogue/" class="nv-bottom-nav-item" data-nav="reports" title="Reports">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Reports</span>
+    </a>
+    <a href="/dashboard/" class="nv-bottom-nav-item" data-nav="account" title="Account">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Account</span>
+    </a>
+  </nav>
+
+  <script src="/static/js/nav.js?v=5.5.0" defer></script>
+
+
+  <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
+  <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
+  <script src="/static/js/nv_profile_sync.js?v=5.4.0" defer></script>
+  <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+</body>
+</html>

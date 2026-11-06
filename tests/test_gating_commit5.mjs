@@ -38,7 +38,10 @@ async function runTests() {
     RAZORPAY_KEY_ID: 'rzp_test_MOCK_COMMIT5_KEY',
     RAZORPAY_KEY_SECRET: 'test_secret_for_commit5_payments',
     RAZORPAY_WEBHOOK_SECRET: 'test_webhook_secret_commit5',
-    AUTH_SECRET: 'test_auth_secret_commit5_salt',
+    OTP_HMAC_SECRET: 'test_otp_hmac_secret_commit5_32b',
+    SESSION_SECRET: 'test_session_secret_commit5_32b_',
+    IP_HASH_SALT: 'test_ip_hash_salt_commit5_32b_00',
+    DATA_ENCRYPTION_KEY: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
     ASSETS: {
       fetch: async () => new Response('Asset stub', { status: 200 })
     }

@@ -683,7 +683,7 @@
 
               <!-- Main CTA Button -->
               <button type="button" id="pitchMainCtaBtn" onclick="handlePitchCtaClick()" style="width:100%; padding:13px; font-size:0.92rem; font-weight:700; border-radius:8px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(201,162,39,0.25); transition:transform 0.2s;">
-                ANVEIL FULL MISSING CHARMS ₹2,100 (₹1,050) &rarr;
+                ANVEIL FULL MISSING CHARMS (₹1,050) &rarr;
               </button>
               <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:6px;">
                 🔒 Instant PDF Download · Private &amp; Secure · Authentic Guidance
@@ -1036,9 +1036,14 @@
       // 1. Driver (Mulank)
       const driver = reduceToSingle(d);
 
-      // 2. Conductor (Bhagyank)
-      const digits = (dobStr.replace(/[^0-9]/g, '')).split('').map(x => parseInt(x, 10));
-      const conductor = reduceToSingle(digits.reduce((a, b) => a + b, 0));
+      // 2. Conductor (Bhagyank via Core Matrix Engine rule)
+      const digits = `${String(d).padStart(2, '0')}${String(m).padStart(2, '0')}${String(y).padStart(4, '0')}`.split('').map(x => parseInt(x, 10));
+      let conductorRaw = digits.reduce((a, b) => a + b, 0);
+      while (conductorRaw > 9 && conductorRaw !== 11 && conductorRaw !== 22 && conductorRaw !== 33) {
+        conductorRaw = String(conductorRaw).split('').reduce((a, b) => a + parseInt(b, 10), 0);
+      }
+      const conductor = reduceToSingle(conductorRaw);
+      const conductorDisplay = conductorRaw > 9 ? `${conductorRaw}/${conductor}` : `${conductor}`;
 
       // 3. Kua Number
       const ySum = reduceToSingle(y);
@@ -1065,7 +1070,7 @@
         if (counts[n] === 0) missing.push(n);
       }
 
-      return { driver, conductor, kua, personal_year: py, counts, missing, day: d, month: m, year: y };
+      return { driver, conductor, conductorRaw, conductorDisplay, kua, personal_year: py, counts, missing, day: d, month: m, year: y };
     }
 
     function getStoredFamilyProfiles() {
@@ -1411,24 +1416,24 @@
 
       } else if (type === 'yogas') {
         _currentPitchOffer.planId = 'report_basic';
-        _currentPitchOffer.planName = 'Basic Numerology Report (3 Pages)';
+        _currentPitchOffer.planName = 'Basic Report (3 Pages)';
         _currentPitchOffer.amount = 199;
 
         if (iconEl) iconEl.textContent = '⚡';
-        if (titleEl) titleEl.textContent = 'ELEMENT YOGAS ALIGNMENT · EXECUTIVE BRIEF (3 PAGES)';
+        if (titleEl) titleEl.textContent = 'ELEMENT YOGAS ALIGNMENT · BASIC REPORT (3 PAGES)';
         if (subEl) subEl.textContent = '5 Elements Harmony & Directional Vectors';
         if (priceEl) priceEl.textContent = '₹199';
         if (strikeEl) strikeEl.textContent = '';
         if (headEl) headEl.textContent = 'ELEMENT YOGAS & FOUNDATIONAL HABITS AUDIT';
-        if (narrEl) narrEl.textContent = `Your current Element Yogas alignment is ${_lastCalculatedData.yogaPct}% Active. The 3-Page Executive Diagnostic Brief provides instant clarity on your dominant Wood, Fire, Earth, Metal, and Water planes to strengthen daily vitality, focus, and emotional equilibrium.`;
-        if (incTitleEl) incTitleEl.textContent = '✦ Executive Diagnostic Deliverables (3 Pages):';
+        if (narrEl) narrEl.textContent = `Your current Element Yogas alignment is ${_lastCalculatedData.yogaPct}% Active. The 3-Page Basic Report provides instant clarity on your dominant Wood, Fire, Earth, Metal, and Water planes to strengthen daily vitality, focus, and emotional equilibrium.`;
+        if (incTitleEl) incTitleEl.textContent = '✦ Basic Report Deliverables (3 Pages):';
         if (incListEl) incListEl.innerHTML = `
           <li><strong>Lo Shu 3×3 Grid Matrix:</strong> Complete visual blueprint of natal and elemental lines</li>
           <li><strong>Auspicious Directional Vectors:</strong> Best compass directions for workspace, sleep, and negotiations</li>
-          <li><strong>Primary Gemstone &amp; Color Alignment:</strong> Foundational planetary resonance without negative side-effects</li>
-          <li><strong>1-Year Cyclical Snapshot:</strong> Key personal milestones for your current Personal Year</li>
+          <li><strong>5-Element Balancing Actions:</strong> Foundational elemental habits and spatial orientation</li>
+          <li><strong>Chaldean Name Breakdown:</strong> Single root and compound letter analysis</li>
         `;
-        if (ctaBtn) ctaBtn.textContent = 'ANVEIL YOGAS CHARM ₹499 (₹199) →';
+        if (ctaBtn) ctaBtn.textContent = 'ANVEIL YOGAS CHARM (₹199) →';
       }
     }
 
@@ -1716,9 +1721,9 @@
               price: "₹199",
               badge: "TARGETED RECOMMENDATION",
               reason: "Your mobile number carries vibrational friction against your birth matrix. Correcting this single commercial antenna unlocks favorable client calls and closes energy leaks.",
-              deliverable: "Personalized 5-page audit with auspicious 10-digit alternative configurations and planetary wallpaper remedy.",
-              cta: "Review Mobile Alignment Report (₹199) 🔒",
-              plan: "report_mobile"
+              deliverable: "Personalized 3-page Basic Report with element balancing and frequency alignment.",
+              cta: "Review Basic Report (₹199) 🔒",
+              plan: "report_basic"
             };
           } else if (!isNameAligned && isMobileAligned && isEmailAligned) {
             nbp = {
@@ -1727,27 +1732,27 @@
               badge: "HIGH PRIORITY RECOMMENDATION",
               reason: "Your calling name carries karmic resistance against your Driver number. Strategic letter balancing aligns your personal authority and public reputation.",
               deliverable: "Authentic Chaldean letter-by-letter sound analysis with 3 lucky calling/business name variations.",
-              cta: "Review Name Balancing Report (₹199) 🔒",
-              plan: "report_name"
+              cta: "Review Basic Report (₹199) 🔒",
+              plan: "report_basic"
             };
           } else if (!isEmailAligned && isNameAligned && isMobileAligned) {
             nbp = {
               title: "Digital Email Frequency & Identity Alignment",
-              price: "₹149",
+              price: "₹199",
               badge: "DIGITAL IDENTITY FOCUS",
               reason: "Your email handle vibrates outside the growth axis, leading to stalled pitches and delayed responses. Harmonizing your digital identity unblocks corporate deal flow.",
               deliverable: "Chaldean email handle audit with recommended corporate alias configurations and sign-off vibration codes.",
-              cta: "Review Email Frequency Report (₹149) 🔒",
-              plan: "report_email"
+              cta: "Review Basic Report (₹199) 🔒",
+              plan: "report_basic"
             };
           } else if (!isMobileAligned || !isNameAligned || !isEmailAligned) {
             nbp = {
-              title: "Master Numerological Dossier (12-Page Complete Alignment)",
+              title: "Advanced Master Dossier (12-Page Complete Alignment)",
               price: "₹510",
               badge: "BEST VALUE · MULTI-VECTOR HARMONIZATION",
               reason: "Multiple friction points detected across your identity vectors and natal Lo Shu planes. A comprehensive chart calibration is urgently recommended.",
-              deliverable: "12-page in-depth dossier covering Name, Mobile, Email remedies, 8-plane Lo Shu analysis, and Mahadasha timing.",
-              cta: "ANVEIL EVERY CHARM ✦ Unlock Master Dossier (₹510) 🔒",
+              deliverable: "12-page in-depth dossier covering element balancing, enabled numbers in depth, and 8-plane Lo Shu analysis.",
+              cta: "ANVIEL EVERY CHARM ✦ Unlock Advanced Master Dossier (₹510) 🔒",
               plan: "report_master"
             };
           } else {
@@ -2020,7 +2025,7 @@
               {
                 id: 'report_basic',
                 alias: 'report_essential',
-                name: 'Basic Numerology Report',
+                name: 'Basic Report',
                 desc: '3-Page Executive PDF · Mulank 1, Bhagyank 4, Lo Shu Matrix & Planetary Vectors',
                 pages: '3 Pages',
                 price: '₹199',
@@ -2057,30 +2062,30 @@
               {
                 id: 'starter_bundle',
                 alias: 'bundle_starter',
-                name: 'Starter Value Bundle (2 Reports)',
-                desc: 'Curated 2-Report Master Pack · Core Vedic & Career Auspicious Timing (24 Pages)',
-                pages: '24 Pages',
-                price: '₹339',
+                name: 'Starter Bundle',
+                desc: '2 Complete 3-Page Basic PDF Reports · Coming soon',
+                pages: '3 Pages',
+                price: 'Coming soon',
                 amount: 339,
                 pdf: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'
               },
               {
                 id: 'discovery_bundle',
                 alias: 'bundle_discovery',
-                name: 'Discovery Master Bundle (3 Reports)',
-                desc: 'Curated 3-Report Master Pack · Vedic, Compatibility & Wealth Matrices (36 Pages)',
-                pages: '36 Pages',
-                price: '₹1,299',
+                name: 'Discovery Bundle',
+                desc: '3 Complete 12-Page Advanced Master Dossiers · Coming soon',
+                pages: '12 Pages',
+                price: 'Coming soon',
                 amount: 1299,
                 pdf: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'
               },
               {
                 id: 'comprehensive_bundle',
                 alias: 'bundle_comprehensive',
-                name: 'Comprehensive Master Bundle (5 Reports)',
-                desc: 'Curated 5-Report Master Pack · Complete 5-Pillar Sovereign Architecture (60 Pages)',
-                pages: '60 Pages',
-                price: '₹1,999',
+                name: 'Comprehensive Bundle',
+                desc: '5 Complete 12-Page Advanced Master Dossiers · Coming soon',
+                pages: '12 Pages',
+                price: 'Coming soon',
                 amount: 1999,
                 pdf: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'
               }
@@ -2146,12 +2151,12 @@
       if (!bannerContainer) return;
 
       const planTitles = {
-        'report_basic': 'Basic Numerology Report (3 Pages)',
-        'report_advanced': 'Advanced Master Dossier (12 Pages)',
-        'report_premium': 'Premium Sovereign Blueprint (32 Pages)',
-        'starter_bundle': 'Starter Value Bundle (2 Reports)',
-        'discovery_bundle': 'Discovery Master Bundle (3 Reports)',
-        'comprehensive_bundle': 'Comprehensive Master Bundle (5 Reports)'
+        'report_basic': 'Basic Report',
+        'report_advanced': 'Advanced Master Dossier',
+        'report_premium': 'Premium Sovereign Blueprint',
+        'starter_bundle': 'Starter Bundle',
+        'discovery_bundle': 'Discovery Bundle',
+        'comprehensive_bundle': 'Comprehensive Bundle'
       };
       const pTitle = planTitles[planId] || 'Personal Numerology Dossier';
 
@@ -2303,12 +2308,12 @@
           window.history.replaceState({}, document.title, window.location.pathname);
 
           const planNames = {
-            'report_basic': 'Basic Numerology Report (3 Pages)',
-            'report_advanced': 'Advanced Master Dossier (12 Pages)',
-            'report_premium': 'Premium Sovereign Blueprint (32 Pages)',
-            'starter_bundle': 'Starter Value Bundle (2 Reports)',
-            'discovery_bundle': 'Discovery Master Bundle (3 Reports)',
-            'comprehensive_bundle': 'Comprehensive Master Bundle (5 Reports)'
+            'report_basic': 'Basic Report',
+            'report_advanced': 'Advanced Master Dossier',
+            'report_premium': 'Premium Sovereign Blueprint',
+            'starter_bundle': 'Starter Bundle',
+            'discovery_bundle': 'Discovery Bundle',
+            'comprehensive_bundle': 'Comprehensive Bundle'
           };
           const planAmounts = {
             'report_basic': 199,

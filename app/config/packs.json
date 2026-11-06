@@ -25,8 +25,8 @@
     "report_advanced": {
       "pack_id": "report_advanced",
       "tier_id": "advanced",
-      "name": "Advanced Report",
-      "display_name": "Advanced Report \u00b7 Recommended",
+      "name": "Advanced Master Dossier",
+      "display_name": "Advanced Master Dossier \u00b7 Recommended",
       "pages": 12,
       "price_inr": 510,
       "amount_paise": 51000,
@@ -45,8 +45,8 @@
     "report_premium": {
       "pack_id": "report_premium",
       "tier_id": "premium",
-      "name": "Premium Dossier",
-      "display_name": "Premium Dossier \u00b7 Comprehensive",
+      "name": "Premium Sovereign Blueprint",
+      "display_name": "Premium Sovereign Blueprint \u00b7 Comprehensive",
       "pages": 32,
       "price_inr": 1050,
       "amount_paise": 105000,
@@ -71,7 +71,7 @@
       "price_inr": 339,
       "amount_paise": 33900,
       "digital_root": 6,
-      "status": "inactive",
+      "status": "coming_soon",
       "voucher_allocation": {
         "basic_vouchers": 2,
         "advanced_vouchers": 0,
@@ -91,14 +91,14 @@
       "price_inr": 1299,
       "amount_paise": 129900,
       "digital_root": 3,
-      "status": "inactive",
+      "status": "coming_soon",
       "voucher_allocation": {
         "basic_vouchers": 0,
         "advanced_vouchers": 3,
         "premium_vouchers": 0
       },
       "deliverables": [
-        "3 Complete 12-Page Advanced Master Reports (36 pages total)",
+        "3 Complete 12-Page Advanced Master Reports",
         "Choose any three topics from the entire catalogue",
         "3-Year Macro Dasha Radar & 12 Personal Months for each topic",
         "7-Layer safe planetary remedy protocols for selected domains"
@@ -111,14 +111,14 @@
       "price_inr": 1999,
       "amount_paise": 199900,
       "digital_root": 1,
-      "status": "inactive",
+      "status": "coming_soon",
       "voucher_allocation": {
         "basic_vouchers": 0,
         "advanced_vouchers": 5,
         "premium_vouchers": 0
       },
       "deliverables": [
-        "5 Complete 12-Page Advanced Master Reports (60 pages total)",
+        "5 Complete 12-Page Advanced Master Reports",
         "Complete multi-domain lifetime clarity across Love, Career, Wealth & Family",
         "3-Year Macro Dasha Radar & 12 Personal Months for each domain",
         "7-Layer safe planetary remedy protocols & auspicious timing windows"

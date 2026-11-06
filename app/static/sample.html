@@ -539,9 +539,7 @@
       color: #523E28;
       line-height: 1.55;
     }
-    .blurred-content-preview {
-      display: none;
-    }
+    
     .page-watermark img {
       width: 100%;
       height: 100%;
@@ -1711,7 +1709,7 @@
     }
 
     function isFormatUnlocked(formatKey) {
-      // Sample viewer displays public 4-page excerpt; locked chapters display static excerpt preview cards
+      // Sample viewer displays public 3-page excerpt; locked chapters display static excerpt preview cards
       return false;
     }
 
@@ -2551,8 +2549,8 @@
 
 
     // =========================================================================
-    // FORMAT 3: SOVEREIGN FULL LIFE ROADMAP (18 PAGES)
-    // Mirrors the 77-page reference Ankur_Sachdeva__numerology.pdf
+    // FORMAT 3: PREMIUM SOVEREIGN BLUEPRINT (32 PAGES)
+    // Mirrors the 32-page reference Ankur_Sachdeva__numerology.pdf
     // =========================================================================
     // =========================================================================
     // FORMAT 3: DIVINE SOVEREIGN ROADMAP (32 PAGES)
@@ -2609,7 +2607,7 @@
         } else {
           const repStr = String(num).repeat(cnt);
           return `
-            <td onclick="showPaywallUnlockModal('master')" style="cursor:pointer; border:1.5px solid #16835B; background:#FFFFFF; vertical-align:middle; text-align:center; padding:4px 2px; border-radius:4px; box-shadow:0 1px 3px rgba(22,131,91,0.15); transition:all 0.2s;" title="Know Your Present Number ${num} Charm (@ ₹510 / ₹599)">
+            <td onclick="showPaywallUnlockModal('master')" style="cursor:pointer; border:1.5px solid #16835B; background:#FFFFFF; vertical-align:middle; text-align:center; padding:4px 2px; border-radius:4px; box-shadow:0 1px 3px rgba(22,131,91,0.15); transition:all 0.2s;" title="Know Your Present Number ${num} Charm (@ ₹510)">
               <div style="font-size:7px; color:#16835B; font-weight:800; letter-spacing:0.03em;">🔓 ACTIVE CHARM</div>
               <div style="font-size:11.5px; font-weight:900; color:#8B6914; font-family:'Cinzel',serif; margin:0.5px 0;">${repStr}${markerStr}</div>
               <div style="font-size:7px; color:#16835B; font-weight:700;">${label} · Active</div>
@@ -3646,7 +3644,7 @@
       <span style="font-family:'Cinzel',serif; font-size:0.82rem; letter-spacing:0.18em; text-transform:uppercase; color:#8B6914; font-weight:700;">PREMIUM SOVEREIGN SECTION LOCKED</span>
       <h2 style="font-family:'Cinzel',serif; font-size:1.5rem; color:#523E28; margin:10px 0 12px 0; font-weight:700;" id="paywallModalTitle">Unlock Complete Sovereign Blueprint (32 Pages)</h2>
       <p style="font-size:0.90rem; color:#523E28; line-height:1.65; margin:0 0 20px 0;" id="paywallModalBody">
-        You are currently exploring your <strong>Free Discovery Tier (Pages 1–3)</strong>. The complete 12–35 Page Planetary Synergy, 10-Year Mahadasha-Antardasha Timeline, Career Rectification Matrix, and Tailored Vedic Remedies are reserved for paid members.
+        You are currently exploring your <strong>Basic Report Preview (3 Pages)</strong>. The complete 12-Page Advanced Master Dossier and 32-Page Premium Sovereign Blueprint with 10-Year Mahadasha-Antardasha Timeline, Career Rectification Matrix, and Tailored Vedic Remedies are reserved for paid members.
       </p>
       <div style="background:rgba(201,162,39,0.1); border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:14px; margin-bottom:24px; text-align:left;">
         <div style="font-size:0.82rem; font-weight:700; color:#8B6914; margin-bottom:6px;">✦ What you unlock in the Full Dossier:</div>
@@ -3661,7 +3659,7 @@
       <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px; text-align:left;">
         <a href="/pricing.html#order" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:2px solid #8B6914; background:#FFFDF7; border-radius:10px; text-decoration:none; color:#523E28;">
           <div>
-            <div style="font-weight:800; font-size:0.88rem; color:#8B6914;">Diamond Sovereign Compendium (32 Pages)</div>
+            <div style="font-weight:800; font-size:0.88rem; color:#8B6914;">Premium Sovereign Blueprint (32 Pages)</div>
             <div style="font-size:0.75rem; color:#7A654D;">Full Missing Numbers Remedies, Name Correction &amp; Vastu</div>
           </div>
           <div style="text-align:right;">
@@ -3671,7 +3669,7 @@
         </a>
         <a href="/pricing.html#order" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid #16835B; background:#FFFFFF; border-radius:10px; text-decoration:none; color:#523E28;">
           <div>
-            <div style="font-weight:800; font-size:0.88rem; color:#16835B;">Gold Master Dossier (12 Pages)</div>
+            <div style="font-weight:800; font-size:0.88rem; color:#16835B;">Advanced Master Dossier (12 Pages)</div>
             <div style="font-size:0.75rem; color:#7A654D;">Present Numbers Harmonization, 5-Year Dasha &amp; Career</div>
           </div>
           <div style="text-align:right;">
@@ -3681,7 +3679,7 @@
         </a>
         <a href="/checkout/?plan=report_basic" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid rgba(201,162,39,0.4); background:#FFFFFF; border-radius:10px; text-decoration:none; color:#523E28;">
           <div>
-            <div style="font-weight:800; font-size:0.88rem; color:#8B6914;">Silver Discovery Blueprint (3 Pages)</div>
+            <div style="font-weight:800; font-size:0.88rem; color:#8B6914;">Basic Report (3 Pages)</div>
             <div style="font-size:0.75rem; color:#7A654D;">Driver-Conductor Strengths &amp; Element Yogas Overview</div>
           </div>
           <div style="text-align:right;">
@@ -3707,21 +3705,21 @@
       const cta = document.getElementById('paywallModalCtaBtn');
 
       if (fmt === 'roadmap') {
-        if (title) title.textContent = 'Full Anveil Charm for Missing Numbers (₹1,050)';
+        if (title) title.textContent = 'Premium Sovereign Blueprint (32 Pages · ₹1,050)';
         if (body) body.innerHTML = 'Activate all unsealed Lo Shu voids through <strong>Chaldean Calling Name Balancing</strong>, <strong>Golden Raj Yoga (4-5-6) completion</strong>, and <strong>7-Layer Vastu Directional Cures</strong> (SW, E, SE, Center, NW, W). Includes the complete 32-page lifetime sovereign compendium with all 4-Stage Pinnacle Cycles.';
         if (cta) {
           cta.textContent = 'ANVEIL EVERY CHARM ✦ Unlock Full Missing Charms (₹1,050) →';
           cta.href = '/pricing.html#order';
         }
       } else if (fmt === 'master') {
-        if (title) title.textContent = 'Know Your Present Numbers\' Charm & Power (₹510)';
+        if (title) title.textContent = 'Advanced Master Dossier (12 Pages · ₹510)';
         if (body) body.innerHTML = 'Harmonize your inborn gifts and balance repeated number overdrive. Unlocks the complete 12-page Master Dossier: 8 Elemental Planes, 5-Year Numerology Dasha & Numerology Dasha timing corridors, and high-conversion Muhurat windows.';
         if (cta) {
           cta.textContent = 'ANVEIL EVERY CHARM ✦ Unlock Present Charm Dossier (₹510) →';
           cta.href = '/pricing.html#order';
         }
       } else {
-        if (title) title.textContent = 'Unlock Silver Charm Blueprint (3 Pages · ₹199)';
+        if (title) title.textContent = 'Basic Report (3 Pages · ₹199)';
         if (body) body.innerHTML = 'Unlock complete 8 Elemental Planes breakdown, Raj Yogas, and 7-Layer Holistic Remedial System with Driver-Conductor safeguards.';
         if (cta) {
           cta.textContent = 'ANVEIL EVERY CHARM ✦ Unlock Silver Blueprint (₹199) →';

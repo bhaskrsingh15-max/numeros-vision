@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z2E6416W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3Z2E6416W7', {
+      send_page_view: true,
+      cookie_flags: 'SameSite=Lax;Secure'
+    });
+  </script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Standardized Favicon & Brand Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="/logos/nv-logo-mark.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+
+  <title>Free Lucky Number Calculator — Numeros Vision</title>
+  <meta name="description" content="Find your lucky numbers free instantly. Calculate your personal lucky number, lucky day, lucky colour, and lucky gemstone from your date of birth. Powered by Numeros Vision AI." />
+  <meta name="keywords" content="lucky number calculator, lucky number by date of birth, my lucky number today, lucky number numerology, personal lucky number free" />
+  <link rel="canonical" href="https://numerosvision.com/tools/lucky-number/" />
+  <!-- Search Engine Crawl & Indexing Directives -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+  <!-- App Store, PWA & Mobile Web Directives -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Numeros Vision" />
+  <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+  <meta property="og:site_name" content="Numeros Vision" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://numerosvision.com/tools/lucky-number" />
+  <meta property="og:title" content="Free Lucky Number Calculator — Numeros Vision" />
+  <meta property="og:description" content="Find your lucky numbers free instantly. Calculate your personal lucky number, lucky day, lucky colour, and lucky gemstone from your date of birth. Powered by Numeros Vision AI." />
+  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+
+  <!-- Twitter Card Directives -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Lucky Number Calculator — Numeros Vision" />
+  <meta name="twitter:description" content="Find your lucky numbers free instantly. Calculate your personal lucky number, lucky day, lucky colour, and lucky gemstone from your date of birth. Powered by Numeros Vision AI." />
+  <meta name="twitter:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Lucky Number Calculator",
+    "description": "Free personal lucky number calculator by Numeros Vision",
+    "url": "https://numerosvision.com/tools/lucky-number",
+    "applicationCategory": "LifestyleApplication",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+    "provider": { "@type": "Organization", "name": "Numeros Vision" }
+  }
+  </script>
+
+  <style>
+    /* Tool Specific Overrides (Venus Pearl & Jupiter Gold) */
+    .tool-hero { text-align: center; padding: 60px 20px 36px; max-width: 760px; margin: 0 auto; }
+    .tool-eyebrow { font-size: 0.72rem; letter-spacing: 0.16em; color: var(--gold); text-transform: uppercase; font-weight: 700; margin-bottom: 16px; }
+    .tool-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 400; line-height: 1.15; margin-bottom: 16px; color: var(--text-primary); }
+    .tool-title span { color: var(--gold-dark); }
+    .tool-sub { font-size: 0.96rem; color: var(--text-muted); line-height: 1.75; }
+
+    /* Calculator Card */
+    .calc-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 500px;
+      margin: 0 auto 36px;
+      box-shadow: 0 8px 30px rgba(180, 155, 110, 0.12);
+    }
+    .input-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+    .input-group { flex: 1; min-width: 70px; }
+    label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-dark); font-weight: 700; margin-bottom: 8px; }
+    input, select {
+      width: 100%;
+      background: #FFFDF7;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.25s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    input:focus, select:focus {
+      border-color: var(--gold);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.14);
+    }
+    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .btn-calc {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #C9A227 0%, #E2B84B 100%);
+      border: 1px solid #C9A227;
+      border-radius: 12px;
+      color: #FFFDF7;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-calc:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(201, 162, 39, 0.35);
+    }
+
+    /* Result Card */
+    #result { display: none; max-width: 540px; margin: 0 auto; padding: 0 16px 60px; }
+    .lucky-hero {
+      text-align: center;
+      padding: 32px 24px;
+      background: #FFFDF7;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 30px rgba(180, 155, 110, 0.1);
+    }
+    .num-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      font-weight: 400;
+      color: var(--gold-dark);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .num-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    .lucky-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .lucky-box {
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(180, 155, 110, 0.06);
+    }
+    .lb-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .lb-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-dark);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .lb-val {
+      font-size: 0.92rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Extra numbers */
+    .extra-nums {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .num-pill {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+    }
+    .num-pill.primary {
+      border-color: var(--gold);
+      background: rgba(201, 162, 39, 0.12);
+      color: var(--gold-dark);
+      font-size: 1.45rem;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(201, 162, 39, 0.2);
+    }
+
+    .guidance {
+      background: #FFFFFF;
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(180, 155, 110, 0.08);
+    }
+    .guidance-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold-dark);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .guidance-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+    }
+
+    .cta-strip {
+      text-align: center;
+      padding: 32px 24px;
+      background: rgba(201, 162, 39, 0.05);
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+      margin-bottom: 30px;
+    }
+    .cta-strip h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; margin-bottom: 10px; color: var(--text-primary); }
+    .cta-strip p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.7; }
+
+    /* Tool Links */
+    .tool-links {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 24px 0 0;
+    }
+    .tl {
+      padding: 10px 18px;
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      color: var(--gold-dark);
+      font-size: 0.82rem;
+      text-decoration: none;
+      background: #FFFFFF;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .tl:hover {
+      background: rgba(201, 162, 39, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* FAQ */
+    .faq-section { max-width: 720px; margin: 40px auto 80px; padding: 0 20px; }
+    .faq-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; text-align: center; margin-bottom: 32px; color: var(--text-primary); }
+    .faq-item { border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; background: #FFFFFF; }
+    .faq-q { padding: 18px 20px; cursor: pointer; font-weight: 600; font-size: 0.92rem; display: flex; justify-content: space-between; align-items: center; color: var(--text-primary); }
+    .faq-q:hover { background: rgba(201, 162, 39, 0.04); }
+    .faq-a { padding: 0 20px 20px; font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; display: none; }
+    .faq-a.open { display: block; }
+  </style>
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
+  <!-- Google Fonts for Unified Master Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KW6GQRVZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+<!-- ───── MASTER SITE HEADER ───── -->
+  <!-- Master Unified Site Header -->
+  <header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links matching Master Roadmap IA -->
+      <nav aria-label="Main Navigation">
+                <ul class="nv-nav-menu" id="nvNavMenu">
+          <!-- 1. Home -->
+          <li class="nv-nav-item">
+            <a href="/" class="nv-nav-link" title="Numeros Vision Home">Home</a>
+          </li>
+
+          <!-- 1. About Us -->
+          <li class="nv-nav-item">
+            <a href="/about/" class="nv-nav-link" title="About Numeros Vision | Our Approach to Numerology" data-canonical="https://numerosvision.com/about/">About Us</a>
+          </li>
+
+          <!-- 2. Calculators (Accordion / Dropdown) -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/tools/baby-naming" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/tools/name-numerology" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/tools/mobile-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/tools/compatibility-calculator" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Compatibility Synastry &amp; Synastry</span></a></li>
+              <li><a href="/tools/business-numerology" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/tools/life-path-calculator" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/tools/lo-shu-grid" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/tools/vehicle-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/tools/property-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/tools/blessing-years" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+
+          <!-- 2. Charm AI -->
+          <li class="nv-nav-item"><a href="/#charm-ai" class="nv-nav-link">Charm AI</a></li>
+
+          <!-- 3. Reports & Consultations -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Reports</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/reports/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
+              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Insights -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Insights</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
+              <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
+              <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
+              <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
+              <li><a href="/blog/gemstone-remedies" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Pricing -->
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+
+          <!-- 6. Contact Us -->
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+
+          <!-- 7. PWA Download / Install App on Mobile & Tablet ONLY -->
+          <li class="nv-nav-item nv-pwa-menu-item" id="nvPwaDrawerItem" style="display:none; margin: 8px 0; width: 100%; box-sizing: border-box;">
+            <button type="button" class="nv-nav-link nv-pwa-install-trigger-btn" onclick="triggerPwaInstall(event)" style="background: rgba(201,162,39,0.12); border: 1.5px solid rgba(201,162,39,0.38); border-radius: 999px; padding: 10px 18px; font-weight: 600; color: #8B6914; display: flex; align-items: center; justify-content: space-between; width: 100%; cursor: pointer; text-align: left; box-sizing: border-box;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <span class="nv-sub-icon" style="font-size: 1.15rem;">📲</span>
+                <span>Install / Download App</span>
+              </span>
+              <span class="nv-sub-tag" style="background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #fff; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; font-weight: 700; text-transform: uppercase;">PWA</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/#birth-profile" class="nv-btn-cta">Discover My Numbers ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+    <script>
+    function toggleMobileNav(e) {
+      if (window.nvToggleMaster && typeof window.nvToggleMaster === 'function') {
+        return window.nvToggleMaster(e || window.event);
+      }
+      var evt = e || window.event;
+      if (evt && evt.stopPropagation) evt.stopPropagation();
+      var menu = document.getElementById('nvNavMenu');
+      var btn = document.querySelector('.nv-mobile-toggle');
+      var header = document.querySelector('.nv-header');
+      if (menu) {
+        var isOpen = menu.classList.toggle('active');
+        if (btn) {
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          btn.innerHTML = isOpen ? '✕' : '☰';
+        }
+        if (header) {
+          header.classList.toggle('menu-open', isOpen);
+        }
+        document.body.classList.toggle('nv-nav-open', isOpen);
+        var backdrop = document.getElementById('nv-drawer-backdrop');
+        if (backdrop) {
+          backdrop.classList.toggle('active', isOpen);
+        }
+      }
+    }
+  </script>
+
+<!-- ───── TOOL HERO ───── -->
+<div class="tool-hero">
+  <div class="tool-eyebrow">Free Numerology Tool</div>
+  <h1 class="tool-title">Lucky Number<br/><span>Calculator</span></h1>
+  <p class="tool-sub">Your personal lucky numbers are encoded in your date of birth. Discover your primary lucky number, complete lucky set, power weekday, lucky colour, and power gemstone — free, instantly.</p>
+</div>
+
+<!-- ───── CALCULATOR CARD ───── -->
+<div class="calc-card">
+  <div class="input-row">
+    <div class="input-group" style="flex:0.5;">
+      <label>Day</label>
+      <input type="number" id="ln-day" min="1" max="31" placeholder="DD"/>
+    </div>
+    <div class="input-group" style="flex:0.7;">
+      <label>Month</label>
+      <select id="ln-month">
+        <option value="">Month</option>
+        <option value="1">January</option><option value="2">February</option>
+        <option value="3">March</option><option value="4">April</option>
+        <option value="5">May</option><option value="6">June</option>
+        <option value="7">July</option><option value="8">August</option>
+        <option value="9">September</option><option value="10">October</option>
+        <option value="11">November</option><option value="12">December</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Year</label>
+      <input type="number" id="ln-year" min="1900" max="2026" placeholder="YYYY"/>
+    </div>
+  </div>
+  <div style="margin-bottom:18px;">
+    <label>Your Full Name (for Name Energy alignment)</label>
+    <input type="text" id="ln-name" placeholder="As written on birth certificate" />
+  </div>
+  <button class="btn-calc" onclick="calcLucky()">✦ Find My Lucky Numbers</button>
+</div>
+
+<!-- ───── RESULT ───── -->
+<div id="result">
+  <!-- Primary lucky number hero -->
+  <div class="lucky-hero">
+    <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-muted);font-weight:700;margin-bottom:8px;">Your Primary Lucky Number</div>
+    <div class="num-display" id="r-primary"></div>
+    <div class="num-label" id="r-theme"></div>
+
+    <!-- Lucky number set -->
+    <div style="margin-bottom:6px;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold-dark);font-weight:700;">Your Complete Lucky Set</div>
+    <div class="extra-nums" id="r-set"></div>
+  </div>
+
+  <!-- Lucky elements grid -->
+  <div class="lucky-row">
+    <div class="lucky-box"><div class="lb-icon">📅</div><div class="lb-label">Auspicious Day</div><div class="lb-val" id="r-day"></div></div>
+    <div class="lucky-box"><div class="lb-icon">🪐</div><div class="lb-label">Ruling Planet</div><div class="lb-val" id="r-planet"></div></div>
+    <div class="lucky-box"><div class="lb-icon">🎨</div><div class="lb-label">Harmonic Colours</div><div class="lb-val" id="r-colors"></div></div>
+    <div class="lucky-box"><div class="lb-icon">⏰</div><div class="lb-label">Auspicious Hour</div><div class="lb-val" id="r-hour"></div></div>
+  </div>
+
+  <!-- Planetary Energy Calculation Diagnostics -->
+  <div class="guidance" id="r-diag-block">
+    <div class="guidance-title">✦ Planetary Energy Diagnostic Breakdown</div>
+    <div class="guidance-text" id="r-diag-text"></div>
+  </div>
+
+  <!-- Name energy -->
+  <div class="guidance" id="r-name-block" style="display:none;">
+    <div class="guidance-title">✦ Name Energy Alignment</div>
+    <div class="guidance-text" id="r-name-text"></div>
+  </div>
+
+  <!-- Step 2 & 3: Unified Curiosity Bridge & Standard Upgrade Panel -->
+  <div id="res-funnel-offer-lucky"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (window.nvFunnel && typeof window.nvFunnel.renderOfferBridge === "function") {
+        window.nvFunnel.renderOfferBridge("res-funnel-offer-lucky", { productId: "birth_number" });
+      }
+    });
+  </script>
+
+  <div class="tool-links">
+    <a href="/tools/life-path-calculator" class="tl">Life Path Calculator</a>
+    <a href="/tools/lo-shu-grid" class="tl">Lo Shu Grid</a>
+    <a href="/tools/name-numerology" class="tl">Name Numerology</a>
+  </div>
+</div>
+
+<!-- ───── FAQ ───── -->
+<div class="faq-section">
+  <h2 class="faq-title">Frequently Asked Questions</h2>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">How is my lucky number calculated? <span>+</span></div>
+    <div class="faq-a">Your primary lucky number (Psychic/Driver Number) is the single-digit sum of your day of birth. Your secondary number (Destiny/Conductor Number) is the sum of your full date of birth reduced to a single digit. Together they form your core lucky number set. Additional numbers come from your name value and personal year cycle.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Can I use my lucky numbers for important decisions? <span>+</span></div>
+    <div class="faq-a">Lucky numbers in numerology represent energetic alignments — periods and choices where things flow more naturally for you. They work best as guides for timing decisions (signing contracts, starting ventures, scheduling meetings) rather than as random numbers. The real value is in using them to align your actions with your natural energy cycles.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What is the difference between Psychic and Destiny number? <span>+</span></div>
+    <div class="faq-a">Your Psychic (Driver) Number comes from just your day of birth — it reflects how you see yourself and your instinctive nature. Your Destiny (Conductor) Number comes from your full date of birth — it reflects how the world sees you and the energy you radiate outward. Your Primary Lucky Number is your Psychic Number; your power set includes both.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">How often do lucky numbers change? <span>+</span></div>
+    <div class="faq-a">Your core Psychic and Destiny numbers never change — they are fixed by birth. However, your Personal Year Number changes every year, and your Personal Month Number changes monthly, creating shifting auspicious windows throughout your life. Charm AI tracks all of these for you.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What is a power gemstone in numerology? <span>+</span></div>
+    <div class="faq-a">In Core Matrix and numerological tradition, each number 1–9 corresponds to a planetary ruler, and each planet has a specific gemstone that channels its energy. Wearing your power gemstone on the correct finger on your lucky day is believed to strengthen your number's positive qualities and reduce its challenges.</div>
+  </div>
+</div>
+
+<!-- ───── FIXED MOBILE BOTTOM BAR (Horocosmo 5-Tab Ergonomic Standard) ───── -->
+<nav class="mobile-bottom-tabs" id="mobile-bottom-tabs" aria-label="Mobile Navigation">
+  <a class="bottom-tab-item" href="/">
+    <div class="bottom-tab-indicator"></div>
+    <div class="bottom-tab-icon">
+      <svg viewBox="0 0 20 20" fill="currentColor">
+        <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="10" cy="10" r="2.4"/>
+      </svg>
+    </div>
+    <span>Home</span>
+  </a>
+  <a class="bottom-tab-item" href="/#charm-ai">
+    <div class="bottom-tab-indicator"></div>
+    <div class="bottom-tab-icon" style="display:flex;align-items:center;justify-content:center;">
+      <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision - ANVEIL EVERY CHARM" style="width:20px;height:20px;border-radius:50%;display:block;filter:drop-shadow(0 1px 4px rgba(201,162,39,0.35));" />
+    </div>
+    <span>Charm AI</span>
+  </a>
+  <a class="bottom-tab-item" href="/tools/lo-shu-grid" title="Lo Shu 3x3 Magic Square Matrix">
+    <div class="bottom-tab-indicator"></div>
+    <div class="bottom-tab-icon">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+        <rect x="2.5" y="2.5" width="15" height="15" rx="2" stroke="currentColor"/>
+        <line x1="7.5" y1="2.5" x2="7.5" y2="17.5"/>
+        <line x1="12.5" y1="2.5" x2="12.5" y2="17.5"/>
+        <line x1="2.5" y1="7.5" x2="17.5" y2="7.5"/>
+        <line x1="2.5" y1="12.5" x2="17.5" y2="12.5"/>
+      </svg>
+    </div>
+    <span>Lo Shu Grid</span>
+  </a>
+  <a class="bottom-tab-item active" href="/tools/life-path-calculator" title="Numerology Calculators & Tools">
+    <div class="bottom-tab-indicator"></div>
+    <div class="bottom-tab-icon">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="10" cy="10" r="7.5" stroke="currentColor"/>
+        <circle cx="10" cy="2.2" fill="currentColor"/>
+        <line x1="10" y1="2.5" x2="10" y2="5.5"/>
+        <line x1="10" y1="14.5" x2="10" y2="17.5"/>
+        <line x1="2.5" y1="10" x2="5.5" y2="10"/>
+        <line x1="14.5" y1="10" x2="17.5" y2="10"/>
+      </svg>
+    </div>
+    <span>Tools</span>
+  </a>
+  <a class="bottom-tab-item" href="/#consultation" title="Book 1-on-1 Numerology Consultant Session">
+    <div class="bottom-tab-indicator"></div>
+    <div class="bottom-tab-icon">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+        <line x1="10" y1="2" x2="10" y2="18"/>
+        <path d="M5 6 C 7.5 4.5, 12.5 4.5, 15 6 C 12.5 8, 7.5 8, 5 10 C 7.5 12, 12.5 12, 15 10.5"/>
+        <circle cx="10" cy="2.5" r="1.8" fill="currentColor"/>
+      </svg>
+    </div>
+    <span>Consult</span>
+  </a>
+</nav>
+
+<!-- ───── FLOATING BACK TO TOP BUTTON ───── -->
+<button class="back-to-top-btn" id="back-to-top-btn" onclick="scrollToTop(event)" title="Go to top of page" aria-label="Back to Top">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  <span>TOP</span>
+</button>
+
+<!-- ───── MASTER FOOTER ───── -->
+  <!-- Master Unified Site Footer -->
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <!-- Brand Summary Column -->
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+
+        <!-- Column 1: Working Calculators -->
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year 2026</a></li>
+            <li><a href="/calculators/">View All Calculators →</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Intelligence & Plans -->
+        <div class="nv-footer-col">
+          <h4>Intelligence &amp; Plans</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
+            <li><a href="/sample">Sample Dossier</a></li>
+            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation/">1-on-1 Consultation</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Wisdom & Governance -->
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/insights/">Insights Learning Hub</a></li>
+            <li><a href="/about/">About Numeros Vision</a></li>
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="mailto:support@numerosvision.com">support@numerosvision.com</a></li>
+            <li><a href="/practitioner">Practitioner Portal</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/disclaimer/">Disclaimer</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+<!-- Bottom Bar -->
+      <div class="nv-footer-bottom">
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: ANVEIL EVERY CHARM.</div>
+        <div class="nv-footer-legal-inline">
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/disclaimer/">Disclaimer</a>
+          <a href="/cookie-policy/">Cookie Policy</a>
+          <a href="/refund-policy/">Refund Policy</a>
+          <a href="/accessibility/">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script src="/static/js/nav.js?v=5.5.0"></script>
+<script src="/static/js/nv_profile_sync.js?v=5.4.0"></script>
+<script>
+const PLANET_NAMES = {1:'Sun (Surya)',2:'Moon (Chandra)',3:'Jupiter (Guru)',4:'Rahu',5:'Mercury (Budha)',6:'Venus (Shukra)',7:'Ketu',8:'Saturn (Shani)',9:'Mars (Mangal)',11:'Master 11',22:'Master 22'};
+
+const D = {
+  themes:{1:'Solar Monad (Root 1)',2:'Lunar Dyad (Root 2)',3:'Jovian Triad (Root 3)',4:'Rahu Tetrad (Root 4)',5:'Mercurial Pentad (Root 5)',6:'Venusian Hexad (Root 6)',7:'Ketu Heptad (Root 7)',8:'Saturnian Octad (Root 8)',9:'Martial Ennead (Root 9)',11:'Master 11 Frequency',22:'Master 22 Frequency'},
+  days:{1:'Sunday',2:'Monday',3:'Thursday',4:'Saturday',5:'Wednesday',6:'Friday',7:'Monday',8:'Saturday',9:'Tuesday',11:'Monday',22:'Saturday'},
+  colors:{1:'Gold, Orange, Red',2:'White, Silver, Cream',3:'Yellow, Purple, Gold',4:'Electric Blue, Grey, Green',5:'Green, Silver, White',6:'Pink, Cream, Blue',7:'Violet, Lavender, White',8:'Dark Blue, Navy, Royal Blue, Brown',9:'Red, Crimson, Gold',11:'White, Silver, Pale Blue',22:'Indigo, Dark Blue, Earth'},
+  hours:{1:'Sunrise (6–8 AM)',2:'Late evening (9–11 PM)',3:'Morning (9–11 AM)',4:'Late afternoon (4–6 PM)',5:'Midday (12–2 PM)',6:'Early evening (6–8 PM)',7:'Pre-dawn (4–6 AM)',8:'Early morning (7–9 AM)',9:'Late morning (10 AM–12 PM)',11:'Dawn (5–7 AM)',22:'Sunrise (6–8 AM)'}
+};
+
+function digitSum(n){return String(Math.abs(n)).split('').reduce((a,c)=>a+parseInt(c,10),0);}
+function reduceToSingle(n, preserveMaster=false){while(n>9){if(preserveMaster&&(n===11||n===22||n===33))return n;n=digitSum(n);}return n;}
+function reduce(n){return reduceToSingle(n, false);}
+function chaldean(s){
+  const m={a:1,i:1,q:1,j:1,y:1,b:2,k:2,r:2,c:3,g:3,l:3,s:3,d:4,m:4,t:4,e:5,h:5,n:5,x:5,u:6,v:6,w:6,o:7,z:7,f:8,p:8};
+  return s.toLowerCase().replace(/[^a-z]/g,'').split('').reduce((a,c)=>a+(m[c]||0),0);
+}
+
+function calcLucky(){
+  const d=parseInt(document.getElementById('ln-day').value);
+  const m=parseInt(document.getElementById('ln-month').value);
+  const y=parseInt(document.getElementById('ln-year').value);
+  const name=document.getElementById('ln-name').value.trim();
+  if(!d||!m||!y||d<1||d>31||m<1||m>12||y<1900){alert('Please enter a valid date of birth.');return;}
+
+  const dobStr = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const calcData = {
+    tool: 'lucky_number',
+    name: name || 'Seeker',
+    dob: dobStr,
+    summary: `Lucky Numbers calculation for ${dobStr}`
+  };
+
+  const doRenderLucky = function() {
+    const psychic=reduceToSingle(d, false);          // driver / primary
+    const fullDigits=`${String(d).padStart(2,'0')}${String(m).padStart(2,'0')}${String(y).padStart(4,'0')}`;
+    const destinyRaw=reduceToSingle(digitSum(fullDigits), true);
+    const destiny=reduceToSingle(destinyRaw, false);
+    const destinyDisplay=destinyRaw>9?`${destinyRaw}/${destiny}`:`${destiny}`;
+    const cy=new Date().getFullYear();
+    const personalYear=reduce(reduce(d)+reduce(m)+digitSum(cy));
+
+    // Lucky set: psychic, destiny, personal year — unique, sorted
+    const luckySet=[...new Set([psychic,destiny,personalYear])].sort((a,b)=>a-b);
+
+    document.getElementById('r-primary').textContent=psychic;
+    document.getElementById('r-theme').textContent=D.themes[psychic]||`Root ${psychic}`;
+
+    // Render set
+    const setEl=document.getElementById('r-set');
+    setEl.innerHTML=luckySet.map(n=>`<div class="num-pill${n===psychic?' primary':''}">${n}</div>`).join('');
+
+    document.getElementById('r-day').textContent=D.days[psychic]||'Friday';
+    document.getElementById('r-planet').textContent=PLANET_NAMES[psychic]||'Cosmic Vibration';
+    document.getElementById('r-colors').textContent=D.colors[psychic]||'Gold, White';
+    document.getElementById('r-hour').textContent=D.hours[psychic]||'Sunrise';
+
+    // Birth digits breakdown
+    const dobDigitsStr = `${String(d).padStart(2,'0')}${String(m).padStart(2,'0')}${y}`;
+    const counts = {};
+    for (let i=1;i<=9;i++) counts[i]=0;
+    for (const ch of dobDigitsStr) { const n=parseInt(ch); if(n>=1&&n<=9) counts[n]++; }
+    const missing = [1,2,3,4,5,6,7,8,9].filter(n=>counts[n]===0);
+    const repeating = [1,2,3,4,5,6,7,8,9].filter(n=>counts[n]>1);
+
+    const frictionPairs = [[1,8],[8,1],[2,8],[8,2],[4,8],[8,4],[4,9],[9,4],[1,4],[4,1]];
+    const isFriction = frictionPairs.some(([a,b]) => (psychic===a && destiny===b) || (psychic===b && destiny===a));
+    const alignStatus = isFriction ? 'Tension Detected (Karmic Friction)' : 'Harmonic Alignment';
+    const alignCol = isFriction ? '#C0392B' : '#16835B';
+
+    document.getElementById('r-diag-text').innerHTML = `
+      <div style="font-size:0.86rem;color:var(--text-primary);line-height:1.7;">
+        <strong>Driver Number:</strong> ${psychic} (${PLANET_NAMES[psychic]}) &nbsp;|&nbsp; 
+        <strong>Destiny Number:</strong> ${destinyDisplay} (${PLANET_NAMES[destiny]}) &nbsp;|&nbsp;
+        <strong>Personal Year Cycle:</strong> ${personalYear} <br>
+        <strong>Planetary Resonance:</strong> <span style="color:${alignCol};font-weight:700;">${alignStatus}</span> <br>
+        <strong>Missing Planet Energies:</strong> ${missing.length > 0 ? missing.map(n=>`${n} (${PLANET_NAMES[n]})`).join(', ') : 'None (Full Presence)'} <br>
+        <strong>Repetitive Planet Energies:</strong> ${repeating.length > 0 ? repeating.map(n=>`${n} (×${counts[n]} - ${PLANET_NAMES[n]})`).join(', ') : 'None (Single Digits)'}
+      </div>
+    `;
+
+    // Name energy
+    if(name.length>1){
+      const nv=reduce(chaldean(name));
+      const match=nv===psychic||nv===destiny;
+      const nb=document.getElementById('r-name-block');
+      const nt=document.getElementById('r-name-text');
+      nt.innerHTML=match
+        ?`<span style="color:#16835B;font-weight:700;">ALIGNED:</span> Name vibration reduces to Compound ${chaldean(name)} / Root ${nv} (${PLANET_NAMES[nv]}). Resonates with your core numbers.`
+        :`<span style="color:#C0392B;font-weight:700;">FRICTION DETECTED:</span> Name vibration reduces to Root ${nv} (${PLANET_NAMES[nv]}). Does not match Driver ${psychic} or Destiny ${destiny}.`;
+      nb.style.display='block';
+    }
+
+    const el=document.getElementById('result');
+    el.style.display='block';
+    el.scrollIntoView({behavior:'smooth',block:'start'});
+  };
+
+  if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
+    window.nvProfileSync.requireConsentToReveal(calcData, doRenderLucky, 'result');
+  } else {
+        const qp = new URLSearchParams(calcData).toString();
+        window.location.href = '/signup/?source=calculator_gate&' + qp;
+      
+  }
+}
+
+function toggleFaq(el) {
+  const ans = el.nextElementSibling;
+  const isOpen = ans.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a=>a.classList.remove('open'));
+  document.querySelectorAll('.faq-q span').forEach(s=>s.textContent='+');
+  if (!isOpen) { ans.classList.add('open'); el.querySelector('span').textContent='−'; }
+}
+</script>
+  <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
+  <nav class="nv-sticky-bottom-nav" aria-label="Mobile and Tablet Sticky Navigation">
+    <a href="/" class="nv-bottom-nav-item" data-nav="home" title="Home">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/calculators/" class="nv-bottom-nav-item" data-nav="calculate" title="Calculate">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Calculate</span>
+    </a>
+    <a href="/reports_catalogue/" class="nv-bottom-nav-item" data-nav="reports" title="Reports">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Reports</span>
+    </a>
+    <a href="/dashboard/" class="nv-bottom-nav-item" data-nav="account" title="Account">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Account</span>
+    </a>
+  </nav>
+
+  <script src="/static/js/nav.js?v=5.5.0" defer></script>
+
+
+  <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
+  <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
+  <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+</body>
+</html>
+

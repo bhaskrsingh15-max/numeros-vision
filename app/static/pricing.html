@@ -124,7 +124,7 @@
     .tier-tagline { font-size: 0.84rem; color: #6B5E4F; min-height: 38px; margin-bottom: 16px; line-height: 1.5; }
     .tier-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
     .tier-price { font-family: 'Cormorant Garamond', serif; font-size: 2.7rem; font-weight: 700; color: var(--gold-dark, #8B6914) !important; }
-    .tier-strike { display: none !important; font-size: 1.15rem; color: #9C8F80; font-weight: 400; }
+    
     .tier-billing { font-size: 0.74rem; color: #7A6F62; margin-bottom: 22px; text-transform: uppercase; letter-spacing: 0.06em; }
 
     .tier-features { list-style: none; padding: 0; margin: 0 0 28px 0; flex: 1; display: flex; flex-direction: column; gap: 11px; font-size: 0.86rem; color: #523E28; line-height: 1.5; }
@@ -351,14 +351,14 @@
       </p>
     </div>
 
-    <!-- Specialised Reports Catalogue & Curated Bundles Announcement Banner (PAUSED FOR MVP) -->
-    <div style="display:none; background: linear-gradient(135deg, rgba(201,162,39,0.12) 0%, rgba(22,131,91,0.08) 100%); border: 1.5px solid var(--border-gold, #C9A227); border-radius: 16px; padding: 18px 24px; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+    <!-- Multi-Report Curated Value Bundles (Coming Soon — No Purchase Button) -->
+    <div style="background: linear-gradient(135deg, rgba(201,162,39,0.10) 0%, rgba(22,131,91,0.06) 100%); border: 1.5px solid var(--border-gold, #C9A227); border-radius: 16px; padding: 18px 24px; margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
       <div>
-        <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold-dark, #8B6914); display: block; margin-bottom: 4px;">EXPLORE 10 SPECIALISED REPORTS &amp; BUNDLES</span>
-        <h3 style="font-family: 'Cinzel', serif; font-size: 1.15rem; color: #8B6914; margin: 0 0 4px;">Looking for Love, Money, Work, or Growth Specific Reports?</h3>
-        <p style="font-size: 0.86rem; color: #6B5E4F; margin: 0;">Explore individual reports from ₹199 and curated 3-in-1 bundles saving up to 46%.</p>
+        <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold-dark, #8B6914); display: block; margin-bottom: 4px;">CURATED VALUE BUNDLES · COMING SOON</span>
+        <h3 style="font-family: 'Cinzel', serif; font-size: 1.15rem; color: #8B6914; margin: 0 0 4px;">Starter Bundle · Discovery Bundle · Comprehensive Bundle</h3>
+        <p style="font-size: 0.86rem; color: #6B5E4F; margin: 0;">Multi-report curated bundles (Starter Bundle, Discovery Bundle, Comprehensive Bundle) are Coming soon.</p>
       </div>
-      <a href="/reports_catalogue/" class="btn-gold-action" style="padding: 10px 22px; width: auto; font-size: 0.8rem;">View Reports Catalogue ✦</a>
+      <span style="background: rgba(201,162,39,0.16); color: #8B6914; border: 1px solid rgba(201,162,39,0.45); padding: 8px 18px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Coming soon</span>
     </div>
 
     <!-- Transparent Package & Shagun Pricing Catalog -->
@@ -420,7 +420,7 @@
               <td style="padding:14px 16px; color:#7A654D;">One-Time</td>
               <td style="padding:14px 16px; text-align:right;">
                 <a href="/reports_catalogue/?sku=advanced#order" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px; font-weight:700;">
-                  Get Advanced Report (₹510)
+                  Get Advanced Master Dossier (₹510)
                 </a>
               </td>
             </tr>
@@ -437,7 +437,7 @@
               <td style="padding:14px 16px; color:#7A654D;">One-Time</td>
               <td style="padding:14px 16px; text-align:right;">
                 <a href="/reports_catalogue/?sku=premium#order" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px;">
-                  Get Premium Dossier (₹1,050)
+                  Get Premium Sovereign Blueprint (₹1,050)
                 </a>
               </td>
             </tr>
@@ -445,7 +445,7 @@
             <tr style="border-bottom:1px solid rgba(180,155,110,0.2);">
               <td style="padding:14px 16px; font-weight:700; color:#2C2214;">
                 <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="color:#C9A227;">✦</span> Charm AI Starter Pass
+                  <span style="color:#C9A227;">✦</span> Charm AI Starter Pack
                   <span style="font-size:0.65rem; background:rgba(201,162,39,0.15); color:#8B6914; padding:2px 6px; border-radius:4px; font-weight:700; text-transform:uppercase;">AI Product</span>
                 </div>
               </td>
@@ -691,14 +691,14 @@
         theme: 'Personal Destiny, Soul Purpose & Lifetime Trajectory',
         rootTag: '⭐ CORE LIFE BLUEPRINTS · 3, 12 &amp; 32 PAGES',
         INR: {
-          tripwire: { name: 'Basic Numerology Report', price: '₹199', note: 'A concise report presenting your calculated results, the method used and an initial interpretation of the key findings.' },
-          master: { name: 'Advanced Numerology Report', price: '₹510', note: 'A more detailed report providing expanded interpretations, relevant number relationships and additional analysis supported by the selected product.' },
-          sovereign: { name: 'Premium Numerology Report', price: '₹1,050', note: 'An extensive report bringing together the supported calculations, detailed interpretations, relevant comparisons and personalised recommendations available for the selected product.' }
+          tripwire: { name: 'Basic Report', price: '₹199', note: 'A concise report presenting your calculated results, the method used and an initial interpretation of the key findings.' },
+          master: { name: 'Advanced Master Dossier', price: '₹510', note: 'A more detailed report providing expanded interpretations, relevant number relationships and additional analysis supported by the selected product.' },
+          sovereign: { name: 'Premium Sovereign Blueprint', price: '₹1,050', note: 'An extensive report bringing together the supported calculations, detailed interpretations, relevant comparisons and personalised recommendations available for the selected product.' }
         },
         USD: {
-          tripwire: { name: 'Basic Numerology Report', price: '$5.00', note: 'A concise report presenting your calculated results, the method used and an initial interpretation of the key findings.' },
-          master:   { name: 'Advanced Numerology Report', price: '$14.00', note: 'A more detailed report providing expanded interpretations, relevant number relationships and additional analysis supported by the selected product.' },
-          sovereign:{ name: 'Premium Numerology Report', price: '$28.00', note: 'An extensive report bringing together the supported calculations, detailed interpretations, relevant comparisons and personalised recommendations available for the selected product.' }
+          tripwire: { name: 'Basic Report', price: '$5.00', note: 'A concise report presenting your calculated results, the method used and an initial interpretation of the key findings.' },
+          master:   { name: 'Advanced Master Dossier', price: '$14.00', note: 'A more detailed report providing expanded interpretations, relevant number relationships and additional analysis supported by the selected product.' },
+          sovereign:{ name: 'Premium Sovereign Blueprint', price: '$28.00', note: 'An extensive report bringing together the supported calculations, detailed interpretations, relevant comparisons and personalised recommendations available for the selected product.' }
         },
         featuresTripwire: [
           '3-Page Executive Life Matrix Brief',
@@ -1010,9 +1010,9 @@
           <div class="tier-tagline">${prices.sovereign.note}</div>
           <div class="tier-price-row" style="margin-top:6px;">
             <span class="tier-price" style="font-size:1.75rem; color:#8B6914;">${prices.sovereign.price}</span>
-            <span class="tier-strike">${prices.sovereign.strike}</span>
+            
           </div>
-          <div class="tier-billing" style="font-size:0.75rem; color:#7A654D;">One-Time · Only ~₹2.87/day across 1 year of guidance</div>
+          <div class="tier-billing" style="font-size:0.75rem; color:#7A654D;">One-Time Investment · Instant 32-Page PDF Access</div>
           <ul class="tier-features">
             ${data.featuresSovereign.map(f => `<li><span class="check" style="color:#16835B;">✓</span> <span>${f}</span></li>`).join('')}
           </ul>
@@ -1032,9 +1032,9 @@
           <div class="tier-tagline">${prices.master.note}</div>
           <div class="tier-price-row" style="margin-top:6px;">
             <span class="tier-price" style="font-size:1.85rem; color:#8B6914;">${prices.master.price}</span>
-            <span class="tier-strike">${prices.master.strike}</span>
+            
           </div>
-          <div class="tier-billing" style="font-size:0.75rem; color:#8B6914; font-weight:600;">One-Time · Less than ₹1.40/day for complete life direction</div>
+          <div class="tier-billing" style="font-size:0.75rem; color:#8B6914; font-weight:600;">One-Time Investment · Instant 12-Page PDF Access</div>
           <ul class="tier-features">
             ${data.featuresMaster.map(f => `<li><span class="check">✓</span> <span><strong>${f}</strong></span></li>`).join('')}
           </ul>
@@ -1053,7 +1053,7 @@
           <div class="tier-tagline">${prices.tripwire.note}</div>
           <div class="tier-price-row" style="margin-top:6px;">
             <span class="tier-price" style="font-size:1.65rem; color:#8B6914;">${prices.tripwire.price}</span>
-            <span class="tier-strike">${prices.tripwire.strike}</span>
+            
           </div>
           <div class="tier-billing" style="font-size:0.75rem; color:#7A654D;">One-Time Offering · Instant WhatsApp &amp; PDF</div>
           <ul class="tier-features">

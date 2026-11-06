@@ -39,7 +39,10 @@ async function runTests() {
     RAZORPAY_KEY_ID: 'rzp_test_MOCK_COMMIT4_KEY',
     RAZORPAY_KEY_SECRET: 'test_secret_for_commit4_payments',
     RAZORPAY_WEBHOOK_SECRET: 'test_webhook_secret_commit4',
-    AUTH_SECRET: 'test_auth_secret_commit4_salt',
+    OTP_HMAC_SECRET: 'test_otp_hmac_secret_commit4_32b',
+    SESSION_SECRET: 'test_session_secret_commit4_32b_',
+    IP_HASH_SALT: 'test_ip_hash_salt_commit4_32b_00',
+    DATA_ENCRYPTION_KEY: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
     ASSETS: {
       fetch: async () => new Response('Asset stub', { status: 200 })
     }
@@ -557,7 +560,32 @@ async function runTests() {
     }
   });
 
-  console.log('\n--- RESULT: 18/18 COMMIT 4 PAYMENTS & WEBHOOK TESTS PASSED ---\n');
+  // Test 19: Hotfix Guard — Checkout returns 503 "temporarily unavailable" if D1 or secrets are missing in production
+  await assertCase('Checkout returns 503 temporarily unavailable if D1 or secrets are missing in production', async () => {
+    const prodNoDbEnv = { ...mockEnv, ENVIRONMENT: 'production', DB: undefined };
+    const req1 = new Request('https://numerosvision.com/api/v1/payments/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie },
+      body: JSON.stringify({ packId: 'report_basic', name: 'Hotfix Test', dob: '1981-11-28' })
+    });
+    const res1 = await worker.fetch(req1, prodNoDbEnv);
+    if (res1.status !== 503) throw new Error(`Expected 503 when DB is missing in production, got ${res1.status}`);
+    const data1 = await res1.json();
+    if (data1.code !== 'CHECKOUT_TEMPORARILY_UNAVAILABLE' || !data1.error.toLowerCase().includes('temporarily unavailable')) {
+      throw new Error(`Unexpected response: ${JSON.stringify(data1)}`);
+    }
+
+    const prodNoSecretEnv = { ...mockEnv, ENVIRONMENT: 'production', RAZORPAY_KEY_SECRET: undefined };
+    const req2 = new Request('https://numerosvision.com/api/v1/payments/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie },
+      body: JSON.stringify({ packId: 'report_basic', name: 'Hotfix Test', dob: '1981-11-28' })
+    });
+    const res2 = await worker.fetch(req2, prodNoSecretEnv);
+    if (res2.status !== 503) throw new Error(`Expected 503 when RAZORPAY_KEY_SECRET is missing in production, got ${res2.status}`);
+  });
+
+  console.log('\n--- RESULT: 19/19 COMMIT 4 PAYMENTS & WEBHOOK TESTS PASSED ---\n');
   globalThis.fetch = originalFetch;
 }
 

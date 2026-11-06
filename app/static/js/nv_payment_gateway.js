@@ -148,6 +148,11 @@
         } else {
           const errData = await orderRes.json().catch(() => ({}));
           console.warn('Order creation failed on backend:', errData);
+          if (orderRes.status === 503 || (errData && errData.code === 'CHECKOUT_TEMPORARILY_UNAVAILABLE')) {
+            alert('Checkout Temporarily Unavailable:\n\n' + ((errData && errData.error) || 'Checkout is temporarily unavailable while server maintenance completes. Please try again shortly.'));
+            if (opts.onFailure) opts.onFailure(errData);
+            return;
+          }
           if (orderRes.status === 401) {
             // Unauthenticated: store pending state in sessionStorage and redirect to login
             sessionStorage.setItem('nv_pending_subject', JSON.stringify({
@@ -160,7 +165,7 @@
             window.location.href = '/login.html?returnTo=/dashboard/';
             return;
           }
-          const msg = (errData && errData.error) || 'Unable to create payment order.';
+          const msg = (errData && errData.error) || 'Checkout is temporarily unavailable. Please try again shortly.';
           alert('Payment Notice:
 
 ' + msg);

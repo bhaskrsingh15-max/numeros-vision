@@ -41,14 +41,125 @@ function getRandomHex(bytesCount = 16) {
   return Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+
+function requireSecret(env, name) {
+  const val = env && typeof env[name] === 'string' ? env[name].trim() : '';
+  if (val) return val;
+  console.error(`[MISSING_SECRET] Required environment variable ${name} is not configured`);
+  const err = new Error(`Missing required secret: ${name}`);
+  err.code = 'MISSING_SECRET';
+  err.secretName = name;
+  err.status = 500;
+  throw err;
+}
+
+function parse32ByteKey(secret) {
+  if (!secret || typeof secret !== 'string') {
+    throw new Error('DATA_ENCRYPTION_KEY is required and must be a 64-character hex (32-byte) key.');
+  }
+  const trimmed = secret.trim();
+  if (!/^[0-9a-fA-F]{64}$/.test(trimmed)) {
+    throw new Error('DATA_ENCRYPTION_KEY must be a 64-character hex string representing a 32-byte key (passphrases are not permitted).');
+  }
+  const bytes = new Uint8Array(32);
+  for (let i = 0; i < 32; i++) {
+    bytes[i] = parseInt(trimmed.slice(i * 2, i * 2 + 2), 16);
+  }
+  return bytes;
+}
+
+async function getAesGcmKey(secret) {
+  const keyBytes = parse32ByteKey(secret);
+  return crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']);
+}
+
+async function encryptField(plainText, secret) {
+  if (plainText === null || plainText === undefined || plainText === '') return null;
+  const key = await getAesGcmKey(secret);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const encoded = new TextEncoder().encode(String(plainText));
+  const cipherBuffer = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded);
+  const ivHex = Array.from(iv).map(b => b.toString(16).padStart(2, '0')).join('');
+  const cipherHex = Array.from(new Uint8Array(cipherBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+  return `${ivHex}:${cipherHex}`;
+}
+
+async function decryptField(encryptedText, secret) {
+  if (encryptedText === null || encryptedText === undefined || encryptedText === '') return null;
+  if (typeof encryptedText !== 'string' || !encryptedText.includes(':')) {
+    throw new Error('Invalid encrypted field format: expected ivHex:cipherHex');
+  }
+  const parts = encryptedText.split(':');
+  if (parts.length !== 2) {
+    throw new Error('Invalid encrypted field format: expected single colon separator');
+  }
+  const [ivHex, cipherHex] = parts;
+  if (!/^[0-9a-fA-F]{24}$/.test(ivHex) || !/^[0-9a-fA-F]+$/.test(cipherHex) || cipherHex.length < 32 || cipherHex.length % 2 !== 0) {
+    throw new Error('Invalid encrypted field hex encoding');
+  }
+  const iv = new Uint8Array(ivHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+  const cipherBytes = new Uint8Array(cipherHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+  const key = await getAesGcmKey(secret);
+  const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBytes);
+  return new TextDecoder().decode(decrypted);
+}
+
 function verifyOrigin(request, env) {
   const origin = request.headers.get('Origin');
   if (!origin) return true;
   if (origin === 'https://numerosvision.com') return true;
+  if (env && env.ALLOWED_ORIGINS) {
+    const list = env.ALLOWED_ORIGINS.split(',').map(s => s.trim()).filter(Boolean);
+    if (list.includes(origin)) return true;
+  }
   if (env && env.ENVIRONMENT === 'local' && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:'))) {
     return true;
   }
   return false;
+}
+
+function getCorsOrigin(request, env) {
+  const origin = request ? request.headers.get('Origin') : null;
+  const allowedList = ['https://numerosvision.com'];
+  if (env && env.ALLOWED_ORIGINS) {
+    env.ALLOWED_ORIGINS.split(',').forEach(o => {
+      const trimmed = o.trim();
+      if (trimmed && !allowedList.includes(trimmed)) allowedList.push(trimmed);
+    });
+  }
+  if (origin) {
+    if (allowedList.includes(origin)) return origin;
+    if (env && env.ENVIRONMENT === 'local' && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:'))) {
+      return origin;
+    }
+  }
+  return 'https://numerosvision.com';
+}
+
+function getCorsHeaders(request, env) {
+  const origin = request ? request.headers.get('Origin') : null;
+  const allowedList = ['https://numerosvision.com'];
+  if (env && env.ALLOWED_ORIGINS) {
+    env.ALLOWED_ORIGINS.split(',').forEach(o => {
+      const trimmed = o.trim();
+      if (trimmed && !allowedList.includes(trimmed)) allowedList.push(trimmed);
+    });
+  }
+  let matchedOrigin = 'https://numerosvision.com';
+  if (origin) {
+    if (allowedList.includes(origin)) {
+      matchedOrigin = origin;
+    } else if (env && env.ENVIRONMENT === 'local' && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:'))) {
+      matchedOrigin = origin;
+    }
+  }
+  return {
+    'Access-Control-Allow-Origin': matchedOrigin,
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, Origin, Accept',
+    'Access-Control-Allow-Credentials': 'true',
+    'Vary': 'Origin'
+  };
 }
 
 function getCookie(request, name) {
@@ -201,7 +312,8 @@ async function verifyGoogleIdToken(credential, env) {
 async function authenticateUser(request, env) {
   const sessionToken = getSessionToken(request, env);
   if (!sessionToken) return null;
-  const tokenHash = await sha256Hex(sessionToken);
+  const sessionSecret = requireSecret(env, 'SESSION_SECRET');
+  const tokenHash = await hmacSha256Hex(sessionSecret, sessionToken);
   const now = Date.now();
   if (env.DB) {
     return await env.DB.prepare(
@@ -514,24 +626,33 @@ async function viewFor(user, subject, env) {
   }
 
   // 3. Deterministic Numerology Calculation
-  const rawDob = subject.dob_enc || subject.dob || '';
+  let rawDob = '';
+  if (subject.dob_enc) {
+    const encKey = requireSecret(env, 'DATA_ENCRYPTION_KEY');
+    rawDob = await decryptField(subject.dob_enc, encKey);
+  } else {
+    rawDob = subject.dob || '';
+  }
   const dobInfo = parseDobParts(rawDob);
   const day = dobInfo.day;
   const month = dobInfo.month;
   const year = dobInfo.year;
   const formattedDob = dobInfo.dob;
 
-  function reduceToSingle(num) {
+  function reduceToSingle(num, preserveMaster = false) {
     let n = Math.abs(num);
     while (n > 9) {
+      if (preserveMaster && (n === 11 || n === 22 || n === 33)) return n;
       n = String(n).split('').reduce((acc, d) => acc + parseInt(d, 10), 0);
     }
     return n === 0 ? 9 : n;
   }
 
-  const driver = reduceToSingle(day);
-  const totalDobDigits = `${String(day).padStart(2, '0')}${String(month).padStart(2, '0')}${year}`;
-  const conductor = reduceToSingle(totalDobDigits.split('').reduce((acc, d) => acc + parseInt(d, 10), 0));
+  const driver = reduceToSingle(day, false);
+  const totalDobDigits = `${String(day).padStart(2, '0')}${String(month).padStart(2, '0')}${String(year).padStart(4, '0')}`;
+  const conductorRaw = reduceToSingle(totalDobDigits.split('').reduce((acc, d) => acc + parseInt(d, 10), 0), true);
+  const conductor = reduceToSingle(conductorRaw, false);
+  const conductorDisplay = conductorRaw > 9 ? `${conductorRaw}/${conductor}` : `${conductor}`;
 
   const PLANETS = {
     1: { name: 'Sun', sanskrit: 'Surya', element: 'Water', quality: 'Leadership & Vitality' },
@@ -675,7 +796,7 @@ async function viewFor(user, subject, env) {
         interpretation: `Repeating frequency ×${counts[d]} intensifies ${PLANETS[d].quality}. Channeling this into systematic routines prevents executive burnout.`
       })),
       archetypeSynergies: {
-        driverToConductor: `Driver ${driver} (${PLANETS[driver].name}) and Conductor ${conductor} (${PLANETS[conductor].name}) create a ${driver === conductor ? 'focused singular' : 'dynamic dual'} vibrational pattern.`,
+        driverToConductor: `Driver ${driver} (${PLANETS[driver].name}) and Conductor ${conductorDisplay} (${PLANETS[conductor].name}) create a ${driver === conductor ? 'focused singular' : 'dynamic dual'} vibrational pattern.`,
         planeEquilibrium: planes.filter(p => p.status === 'COMPLETE').map(p => p.name)
       },
       actionableHarmonization: 'Align high-frequency digits with designated peak focus blocks in your weekly calendar.'
@@ -784,6 +905,8 @@ async function viewFor(user, subject, env) {
     calculation: {
       driver,
       conductor,
+      conductorRaw,
+      conductorDisplay,
       driverPlanet: PLANETS[driver].name,
       conductorPlanet: PLANETS[conductor].name,
       counts,
@@ -809,9 +932,40 @@ async function viewFor(user, subject, env) {
   };
 }
 
-export { viewFor, parseDobParts };
+export { viewFor, parseDobParts, encryptField, decryptField, getAesGcmKey, requireSecret };
 export default {
   async fetch(request, env) {
+    try {
+      return await this._handleRequest(request, env);
+    } catch (err) {
+      if (err && err.code === 'MISSING_SECRET') {
+        return new Response(JSON.stringify({
+          success: false,
+          error: err.message,
+          missing_secret: err.secretName
+        }), {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+            ...getCorsHeaders(request, env)
+          }
+        });
+      }
+      console.error('[Unhandled_Worker_Error]', err);
+      return new Response(JSON.stringify({
+        success: false,
+        error: err && err.message ? err.message : 'Internal server error'
+      }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(request, env)
+        }
+      });
+    }
+  },
+
+  async _handleRequest(request, env) {
         const url = new URL(request.url);
 
     // CSRF Protection: Verify Origin on state-changing POST endpoints
@@ -823,7 +977,7 @@ export default {
           status: 403,
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://numerosvision.com'
+            ...getCorsHeaders(request, env)
           }
         });
       }
@@ -895,7 +1049,8 @@ export default {
     if (url.pathname === '/api/v1/auth/otp/send' && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -912,10 +1067,11 @@ export default {
           }), { status: 400, headers: corsHeaders });
         }
 
-        const authSecret = env.AUTH_SECRET || env.RAZORPAY_KEY_SECRET || 'nv_auth_secret_salt_39900';
+        const otpSecret = requireSecret(env, 'OTP_HMAC_SECRET');
+        const ipSalt = requireSecret(env, 'IP_HASH_SALT');
         const clientIp = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || '127.0.0.1';
-        const phoneHash = await hmacSha256Hex(authSecret, mobile10);
-        const ipHash = await hmacSha256Hex(authSecret, clientIp);
+        const phoneHash = await hmacSha256Hex(otpSecret, mobile10);
+        const ipHash = await hmacSha256Hex(ipSalt, clientIp);
         const now = Date.now();
 
         // Rate limiting checks
@@ -961,7 +1117,7 @@ export default {
         const randomArr = new Uint32Array(1);
         crypto.getRandomValues(randomArr);
         const otpCode = (100000 + (randomArr[0] % 900000)).toString();
-        const codeHash = await hmacSha256Hex(authSecret, `${mobile10}:${otpCode}`);
+        const codeHash = await hmacSha256Hex(otpSecret, `${mobile10}:${otpCode}`);
         const expiresAt = now + 5 * 60 * 1000;
         const challengeId = 'otp_' + now + '_' + getRandomHex(4);
 
@@ -1030,7 +1186,8 @@ export default {
     if ((url.pathname === '/api/v1/auth/otp/verify' || url.pathname === '/api/v1/auth/login' || url.pathname === '/api/v1/auth/otp/login') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -1048,8 +1205,11 @@ export default {
           }), { status: 400, headers: corsHeaders });
         }
 
-        const authSecret = env.AUTH_SECRET || env.RAZORPAY_KEY_SECRET || 'nv_auth_secret_salt_39900';
-        const phoneHash = await hmacSha256Hex(authSecret, mobile10);
+        const otpSecret = requireSecret(env, 'OTP_HMAC_SECRET');
+        const sessionSecret = requireSecret(env, 'SESSION_SECRET');
+        const ipSalt = requireSecret(env, 'IP_HASH_SALT');
+        const dataEncKey = requireSecret(env, 'DATA_ENCRYPTION_KEY');
+        const phoneHash = await hmacSha256Hex(otpSecret, mobile10);
         const now = Date.now();
 
         let challenge = null;
@@ -1083,7 +1243,7 @@ export default {
           challenge.attempts = newAttempts;
         }
 
-        const expectedCodeHash = await hmacSha256Hex(authSecret, `${mobile10}:${code}`);
+        const expectedCodeHash = await hmacSha256Hex(otpSecret, `${mobile10}:${code}`);
         const isValid = timingSafeEqual(expectedCodeHash, challenge.code_hash);
 
         if (!isValid) {
@@ -1106,11 +1266,12 @@ export default {
         // Find or create User in D1
         let userId = null;
         let isNewUser = false;
+        const phoneEnc = await encryptField(mobile10, dataEncKey);
         if (env.DB) {
           let user = await env.DB.prepare('SELECT id FROM users WHERE phone_hash = ?').bind(phoneHash).first();
           if (!user) {
             userId = 'usr_' + now + '_' + getRandomHex(4);
-            await env.DB.prepare('INSERT INTO users (id, phone_hash, created_at) VALUES (?, ?, ?)').bind(userId, phoneHash, now).run();
+            await env.DB.prepare('INSERT INTO users (id, phone_hash, phone_enc, created_at) VALUES (?, ?, ?, ?)').bind(userId, phoneHash, phoneEnc, now).run();
             isNewUser = true;
             await env.DB.prepare(
               'INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
@@ -1122,7 +1283,7 @@ export default {
           let user = memoryStore.users.get(phoneHash);
           if (!user) {
             userId = 'usr_' + now + '_' + getRandomHex(4);
-            user = { id: userId, phoneHash, createdAt: now };
+            user = { id: userId, phoneHash, phone_enc: phoneEnc, createdAt: now };
             memoryStore.users.set(phoneHash, user);
             isNewUser = true;
           } else {
@@ -1132,11 +1293,11 @@ export default {
 
         // Issue server session in D1
         const rawToken = getRandomHex(32);
-        const tokenHash = await sha256Hex(rawToken);
+        const tokenHash = await hmacSha256Hex(sessionSecret, rawToken);
         const sessionExpiresAt = now + 30 * 24 * 3600 * 1000;
         const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
         const userAgent = request.headers.get('User-Agent') || 'Unknown';
-        const ipHash = await hmacSha256Hex(authSecret, clientIp);
+        const ipHash = await hmacSha256Hex(ipSalt, clientIp);
 
         if (env.DB) {
           await env.DB.prepare(
@@ -1180,7 +1341,8 @@ export default {
     if (url.pathname === '/api/v1/auth/google' && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -1229,12 +1391,13 @@ export default {
           }
         }
 
+        const sessionSecret = requireSecret(env, 'SESSION_SECRET');
+        const ipSalt = requireSecret(env, 'IP_HASH_SALT');
         const rawToken = getRandomHex(32);
-        const tokenHash = await sha256Hex(rawToken);
+        const tokenHash = await hmacSha256Hex(sessionSecret, rawToken);
         const sessionExpiresAt = now + 30 * 24 * 3600 * 1000;
-        const authSecret = env.AUTH_SECRET || env.RAZORPAY_KEY_SECRET || 'nv_auth_secret_salt_39900';
         const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
-        const ipHash = await hmacSha256Hex(authSecret, clientIp);
+        const ipHash = await hmacSha256Hex(ipSalt, clientIp);
         const userAgent = request.headers.get('User-Agent') || 'Unknown';
 
         if (env.DB) {
@@ -1299,7 +1462,8 @@ export default {
             status: 503,
             headers: {
               'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': 'https://numerosvision.com'
+              'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
             }
           });
         }
@@ -1336,7 +1500,8 @@ export default {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://numerosvision.com'
+            'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
           }
         });
       } catch (err) {
@@ -1369,7 +1534,8 @@ export default {
             status: 503,
             headers: {
               'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': 'https://numerosvision.com'
+              'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
             }
           });
         }
@@ -1402,7 +1568,8 @@ export default {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://numerosvision.com'
+            'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
           }
         });
       } catch (err) {
@@ -1417,7 +1584,8 @@ export default {
     if (url.pathname.startsWith('/api/v1/billing/')) {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -1609,13 +1777,28 @@ export default {
     if ((url.pathname === '/api/v1/payments/create-order' || url.pathname === '/api/create-order') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
 
       if (url.pathname === '/api/create-order') {
         corsHeaders['X-API-Deprecated'] = '/api/create-order is retired. Use /api/v1/payments/create-order';
+      }
+
+      // Production hotfix guard: require D1 and secrets before accepting checkout outside ENVIRONMENT=local
+      if (env.ENVIRONMENT !== 'local') {
+        const rzpKeyIdCheck = (env.RAZORPAY_KEY_ID || '').trim();
+        const rzpSecretCheck = (env.RAZORPAY_KEY_SECRET || '').trim();
+        const hasSecrets = !!(env.DB && env.OTP_HMAC_SECRET && env.SESSION_SECRET && env.IP_HASH_SALT && env.DATA_ENCRYPTION_KEY && rzpKeyIdCheck && rzpSecretCheck && !rzpKeyIdCheck.includes('REPLACE_ME') && !rzpKeyIdCheck.includes('PLACEHOLDER'));
+        if (!hasSecrets) {
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'CHECKOUT_TEMPORARILY_UNAVAILABLE',
+            error: 'Checkout is temporarily unavailable while secure server upgrades complete. Please try again shortly.'
+          }), { status: 503, headers: corsHeaders });
+        }
       }
 
       // 1. Session verification
@@ -1674,9 +1857,12 @@ export default {
               }), { status: 400, headers: corsHeaders });
             }
             subjectId = 'sbj_' + now + '_' + getRandomHex(4);
+            const dataEncKey = requireSecret(env, 'DATA_ENCRYPTION_KEY');
+            const dobEnc = await encryptField(customerDob, dataEncKey);
+            const birthTimeEnc = await encryptField(body.birthTime || body.birth_time || null, dataEncKey);
             await env.DB.prepare(
-              'INSERT INTO subjects (id, user_id, name, dob_hash, dob_enc, created_at) VALUES (?, ?, ?, ?, ?, ?)'
-            ).bind(subjectId, user.user_id, customerName, dobHash, customerDob, now).run();
+              'INSERT INTO subjects (id, user_id, name, dob_hash, dob_enc, birth_time_enc, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+            ).bind(subjectId, user.user_id, customerName, dobHash, dobEnc, birthTimeEnc, now).run();
           } else {
             subjectId = subject.id;
           }
@@ -1699,7 +1885,10 @@ export default {
               }), { status: 400, headers: corsHeaders });
             }
             subjectId = 'sbj_' + now + '_' + getRandomHex(4);
-            memoryStore.subjects.set(subjectId, { id: subjectId, user_id: user.user_id, name: customerName, dob_hash: dobHash, dob_enc: customerDob, created_at: now });
+            const dataEncKey = requireSecret(env, 'DATA_ENCRYPTION_KEY');
+            const dobEnc = await encryptField(customerDob, dataEncKey);
+            const birthTimeEnc = await encryptField(body.birthTime || body.birth_time || null, dataEncKey);
+            memoryStore.subjects.set(subjectId, { id: subjectId, user_id: user.user_id, name: customerName, dob_hash: dobHash, dob_enc: dobEnc, birth_time_enc: birthTimeEnc, created_at: now });
           }
         }
       } else {
@@ -1748,9 +1937,9 @@ export default {
       if (!rzpKeyId || !rzpSecret || rzpKeyId.includes('REPLACE_ME') || rzpKeyId.includes('PLACEHOLDER')) {
         return new Response(JSON.stringify({
           success: false,
-          code: 'GATEWAY_CONFIG_MISSING',
-          error: 'Payment gateway credentials are not configured in the server environment.'
-        }), { status: 500, headers: corsHeaders });
+          code: 'CHECKOUT_TEMPORARILY_UNAVAILABLE',
+          error: 'Checkout is temporarily unavailable. Payment gateway credentials are not configured in the server environment.'
+        }), { status: 503, headers: corsHeaders });
       }
 
       let internalOrderId = 'ord_' + now + '_' + getRandomHex(4);
@@ -1842,7 +2031,8 @@ export default {
     if ((url.pathname === '/api/v1/payments/verify' || url.pathname === '/api/verify-payment' || url.pathname === '/api/v1/payments/verify-payment') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -1935,7 +2125,8 @@ export default {
     if (url.pathname === '/api/v1/payments/status' && request.method === 'GET') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -2011,7 +2202,8 @@ export default {
     if (url.pathname === '/api/v1/subjects/correct-dob' && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -2101,11 +2293,13 @@ export default {
 
       const newDobHash = await sha256Hex(newDob);
       const updatedName = newName || subject.name;
+      const dataEncKey = requireSecret(env, 'DATA_ENCRYPTION_KEY');
+      const newDobEnc = await encryptField(newDob, dataEncKey);
 
       if (env.DB) {
         await env.DB.prepare(
           'UPDATE subjects SET dob_hash = ?, dob_enc = ?, name = ? WHERE id = ?'
-        ).bind(newDobHash, newDob, updatedName, subjectId).run();
+        ).bind(newDobHash, newDobEnc, updatedName, subjectId).run();
 
         // Invalidate old report jobs in progress and queue fresh job if entitlement exists
         await env.DB.prepare(
@@ -2125,9 +2319,10 @@ export default {
 
         await env.DB.prepare(
           "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'subject_dob_corrected', 'subjects', ?, ?, ?)"
-        ).bind('aud_' + now + '_' + getRandomHex(4), user.user_id, subjectId, JSON.stringify({ old_dob_hash: subject.dob_hash, new_dob: newDob, name: updatedName }), now).run();
+        ).bind('aud_' + now + '_' + getRandomHex(4), user.user_id, subjectId, JSON.stringify({ old_dob_hash: subject.dob_hash, new_dob_hash: newDobHash, name: updatedName }), now).run();
       } else {
         subject.dob_hash = newDobHash;
+        subject.dob_enc = newDobEnc;
         subject.name = updatedName;
         subject.corrected = true;
         for (const job of memoryStore.reportJobs.values()) {
@@ -2161,7 +2356,8 @@ export default {
     if (url.pathname === '/api/v1/subjects') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization, Cookie'
       };
@@ -2174,14 +2370,20 @@ export default {
       }
 
       if (request.method === 'GET') {
+        const dataEncKey = requireSecret(env, 'DATA_ENCRYPTION_KEY');
         let subjects = [];
         if (env.DB) {
-          const rows = await env.DB.prepare('SELECT id, name, dob_enc as dob, created_at FROM subjects WHERE user_id = ? ORDER BY created_at ASC').bind(user.user_id).all();
-          subjects = (rows && rows.results) || [];
+          const rows = await env.DB.prepare('SELECT id, name, dob_enc, created_at FROM subjects WHERE user_id = ? ORDER BY created_at ASC').bind(user.user_id).all();
+          const rawRows = (rows && rows.results) || [];
+          for (const r of rawRows) {
+            const decDob = r.dob_enc ? await decryptField(r.dob_enc, dataEncKey) : '';
+            subjects.push({ id: r.id, name: r.name, dob: decDob, created_at: r.created_at });
+          }
         } else {
           for (const s of memoryStore.subjects.values()) {
             if (s.user_id === user.user_id) {
-              subjects.push({ id: s.id, name: s.name, dob: s.dob_enc || s.dob, created_at: s.created_at });
+              const decDob = s.dob_enc ? await decryptField(s.dob_enc, dataEncKey) : (s.dob || '');
+              subjects.push({ id: s.id, name: s.name, dob: decDob, created_at: s.created_at });
             }
           }
         }
@@ -2233,10 +2435,14 @@ export default {
         const subjectId = 'sbj_' + now + '_' + getRandomHex(4);
         const consentId = 'cns_' + now + '_' + getRandomHex(4);
 
+        const dataEncKey = requireSecret(env, 'DATA_ENCRYPTION_KEY');
+        const dobEnc = await encryptField(dobInfo.dob, dataEncKey);
+        const birthTimeEnc = await encryptField(body.birthTime || body.birth_time || null, dataEncKey);
+
         if (env.DB) {
           await env.DB.prepare(
-            'INSERT INTO subjects (id, user_id, name, dob_hash, dob_enc, created_at) VALUES (?, ?, ?, ?, ?, ?)'
-          ).bind(subjectId, user.user_id, name, dobHash, dobInfo.dob, now).run();
+            'INSERT INTO subjects (id, user_id, name, dob_hash, dob_enc, birth_time_enc, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+          ).bind(subjectId, user.user_id, name, dobHash, dobEnc, birthTimeEnc, now).run();
 
           await env.DB.prepare(
             'INSERT INTO consents (id, user_id, purpose, text_version, granted_at) VALUES (?, ?, ?, ?, ?)'
@@ -2247,7 +2453,8 @@ export default {
             user_id: user.user_id,
             name,
             dob_hash: dobHash,
-            dob_enc: dobInfo.dob,
+            dob_enc: dobEnc,
+            birth_time_enc: birthTimeEnc,
             created_at: now
           });
           memoryStore.consents = memoryStore.consents || new Map();
@@ -2278,7 +2485,8 @@ export default {
     if (url.pathname === '/api/v1/dashboard/view' && request.method === 'GET') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization, Cookie'
       };
@@ -2288,16 +2496,22 @@ export default {
         return new Response(JSON.stringify({ error: 'Unauthorized. Please sign in.' }), { status: 401, headers: corsHeaders });
       }
 
+      const dataEncKey = requireSecret(env, 'DATA_ENCRYPTION_KEY');
       let subjects = [];
+      let rawSubjects = [];
       if (env.DB) {
-        const rows = await env.DB.prepare('SELECT id, name, dob_enc as dob, created_at FROM subjects WHERE user_id = ? ORDER BY created_at ASC').bind(user.user_id).all();
-        subjects = (rows && rows.results) || [];
+        const rows = await env.DB.prepare('SELECT id, name, dob_enc, created_at FROM subjects WHERE user_id = ? ORDER BY created_at ASC').bind(user.user_id).all();
+        rawSubjects = (rows && rows.results) || [];
       } else {
         for (const s of memoryStore.subjects.values()) {
           if (s.user_id === user.user_id) {
-            subjects.push({ id: s.id, name: s.name, dob: s.dob_enc || s.dob, created_at: s.created_at });
+            rawSubjects.push(s);
           }
         }
+      }
+      for (const s of rawSubjects) {
+        const decDob = s.dob_enc ? await decryptField(s.dob_enc, dataEncKey) : (s.dob || '');
+        subjects.push({ id: s.id, name: s.name, dob: decDob, dob_enc: s.dob_enc, created_at: s.created_at });
       }
 
       const reqSubjId = (url.searchParams.get('subjectId') || '').trim();
@@ -2347,6 +2561,8 @@ export default {
         }
       }
 
+      const cleanSubjects = subjects.map(({ id, name, dob, created_at }) => ({ id, name, dob, created_at }));
+
       return new Response(JSON.stringify({
         user: {
           userId: user.user_id,
@@ -2354,8 +2570,8 @@ export default {
           email: user.email || null,
           name: user.name || (activeSubject ? activeSubject.name : 'Member')
         },
-        subjects,
-        activeSubject: activeSubject ? { id: activeSubject.id, name: activeSubject.name, dob: activeSubject.dob_enc || activeSubject.dob } : null,
+        subjects: cleanSubjects,
+        activeSubject: activeSubject ? { id: activeSubject.id, name: activeSubject.name, dob: activeSubject.dob } : null,
         subjectCount: subjects.length,
         charmCredits,
         view: viewData,
@@ -2369,7 +2585,8 @@ export default {
     if ((url.pathname === '/api/v1/payments/webhook' || url.pathname === '/api/webhook') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com'
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
       };
 
       if (url.pathname === '/api/webhook') {
@@ -2608,7 +2825,8 @@ export default {
     if ((url.pathname === '/api/v1/pricing-catalog' || url.pathname === '/api/v1/payments/pricing-catalog') && request.method === 'GET') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com'
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
       };
       return new Response(JSON.stringify(PACK_CATALOG), { status: 200, headers: corsHeaders });
     }
@@ -2617,7 +2835,8 @@ export default {
     if ((url.pathname === '/api/v1/identity/signup' || url.pathname === '/api/v1/auth/signup') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -2705,7 +2924,8 @@ export default {
     if ((url.pathname === '/api/me' || url.pathname === '/api/v1/auth/me') && (request.method === 'GET' || request.method === 'POST')) {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -2718,7 +2938,8 @@ export default {
         }), { status: 401, headers: corsHeaders });
       }
 
-      const tokenHash = await sha256Hex(sessionToken);
+      const sessionSecret = requireSecret(env, 'SESSION_SECRET');
+      const tokenHash = await hmacSha256Hex(sessionSecret, sessionToken);
       const now = Date.now();
       let sessionUser = null;
 
@@ -2773,13 +2994,15 @@ export default {
     if ((url.pathname === '/api/logout' || url.pathname === '/api/v1/auth/logout') && (request.method === 'POST' || request.method === 'GET')) {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
       const sessionToken = getSessionToken(request, env);
       if (sessionToken) {
-        const tokenHash = await sha256Hex(sessionToken);
+        const sessionSecret = requireSecret(env, 'SESSION_SECRET');
+        const tokenHash = await hmacSha256Hex(sessionSecret, sessionToken);
         if (env.DB) {
           await env.DB.prepare('DELETE FROM sessions WHERE token_hash = ?').bind(tokenHash).run();
         } else {
@@ -2804,7 +3027,8 @@ export default {
     if ((url.pathname === '/api/charm/chat' || url.pathname === '/api/v1/readings/ask') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -2901,7 +3125,8 @@ export default {
         status: 403,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://numerosvision.com'
+          'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
         }
       });
     }
@@ -2909,7 +3134,8 @@ export default {
     if (url.pathname === '/api/charm/outcomes' && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };

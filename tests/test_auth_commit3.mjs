@@ -30,7 +30,10 @@ async function runAuthTests() {
 
   const baseEnv = {
     ENVIRONMENT: 'production',
-    AUTH_SECRET: 'test_auth_secret_key_99',
+    OTP_HMAC_SECRET: 'test_otp_hmac_secret_32bytes_long',
+    SESSION_SECRET: 'test_session_secret_32bytes_long_',
+    IP_HASH_SALT: 'test_ip_hash_salt_32bytes_long_00',
+    DATA_ENCRYPTION_KEY: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
     RAZORPAY_KEY_ID: 'rzp_test_MOCK_ENV_KEY',
     RAZORPAY_KEY_SECRET: 'test_secret_for_local_behavior_suite',
     FAST2SMS_API_KEY: 'test_fast2sms_key',
@@ -49,6 +52,27 @@ async function runAuthTests() {
     });
     const res = await worker.fetch(req, baseEnv);
     if (res.status !== 403) throw new Error(`Expected 403, got ${res.status}`);
+  });
+
+  // Test 1b: ALLOWED_ORIGINS allows preview origins
+  await assertCase('ALLOWED_ORIGINS allows preview origins and sets dynamic CORS', async () => {
+    const previewEnv = {
+      ...baseEnv,
+      ALLOWED_ORIGINS: 'https://preview.numerosvision.pages.dev,https://staging.numerosvision.com'
+    };
+    const req = new Request('https://numerosvision.com/api/v1/auth/otp/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Origin': 'https://preview.numerosvision.pages.dev'
+      },
+      body: JSON.stringify({ phone: '123' })
+    });
+    const res = await worker.fetch(req, previewEnv);
+    if (res.status !== 400) throw new Error(`Expected 400 validation error (not 403 CSRF), got ${res.status}`);
+    if (res.headers.get('Access-Control-Allow-Origin') !== 'https://preview.numerosvision.pages.dev') {
+      throw new Error(`Expected Access-Control-Allow-Origin to match preview origin, got ${res.headers.get('Access-Control-Allow-Origin')}`);
+    }
   });
 
   // Test 2: In production, dev_otp is NEVER returned in response

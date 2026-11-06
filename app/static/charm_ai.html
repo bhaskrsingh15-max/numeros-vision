@@ -426,13 +426,13 @@
       </div>
 
       <div class="ai-status-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <span id="aiStatusPill" style="font-size:0.75rem; color:#A13030; background:rgba(161,48,48,0.1); border:1px solid rgba(161,48,48,0.25); padding:4px 10px; border-radius:6px; font-weight:700;">🔒 CHARM AI CAREER ORACLE — PAID PASS ONLY (0 Credits)</span>
+        <span id="aiStatusPill" style="font-size:0.75rem; color:#A13030; background:rgba(161,48,48,0.1); border:1px solid rgba(161,48,48,0.25); padding:4px 10px; border-radius:6px; font-weight:700;">🔒 3 Free Questions after verified sign-up • Starter Pack: 5 Questions for ₹199</span>
         <button type="button" onclick="loadSampleProfile()" style="background:none; border:none; color:#8B6914; font-size:0.78rem; text-decoration:underline; cursor:pointer;">
           Load Saved / Sample Profile
         </button>
       </div>
 
-      <button class="btn-ai-ask" id="btnCharmAsk" onclick="handleCharmSubmitOrLock()" style="background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%);">Unlock Charm AI Pass (From ₹199) 🔒</button>
+      <button class="btn-ai-ask" id="btnCharmAsk" onclick="handleCharmSubmitOrLock()" style="background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%);">Unlock Charm AI Pass (5 Questions for ₹199) 🔒</button>
 
       <div class="ai-response-box" id="ai_output_panel">
         <div class="ai-msg-header">
@@ -774,13 +774,13 @@
         }
       } else {
         if (statusPill) {
-          statusPill.innerHTML = '🔒 CHARM AI CAREER ORACLE — PAID PASS ONLY (0 Credits)';
+          statusPill.innerHTML = '🔒 3 Free Questions after verified sign-up • Starter Pack: 5 Questions for ₹199';
           statusPill.style.color = '#A13030';
           statusPill.style.background = 'rgba(161,48,48,0.1)';
           statusPill.style.borderColor = 'rgba(161,48,48,0.25)';
         }
         if (askBtn) {
-          askBtn.innerHTML = 'Unlock Charm AI Pass (From ₹199) 🔒';
+          askBtn.innerHTML = 'Unlock Charm AI Pass (5 Questions for ₹199) 🔒';
           askBtn.style.background = 'linear-gradient(135deg, #C9A227 0%, #8B6914 100%);';
         }
         if (qInput) {
@@ -1321,7 +1321,7 @@
               <span style="font-family:'Cinzel',serif; font-size:1.05rem; font-weight:700; color:#8B6914;">
                 ${w.start} &nbsp;➔&nbsp; ${w.end}
               </span>
-              <span id="aiStatusPill" style="font-size:0.75rem; color:#A13030; background:rgba(161,48,48,0.1); border:1px solid rgba(161,48,48,0.25); padding:4px 10px; border-radius:6px; font-weight:700;">🔒 CHARM AI CAREER ORACLE — PAID PASS ONLY (0 Credits)</span>
+              <span id="aiStatusPill" style="font-size:0.75rem; color:#A13030; background:rgba(161,48,48,0.1); border:1px solid rgba(161,48,48,0.25); padding:4px 10px; border-radius:6px; font-weight:700;">🔒 3 Free Questions after verified sign-up • Starter Pack: 5 Questions for ₹199</span>
             </div>
             <div style="font-size:0.80rem; color:#523E28; margin-top:4px; font-weight:500;">
               ${w.label || ''}
@@ -1658,7 +1658,7 @@
         Charm AI Career &amp; Transit Oracle
       </h3>
       <p style="font-size:0.86rem; color:#7A654D; line-height:1.6; margin:0 0 20px;">
-        Interactive career inflection windows, transit radar, and acute dasha rectifications are reserved for verified paid accounts. Choose an option below to unlock:
+        Every account receives <strong>3 free questions after verified sign-up</strong> (drawn from your free Lo Shu grid). For deep career inflection windows, transit radar, and acute timing, unlock additional questions:
       </p>
 
       <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px; text-align:left;">
@@ -1669,26 +1669,6 @@
             <span style="font-size:0.76rem; color:#7A654D;">5 Classical Inquiries · One-Time · Root 1</span>
           </div>
           <span style="font-family:'Cinzel', serif; font-size:1.15rem; font-weight:800; color:#8B6914;">₹199 →</span>
-        </a>
-
-        <!-- Option 2: 10 Questions Growth Pack (PAUSED FOR MVP) -->
-        <a href="/pricing/?domain=ai" style="display:none; justify-content:space-between; align-items:center; padding:12px 16px; border:2px solid #C9A227; border-radius:12px; background:#FFFDF7; text-decoration:none; color:#523E28; box-shadow:0 4px 14px rgba(201,162,39,0.15);">
-          <div>
-            <span style="background:rgba(22,131,91,0.12); color:#16835B; font-size:0.65rem; font-weight:800; padding:2px 6px; border-radius:4px; text-transform:uppercase;">Most Popular</span>
-            <strong style="color:#8B6914; font-size:0.92rem; display:block; margin-top:2px;">Charm AI Growth Pack (10 Questions)</strong>
-            <span style="font-size:0.76rem; color:#7A654D;">10 In-Depth Queries + Remedies · Root 3</span>
-          </div>
-          <span style="font-family:'Cinzel', serif; font-size:1.15rem; font-weight:800; color:#8B6914;">₹399 →</span>
-        </a>
-
-        <!-- Option 3: 25 Questions Extended Pack (PAUSED FOR MVP) -->
-        <a href="/pricing/?domain=ai" style="display:none; justify-content:space-between; align-items:center; padding:12px 16px; border:1.5px solid rgba(22,131,91,0.4); border-radius:12px; background:#F4F8F5; text-decoration:none; color:#523E28;">
-          <div>
-            <span style="background:rgba(201,162,39,0.15); color:#8B6914; font-size:0.65rem; font-weight:800; padding:2px 6px; border-radius:4px; text-transform:uppercase;">Best Value</span>
-            <strong style="color:#16835B; font-size:0.92rem; display:block; margin-top:2px;">Charm AI Extended Pack (25 Questions)</strong>
-            <span style="font-size:0.76rem; color:#7A654D;">25 Deep Consultations + Transit Radar · Root 6</span>
-          </div>
-          <span style="font-family:'Cinzel', serif; font-size:1.15rem; font-weight:800; color:#16835B;">₹699 →</span>
         </a>
       </div>
 

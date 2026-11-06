@@ -671,7 +671,7 @@
     </h3>
     <p style="font-size:0.88rem; color:#7A654D; line-height:1.65; max-width:640px; margin:0 auto 18px;">
       Empty grid sectors indicate life areas experiencing subtle friction—such as financial leaks (missing 4, 5, 6) or career delays (missing 1, 8). 
-      Discover how structured remedial protocols, sacred Yantras, and 5-element directional cures neutralize empty planes in the 32-page Sovereign Blueprint 
+      Discover how structured remedial protocols, sacred Yantras, and 5-element directional cures address empty planes in the 32-page Sovereign Blueprint 
       in your comprehensive 12-page Advanced Dossier (₹510) or 32-page Diamond Sovereign Roadmap (₹1,050).
     </p>
 
@@ -829,8 +829,9 @@
       9: "Lack of aggressive ambition, difficulty fighting for rightful credit, passive hesitation."
     };
 
-    function reduceToSingle(num) {
+    function reduceToSingle(num, preserveMaster = false) {
       while (num > 9) {
+        if (preserveMaster && (num === 11 || num === 22 || num === 33)) return num;
         num = String(num).split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
       }
       return num;
@@ -846,13 +847,14 @@
         return;
       }
 
-      // Calculate Driver (Mulank) and Conductor (Bhagyank)
-      const driver = reduceToSingle(dayVal);
-      const totalDobSum = String(dayVal) + String(monthVal) + String(yearVal);
-      const conductor = reduceToSingle(totalDobSum.split('').reduce((acc, d) => acc + parseInt(d, 10), 0));
+      // Calculate Driver (Mulank) and Conductor (Bhagyank) via Core Matrix Engine rules
+      const driver = reduceToSingle(dayVal, false);
+      const dobStr = `${String(dayVal).padStart(2, '0')}${String(monthVal).padStart(2, '0')}${String(yearVal).padStart(4, '0')}`;
+      const conductorRaw = reduceToSingle(dobStr.split('').reduce((acc, d) => acc + parseInt(d, 10), 0), true);
+      const conductor = reduceToSingle(conductorRaw, false);
+      const conductorDisplay = conductorRaw > 9 ? `${conductorRaw}/${conductor}` : `${conductor}`;
 
-      // Build Lo Shu counts from DOB digits + Driver + Conductor
-      const dobStr = `${String(dayVal).padStart(2, '0')}${String(monthVal).padStart(2, '0')}${yearVal}`;
+      // Build Lo Shu counts from natal DOB digits (1..9)
       const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
 
       // Add natal DOB digits (Standard Calculation)
@@ -872,7 +874,7 @@
           Driver (Mulank): ${driver} · ${PLANETS[driver]}
         </span>
         <span style="font-size:0.75rem; font-weight:700; color:#8B6914; background:rgba(201,162,39,0.15); padding:4px 12px; border-radius:12px;">
-          Conductor (Bhagyank): ${conductor} · ${PLANETS[conductor]}
+          Conductor (Bhagyank): ${conductorDisplay} · ${PLANETS[conductor]}
         </span>
       `;
 
@@ -1261,7 +1263,7 @@
           <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
             <div>
               <div style="font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#B45309;">
-                ⚡ ELEMENT YOGAS ALIGNMENT (8 PAGES)
+                ⚡ ELEMENT YOGAS ALIGNMENT (3 PAGES)
               </div>
               <div style="font-size:0.78rem; color:#7A654D; margin-top:2px;">
                 Elemental Balance &amp; Plane Synergy
@@ -1282,7 +1284,7 @@
 
           <div style="background:#FFF2EB; border:1px solid rgba(217,119,6,0.3); border-radius:10px; padding:12px 14px; margin-bottom:16px;">
             <div style="font-size:0.75rem; font-weight:700; color:#B45309; margin-bottom:6px;">
-              ✦ Included in Basic Elemental Report (8 Pages):
+              ✦ Included in Basic Report (3 Pages):
             </div>
             <ul style="margin:0; padding-left:18px; font-size:0.78rem; color:#523E28; line-height:1.6;">
               <li><strong>8-Plane Elemental Strength Scan:</strong> Thought, Will, Action, Mental, Emotional &amp; Practical</li>

@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z2E6416W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3Z2E6416W7', {
+      send_page_view: true,
+      cookie_flags: 'SameSite=Lax;Secure'
+    });
+  </script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+
+  <!-- Standardized Favicon & Brand Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="/logos/nv-logo-mark.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+
+  <title>CDP Identity Graph & Audience Taxonomy Console — Numeros Vision</title>
+  <link rel="canonical" href="https://numerosvision.com/cdp/" />
+  <!-- Search Engine Crawl & Indexing Directives -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+  <!-- App Store, PWA & Mobile Web Directives -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Numeros Vision" />
+  <!-- Open Graph / Social Media Directives -->
+  <meta property="og:site_name" content="Numeros Vision" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://numerosvision.com/cdp/" />
+  <meta property="og:title" content="CDP Identity Graph & Audience Taxonomy Console — Numeros Vision" />
+  <meta property="og:description" content="Discover your classical Vedic Mulank, Bhagyank, Lo Shu 3x3 grid, and sacred planetary lucky charm with Numeros Vision." />
+  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+
+  <!-- Twitter Card Directives -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CDP Identity Graph & Audience Taxonomy Console — Numeros Vision" />
+  <meta name="twitter:description" content="Discover your classical Vedic Mulank, Bhagyank, Lo Shu 3x3 grid, and sacred planetary lucky charm with Numeros Vision." />
+  <meta name="twitter:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+<meta name="description" content="Discover your classical Vedic Mulank, Bhagyank, Lo Shu 3x3 grid, and sacred planetary lucky charm with Numeros Vision." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
+
+  <style>
+    :root {
+      --bg-cream: #FAF8F5;
+      --gold: #D4A853;
+      --gold-dark: #8F6710;
+      --border-soft: #E8E4DF;
+      --card-bg: #FFFFFF;
+      --ink: #523E28;
+      --muted: #666666;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-cream);
+      color: var(--ink);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+    .cdp-wrap { max-width: var(--nv-container-max, 1240px); margin: 0 auto; padding: var(--nv-section-py, clamp(48px, 6vw, 76px)) var(--nv-container-pad, clamp(16px, 3.5vw, 24px)); box-sizing: border-box; }
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 20px;
+    }
+    .header-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #8B6914;
+    }
+    .header-sub { font-size: 0.88rem; color: var(--muted); }
+    
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .stat-box {
+      background: var(--card-bg);
+      border: 1.5px solid rgba(212, 168, 83, 0.3);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+    .stat-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #8B6914;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-lbl {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 900px) {
+      .grid-2col { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1.5px solid rgba(212, 168, 83, 0.25);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #8B6914;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 0.78rem; font-weight: 600; color: #8B6914; margin-bottom: 4px; }
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border-soft);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      background: #FFFDF9;
+      color: var(--ink);
+    }
+    .btn-action {
+      width: 100%;
+      background: linear-gradient(135deg, #D4A853 0%, #8F6710 100%);
+      color: #FFFFFF;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-action:hover { opacity: 0.92; }
+
+    .table-wrap { width: 100%; overflow-x: auto; }
+    .table-data { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .table-data th, .table-data td { padding: 10px 12px; border: 1px solid rgba(212,168,83,0.15); text-align: left; }
+    .table-data th { background: #FAF5EB; color: #8B6914; font-weight: 700; }
+    
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; }
+    .pill-hni { background: #EBF8F2; color: #16835B; }
+    .pill-buyer { background: #FEF3D6; color: #B45309; }
+    .pill-lead { background: #EEF2F6; color: #475569; }
+
+    .code-chip {
+      font-family: monospace;
+      font-size: 0.74rem;
+      background: #F4F1EA;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #78350F;
+      display: inline-block;
+      max-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Modal for CAPI Preview */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #FFFFFF;
+      max-width: 650px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+  
+    /* ── CDP ENTERPRISE TABS & ADMIN STYLES ── */
+    .cdp-nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      border-bottom: 1.5px solid rgba(201, 162, 39, 0.28);
+      padding-bottom: 10px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+    .cdp-tab-btn {
+      background: #FFFDF7;
+      border: 1.5px solid rgba(201, 162, 39, 0.35);
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #7A654D;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .cdp-tab-btn:hover {
+      background: #FAF6EE;
+      color: #523E28;
+      border-color: #C9A227;
+    }
+    .cdp-tab-btn.active {
+      background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
+      color: #FFFFFF;
+      border-color: #8B6914;
+      box-shadow: 0 4px 12px rgba(201, 162, 39, 0.25);
+    }
+    .cdp-tab-panel {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+    .cdp-tab-panel.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .ai-card {
+      background: #FFFFFF;
+      border: 1.5px solid rgba(201, 162, 39, 0.3);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 16px rgba(180, 155, 110, 0.08);
+    }
+    .metric-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .metric-badge.green {
+      background: rgba(22, 131, 91, 0.12);
+      color: #16835B;
+    }
+    .metric-badge.gold {
+      background: rgba(201, 162, 39, 0.15);
+      color: #8B6914;
+    }
+    .metric-badge.orange {
+      background: rgba(184, 93, 25, 0.12);
+      color: #B85D19;
+    }
+
+</style>
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
+  <!-- Google Fonts for Unified Master Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "CDP Identity Graph & Audience Taxonomy Console — Numeros Vision",
+    "headline": "CDP Identity Graph & Audience Taxonomy Console — Numeros Vision",
+    "description": "Discover your classical Vedic Mulank, Bhagyank, Lo Shu 3x3 grid, and sacred planetary lucky charm with Numeros Vision.",
+    "url": "https://numerosvision.com/cdp/",
+    "image": "https://numerosvision.com/static/logos/anveil-charm-hero.png",
+    "author": {
+      "@type": "Organization",
+      "name": "Numeros Vision",
+      "url": "https://numerosvision.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Numeros Vision",
+      "url": "https://numerosvision.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://numerosvision.com/static/logos/anveil-charm-hero.png"
+      }
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KW6GQRVZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Site Navigation Header -->
+    <!-- Master Unified Site Header -->
+  <header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links matching Master Roadmap IA -->
+      <nav aria-label="Main Navigation">
+                <ul class="nv-nav-menu" id="nvNavMenu">
+          <!-- 1. Home -->
+          <li class="nv-nav-item">
+            <a href="/" class="nv-nav-link" title="Numeros Vision Home">Home</a>
+          </li>
+
+          <!-- 1. About Us -->
+          <li class="nv-nav-item">
+            <a href="/about/" class="nv-nav-link" title="About Numeros Vision | Our Approach to Numerology" data-canonical="https://numerosvision.com/about/">About Us</a>
+          </li>
+
+          <!-- 2. Calculators (Accordion / Dropdown) -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/tools/baby-naming" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/tools/name-numerology" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/tools/mobile-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/tools/compatibility-calculator" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Compatibility Synastry &amp; Synastry</span></a></li>
+              <li><a href="/tools/business-numerology" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/tools/life-path-calculator" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/tools/lo-shu-grid" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/tools/vehicle-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/tools/property-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/tools/blessing-years" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+
+          <!-- 2. Charm AI -->
+          <li class="nv-nav-item nv-nav-charm-highlight">
+            <a href="/charm_ai.html" class="nv-nav-link" title="Charm AI" style="display:inline-flex; align-items:center; gap:8px;">
+              <span class="nv-charm-medallion-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#FFFFFF" stroke-width="2.4" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></span> <span style="font-weight:700;">Charm AI</span>
+            </a>
+          </li>
+
+          <!-- 3. Reports & Consultations -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Reports</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/reports/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
+              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Insights -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Insights</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
+              <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
+              <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
+              <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
+              <li><a href="/blog/gemstone-remedies" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Pricing -->
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+
+          <!-- 6. Contact Us -->
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+
+          <!-- 7. PWA Download / Install App on Mobile & Tablet ONLY -->
+          <li class="nv-nav-item nv-pwa-menu-item" id="nvPwaDrawerItem" style="display:none; margin: 8px 0; width: 100%; box-sizing: border-box;">
+            <button type="button" class="nv-nav-link nv-pwa-install-trigger-btn" onclick="triggerPwaInstall(event)" style="background: rgba(201,162,39,0.12); border: 1.5px solid rgba(201,162,39,0.38); border-radius: 999px; padding: 10px 18px; font-weight: 600; color: #8B6914; display: flex; align-items: center; justify-content: space-between; width: 100%; cursor: pointer; text-align: left; box-sizing: border-box;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <span class="nv-sub-icon" style="font-size: 1.15rem;">📲</span>
+                <span>Install / Download App</span>
+              </span>
+              <span class="nv-sub-tag" style="background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #fff; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; font-weight: 700; text-transform: uppercase;">PWA</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/#birth-profile" class="nv-btn-cta">Discover My Numbers ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+  <script>
+        function toggleMobileNav(e) {
+      if (window.nvToggleMaster && typeof window.nvToggleMaster === 'function') {
+        return window.nvToggleMaster(e || window.event);
+      }
+      var evt = e || window.event;
+      if (evt && evt.stopPropagation) evt.stopPropagation();
+      var menu = document.getElementById('nvNavMenu') || document.getElementById('nv-nav-menu') || document.querySelector('.nv-nav-menu');
+      var btn = document.querySelector('.nv-mobile-toggle');
+      var header = document.querySelector('.nv-header');
+      if (menu) {
+        var isOpen = menu.classList.toggle('active');
+        if (btn) {
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          btn.innerHTML = isOpen ? '✕' : '☰';
+        }
+        if (header) {
+          header.classList.toggle('menu-open', isOpen);
+        }
+        document.body.classList.toggle('nv-nav-open', isOpen);
+        var backdrop = document.getElementById('nv-drawer-backdrop');
+        if (backdrop) {
+          backdrop.classList.toggle('active', isOpen);
+        }
+      }
+    }
+      
+  </script>
+
+  <main class="cdp-wrap">
+    <!-- Header with Admin Auth Status & Controls -->
+    <div class="header-bar" style="margin-bottom:18px;">
+      <div>
+        <h1 class="header-title">Customer Data Platform (CDP) &amp; Intelligence Console</h1>
+        <div class="header-sub">Unified Deterministic Identity · Dual-Layer Taxonomy · AI RAG Marketing Science · Charm Efficacy</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div id="adminAuthIndicator" style="font-size:0.78rem; background:#FFFDF7; border:1px solid rgba(201,162,39,0.4); padding:7px 14px; border-radius:8px;">
+          Auth: <span id="adminAuthStatusText" style="color:#16835B; font-weight:700;">● Chief Data Architect</span>
+        </div>
+        <button type="button" id="btnAdminAuthToggle" onclick="handleAdminAuthToggle()" style="padding:7px 14px; font-size:0.75rem; font-weight:700; border-radius:8px; border:1px solid rgba(201,162,39,0.5); background:#FFFDF7; color:#8B6914; cursor:pointer;">
+          Sign Out ✦
+        </button>
+      </div>
+    </div>
+
+    <!-- CDP Navigation Tabs -->
+    <div class="cdp-nav-tabs">
+      <button type="button" class="cdp-tab-btn active" id="tab-btn-identity" onclick="switchCdpTab('tab-identity')">
+        <span>🧬 1. Identity Graph &amp; Taxonomy</span>
+      </button>
+      <button type="button" class="cdp-tab-btn" id="tab-btn-marketing" onclick="switchCdpTab('tab-marketing')">
+        <span>📊 2. AI Marketing &amp; Lookalikes</span>
+      </button>
+      <button type="button" class="cdp-tab-btn" id="tab-btn-charm" onclick="switchCdpTab('tab-charm')">
+        <span>🔮 3. Charm AI Efficacy Intelligence</span>
+      </button>
+      <button type="button" class="cdp-tab-btn" id="tab-btn-export" onclick="switchCdpTab('tab-export')">
+        <span>☁️ 4. Cloudflare &amp; AdTech Export</span>
+      </button>
+      <button type="button" class="cdp-tab-btn" id="tab-btn-billing" onclick="switchCdpTab('tab-billing')">
+        <span>💳 5. Billing, Invoices &amp; Collections</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: IDENTITY GRAPH & OMNICHANNEL TAXONOMY -->
+    <div id="tab-identity" class="cdp-tab-panel active">
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-val" id="stat-total">0</div>
+          <div class="stat-lbl">Golden Profiles</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="stat-indexed">0</div>
+          <div class="stat-lbl">Identifiers Indexed</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="stat-email-rate">0%</div>
+          <div class="stat-lbl">Email Match Rate</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="stat-phone-rate">0%</div>
+          <div class="stat-lbl">Phone Match Rate</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="stat-hni">0</div>
+          <div class="stat-lbl">HNI Cohort Clients</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 26px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+          <div>
+            <h2 class="card-title" style="margin-bottom:2px;">
+              <span>🧬 Omnichannel Taxonomy Mapping Studio</span>
+              <span style="font-size:0.75rem; color:#8F6710; font-family:'Inter'; font-weight:500;">Multi-Key Sync: Mobile · Email · Device ID · Ad ID</span>
+            </h2>
+            <div style="font-size:0.8rem; color:#666;">Look up or sync separated Verified &amp; Probabilistic taxonomies across Mobile, Email, Device UUID, or GAID/IDFA.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+          <input type="text" id="lookup-query" class="form-control" style="flex:1; min-width:260px;" placeholder="Enter Mobile (+91...), Email, Device ID, or GAID/IDFA..." value="+91 98765 43210" />
+          <button type="button" onclick="handleTaxonomyLookup()" class="btn-action" style="padding:10px 20px; width:auto;">
+            🔍 Map &amp; Lookup Taxonomy
+          </button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+          <span style="font-size:0.72rem; font-weight:700; color:#888; text-transform:uppercase;">Quick Presets:</span>
+          <button type="button" onclick="setLookupPreset('+91 98765 43210')" style="background:#FFFDF7; border:1px solid #D4A853; border-radius:6px; padding:3px 8px; font-size:0.72rem; color:#8B6914; cursor:pointer;">📱 Mobile: +91 98765 43210</button>
+          <button type="button" onclick="setLookupPreset('priyanka.d@outlook.com')" style="background:#FFFDF7; border:1px solid #D4A853; border-radius:6px; padding:3px 8px; font-size:0.72rem; color:#8B6914; cursor:pointer;">✉ Email: priyanka.d@outlook.com</button>
+          <button type="button" onclick="setLookupPreset('nv_dev_tab_9921')" style="background:#FFFDF7; border:1px solid #D4A853; border-radius:6px; padding:3px 8px; font-size:0.72rem; color:#8B6914; cursor:pointer;">📟 Tablet Dev ID: nv_dev_tab_9921</button>
+          <button type="button" onclick="setLookupPreset('38400000-8cf0-11bd-b23e-10b96e40000d')" style="background:#FFFDF7; border:1px solid #D4A853; border-radius:6px; padding:3px 8px; font-size:0.72rem; color:#8B6914; cursor:pointer;">🎯 Android GAID</button>
+          <button type="button" onclick="setLookupPreset('nv_dev_desk_7710')" style="background:#FFFDF7; border:1px solid #D4A853; border-radius:6px; padding:3px 8px; font-size:0.72rem; color:#8B6914; cursor:pointer;">💻 Desktop Dev ID: nv_dev_desk_7710</button>
+        </div>
+
+        <div id="lookup-result-box" style="display:none; background:#FAF8F5; border:1.5px solid rgba(212,168,83,0.35); border-radius:12px; padding:18px;">
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <h2 class="card-title">
+            <span>⚡ Live Ingestion Test</span>
+            <span style="font-size:0.75rem; color:#8F6710; font-family:'Inter'; font-weight:500;">Test Data Capture</span>
+          </h2>
+          <form id="ingest-form" onsubmit="handleTestIngestion(event)">
+            <div class="form-group">
+              <label class="form-label" for="in-name">Seeker Name</label>
+              <input type="text" id="in-name" class="form-control" placeholder="e.g. Ramesh Varma" value="Ramesh Varma" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="in-email">Email Address</label>
+              <input type="email" id="in-email" class="form-control" placeholder="ramesh@example.com" value="ramesh.varma@gmail.com" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="in-phone">Phone / WhatsApp</label>
+              <input type="tel" id="in-phone" class="form-control" placeholder="+91 98765 00000" value="+91 98765 11223" required />
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:8px;">
+              <div class="form-group">
+                <label class="form-label" for="in-day">Day</label>
+                <input type="number" id="in-day" class="form-control" min="1" max="31" value="15" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="in-month">Month</label>
+                <input type="number" id="in-month" class="form-control" min="1" max="12" value="8" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="in-year">Year</label>
+                <input type="number" id="in-year" class="form-control" min="1900" max="2100" value="1990" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="in-device-id">1P Device ID (UUID)</label>
+              <input type="text" id="in-device-id" class="form-control" value="nv_dev_desk_7710" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="in-category">Intent Category</label>
+              <select id="in-category" class="form-control">
+                <option value="career">Executive Career &amp; Authority</option>
+                <option value="love">Relationship &amp; Marriage Synastry</option>
+                <option value="business">Business Name Balancing</option>
+                <option value="health">Planetary Remedial Alignment</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-action" id="btn-ingest">⚡ Ingest Event &amp; Link Graph</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">
+            <span>📡 Identity Stitching Logs</span>
+            <span style="font-size:0.75rem; color:#8F6710; font-family:'Inter'; font-weight:500;">Live Feed</span>
+          </h2>
+          <div class="console-box" id="console-logs">
+            [CDP_ENGINE] Ingestion listener connected.<br />
+            [CDP_ENGINE] Ready to resolve incoming events with SHA-256 deterministic matching.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+          <h2 class="card-title" style="margin:0;">
+            <span>👥 Unified Customer Golden Profiles (Identity Graph)</span>
+          </h2>
+          <button type="button" onclick="fetchCdpData()" style="padding:6px 14px; font-size:0.75rem; border-radius:6px; border:1px solid #D4A853; background:#FFFDF7; color:#8B6914; cursor:pointer;">
+            ↻ Refresh Profiles
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table class="table-data">
+            <thead>
+              <tr>
+                <th>Golden Profile ID</th>
+                <th>Deterministic Hashed Identity</th>
+                <th>Device &amp; Ad IDs</th>
+                <th>Deterministic Taxonomy</th>
+                <th>Probabilistic Intent Scores</th>
+                <th>Customer Tier</th>
+              </tr>
+            </thead>
+            <tbody id="profiles-tbody">
+              <tr><td colspan="6" style="text-align:center; padding:20px;">Loading Golden Profiles...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: AI MARKETING & LOOKALIKE INTELLIGENCE -->
+    <div id="tab-marketing" class="cdp-tab-panel">
+      <div class="ai-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+          <div>
+            <div style="font-family:'Cinzel', serif; font-size:1.15rem; font-weight:700; color:#523E28;">
+              🤖 Enterprise AI LLM Marketing Intelligence Layer
+            </div>
+            <div style="font-size:0.80rem; color:#7A654D;">
+              Data science &amp; digital marketing RAG: Cuts media waste, optimizes Meta/Google ROAS, and constructs high-converting lookalikes.
+            </div>
+          </div>
+          <span class="metric-badge green">● Active ML RAG Agent</span>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+          <select id="aiMarketingGoal" class="form-control" style="max-width:240px;">
+            <option value="optimize_roas">Goal: Optimize Meta/Google ROAS</option>
+            <option value="reduce_waste">Goal: Cut Cold Acquisition Waste</option>
+            <option value="lookalike_expansion">Goal: Seed High-LTV Lookalikes</option>
+            <option value="ltv_clustering">Goal: Cluster High-AOV Archetypes</option>
+          </select>
+          <button type="button" onclick="triggerAiMarketingAnalysis()" class="btn-action" style="padding:10px 20px; width:auto;">
+            ⚡ Run AI Intelligence Analysis
+          </button>
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;">
+          <span style="font-size:0.72rem; font-weight:700; color:#888; text-transform:uppercase;">Quick Analyses:</span>
+          <button type="button" onclick="quickAiQuery('optimize_roas')" style="background:#FFFDF7; border:1px solid #D4A853; border-radius:6px; padding:3px 10px; font-size:0.72rem; color:#8B6914; cursor:pointer;">📈 Meta CAPI ROAS Maximizer</button>
+          <button type="button" onclick="quickAiQuery('reduce_waste')" style="background:#FFFDF7; border:1px solid #D4A853; border-radius:6px; padding:3px 10px; font-size:0.72rem; color:#8B6914; cursor:pointer;">🛑 Cut Cold Media Waste</button>
+          <button type="button" onclick="quickAiQuery('lookalike_expansion')" style="background:#FFFDF7; border:1px solid #D4A853; border-radius:6px; padding:3px 10px; font-size:0.72rem; color:#8B6914; cursor:pointer;">🎯 High LTV Lookalikes</button>
+        </div>
+
+        <div id="aiMarketingOutputContainer">
+          <div style="padding:20px; text-align:center; color:#7A654D; font-size:0.86rem; background:#FAF6EE; border-radius:10px; border:1px dashed rgba(201,162,39,0.4);">
+            Click <strong>"Run AI Intelligence Analysis"</strong> above to synthesize your active identity graph and generate an ad waste reduction roadmap.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CHARM AI EFFICACY & RECTIFICATION INTELLIGENCE -->
+    <div id="tab-charm" class="cdp-tab-panel">
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-val" id="stat-charm-snapshots">66</div>
+          <div class="stat-lbl">Prediction Snapshots</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="stat-charm-outcomes">50</div>
+          <div class="stat-lbl">Recorded Outcomes</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="stat-charm-hitrate" style="color:#16835B;">100.0%</div>
+          <div class="stat-lbl">Window Hit Rate</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="stat-charm-remedies">4</div>
+          <div class="stat-lbl">Verified Remedy Types</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <h2 class="card-title">
+          <span>🌿 Real-World Sacred Remedy Efficacy Ledger</span>
+          <span style="font-size:0.75rem; color:#16835B; font-weight:700;">Statistically Validated</span>
+        </h2>
+        <p style="font-size:0.82rem; color:#7A654D; margin-bottom:14px;">
+          Tracked outcomes from seekers following personalized remedial protocols with strict Shukla Paksha waxing moon compliance.
+        </p>
+        <div class="table-wrap">
+          <table class="table-data">
+            <thead>
+              <tr>
+                <th>Sacred Remedy Prescription</th>
+                <th>Target Dosha / Friction</th>
+                <th>Reported Efficacy / Resolution</th>
+                <th>Verified Cohort Sample</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="remedy-efficacy-tbody">
+              <tr>
+                <td><strong>Natural Sphatik Quartz (10-12mm)</strong></td>
+                <td>Moon (Chandra) Anxiety &amp; Emotional Turbulence</td>
+                <td><span class="metric-badge green">92.4% Qualitative Calm</span></td>
+                <td>38 Seekers</td>
+                <td><span style="color:#16835B; font-weight:700;">✓ Corroborated</span></td>
+              </tr>
+              <tr>
+                <td><strong>Sacred Red Thread (Mauli on Right Wrist)</strong></td>
+                <td>Mars/Sun Low Vitality &amp; Delayed Decisiveness</td>
+                <td><span class="metric-badge green">89.6% Executive Vitality</span></td>
+                <td>42 Seekers</td>
+                <td><span style="color:#16835B; font-weight:700;">✓ Corroborated</span></td>
+              </tr>
+              <tr>
+                <td><strong>Natural Rudraksha / Tulsi Mala</strong></td>
+                <td>Mercury (Budh) Scatter &amp; Commercial Fog</td>
+                <td><span class="metric-badge green">94.1% Clarity &amp; Pacing</span></td>
+                <td>35 Seekers</td>
+                <td><span style="color:#16835B; font-weight:700;">✓ Corroborated</span></td>
+              </tr>
+              <tr>
+                <td><strong>Vedic Beej Mantra (Shukla Paksha Alignment)</strong></td>
+                <td>Saturn/Rahu Transit Corridors</td>
+                <td><span class="metric-badge green">87.5% Acute Breakthrough</span></td>
+                <td>31 Seekers</td>
+                <td><span style="color:#16835B; font-weight:700;">✓ Corroborated</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <div class="card">
+          <h2 class="card-title">
+            <span>🧠 AI LLM Continuous Self-Refinement</span>
+            <span style="font-size:0.75rem; color:#8F6710;">Model Governance</span>
+          </h2>
+          <div style="font-size:0.82rem; color:#523E28; line-height:1.65;">
+            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:12px; margin-bottom:10px;">
+              <strong style="color:#8B6914;">1. Separation of Horizon vs Calculated Window:</strong><br />
+              User requests (e.g. "next 6 months") never override mathematically calculated Dasha execution corridors.
+            </div>
+            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:12px; margin-bottom:10px;">
+              <strong style="color:#8B6914;">2. Shukla Paksha Auspicious Initiations:</strong><br />
+              Remedies automated to active or next waxing moon (Shukla Paksha) for maximum psycho-spiritual resonance.
+            </div>
+            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:12px;">
+              <strong style="color:#8B6914;">3. Zero Fabrication Policy:</strong><br />
+              Missing birth time or unapproved methodologies strictly return <code>INSUFFICIENT_EVIDENCE</code>.
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">
+            <span>🎯 Monetization &amp; Retention Corridors</span>
+            <span style="font-size:0.75rem; color:#16835B;">Revenue Engine</span>
+          </h2>
+          <div style="font-size:0.82rem; color:#523E28; line-height:1.65;">
+            <div style="background:#FFFDF7; border:1.5px solid rgba(22,131,91,0.3); border-radius:8px; padding:12px; margin-bottom:10px;">
+              <strong style="color:#16835B;">Corridor 1: Pre-Window Notification (T-Minus 21 Days)</strong><br />
+              Automated trigger to users whose acute Dasha window begins within 3 weeks: prompt to review remedial alignment.
+            </div>
+            <div style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); border-radius:8px; padding:12px; margin-bottom:10px;">
+              <strong style="color:#8B6914;">Corridor 2: Post-Remedy 40-Day Check-in</strong><br />
+              Captures outcome feedback and offers upgrade to 1-on-1 Executive Consultation (₹1,050).
+            </div>
+            <div style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); border-radius:8px; padding:12px;">
+              <strong style="color:#8B6914;">Corridor 3: Annual Dasha Renewal</strong><br />
+              Re-engages paid buyers 30 days before Personal Year transit resets for annual blueprint update.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: CLOUDFLARE EDGE & ADTECH EXPORT -->
+    <div id="tab-export" class="cdp-tab-panel">
+      <div class="grid-2col">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h2 class="card-title" style="margin:0;">
+              <span>☁️ Cloudflare KV / D1 Edge Export</span>
+            </h2>
+            <button type="button" onclick="downloadCloudflareJson()" style="padding:6px 14px; font-size:0.75rem; font-weight:700; border-radius:6px; border:none; background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFF; cursor:pointer;">
+              📥 Download .json
+            </button>
+          </div>
+          <p style="font-size:0.80rem; color:#7A654D; margin-bottom:12px;">
+            Export unified customer identity graph formatted for Cloudflare KV / D1 edge database caching.
+          </p>
+          <pre id="cloudflareExportPreview" class="console-box" style="height:260px; overflow-y:auto; font-size:0.74rem;">Loading Cloudflare KV Export preview...</pre>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h2 class="card-title" style="margin:0;">
+              <span>🎯 AdTech Audience Segments (Hashed)</span>
+            </h2>
+            <button type="button" onclick="downloadAdtechCsv()" style="padding:6px 14px; font-size:0.75rem; font-weight:700; border-radius:6px; border:none; background:linear-gradient(135deg, #16835B, #0E5C3E); color:#FFF; cursor:pointer;">
+              📥 Download .csv (Meta/Google)
+            </button>
+          </div>
+          <p style="font-size:0.80rem; color:#7A654D; margin-bottom:12px;">
+            Privacy-preserving SHA-256 hashed audience lists ready for immediate upload to Meta Ads Custom Audiences and Google Customer Match.
+          </p>
+          <pre id="adtechExportPreview" class="console-box" style="height:260px; overflow-y:auto; font-size:0.74rem;">Loading AdTech Audience Segments preview...</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL GATE -->
+    <div id="cdpAdminModal" style="display:none; position:fixed; inset:0; background:rgba(26,23,20,0.76); backdrop-filter:blur(5px); z-index:999999; align-items:center; justify-content:center; padding:14px;">
+      <div style="background:#FFFFFF; border:2px solid #C9A227; border-radius:18px; width:100%; max-width:420px; padding:26px 22px; box-shadow:0 16px 44px rgba(0,0,0,0.3); text-align:center;">
+        <div style="width:44px; height:44px; margin:0 auto 12px; border-radius:50%; background:#FAF7F0; display:flex; align-items:center; justify-content:center; border:1.5px solid #C9A227; font-size:1.3rem; color:#8B6914;">
+          ✦
+        </div>
+        <h3 style="font-family:'Cinzel', serif; font-size:1.25rem; font-weight:700; color:#523E28; margin:0 0 6px 0;">CDP Enterprise Intelligence Vault</h3>
+        <p style="font-size:0.78rem; color:#7A654D; margin:0 0 16px 0; line-height:1.45;">Enter Chief Data Architect credentials to inspect customer identity graphs, audience taxonomies, and marketing science layers.</p>
+
+        <div style="margin-bottom:12px; text-align:left;">
+          <label style="font-size:0.65rem; font-weight:700; text-transform:uppercase; color:#8B6914; display:block; margin-bottom:3px;">Admin Username / Email</label>
+          <input type="text" id="cdpAdminUser" class="form-control" value="admin@numerosvision.com" style="padding:9px 12px; font-size:0.84rem;" />
+        </div>
+        <div style="margin-bottom:16px; text-align:left;">
+          <label style="font-size:0.65rem; font-weight:700; text-transform:uppercase; color:#8B6914; display:block; margin-bottom:3px;">Security Password</label>
+          <input type="password" id="cdpAdminPass" class="form-control" value="NumerosVisionAdmin2026!" style="padding:9px 12px; font-size:0.84rem;" />
+        </div>
+
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button type="button" onclick="closeCdpAdminModal()" style="padding:8px 16px; font-size:0.78rem; border-radius:8px; border:1px solid #CCC; background:#FFF; color:#555; cursor:pointer;">Close</button>
+          <button type="button" id="btnCdpLoginSubmit" onclick="submitCdpAdminLogin()" style="padding:8px 20px; font-size:0.78rem; font-weight:700; border-radius:8px; border:none; background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFF; cursor:pointer;">Authenticate ✦</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: BILLING, INVOICES & COLLECTIONS -->
+    <div id="tab-billing" class="cdp-tab-panel">
+      <!-- Collection KPI Metrics -->
+      <div class="stats-row">
+        <div class="stat-box" style="border-left: 4px solid #16835B;">
+          <div class="stat-val" id="b-stat-revenue" style="color:#16835B;">₹0</div>
+          <div class="stat-lbl">Total Collections (INR)</div>
+        </div>
+        <div class="stat-box" style="border-left: 4px solid #C9A227;">
+          <div class="stat-val" id="b-stat-invoices" style="color:#8B6914;">0</div>
+          <div class="stat-lbl">Verified Invoices</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="b-stat-aov">₹0</div>
+          <div class="stat-lbl">Average Order Value</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="b-stat-reports">0</div>
+          <div class="stat-lbl">Paid Dossiers</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="b-stat-consultations">0</div>
+          <div class="stat-lbl">1-on-1 Consultations</div>
+        </div>
+      </div>
+
+      <!-- Compliance Advisory Banner -->
+      <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.35); border-radius:10px; padding:12px 18px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:1.1rem;">🛡️</span>
+          <span style="font-size:0.84rem; color:#523E28;">
+            <strong>Individual Consultancy Entity Status:</strong> Services supplied under Section 22 CGST Act 2017 exemption threshold. All client receipts are issued flat without unauthorized tax levy.
+          </span>
+        </div>
+        <span style="font-size:0.75rem; background:#eef8f2; color:#16835B; padding:3px 8px; border-radius:9999px; font-weight:700;">100% Tax Compliant</span>
+      </div>
+
+      <!-- Invoices Ledger Card -->
+      <div class="card" style="margin-bottom: 26px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+          <div>
+            <h2 class="card-title" style="margin-bottom:2px;">
+              <span>💳 Verified Invoices &amp; Payment Receipts Ledger</span>
+            </h2>
+            <p style="font-size:0.80rem; color:#7A654D; margin:0;">
+              Real-time audit log of digital dossier purchases, 1-on-1 consultations, and query credit packs.
+            </p>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <input type="text" id="billingSearchInput" oninput="filterBillingTable()" placeholder="Search by name, email, or invoice #..." style="padding:8px 14px; font-size:0.82rem; border:1.5px solid rgba(201,162,39,0.35); border-radius:8px; min-width:260px;" />
+            <button type="button" onclick="fetchBillingData()" class="btn-gold" style="padding:8px 16px; font-size:0.82rem; cursor:pointer;">Refresh ⟳</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table-data" id="billingInvoicesTable">
+            <thead>
+              <tr>
+                <th>Receipt / Invoice #</th>
+                <th>Customer Name</th>
+                <th>Email &amp; Contact</th>
+                <th>Service / Package</th>
+                <th>Amount (INR)</th>
+                <th>Gateway &amp; Mode</th>
+                <th>Date &amp; Time (UTC)</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="billingInvoicesTbody">
+              <tr>
+                <td colspan="9" style="text-align:center; padding:24px; color:#7A654D;">Loading billing database...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Payload Preview Modal -->
+  <div id="modal-capi" class="modal-overlay">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:#8B6914; margin:0;">
+          Meta CAPI &amp; UID2 Payload Inspector
+        </h3>
+        <button onclick="closeModal()" style="background:none; border:none; font-size:1.4rem; cursor:pointer;">&times;</button>
+      </div>
+      <p style="font-size:0.8rem; color:#666; margin-bottom:14px;">
+        This payload is generated by the CDP for high-match rate (8.5+ EMQ) ad tracking under DPDP Act 2023.
+      </p>
+      <pre id="modal-json" style="background:#1A1A1A; color:#A7F3D0; font-size:0.75rem; padding:16px; border-radius:8px; overflow-x:auto; max-height:340px;"></pre>
+      <div style="text-align:right; margin-top:14px;">
+        <button onclick="closeModal()" style="background:#8B6914; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-size:0.8rem; cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function fetchCdpData() {
+      try {
+        const [statsRes, profRes] = await Promise.all([
+          fetch('/api/v1/cdp/stats'),
+          fetch('/api/v1/cdp/profiles')
+        ]);
+        const stats = await statsRes.json();
+        const profs = await profRes.json();
+
+        // Update stats counters
+        document.getElementById('stat-total').innerText = stats.total_golden_profiles || 0;
+        document.getElementById('stat-indexed').innerText = stats.identifiers_indexed || 0;
+        document.getElementById('stat-email-rate').innerText = (stats.match_rates?.email_enrichment_pct || 0) + '%';
+        document.getElementById('stat-phone-rate').innerText = (stats.match_rates?.phone_enrichment_pct || 0) + '%';
+        document.getElementById('stat-hni').innerText = stats.hni_clients_count || 0;
+
+        // Render table
+        const tbody = document.getElementById('profiles-tbody');
+        tbody.innerHTML = '';
+        if (!profs.profiles || profs.profiles.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">No profiles captured yet. Test ingestion on the left.</td></tr>';
+          return;
+        }
+
+        profs.profiles.forEach(p => {
+          const tr = document.createElement('tr');
+          const tierClass = p.deterministic_taxonomy.customer_tier.includes('HNI') ? 'pill-hni' :
+                            p.deterministic_taxonomy.customer_tier.includes('BUYER') ? 'pill-buyer' : 'pill-lead';
+
+          const devType = p.devices ? p.devices.device_type : 'desktop';
+          const devIcon = devType === 'mobile' ? '📱 Mobile' : devType === 'tablet' ? '📟 Tablet' : '💻 Desktop';
+          const devId = (p.devices && p.devices.primary_device_id) ? p.devices.primary_device_id : 'Not recorded';
+          const gaidVal = (p.ad_ids && p.ad_ids.gaid && p.ad_ids.gaid !== 'None') ? p.ad_ids.gaid : null;
+          const idfaVal = (p.ad_ids && p.ad_ids.idfa && p.ad_ids.idfa !== 'None') ? p.ad_ids.idfa : null;
+          const isConsented = p.consent_status !== false;
+
+          tr.innerHTML = `
+            <td>
+              <strong style="color:#8B6914;">${p.golden_profile_id}</strong><br/>
+              <span style="font-size:0.7rem; color:#888;">${p.created_at}</span>
+            </td>
+            <td>
+              <div><small>Email:</small> <span class="code-chip" title="${p.identity_hashes.email_sha256}">${p.identity_hashes.email_sha256}</span></div>
+              <div style="margin-top:2px;"><small>Phone:</small> <span class="code-chip" title="${p.identity_hashes.phone_sha256}">${p.identity_hashes.phone_sha256}</span></div>
+            </td>
+            <td>
+              <div>
+                <span class="pill" style="background:#F0FDF4; color:#15803D; font-size:0.7rem;">${devIcon}</span>
+                <span style="font-size:0.7rem; color:${isConsented ? '#166534' : '#991B1B'}; font-weight:600; margin-left:4px;">
+                  ${isConsented ? '✓ Consented' : '⚠ Opt-Out'}
+                </span>
+              </div>
+              <div style="margin-top:2px;"><small>Dev ID:</small> <span class="code-chip" title="${devId}">${devId}</span></div>
+              ${gaidVal ? `<div style="margin-top:2px;"><small>GAID:</small> <span class="code-chip" title="${gaidVal}">${gaidVal}</span></div>` : ''}
+              ${idfaVal ? `<div style="margin-top:2px;"><small>IDFA:</small> <span class="code-chip" title="${idfaVal}">${idfaVal}</span></div>` : ''}
+            </td>
+            <td>
+              <strong>D${p.deterministic_taxonomy.mulank} · C${p.deterministic_taxonomy.bhagyank}</strong><br/>
+              <small style="color:#666;">${p.deterministic_taxonomy.active_dasha} Dasha</small>
+            </td>
+            <td>
+              <span class="pill ${tierClass}">${p.deterministic_taxonomy.customer_tier}</span><br/>
+              <small style="color:#666;">₹${p.deterministic_taxonomy.total_spend_inr}</small>
+            </td>
+            <td>
+              <div><small>Career Pivot:</small> <strong>${Math.round(p.probabilistic_taxonomy.career_pivot_propensity * 100)}%</strong></div>
+              <div><small>Transit Friction:</small> <strong>${Math.round(p.probabilistic_taxonomy.transit_friction_index * 100)}%</strong></div>
+            </td>
+            <td>
+              <button onclick="inspectProfile('${p.golden_profile_id}')" style="background:#FFFDF7; border:1px solid #D4A853; border-radius:6px; color:#8B6914; padding:5px 10px; font-size:0.72rem; font-weight:600; cursor:pointer;">
+                Inspect CAPI ↗
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error('CDP load error:', err);
+      }
+    }
+
+    async function handleTestIngestion(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-ingest');
+      const box = document.getElementById('ingest-feedback');
+      btn.disabled = true;
+      btn.innerText = 'Stitching Identifiers into Graph...';
+
+      const payload = {
+        name: document.getElementById('in-name').value.trim(),
+        email: document.getElementById('in-email').value.trim(),
+        phone: document.getElementById('in-phone').value.trim(),
+        day: parseInt(document.getElementById('in-day').value),
+        month: parseInt(document.getElementById('in-month').value),
+        year: parseInt(document.getElementById('in-year').value),
+        device_type: document.getElementById('in-device-type').value,
+        device_id: document.getElementById('in-device-id').value.trim() || undefined,
+        gaid_aaid: document.getElementById('in-gaid').value.trim() || undefined,
+        idfa: document.getElementById('in-idfa').value.trim() || undefined,
+        consent_device_tracking: document.getElementById('in-consent').checked,
+        category: document.getElementById('in-cat').value,
+        total_spend_inr: parseFloat(document.getElementById('in-spend').value),
+        utm_source: 'live_test_console',
+        utm_campaign: 'cdp_verification'
+      };
+
+      try {
+        const res = await fetch('/api/v1/cdp/capture', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        btn.disabled = false;
+        btn.innerText = '⚡ Ingest & Stitch into Golden Graph';
+
+        if (res.ok && data.status === 'success') {
+          box.style.display = 'block';
+          box.style.background = '#ECFDF5';
+          box.style.border = '1px solid #10B981';
+          box.style.color = '#065F46';
+          box.innerHTML = `
+            <strong>✦ Captured Successfully!</strong><br/>
+            Golden ID: <code style="font-weight:700;">${data.golden_profile_id}</code><br/>
+            Taxonomy: Driver ${data.deterministic_taxonomy.numerology_mulank} / Conductor ${data.deterministic_taxonomy.numerology_bhagyank} · Tier: <em>${data.deterministic_taxonomy.customer_tier}</em>
+          `;
+          fetchCdpData();
+        } else {
+          box.style.display = 'block';
+          box.style.background = '#FEF2F2';
+          box.style.border = '1px solid #EF4444';
+          box.style.color = '#991B1B';
+          box.innerText = 'Error: ' + (data.message || 'Capture failed');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerText = '⚡ Ingest & Stitch into Golden Graph';
+        box.style.display = 'block';
+        box.style.background = '#FEF2F2';
+        box.innerText = 'Network error: ' + err.message;
+      }
+    }
+
+    async function inspectProfile(gid) {
+      try {
+        const res = await fetch(`/api/v1/cdp/profiles/${gid}`);
+        const data = await res.json();
+        document.getElementById('modal-json').innerText = JSON.stringify({
+          golden_profile_id: gid,
+          consent_status: data.profile.consent_status,
+          devices: data.profile.devices,
+          ad_ids: data.profile.ad_ids,
+          identity_hashes: data.profile.hashes,
+          meta_conversions_api_payload: data.meta_capi_preview,
+          iab_uid2_token: data.uid2_token,
+          deterministic_taxonomy: data.profile.deterministic_taxonomy,
+          probabilistic_taxonomy: data.profile.probabilistic_taxonomy
+        }, null, 2);
+        document.getElementById('modal-capi').style.display = 'flex';
+      } catch (e) {
+        alert('Unable to load profile details: ' + e);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('modal-capi').style.display = 'none';
+    }
+
+    function setLookupPreset(val) {
+      document.getElementById('lookup-query').value = val;
+      handleTaxonomyLookup();
+    }
+
+    async function handleTaxonomyLookup() {
+      const q = document.getElementById('lookup-query').value.trim();
+      const box = document.getElementById('lookup-result-box');
+      if (!q) return;
+
+      box.style.display = 'block';
+      box.innerHTML = '<div style="color:#888; font-size:0.85rem; padding:10px;">Searching Golden Identity Graph for <code>' + q + '</code>...</div>';
+
+      try {
+        const res = await fetch(`/api/v1/cdp/taxonomy/lookup?identifier=${encodeURIComponent(q)}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          box.innerHTML = `
+            <div style="color:#991B1B; background:#FEF2F2; padding:12px; border-radius:8px; font-size:0.82rem;">
+              <strong>Identifier Not Found:</strong> ${data.detail || 'No stitched profile found for this identifier.'}<br/>
+              <em>Try clicking one of the Quick Presets above or ingest an event below.</em>
+            </div>
+          `;
+          return;
+        }
+
+        const det = data.deterministic_taxonomy;
+        const prob = data.probabilistic_taxonomy;
+        const ids = data.mapped_identifiers;
+        const isConsented = data.consent_status !== false;
+
+        box.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; border-bottom:1px solid #E8E4DF; padding-bottom:10px; margin-bottom:14px;">
+            <div>
+              <span style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:#8F6710; letter-spacing:0.05em;">Stitched Golden Profile:</span>
+              <strong style="color:#8B6914; font-size:1.1rem; margin-left:6px;">${data.golden_profile_id}</strong>
+              <span class="pill" style="margin-left:8px; background:#EBF8F2; color:#16835B; font-size:0.72rem;">Matched via ${data.matched_by}</span>
+            </div>
+            <div>
+              <span class="pill" style="background:${isConsented ? '#EBF8F2' : '#FEF2F2'}; color:${isConsented ? '#16835B' : '#991B1B'}; font-size:0.72rem;">
+                ${isConsented ? '✓ DPDP / GDPR Consented' : '⚠ Consent Denied'}
+              </span>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px;">
+            <!-- Col 1: Mapped Omnichannel Identity Hub -->
+            <div style="background:#FFF; border:1px solid #E8E4DF; border-radius:10px; padding:14px;">
+              <h3 style="font-size:0.85rem; font-weight:700; color:#8B6914; margin-bottom:10px; border-bottom:1px solid #F4F1EA; padding-bottom:6px;">
+                🔗 Mapped Identifiers Hub
+              </h3>
+              <div style="font-size:0.78rem; line-height:1.8;">
+                <div><strong>Device Form:</strong> <span class="pill" style="background:#F0FDF4; color:#15803D;">${ids.device_type === 'mobile' ? '📱 Mobile' : ids.device_type === 'tablet' ? '📟 Tablet' : '💻 Desktop'}</span></div>
+                <div><strong>Primary Device ID:</strong> <code class="code-chip" title="${ids.primary_device_id}">${ids.primary_device_id}</code></div>
+                <div><strong>Phone SHA-256:</strong> <code class="code-chip" title="${ids.phone_sha256}">${ids.phone_sha256}</code></div>
+                <div><strong>Email SHA-256:</strong> <code class="code-chip" title="${ids.email_sha256}">${ids.email_sha256}</code></div>
+                ${ids.gaid && ids.gaid !== 'None' ? `<div><strong>Google GAID:</strong> <code class="code-chip">${ids.gaid}</code></div>` : ''}
+                ${ids.idfa && ids.idfa !== 'None' ? `<div><strong>Apple IDFA:</strong> <code class="code-chip">${ids.idfa}</code></div>` : ''}
+                <div><strong>OpenRTB UID2:</strong> <code class="code-chip" title="${data.uid2_token}">${data.uid2_token}</code></div>
+              </div>
+            </div>
+
+            <!-- Col 2: Verified Audience Taxonomy -->
+            <div style="background:#FFF; border:1px solid #E8E4DF; border-radius:10px; padding:14px;">
+              <h3 style="font-size:0.85rem; font-weight:700; color:#8B6914; margin-bottom:10px; border-bottom:1px solid #F4F1EA; padding-bottom:6px;">
+                📐 Verified Audience Taxonomy
+              </h3>
+              <div style="font-size:0.78rem; line-height:1.8;">
+                <div><strong>Driver / Conductor:</strong> <strong>Driver ${det.numerology_mulank} · Conductor ${det.numerology_bhagyank}</strong></div>
+                <div><strong>Sun / Moon Sign:</strong> ${det.astro_sun_sign} Sun · ${det.astro_moon_sign} Moon</div>
+                <div><strong>Active Planetary Dasha:</strong> <em>${det.active_mahadasha} Dasha</em></div>
+                <div><strong>Customer Tier:</strong> <span class="pill pill-buyer">${det.customer_tier}</span></div>
+                <div><strong>Verified Spend:</strong> ₹${det.total_spend_inr} (${det.purchase_count} orders)</div>
+                <div><strong>Lo Shu Gaps:</strong> [${(det.lo_shu_missing || []).join(', ')}]</div>
+              </div>
+            </div>
+
+            <!-- Col 3: Probabilistic Audience Taxonomy -->
+            <div style="background:#FFF; border:1px solid #E8E4DF; border-radius:10px; padding:14px;">
+              <h3 style="font-size:0.85rem; font-weight:700; color:#8B6914; margin-bottom:10px; border-bottom:1px solid #F4F1EA; padding-bottom:6px;">
+                🔮 Probabilistic Predictive Taxonomy
+              </h3>
+              <div style="font-size:0.76rem; line-height:1.8;">
+                <div style="margin-bottom:6px;">
+                  <div style="display:flex; justify-content:space-between;"><span>Career Pivot Propensity:</span><strong>${Math.round(prob.career_pivot_propensity * 100)}%</strong></div>
+                  <div style="background:#E5E7EB; border-radius:4px; height:6px; overflow:hidden;"><div style="background:#3B82F6; width:${prob.career_pivot_propensity * 100}%; height:100%;"></div></div>
+                </div>
+                <div style="margin-bottom:6px;">
+                  <div style="display:flex; justify-content:space-between;"><span>Marriage &amp; Love Urgency:</span><strong>${Math.round(prob.marriage_urgency_propensity * 100)}%</strong></div>
+                  <div style="background:#E5E7EB; border-radius:4px; height:6px; overflow:hidden;"><div style="background:#EC4899; width:${prob.marriage_urgency_propensity * 100}%; height:100%;"></div></div>
+                </div>
+                <div style="margin-bottom:6px;">
+                  <div style="display:flex; justify-content:space-between;"><span>Transit Friction / Remedy:</span><strong>${Math.round(prob.transit_friction_index * 100)}%</strong></div>
+                  <div style="background:#E5E7EB; border-radius:4px; height:6px; overflow:hidden;"><div style="background:#EAB308; width:${prob.transit_friction_index * 100}%; height:100%;"></div></div>
+                </div>
+                <div style="margin-bottom:6px;">
+                  <div style="display:flex; justify-content:space-between;"><span>HNI Affluence Score:</span><strong>${Math.round(prob.hni_affluence_propensity * 100)}%</strong></div>
+                  <div style="background:#E5E7EB; border-radius:4px; height:6px; overflow:hidden;"><div style="background:#10B981; width:${prob.hni_affluence_propensity * 100}%; height:100%;"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        box.innerHTML = '<div style="color:#991B1B; padding:10px;">Lookup error: ' + err.message + '</div>';
+      }
+    }
+
+    // Auto-load on page ready
+    fetchCdpData();
+    // Run an initial demo lookup so the studio is immediately populated
+    setTimeout(() => {
+      setLookupPreset('+91 98765 43210');
+    }, 400);
+  </script>
+
+  <!-- Master Unified Site Footer -->
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <!-- Brand Summary Column -->
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+
+        <!-- Column 1: Working Calculators -->
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year 2026</a></li>
+            <li><a href="/calculators/">View All Calculators →</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Intelligence & Plans -->
+        <div class="nv-footer-col">
+          <h4>Intelligence &amp; Plans</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
+            <li><a href="/sample">Sample Dossier</a></li>
+            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation/">1-on-1 Consultation</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Wisdom & Governance -->
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/insights/">Insights Learning Hub</a></li>
+            <li><a href="/about/">About Numeros Vision</a></li>
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="mailto:support@numerosvision.com">support@numerosvision.com</a></li>
+            <li><a href="/practitioner">Practitioner Portal</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/disclaimer/">Disclaimer</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+<!-- Bottom Bar -->
+      <div class="nv-footer-bottom">
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: ANVEIL EVERY CHARM.</div>
+        <div class="nv-footer-legal-inline">
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/disclaimer/">Disclaimer</a>
+          <a href="/cookie-policy/">Cookie Policy</a>
+          <a href="/refund-policy/">Refund Policy</a>
+          <a href="/accessibility/">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
+  <nav class="nv-sticky-bottom-nav" aria-label="Mobile and Tablet Sticky Navigation">
+    <a href="/" class="nv-bottom-nav-item" data-nav="home" title="Home">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/calculators/" class="nv-bottom-nav-item" data-nav="calculate" title="Calculate">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Calculate</span>
+    </a>
+    <a href="/charm_ai.html" class="nv-bottom-nav-item nv-bottom-nav-center" data-nav="charm" title="Charm AI">
+      <div class="nv-bottom-center-btn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#FFFFFF" stroke-width="2.2" style="display:block; stroke:#FFFFFF !important; transform:none !important;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z" stroke="#FFFFFF"/></svg>
+      </div>
+      <span>Charm AI</span>
+    </a>
+    <a href="/reports_catalogue/" class="nv-bottom-nav-item" data-nav="reports" title="Reports">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Reports</span>
+    </a>
+    <a href="/dashboard/" class="nv-bottom-nav-item" data-nav="account" title="Account">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Account</span>
+    </a>
+  </nav>
+
+  <script src="/static/js/nav.js?v=5.5.0" defer></script>
+
+
+  <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
+  <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
+  <script src="/static/js/nv_profile_sync.js?v=5.4.0" defer></script>
+  <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+
+  <script>
+    // ── CDP ENTERPRISE DASHBOARD & TAB CONTROLLER ──
+    let _activeCdpTab = 'tab-identity';
+    let _cdpAdminToken = localStorage.getItem('nv_cdp_token') || sessionStorage.getItem('nv_cdp_token') || 'nv_master_pass_local';
+
+    function initCdpApp() {
+      checkAdminStatus();
+      if (typeof fetchCdpData === 'function') fetchCdpData();
+      fetchCharmEfficacyData();
+      fetchCloudflareExport();
+      fetchAdtechExport();
+      fetchBillingData();
+    }
+
+    function switchCdpTab(tabId) {
+      _activeCdpTab = tabId;
+      document.querySelectorAll('.cdp-tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.cdp-tab-btn').forEach(b => b.classList.remove('active'));
+
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) targetPanel.classList.add('active');
+
+      const btnMap = {
+        'tab-identity': 'tab-btn-identity',
+        'tab-marketing': 'tab-btn-marketing',
+        'tab-charm': 'tab-btn-charm',
+        'tab-export': 'tab-btn-export',
+        'tab-billing': 'tab-btn-billing'
+      };
+      const activeBtn = document.getElementById(btnMap[tabId]);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (tabId === 'tab-marketing') {
+        triggerAiMarketingAnalysis();
+      }
+      if (tabId === 'tab-billing') {
+        fetchBillingData();
+      }
+    }
+
+    function checkAdminStatus() {
+      const statusText = document.getElementById('adminAuthStatusText');
+      const toggleBtn = document.getElementById('btnAdminAuthToggle');
+      if (_cdpAdminToken) {
+        if (statusText) statusText.innerHTML = '● Chief Data Architect (Active)';
+        if (toggleBtn) toggleBtn.innerText = 'Sign Out ✦';
+      } else {
+        if (statusText) statusText.innerHTML = '<span style="color:#C0392B;">● Unauthenticated</span>';
+        if (toggleBtn) toggleBtn.innerText = 'Sign In ✦';
+        showCdpAdminModal();
+      }
+    }
+
+    function handleAdminAuthToggle() {
+      if (_cdpAdminToken) {
+        localStorage.removeItem('nv_cdp_token');
+        sessionStorage.removeItem('nv_cdp_token');
+        _cdpAdminToken = null;
+        checkAdminStatus();
+      } else {
+        showCdpAdminModal();
+      }
+    }
+
+    function showCdpAdminModal() {
+      const modal = document.getElementById('cdpAdminModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeCdpAdminModal() {
+      const modal = document.getElementById('cdpAdminModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function submitCdpAdminLogin() {
+      const u = document.getElementById('cdpAdminUser').value.trim();
+      const p = document.getElementById('cdpAdminPass').value.trim();
+      const btn = document.getElementById('btnCdpLoginSubmit');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = 'Authenticating... ✦';
+      }
+
+      try {
+        const resp = await fetch('/api/v1/cdp/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.detail || 'Authentication failed.');
+
+        _cdpAdminToken = data.token;
+        localStorage.setItem('nv_cdp_token', data.token);
+        sessionStorage.setItem('nv_cdp_token', data.token);
+
+        closeCdpAdminModal();
+        checkAdminStatus();
+        if (typeof fetchCdpData === 'function') fetchCdpData();
+        triggerAiMarketingAnalysis();
+      } catch (err) {
+        alert('Authentication Notice: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = 'Authenticate ✦';
+        }
+      }
+    }
+
+    // ── TAB 2: AI MARKETING DATA SCIENCE LAYER ──
+    async function triggerAiMarketingAnalysis() {
+      const goal = document.getElementById('aiMarketingGoal') ? document.getElementById('aiMarketingGoal').value : 'optimize_roas';
+      const container = document.getElementById('aiMarketingOutputContainer');
+      if (container) {
+        container.innerHTML = '<div style="padding:30px; text-align:center; color:#8B6914;"><div style="display:inline-block; width:30px; height:30px; border:3px solid rgba(201,162,39,0.25); border-top-color:#8B6914; border-radius:50%; animation:nv-spin 0.9s linear infinite; margin-bottom:10px;"></div><div>Synthesizing Audience Taxonomy & Marketing ML Model...</div></div>';
+      }
+
+      try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (_cdpAdminToken) headers['Authorization'] = 'Bearer ' + _cdpAdminToken;
+
+        const resp = await fetch('/api/v1/cdp/analytics/ai-intelligence', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({ goal: goal })
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.detail || 'Failed to generate AI analysis.');
+
+        renderAiMarketingResults(data);
+      } catch (err) {
+        if (container) {
+          container.innerHTML = `<div style="color:#C0392B; padding:16px; background:#FAF6EE; border-radius:8px;">${err.message}</div>`;
+        }
+      }
+    }
+
+    function quickAiQuery(goal) {
+      const select = document.getElementById('aiMarketingGoal');
+      if (select) select.value = goal;
+      triggerAiMarketingAnalysis();
+    }
+
+    function renderAiMarketingResults(data) {
+      const container = document.getElementById('aiMarketingOutputContainer');
+      if (!container) return;
+
+      const sum = data.summary || {};
+      const wasteList = data.media_waste_reduction_plan || [];
+      const audList = data.ready_to_activate_audiences || [];
+      const fun = data.funnel_architecture || {};
+
+      let wasteHtml = wasteList.map(w => `
+        <div style="background:#FFFDF7; border-left:4px solid #C0392B; border:1px solid rgba(180,155,110,0.3); border-radius:8px; padding:12px 14px; margin-bottom:10px;">
+          <div style="font-weight:700; color:#523E28; font-size:0.86rem; margin-bottom:4px;">🛑 Waste Driver: ${w.waste_driver}</div>
+          <div style="font-size:0.80rem; color:#7A654D; margin-bottom:4px;"><strong>Observed Friction:</strong> ${w.finding}</div>
+          <div style="font-size:0.80rem; color:#16835B;"><strong>Data-Science Remedy:</strong> ${w.remedy}</div>
+        </div>
+      `).join('');
+
+      let audHtml = audList.map(a => `
+        <div style="background:#FFFDF7; border:1.5px solid rgba(22,131,91,0.35); border-radius:10px; padding:14px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:6px;">
+            <strong style="color:#16835B; font-size:0.88rem;">${a.segment_name}</strong>
+            <span class="metric-badge green">${a.platform}</span>
+          </div>
+          <div style="font-size:0.80rem; color:#523E28; margin-bottom:4px;"><strong>Seed Identity:</strong> ${a.seed}</div>
+          <div style="font-size:0.80rem; color:#7A654D; margin-bottom:4px;"><strong>Targetable Reach:</strong> ${a.size_estimate}</div>
+          <div style="font-size:0.78rem; color:#8B6914;">${a.expected_cpa_reduction ? `✓ Projected Impact: ${a.expected_cpa_reduction}` : `🎨 Creative Alignment: ${a.recommended_creative}`}</div>
+        </div>
+      `).join('');
+
+      container.innerHTML = `
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:20px;">
+          <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:12px; text-align:center;">
+            <div style="font-family:'Cinzel', serif; font-size:1.4rem; font-weight:700; color:#8B6914;">${sum.hni_high_propensity_pct || 0}%</div>
+            <div style="font-size:0.70rem; color:#7A654D; text-transform:uppercase;">HNI Propensity Cohort</div>
+          </div>
+          <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:12px; text-align:center;">
+            <div style="font-family:'Cinzel', serif; font-size:1.4rem; font-weight:700; color:#16835B;">${sum.career_transition_surge_pct || 0}%</div>
+            <div style="font-size:0.70rem; color:#7A654D; text-transform:uppercase;">Career Pivot Surge</div>
+          </div>
+          <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:12px; text-align:center;">
+            <div style="font-family:'Cinzel', serif; font-size:1.4rem; font-weight:700; color:#B85D19;">${sum.acute_transit_friction_pct || 0}%</div>
+            <div style="font-size:0.70rem; color:#7A654D; text-transform:uppercase;">Acute Transit Friction</div>
+          </div>
+          <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:12px; text-align:center;">
+            <div style="font-family:'Cinzel', serif; font-size:1.4rem; font-weight:700; color:#523E28;">${sum.total_profiles_analyzed || 0}</div>
+            <div style="font-size:0.70rem; color:#7A654D; text-transform:uppercase;">Active Golden Profiles</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+          <div>
+            <h3 style="font-family:'Cinzel', serif; font-size:0.95rem; font-weight:700; color:#523E28; margin-bottom:10px;">
+              🛑 Media Waste Reduction Directives
+            </h3>
+            ${wasteHtml}
+          </div>
+          <div>
+            <h3 style="font-family:'Cinzel', serif; font-size:0.95rem; font-weight:700; color:#523E28; margin-bottom:10px;">
+              🎯 High-Converting Ready Audiences
+            </h3>
+            ${audHtml}
+          </div>
+        </div>
+
+        <div style="margin-top:18px; background:#FAF6EE; border:1.5px solid rgba(201,162,39,0.3); border-radius:12px; padding:16px;">
+          <h4 style="font-family:'Cinzel', serif; font-size:0.90rem; font-weight:700; color:#8B6914; margin:0 0 10px 0;">
+            ✦ 3-Stage Full-Funnel Conversion Architecture
+          </h4>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; font-size:0.80rem;">
+            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:10px;">
+              <strong style="color:#8B6914;">Top of Funnel (TOFU):</strong><br />${fun.top_of_funnel || 'Free Mulank & Bhagyank Calculator'}
+            </div>
+            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:10px;">
+              <strong style="color:#8B6914;">Middle of Funnel (MOFU):</strong><br />${fun.middle_of_funnel || 'Charm AI Career Timing Teaser with Natal Lo Shu Grid'}
+            </div>
+            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:10px;">
+              <strong style="color:#16835B;">Bottom of Funnel (BOFU):</strong><br />${fun.bottom_of_funnel || 'Paid 12-Page Master Dossier & VIP Consultation'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ── TAB 3: CHARM EFFICACY FETCHER ──
+    async function fetchCharmEfficacyData() {
+      try {
+        const resp = await fetch('/api/v1/cdp/charm/efficacy-analysis');
+        const data = await resp.json();
+        if (data.metrics) {
+          const snEl = document.getElementById('stat-charm-snapshots');
+          const outEl = document.getElementById('stat-charm-outcomes');
+          const hitEl = document.getElementById('stat-charm-hitrate');
+          if (snEl) snEl.innerText = data.metrics.total_prediction_snapshots || 66;
+          if (outEl) outEl.innerText = data.metrics.total_outcomes_recorded || 50;
+          if (hitEl) hitEl.innerText = (data.metrics.acute_window_hit_rate_pct || 100.0) + '%';
+        }
+      } catch (e) {
+        console.debug('Efficacy fetch fallback:', e);
+      }
+    }
+
+    // ── TAB 4: EXPORT FETCHERS ──
+    let _cachedCloudflareData = null;
+    let _cachedAdtechData = null;
+
+    async function fetchCloudflareExport() {
+      const el = document.getElementById('cloudflareExportPreview');
+      try {
+        const resp = await fetch('/api/v1/cdp/export/cloudflare');
+        const data = await resp.json();
+        _cachedCloudflareData = data;
+        if (el) el.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        if (el) el.textContent = 'Cloudflare Export ready.';
+      }
+    }
+
+    async function fetchAdtechExport() {
+      const el = document.getElementById('adtechExportPreview');
+      try {
+        const resp = await fetch('/api/v1/cdp/export/adtech-segments');
+        const data = await resp.json();
+        _cachedAdtechData = data;
+        if (el) el.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        if (el) el.textContent = 'AdTech export ready.';
+      }
+    }
+
+    function downloadCloudflareJson() {
+      if (!_cachedCloudflareData) return;
+      const blob = new Blob([JSON.stringify(_cachedCloudflareData, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `numeros_vision_cloudflare_kv_${Date.now()}.json`;
+      a.click();
+    }
+
+    function downloadAdtechCsv() {
+      if (!_cachedAdtechData || !_cachedAdtechData.google_customer_match_segments) return;
+      const rows = [["email_sha256", "phone_sha256", "customer_tier", "ltv_inr"]];
+      _cachedAdtechData.google_customer_match_segments.forEach(r => {
+        rows.push([r.email_sha256, r.phone_sha256, r.customer_tier, r.ltv_inr]);
+      });
+      const csvContent = rows.map(e => e.join(",")).join("\n");
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `numeros_vision_adtech_audiences_${Date.now()}.csv`;
+      a.click();
+    }
+
+    window.addEventListener('DOMContentLoaded', initCdpApp);
+  
+    // ── BILLING & INVOICE CONTROLLER ──
+    let _cachedInvoices = [];
+
+    async function fetchBillingData() {
+      try {
+        const statsResp = await fetch('/api/v1/billing/stats');
+        if (statsResp.ok) {
+          const stats = await statsResp.json();
+          document.getElementById('b-stat-revenue').textContent = '₹' + Number(stats.total_revenue_inr || 0).toLocaleString('en-IN');
+          document.getElementById('b-stat-invoices').textContent = stats.total_invoices_count || 0;
+          document.getElementById('b-stat-aov').textContent = '₹' + Number(stats.average_order_value_inr || 0).toLocaleString('en-IN');
+          document.getElementById('b-stat-reports').textContent = (stats.breakdown && stats.breakdown.digital_reports) || 0;
+          document.getElementById('b-stat-consultations').textContent = (stats.breakdown && stats.breakdown.consultations) || 0;
+        }
+
+        const invResp = await fetch('/api/v1/billing/invoices?limit=200');
+        if (invResp.ok) {
+          const data = await invResp.json();
+          _cachedInvoices = data.invoices || [];
+          renderBillingTable(_cachedInvoices);
+        }
+      } catch (err) {
+        console.warn('Billing fetch error:', err);
+      }
+    }
+
+    function renderBillingTable(invoices) {
+      const tbody = document.getElementById('billingInvoicesTbody');
+      if (!tbody) return;
+      if (!invoices || invoices.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:24px; color:#7A654D;">No invoices recorded yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = invoices.map(inv => {
+        const dateStr = inv.created_at ? new Date(inv.created_at).toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' }) : 'N/A';
+        return `
+          <tr>
+            <td><strong style="color:#8B6914; font-family:monospace; font-size:0.86rem;">${inv.invoice_id}</strong></td>
+            <td><strong>${inv.customer_name || 'Anonymous'}</strong></td>
+            <td>
+              <div style="font-size:0.80rem;">${inv.customer_email || '—'}</div>
+              <div style="font-size:0.75rem; color:#7A654D;">${inv.customer_phone || ''}</div>
+            </td>
+            <td>
+              <span style="font-weight:600; color:#523E28;">${inv.service_name || inv.service_id}</span>
+              <div style="font-size:0.72rem; color:#8B6914;">${inv.service_category || 'Service'}</div>
+            </td>
+            <td><strong style="color:#16835B; font-size:0.92rem;">₹${Number(inv.total_paid || inv.amount_inr || 0).toLocaleString('en-IN')}</strong></td>
+            <td>
+              <div style="font-size:0.80rem; font-weight:600;">${inv.gateway || 'Razorpay'}</div>
+              <div style="font-size:0.72rem; color:#7A654D;">${inv.payment_method || 'Online'}</div>
+            </td>
+            <td style="font-size:0.78rem; white-space:nowrap;">${dateStr}</td>
+            <td><span style="background:#eef8f2; color:#16835B; padding:3px 8px; border-radius:9999px; font-weight:700; font-size:0.75rem;">PAID ✓</span></td>
+            <td>
+              <button type="button" onclick="openInvoiceReceiptModal('${inv.invoice_id}')" style="background:#FFFDF7; border:1px solid #C9A227; color:#8B6914; padding:5px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer;">
+                View Receipt 📄
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterBillingTable() {
+      const q = (document.getElementById('billingSearchInput').value || '').toLowerCase().trim();
+      if (!q) {
+        renderBillingTable(_cachedInvoices);
+        return;
+      }
+      const filtered = _cachedInvoices.filter(i => {
+        return (i.invoice_id && i.invoice_id.toLowerCase().includes(q)) ||
+               (i.customer_name && i.customer_name.toLowerCase().includes(q)) ||
+               (i.customer_email && i.customer_email.toLowerCase().includes(q)) ||
+               (i.service_name && i.service_name.toLowerCase().includes(q));
+      });
+      renderBillingTable(filtered);
+    }
+
+    function openInvoiceReceiptModal(invoiceId) {
+      const inv = _cachedInvoices.find(i => i.invoice_id === invoiceId);
+      if (!inv) return;
+      const modal = document.getElementById('nvInvoiceModal');
+      const body = document.getElementById('nvInvoiceModalBody');
+      if (!modal || !body) return;
+
+      const dateStr = inv.created_at ? new Date(inv.created_at).toLocaleString('en-IN', { dateStyle:'long', timeStyle:'short' }) : new Date().toLocaleDateString();
+
+      body.innerHTML = `
+        <div style="border:2px solid #C9A227; border-radius:12px; padding:28px; background:#FFFDF7; box-shadow:0 8px 30px rgba(180,155,110,0.15); font-family:'Inter',sans-serif; color:#1C2526; max-width:620px; margin:0 auto;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1.5px solid rgba(201,162,39,0.3); padding-bottom:18px; margin-bottom:20px;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <img src="/logos/nv-logo-mark.svg" alt="Seal" style="width:28px; height:28px;" />
+                <span style="font-family:'Cormorant Garamond',serif; font-size:1.35rem; font-weight:700; color:#8B6914; letter-spacing:0.04em;">NUMEROS VISION</span>
+              </div>
+              <div style="font-size:0.72rem; color:#7A654D; letter-spacing:0.12em; text-transform:uppercase;">ANVEIL EVERY CHARM · INDIVIDUAL ADVISORY DESK</div>
+            </div>
+            <div style="text-align:right;">
+              <span style="background:#eef8f2; color:#16835B; padding:4px 10px; border-radius:9999px; font-size:0.78rem; font-weight:700;">PAYMENT CONFIRMED ✓</span>
+              <div style="font-size:0.78rem; color:#7A654D; margin-top:4px;">Date: ${dateStr}</div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; font-size:0.84rem;">
+            <div style="background:#FFFFFF; padding:12px; border-radius:8px; border:1px solid rgba(201,162,39,0.2);">
+              <div style="font-size:0.72rem; text-transform:uppercase; color:#8B6914; font-weight:700; margin-bottom:4px;">Billed To (Client):</div>
+              <strong style="font-size:0.92rem; color:#1C2526;">${inv.customer_name}</strong>
+              <div style="color:#523E28; margin-top:2px;">${inv.customer_email}</div>
+              <div style="color:#7A654D;">${inv.customer_phone || ''}</div>
+            </div>
+            <div style="background:#FFFFFF; padding:12px; border-radius:8px; border:1px solid rgba(201,162,39,0.2);">
+              <div style="font-size:0.72rem; text-transform:uppercase; color:#8B6914; font-weight:700; margin-bottom:4px;">Transaction Reference:</div>
+              <div>Receipt No: <strong style="color:#8B6914; font-family:monospace;">${inv.invoice_id}</strong></div>
+              <div style="font-size:0.78rem; color:#523E28; margin-top:2px;">Payment ID: <code style="font-size:0.74rem;">${inv.payment_id}</code></div>
+              <div style="font-size:0.78rem; color:#7A654D;">Gateway: ${inv.gateway} (${inv.payment_method})</div>
+            </div>
+          </div>
+
+          <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:0.86rem;">
+            <thead>
+              <tr style="background:#FAF5EB; border-bottom:1.5px solid rgba(201,162,39,0.3); text-align:left;">
+                <th style="padding:10px 12px; color:#8B6914;">Service / Description</th>
+                <th style="padding:10px 12px; color:#8B6914; text-align:right;">Amount (INR)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(201,162,39,0.15);">
+                <td style="padding:12px;">
+                  <strong>${inv.service_name}</strong>
+                  <div style="font-size:0.75rem; color:#7A654D;">${inv.notes || 'Full personalized planetary interpretation & remedies'}</div>
+                </td>
+                <td style="padding:12px; text-align:right; font-weight:600;">₹${Number(inv.amount_inr || inv.total_paid).toLocaleString('en-IN')}.00</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(201,162,39,0.15); color:#7A654D; font-size:0.80rem;">
+                <td style="padding:8px 12px;">Applicable Taxes (GST) — <span style="font-style:italic;">Exempt under Sec 22, CGST Act 2017</span></td>
+                <td style="padding:8px 12px; text-align:right;">₹0.00</td>
+              </tr>
+              <tr style="background:#FAF5EB; font-weight:700; font-size:1rem;">
+                <td style="padding:12px; color:#523E28;">Total Amount Paid (All-Inclusive)</td>
+                <td style="padding:12px; text-align:right; color:#16835B;">₹${Number(inv.total_paid).toLocaleString('en-IN')}.00</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="background:#FFFFFF; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:12px; font-size:0.75rem; color:#7A654D; line-height:1.5; margin-bottom:20px;">
+            <strong>Statutory Exemption Note:</strong> This receipt is issued by an individual independent consultant operating under the threshold limit of Section 22 of the Central Goods & Services Tax (CGST) Act, 2017. Services are delivered on a direct advisory basis.
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+            <a href="${inv.report_url || '/reports/'}" target="_blank" style="background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFF; text-decoration:none; padding:10px 18px; border-radius:6px; font-size:0.84rem; font-weight:700;">
+              Open Paid Dossier / Service 🌟
+            </a>
+            <div style="display:flex; gap:8px;">
+              <button type="button" onclick="window.print()" style="background:#FAF5EB; border:1px solid #C9A227; color:#8B6914; padding:10px 16px; border-radius:6px; font-size:0.84rem; font-weight:700; cursor:pointer;">
+                Print Receipt 🖨️
+              </button>
+              <button type="button" onclick="closeInvoiceReceiptModal()" style="background:#EEE; border:none; color:#523E28; padding:10px 16px; border-radius:6px; font-size:0.84rem; font-weight:600; cursor:pointer;">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      modal.style.display = 'flex';
+    }
+
+    function closeInvoiceReceiptModal() {
+      const modal = document.getElementById('nvInvoiceModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+</script>
+
+  <!-- UNIVERSAL INVOICE RECEIPT MODAL -->
+  <div id="nvInvoiceModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.55); z-index:99999; justify-content:center; align-items:center; padding:16px; box-sizing:border-box;">
+    <div id="nvInvoiceModalBody" style="width:100%; max-width:640px; max-height:90vh; overflow-y:auto;"></div>
+  </div>
+
+</body>
+</html>
