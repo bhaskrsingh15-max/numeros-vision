@@ -1,0 +1,228 @@
+/**
+ * NUMEROS VISION — CANONICAL PACK CATALOG (TypeScript)
+ * Auto-generated from app/config/pricing_config.py
+ * Enforces server-side authority, integer paise, and voucher architectures.
+ */
+
+export interface PackDefinition {
+  pack_id: string;
+  name: string;
+  display_name: string;
+  price_inr: number;
+  amount_paise: number;
+  digital_root?: number;
+  status: 'active' | 'inactive';
+  pages?: number;
+  deliverables: string[];
+  voucher_allocation?: {
+    basic_vouchers: number;
+    advanced_vouchers: number;
+    premium_vouchers: number;
+  };
+  questions_count?: number;
+  progressive_unlock?: string;
+}
+
+export const PACK_CATALOG: {
+  version: string;
+  currency: string;
+  core_reports: Record<string, PackDefinition>;
+  bundles: Record<string, PackDefinition>;
+  charm_ai: Record<string, PackDefinition>;
+} = {
+  "version": "2.1.0",
+  "currency": "INR",
+  "updated_at": "2026-11-06T17:30:00Z",
+  "core_reports": {
+    "report_basic": {
+      "pack_id": "report_basic",
+      "tier_id": "basic",
+      "name": "Basic Report",
+      "display_name": "Basic Report \u00b7 Entry",
+      "pages": 3,
+      "price_inr": 199,
+      "amount_paise": 19900,
+      "digital_root": 1,
+      "status": "active",
+      "deliverables": [
+        "3-Page Personalised Executive PDF",
+        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
+        "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
+        "Chaldean Single Root & Compound Letter Breakdown",
+        "Methodology Note & Interpretive Limitations Summary"
+      ],
+      "progressive_unlock": "entry"
+    },
+    "report_advanced": {
+      "pack_id": "report_advanced",
+      "tier_id": "advanced",
+      "name": "Advanced Report",
+      "display_name": "Advanced Report \u00b7 Recommended",
+      "pages": 12,
+      "price_inr": 510,
+      "amount_paise": 51000,
+      "digital_root": 6,
+      "status": "active",
+      "deliverables": [
+        "12-Page Master Synthesis PDF Dossier",
+        "All Basic calculations + 5-Year Numerology Dasha Timing Timeline",
+        "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
+        "Chaldean Sound Frequency & Name Harmony Matrix",
+        "7-Layer Safe Planetary Remedy Protocols",
+        "Structured Cross-Factor Comparisons & Practical Guidance"
+      ],
+      "progressive_unlock": "includes_basic"
+    },
+    "report_premium": {
+      "pack_id": "report_premium",
+      "tier_id": "premium",
+      "name": "Premium Dossier",
+      "display_name": "Premium Dossier \u00b7 Comprehensive",
+      "pages": 32,
+      "price_inr": 1050,
+      "amount_paise": 105000,
+      "digital_root": 6,
+      "status": "active",
+      "deliverables": [
+        "32-Page Sovereign Executive Master Blueprint PDF",
+        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
+        "10-Year Macro Planetary Timing Radar & Acute Execution Windows",
+        "Multi-Generational Synastry & Compatibility Analysis",
+        "Commercial & Professional Resonance Vectors",
+        "Complete Technical Appendix: Formulas, Engine Versions & Assumptions"
+      ],
+      "progressive_unlock": "includes_basic"
+    }
+  },
+  "bundles": {
+    "starter_bundle": {
+      "pack_id": "starter_bundle",
+      "name": "Starter Bundle",
+      "display_name": "Starter Bundle \u00b7 2 Basic Reports",
+      "price_inr": 339,
+      "amount_paise": 33900,
+      "digital_root": 6,
+      "status": "inactive",
+      "voucher_allocation": {
+        "basic_vouchers": 2,
+        "advanced_vouchers": 0,
+        "premium_vouchers": 0
+      },
+      "deliverables": [
+        "2 Complete 3-Page Basic PDF Reports",
+        "Choose any two topics across Love, Money, Work, or Growth",
+        "Full calculation breakdown and practical remedies",
+        "Instant on-screen digital access in 10-15 seconds plus permanent PDF download"
+      ]
+    },
+    "discovery_bundle": {
+      "pack_id": "discovery_bundle",
+      "name": "Discovery Bundle",
+      "display_name": "Discovery Bundle \u00b7 3 Advanced Reports",
+      "price_inr": 1299,
+      "amount_paise": 129900,
+      "digital_root": 3,
+      "status": "inactive",
+      "voucher_allocation": {
+        "basic_vouchers": 0,
+        "advanced_vouchers": 3,
+        "premium_vouchers": 0
+      },
+      "deliverables": [
+        "3 Complete 12-Page Advanced Master Reports (36 pages total)",
+        "Choose any three topics from the entire catalogue",
+        "3-Year Macro Dasha Radar & 12 Personal Months for each topic",
+        "7-Layer safe planetary remedy protocols for selected domains"
+      ]
+    },
+    "comprehensive_bundle": {
+      "pack_id": "comprehensive_bundle",
+      "name": "Comprehensive Bundle",
+      "display_name": "Comprehensive Bundle \u00b7 5 Advanced Reports",
+      "price_inr": 1999,
+      "amount_paise": 199900,
+      "digital_root": 1,
+      "status": "inactive",
+      "voucher_allocation": {
+        "basic_vouchers": 0,
+        "advanced_vouchers": 5,
+        "premium_vouchers": 0
+      },
+      "deliverables": [
+        "5 Complete 12-Page Advanced Master Reports (60 pages total)",
+        "Complete multi-domain lifetime clarity across Love, Career, Wealth & Family",
+        "3-Year Macro Dasha Radar & 12 Personal Months for each domain",
+        "7-Layer safe planetary remedy protocols & auspicious timing windows"
+      ]
+    }
+  },
+  "charm_ai": {
+    "charm_free": {
+      "pack_id": "charm_free",
+      "name": "Free Preview",
+      "display_name": "Charm AI \u00b7 Free Preview",
+      "price_inr": 0,
+      "amount_paise": 0,
+      "questions_count": 3,
+      "digital_root": 0,
+      "status": "active",
+      "deliverables": [
+        "3 Free Exploratory Inquiries Daily per Account",
+        "Instant Driver / Conductor token verification",
+        "24/7 web access"
+      ]
+    },
+    "charm_single": {
+      "pack_id": "charm_single",
+      "name": "Charm AI Starter Pack",
+      "display_name": "Charm AI \u00b7 Starter Pack",
+      "price_inr": 199,
+      "amount_paise": 19900,
+      "questions_count": 5,
+      "digital_root": 1,
+      "status": "active",
+      "deliverables": [
+        "5 In-Depth Consultation Inquiries across any life area",
+        "Acute execution timing windows (Hora & transit)",
+        "Grounded non-fatalistic practical guidance",
+        "Credits valid for 6 months"
+      ]
+    },
+    "charm_multi": {
+      "pack_id": "charm_multi",
+      "name": "Multi-Reading Pack",
+      "display_name": "Charm AI \u00b7 Multi-Reading Pack",
+      "price_inr": 399,
+      "amount_paise": 39900,
+      "questions_count": 10,
+      "digital_root": 0,
+      "status": "active",
+      "deliverables": [
+        "10 Detailed Question Predictions",
+        "Customised 7-Layer safe remedies for all queries",
+        "Auspicious date selection & Muhurat guidance",
+        "Priority engine response queue",
+        "Credits valid for 12 months"
+      ]
+    },
+    "charm_extended": {
+      "pack_id": "charm_extended",
+      "name": "Extended Reading Pack",
+      "display_name": "Charm AI \u00b7 Extended Pack",
+      "price_inr": 699,
+      "amount_paise": 69900,
+      "questions_count": 25,
+      "digital_root": 0,
+      "status": "active",
+      "deliverables": [
+        "25 Deep In-Depth Predictions",
+        "Interactive chart companion with transit radar",
+        "Multi-profile synastry consultation capability",
+        "Downloadable consultation transcript",
+        "Credits valid for 12 months with rollover"
+      ]
+    }
+  }
+};
+
+export default PACK_CATALOG;

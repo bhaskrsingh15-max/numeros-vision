@@ -1,0 +1,15 @@
+name = "numeros-vision"
+pages_build_output_dir = "app/static"
+compatibility_date = "2026-10-21"
+
+# Cloudflare D1 Database Binding
+[[d1_databases]]
+binding = "DB"
+database_name = "numeros-vision-db"
+database_id = "placeholder-pending-wrangler-d1-create"
+migrations_dir = "migrations"
+
+# Cloudflare R2 Bucket Binding (Private PDF Storage)
+[[r2_buckets]]
+binding = "REPORTS_BUCKET"
+bucket_name = "numeros-reports-private"

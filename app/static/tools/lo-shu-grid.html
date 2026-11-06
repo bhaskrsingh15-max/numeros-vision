@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z2E6416W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3Z2E6416W7', {
+      send_page_view: true,
+      cookie_flags: 'SameSite=Lax;Secure'
+    });
+  </script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Standardized Favicon & Brand Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="/logos/nv-logo-mark.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+
+  <title>Free Lo Shu Grid Calculator — Numeros Vision</title>
+  <meta name="description" content="Generate your personal Lo Shu Grid free. Discover missing numbers, strengths, personality traits, and what your 3×3 magic square reveals about your destiny. Powered by Numeros Vision AI." />
+  <meta name="keywords" content="lo shu grid calculator, lo shu grid free, chinese numerology grid, missing numbers numerology, 3x3 magic square numerology" />
+  <link rel="canonical" href="https://numerosvision.com/tools/lo-shu-grid/" />
+  <!-- Search Engine Crawl & Indexing Directives -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+  <!-- App Store, PWA & Mobile Web Directives -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Numeros Vision" />
+  <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+  <meta property="og:site_name" content="Numeros Vision" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://numerosvision.com/tools/lo-shu-grid" />
+  <meta property="og:title" content="Free Lo Shu Grid Calculator — Numeros Vision" />
+  <meta property="og:description" content="Generate your personal Lo Shu Grid free. Discover missing numbers, strengths, personality traits, and what your 3×3 magic square reveals about your destiny. Powered by Numeros Vision AI." />
+  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+
+  <!-- Twitter Card Directives -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Lo Shu Grid Calculator — Numeros Vision" />
+  <meta name="twitter:description" content="Generate your personal Lo Shu Grid free. Discover missing numbers, strengths, personality traits, and what your 3×3 magic square reveals about your destiny. Powered by Numeros Vision AI." />
+  <meta name="twitter:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Lo Shu Grid Calculator",
+    "description": "Free Lo Shu Grid numerology calculator by Numeros Vision",
+    "url": "https://numerosvision.com/tools/lo-shu-grid",
+    "applicationCategory": "LifestyleApplication",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+    "provider": { "@type": "Organization", "name": "Numeros Vision" }
+  }
+  </script>
+
+  <style>
+    .tool-hero { text-align: center; padding: 60px 20px 36px; max-width: 760px; margin: 0 auto; }
+    .eyebrow { font-size: 0.72rem; letter-spacing: 0.16em; color: var(--gold); text-transform: uppercase; font-weight: 700; margin-bottom: 16px; }
+    .tool-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 400; line-height: 1.15; margin-bottom: 16px; color: var(--text-primary); }
+    .tool-title span { color: var(--gold-dark); }
+    .tool-sub { font-size: 0.96rem; color: var(--text-muted); line-height: 1.75; }
+
+    /* Input Card */
+    .calc-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 500px;
+      margin: 0 auto 36px;
+      box-shadow: 0 8px 30px rgba(180, 155, 110, 0.12);
+    }
+    .input-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .input-group { flex: 1; min-width: 70px; }
+    label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-dark); font-weight: 700; margin-bottom: 8px; }
+    input, select {
+      width: 100%;
+      background: #FFFDF7;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.25s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    input:focus, select:focus {
+      border-color: var(--gold);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.14);
+    }
+
+    .btn-calc {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #C9A227 0%, #E2B84B 100%);
+      border: 1px solid #C9A227;
+      border-radius: 12px;
+      color: #FFFDF7;
+      font-weight: 700;
+      font-size: 0.98rem;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 0.25s ease;
+    }
+    .btn-calc:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(201, 162, 39, 0.35);
+    }
+
+    /* Lo Shu Grid Visual */
+    #result { display: none; max-width: 680px; margin: 0 auto; padding: 0 16px 60px; }
+    .grid-wrap { display: flex; justify-content: center; margin-bottom: 28px; }
+    .lo-shu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 280px; }
+    .grid-cell {
+      aspect-ratio: 1;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid;
+      position: relative;
+      transition: all 0.3s;
+      box-shadow: 0 2px 10px rgba(180, 155, 110, 0.08);
+    }
+    .grid-cell.present {
+      background: rgba(201, 162, 39, 0.12);
+      border-color: var(--gold);
+    }
+    .grid-cell.absent {
+      background: #FFFFFF;
+      border-color: var(--border);
+      border-style: dashed;
+    }
+    .cell-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .cell-number.present-num { color: #8B6914; }
+    .cell-number.absent-num { color: rgba(28, 25, 23, 0.25); }
+    .cell-count { font-size: 0.68rem; color: var(--gold-dark); font-weight: 700; margin-top: 2px; }
+    .cell-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-top: 3px; text-align: center; padding: 0 4px; font-weight: 600; }
+
+    .grid-legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 28px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 4px; }
+
+    /* Planes */
+    .planes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .plane-card {
+      padding: 18px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(180, 155, 110, 0.06);
+    }
+    .plane-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-dark); font-weight: 700; margin-bottom: 6px; }
+    .plane-value { font-size: 0.92rem; font-weight: 700; margin-bottom: 4px; }
+    .plane-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* Missing numbers */
+    .missing-section {
+      background: rgba(201, 162, 39, 0.05);
+      border: 1.5px solid var(--border-gold);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .missing-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold-dark); font-weight: 700; margin-bottom: 12px; }
+    .missing-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .missing-tag { padding: 4px 14px; border-radius: 100px; background: rgba(201, 162, 39, 0.12); border: 1px solid var(--border-gold); font-size: 0.78rem; color: #8B6914; font-weight: 700; }
+
+    .cta-strip {
+      text-align: center;
+      padding: 32px 24px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+      margin-top: 16px;
+      box-shadow: 0 8px 24px rgba(180, 155, 110, 0.08);
+    }
+    .cta-strip h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; margin-bottom: 10px; color: var(--text-primary); }
+    .cta-strip p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.7; }
+
+    .faq-section { max-width: 720px; margin: 0 auto 80px; padding: 0 20px; }
+    .faq-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; text-align: center; margin-bottom: 28px; color: var(--text-primary); }
+    .faq-item { border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; background: #FFFFFF; }
+    .faq-q { padding: 18px 20px; cursor: pointer; font-weight: 600; font-size: 0.92rem; display: flex; justify-content: space-between; align-items: center; color: var(--text-primary); }
+    .faq-q:hover { background: rgba(201, 162, 39, 0.04); }
+    .faq-a { padding: 0 20px 20px; font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; display: none; }
+    .faq-a.open { display: block; }
+  
+    /* ── LO SHU FULL ANVEIL REFERENCE COMPONENT STYLES (MATCHING USER REFERENCE IMAGE) ── */
+    .ls-ref-card {
+      background: #FFFDF7;
+      border: 1.5px solid #C9A227;
+      border-radius: 16px;
+      padding: clamp(16px, 2.5vw, 24px);
+      box-shadow: 0 8px 32px rgba(201, 162, 39, 0.12);
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .ls-pitch-pill {
+      transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .ls-pitch-pill:hover, .ls-pitch-pill.active {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(201, 162, 39, 0.25);
+    }
+    .ls-grid-cell {
+      border-radius: 10px;
+      padding: 8px 5px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 84px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    .ls-grid-cell:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    }
+    .ls-grid-cell.missing-void {
+      border: 2px dashed #C9A227;
+      background: #FFFDF7;
+    }
+    .ls-grid-cell.active-charm {
+      border: 2px solid #16835B;
+      background: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(22, 131, 91, 0.08);
+    }
+    .ls-cell-tag {
+      font-size: 0.60rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .ls-cell-tag.missing { color: #8B6914; }
+    .ls-cell-tag.active { color: #16835B; }
+    .ls-cell-num {
+      font-family: 'Cinzel', serif;
+      font-size: 1.45rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 2px 0;
+    }
+    .ls-cell-num.missing { color: #523E28; }
+    .ls-cell-num.active { color: #16835B; }
+    .ls-cell-label {
+      font-size: 0.62rem;
+      color: #7A654D;
+      margin-bottom: 2px;
+      font-weight: 500;
+    }
+    .ls-cell-action {
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .ls-grid-cell.missing-void .ls-cell-action {
+      color: #8B6914;
+      background: rgba(201, 162, 39, 0.12);
+    }
+    .ls-grid-cell.active-charm .ls-cell-action {
+      color: #16835B;
+      background: rgba(22, 131, 91, 0.1);
+    }
+
+  
+    /* Checkout Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(24, 21, 16, 0.65);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #FFFFFF;
+      border: 1.5px solid rgba(201,162,39,0.35);
+      border-radius: 20px;
+      padding: 36px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 18px; right: 20px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #7A654D;
+      line-height: 1;
+    }
+    .modal-close:hover { color: #8B6914; }
+</style>
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
+  <!-- Google Fonts for Unified Master Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KW6GQRVZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+<!-- ───── MASTER SITE HEADER ───── -->
+  <!-- Master Unified Site Header -->
+  <header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" width="36" height="36" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links matching Master Roadmap IA -->
+      <nav aria-label="Main Navigation">
+                <ul class="nv-nav-menu" id="nvNavMenu">
+          <!-- 1. Home -->
+          <li class="nv-nav-item">
+            <a href="/" class="nv-nav-link" title="Numeros Vision Home">Home</a>
+          </li>
+
+          <!-- 1. About Us -->
+          <li class="nv-nav-item">
+            <a href="/about/" class="nv-nav-link" title="About Numeros Vision | Our Approach to Numerology" data-canonical="https://numerosvision.com/about/">About Us</a>
+          </li>
+
+          <!-- 2. Calculators (Accordion / Dropdown) -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/tools/baby-naming" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/tools/name-numerology" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/tools/mobile-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/tools/compatibility-calculator" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Compatibility Synastry &amp; Synastry</span></a></li>
+              <li><a href="/tools/business-numerology" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/tools/life-path-calculator" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/tools/lo-shu-grid" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/tools/vehicle-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/tools/property-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/tools/blessing-years" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+
+          <!-- 2. Charm AI -->
+          <li class="nv-nav-item"><a href="/#charm-ai" class="nv-nav-link">Charm AI</a></li>
+
+          <!-- 3. Reports & Consultations -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Reports</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/reports/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
+              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Insights -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Insights</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
+              <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
+              <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
+              <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
+              <li><a href="/blog/gemstone-remedies" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Pricing -->
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+
+          <!-- 6. Contact Us -->
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+
+          <!-- 7. PWA Download / Install App on Mobile & Tablet ONLY -->
+          <li class="nv-nav-item nv-pwa-menu-item" id="nvPwaDrawerItem" style="display:none; margin: 8px 0; width: 100%; box-sizing: border-box;">
+            <button type="button" class="nv-nav-link nv-pwa-install-trigger-btn" onclick="triggerPwaInstall(event)" style="background: rgba(201,162,39,0.12); border: 1.5px solid rgba(201,162,39,0.38); border-radius: 999px; padding: 10px 18px; font-weight: 600; color: #8B6914; display: flex; align-items: center; justify-content: space-between; width: 100%; cursor: pointer; text-align: left; box-sizing: border-box;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <span class="nv-sub-icon" style="font-size: 1.15rem;">📲</span>
+                <span>Install / Download App</span>
+              </span>
+              <span class="nv-sub-tag" style="background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #fff; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; font-weight: 700; text-transform: uppercase;">PWA</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/#birth-profile" class="nv-btn-cta">Discover My Numbers ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+    <script>
+    function toggleMobileNav(e) {
+      if (window.nvToggleMaster && typeof window.nvToggleMaster === 'function') {
+        return window.nvToggleMaster(e || window.event);
+      }
+      var evt = e || window.event;
+      if (evt && evt.stopPropagation) evt.stopPropagation();
+      var menu = document.getElementById('nvNavMenu');
+      var btn = document.querySelector('.nv-mobile-toggle');
+      var header = document.querySelector('.nv-header');
+      if (menu) {
+        var isOpen = menu.classList.toggle('active');
+        if (btn) {
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          btn.innerHTML = isOpen ? '✕' : '☰';
+        }
+        if (header) {
+          header.classList.toggle('menu-open', isOpen);
+        }
+        document.body.classList.toggle('nv-nav-open', isOpen);
+        var backdrop = document.getElementById('nv-drawer-backdrop');
+        if (backdrop) {
+          backdrop.classList.toggle('active', isOpen);
+        }
+      }
+    }
+  </script>
+
+<!-- ───── TOOL HERO ───── -->
+<div class="tool-hero">
+  <div class="eyebrow">Free Numerology Tool</div>
+  <h1 class="tool-title">Lo Shu Grid<br/><span>Calculator</span></h1>
+  <p class="tool-sub">The Lo Shu Grid is a 3×3 magic square from ancient Chinese numerology. Each cell maps to a number 1–9, revealing which vibrational frequencies are present, amplified, or missing in your personal energetic grid.</p>
+</div>
+
+<!-- ───── AEO DIRECT ANSWER & TRANSPARENT METHODOLOGY ───── -->
+<div style="max-width: 680px; margin: 0 auto 28px; background: #FFFFFF; border: 1.5px solid var(--border-gold); border-radius: 16px; padding: 22px 24px; box-shadow: 0 4px 20px rgba(180, 155, 110, 0.08);">
+  <div style="font-size: 0.74rem; font-weight: 700; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">
+    ✦ Direct Answer Definition · Classical Numerology Framework
+  </div>
+  <p style="font-size: 0.92rem; color: #523E28; line-height: 1.7; margin: 0 0 16px 0;">
+    The <strong>Lo Shu Grid</strong> is an ancient 3&times;3 numerological magic square that maps the digits of a person's full birth date across 8 energetic planes (mental, emotional, practical, thought, will, action, and diagonal success yogas). In numerology, every row, column, and diagonal sums to 15, revealing strengths, amplified vibrations, and missing numbers that guide remedial harmonization.
+  </p>
+  <div style="border-top: 1px dashed rgba(201, 162, 39, 0.35); padding-top: 14px;">
+    <div style="font-size: 0.8rem; font-weight: 700; color: #8B6914; margin-bottom: 8px;">5-Step Calculation Method:</div>
+    <ol style="margin: 0; padding-left: 20px; font-size: 0.84rem; color: #7A654D; line-height: 1.7;">
+      <li><strong>Date of Birth:</strong> Write down your full birth date in DD/MM/YYYY format.</li>
+      <li><strong>Birth Number (Mulank):</strong> Reduce your calendar day of birth to a single digit (1–9).</li>
+      <li><strong>Destiny Number (Bhagyank):</strong> Sum all digits of your date, month, and year to a single digit (1–9).</li>
+      <li><strong>Plot the Numbers:</strong> Place all digits of your birth date, Mulank, and Bhagyank into the traditional 3&times;3 matrix: Top row (4-9-2), Middle row (3-5-7), Bottom row (8-1-6). The digit 0 is omitted as it has no cell in the classical grid.</li>
+      <li><strong>Assess the Planes:</strong> Identify completed planes (such as 4-5-6 Golden Rajyog or 2-5-8 Silver Success Plane) and note any missing numbers.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ───── CALCULATOR CARD ───── -->
+<div class="calc-card">
+    <div class="input-group" style="margin-bottom:12px;">
+    <label for="ls-name">Full Legal Name (Optional)</label>
+    <input type="text" id="ls-name" placeholder="Enter your full name (e.g. Bhaskr Singh)" />
+  </div>
+  <div class="input-row">
+    <div class="input-group" style="flex:0.5;">
+      <label>Day</label>
+      <input type="number" id="ls-day" min="1" max="31" placeholder="DD" />
+    </div>
+    <div class="input-group" style="flex:0.7;">
+      <label>Month</label>
+      <select id="ls-month">
+        <option value="">Month</option>
+        <option value="1">January</option><option value="2">February</option>
+        <option value="3">March</option><option value="4">April</option>
+        <option value="5">May</option><option value="6">June</option>
+        <option value="7">July</option><option value="8">August</option>
+        <option value="9">September</option><option value="10">October</option>
+        <option value="11">November</option><option value="12">December</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Year</label>
+      <input type="number" id="ls-year" min="1900" max="2026" placeholder="YYYY" />
+    </div>
+  </div>
+  <button class="btn-calc" onclick="generateGrid()">✦ Generate My Lo Shu Grid</button>
+</div>
+
+<!-- ───── RESULTS ───── -->
+<div id="result" style="display:none;">
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!-- LO SHU FULL ANVEIL REFERENCE COMPONENT (IMAGE 2 REPLICA)    -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <div class="ls-ref-card" id="loShuReferenceCard">
+    <!-- Component Header -->
+    <div style="border-bottom:1px solid rgba(201,162,39,0.25); padding-bottom:14px; margin-bottom:18px;">
+      <h3 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.55rem; color:#523E28; font-weight:700; margin:0 0 6px;">
+        Lo Shu Grid: Full Anveil Charms, Present Powers &amp; Element Yogas
+      </h3>
+      <p style="font-size:0.86rem; color:#7A654D; margin:0 0 12px; line-height:1.5;">
+        Unlock your personalized natal matrix across 3 comprehensive consultation tiers: Full Missing Void Activation (@ ₹1,050), Present Number Harmonization (@ ₹510), and Element Yogas Active % (@ ₹199).
+      </p>
+      
+      <!-- 3 Top Ranked Pills -->
+      <div style="display:flex; flex-wrap:wrap; gap:10px;">
+        <button type="button" class="ls-pitch-pill active" onclick="selectConversionOffer('missing')" id="pillMissing" style="background:#FFF9E6; border:1px solid #C9A227; color:#8B6914; padding:6px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+          <span>🔒 1st: Missing Numbers: Full Anveil @ ₹1,050</span>
+        </button>
+        <button type="button" class="ls-pitch-pill" onclick="selectConversionOffer('present')" id="pillPresent" style="background:#EBF7F2; border:1px solid #16835B; color:#16835B; padding:6px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+          <span>🌿 2nd: Present Numbers: Harmonize @ ₹510</span>
+        </button>
+        <button type="button" class="ls-pitch-pill" onclick="selectConversionOffer('yogas')" id="pillYogas" style="background:#FFF2EB; border:1px solid #D97706; color:#B45309; padding:6px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+          <span>⚡ 3rd: Element Yogas: Active % @ ₹199</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Two-Column Interactive Layout -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:22px; align-items:start;">
+      <!-- LEFT COLUMN: NATAL MATRIX -->
+      <div style="background:#FFFFFF; border:1px solid rgba(201,162,39,0.3); border-radius:14px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div>
+            <div style="font-family:'Cinzel',serif; font-size:0.88rem; font-weight:800; color:#523E28; letter-spacing:0.04em;">NATAL LO SHU 3×3 MATRIX</div>
+            <div style="font-size:0.76rem; color:#7A654D;">Seeker: <span id="lsGridSeekerName" style="font-weight:700;">Seeker</span> (DOB: <span id="lsGridSeekerDob" style="font-weight:700;">28-11-1981</span>)</div>
+          </div>
+          <span style="font-size:0.70rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 9px; border-radius:6px;">Click Any Cell</span>
+        </div>
+
+        <!-- 3x3 Grid Container -->
+        <div id="toolLoShuGridCells" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:14px;">
+          <!-- Injected via JS -->
+        </div>
+
+        <!-- Element Yogas Alignment Strip -->
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:10px 14px; margin-bottom:14px;">
+          <div style="font-size:0.82rem; font-weight:700; color:#523E28; display:flex; align-items:center; gap:6px;">
+            <span style="color:#D97706;">⚡</span>
+            <span>Element Yogas Alignment: <span id="lsYogaPctText" style="color:#16835B; font-weight:800;">25% ACTIVE</span></span>
+          </div>
+          <button type="button" onclick="selectConversionOffer('yogas')" style="background:#8B6914; color:#FFFFFF; border:none; border-radius:6px; padding:5px 11px; font-size:0.74rem; font-weight:700; cursor:pointer;">
+            Anveil Yogas Charm @ ₹199 &rarr;
+          </button>
+        </div>
+
+        <!-- Quick Pitch Previews -->
+        <div style="font-size:0.74rem; color:#7A654D; font-weight:700; margin-bottom:6px;">Quick Pitch Previews:</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <button type="button" onclick="selectConversionOffer('missing')" style="background:#FFF9E6; border:1px solid rgba(201,162,39,0.4); color:#8B6914; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
+            🔒 1. Missing @ ₹1,050
+          </button>
+          <button type="button" onclick="selectConversionOffer('present')" style="background:#EBF7F2; border:1px solid rgba(22,131,91,0.4); color:#16835B; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
+            🌿 2. Present @ ₹510
+          </button>
+          <button type="button" onclick="selectConversionOffer('yogas')" style="background:#FFF2EB; border:1px solid rgba(217,119,6,0.4); color:#B45309; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
+            ⚡ 3. Anveil Yogas (<span id="lsQuickYogaPct">25%</span>) @ ₹199
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: DYNAMIC PITCH CARD -->
+      <div id="lsDynamicPitchCard" style="background:#FFFFFF; border:1.5px solid #C9A227; border-radius:14px; padding:20px; box-shadow:0 4px 16px rgba(201,162,39,0.1);">
+        <!-- Dynamic via selectConversionOffer -->
+      </div>
+    </div>
+
+    <!-- Bottom Permutation & Combination Conversion Matrix -->
+    <div style="margin-top:22px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.35); border-radius:12px; padding:16px 18px;">
+      <div style="font-family:'Cinzel',serif; font-size:0.84rem; font-weight:800; color:#8B6914; letter-spacing:0.04em; margin-bottom:10px;">
+        ✦ PERMUTATION &amp; COMBINATION CONVERSION MATRIX
+      </div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.80rem; color:#523E28;">
+          <thead>
+            <tr style="border-bottom:1.5px solid rgba(201,162,39,0.4); text-align:left;">
+              <th style="padding:6px 8px; font-weight:700; color:#8B6914;">User Intent</th>
+              <th style="padding:6px 8px; font-weight:700; color:#8B6914;">Core Value Proposition</th>
+              <th style="padding:6px 8px; font-weight:700; color:#8B6914; text-align:right;">Offer &amp; Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(201,162,39,0.2); cursor:pointer;" onclick="selectConversionOffer('missing')">
+              <td style="padding:8px 8px; font-weight:700; color:#8B6914;">1. 🔒 Missing Voids</td>
+              <td style="padding:8px 8px;">Full Anveil: Name Balancing &amp; Vastu</td>
+              <td style="padding:8px 8px; text-align:right; font-weight:700; color:#8B6914;">
+                ₹1,050
+              </td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(201,162,39,0.2); cursor:pointer;" onclick="selectConversionOffer('present')">
+              <td style="padding:8px 8px; font-weight:700; color:#16835B;">2. 🌿 Present Digits</td>
+              <td style="padding:8px 8px;">Inborn gifts, digit overdrive &amp; Dasha</td>
+              <td style="padding:8px 8px; text-align:right; font-weight:700; color:#16835B;">
+                ₹510
+              </td>
+            </tr>
+            <tr style="cursor:pointer;" onclick="selectConversionOffer('yogas')">
+              <td style="padding:8px 8px; font-weight:700; color:#B45309;">3. ⚡ Element Yogas</td>
+              <td style="padding:8px 8px;">Active Plane % &amp; foundational habits</td>
+              <td style="padding:8px 8px; text-align:right; font-weight:700; color:#B45309;">
+                ₹199
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANES OF EXPRESSION -->
+  <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold-dark);font-weight:700;margin-bottom:14px;text-align:center;">Your Planes of Expression</div>
+  <div class="planes-grid" id="planes-grid"></div>
+
+  <!-- MISSING NUMBERS -->
+  <div class="missing-section" id="missing-section"></div>
+
+  <!-- CTA -->
+  <div class="cta-strip" style="background:linear-gradient(135deg, #FFFDF7 0%, #FFFFFF 100%); border:1.5px solid var(--gold, #C9A227); border-radius:20px; padding:32px 24px; text-align:center; box-shadow:0 8px 30px rgba(82,62,40,0.08); margin: 0 auto 60px; max-width: 680px;">
+    <div style="display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:50%; background:rgba(201,162,39,0.12); border:1.5px solid var(--gold, #C9A227); font-size:1.4rem; color:#8B6914; margin-bottom:10px;">
+      🔒
+    </div>
+    <div style="font-family:'Cinzel', serif; font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:#8B6914; font-weight:700; margin-bottom:6px;">
+      NUMEROS VISION · ANVEIL EVERY CHARM
+    </div>
+    <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.75rem; color:#523E28; margin:0 0 10px; font-weight:700;">
+      ANVEIL Your Elemental Grid Charm — Explore Missing Plane Remedies
+    </h3>
+    <p style="font-size:0.88rem; color:#7A654D; line-height:1.65; max-width:640px; margin:0 auto 18px;">
+      Empty grid sectors indicate life areas experiencing subtle friction—such as financial leaks (missing 4, 5, 6) or career delays (missing 1, 8). 
+      Learn how consecrated gemstone attunements, sacred Yantras, and 5-element directional cures neutralize empty planes 
+      in your comprehensive 12-page Advanced Dossier (₹510) or 32-page Diamond Sovereign Roadmap (₹1,050).
+    </p>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:8px; text-align:left; max-width:640px; margin:0 auto 18px; background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:10px; padding:12px 16px; font-size:0.82rem; color:#523E28; font-weight:600;">
+      <div>✦ 8 Elemental Planes Strength &amp; Void Frequency Audit</div>
+      <div>✦ Golden (4-5-6) &amp; Silver (2-5-8) Rajyog Abundance Activation</div>
+      <div>✦ Consecrated Crystal &amp; Sacred Yantra Directional Placement Guide</div>
+      <div>✦ 5-Year Dasha &amp; Personal Year Remedial Harmonization</div>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px; flex-wrap:wrap;">
+      <span style="font-family:'Cinzel', serif; font-size:1.6rem; font-weight:800; color:#8B6914;">₹1,050</span>
+      <span style="font-size:0.72rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 10px; border-radius:999px; text-transform:uppercase;">SAVE 50% · INSTANT PDF</span>
+    </div>
+
+    <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+      <button type="button" onclick="launchOfferCheckout('report_premium', 1050, 'Full Anveil Charm: Missing Number Activation')" style="display:inline-flex; align-items:center; justify-content:center; padding:14px 28px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel', serif; font-weight:700; font-size:0.88rem; letter-spacing:0.06em; border-radius:10px; border:none; cursor:pointer; text-decoration:none; box-shadow:0 4px 18px rgba(201,162,39,0.35);">
+        <span>🔒 ANVEIL Your Elemental Grid Charm · Sovereign Roadmap (₹1,050) ✦</span>
+      </button>
+      <a href="/sample_roadmap/?topic=loshu_grid" style="display:inline-flex; align-items:center; justify-content:center; padding:14px 20px; background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); color:#523E28; font-weight:600; font-size:0.82rem; border-radius:10px; text-decoration:none;">
+        Preview Sample Dossier
+      </a>
+    </div>
+
+    <div style="font-size:0.72rem; color:#7A654D; margin-top:10px;">
+      Authentic Classical Numerology · Pure Mathematical Precision · 100% Confidential &amp; Private
+    </div>
+  </div>
+
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" width="36" height="36" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year 2026</a></li>
+            <li><a href="/calculators/">View All Calculators →</a></li>
+          </ul>
+        </div>
+
+        <div class="nv-footer-col">
+          <h4>Intelligence &amp; Plans</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
+            <li><a href="/sample_roadmap/?topic=loshu_grid">Sample Dossier</a></li>
+            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation/">1-on-1 Consultation</a></li>
+          </ul>
+        </div>
+
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/insights/">Insights Learning Hub</a></li>
+            <li><a href="/about/">About Numeros Vision</a></li>
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="mailto:support@numerosvision.com">support@numerosvision.com</a></li>
+            <li><a href="/practitioner">Practitioner Portal</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/disclaimer/">Disclaimer</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="nv-footer-bottom">
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: ANVEIL EVERY CHARM.</div>
+        <div class="nv-footer-legal-inline">
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/disclaimer/">Disclaimer</a>
+          <a href="/cookie-policy/">Cookie Policy</a>
+          <a href="/refund-policy/">Refund Policy</a>
+          <a href="/accessibility/">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/nv_profile_sync.js?v=5.4.0" defer></script>
+  <script src="/static/js/nav.js?v=5.5.0" defer></script>
+
+
+  <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
+  <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
+  <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+
+  <script>
+    const PLANETS = {
+      1: "Sun (Surya)",
+      2: "Moon (Chandra)",
+      3: "Jupiter (Guru)",
+      4: "Rahu (North Node)",
+      5: "Mercury (Budh)",
+      6: "Venus (Shukra)",
+      7: "Ketu (South Node)",
+      8: "Saturn (Shani)",
+      9: "Mars (Mangal)"
+    };
+
+    const CELL_INFO = {
+      4: { name: "Wealth & Prosperity", element: "Wood", planet: "Rahu" },
+      9: { name: "Fame & Reputation", element: "Fire", planet: "Mars" },
+      2: { name: "Love & Marriage", element: "Earth", planet: "Moon" },
+      3: { name: "Family & Health", element: "Wood", planet: "Jupiter" },
+      5: { name: "Brahmasthan (Core)", element: "Earth", planet: "Mercury" },
+      7: { name: "Creativity & Children", element: "Metal", planet: "Ketu" },
+      8: { name: "Knowledge & Wisdom", element: "Earth", planet: "Saturn" },
+      1: { name: "Career & Life Path", element: "Water", planet: "Sun" },
+      6: { name: "Helpful Friends & Luxury", element: "Metal", planet: "Venus" }
+    };
+
+    const LO_SHU_PLANES = [
+      { name: "Mental Plane", digits: [4, 9, 2], desc: "Intellect, logic, memory, cognitive analysis, and sharp rational thinking." },
+      { name: "Emotional Plane", digits: [3, 5, 7], desc: "Intuition, heart wisdom, artistic expression, empathy, and emotional balance." },
+      { name: "Practical Plane", digits: [8, 1, 6], desc: "Physical execution, financial discipline, material organization, and business acumen." },
+      { name: "Thought Plane", digits: [4, 3, 8], desc: "Foresight, strategic planning, intellectual vision, and contemplative ideas." },
+      { name: "Will Plane", digits: [9, 5, 1], desc: "Determination, persistence, stamina, resilience, and unwavering willpower." },
+      { name: "Action Plane", digits: [2, 7, 6], desc: "Speed of execution, physical dynamism, spontaneous action, and sports acumen." },
+      { name: "Golden Success Plane (4-5-6 / Golden Rajyog)", digits: [4, 5, 6], desc: "Supreme material abundance, executive leadership, fame, commercial expansion, and lasting wealth accumulation." },
+      { name: "Silver Success Plane (2-5-8 / Property & Stability)", digits: [2, 5, 8], desc: "Real estate stability, land holdings, property security, patience, practical groundedness, and Silver Rajyog abundance." }
+    ];
+
+    const MISSING_MEANINGS = {
+      1: "Career delays, difficulty expressing individuality, lack of independent authority.",
+      2: "Intuition gaps, impatience, difficulty maintaining sensitive intimate relationships.",
+      3: "Difficulty in continuous self-expression, lack of inspirational focus, delayed mentorship.",
+      4: "Disorganized financial planning, difficulty retaining accumulated wealth, lack of routine.",
+      5: "Restlessness, emotional swings, instability during business expansion, lack of central anchor.",
+      6: "Delayed comfort, absence of influential benefactors, strained luxury or family harmony.",
+      7: "Difficulty trusting unseen outcomes, creative self-doubt, vulnerability to false allies.",
+      8: "Financial impulsiveness, avoiding long-term planning, skipping systematic due diligence.",
+      9: "Lack of aggressive ambition, difficulty fighting for rightful credit, passive hesitation."
+    };
+
+    function reduceToSingle(num) {
+      while (num > 9) {
+        num = String(num).split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+      }
+      return num;
+    }
+
+    function generateGrid() {
+      const dayVal = parseInt(document.getElementById('ls-day').value, 10);
+      const monthVal = parseInt(document.getElementById('ls-month').value, 10);
+      const yearVal = parseInt(document.getElementById('ls-year').value, 10);
+
+      if (!dayVal || !monthVal || !yearVal || dayVal < 1 || dayVal > 31 || yearVal < 1900 || yearVal > 2099) {
+        alert("Please enter a valid Day (1-31), Month, and Year (1900-2099).");
+        return;
+      }
+
+      // Calculate Driver (Mulank) and Conductor (Bhagyank)
+      const driver = reduceToSingle(dayVal);
+      const totalDobSum = String(dayVal) + String(monthVal) + String(yearVal);
+      const conductor = reduceToSingle(totalDobSum.split('').reduce((acc, d) => acc + parseInt(d, 10), 0));
+
+      // Build Lo Shu counts from DOB digits + Driver + Conductor
+      const dobStr = `${String(dayVal).padStart(2, '0')}${String(monthVal).padStart(2, '0')}${yearVal}`;
+      const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+
+      // Add natal DOB digits (Standard Calculation)
+      for (const ch of dobStr) {
+        if (ch !== '0') {
+          counts[parseInt(ch, 10)]++;
+        }
+      }
+
+      // 1. Render Birth Chart Badges
+      const badgesContainer = document.getElementById('birthChartBadges');
+      badgesContainer.innerHTML = `
+        <span style="font-size:0.75rem; font-weight:700; color:#8B6914; background:rgba(201,162,39,0.15); padding:4px 12px; border-radius:12px;">
+          Birth Date: ${String(dayVal).padStart(2, '0')}-${String(monthVal).padStart(2, '0')}-${yearVal}
+        </span>
+        <span style="font-size:0.75rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:4px 12px; border-radius:12px;">
+          Driver (Mulank): ${driver} · ${PLANETS[driver]}
+        </span>
+        <span style="font-size:0.75rem; font-weight:700; color:#8B6914; background:rgba(201,162,39,0.15); padding:4px 12px; border-radius:12px;">
+          Conductor (Bhagyank): ${conductor} · ${PLANETS[conductor]}
+        </span>
+      `;
+
+      // 2. Render Present vs Missing Frequency Summary
+      const presentDigits = [];
+      const missingDigits = [];
+      for (let n = 1; n <= 9; n++) {
+        if (counts[n] > 0) presentDigits.push(`${n} (×${counts[n]})`);
+        else missingDigits.push(n);
+      }
+
+      const freqSummary = document.getElementById('birthChartFreqSummary');
+      freqSummary.innerHTML = `
+        <div><strong style="color:#16835B;">✦ Present Frequencies:</strong> [ ${presentDigits.join(', ')} ]</div>
+        <div><strong style="color:#A13030;">⚠️ Karmic Missing Digits:</strong> [ ${missingDigits.join(', ') || 'None (Complete Matrix)'} ]</div>
+      `;
+
+      // 3. Render 3x3 Grid
+      // Standard positions: [4, 9, 2], [3, 5, 7], [8, 1, 6]
+      const gridOrder = [4, 9, 2, 3, 5, 7, 8, 1, 6];
+      const gridContainer = document.getElementById('lo-shu-grid');
+      gridContainer.innerHTML = '';
+
+      gridOrder.forEach(num => {
+        const cnt = counts[num];
+        const info = CELL_INFO[num];
+        const cell = document.createElement('div');
+        cell.className = `grid-cell ${cnt > 0 ? 'present' : 'absent'}`;
+        
+        if (cnt > 0) {
+          cell.innerHTML = `
+            <div class="cell-number present-num">${String(num).repeat(Math.min(cnt, 4))}</div>
+            <div class="cell-count">×${cnt} Present</div>
+            <div class="cell-label">${info.element} · ${info.name.split(' ')[0]}</div>
+          `;
+        } else {
+          cell.innerHTML = `
+            <div class="cell-number absent-num">${num}</div>
+            <div style="font-size:0.65rem; color:#A13030; font-weight:800; background:rgba(161,48,48,0.1); padding:1px 6px; border-radius:4px; margin-top:2px;">GAP</div>
+            <div class="cell-label" style="color:#A13030;">${info.element} Void</div>
+          `;
+        }
+        gridContainer.appendChild(cell);
+      });
+
+      
+      // Call Reference Component Controller
+      const seekerName = (document.getElementById('ls-name') && document.getElementById('ls-name').value.trim()) || localStorage.getItem('nv_user_name') || 'Seeker';
+      const formattedDob = `${String(dayVal).padStart(2, '0')}-${String(monthVal).padStart(2, '0')}-${yearVal}`;
+      renderLoShuReferenceComponent(counts, missingDigits, presentDigits, driver, conductor, seekerName, formattedDob);
+
+      // Persist verified calculation pipeline entity
+      const calculationId = 'CALC-LOSHU-' + Date.now().toString(36).toUpperCase();
+      const calcRecord = {
+        calculation_id: calculationId,
+        tool: 'lo-shu-grid',
+        name: seekerName,
+        dob: formattedDob,
+        day: dayVal,
+        month: monthVal,
+        year: yearVal,
+        driver: driver,
+        conductor: conductor,
+        counts: counts,
+        missingDigits: missingDigits,
+        presentDigits: presentDigits,
+        calculated_at: new Date().toISOString()
+      };
+      try {
+        localStorage.setItem('nv_user_profile', JSON.stringify(calcRecord));
+        localStorage.setItem('nv_last_calculation', JSON.stringify(calcRecord));
+        localStorage.setItem('nv_calculation_id', calculationId);
+        localStorage.setItem('nv_user_dob', `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`);
+        localStorage.setItem('nv_user_name', seekerName);
+      } catch (e) {
+        console.warn('Calculation persistence error:', e);
+      }
+
+      // 4. Render Planes of Expression
+      const planesContainer = document.getElementById('planes-grid');
+      planesContainer.innerHTML = '';
+
+      LO_SHU_PLANES.forEach(plane => {
+        const presentCount = plane.digits.filter(d => counts[d] > 0).length;
+        const pct = Math.round((presentCount / 3) * 100);
+        let statusBadge = '';
+        let badgeColor = '';
+
+        if (pct === 100) {
+          statusBadge = 'COMPLETE · 100%';
+          badgeColor = '#16835B';
+        } else if (pct === 67) {
+          statusBadge = 'STRONG · 67%';
+          badgeColor = '#8B6914';
+        } else if (pct === 33) {
+          statusBadge = 'PARTIAL · 33%';
+          badgeColor = '#C9A227';
+        } else {
+          statusBadge = 'VOID · 0%';
+          badgeColor = '#A13030';
+        }
+
+        const card = document.createElement('div');
+        card.className = 'plane-card';
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span class="plane-label">${plane.name}</span>
+            <span style="font-size:0.68rem; font-weight:800; color:${badgeColor}; background:rgba(201,162,39,0.12); padding:2px 8px; border-radius:6px;">
+              ${statusBadge}
+            </span>
+          </div>
+          <div class="plane-value" style="color:#523E28;">Numbers: [ ${plane.digits.join(' - ')} ]</div>
+          <p class="plane-desc" style="margin:4px 0 8px;">${plane.desc}</p>
+          <div style="font-size:0.75rem; color:#7A654D;">
+            <strong>Present:</strong> [ ${plane.digits.filter(d => counts[d] > 0).join(', ') || 'None'} ] · 
+            <strong>Missing:</strong> [ ${plane.digits.filter(d => counts[d] === 0).join(', ') || 'None'} ]
+          </div>
+        `;
+        planesContainer.appendChild(card);
+      });
+
+      // 5. Render Missing Numbers Section
+      const missingSection = document.getElementById('missing-section');
+      if (missingDigits.length > 0) {
+        missingSection.innerHTML = `
+          <div class="missing-title">⚠️ Karmic Missing Numbers &amp; Elemental Voids</div>
+          <div class="missing-tags">
+            ${missingDigits.map(d => `
+              <span class="missing-tag">
+                <strong>Missing ${d}</strong> · ${CELL_INFO[d].element} (${PLANETS[d].split(' ')[0]})
+              </span>
+            `).join('')}
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:0.84rem; color:#523E28; line-height:1.55;">
+            ${missingDigits.map(d => `
+              <div><strong>Number ${d} Void:</strong> ${MISSING_MEANINGS[d]}</div>
+            `).join('')}
+          </div>
+        `;
+        missingSection.style.display = 'block';
+      } else {
+        missingSection.innerHTML = `
+          <div class="missing-title" style="color:#16835B;">✦ Complete Karmic Matrix</div>
+          <p style="font-size:0.86rem; color:#523E28; margin:0;">
+            Exceptional chart! All 9 vibrational numbers are present in your natal matrix. No karmic voids detected.
+          </p>
+        `;
+        missingSection.style.display = 'block';
+      }
+
+      // 6. Reveal Result and Scroll
+      const resBox = document.getElementById('result');
+      resBox.style.display = 'block';
+      resBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  
+
+    // ── DATA CONTROLLER FOR LO SHU REFERENCE COMPONENT ──
+    let _lastCalculatedData = {
+      counts: {},
+      missing: [],
+      present: [],
+      driver: 1,
+      conductor: 1,
+      name: 'Seeker',
+      dob: '28-11-1981',
+      yogaPct: 25
+    };
+
+    function renderLoShuReferenceComponent(counts, missingDigits, presentDigits, driver, conductor, pName, pDob) {
+      _lastCalculatedData.counts = counts;
+      _lastCalculatedData.missing = missingDigits;
+      _lastCalculatedData.present = presentDigits;
+      _lastCalculatedData.driver = driver;
+      _lastCalculatedData.conductor = conductor;
+      _lastCalculatedData.name = pName || 'Seeker';
+      _lastCalculatedData.dob = pDob || '28-11-1981';
+
+      // 8 planes of Lo Shu
+      const planes = [
+        [4, 9, 2], [3, 5, 7], [8, 1, 6],
+        [4, 3, 8], [9, 5, 1], [2, 7, 6],
+        [4, 5, 6], [2, 5, 8]
+      ];
+      let completePlanes = 0;
+      planes.forEach(pl => {
+        if (pl.every(num => (counts[num] || 0) > 0)) completePlanes++;
+      });
+      let yogaPct = Math.round((completePlanes / 8) * 100);
+      if (yogaPct === 0 && presentDigits.length >= 4) yogaPct = 25; // Base active vector resonance
+      _lastCalculatedData.yogaPct = yogaPct;
+
+      // Update Header Text
+      const nameEl = document.getElementById('lsGridSeekerName');
+      const dobEl = document.getElementById('lsGridSeekerDob');
+      const yogaPctText = document.getElementById('lsYogaPctText');
+      const quickYogaEl = document.getElementById('lsQuickYogaPct');
+
+      if (nameEl) nameEl.textContent = _lastCalculatedData.name;
+      if (dobEl) dobEl.textContent = _lastCalculatedData.dob;
+      if (yogaPctText) yogaPctText.textContent = `${yogaPct}% ACTIVE`;
+      if (quickYogaEl) quickYogaEl.textContent = `${yogaPct}%`;
+
+      // Standard Lo Shu 9 Cells Mapping
+      const cellDefs = [
+        { num: 4, label: 'Wood · SE', unsealPrice: '₹1,050', explorePrice: '₹510' },
+        { num: 9, label: 'Fire · S', unsealPrice: '₹1,050', explorePrice: '₹510' },
+        { num: 2, label: 'Earth · SW', unsealPrice: '₹1,050', explorePrice: '₹510' },
+        { num: 3, label: 'Wood · East', unsealPrice: '₹1,050', explorePrice: '₹510' },
+        { num: 5, label: 'Earth · Center', unsealPrice: '₹1,050', explorePrice: '₹510' },
+        { num: 7, label: 'Metal · West', unsealPrice: '₹1,050', explorePrice: '₹510' },
+        { num: 8, label: 'Earth · NE', unsealPrice: '₹1,050', explorePrice: '₹510' },
+        { num: 1, label: 'Water · North', unsealPrice: '₹1,050', explorePrice: '₹510' },
+        { num: 6, label: 'Metal · NW', unsealPrice: '₹1,050', explorePrice: '₹510' }
+      ];
+
+      const gridEl = document.getElementById('toolLoShuGridCells');
+      if (gridEl) {
+        let cellsHtml = '';
+        cellDefs.forEach(cd => {
+          const count = counts[cd.num] || 0;
+          const isPresent = count > 0;
+          const isMissing = count === 0;
+
+          // Main Display Number (repeat count if present, plus Driver flag if applicable)
+          let numDisplay = String(cd.num);
+          let subLabel = cd.label;
+
+          if (isPresent) {
+            numDisplay = String(cd.num).repeat(count);
+            if (cd.num === driver) {
+              numDisplay += ' (D)';
+            }
+            subLabel += ` · ×${count}`;
+          }
+
+          const actionText = isMissing ? `Unseal @ ₹1,050` : `Explore @ ₹510`;
+          const clickTarget = isMissing ? `'missing', ${cd.num}` : `'present', ${cd.num}`;
+
+          cellsHtml += `
+            <div class="ls-grid-cell ${isMissing ? 'missing-void' : 'active-charm'}" onclick="selectConversionOffer(${clickTarget})" id="lsCell_${cd.num}" title="Click to view detailed ${isMissing ? 'Missing Void activation' : 'Present Digit harmonisation'}">
+              <div class="ls-cell-tag ${isMissing ? 'missing' : 'active'}">
+                ${isMissing ? '🔒 ANVEIL CHARM' : '🌿 ACTIVE CHARM'}
+              </div>
+              <div class="ls-cell-num ${isMissing ? 'missing' : 'active'}">
+                ${numDisplay}
+              </div>
+              <div class="ls-cell-label">
+                ${subLabel}
+              </div>
+              <div class="ls-cell-action">
+                ${actionText}
+              </div>
+            </div>
+          `;
+        });
+        gridEl.innerHTML = cellsHtml;
+      }
+
+      // Default to Missing Numbers pitch if user has missing numbers, otherwise Present
+      if (missingDigits.length > 0) {
+        selectConversionOffer('missing');
+      } else {
+        selectConversionOffer('present');
+      }
+    }
+
+    function selectConversionOffer(offerType, specificNum) {
+      const pitchCard = document.getElementById('lsDynamicPitchCard');
+      if (!pitchCard) return;
+
+      const pills = [
+        { id: 'pillMissing', type: 'missing' },
+        { id: 'pillPresent', type: 'present' },
+        { id: 'pillYogas', type: 'yogas' }
+      ];
+      pills.forEach(p => {
+        const el = document.getElementById(p.id);
+        if (el) {
+          if (p.type === offerType) {
+            el.classList.add('active');
+            el.style.transform = 'translateY(-2px)';
+            el.style.boxShadow = '0 4px 12px rgba(201,162,39,0.3)';
+          } else {
+            el.classList.remove('active');
+            el.style.transform = 'none';
+            el.style.boxShadow = 'none';
+          }
+        }
+      });
+
+      const missingList = _lastCalculatedData.missing.length > 0 ? _lastCalculatedData.missing.join(', ') : 'None';
+      const presentList = _lastCalculatedData.present.join(', ');
+      const yogaPct = _lastCalculatedData.yogaPct || 25;
+
+      if (offerType === 'missing') {
+        const numText = specificNum ? `(Number ${specificNum} Karma Void)` : `[${missingList}]`;
+        pitchCard.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div>
+              <div style="font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#8B6914;">
+                🔒 FULL ANVEIL CHARM · DIAMOND ROADMAP (32 PAGES)
+              </div>
+              <div style="font-size:0.78rem; color:#7A654D; margin-top:2px;">
+                Complete Name Balancing &amp; Element Yogas
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#8B6914;">₹1,050</span>
+              </div>
+          </div>
+
+          <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
+            FULL ANVEIL CHARM FOR MISSING NUMBERS (KARMIC VOID ACTIVATION)
+          </h4>
+
+          <p style="font-size:0.83rem; color:#523E28; line-height:1.55; margin-bottom:14px;">
+            Your birth grid carries missing numbers <strong>${numText}</strong>, creating specific energetic voids in wealth preservation, commercial balance, and mentor support. In the Diamond Sovereign Roadmap, we activate these unsealed vibrations through Chaldean Name Balancing, Element Raj Yoga completion, and directional Vastu remedies.
+          </p>
+
+          <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.35); border-radius:10px; padding:12px 14px; margin-bottom:16px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#8B6914; margin-bottom:6px;">
+              ✦ Full Activation in Diamond Sovereign Roadmap (32 Pages):
+            </div>
+            <ul style="margin:0; padding-left:18px; font-size:0.78rem; color:#523E28; line-height:1.6;">
+              <li><strong>Chaldean Name Balancing:</strong> Adding the missing Number vibrations to your calling name</li>
+              <li><strong>Element Yogas Balancing:</strong> Completing the Golden Raj Yoga (4-5-6) &amp; Silver Earth Plane</li>
+              <li><strong>Vastu Directional Rectification:</strong> Exact room cures (SW 2, E 3, SE 4, Center 5, NW 6, W 7)</li>
+              <li><strong>4-Stage Pinnacle Cycles:</strong> Complete life roadmap covering Ages 0-32, 33-41, 42-50 &amp; 51+</li>
+            </ul>
+          </div>
+
+          <button type="button" onclick="launchOfferCheckout('report_premium', 1050, 'Full Anveil Charm: Missing Number Activation')" style="width:100%; padding:14px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(201,162,39,0.35); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            ANVEIL FULL MISSING CHARMS (₹1,050) &rarr;
+          </button>
+          <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
+            🔒 Instant PDF Download · Private &amp; Secure · Authentic Guidance
+          </div>
+        `;
+      } else if (offerType === 'present') {
+        const numText = specificNum ? `(Number ${specificNum})` : `[${presentList}]`;
+        pitchCard.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div>
+              <div style="font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#16835B;">
+                🌿 PRESENT NUMBER HARMONIZATION (12 PAGES)
+              </div>
+              <div style="font-size:0.78rem; color:#7A654D; margin-top:2px;">
+                Amplification &amp; Multi-Digit Frequency Harmonization
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#16835B;">₹510</span>
+              </div>
+          </div>
+
+          <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
+            PRESENT NUMBER HARMONIZATION &amp; FREQUENCY MASTERY
+          </h4>
+
+          <p style="font-size:0.83rem; color:#523E28; line-height:1.55; margin-bottom:14px;">
+            Your natal chart carries active digits <strong>${numText}</strong>. Multiple repeating digits (such as 1111 or 88) create intense energetic spikes in leadership, drive, and perseverance. In our Advanced Dossier, we harmonize repeating frequencies and channel inborn gifts safely.
+          </p>
+
+          <div style="background:#EBF7F2; border:1px solid rgba(22,131,91,0.3); border-radius:10px; padding:12px 14px; margin-bottom:16px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#16835B; margin-bottom:6px;">
+              ✦ Included in Advanced Numerology Dossier (12 Pages):
+            </div>
+            <ul style="margin:0; padding-left:18px; font-size:0.78rem; color:#523E28; line-height:1.6;">
+              <li><strong>Repeating Digit Calibration:</strong> Turning excessive intensity into productive focus</li>
+              <li><strong>Planet &amp; Archetype Synergy:</strong> Sun (1), Moon (2), Saturn (8), Mars (9) alignment</li>
+              <li><strong>Mahadasha &amp; Antardasha Timing:</strong> 10-year personal life cycle mapping</li>
+              <li><strong>Auspicious Timing &amp; Color Harmonization:</strong> Day, color, and gemstone compatibility</li>
+            </ul>
+          </div>
+
+          <button type="button" onclick="launchOfferCheckout('report_advanced', 510, 'Present Number Harmonization Dossier')" style="width:100%; padding:14px; background:linear-gradient(135deg, #16835B 0%, #0E5C3E 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(22,131,91,0.3); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            HARMONIZE PRESENT CHARMS (₹510) &rarr;
+          </button>
+          <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
+            🌿 Instant PDF Download · Private &amp; Secure · Authentic Guidance
+          </div>
+        `;
+      } else if (offerType === 'yogas') {
+        pitchCard.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div>
+              <div style="font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#B45309;">
+                ⚡ ELEMENT YOGAS ALIGNMENT (8 PAGES)
+              </div>
+              <div style="font-size:0.78rem; color:#7A654D; margin-top:2px;">
+                Elemental Balance &amp; Plane Synergy
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#B45309;">₹199</span>
+              </div>
+          </div>
+
+          <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
+            ELEMENT YOGAS ALIGNMENT &amp; PLANE BALANCING
+          </h4>
+
+          <p style="font-size:0.83rem; color:#523E28; line-height:1.55; margin-bottom:14px;">
+            Your birth matrix currently has <strong>${yogaPct}% active elemental plane alignment</strong>. Completing your mental, emotional, and practical planes balances the natural flow of Wood, Fire, Earth, Metal, and Water energies.
+          </p>
+
+          <div style="background:#FFF2EB; border:1px solid rgba(217,119,6,0.3); border-radius:10px; padding:12px 14px; margin-bottom:16px;">
+            <div style="font-size:0.75rem; font-weight:700; color:#B45309; margin-bottom:6px;">
+              ✦ Included in Basic Elemental Report (8 Pages):
+            </div>
+            <ul style="margin:0; padding-left:18px; font-size:0.78rem; color:#523E28; line-height:1.6;">
+              <li><strong>8-Plane Elemental Strength Scan:</strong> Thought, Will, Action, Mental, Emotional &amp; Practical</li>
+              <li><strong>Five Elements Balancing:</strong> Spatial and directional room alignment</li>
+              <li><strong>Personalized Angel &amp; Master Numbers:</strong> Meaningful life synchronicities</li>
+              <li><strong>Directional Guidance:</strong> Auspicious orientation for work and focus</li>
+            </ul>
+          </div>
+
+          <button type="button" onclick="launchOfferCheckout('report_basic', 199, 'Element Yogas & Plane Alignment Report')" style="width:100%; padding:14px; background:linear-gradient(135deg, #D97706 0%, #B45309 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(217,119,6,0.3); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            ACTIVATE ELEMENT YOGAS (₹199) &rarr;
+          </button>
+          <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
+            ⚡ Instant PDF Download · Private &amp; Secure · Authentic Guidance
+          </div>
+        `;
+      }
+    }
+
+    let _selectedPlanKey = 'report_premium';
+    let _selectedPlanPrice = 1050;
+
+    function updateModalDobLockNotice() {
+      const dobInput = document.getElementById('chk-dob');
+      const lockLabel = document.getElementById('modal-locked-dob');
+      if (dobInput && lockLabel) {
+        lockLabel.textContent = dobInput.value || '--';
+      }
+    }
+
+    function openCheckout(planKey, planName, price) {
+      _selectedPlanKey = planKey;
+      _selectedPlanPrice = price;
+
+      const titleEl = document.getElementById('modal-plan-title');
+      const nameEl = document.getElementById('modal-plan-name');
+      const priceEl = document.getElementById('modal-plan-price');
+      if (titleEl) titleEl.textContent = `Order ${planName}`;
+      if (nameEl) nameEl.textContent = planName;
+      if (priceEl) priceEl.textContent = `₹${price}`;
+
+      const dayVal = document.getElementById('ls-day') ? document.getElementById('ls-day').value : '28';
+      const monthVal = document.getElementById('ls-month') ? document.getElementById('ls-month').value : '11';
+      const yearVal = document.getElementById('ls-year') ? document.getElementById('ls-year').value : '1981';
+      const nameVal = (document.getElementById('ls-name') && document.getElementById('ls-name').value.trim()) || localStorage.getItem('nv_user_name') || 'Seeker';
+      const dobStr = `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`;
+
+      const dobInput = document.getElementById('chk-dob');
+      if (dobInput) {
+        dobInput.value = dobStr;
+        updateModalDobLockNotice();
+      }
+      if (document.getElementById('chk-name')) {
+        document.getElementById('chk-name').value = nameVal;
+      }
+      try {
+        const storedEmail = localStorage.getItem('nv_user_email');
+        if (storedEmail && document.getElementById('chk-email') && !document.getElementById('chk-email').value) {
+          document.getElementById('chk-email').value = storedEmail;
+        }
+        const storedPhone = localStorage.getItem('nv_user_phone');
+        if (storedPhone && document.getElementById('chk-phone') && !document.getElementById('chk-phone').value) {
+          document.getElementById('chk-phone').value = storedPhone;
+        }
+      } catch(e) {}
+
+      document.getElementById('plans-modal').style.display = 'flex';
+    }
+
+    function closeCheckout() {
+      const m = document.getElementById('plans-modal');
+      if (m) m.style.display = 'none';
+    }
+
+    async function processCheckout() {
+      const name = document.getElementById('chk-name').value.trim();
+      const dob = document.getElementById('chk-dob').value;
+      const email = document.getElementById('chk-email').value.trim();
+      const phone = document.getElementById('chk-phone').value.trim();
+      const lockConfirm = document.getElementById('chk-lock-dob');
+
+      if (!name || !email || !phone) {
+        alert('Please complete all contact details.');
+        return;
+      }
+      if (!dob) {
+        alert('Please select your Date of Birth.');
+        return;
+      }
+      if (lockConfirm && !lockConfirm.checked) {
+        alert('Please check the Date of Birth Lock confirmation box to proceed.');
+        lockConfirm.focus();
+        return;
+      }
+
+      try {
+        localStorage.setItem('nv_user_name', name);
+        localStorage.setItem('nv_user_dob', dob);
+        localStorage.setItem('nv_user_email', email);
+        if (phone) localStorage.setItem('nv_user_phone', phone);
+      } catch (err) {}
+
+      closeCheckout();
+
+      const planKey = _selectedPlanKey || 'report_premium';
+      const planName = (document.getElementById('modal-plan-name') || {}).textContent || 'Personal Numerology Report';
+      const price = _selectedPlanPrice || 1050;
+      const profileKey = (name + '_' + dob).toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+      const launchGateway = (gatewayObj) => {
+        gatewayObj.initiateCheckout({
+          plan_id: planKey,
+          plan_name: planName,
+          amount_inr: price,
+          customer_name: name,
+          customer_email: email,
+          customer_phone: phone,
+          customer_dob: dob,
+          profile_id: profileKey,
+          onSuccess: function(inv) {
+            localStorage.setItem('nv_unlocked_' + profileKey + '_' + planKey, 'true');
+            localStorage.setItem('nv_plan_unlocked_' + planKey, 'true');
+            try {
+              const invs = JSON.parse(localStorage.getItem('nv_user_invoices') || '[]');
+              invs.unshift({
+                invoice_id: inv.invoice_id || ('NV-REC-' + Date.now()),
+                plan_id: planKey,
+                plan_name: planName,
+                amount_inr: price,
+                profile_id: profileKey,
+                customer_name: name,
+                customer_email: email,
+                customer_phone: phone,
+                locked_dob: dob,
+                created_at: new Date().toISOString()
+              });
+              localStorage.setItem('nv_user_invoices', JSON.stringify(invs));
+            } catch (e) {}
+
+            window.location.href = `/dashboard/?paid=true&unlocked=${encodeURIComponent(planKey)}&payment_id=${encodeURIComponent(inv.payment_id || '')}&name=${encodeURIComponent(name)}&dob=${encodeURIComponent(dob)}&email=${encodeURIComponent(email)}`;
+          }
+        });
+      };
+
+      if (window.NVPaymentGateway && typeof window.NVPaymentGateway.initiateCheckout === 'function') {
+        launchGateway(window.NVPaymentGateway);
+      } else if (window.NumerosPay && typeof window.NumerosPay.openCheckout === 'function') {
+        launchGateway(window.NumerosPay);
+      } else {
+        alert('Payment gateway module is initializing. Please refresh or try again in a moment.');
+      }
+    }
+
+    function launchOfferCheckout(planId, amountInr, planName) {
+      const dayVal = document.getElementById('ls-day') ? document.getElementById('ls-day').value : '28';
+      const monthVal = document.getElementById('ls-month') ? document.getElementById('ls-month').value : '11';
+      const yearVal = document.getElementById('ls-year') ? document.getElementById('ls-year').value : '1981';
+      const nameVal = (document.getElementById('ls-name') && document.getElementById('ls-name').value.trim()) || localStorage.getItem('nv_user_name') || 'Seeker';
+      const dobStr = `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`;
+      
+      localStorage.setItem('nv_user_name', nameVal);
+      localStorage.setItem('nv_user_dob', dobStr);
+      
+      const profileKey = (nameVal + '_' + dobStr).toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const activeProf = {
+        id: profileKey,
+        name: nameVal,
+        dob: dobStr,
+        gender: 'male',
+        email: localStorage.getItem('nv_user_email') || '',
+        phone: localStorage.getItem('nv_user_phone') || '',
+        relation: 'Self (Primary)'
+      };
+      localStorage.setItem('nv_active_profile', JSON.stringify(activeProf));
+      
+      // Open in-page modal directly (no jarring redirects)
+      openCheckout(planId, planName, amountInr);
+    }
+
+</script>
+
+
+  <!-- ─────────────────── CHECKOUT MODAL ─────────────────── -->
+  <div class="modal-overlay" id="plans-modal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeCheckout()">&times;</button>
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:#8B6914; margin:0 0 4px;" id="modal-plan-title">
+        Order Report Dossier
+      </h3>
+      <div style="font-size:0.85rem; color:#7A654D; margin-bottom:16px;" id="modal-plan-desc">
+        Deterministic Classical Numerology · 100% One-Time Investment
+      </div>
+
+      <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.35); border-radius:12px; padding:14px 18px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-weight:700; font-size:0.95rem; color:#8B6914;" id="modal-plan-name">Advanced Numerology Report</span>
+        <span style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:800; color:#8B6914;" id="modal-plan-price">₹510</span>
+      </div>
+
+      <form onsubmit="event.preventDefault(); processCheckout();">
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.75rem; font-weight:700; text-transform:uppercase; color:#8B6914; margin-bottom:4px;">Full Legal Name</label>
+          <input type="text" id="chk-name" style="width:100%; padding:10px 12px; border:1.5px solid rgba(201,162,39,0.35); border-radius:10px; box-sizing:border-box;" required placeholder="e.g. Bhaskr" />
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.75rem; font-weight:700; text-transform:uppercase; color:#8B6914; margin-bottom:4px;">Date of Birth</label>
+          <input type="date" id="chk-dob" style="width:100%; padding:10px 12px; border:1.5px solid rgba(201,162,39,0.35); border-radius:10px; box-sizing:border-box;" required onchange="updateModalDobLockNotice()" />
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; text-transform:uppercase; color:#8B6914; margin-bottom:4px;">Email Address</label>
+            <input type="email" id="chk-email" style="width:100%; padding:10px 12px; border:1.5px solid rgba(201,162,39,0.35); border-radius:10px; box-sizing:border-box;" required placeholder="you@example.com" />
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; text-transform:uppercase; color:#8B6914; margin-bottom:4px;">Phone / WhatsApp</label>
+            <input type="tel" id="chk-phone" placeholder="+91 9876543210" style="width:100%; padding:10px 12px; border:1.5px solid rgba(201,162,39,0.35); border-radius:10px; box-sizing:border-box;" required />
+          </div>
+        </div>
+
+        <!-- Mandatory Date of Birth Lock & Review Box -->
+        <div style="background:#FFFDF7; border:1.5px solid #C9A227; border-radius:10px; padding:10px 12px; margin-bottom:14px; font-size:0.78rem; color:#523E28;">
+          <div style="font-weight:700; color:#8B6914; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+            <span>🔒</span> Date of Birth Lock Agreement
+          </div>
+          <p style="margin:0 0 6px; line-height:1.4;">
+            This publication will be permanently locked to Date of Birth: <strong id="modal-locked-dob" style="color:#8B6914;">--</strong>. Each purchase covers exactly one individual profile.
+          </p>
+          <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; font-weight:600; font-size:0.74rem;">
+            <input type="checkbox" id="chk-lock-dob" required style="accent-color:#16835B; width:15px; height:15px; margin-top:2px; flex-shrink:0;" />
+            <span>I confirm that the Date of Birth above is correct and understand it cannot be altered post-payment.</span>
+          </label>
+        </div>
+
+        <div style="margin-bottom:14px; font-size:0.75rem; color:#523E28; display:flex; align-items:flex-start; gap:8px;">
+          <input type="checkbox" id="chk-consent" required style="accent-color:#16835B; width:15px; height:15px; margin-top:2px; flex-shrink:0;" />
+          <label for="chk-consent">
+            I agree to the <a href="/terms/" target="_blank" style="color:#8B6914; font-weight:600; text-decoration:underline;">Terms</a> &amp; <a href="/privacy/" target="_blank" style="color:#8B6914; font-weight:600; text-decoration:underline;">Privacy Policy</a> under the DPDP Act 2023.
+          </label>
+        </div>
+
+        <button type="submit" style="width:100%; justify-content:center; padding:12px; font-weight:700; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.95rem; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(201,162,39,0.35);">
+          Proceed to Secure Payment ✦
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
+  <nav class="nv-sticky-bottom-nav" aria-label="Mobile and Tablet Sticky Navigation">
+    <a href="/" class="nv-bottom-nav-item" data-nav="home" title="Home">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/calculators/" class="nv-bottom-nav-item active" data-nav="calculate" title="Calculate">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Calculate</span>
+    </a>
+    <a href="/reports_catalogue/" class="nv-bottom-nav-item" data-nav="reports" title="Reports">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Reports</span>
+    </a>
+    <a href="/dashboard/" class="nv-bottom-nav-item" data-nav="account" title="Account">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Account</span>
+    </a>
+  </nav>
+  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+  <script src="/static/js/nv_payment_gateway.js?v=20261106_v9" defer></script>
+</body>
+</html>
+

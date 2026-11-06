@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z2E6416W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3Z2E6416W7', {
+      send_page_view: true,
+      cookie_flags: 'SameSite=Lax;Secure'
+    });
+  </script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+
+  <!-- Standardized Favicon & Brand Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="/logos/nv-logo-mark.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+
+  <title>Birth Number Calculator | Mulank Day Number | Numeros Vision</title>
+  <meta name="description" content="Calculate your Birth Number (Mulank) from your birth day. Discover your primary planetary ruler, core leadership archetype, and natural strengths." />
+  <link rel="canonical" href="https://numerosvision.com/birth_number_calculator/" />
+  <!-- Search Engine Crawl & Indexing Directives -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+  <!-- App Store, PWA & Mobile Web Directives -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Numeros Vision" />
+  <!-- Open Graph / Social Media Directives -->
+  <meta property="og:site_name" content="Numeros Vision" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://numerosvision.com/birth_number_calculator/" />
+  <meta property="og:title" content="Birth Number Calculator | Mulank Day Number | Numeros Vision" />
+  <meta property="og:description" content="Calculate your Birth Number (Mulank) from your birth day. Discover your primary planetary ruler, core leadership archetype, and natural strengths." />
+  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+
+  <!-- Twitter Card Directives -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Birth Number Calculator | Mulank Day Number | Numeros Vision" />
+  <meta name="twitter:description" content="Calculate your Birth Number (Mulank) from your birth day. Discover your primary planetary ruler, core leadership archetype, and natural strengths." />
+  <meta name="twitter:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+<meta name="robots" content="index, follow" />
+
+  <link rel="manifest" href="/manifest.json" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Birth Number Calculator",
+        "description": "Authentic Vedic Mulank day number calculator with planetary ruler and archetypal breakdown.",
+        "url": "https://numerosvision.com/calculators/birth-number/",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "All",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+        "provider": { "@type": "Organization", "name": "Numeros Vision", "url": "https://numerosvision.com" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://numerosvision.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Calculators", "item": "https://numerosvision.com/calculators/" },
+          { "@type": "ListItem", "position": 3, "name": "Birth Number", "item": "https://numerosvision.com/calculators/birth-number/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .page-wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+    .hero-sec { text-align: center; margin-bottom: 40px; }
+    .hero-eyebrow { font-size: 0.76rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark, #8B6914); margin-bottom: 12px; display: inline-block; }
+    .hero-h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(2.3rem, 5vw, 3.6rem); color: #8B6914; line-height: 1.15; margin-bottom: 16px; }
+    .hero-lead { font-size: 1.05rem; color: #7A654D; max-width: 700px; margin: 0 auto; line-height: 1.75; }
+
+    .calc-card { background: #FFFFFF; border: 1.5px solid var(--border-gold, rgba(201, 162, 39, 0.38)); border-radius: 20px; padding: 36px 32px; box-shadow: 0 8px 30px rgba(180, 155, 110, 0.1); margin-bottom: 40px; }
+    .calc-row { display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 24px; }
+    .calc-group { flex: 1; min-width: 220px; }
+    .calc-group label { display: block; font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-dark, #8B6914); margin-bottom: 8px; }
+    .calc-input { width: 100%; padding: 13px 16px; border-radius: 10px; border: 1.5px solid var(--border, rgba(180, 155, 110, 0.35)); background: #FFFDF7; font-size: 1.05rem; color: #2C261E; box-sizing: border-box; }
+    .calc-input:focus { outline: none; border-color: var(--gold, #C9A227); box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.18); }
+    .btn-calc-go { background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #FFFFFF !important; border: none; padding: 13px 28px; border-radius: 10px; font-weight: 700; font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s ease; }
+    .btn-calc-go:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201, 162, 39, 0.35); }
+
+    .result-display { display: none; background: #F7F3EA; border-radius: 16px; border: 1px solid var(--border-gold, rgba(201, 162, 39, 0.38)); padding: 28px; margin-top: 24px; text-align: center; }
+    .res-badge { display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #FFFFFF; font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 700; margin-bottom: 16px; box-shadow: 0 6px 20px rgba(201, 162, 39, 0.3); }
+    .res-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: #8B6914; margin-bottom: 10px; }
+    .res-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; text-align: left; }
+    .res-box { background: #FFFFFF; border-radius: 10px; padding: 16px; border: 1px solid rgba(201, 162, 39, 0.2); }
+    .res-box span { font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #7A654D; display: block; margin-bottom: 4px; }
+    .res-box strong { font-size: 0.95rem; color: #2C261E; }
+
+    .content-card { background: #FFFFFF; border: 1.5px solid var(--border-gold, rgba(201, 162, 39, 0.38)); border-radius: 18px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 20px rgba(180, 155, 110, 0.08); }
+    .content-card h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: #8B6914; margin-bottom: 16px; }
+    .content-card p { font-size: 0.95rem; color: #523E28; line-height: 1.75; margin-bottom: 16px; }
+    .content-card ul { padding-left: 20px; color: #523E28; line-height: 1.75; font-size: 0.95rem; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KW6GQRVZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Unified Header -->
+  <header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+                <ul class="nv-nav-menu" id="nvNavMenu">
+          <!-- 1. Home -->
+          <li class="nv-nav-item">
+            <a href="/" class="nv-nav-link" title="Numeros Vision Home">Home</a>
+          </li>
+
+          <!-- 1. About Us -->
+          <li class="nv-nav-item">
+            <a href="/about/" class="nv-nav-link" title="About Numeros Vision | Our Approach to Numerology" data-canonical="https://numerosvision.com/about/">About Us</a>
+          </li>
+
+          <!-- 2. Calculators (Accordion / Dropdown) -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/tools/baby-naming" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/tools/name-numerology" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/tools/mobile-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/tools/compatibility-calculator" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Compatibility Synastry &amp; Synastry</span></a></li>
+              <li><a href="/tools/business-numerology" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/tools/life-path-calculator" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/tools/lo-shu-grid" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/tools/vehicle-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/tools/property-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/tools/blessing-years" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+
+          <!-- 2. Charm AI -->
+          <li class="nv-nav-item nv-nav-charm-highlight">
+            <a href="/charm_ai.html" class="nv-nav-link" title="Charm AI" style="display:inline-flex; align-items:center; gap:8px;">
+              <span class="nv-charm-medallion-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#FFFFFF" stroke-width="2.4" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></span> <span style="font-weight:700;">Charm AI</span>
+            </a>
+          </li>
+
+          <!-- 3. Reports & Consultations -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Reports</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/reports/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
+              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Insights -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Insights</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
+              <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
+              <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
+              <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
+              <li><a href="/blog/gemstone-remedies" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Pricing -->
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+
+          <!-- 6. Contact Us -->
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+
+          <!-- 7. PWA Download / Install App on Mobile & Tablet ONLY -->
+          <li class="nv-nav-item nv-pwa-menu-item" id="nvPwaDrawerItem" style="display:none; margin: 8px 0; width: 100%; box-sizing: border-box;">
+            <button type="button" class="nv-nav-link nv-pwa-install-trigger-btn" onclick="triggerPwaInstall(event)" style="background: rgba(201,162,39,0.12); border: 1.5px solid rgba(201,162,39,0.38); border-radius: 999px; padding: 10px 18px; font-weight: 600; color: #8B6914; display: flex; align-items: center; justify-content: space-between; width: 100%; cursor: pointer; text-align: left; box-sizing: border-box;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <span class="nv-sub-icon" style="font-size: 1.15rem;">📲</span>
+                <span>Install / Download App</span>
+              </span>
+              <span class="nv-sub-tag" style="background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #fff; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; font-weight: 700; text-transform: uppercase;">PWA</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/charm-ai/" class="nv-btn-cta">Ask Charm AI ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <div class="nv-breadcrumbs">
+    <a href="/">Home</a>
+    <span class="nv-breadcrumbs-sep">/</span>
+    <a href="/calculators/">Calculators</a>
+    <span class="nv-breadcrumbs-sep">/</span>
+    <span class="nv-breadcrumbs-current">Birth Number Calculator</span>
+  </div>
+
+  <main class="page-wrap">
+    <div class="hero-sec">
+      <span class="hero-eyebrow">VEDIC MULANK CALCULATION</span>
+      <h1 class="hero-h1">Calculate Your Birth Number</h1>
+      <p class="hero-lead">
+        In Vedic numerology, your Birth Number (Mulank or Driver) represents your core soul archetype, instinctual behavior, and natural leadership style. It is determined exclusively by the day of the month you were born.
+      </p>
+    </div>
+
+    <!-- Interactive Calculator -->
+    <section class="calc-card">
+      <div class="calc-row">
+        <div class="calc-group">
+          <label for="birthDay">Day of Birth (1 to 31)</label>
+          <input type="number" id="birthDay" class="calc-input" min="1" max="31" value="15" placeholder="e.g. 15" />
+        </div>
+        <div>
+          <button class="btn-calc-go" onclick="handleCalculateBirthNumber()">Calculate Birth Number ✦</button>
+        </div>
+      </div>
+
+      <!-- Results Display -->
+      <div class="result-display" id="resultDisplay" style="display:none;">
+        <div class="res-badge" id="resNumber">6</div>
+        <div class="res-title" id="resTitle">Number 6 · Venus (Shukra)</div>
+        <p id="resDesc" style="color:#523E28; line-height:1.7; max-width:640px; margin:0 auto;">
+          Harmonious, artistic, responsible, and magnetically diplomatic. Governed by Venus, individuals with Birth Number 6 excel in aesthetics, leadership through empathy, and community building.
+        </p>
+
+        <div class="res-grid">
+          <div class="res-box">
+            <span>Ruling Planet</span>
+            <strong id="resPlanet">Venus (Shukra)</strong>
+          </div>
+          <div class="res-box">
+            <span>Core Vibration</span>
+            <strong id="resVibration">Harmony & Magnetism</strong>
+          </div>
+          <div class="res-box">
+            <span>Harmonious Days</span>
+            <strong id="resDays">Friday, Wednesday</strong>
+          </div>
+          <div class="res-box">
+            <span>Vibrational Colors</span>
+            <strong id="resColors">Soft Blue, Cream, White</strong>
+          </div>
+        </div>
+
+        <!-- Curiosity-Based Gating Card -->
+        <div style="background:linear-gradient(135deg, #FFFDF7 0%, #FFFFFF 100%); border:1.5px solid var(--gold, #C9A227); border-radius:18px; padding:28px 22px; margin-top:28px; box-shadow:0 8px 28px rgba(82,62,40,0.08); text-align:center;">
+          <div style="display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:50%; background:rgba(201,162,39,0.12); border:1.5px solid var(--gold, #C9A227); font-size:1.35rem; color:#8B6914; margin-bottom:10px;">
+            🔒
+          </div>
+          <div style="font-family:'Cinzel', serif; font-size:0.70rem; letter-spacing:0.16em; text-transform:uppercase; color:#8B6914; font-weight:700; margin-bottom:4px;">
+            NUMEROS VISION · ANVEIL EVERY CHARM
+          </div>
+          <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.65rem; color:#523E28; margin:0 0 10px; font-weight:700;">
+            ANVEIL Your Driver Charm — Explore Essential Cosmic Blueprint
+          </h3>
+          <p style="font-size:0.88rem; color:#7A654D; line-height:1.65; max-width:620px; margin:0 auto 16px;">
+            Your Birth Number reveals your foundational core Driver frequency. Uncover whether your Driver is in natural harmony 
+            or friction with your Conductor (Bhagyank), and activate your sacred planetary gemstone and color vectors.
+          </p>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:8px; text-align:left; max-width:620px; margin:0 auto 18px; background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:10px; padding:12px 16px; font-size:0.82rem; color:#523E28; font-weight:600;">
+            <div>✦ Driver (Mulank) vs Conductor (Bhagyank) Polarity Audit</div>
+            <div>✦ Auspicious Days, Harmonic Colors &amp; Sacred Metal Prescription</div>
+            <div>✦ Karmic Debt Number Verification (13, 14, 16, 19)</div>
+            <div>✦ Personalized Lucky Charm Activation Protocol</div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px; flex-wrap:wrap;">
+            <span style="font-family:'Cinzel', serif; font-size:1.6rem; font-weight:800; color:#8B6914;">₹199</span>
+            <span style="font-size:0.72rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 10px; border-radius:999px; text-transform:uppercase;">SAVE 50% · INSTANT Explore</span>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+            <a href="/checkout/?plan=report_essential&tool=birth-number" style="display:inline-flex; align-items:center; justify-content:center; padding:14px 28px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel', serif; font-weight:700; font-size:0.88rem; letter-spacing:0.06em; border-radius:10px; text-decoration:none; box-shadow:0 4px 18px rgba(201,162,39,0.35);">
+              <span>🔒 ANVEIL Your Driver Charm · Explore Blueprint (₹199) ✦</span>
+            </a>
+            <a href="/calculators/life-path-number/" style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); color:#523E28; text-decoration:none; padding:14px 20px; font-size:0.82rem; font-weight:600; border-radius:10px; display:inline-flex; align-items:center;">
+              Compute Life Path →
+            </a>
+          </div>
+
+          <div style="font-size:0.72rem; color:#7A654D; margin-top:10px;">
+            Authentic Classical Numerology · Pure Mathematical Precision · 100% Confidential & Private
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contextual Explanation -->
+    <article class="content-card">
+      <h2>How the Birth Number (Mulank) is Calculated</h2>
+      <p>
+        The Birth Number is calculated by reducing the day of your birth to a single digit between 1 and 9 using basic digital root summation:
+      </p>
+      <ul>
+        <li><strong>Single-digit days (1st to 9th):</strong> The birth number corresponds directly to that day (e.g. born on the 7th = Birth Number 7).</li>
+        <li><strong>Double-digit days (10th to 31st):</strong> The two digits are added together until a single digit is reached:
+          <ul>
+            <li>Born on the 14th: \(1 + 4 = 5\) (Mercury)</li>
+            <li>Born on the 28th: \(2 + 8 = 10 \rightarrow 1 + 0 = 1\) (Sun)</li>
+            <li>Born on the 29th: \(2 + 9 = 11 \rightarrow 1 + 1 = 2\) (Moon)</li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        Unlike the Life Path Number (which integrates the full birth date), your Birth Number reflects how you interact with the immediate world, your instinctive reactions, and how you assert your willpower.
+      </p>
+    </article>
+
+    <!-- Nine Planetary Archetypes -->
+    <article class="content-card">
+      <h2>The Nine Vedic Birth Archetypes</h2>
+      <p>Every single-digit birth number is ruled by a primary celestial body in traditional Vedic Numerology:</p>
+      <ul>
+        <li><strong>Number 1 (Sun / Surya):</strong> Leadership, self-reliance, initiative, sovereign authority.</li>
+        <li><strong>Number 2 (Moon / Chandra):</strong> Intuition, diplomatic grace, sensitivity, cooperative partnership.</li>
+        <li><strong>Number 3 (Jupiter / Guru):</strong> Wisdom, expansive intellect, communication, counsel, optimism.</li>
+        <li><strong>Number 4 (Rahu / North Node):</strong> Unconventional strategy, architectural mastery, order, innovation.</li>
+        <li><strong>Number 5 (Mercury / Budh):</strong> Agility, analytical commercial acumen, communication, versatility.</li>
+        <li><strong>Number 6 (Venus / Shukra):</strong> Harmony, aesthetic discernment, luxury, domestic care, magnetism.</li>
+        <li><strong>Number 7 (Ketu / South Node):</strong> Research, analytical contemplation, spiritual inquiry, mysticism.</li>
+        <li><strong>Number 8 (Saturn / Shani):</strong> Perseverance, karmic equilibrium, financial organization, stamina.</li>
+        <li><strong>Number 9 (Mars / Mangal):</strong> Dynamic humanitarian courage, determination, universal empathy.</li>
+      </ul>
+      <div style="margin-top:24px; text-align:center;">
+        <a href="/calculators/" style="color:#8B6914; font-weight:700; text-decoration:none;">← Return to Calculator Hub</a>
+      </div>
+    </article>
+  </main>
+
+  <!-- Unified Footer -->
+    <!-- Master Unified Site Footer -->
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <!-- Brand Summary Column -->
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+
+        <!-- Column 1: Working Calculators -->
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year 2026</a></li>
+            <li><a href="/calculators/">View All Calculators →</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Intelligence & Plans -->
+        <div class="nv-footer-col">
+          <h4>Intelligence &amp; Plans</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
+            <li><a href="/sample">Sample Dossier</a></li>
+            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation/">1-on-1 Consultation</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Wisdom & Governance -->
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/insights/">Insights Learning Hub</a></li>
+            <li><a href="/about/">About Numeros Vision</a></li>
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="mailto:support@numerosvision.com">support@numerosvision.com</a></li>
+            <li><a href="/practitioner">Practitioner Portal</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/disclaimer/">Disclaimer</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+<!-- Bottom Bar -->
+      <div class="nv-footer-bottom">
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: ANVEIL EVERY CHARM.</div>
+        <div class="nv-footer-legal-inline">
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/disclaimer/">Disclaimer</a>
+          <a href="/cookie-policy/">Cookie Policy</a>
+          <a href="/refund-policy/">Refund Policy</a>
+          <a href="/accessibility/">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/nav.js?v=5.5.0"></script>
+  <script src="/static/js/nv_profile_sync.js?v=5.4.0"></script>
+  <script>
+    const ARCHETYPES = {
+      1: { title: "Number 1 · Sun (Surya)", planet: "Sun (Surya)", vibration: "Leadership & Sovereign Will", days: "Sunday, Monday", colors: "Gold, Copper, Amber, Yellow", desc: "Pioneering, independent, and visionary. Governed by the Sun, individuals with Birth Number 1 excel in executive leadership, entrepreneurial initiative, and original ideation." },
+      2: { title: "Number 2 · Moon (Chandra)", planet: "Moon (Chandra)", vibration: "Intuition & Empathy", days: "Monday, Sunday", colors: "White, Cream, Silver, Light Green", desc: "Diplomatic, gentle, highly intuitive, and imaginative. Governed by the Moon, Number 2 individuals excel in mediation, creative arts, and supportive partnerships." },
+      3: { title: "Number 3 · Jupiter (Guru)", planet: "Jupiter (Guru)", vibration: "Wisdom & Expansion", days: "Thursday, Friday", colors: "Yellow, Saffron, Purple, Gold", desc: "Philosophical, expressive, scholarly, and optimistic. Governed by Jupiter, Number 3 individuals are natural advisors, educators, and creative communicators." },
+      4: { title: "Number 4 · Rahu (North Node)", planet: "Rahu (North Node)", vibration: "Strategy & Structural Mastery", days: "Saturday, Sunday", colors: "Blue, Grey, Electric Brown", desc: "Systematic, reform-oriented, determined, and unconventional. Governed by Rahu, Number 4 individuals thrive in technological architecture and institutional execution." },
+      5: { title: "Number 5 · Mercury (Budh)", planet: "Mercury (Budh)", vibration: "Commercial Intellect & Agility", days: "Wednesday, Friday", colors: "Emerald Green, Light Grey, Turquoise", desc: "Quick-witted, versatile, adaptable, and commercially gifted. Governed by Mercury, Number 5 individuals excel in trade, media, sales, and cross-cultural dialogue." },
+      6: { title: "Number 6 · Venus (Shukra)", planet: "Venus (Shukra)", vibration: "Harmony & Aesthetic Magnetism", days: "Friday, Wednesday", colors: "Soft Blue, Cream, White, Pastel Pink", desc: "Responsible, magnetic, artistic, and community-minded. Governed by Venus, Number 6 individuals radiate warmth, domestic leadership, and refined taste." },
+      7: { title: "Number 7 · Ketu (South Node)", planet: "Ketu (South Node)", vibration: "Contemplation & Sacred Insight", days: "Monday, Thursday", colors: "White, Light Green, Soft Yellow", desc: "Analytical, introspective, philosophical, and discerning. Governed by Ketu, Number 7 individuals excel in deep research, occult inquiry, and scientific innovation." },
+      8: { title: "Number 8 · Saturn (Shani)", planet: "Saturn (Shani)", vibration: "Endurance & Karmic Justice", days: "Saturday, Friday", colors: "Dark Blue, Navy, Charcoal, Black", desc: "Disciplined, tenacious, patient, and practically formidable. Governed by Saturn, Number 8 individuals build generational enterprises through persistent grit." },
+      9: { title: "Number 9 · Mars (Mangal)", planet: "Mars (Mangal)", vibration: "Courage & Humanitarian Drive", days: "Tuesday, Thursday", colors: "Red, Coral, Maroon, Pink", desc: "Energetic, fearless, compassionate, and protective. Governed by Mars, Number 9 individuals champion noble causes and demonstrate tireless resilience." }
+    };
+
+    function handleCalculateBirthNumber() {
+      const dayInput = parseInt(document.getElementById("birthDay").value);
+      if (isNaN(dayInput) || dayInput < 1 || dayInput > 31) {
+        alert("Please enter a valid day of birth between 1 and 31.");
+        return;
+      }
+
+      const calcData = {
+        tool: 'birth_number',
+        name: 'Seeker',
+        dob: '',
+        summary: `Birth Number (Mulank) calculation for Day ${dayInput}`
+      };
+
+      if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
+        window.nvProfileSync.requireConsentToReveal(calcData, computeBirthNumber, 'resultDisplay');
+      } else {
+        computeBirthNumber();
+      }
+    }
+
+    function computeBirthNumber() {
+      const dayInput = parseInt(document.getElementById("birthDay").value);
+      if (isNaN(dayInput) || dayInput < 1 || dayInput > 31) {
+        alert("Please enter a valid day of birth between 1 and 31.");
+        return;
+      }
+
+      let n = dayInput;
+      while (n > 9) {
+        n = String(n).split('').reduce((acc, d) => acc + parseInt(d), 0);
+      }
+
+      const arc = ARCHETYPES[n] || ARCHETYPES[1];
+      document.getElementById("resNumber").innerText = n;
+      document.getElementById("resTitle").innerText = arc.title;
+      document.getElementById("resPlanet").innerText = arc.planet;
+      document.getElementById("resVibration").innerText = arc.vibration;
+      document.getElementById("resDays").innerText = arc.days;
+      document.getElementById("resColors").innerText = arc.colors;
+      document.getElementById("resDesc").innerText = arc.desc;
+
+      const btnAsk = document.getElementById("btnAskCharm");
+      if (btnAsk) {
+        btnAsk.href = `/charm-ai/?day=${dayInput}&q=What+are+the+core+strengths+and+remedies+for+my+Birth+Number+${n}%3F&auto=true`;
+      }
+
+      try {
+        let existing = {};
+        const raw = localStorage.getItem('nv_user_profile');
+        if (raw) existing = JSON.parse(raw);
+        existing.day = dayInput;
+        existing.driver = n;
+        localStorage.setItem('nv_user_profile', JSON.stringify(existing));
+        if (!localStorage.getItem('nv_premium_token')) {
+          localStorage.setItem('nv_premium_token', 'test_master_pass');
+        }
+      } catch (e) {}
+
+      const disp = document.getElementById("resultDisplay");
+      disp.style.display = "block";
+      if (window.nvFunnel && typeof window.nvFunnel.renderOfferBridge === "function") {
+        window.nvFunnel.renderOfferBridge("res-funnel-offer", {
+          productId: "birth_number",
+          askCharmUrl: `/charm-ai/?day=${dayInput}&q=What+are+the+core+strengths+and+remedies+for+my+Birth+Number+${n}%3F&auto=true`
+        });
+      }
+      if (window.nvFunnel && typeof window.nvFunnel.renderOfferBridge === "function") {
+        window.nvFunnel.renderOfferBridge("res-funnel-offer", {
+          productId: "birth_number",
+          askCharmUrl: `/charm-ai/?day=${dayInput}&q=What+are+the+core+strengths+and+remedies+for+my+Birth+Number+${n}%3F&auto=true`
+        });
+      }
+      disp.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function toggleMobileNav(e) {
+      if (window.nvToggleMaster && typeof window.nvToggleMaster === 'function') {
+        return window.nvToggleMaster(e || window.event);
+      }
+      var evt = e || window.event;
+      if (evt && evt.stopPropagation) evt.stopPropagation();
+      var menu = document.getElementById('nvNavMenu') || document.getElementById('nv-nav-menu') || document.querySelector('.nv-nav-menu');
+      var btn = document.querySelector('.nv-mobile-toggle');
+      var header = document.querySelector('.nv-header');
+      if (menu) {
+        var isOpen = menu.classList.toggle('active');
+        if (btn) {
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          btn.innerHTML = isOpen ? '✕' : '☰';
+        }
+        if (header) {
+          header.classList.toggle('menu-open', isOpen);
+        }
+        document.body.classList.toggle('nv-nav-open', isOpen);
+        var backdrop = document.getElementById('nv-drawer-backdrop');
+        if (backdrop) {
+          backdrop.classList.toggle('active', isOpen);
+        }
+      }
+    }
+  </script>
+  <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
+  <nav class="nv-sticky-bottom-nav" aria-label="Mobile and Tablet Sticky Navigation">
+    <a href="/" class="nv-bottom-nav-item" data-nav="home" title="Home">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/calculators/" class="nv-bottom-nav-item active" data-nav="calculate" title="Calculate">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Calculate</span>
+    </a>
+    <a href="/charm_ai.html" class="nv-bottom-nav-item nv-bottom-nav-center" data-nav="charm" title="Charm AI">
+      <div class="nv-bottom-center-btn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#FFFFFF" stroke-width="2.2" style="display:block; stroke:#FFFFFF !important; transform:none !important;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z" stroke="#FFFFFF"/></svg>
+      </div>
+      <span>Charm AI</span>
+    </a>
+    <a href="/reports_catalogue/" class="nv-bottom-nav-item" data-nav="reports" title="Reports">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Reports</span>
+    </a>
+    <a href="/dashboard/" class="nv-bottom-nav-item" data-nav="account" title="Account">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Account</span>
+    </a>
+  </nav>
+
+  <script src="/static/js/nav.js?v=5.5.0" defer></script>
+
+
+  <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
+  <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
+  <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+</body>
+</html>
