@@ -186,7 +186,8 @@ const memoryStore = {
   auditLog: new Map(),
   reportJobs: new Map(),
   voucherLedger: new Map(),
-  refunds: new Map()
+  refunds: new Map(),
+  r2Objects: new Map()
 };
 
 function base64UrlToUint8Array(base64Url) {
@@ -342,7 +343,7 @@ const PACK_CATALOG = {
     },
     report_advanced: {
       pack_id: "report_advanced",
-      name: "Advanced Report",
+      name: "Advanced Master Dossier",
       pages: 12,
       price_inr: 510,
       amount_paise: 51000,
@@ -350,7 +351,7 @@ const PACK_CATALOG = {
     },
     report_premium: {
       pack_id: "report_premium",
-      name: "Premium Dossier",
+      name: "Premium Sovereign Blueprint",
       pages: 32,
       price_inr: 1050,
       amount_paise: 105000,
@@ -449,6 +450,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
   }
 
   const pack = getPackById(order.pack_id);
+  let createdJobId = null;
 
   if (env.DB) {
     // 1. Update order status to PAID
@@ -492,6 +494,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
 
     // 6. Queue report generation job
     const jobId = 'job_' + now + '_' + getRandomHex(4);
+    createdJobId = jobId;
     await env.DB.prepare(
       "INSERT INTO report_jobs (id, user_id, subject_id, pack_id, order_id, status, created_at) VALUES (?, ?, ?, ?, ?, 'QUEUED', ?)"
     ).bind(jobId, order.user_id, order.subject_id, order.pack_id, order.id, now).run();
@@ -520,6 +523,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
       });
     }
     const jobId = 'job_' + now + '_' + getRandomHex(4);
+    createdJobId = jobId;
     memoryStore.reportJobs.set(jobId, {
       id: jobId,
       user_id: order.user_id,
@@ -527,11 +531,18 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
       pack_id: order.pack_id,
       order_id: order.id,
       status: 'QUEUED',
-      created_at: now
+      attempts: 0,
+      max_attempts: 3,
+      r2_key: null,
+      last_error: null,
+      created_at: now,
+      updated_at: now,
+      completed_at: null,
+      downloaded_at: null
     });
   }
 
-  return { alreadyFulfilled: false, orderId: order.id, packId: order.pack_id, subjectId: order.subject_id };
+  return { alreadyFulfilled: false, orderId: order.id, packId: order.pack_id, subjectId: order.subject_id, jobId: createdJobId };
 }
 
 /**
@@ -588,7 +599,7 @@ function parseDobParts(dobStr) {
   return { day, month, year, dob: formattedDob };
 }
 
-async function viewFor(user, subject, env) {
+async function viewFor(user, subject, env, targetPackId = null) {
   if (!user || !subject) return null;
 
   // 1. Query active entitlements for (user, subject) strictly excluding refunded orders
@@ -615,14 +626,20 @@ async function viewFor(user, subject, env) {
     }
   }
 
-  // 2. Determine highest active tier
+  // 2. Determine active tier (or scoped to targetPackId if requested and entitled)
   let tier = 'free';
-  if (activePackIds.has('report_premium')) {
-    tier = 'premium';
-  } else if (activePackIds.has('report_advanced')) {
-    tier = 'advanced';
-  } else if (activePackIds.has('report_basic')) {
-    tier = 'basic';
+  if (targetPackId && activePackIds.has(targetPackId)) {
+    if (targetPackId === 'report_premium') tier = 'premium';
+    else if (targetPackId === 'report_advanced') tier = 'advanced';
+    else if (targetPackId === 'report_basic') tier = 'basic';
+  } else if (!targetPackId) {
+    if (activePackIds.has('report_premium')) {
+      tier = 'premium';
+    } else if (activePackIds.has('report_advanced')) {
+      tier = 'advanced';
+    } else if (activePackIds.has('report_basic')) {
+      tier = 'basic';
+    }
   }
 
   // 3. Deterministic Numerology Calculation
@@ -932,11 +949,407 @@ async function viewFor(user, subject, env) {
   };
 }
 
-export { viewFor, parseDobParts, encryptField, decryptField, getAesGcmKey, requireSecret };
+/**
+ * COMMIT 6b: PRIVATE PDF GENERATOR SERVICE DISPATCH, R2 STORAGE & 5-MINUTE SIGNED DOWNLOADS
+ */
+function uint8ArrayToBase64Url(bytes) {
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function sanitizeViewForGenerator(view) {
+  if (!view) return null;
+  return {
+    user: {
+      userId: view.user ? view.user.userId : null
+    },
+    subject: {
+      id: view.subject ? view.subject.id : null,
+      name: view.subject ? view.subject.name : 'Valued Seeker',
+      dob: view.subject ? view.subject.dob : '1990-08-15',
+      created_at: view.subject ? view.subject.created_at : null
+    },
+    tier: view.tier,
+    entitlements: Array.isArray(view.entitlements) ? [...view.entitlements] : [],
+    calculation: view.calculation,
+    sections: view.sections
+  };
+}
+
+async function signPdfServiceRequest(rawBody, timestampSec, pdfServiceSecret) {
+  if (!pdfServiceSecret || typeof pdfServiceSecret !== 'string' || !pdfServiceSecret.trim()) {
+    throw new Error('PDF_SERVICE_SECRET is required to sign generator requests.');
+  }
+  const ts = String(timestampSec);
+  return await hmacSha256Hex(pdfServiceSecret.trim(), `${ts}.${rawBody}`);
+}
+
+async function createSignedDownloadToken({ userId, subjectId, packId, jobId, nowSec = null, ttlSec = 300 }, pdfServiceSecret) {
+  if (!userId || !subjectId || !packId || !jobId) {
+    throw new Error('userId, subjectId, packId, and jobId are required to mint a signed download token.');
+  }
+  if (!pdfServiceSecret || typeof pdfServiceSecret !== 'string' || !pdfServiceSecret.trim()) {
+    throw new Error('PDF_SERVICE_SECRET is required to mint a signed download token.');
+  }
+  const boundedTtl = Math.min(Math.max(1, Number(ttlSec) || 300), 300);
+  const iat = nowSec !== null ? Math.floor(Number(nowSec)) : Math.floor(Date.now() / 1000);
+  const exp = iat + boundedTtl;
+  const payloadObj = {
+    u: String(userId),
+    s: String(subjectId),
+    p: String(packId),
+    j: String(jobId),
+    iat,
+    exp
+  };
+  const payloadBytes = new TextEncoder().encode(JSON.stringify(payloadObj));
+  const payloadB64 = uint8ArrayToBase64Url(payloadBytes);
+  const sigHex = await hmacSha256Hex(pdfServiceSecret.trim(), payloadB64);
+  return `${payloadB64}.${sigHex}`;
+}
+
+async function verifySignedDownloadToken(token, pdfServiceSecret, expectedContext = {}, nowSec = null) {
+  if (!token || typeof token !== 'string' || !token.includes('.')) {
+    return { valid: false, error: 'Malformed download token.' };
+  }
+  if (!pdfServiceSecret || typeof pdfServiceSecret !== 'string' || !pdfServiceSecret.trim()) {
+    return { valid: false, error: 'PDF_SERVICE_SECRET is not configured.' };
+  }
+  const parts = token.split('.');
+  if (parts.length !== 2) {
+    return { valid: false, error: 'Malformed download token segments.' };
+  }
+  const [payloadB64, sigHex] = parts;
+  const expectedSig = await hmacSha256Hex(pdfServiceSecret.trim(), payloadB64);
+  if (!timingSafeEqual(expectedSig.toLowerCase(), sigHex.trim().toLowerCase())) {
+    return { valid: false, error: 'Invalid download token cryptographic signature.' };
+  }
+
+  let payload = null;
+  try {
+    payload = JSON.parse(new TextDecoder().decode(base64UrlToUint8Array(payloadB64)));
+  } catch (e) {
+    return { valid: false, error: 'Failed to decode download token payload.' };
+  }
+
+  const currentSec = nowSec !== null ? Math.floor(Number(nowSec)) : Math.floor(Date.now() / 1000);
+  if (!payload.exp || !payload.iat || (payload.exp - payload.iat) > 300) {
+    return { valid: false, error: 'Download token exceeds maximum 5-minute lifetime.' };
+  }
+  if (currentSec > payload.exp) {
+    return { valid: false, error: 'Download token has expired (5-minute window elapsed).' };
+  }
+
+  if (expectedContext.userId && payload.u !== expectedContext.userId) {
+    return { valid: false, error: 'Download token user binding mismatch.' };
+  }
+  if (expectedContext.subjectId && payload.s !== expectedContext.subjectId) {
+    return { valid: false, error: 'Download token subject binding mismatch.' };
+  }
+  if (expectedContext.packId && payload.p !== expectedContext.packId) {
+    return { valid: false, error: 'Download token pack binding mismatch.' };
+  }
+  if (expectedContext.jobId && payload.j !== expectedContext.jobId) {
+    return { valid: false, error: 'Download token job binding mismatch.' };
+  }
+
+  return { valid: true, payload };
+}
+
+async function putPrivateR2Report(env, r2Key, pdfBytes) {
+  if (env && env.REPORTS_BUCKET && typeof env.REPORTS_BUCKET.put === 'function') {
+    await env.REPORTS_BUCKET.put(r2Key, pdfBytes, {
+      httpMetadata: { contentType: 'application/pdf', cacheControl: 'private, no-store' }
+    });
+    return;
+  }
+  if (env && env.ENVIRONMENT === 'local') {
+    const copy = pdfBytes instanceof Uint8Array ? pdfBytes : new Uint8Array(pdfBytes);
+    memoryStore.r2Objects.set(r2Key, copy);
+    return;
+  }
+  throw new Error('Private R2 bucket binding (REPORTS_BUCKET) is not configured.');
+}
+
+async function getPrivateR2Report(env, r2Key) {
+  if (env && env.REPORTS_BUCKET && typeof env.REPORTS_BUCKET.get === 'function') {
+    const obj = await env.REPORTS_BUCKET.get(r2Key);
+    if (!obj) return null;
+    if (typeof obj.arrayBuffer === 'function') {
+      return new Uint8Array(await obj.arrayBuffer());
+    }
+    if (obj.body) return obj.body;
+    return null;
+  }
+  if (env && env.ENVIRONMENT === 'local') {
+    return memoryStore.r2Objects.get(r2Key) || null;
+  }
+  throw new Error('Private R2 bucket binding (REPORTS_BUCKET) is not configured.');
+}
+
+async function dispatchReportJob(jobId, env) {
+  const pdfServiceSecret = requireSecret(env, 'PDF_SERVICE_SECRET');
+  const now = Date.now();
+
+  let job = null;
+  if (env && env.DB) {
+    job = await env.DB.prepare('SELECT * FROM report_jobs WHERE id = ?').bind(jobId).first();
+  } else {
+    job = memoryStore.reportJobs.get(jobId) || null;
+  }
+
+  if (!job) {
+    return { ok: false, status: 404, error: `Report job ${jobId} not found.` };
+  }
+  if (job.status === 'COMPLETED' || job.status === 'DOWNLOADED') {
+    return { ok: true, status: 200, jobStatus: job.status, r2Key: job.r2_key, alreadyCompleted: true };
+  }
+  if (job.status === 'FAILED' || (job.attempts || 0) >= 3) {
+    return { ok: false, status: 409, jobStatus: 'FAILED', attempts: job.attempts || 3, error: job.last_error || 'Maximum 3 retries exhausted.' };
+  }
+
+  // 1. Transition QUEUED -> PROCESSING
+  if (env && env.DB) {
+    await env.DB.prepare("UPDATE report_jobs SET status = 'PROCESSING', updated_at = ? WHERE id = ?").bind(now, job.id).run();
+  } else {
+    job.status = 'PROCESSING';
+    job.updated_at = now;
+  }
+
+  try {
+    // 2. Load subject and compute sanitized viewFor(user, subject, env, job.pack_id)
+    let subject = null;
+    if (env && env.DB) {
+      subject = await env.DB.prepare('SELECT id, user_id, name, dob_enc, created_at FROM subjects WHERE id = ? AND user_id = ?').bind(job.subject_id, job.user_id).first();
+    } else {
+      subject = memoryStore.subjects.get(job.subject_id);
+      if (subject && subject.user_id !== job.user_id) subject = null;
+    }
+
+    if (!subject) {
+      throw new Error(`Subject ${job.subject_id} not found for user ${job.user_id}.`);
+    }
+
+    const fullView = await viewFor({ user_id: job.user_id }, subject, env, job.pack_id);
+    if (!fullView || fullView.tier === 'free') {
+      throw new Error(`No active paid entitlement found for subject ${job.subject_id} and pack ${job.pack_id}.`);
+    }
+
+    // Strip any contact PII; pass ONLY sanitized viewFor output to the Python generator
+    const sanitizedView = sanitizeViewForGenerator(fullView);
+    const requestPayload = JSON.stringify({
+      job_id: job.id,
+      pack_id: job.pack_id,
+      view: sanitizedView
+    });
+
+    const timestampSec = Math.floor(now / 1000);
+    const signatureHex = await signPdfServiceRequest(requestPayload, timestampSec, pdfServiceSecret);
+    let generatorUrl = '';
+    if (env && (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL)) {
+      generatorUrl = (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL).trim();
+    } else if (env && env.ENVIRONMENT === 'local') {
+      generatorUrl = 'http://127.0.0.1:8090/internal/v1/render-pdf';
+    } else {
+      generatorUrl = requireSecret(env, 'PDF_SERVICE_URL');
+    }
+
+    const genResp = await fetch(generatorUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-NV-Timestamp': String(timestampSec),
+        'X-NV-Signature': signatureHex
+      },
+      body: requestPayload
+    });
+
+    if (!genResp.ok) {
+      const errText = await genResp.text().catch(() => '');
+      throw new Error(`Python generator returned HTTP ${genResp.status}: ${errText || 'Generation failed'}`);
+    }
+
+    const pdfBuffer = await genResp.arrayBuffer();
+    const pdfBytes = new Uint8Array(pdfBuffer);
+    if (pdfBytes.length < 100 || String.fromCharCode(pdfBytes[0], pdfBytes[1], pdfBytes[2], pdfBytes[3]) !== '%PDF') {
+      throw new Error('Generator output is not a valid PDF document.');
+    }
+
+    const r2Key = `reports/${job.user_id}/${job.subject_id}/${job.pack_id}/${job.id}.pdf`;
+    await putPrivateR2Report(env, r2Key, pdfBytes);
+
+    const doneAt = Date.now();
+    if (env && env.DB) {
+      await env.DB.prepare(
+        "UPDATE report_jobs SET status = 'COMPLETED', r2_key = ?, completed_at = ?, updated_at = ?, last_error = NULL WHERE id = ?"
+      ).bind(r2Key, doneAt, doneAt, job.id).run();
+    } else {
+      job.status = 'COMPLETED';
+      job.r2_key = r2Key;
+      job.completed_at = doneAt;
+      job.updated_at = doneAt;
+      job.last_error = null;
+    }
+
+    return { ok: true, status: 200, jobStatus: 'COMPLETED', r2Key, attempts: job.attempts || 0 };
+  } catch (err) {
+    const newAttempts = (job.attempts || 0) + 1;
+    const maxAttempts = job.max_attempts || 3;
+    const isFailed = newAttempts >= maxAttempts;
+    const nextStatus = isFailed ? 'FAILED' : 'QUEUED';
+    const errMsg = err && err.message ? err.message : String(err);
+    const errAt = Date.now();
+
+    if (env && env.DB) {
+      await env.DB.prepare(
+        'UPDATE report_jobs SET status = ?, attempts = ?, last_error = ?, updated_at = ? WHERE id = ?'
+      ).bind(nextStatus, newAttempts, errMsg, errAt, job.id).run();
+
+      if (isFailed) {
+        const alertId = 'aud_' + errAt + '_' + getRandomHex(4);
+        const alertDetails = JSON.stringify({
+          alert: true,
+          severity: 'CRITICAL',
+          jobId: job.id,
+          userId: job.user_id,
+          subjectId: job.subject_id,
+          packId: job.pack_id,
+          attempts: newAttempts,
+          error: errMsg
+        });
+        await env.DB.prepare(
+          "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'system', 'report_job_failed_alert', 'report_jobs', ?, ?, ?)"
+        ).bind(alertId, job.id, alertDetails, errAt).run();
+        console.error(`[REPORT_JOB_FAILED_ALERT] Job ${job.id} permanently FAILED after ${newAttempts} attempts: ${errMsg}`);
+      }
+    } else {
+      job.status = nextStatus;
+      job.attempts = newAttempts;
+      job.last_error = errMsg;
+      job.updated_at = errAt;
+      if (isFailed) {
+        const alertId = 'aud_' + errAt + '_' + getRandomHex(4);
+        memoryStore.auditLog.set(alertId, {
+          id: alertId,
+          actor_id: 'system',
+          action: 'report_job_failed_alert',
+          resource_type: 'report_jobs',
+          resource_id: job.id,
+          details_json: JSON.stringify({
+            alert: true,
+            severity: 'CRITICAL',
+            jobId: job.id,
+            userId: job.user_id,
+            subjectId: job.subject_id,
+            packId: job.pack_id,
+            attempts: newAttempts,
+            error: errMsg
+          }),
+          created_at: errAt
+        });
+        console.error(`[REPORT_JOB_FAILED_ALERT] Job ${job.id} permanently FAILED after ${newAttempts} attempts: ${errMsg}`);
+      }
+    }
+
+    return {
+      ok: false,
+      status: isFailed ? 500 : 502,
+      jobStatus: nextStatus,
+      attempts: newAttempts,
+      alertTriggered: isFailed,
+      error: errMsg
+    };
+  }
+}
+
+/**
+ * LAZY RETRY ENGINE FOR CLOUDFLARE PAGES (Commit 6b.d)
+ * Automatically retries any QUEUED report_jobs (attempts < 3) or stuck PROCESSING jobs (>120s old)
+ * when the user loads their dashboard (/api/v1/dashboard/view) or polls order status (/api/v1/payments/status).
+ * Runs non-blocking via ctx.waitUntil when ctx is available.
+ */
+async function retryPendingReportJobsForUser(userId, env, ctx = null, orderId = null) {
+  if (!userId && !orderId) return [];
+  const now = Date.now();
+  const STUCK_PROCESSING_MS = 120 * 1000;
+  let candidateJobs = [];
+
+  if (env && env.DB) {
+    let query = `
+      SELECT id, status, attempts, max_attempts, updated_at, created_at
+      FROM report_jobs
+      WHERE user_id = ?
+        AND (
+          (status = 'QUEUED' AND COALESCE(attempts, 0) < COALESCE(max_attempts, 3))
+          OR (status = 'PROCESSING' AND COALESCE(attempts, 0) < COALESCE(max_attempts, 3) AND (? - COALESCE(updated_at, created_at, 0)) > ?)
+        )
+    `;
+    let binds = [userId, now, STUCK_PROCESSING_MS];
+    if (orderId) {
+      query += ' AND order_id = ?';
+      binds.push(orderId);
+    }
+    const rows = await env.DB.prepare(query).bind(...binds).all();
+    candidateJobs = (rows && rows.results) || [];
+  } else {
+    for (const j of memoryStore.reportJobs.values()) {
+      if (userId && j.user_id !== userId) continue;
+      if (orderId && j.order_id !== orderId) continue;
+      const att = j.attempts || 0;
+      const maxAtt = j.max_attempts || 3;
+      if (att >= maxAtt) continue;
+      const isQueued = j.status === 'QUEUED';
+      const isStuckProcessing = j.status === 'PROCESSING' && (now - (j.updated_at || j.created_at || 0)) > STUCK_PROCESSING_MS;
+      if (isQueued || isStuckProcessing) {
+        candidateJobs.push(j);
+      }
+    }
+  }
+
+  if (candidateJobs.length === 0) return [];
+
+  const runPromise = (async () => {
+    const results = [];
+    for (const job of candidateJobs) {
+      try {
+        const res = await dispatchReportJob(job.id, env);
+        results.push({ jobId: job.id, ...res });
+      } catch (e) {
+        console.error(`[Lazy_Retry_Error] Job ${job.id}:`, e);
+      }
+    }
+    return results;
+  })();
+
+  if (ctx && typeof ctx.waitUntil === 'function') {
+    ctx.waitUntil(runPromise);
+    return candidateJobs.map(j => j.id);
+  }
+  return await runPromise;
+}
+
+export {
+  viewFor,
+  parseDobParts,
+  encryptField,
+  decryptField,
+  getAesGcmKey,
+  requireSecret,
+  sanitizeViewForGenerator,
+  signPdfServiceRequest,
+  createSignedDownloadToken,
+  verifySignedDownloadToken,
+  dispatchReportJob,
+  retryPendingReportJobsForUser,
+  memoryStore
+};
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     try {
-      return await this._handleRequest(request, env);
+      return await this._handleRequest(request, env, ctx);
     } catch (err) {
       if (err && err.code === 'MISSING_SECRET') {
         return new Response(JSON.stringify({
@@ -965,7 +1378,7 @@ export default {
     }
   },
 
-  async _handleRequest(request, env) {
+  async _handleRequest(request, env, ctx) {
         const url = new URL(request.url);
 
     // CSRF Protection: Verify Origin on state-changing POST endpoints
@@ -1787,11 +2200,26 @@ export default {
         corsHeaders['X-API-Deprecated'] = '/api/create-order is retired. Use /api/v1/payments/create-order';
       }
 
-      // Production hotfix guard: require D1 and secrets before accepting checkout outside ENVIRONMENT=local
+      // Production hotfix guard: require D1, R2, and all required secrets before accepting checkout outside ENVIRONMENT=local
       if (env.ENVIRONMENT !== 'local') {
         const rzpKeyIdCheck = (env.RAZORPAY_KEY_ID || '').trim();
         const rzpSecretCheck = (env.RAZORPAY_KEY_SECRET || '').trim();
-        const hasSecrets = !!(env.DB && env.OTP_HMAC_SECRET && env.SESSION_SECRET && env.IP_HASH_SALT && env.DATA_ENCRYPTION_KEY && rzpKeyIdCheck && rzpSecretCheck && !rzpKeyIdCheck.includes('REPLACE_ME') && !rzpKeyIdCheck.includes('PLACEHOLDER'));
+        const pdfServiceUrlCheck = (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL || '').trim();
+        const hasSecrets = !!(
+          env.DB &&
+          env.REPORTS_BUCKET &&
+          env.OTP_HMAC_SECRET &&
+          env.SESSION_SECRET &&
+          env.IP_HASH_SALT &&
+          env.DATA_ENCRYPTION_KEY &&
+          env.PDF_SERVICE_SECRET &&
+          pdfServiceUrlCheck &&
+          env.DOWNLOAD_TOKEN_SECRET &&
+          rzpKeyIdCheck &&
+          rzpSecretCheck &&
+          !rzpKeyIdCheck.includes('REPLACE_ME') &&
+          !rzpKeyIdCheck.includes('PLACEHOLDER')
+        );
         if (!hasSecrets) {
           return new Response(JSON.stringify({
             success: false,
@@ -2105,8 +2533,14 @@ export default {
         }
       }
 
+      let fulfillRes = null;
       if (order) {
-        await fulfillPaidOrder(order, rzpPaymentId, order.amount_paise, 'online', env, now, 'checkout_verify');
+        fulfillRes = await fulfillPaidOrder(order, rzpPaymentId, order.amount_paise, 'online', env, now, 'checkout_verify');
+        if (fulfillRes && fulfillRes.jobId && ctx && typeof ctx.waitUntil === 'function') {
+          ctx.waitUntil(
+            dispatchReportJob(fulfillRes.jobId, env).catch(err => console.error('[Verify_WaitUntil_Dispatch_Error]', err))
+          );
+        }
       }
 
       return new Response(JSON.stringify({
@@ -2116,6 +2550,7 @@ export default {
         orderId: order ? order.id : null,
         packId: order ? order.pack_id : null,
         subjectId: order ? order.subject_id : null,
+        jobId: fulfillRes ? fulfillRes.jobId : null,
         reportStatus: 'preparing',
         message: 'Your payment has been verified. Your personalized report is being prepared.'
       }), { status: 200, headers: corsHeaders });
@@ -2166,13 +2601,32 @@ export default {
       const THIRTY_MINUTES_MS = 30 * 60 * 1000;
 
       if (order.status === 'PAID') {
+        // Trigger lazy retry for any pending/queued report job for this order
+        if (order.user_id && (env.PDF_SERVICE_SECRET || env.ENVIRONMENT === 'local') && (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL)) {
+          await retryPendingReportJobsForUser(order.user_id, env, ctx, order.id);
+        }
+        let jobStatus = 'preparing';
+        let jobId = null;
+        if (env.DB) {
+          const jRow = await env.DB.prepare('SELECT id, status FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(order.id).first();
+          if (jRow) { jobId = jRow.id; jobStatus = jRow.status; }
+        } else {
+          for (const j of memoryStore.reportJobs.values()) {
+            if (j.order_id === order.id) { jobId = j.id; jobStatus = j.status; }
+          }
+        }
+        const normalizedReportStatus = (jobStatus === 'QUEUED' || jobStatus === 'PROCESSING' || jobStatus === 'preparing')
+          ? 'preparing'
+          : jobStatus.toLowerCase();
         return new Response(JSON.stringify({
           orderId: order.id,
           rzpOrderId: order.rzp_order_id,
           status: 'paid',
           packId: order.pack_id,
           subjectId: order.subject_id,
-          reportStatus: 'preparing',
+          jobId,
+          jobStatus: jobStatus.toLowerCase(),
+          reportStatus: normalizedReportStatus,
           message: 'Your personalized report is being prepared. It will be available shortly.'
         }), { status: 200, headers: corsHeaders });
       }
@@ -2528,6 +2982,11 @@ export default {
         viewData = await viewFor(user, activeSubject, env);
       }
 
+      // Lazy retry any QUEUED report_jobs (attempts < 3) for this user on dashboard load
+      if (env.PDF_SERVICE_SECRET && (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL)) {
+        await retryPendingReportJobsForUser(user.user_id, env, ctx);
+      }
+
       // Charm AI credit balance
       let charmCredits = 0;
       if (env.DB) {
@@ -2699,9 +3158,16 @@ export default {
 
         // Fulfill payment (handles CREATED, pending, or EXPIRED late UPI payments)
         const fulfillRes = await fulfillPaidOrder(order, paymentId, amountPaise, paymentEntity.method || 'card', env, now, 'webhook');
+        // Acknowledge Razorpay webhook immediately and run PDF report dispatch in background via ctx.waitUntil
+        if (fulfillRes && fulfillRes.jobId && ctx && typeof ctx.waitUntil === 'function') {
+          ctx.waitUntil(
+            dispatchReportJob(fulfillRes.jobId, env).catch(err => console.error('[Webhook_WaitUntil_Dispatch_Error]', err))
+          );
+        }
         return new Response(JSON.stringify({
           status: 'success',
           message: fulfillRes.alreadyFulfilled ? 'order_already_paid' : 'order_paid_fulfilled',
+          jobId: fulfillRes.jobId || null,
           note: order.status === 'EXPIRED' ? 'late_upi_settlement_on_expired_order' : undefined
         }), { status: 200, headers: corsHeaders });
       } else if (event === 'payment.failed') {
@@ -3115,7 +3581,7 @@ export default {
       }), { status: 200, headers: corsHeaders });
     }
 
-        // ── ROUTE: PDF REPORT DISPATCH (/api/v1/reports/generate-pdf) ──
+    // ── ROUTE: PDF REPORT DISPATCH (/api/v1/reports/generate-pdf) ──
     if (url.pathname === '/api/v1/reports/generate-pdf' && request.method === 'POST') {
       return new Response(JSON.stringify({
         status: 'upgrading',
@@ -3126,7 +3592,202 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+          'Vary': 'Origin'
+        }
+      });
+    }
+
+    // ── COMMIT 6b ROUTE: PROCESS REPORT JOB (/api/v1/reports/process-job) ──
+    if (url.pathname === '/api/v1/reports/process-job' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
         'Vary': 'Origin'
+      };
+      const user = await authenticateUser(request, env);
+      if (!user) {
+        return new Response(JSON.stringify({ success: false, error: 'Authentication required.' }), { status: 401, headers: corsHeaders });
+      }
+      const body = await request.json().catch(() => ({}));
+      const jobId = (body.jobId || body.job_id || '').trim();
+      if (!jobId) {
+        return new Response(JSON.stringify({ success: false, error: 'jobId is required.' }), { status: 400, headers: corsHeaders });
+      }
+
+      let job = null;
+      if (env && env.DB) {
+        job = await env.DB.prepare('SELECT * FROM report_jobs WHERE id = ? AND user_id = ?').bind(jobId, user.user_id).first();
+      } else {
+        const candidate = memoryStore.reportJobs.get(jobId);
+        if (candidate && candidate.user_id === user.user_id) job = candidate;
+      }
+      if (!job) {
+        return new Response(JSON.stringify({ success: false, error: 'Report job not found for authenticated user.' }), { status: 404, headers: corsHeaders });
+      }
+
+      const result = await dispatchReportJob(jobId, env);
+      return new Response(JSON.stringify(result), { status: result.status || 200, headers: corsHeaders });
+    }
+
+    // ── COMMIT 6b ROUTE: MINT 5-MINUTE SIGNED DOWNLOAD TOKEN (/api/v1/reports/download-token) ──
+    if (url.pathname === '/api/v1/reports/download-token' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+      const user = await authenticateUser(request, env);
+      if (!user) {
+        return new Response(JSON.stringify({ success: false, error: 'Authentication required.' }), { status: 401, headers: corsHeaders });
+      }
+      const downloadTokenSecret = requireSecret(env, 'DOWNLOAD_TOKEN_SECRET');
+      const body = await request.json().catch(() => ({}));
+      const subjectId = (body.subjectId || body.subject_id || '').trim();
+      const packId = (body.packId || body.pack_id || '').trim();
+      const jobId = (body.jobId || body.job_id || '').trim();
+
+      if (!subjectId || !packId) {
+        return new Response(JSON.stringify({ success: false, error: 'subjectId and packId are required.' }), { status: 400, headers: corsHeaders });
+      }
+
+      let job = null;
+      if (env && env.DB) {
+        if (jobId) {
+          job = await env.DB.prepare(
+            "SELECT * FROM report_jobs WHERE id = ? AND user_id = ? AND subject_id = ? AND pack_id = ? AND status IN ('COMPLETED', 'DOWNLOADED')"
+          ).bind(jobId, user.user_id, subjectId, packId).first();
+        } else {
+          job = await env.DB.prepare(
+            "SELECT * FROM report_jobs WHERE user_id = ? AND subject_id = ? AND pack_id = ? AND status IN ('COMPLETED', 'DOWNLOADED') ORDER BY created_at DESC LIMIT 1"
+          ).bind(user.user_id, subjectId, packId).first();
+        }
+      } else {
+        for (const candidate of memoryStore.reportJobs.values()) {
+          if (
+            candidate.user_id === user.user_id &&
+            candidate.subject_id === subjectId &&
+            candidate.pack_id === packId &&
+            (candidate.status === 'COMPLETED' || candidate.status === 'DOWNLOADED') &&
+            (!jobId || candidate.id === jobId)
+          ) {
+            job = candidate;
+          }
+        }
+      }
+
+      if (!job) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Completed report job not found for the requested subject and pack.'
+        }), { status: 404, headers: corsHeaders });
+      }
+
+      const token = await createSignedDownloadToken({
+        userId: user.user_id,
+        subjectId: job.subject_id,
+        packId: job.pack_id,
+        jobId: job.id,
+        ttlSec: 300
+      }, downloadTokenSecret);
+
+      return new Response(JSON.stringify({
+        success: true,
+        token,
+        downloadUrl: `/api/v1/reports/download?token=${encodeURIComponent(token)}`,
+        expiresInSeconds: 300,
+        jobId: job.id,
+        jobStatus: job.status
+      }), { status: 200, headers: corsHeaders });
+    }
+
+    // ── COMMIT 6b ROUTE: SIGNED 5-MINUTE PRIVATE R2 PDF DOWNLOAD (/api/v1/reports/download) ──
+    if (url.pathname === '/api/v1/reports/download' && request.method === 'GET') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+      // 6b(a): Require a valid session whose user_id matches the token
+      const sessionUser = await authenticateUser(request, env);
+      if (!sessionUser || !sessionUser.user_id) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Authentication required. Please sign in to download your report.'
+        }), { status: 401, headers: corsHeaders });
+      }
+
+      // 6b(b): Use separate DOWNLOAD_TOKEN_SECRET for download tokens
+      const downloadTokenSecret = requireSecret(env, 'DOWNLOAD_TOKEN_SECRET');
+      const token = (url.searchParams.get('token') || '').trim();
+      if (!token) {
+        return new Response(JSON.stringify({ success: false, error: 'Missing signed download token.' }), { status: 401, headers: corsHeaders });
+      }
+
+      const expectedContext = { userId: sessionUser.user_id };
+      const querySubj = (url.searchParams.get('subjectId') || url.searchParams.get('subject_id') || '').trim();
+      const queryPack = (url.searchParams.get('packId') || url.searchParams.get('pack_id') || '').trim();
+      if (querySubj) expectedContext.subjectId = querySubj;
+      if (queryPack) expectedContext.packId = queryPack;
+
+      const verified = await verifySignedDownloadToken(token, downloadTokenSecret, expectedContext);
+      if (!verified.valid) {
+        return new Response(JSON.stringify({ success: false, error: verified.error }), { status: 403, headers: corsHeaders });
+      }
+
+      const { u: userId, s: subjectId, p: packId, j: jobId } = verified.payload;
+      let job = null;
+      if (env && env.DB) {
+        job = await env.DB.prepare(
+          'SELECT * FROM report_jobs WHERE id = ? AND user_id = ? AND subject_id = ? AND pack_id = ?'
+        ).bind(jobId, userId, subjectId, packId).first();
+      } else {
+        const candidate = memoryStore.reportJobs.get(jobId);
+        if (candidate && candidate.user_id === userId && candidate.subject_id === subjectId && candidate.pack_id === packId) {
+          job = candidate;
+        }
+      }
+
+      if (!job || (job.status !== 'COMPLETED' && job.status !== 'DOWNLOADED') || !job.r2_key) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Report job is not ready for download or does not match token bindings.'
+        }), { status: 404, headers: corsHeaders });
+      }
+
+      const pdfBytes = await getPrivateR2Report(env, job.r2_key);
+      if (!pdfBytes) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'Report file not found in private storage.'
+        }), { status: 404, headers: corsHeaders });
+      }
+
+      // Transition COMPLETED -> DOWNLOADED on the first signed download
+      const now = Date.now();
+      if (job.status === 'COMPLETED') {
+        if (env && env.DB) {
+          await env.DB.prepare(
+            "UPDATE report_jobs SET status = 'DOWNLOADED', downloaded_at = ?, updated_at = ? WHERE id = ?"
+          ).bind(now, now, job.id).run();
+          await env.DB.prepare(
+            "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'report_first_downloaded', 'report_jobs', ?, ?, ?)"
+          ).bind('aud_' + now + '_' + getRandomHex(4), userId, job.id, JSON.stringify({ subjectId, packId, r2Key: job.r2_key }), now).run();
+        } else {
+          job.status = 'DOWNLOADED';
+          job.downloaded_at = now;
+          job.updated_at = now;
+        }
+      }
+
+      return new Response(pdfBytes, {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="Numeros_Vision_${packId}_${subjectId}.pdf"`,
+          'Cache-Control': 'private, no-store',
+          'X-NV-Job-Status': 'DOWNLOADED',
+          'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+          'Vary': 'Origin'
         }
       });
     }
