@@ -1,0 +1,34 @@
+# Environment & Secret variables
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# Python caches & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Node & Build artifacts
+node_modules/
+dist_cloudflare_pages/
+
+# Backups & Archives
+backups/
+*.zip
+*.tar.gz
+
+# Sensitive Customer Data & PII
+data/*.jsonl
+data/invoices.json
+data/users.json
+data/premium_profiles.jsonl
+
+# Private Deliverables Storage
+app/reports/private/
+
+# System files
+.DS_Store
+Thumbs.db
