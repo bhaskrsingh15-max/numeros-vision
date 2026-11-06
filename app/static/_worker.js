@@ -24,6 +24,8 @@ export default {
       /^\/static\/reports\//i,
       /^\/reports\//i,
       /^\/static\/reports\//i,
+      /^\/reports\//i,
+      /^\/static\/reports\//i,
       /\.py$/i,
       /\.env/i,
       /\.jsonl$/i,
@@ -611,20 +613,6 @@ export default {
           code: 'ORDER_CREATION_FAILED',
           message: 'Failed to obtain an authentic order ID from the payment gateway.'
         }), { status: 502, headers: corsHeaders });
-      }
-
-            return new Response(JSON.stringify({
-              status: 'error',
-              code: isAuth ? 'RAZORPAY_AUTH_FAILED' : 'RAZORPAY_ORDER_FAILED',
-              message: isAuth 
-                ? 'Razorpay API authentication failed (HTTP 401). The RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET configured in Cloudflare Pages is inactive, regenerated, or invalid.' 
-                : errDesc,
-              details: errData
-            }), { status: rzpReq.status || 400, headers: corsHeaders });
-          }
-        } catch (apiErr) {
-          console.warn('Razorpay fetch exception:', apiErr);
-        }
       }
 
       return new Response(JSON.stringify({
