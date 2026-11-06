@@ -61,6 +61,8 @@ for bundle_id, data in BUNDLES.items():
 
 # 3. Charm AI Packs
 for pack_id, data in CHARM_AI_PACKS.items():
+    # Only charm_free and charm_single are active; multi and extended held inactive pending question count confirmation
+    is_active = pack_id in ["charm_free", "charm_single"]
     packs["charm_ai"][pack_id] = {
         "pack_id": pack_id,
         "name": data["name"],
@@ -69,7 +71,7 @@ for pack_id, data in CHARM_AI_PACKS.items():
         "amount_paise": data["amount_paise"],
         "questions_count": data["questions_count"],
         "digital_root": data.get("digital_root", 0),
-        "status": "active",
+        "status": "active" if is_active else "inactive",
         "deliverables": data["deliverables"]
     }
 

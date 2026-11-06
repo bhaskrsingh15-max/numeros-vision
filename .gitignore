@@ -29,6 +29,14 @@ data/premium_profiles.jsonl
 # Private Deliverables Storage
 app/reports/private/
 
+# Scratch & Temporary Testing Files
+scratch/
+scratch_*
+temp_*.js
+temp_*.py
+scripts/patch_*.py
+scripts/run_*.py
+
 # System files
 .DS_Store
 Thumbs.db

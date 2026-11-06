@@ -196,7 +196,7 @@ export const PACK_CATALOG: {
       "amount_paise": 39900,
       "questions_count": 10,
       "digital_root": 0,
-      "status": "active",
+      "status": "inactive",
       "deliverables": [
         "10 Detailed Question Predictions",
         "Customised 7-Layer safe remedies for all queries",
@@ -213,7 +213,7 @@ export const PACK_CATALOG: {
       "amount_paise": 69900,
       "questions_count": 25,
       "digital_root": 0,
-      "status": "active",
+      "status": "inactive",
       "deliverables": [
         "25 Deep In-Depth Predictions",
         "Interactive chart companion with transit radar",
