@@ -1,3 +1,19 @@
+
+// Constant-time string comparison to prevent side-channel timing attacks
+function timingSafeEqual(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false;
+  const aLen = a.length;
+  const bLen = b.length;
+  let mismatch = aLen === bLen ? 0 : 1;
+  const maxLen = Math.max(aLen, bLen);
+  for (let i = 0; i < maxLen; i++) {
+    const charA = i < aLen ? a.charCodeAt(i) : 0;
+    const charB = i < bLen ? b.charCodeAt(i) : 0;
+    mismatch |= charA ^ charB;
+  }
+  return mismatch === 0;
+}
+
 /**
  * NUMEROS VISION — CLOUDFLARE PAGES EDGE WORKER
  * Document Version: 1.0.0
@@ -85,7 +101,7 @@ export default {
             status: 503,
             headers: {
               'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
+              'Access-Control-Allow-Origin': 'https://numerosvision.com'
             }
           });
         }
@@ -135,7 +151,7 @@ export default {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': 'https://numerosvision.com'
           }
         });
       } catch (err) {
@@ -162,7 +178,7 @@ export default {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': 'https://numerosvision.com'
           }
         });
       } catch (err) {
@@ -196,7 +212,7 @@ export default {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': 'https://numerosvision.com'
           }
         });
       } catch (err) {
@@ -221,11 +237,22 @@ export default {
         const ts = new Date().toISOString();
         const enquiryId = 'ENQ-' + Date.now().toString().slice(-6) + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
 
-        // Optional: If an edge webhook or email key is set in Cloudflare env
-        const web3Key = env.WEB3FORMS_ACCESS_KEY || 'e27c09c1-4ad2-4301-ac99-98c230ad866c';
-        if (web3Key) {
-          try {
-            await fetch('https://api.web3forms.com/submit', {
+        // Web3Forms access key strictly loaded from Cloudflare environment
+        const web3Key = env.WEB3FORMS_ACCESS_KEY;
+        if (!web3Key) {
+          return new Response(JSON.stringify({
+            status: 'error',
+            message: 'Consultation dispatch service is not configured on server.'
+          }), {
+            status: 503,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': 'https://numerosvision.com'
+            }
+          });
+        }
+        try {
+          await fetch('https://api.web3forms.com/submit', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -246,7 +273,6 @@ export default {
           } catch (e) {
             console.error('[Web3Forms_Edge_Error]', e);
           }
-        }
 
         return new Response(JSON.stringify({
           status: 'success',
@@ -258,7 +284,7 @@ export default {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': 'https://numerosvision.com'
           }
         });
       } catch (err) {
@@ -282,10 +308,21 @@ export default {
 
         const ticketId = 'NV-TICK-' + Math.floor(100000 + Math.random() * 900000);
 
-        const web3Key = env.WEB3FORMS_ACCESS_KEY || 'e27c09c1-4ad2-4301-ac99-98c230ad866c';
-        if (web3Key) {
-          try {
-            await fetch('https://api.web3forms.com/submit', {
+        const web3Key = env.WEB3FORMS_ACCESS_KEY;
+        if (!web3Key) {
+          return new Response(JSON.stringify({
+            status: 'error',
+            message: 'Support ticket dispatch service is not configured on server.'
+          }), {
+            status: 503,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': 'https://numerosvision.com'
+            }
+          });
+        }
+        try {
+          await fetch('https://api.web3forms.com/submit', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -303,7 +340,6 @@ export default {
               })
             });
           } catch (e) {}
-        }
 
         return new Response(JSON.stringify({
           status: 'success',
@@ -314,7 +350,7 @@ export default {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': 'https://numerosvision.com'
           }
         });
       } catch (err) {
@@ -329,7 +365,7 @@ export default {
     if (url.pathname.startsWith('/api/v1/billing/')) {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -479,7 +515,7 @@ export default {
           };
 
           // Dispatch to support@numerosvision.com via Web3Forms
-          const web3Key = env.WEB3FORMS_ACCESS_KEY || 'e27c09c1-4ad2-4301-ac99-98c230ad866c';
+          const web3Key = env.WEB3FORMS_ACCESS_KEY;
           if (web3Key) {
             try {
               await fetch('https://api.web3forms.com/submit', {
@@ -519,7 +555,7 @@ export default {
     if ((url.pathname === '/api/create-order' || url.pathname === '/api/v1/payments/create-order') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -630,7 +666,7 @@ export default {
     if ((url.pathname === '/api/verify-payment' || url.pathname === '/api/v1/payments/verify' || url.pathname === '/api/v1/payments/verify-payment') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -673,7 +709,7 @@ export default {
           const sigBuffer = await crypto.subtle.sign('HMAC', cryptoKey, msgData);
           const hashArray = Array.from(new Uint8Array(sigBuffer));
           const genSig = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-          if (genSig.toLowerCase() === cleanSig) {
+          if (timingSafeEqual(genSig.toLowerCase(), cleanSig)) {
             isSigValid = true;
           }
         } catch (e) {
@@ -695,7 +731,7 @@ export default {
       const reportUrl = plan.includes('consult') ? '/consultation/' : '/sample-report/?tier=master';
 
       // Dispatch payment notification email to support@numerosvision.com
-      const web3Key = env.WEB3FORMS_ACCESS_KEY || 'e27c09c1-4ad2-4301-ac99-98c230ad866c';
+      const web3Key = env.WEB3FORMS_ACCESS_KEY;
       if (web3Key) {
         try {
           await fetch('https://api.web3forms.com/submit', {
@@ -738,7 +774,7 @@ export default {
     if ((url.pathname === '/api/v1/payments/webhook' || url.pathname === '/api/webhook') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': 'https://numerosvision.com'
       };
       const rawBody = await request.text();
       const signature = request.headers.get('X-Razorpay-Signature') || request.headers.get('x-razorpay-signature') || '';
@@ -788,7 +824,7 @@ export default {
     if ((url.pathname === '/api/v1/pricing-catalog' || url.pathname === '/api/v1/payments/pricing-catalog') && request.method === 'GET') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': 'https://numerosvision.com'
       };
       return new Response(JSON.stringify({
         currency: 'INR',
@@ -816,7 +852,7 @@ export default {
     if ((url.pathname === '/api/v1/identity/signup' || url.pathname === '/api/v1/auth/signup') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -904,7 +940,7 @@ export default {
     if (url.pathname === '/api/v1/auth/me' && (request.method === 'GET' || request.method === 'POST')) {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -952,7 +988,7 @@ export default {
     if ((url.pathname === '/api/v1/auth/login' || url.pathname === '/api/v1/auth/otp/login') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Set-Cookie': 'nv_user_session=sess_live_' + Date.now() + '; Path=/; Max-Age=2592000; SameSite=Lax'
@@ -1006,7 +1042,7 @@ export default {
     if ((url.pathname === '/api/charm/chat' || url.pathname === '/api/v1/readings/ask') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
@@ -1103,7 +1139,7 @@ export default {
         status: 403,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': 'https://numerosvision.com'
         }
       });
     }
@@ -1111,7 +1147,7 @@ export default {
     if (url.pathname === '/api/charm/outcomes' && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };

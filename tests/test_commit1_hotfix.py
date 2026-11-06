@@ -40,9 +40,11 @@ def test_reports_moved_out_of_public_static():
     assert len(private_pdfs) > 0, "PDFs must be safely moved to app/reports/private"
 
 def test_sample_dossier_preserved():
-    sample_path = os.path.join("app", "static", "samples", "Numeros_Vision_Sample_Dossier_Fictional.pdf")
-    assert os.path.exists(sample_path), "Fictional sample dossier must exist in app/static/samples"
-    assert os.path.getsize(sample_path) > 100000, "Sample dossier must be non-empty"
+    sample_path = os.path.join("app", "static", "samples", "Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf")
+    assert os.path.exists(sample_path), "Fictional sample excerpt must exist in app/static/samples"
+    assert os.path.getsize(sample_path) > 10000, "Sample excerpt must be non-empty"
+    private_sample = os.path.join("app", "reports", "private", "Numeros_Vision_Sample_Dossier_Fictional.pdf")
+    assert os.path.exists(private_sample), "Full 32-page sample must be quarantined in app/reports/private"
 
 def test_tunnel_files_removed():
     assert not os.path.exists("LIVE_URL.txt"), "LIVE_URL.txt must be removed"

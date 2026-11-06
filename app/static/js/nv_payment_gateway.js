@@ -342,11 +342,11 @@
       if (inv.service_id && inv.service_id.includes('consult')) {
         reportLink = '/consultation/';
       } else if (inv.plan_id === 'report_basic' || inv.service_id === 'report_basic' || inv.plan_id === 'report_essential') {
-        reportLink = '/samples/Numeros_Vision_Sample_Dossier_Fictional.pdf';
+        reportLink = '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
       } else if (inv.plan_id === 'report_advanced' || inv.service_id === 'report_advanced' || inv.plan_id === 'report_master') {
-        reportLink = '/samples/Numeros_Vision_Sample_Dossier_Fictional.pdf';
+        reportLink = '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
       } else if (inv.plan_id === 'report_premium' || inv.service_id === 'report_premium' || inv.plan_id === 'report_divine') {
-        reportLink = '/samples/Numeros_Vision_Sample_Dossier_Fictional.pdf';
+        reportLink = '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
       } else {
         reportLink = '/dashboard/';
       }
