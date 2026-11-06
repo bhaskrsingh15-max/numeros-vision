@@ -887,7 +887,7 @@
       const freqSummary = document.getElementById('birthChartFreqSummary');
       freqSummary.innerHTML = `
         <div><strong style="color:#16835B;">✦ Present Frequencies:</strong> [ ${presentDigits.join(', ')} ]</div>
-        <div><strong style="color:#A13030;">⚠️ Karmic Missing Digits:</strong> [ ${missingDigits.join(', ') || 'None (Complete Matrix)'} ]</div>
+        <div><strong style="color:#8B6914;">🔒 Missing Digits:</strong> [ ${missingDigits.map(d => `${d} (🔒)`).join(', ') || 'None (Complete Matrix)'} ]</div>
       `;
 
       // 3. Render 3x3 Grid
@@ -910,9 +910,9 @@
           `;
         } else {
           cell.innerHTML = `
-            <div class="cell-number absent-num">${num}</div>
-            <div style="font-size:0.65rem; color:#A13030; font-weight:800; background:rgba(161,48,48,0.1); padding:1px 6px; border-radius:4px; margin-top:2px;">GAP</div>
-            <div class="cell-label" style="color:#A13030;">${info.element} Void</div>
+            <div class="cell-number absent-num" style="opacity:0.35;">${num}</div>
+            <div style="font-size:0.65rem; color:#8B6914; font-weight:800; background:rgba(201,162,39,0.12); padding:1px 6px; border-radius:4px; margin-top:2px;">🔒 LOCKED</div>
+            <div class="cell-label" style="color:#7A654D;">Missing Digit</div>
           `;
         }
         gridContainer.appendChild(cell);
@@ -1403,8 +1403,8 @@
           customer_dob: dob,
           profile_id: profileKey,
           onSuccess: function(inv) {
-            localStorage.setItem('nv_unlocked_' + profileKey + '_' + planKey, 'true');
-            localStorage.setItem('nv_plan_unlocked_' + planKey, 'true');
+            // server authority: entitlements managed in D1
+            // server authority: entitlements managed in D1
             try {
               const invs = JSON.parse(localStorage.getItem('nv_user_invoices') || '[]');
               invs.unshift({

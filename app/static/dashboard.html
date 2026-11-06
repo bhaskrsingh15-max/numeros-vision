@@ -409,12 +409,12 @@
     <div class="dash-header">
       <div>
         <h1 class="dash-h1">Your Numeros Dashboard</h1>
-        <div class="dash-sub">Welcome back, <strong id="dashWelcomeName">Seeker</strong> · Member ID: <span id="dashMemberId" style="font-family:monospace; font-weight:700; color:#8B6914;">NV-MEM-LIVE</span></div>
+        <div class="dash-sub">Welcome back, <strong id="dashWelcomeName">Member</strong> · Member ID: <span id="dashMemberId" style="font-family:monospace; font-weight:700; color:#8B6914;">—</span></div>
       </div>
       <div style="display:flex; gap:10px; align-items:center;">
         <button onclick="handleDashboardLogout()" class="nv-nav-link" style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:8px 14px; font-size:0.8rem; cursor:pointer; color:#7A654D;">Sign Out</button>
         <a id="dashViewFreeReportBtn" href="/sample-report/?tier=free" class="nv-btn-cta" style="font-size:0.8rem; padding:9px 16px; background:rgba(201,162,39,0.12); color:#8B6914; border:1.5px solid #C9A227;">View Free Dossier ✦</a>
-        <a id="dashUnlockMasterBtn" href="/pricing/" class="nv-btn-cta" style="font-size:0.8rem; padding:9px 18px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF;">Unlock Master Dossier (45+ Pgs) 🔒</a>
+        <a id="dashUnlockMasterBtn" href="/pricing.html" class="nv-btn-cta" style="font-size:0.8rem; padding:9px 18px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF;">Unlock Premium Blueprint (32 Pages) 🔒</a>
       </div>
     </div>
 
@@ -605,7 +605,7 @@
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <div>
                   <div style="font-family:'Cinzel',serif; font-size:0.90rem; font-weight:700; color:#8B6914; letter-spacing:0.04em;">NATAL LO SHU 3×3 MATRIX</div>
-                  <div style="font-size:0.74rem; color:#7A654D;">Seeker: <strong id="lsGridSeekerName" style="color:#8B6914;">Seeker</strong> (DOB: <span id="lsGridSeekerDob">28-11-1981</span>)</div>
+                  <div style="font-size:0.74rem; color:#7A654D;">Profile: <strong id="lsGridSeekerName" style="color:#8B6914;">—</strong> (DOB: <span id="lsGridSeekerDob">28-11-1981</span>)</div>
                 </div>
                 <span style="background:#16835B; color:#FFFFFF; border-radius:20px; padding:3px 10px; font-size:0.70rem; font-weight:700; letter-spacing:0.02em;">Click Any Cell</span>
               </div>
@@ -973,6 +973,47 @@
     </div>
   </footer>
   <script>
+    let _dashboardState = null;
+
+    // Strict Auth Gate: Unauthenticated users redirect to /login.html?returnTo=/dashboard/
+    (async function checkDashboardAuth() {
+      try {
+        const meRes = await fetch('/api/me');
+        if (meRes.status === 401) {
+          window.location.href = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        const meData = await meRes.json();
+        if (!meData || !meData.authenticated) {
+          window.location.href = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        
+        // Fetch server-gated dashboard view
+        const urlParams = new URLSearchParams(window.location.search);
+        const subjId = urlParams.get('subjectId') || '';
+        const viewRes = await fetch('/api/v1/dashboard/view' + (subjId ? `?subjectId=${encodeURIComponent(subjId)}` : ''));
+        if (viewRes.ok) {
+          _dashboardState = await viewRes.json();
+          if (_dashboardState.user) {
+            const wName = document.getElementById('dashWelcomeName');
+            const mId = document.getElementById('dashMemberId');
+            if (wName) wName.textContent = _dashboardState.user.name || (_dashboardState.activeSubject ? _dashboardState.activeSubject.name : 'Member');
+            if (mId) mId.textContent = _dashboardState.user.userId || 'NV-MEMBER';
+          }
+          if (_dashboardState.activeSubject) {
+            window.currentActiveProfile = {
+              id: _dashboardState.activeSubject.id,
+              name: _dashboardState.activeSubject.name,
+              dob: _dashboardState.activeSubject.dob,
+              relation: 'Subject'
+            };
+          }
+        }
+      } catch (err) {
+        console.warn('Dashboard auth check exception:', err);
+      }
+    })();
     
     // ══════════════════════════════════════════════════════════════════
     // DETERMINISTIC NUMEROLOGY CORE & MULTI-PROFILE FAMILY ENGINE
@@ -1037,7 +1078,7 @@
       } catch (e) {}
 
       // Dynamically resolve primary profile from user's actual profile or recent calculation
-      let resolvedName = localStorage.getItem('nv_user_name') || 'Seeker';
+      let resolvedName = localStorage.getItem('nv_user_name') || 'Member';
       let resolvedDob = localStorage.getItem('nv_user_dob') || '';
       let resolvedGender = localStorage.getItem('nv_user_gender') || 'Male';
 
@@ -1090,7 +1131,17 @@
     function renderFamilyProfilesBar() {
       const bar = document.getElementById('familyProfilesBar');
       if (!bar) return;
-      const list = getStoredFamilyProfiles();
+      let list = [];
+      if (_dashboardState && Array.isArray(_dashboardState.subjects) && _dashboardState.subjects.length > 0) {
+        list = _dashboardState.subjects.map(s => ({
+          id: s.id,
+          name: s.name,
+          dob: s.dob,
+          relation: 'Subject'
+        }));
+      } else {
+        list = getStoredFamilyProfiles();
+      }
       const activeProf = window.currentActiveProfile || list[0];
       const activeId = activeProf.id;
 
@@ -1098,8 +1149,7 @@
       list.forEach(p => {
         const isActive = p.id === activeId;
         const profKey = (p.id || (p.name + '_' + (p.dob || ''))).toLowerCase().replace(/[^a-z0-9]/g, '_');
-        const hasPaidMaster = localStorage.getItem('nv_unlocked_' + profKey + '_report_master') === 'true' ||
-                              localStorage.getItem('nv_unlocked_' + profKey + '_report_divine') === 'true';
+        const hasPaidMaster = (_dashboardState && _dashboardState.view && _dashboardState.view.tier !== 'free');
 
         html += `
           <div onclick="switchActiveProfile('${p.id}')" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:20px; font-size:0.80rem; font-weight:600; transition:all 0.2s; ${isActive ? 'background:#8B6914; color:#FFFFFF; border:1.5px solid #8B6914; box-shadow:0 2px 8px rgba(139,105,20,0.3);' : 'background:#FFFFFF; color:#7A654D; border:1px solid rgba(201,162,39,0.35);'}">
@@ -1132,7 +1182,7 @@
       if (m) m.style.display = 'none';
     }
 
-    function handleSaveFamilyMember(e) {
+    async function handleSaveFamilyMember(e) {
       e.preventDefault();
       const name = document.getElementById('fm_name').value.trim();
       const rel = document.getElementById('fm_relation').value;
@@ -1144,24 +1194,23 @@
         return;
       }
 
-      const list = getStoredFamilyProfiles();
-      const newId = 'fm_' + Date.now();
-      const newProf = {
-        id: newId,
-        name: name,
-        dob: dob,
-        gender: gender,
-        relation: rel
-      };
-      list.push(newProf);
-      saveFamilyProfiles(list);
-      window.currentActiveProfile = newProf;
-      closeAddFamilyModal();
-      document.getElementById('addFamilyForm').reset();
-      renderFamilyProfilesBar();
-      initDashboard();
-      alert(`Family chart for ${name} (${rel}) created!
-Lo Shu grid and numerical vectors have been computed.`);
+      try {
+        const resp = await fetch('/api/v1/subjects', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, dob, consent: true })
+        });
+        const data = await resp.json();
+        if (!resp.ok) {
+          alert(data.error || 'Failed to create family subject.');
+          return;
+        }
+        closeAddFamilyModal();
+        document.getElementById('addFamilyForm').reset();
+        window.location.href = '/dashboard/?subjectId=' + encodeURIComponent(data.subject.id);
+      } catch (err) {
+        alert('Network error adding family subject. Please try again.');
+      }
     }
 
     async 
@@ -1180,7 +1229,7 @@ Lo Shu grid and numerical vectors have been computed.`);
       yogaPct: 25,
       driver: 1,
       conductor: 4,
-      name: 'Seeker',
+      name: 'Member',
       dob: '1981-11-28'
     };
 
@@ -1190,7 +1239,7 @@ Lo Shu grid and numerical vectors have been computed.`);
       _lastCalculatedData.present = presentDigits;
       _lastCalculatedData.driver = driver;
       _lastCalculatedData.conductor = conductor;
-      _lastCalculatedData.name = pName || 'Seeker';
+      _lastCalculatedData.name = pName || 'Member';
       _lastCalculatedData.dob = pDob || '28-11-1981';
 
       // 8 planes of Lo Shu
@@ -1327,7 +1376,7 @@ Lo Shu grid and numerical vectors have been computed.`);
         if (titleEl) titleEl.textContent = 'FULL ANVEIL CHARM · DIAMOND ROADMAP (32 PAGES)';
         if (subEl) subEl.textContent = 'Complete Name Balancing & Element Yogas';
         if (priceEl) priceEl.textContent = '₹1,050';
-        if (strikeEl) strikeEl.textContent = '₹2,100 (50% OFF)';
+        if (strikeEl) strikeEl.textContent = '';
         if (headEl) headEl.textContent = 'FULL ANVEIL CHARM FOR MISSING NUMBERS (KARMIC VOID ACTIVATION)';
         if (narrEl) narrEl.textContent = `Your birth grid carries missing numbers [${missingListStr}], creating specific energetic voids in wealth preservation, commercial balance, and mentor support. In the Diamond Sovereign Roadmap, we activate these unsealed vibrations through Chaldean Name Balancing, Element Raj Yoga completion, and directional Vastu remedies.`;
         if (incTitleEl) incTitleEl.textContent = '✦ Full Activation in Diamond Sovereign Roadmap (32 Pages):';
@@ -1337,7 +1386,7 @@ Lo Shu grid and numerical vectors have been computed.`);
           <li><strong>Vastu Directional Rectification:</strong> Exact room cures (SW 2, E 3, SE 4, Center 5, NW 6, W 7)</li>
           <li><strong>4-Stage Pinnacle Cycles:</strong> Complete life roadmap covering Ages 0–32, 33–41, 42–50 &amp; 51+</li>
         `;
-        if (ctaBtn) ctaBtn.textContent = 'ANVEIL FULL MISSING CHARMS ₹2,100 (₹1,050) →';
+        if (ctaBtn) ctaBtn.textContent = 'ANVEIL FULL MISSING CHARMS (₹1,050) →';
 
       } else if (type === 'present') {
         _currentPitchOffer.planId = 'report_advanced';
@@ -1348,7 +1397,7 @@ Lo Shu grid and numerical vectors have been computed.`);
         if (titleEl) titleEl.textContent = 'PRESENT NUMBER HARMONISATION · MASTER DOSSIER (12 PAGES)';
         if (subEl) subEl.textContent = 'Digit Overdrive Balancing & 3-Year Dasha Radar';
         if (priceEl) priceEl.textContent = '₹510';
-        if (strikeEl) strikeEl.textContent = '₹999 (49% OFF)';
+        if (strikeEl) strikeEl.textContent = '';
         if (headEl) headEl.textContent = 'PRESENT NUMBER HARMONISATION & OVERDRIVE CONTROL';
         if (narrEl) narrEl.textContent = `Your active numbers [${presentListStr}] represent inborn gifts, but multiple repeated digits (like 1111 Water in North or 88 Earth in NE) create energetic intensity that needs grounding remedies. The 12-page Master Dossier balances these over-represented frequencies.`;
         if (incTitleEl) incTitleEl.textContent = '✦ Master Harmonisation Features (12 Pages):';
@@ -1358,7 +1407,7 @@ Lo Shu grid and numerical vectors have been computed.`);
           <li><strong>Calling Name Harmony:</strong> Synchronizing professional signature with Driver and Conductor</li>
           <li><strong>7-Layer Safe Remedies:</strong> Auspicious gemstones, colors, Rudraksha, and practical charity protocols</li>
         `;
-        if (ctaBtn) ctaBtn.textContent = 'HARMONISE PRESENT DIGITS ₹999 (₹510) →';
+        if (ctaBtn) ctaBtn.textContent = 'HARMONISE PRESENT DIGITS (₹510) →';
 
       } else if (type === 'yogas') {
         _currentPitchOffer.planId = 'report_basic';
@@ -1369,7 +1418,7 @@ Lo Shu grid and numerical vectors have been computed.`);
         if (titleEl) titleEl.textContent = 'ELEMENT YOGAS ALIGNMENT · EXECUTIVE BRIEF (3 PAGES)';
         if (subEl) subEl.textContent = '5 Elements Harmony & Directional Vectors';
         if (priceEl) priceEl.textContent = '₹199';
-        if (strikeEl) strikeEl.textContent = '₹499 (60% OFF)';
+        if (strikeEl) strikeEl.textContent = '';
         if (headEl) headEl.textContent = 'ELEMENT YOGAS & FOUNDATIONAL HABITS AUDIT';
         if (narrEl) narrEl.textContent = `Your current Element Yogas alignment is ${_lastCalculatedData.yogaPct}% Active. The 3-Page Executive Diagnostic Brief provides instant clarity on your dominant Wood, Fire, Earth, Metal, and Water planes to strengthen daily vitality, focus, and emotional equilibrium.`;
         if (incTitleEl) incTitleEl.textContent = '✦ Executive Diagnostic Deliverables (3 Pages):';
@@ -1384,12 +1433,11 @@ Lo Shu grid and numerical vectors have been computed.`);
     }
 
     function handlePitchCtaClick() {
-      const activeProf = window.currentActiveProfile || { name: 'Seeker', dob: '1981-11-28', id: 'primary' };
+      const activeProf = window.currentActiveProfile || { name: 'Member', dob: '1981-11-28', id: 'primary' };
       const rawKey = activeProf.id || (activeProf.name + '_' + (activeProf.dob || ''));
       const profKey = rawKey.toLowerCase().replace(/[^a-z0-9]/g, '_');
       
-      const isAlreadyUnlocked = localStorage.getItem('nv_unlocked_' + profKey + '_' + _currentPitchOffer.planId) === 'true' ||
-                                localStorage.getItem('nv_plan_unlocked_' + _currentPitchOffer.planId) === 'true';
+      const isAlreadyUnlocked = (_dashboardState && _dashboardState.view && (_dashboardState.view.tier === 'premium' || (_dashboardState.view.tier === 'advanced' && _currentPitchOffer.planId !== 'report_premium') || (_dashboardState.view.tier === 'basic' && _currentPitchOffer.planId === 'report_basic')));
       if (isAlreadyUnlocked) {
         openPaidPdfDirectly(_currentPitchOffer.planId, activeProf);
         return;
@@ -1412,7 +1460,7 @@ Lo Shu grid and numerical vectors have been computed.`);
         const activeProf = window.currentActiveProfile;
         const vectors = calcDeterministicVectors(activeProf.dob, activeProf.gender);
 
-        let memberId = localStorage.getItem('nv_golden_id') || 'NV-MEM-LIVE';
+        let memberId = (_dashboardState && _dashboardState.user && _dashboardState.user.userId) || 'NV-MEMBER';
         let alignment = null;
         let entitlements = null;
 
@@ -1520,7 +1568,7 @@ Lo Shu grid and numerical vectors have been computed.`);
           }
 
           // 1. Audit Calling Name Alignment
-          const userName = profile.name || 'Seeker';
+          const userName = profile.name || 'Member';
           let nameCompound = 0;
           const cleanName = userName.toLowerCase().replace(/[^a-z]/g, '');
           for (let i = 0; i < cleanName.length; i++) {
@@ -1609,7 +1657,7 @@ Lo Shu grid and numerical vectors have been computed.`);
           }
 
           // 3. Audit Registered Email Handle (Skipping @gmail.com / @yahoo.com)
-          const userEmail = profile.email || localStorage.getItem('nv_user_email') || 'seeker@example.com';
+          const userEmail = profile.email || localStorage.getItem('nv_user_email') || 'member@numerosvision.com';
           const emailParts = userEmail.split('@');
           const emailHandle = (emailParts[0] || '').toLowerCase().trim();
           const emailDomain = emailParts[1] ? ('@' + emailParts[1]) : '';
@@ -1958,27 +2006,13 @@ Lo Shu grid and numerical vectors have been computed.`);
             const currentProfileKey = getProfileKey(profile);
 
             function checkProfileTierUnlocked(tId, tAlias) {
-              // 1. Profile-specific explicit storage
-              if (localStorage.getItem('nv_unlocked_' + currentProfileKey + '_' + tId) === 'true' ||
-                  localStorage.getItem('nv_unlocked_' + currentProfileKey + '_' + tAlias) === 'true') {
-                return true;
-              }
-              // 2. Profile-specific unlocked_reports array
-              const profReports = (profile && profile.unlocked_reports) || [];
-              if (profReports.includes(tId) || profReports.includes(tAlias)) {
-                return true;
-              }
-              // 3. Match against verified receipts specifically matching profile name or ID
-              try {
-                const invs = JSON.parse(localStorage.getItem('nv_user_invoices') || '[]');
-                for (const inv of invs) {
-                  const planMatch = (inv.plan_id === tId || inv.plan_id === tAlias || inv.plan === tId || inv.plan === tAlias);
-                  const nameMatch = (inv.customer_name && inv.customer_name.trim().toLowerCase() === profile.name.trim().toLowerCase());
-                  const idMatch = (inv.profile_id && inv.profile_id === currentProfileKey);
-                  if (planMatch && (nameMatch || idMatch)) return true;
-                }
-              } catch (e) {}
-              return false;
+              if (!_dashboardState || !_dashboardState.view) return false;
+              const currentTier = _dashboardState.view.tier || 'free';
+              const entitlements = _dashboardState.view.entitlements || [];
+              if (currentTier === 'premium') return true;
+              if (currentTier === 'advanced' && (tId === 'report_basic' || tId === 'report_advanced' || tAlias === 'report_essential' || tAlias === 'report_master')) return true;
+              if (currentTier === 'basic' && (tId === 'report_basic' || tAlias === 'report_essential')) return true;
+              return entitlements.includes(tId) || (tAlias && entitlements.includes(tAlias));
             }
 
             const isAlex = (profile.name || '').toLowerCase().includes('alexander');
@@ -2071,7 +2105,7 @@ Lo Shu grid and numerical vectors have been computed.`);
                       </span>
                     </div>
                     <div style="font-size:0.74rem; color:#8B6914; margin-bottom:3px; font-weight:600;">
-                      Subject: <span>${profile.name || 'Seeker'}</span> · Locked DOB: <span>${profile.dob || '28-11-1981'}</span>
+                      Subject: <span>${profile.name || 'Member'}</span> · Locked DOB: <span>${profile.dob || '28-11-1981'}</span>
                     </div>
                     <span style="font-size:0.78rem; color:#7A654D; display:block; line-height:1.45;">${t.desc}</span>
                   </div>
@@ -2096,7 +2130,7 @@ Lo Shu grid and numerical vectors have been computed.`);
           }
 
           // Always ensure invoices are hydrated synchronously
-          const activeEmail = (profile && profile.email) || localStorage.getItem('nv_user_email') || 'seeker@example.com';
+          const activeEmail = (profile && profile.email) || localStorage.getItem('nv_user_email') || 'member@numerosvision.com';
           if (typeof loadUserInvoices === 'function') {
             loadUserInvoices(activeEmail);
           }
@@ -2168,10 +2202,10 @@ Lo Shu grid and numerical vectors have been computed.`);
     }
 
     function triggerTierUnlock(planId, planName, amountInr) {
-      const activeProf = window.currentActiveProfile || { name: 'Seeker', dob: '1981-11-28', id: 'primary' };
+      const activeProf = window.currentActiveProfile || { name: 'Member', dob: '1981-11-28', id: 'primary' };
       const rawKey = activeProf.id || (activeProf.name + '_' + (activeProf.dob || ''));
       const profKey = rawKey.toLowerCase().replace(/[^a-z0-9]/g, '_');
-      const uEmail = localStorage.getItem('nv_user_email') || 'seeker@example.com';
+      const uEmail = localStorage.getItem('nv_user_email') || 'member@numerosvision.com';
       const uPhone = localStorage.getItem('nv_user_phone') || '';
 
       const launchGateway = (gatewayObj) => {
@@ -2185,43 +2219,14 @@ Lo Shu grid and numerical vectors have been computed.`);
           customer_dob: activeProf.dob,
           profile_id: profKey,
           onSuccess: function(inv) {
-            // 1. Store entitlement strictly bound to this profile & DOB
-            localStorage.setItem('nv_unlocked_' + profKey + '_' + planId, 'true');
-            localStorage.setItem('nv_plan_unlocked_' + planId, 'true');
-
-            // 2. Record structured receipt in local invoices
-            try {
-              const invs = JSON.parse(localStorage.getItem('nv_user_invoices') || '[]');
-              invs.unshift({
-                invoice_id: inv.invoice_id || ('NV-INV-' + Date.now()),
-                payment_id: inv.payment_id,
-                plan_id: planId,
-                service_title: `${planName} (${activeProf.name})`,
-                customer_name: activeProf.name,
-                customer_email: uEmail,
-                customer_phone: uPhone,
-                profile_id: profKey,
-                locked_dob: activeProf.dob,
-                amount: amountInr,
-                created_at: new Date().toISOString()
-              });
-              localStorage.setItem('nv_user_invoices', JSON.stringify(invs));
-            } catch (e) {}
-
-            // 3. Re-hydrate dashboard
+            // Server authority: refetch dashboard view to load server-settled entitlements
             initDashboard();
-            loadUserInvoices(uEmail);
+            showPaymentSuccessBanner(planId, activeProf, (inv && (inv.paymentId || inv.payment_id)));
 
-            // 4. Show success banner
-            showPaymentSuccessBanner(planId, activeProf, inv.payment_id);
-
-            // 5. Scroll to reports list
             const repEl = document.getElementById('dashReportsList');
             if (repEl) {
               repEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-
-            // 6. Automatically open the paid PDF package report
             openPaidPdfDirectly(planId, activeProf);
           }
         });
@@ -2276,10 +2281,9 @@ Lo Shu grid and numerical vectors have been computed.`);
         const isPaidParam = urlParams.get('paid') === 'true';
         if (unlockedParam || isPaidParam) {
           const unlockedTier = unlockedParam || urlParams.get('plan') || 'report_premium';
-          const activeProf = window.currentActiveProfile || { name: 'Seeker', dob: '1981-11-28', id: 'primary' };
+          const activeProf = window.currentActiveProfile || { name: 'Member', dob: '1981-11-28', id: 'primary' };
           const profKey = (activeProf.id || (activeProf.name + '_' + (activeProf.dob || ''))).toLowerCase().replace(/[^a-z0-9]/g, '_');
-          localStorage.setItem('nv_unlocked_' + profKey + '_' + unlockedTier, 'true');
-          localStorage.setItem('nv_plan_unlocked_' + unlockedTier, 'true');
+          // Server authority: entitlements settled strictly in D1 via /verify or webhook
 
           window.history.replaceState({}, document.title, window.location.pathname);
           initDashboard();
@@ -2327,7 +2331,7 @@ Lo Shu grid and numerical vectors have been computed.`);
                   <div>
                     <span style="font-size:0.75rem; text-transform:uppercase; font-weight:800; color:#8B6914; letter-spacing:0.04em;">Ready for Checkout</span>
                     <h3 style="margin:4px 0; color:#523E28; font-family:'Cinzel',serif; font-size:1.25rem;">${pName}</h3>
-                    <div style="font-size:0.82rem; color:#7A654D;">Locked to DOB: <strong>${paramDob || '28-11-1981'}</strong> for <strong>${paramName || 'Seeker'}</strong></div>
+                    <div style="font-size:0.82rem; color:#7A654D;">Locked to DOB: <strong>${paramDob || '28-11-1981'}</strong> for <strong>${paramName || 'Member'}</strong></div>
                   </div>
                   <div style="display:flex; align-items:center; gap:14px;">
                     <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#8B6914;">₹${pAmount}</span>
@@ -2362,7 +2366,7 @@ async function handleDashboardLogout() {
       document.addEventListener('DOMContentLoaded', () => {
         initDashboard();
         checkUrlTriggers();
-        const uEmail = (localStorage.getItem('nv_user_email') || 'seeker@example.com');
+        const uEmail = (localStorage.getItem('nv_user_email') || 'member@numerosvision.com');
         loadUserInvoices(uEmail);
       });
     } else {
@@ -2453,32 +2457,16 @@ async function handleDashboardLogout() {
         console.warn('Error fetching user invoices:', err);
       }
 
-      // Fallback: check localStorage for local receipts
+      // If no invoices yet, show clean empty state
       if (_userInvoices.length === 0) {
-        const localInvs = JSON.parse(localStorage.getItem('nv_user_invoices') || '[]');
-        if (localInvs.length > 0) {
-          _userInvoices = localInvs;
-        } else {
-          // Baseline verified receipt for logged-in user
-          _userInvoices = [
-            {
-              invoice_id: 'NV-REC-2026-104819',
-              order_id: 'order_RZP_MASTER_9102',
-              payment_id: 'pay_LIVE_91028341',
-              gateway: 'Razorpay',
-              customer_name: (document.getElementById('dashWelcomeName') || {}).textContent || 'Seeker',
-              customer_email: userEmail || 'seeker@example.com',
-              service_name: 'Personal Numerology Master Dossier (32 Pages)',
-              service_category: 'Digital Dossier',
-              amount_inr: 1050,
-              total_paid: 1050,
-              status: 'PAID',
-              payment_method: 'UPI (Instant)',
-              created_at: new Date().toISOString(),
-              report_url: '/sample-report/?tier=master',
-              notes: 'Full planetary chart, D60 shashtiamsa rectification, gemstone remedies'
-            }
-          ];
+        if (_dashboardState && Array.isArray(_dashboardState.invoices) && _dashboardState.invoices.length > 0) {
+          _userInvoices = _dashboardState.invoices.map(inv => ({
+            invoice_id: inv.invoice_number || inv.id,
+            service_name: inv.service_title || 'Numerology Report',
+            amount_inr: (inv.amount_paise / 100),
+            status: inv.status || 'PAID',
+            created_at: new Date(inv.created_at).toISOString()
+          }));
         }
       }
 

@@ -391,7 +391,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
   } else {
     order.status = 'PAID';
     order.updated_at = now;
-    memoryStore.payments.set(paymentId, { id: 'pmt_' + now, order_id: order.id, rzp_payment_id: paymentId, status: 'CAPTURED', captured_at: now });
+    memoryStore.payments.set(paymentId, { id: 'pmt_' + now, order_id: order.id, rzp_payment_id: paymentId, amount_paise: amountPaise || order.amount_paise, status: 'CAPTURED', captured_at: now });
     memoryStore.entitlements.set(`${order.user_id}_${order.subject_id}_${order.pack_id}`, {
       user_id: order.user_id,
       subject_id: order.subject_id,
@@ -431,6 +431,385 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
 
     // Fast2SMS API key strictly loaded from env.FAST2SMS_API_KEY
 
+
+/**
+ * DETERMINISTIC SERVER GATING ENGINE: viewFor(user, subject, env)
+ * The SOLE authority on gated profile calculations and entitlements for (user, subject).
+ * Excludes entitlements from refunded orders.
+ * Gated strictly to confirmed unlock matrix:
+ * - Free: Lo Shu grid with enabled digits; missing digits shown only as locked marks ('🔒').
+ * - Rs199 (report_basic, 3 pages): element balancing.
+ * - Rs510 (report_advanced, 12 pages): element balancing + enabled numbers in depth.
+ * - Rs1050 (report_premium, 32 pages): everything: missing numbers in depth, remedies, predictions (dasha timelines, 10-year radar).
+ */
+function parseDobParts(dobStr) {
+  if (!dobStr) return { day: 1, month: 1, year: 2000, dob: '2000-01-01' };
+  const str = String(dobStr).trim();
+  let day = 1, month = 1, year = 2000;
+  if (str.includes('-')) {
+    const parts = str.split('-');
+    if (parts[0].length === 4) {
+      year = parseInt(parts[0], 10);
+      month = parseInt(parts[1], 10);
+      day = parseInt(parts[2], 10);
+    } else {
+      day = parseInt(parts[0], 10);
+      month = parseInt(parts[1], 10);
+      year = parseInt(parts[2], 10);
+    }
+  } else if (str.includes('/')) {
+    const parts = str.split('/');
+    if (parts[0].length === 4) {
+      year = parseInt(parts[0], 10);
+      month = parseInt(parts[1], 10);
+      day = parseInt(parts[2], 10);
+    } else {
+      day = parseInt(parts[0], 10);
+      month = parseInt(parts[1], 10);
+      year = parseInt(parts[2], 10);
+    }
+  }
+  if (isNaN(day) || day < 1 || day > 31) day = 1;
+  if (isNaN(month) || month < 1 || month > 12) month = 1;
+  if (isNaN(year) || year < 1900 || year > 2100) year = 2000;
+  const formattedDob = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  return { day, month, year, dob: formattedDob };
+}
+
+async function viewFor(user, subject, env) {
+  if (!user || !subject) return null;
+
+  // 1. Query active entitlements for (user, subject) strictly excluding refunded orders
+  const activePackIds = new Set();
+  if (env && env.DB) {
+    const rows = await env.DB.prepare(`
+      SELECT e.pack_id
+      FROM entitlements e
+      LEFT JOIN orders o ON e.order_id = o.id
+      WHERE e.user_id = ? AND e.subject_id = ?
+        AND (o.status IS NULL OR o.status != 'REFUNDED')
+    `).bind(user.user_id, subject.id).all();
+    if (rows && rows.results) {
+      for (const r of rows.results) activePackIds.add(r.pack_id);
+    }
+  } else if (memoryStore && memoryStore.entitlements) {
+    for (const ent of memoryStore.entitlements.values()) {
+      if (ent.user_id === user.user_id && ent.subject_id === subject.id) {
+        const ord = ent.order_id ? memoryStore.orders.get(ent.order_id) : null;
+        if (!ord || ord.status !== 'REFUNDED') {
+          activePackIds.add(ent.pack_id);
+        }
+      }
+    }
+  }
+
+  // 2. Determine highest active tier
+  let tier = 'free';
+  if (activePackIds.has('report_premium')) {
+    tier = 'premium';
+  } else if (activePackIds.has('report_advanced')) {
+    tier = 'advanced';
+  } else if (activePackIds.has('report_basic')) {
+    tier = 'basic';
+  }
+
+  // 3. Deterministic Numerology Calculation
+  const rawDob = subject.dob_enc || subject.dob || '';
+  const dobInfo = parseDobParts(rawDob);
+  const day = dobInfo.day;
+  const month = dobInfo.month;
+  const year = dobInfo.year;
+  const formattedDob = dobInfo.dob;
+
+  function reduceToSingle(num) {
+    let n = Math.abs(num);
+    while (n > 9) {
+      n = String(n).split('').reduce((acc, d) => acc + parseInt(d, 10), 0);
+    }
+    return n === 0 ? 9 : n;
+  }
+
+  const driver = reduceToSingle(day);
+  const totalDobDigits = `${String(day).padStart(2, '0')}${String(month).padStart(2, '0')}${year}`;
+  const conductor = reduceToSingle(totalDobDigits.split('').reduce((acc, d) => acc + parseInt(d, 10), 0));
+
+  const PLANETS = {
+    1: { name: 'Sun', sanskrit: 'Surya', element: 'Water', quality: 'Leadership & Vitality' },
+    2: { name: 'Moon', sanskrit: 'Chandra', element: 'Earth', quality: 'Intuition & Harmony' },
+    3: { name: 'Jupiter', sanskrit: 'Guru', element: 'Wood', quality: 'Wisdom & Expansion' },
+    4: { name: 'Rahu', sanskrit: 'Rahu', element: 'Wood', quality: 'Strategy & Discipline' },
+    5: { name: 'Mercury', sanskrit: 'Budh', element: 'Earth', quality: 'Commerce & Communication' },
+    6: { name: 'Venus', sanskrit: 'Shukra', element: 'Metal', quality: 'Luxury & Aesthetics' },
+    7: { name: 'Ketu', sanskrit: 'Ketu', element: 'Metal', quality: 'Spirituality & Research' },
+    8: { name: 'Saturn', sanskrit: 'Shani', element: 'Earth', quality: 'Structure & Endurance' },
+    9: { name: 'Mars', sanskrit: 'Mangal', element: 'Fire', quality: 'Drive & Courage' }
+  };
+
+  const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  for (const ch of totalDobDigits) {
+    if (ch !== '0') counts[parseInt(ch, 10)]++;
+  }
+
+  const presentDigits = [];
+  const missingDigits = [];
+  for (let n = 1; n <= 9; n++) {
+    if (counts[n] > 0) presentDigits.push(n);
+    else missingDigits.push(n);
+  }
+
+  const PLANES_DEF = [
+    { name: 'Mental Plane', digits: [4, 9, 2], description: 'Memory, cognitive clarity, analytical agility' },
+    { name: 'Emotional Plane', digits: [3, 5, 7], description: 'Compassion, spirituality, relational depth' },
+    { name: 'Practical Plane', digits: [8, 1, 6], description: 'Commercial execution, physical manifestation' },
+    { name: 'Thought Plane', digits: [4, 3, 8], description: 'Planning, structural vision, conceptualization' },
+    { name: 'Will Plane', digits: [9, 5, 1], description: 'Perseverance, stamina, determination' },
+    { name: 'Action Plane', digits: [2, 7, 6], description: 'Execution speed, decisiveness, manifestation' },
+    { name: 'Golden Raj Yoga', digits: [4, 5, 6], description: 'Prosperity axis, leadership compounding' },
+    { name: 'Silver Raj Yoga', digits: [2, 5, 8], description: 'Earth stability axis, property & endurance' }
+  ];
+
+  const planes = PLANES_DEF.map(pl => {
+    const presentCount = pl.digits.filter(d => counts[d] > 0).length;
+    const percentage = Math.round((presentCount / pl.digits.length) * 100);
+    return {
+      name: pl.name,
+      digits: pl.digits,
+      presentCount,
+      percentage,
+      status: percentage === 100 ? 'COMPLETE' : percentage > 33 ? 'ACTIVE' : 'DORMANT'
+    };
+  });
+
+  const ELEMENT_MAP = {
+    Wood: [3, 4],
+    Fire: [9],
+    Earth: [2, 5, 8],
+    Metal: [6, 7],
+    Water: [1]
+  };
+  const elements = {};
+  for (const [elName, elDigits] of Object.entries(ELEMENT_MAP)) {
+    const cnt = elDigits.reduce((acc, d) => acc + counts[d], 0);
+    elements[elName] = { count: cnt, present: cnt > 0, digits: elDigits };
+  }
+
+  const hasBasic = tier === 'basic' || tier === 'advanced' || tier === 'premium';
+  const hasAdvanced = tier === 'advanced' || tier === 'premium';
+  const hasPremium = tier === 'premium';
+
+  // Section 1: Grid (always accessible, missing shown strictly as locked marks '🔒')
+  const gridCells = [4, 9, 2, 3, 5, 7, 8, 1, 6].map(num => {
+    const cnt = counts[num];
+    const p = PLANETS[num];
+    if (cnt > 0) {
+      return {
+        digit: num,
+        count: cnt,
+        status: 'present',
+        planet: p.name,
+        element: p.element,
+        quality: p.quality
+      };
+    } else {
+      return {
+        digit: num,
+        count: 0,
+        status: 'locked',
+        mark: '🔒',
+        element: p.element,
+        lockReason: 'Missing digit karmic analysis is unlocked in the Premium report.'
+      };
+    }
+  });
+
+  // Section 2: Enabled Digits
+  const enabledDigitsSummary = presentDigits.map(d => ({
+    digit: d,
+    count: counts[d],
+    planet: PLANETS[d].name,
+    element: PLANETS[d].element,
+    summary: `Active vibration ×${counts[d]} (${PLANETS[d].name}). Governs ${PLANETS[d].quality}.`
+  }));
+
+  // Section 3: Element Balancing (Basic ₹199, 3 pages)
+  let elementBalancingSection;
+  if (hasBasic) {
+    elementBalancingSection = {
+      unlocked: true,
+      pageCount: 3,
+      elements: Object.entries(elements).map(([name, data]) => ({
+        name,
+        count: data.count,
+        status: data.count === 0 ? 'DEFICIENT' : data.count > 2 ? 'SURPLUS' : 'BALANCED',
+        recommendation: data.count === 0
+          ? `Incorporate subtle ${name} element resonance in your environment.`
+          : data.count > 2
+            ? `Gently ground excess ${name} vibration with complementary lifestyle pacing.`
+            : `Harmonious ${name} equilibrium maintained.`
+      })),
+      rajYogas: planes.filter(p => p.name.includes('Raj Yoga')),
+      balancingGuidance: 'Elemental balancing establishes the foundational stability of your chart, resolving subconscious friction between cognitive drive and emotional pacing.'
+    };
+  } else {
+    elementBalancingSection = {
+      unlocked: false,
+      pageCount: 3,
+      lockReason: 'Element Balancing and Elemental Raj Yogas are available in the Basic (3 pages), Advanced (12 pages), and Premium (32 pages) reports.',
+      upgradePack: 'report_basic',
+      minTier: 'basic',
+      priceInr: 199
+    };
+  }
+
+  // Section 4: Enabled Numbers in Depth (Advanced ₹510, 12 pages)
+  let enabledNumbersInDepthSection;
+  if (hasAdvanced) {
+    enabledNumbersInDepthSection = {
+      unlocked: true,
+      pageCount: 12,
+      repeatingFrequencies: presentDigits.filter(d => counts[d] > 1).map(d => ({
+        digit: d,
+        frequency: counts[d],
+        archetype: PLANETS[d].name,
+        intensity: counts[d] >= 3 ? 'HIGH INTENSITY SPIKE' : 'AMPLIFIED MODERATE',
+        interpretation: `Repeating frequency ×${counts[d]} intensifies ${PLANETS[d].quality}. Channeling this into systematic routines prevents executive burnout.`
+      })),
+      archetypeSynergies: {
+        driverToConductor: `Driver ${driver} (${PLANETS[driver].name}) and Conductor ${conductor} (${PLANETS[conductor].name}) create a ${driver === conductor ? 'focused singular' : 'dynamic dual'} vibrational pattern.`,
+        planeEquilibrium: planes.filter(p => p.status === 'COMPLETE').map(p => p.name)
+      },
+      actionableHarmonization: 'Align high-frequency digits with designated peak focus blocks in your weekly calendar.'
+    };
+  } else {
+    enabledNumbersInDepthSection = {
+      unlocked: false,
+      pageCount: 12,
+      lockReason: 'Enabled Numbers in Depth, repeating frequency calibrations, and archetype synergies are available in the Advanced (12 pages) and Premium (32 pages) reports.',
+      upgradePack: 'report_advanced',
+      minTier: 'advanced',
+      priceInr: 510
+    };
+  }
+
+  // Section 5: Missing Numbers in Depth (Premium ₹1,050, 32 pages)
+  let missingNumbersInDepthSection;
+  if (hasPremium) {
+    missingNumbersInDepthSection = {
+      unlocked: true,
+      pageCount: 32,
+      karmicVoids: missingDigits.map(d => ({
+        digit: d,
+        planet: PLANETS[d].name,
+        element: PLANETS[d].element,
+        voidDescription: `Karmic void in ${PLANETS[d].quality}. Subconscious hesitation in areas governed by ${PLANETS[d].name}.`,
+        vibrationalBridge: `Bridge this void by partnering with individuals carrying strong ${d} vibrations and adopting structured cognitive habits.`
+      }))
+    };
+  } else {
+    missingNumbersInDepthSection = {
+      unlocked: false,
+      pageCount: 32,
+      lockReason: 'In-depth missing number karmic void activations are available in the Premium Sovereign Blueprint (32 pages).',
+      upgradePack: 'report_premium',
+      minTier: 'premium',
+      priceInr: 1050
+    };
+  }
+
+  // Section 6: Remedies (Premium ₹1,050, 32 pages)
+  let remediesSection;
+  if (hasPremium) {
+    remediesSection = {
+      unlocked: true,
+      pageCount: 32,
+      protocols: [
+        { layer: 'Color Harmonization', advice: `Prioritize ${PLANETS[driver].name} and ${PLANETS[conductor].name} resonant hues without sharp contrasting clashes.` },
+        { layer: 'Directional Spatial Alignment', advice: `Orient primary study/work desk toward ${driver % 2 === 0 ? 'East / North-East' : 'North / North-West'} for mental coherence.` },
+        { layer: 'Habit & Rhythm Cadence', advice: 'Synchronize major financial decisions during your personal auspicious planetary days.' }
+      ]
+    };
+  } else {
+    remediesSection = {
+      unlocked: false,
+      pageCount: 32,
+      lockReason: 'Authentic 7-layer remedial protocols and directional spatial alignment are available in the Premium Sovereign Blueprint (32 pages).',
+      upgradePack: 'report_premium',
+      minTier: 'premium',
+      priceInr: 1050
+    };
+  }
+
+  // Section 7: Predictions (Premium ₹1,050, 32 pages)
+  let predictionsSection;
+  if (hasPremium) {
+    predictionsSection = {
+      unlocked: true,
+      pageCount: 32,
+      dashaTimeline: {
+        currentCycle: `Personal Year ${reduceToSingle(day + month + new Date().getFullYear())}`,
+        tenYearRadar: '10-Year macro planetary dasha radar indicates steady expansion with focus on structural consolidation.'
+      },
+      pinnacleCycles: [
+        { stage: 'Pinnacle 1 (Ages 0-32)', rulingDigit: reduceToSingle(day + month) },
+        { stage: 'Pinnacle 2 (Ages 33-41)', rulingDigit: reduceToSingle(day + year) },
+        { stage: 'Pinnacle 3 (Ages 42-50)', rulingDigit: reduceToSingle(reduceToSingle(day + month) + reduceToSingle(day + year)) },
+        { stage: 'Pinnacle 4 (Ages 51+)', rulingDigit: reduceToSingle(month + year) }
+      ]
+    };
+  } else {
+    predictionsSection = {
+      unlocked: false,
+      pageCount: 32,
+      lockReason: '10-Year Mahadasha timelines, Personal Year cycles, and 4-stage pinnacle radar are available in the Premium Sovereign Blueprint (32 pages).',
+      upgradePack: 'report_premium',
+      minTier: 'premium',
+      priceInr: 1050
+    };
+  }
+
+  return {
+    user: {
+      userId: user.user_id,
+      phone: user.phone || null,
+      email: user.email || null
+    },
+    subject: {
+      id: subject.id,
+      name: subject.name,
+      dob: formattedDob,
+      created_at: subject.created_at
+    },
+    tier,
+    entitlements: Array.from(activePackIds),
+    calculation: {
+      driver,
+      conductor,
+      driverPlanet: PLANETS[driver].name,
+      conductorPlanet: PLANETS[conductor].name,
+      counts,
+      presentDigits,
+      missingDigits,
+      planes
+    },
+    sections: {
+      grid: {
+        unlocked: true,
+        cells: gridCells
+      },
+      enabledDigits: {
+        unlocked: true,
+        items: enabledDigitsSummary
+      },
+      elementBalancing: elementBalancingSection,
+      enabledNumbersInDepth: enabledNumbersInDepthSection,
+      missingNumbersInDepth: missingNumbersInDepthSection,
+      remedies: remediesSection,
+      predictions: predictionsSection
+    }
+  };
+}
+
+export { viewFor, parseDobParts };
 export default {
   async fetch(request, env) {
         const url = new URL(request.url);
@@ -1287,6 +1666,13 @@ export default {
         if (env.DB) {
           let subject = await env.DB.prepare('SELECT id FROM subjects WHERE user_id = ? AND dob_hash = ?').bind(user.user_id, dobHash).first();
           if (!subject) {
+            const countRow = await env.DB.prepare('SELECT COUNT(*) as cnt FROM subjects WHERE user_id = ?').bind(user.user_id).first();
+            if (countRow && countRow.cnt >= 10) {
+              return new Response(JSON.stringify({
+                success: false,
+                error: 'Maximum limit of 10 subjects per account reached.'
+              }), { status: 400, headers: corsHeaders });
+            }
             subjectId = 'sbj_' + now + '_' + getRandomHex(4);
             await env.DB.prepare(
               'INSERT INTO subjects (id, user_id, name, dob_hash, dob_enc, created_at) VALUES (?, ?, ?, ?, ?, ?)'
@@ -1295,8 +1681,26 @@ export default {
             subjectId = subject.id;
           }
         } else {
-          subjectId = 'sbj_' + now + '_' + getRandomHex(4);
-          memoryStore.subjects.set(subjectId, { id: subjectId, user_id: user.user_id, name: customerName, dob_hash: dobHash, created_at: now });
+          let userSubjCount = 0;
+          let existingSubj = null;
+          for (const s of memoryStore.subjects.values()) {
+            if (s.user_id === user.user_id) {
+              userSubjCount++;
+              if (s.dob_hash === dobHash) existingSubj = s;
+            }
+          }
+          if (existingSubj) {
+            subjectId = existingSubj.id;
+          } else {
+            if (userSubjCount >= 10) {
+              return new Response(JSON.stringify({
+                success: false,
+                error: 'Maximum limit of 10 subjects per account reached.'
+              }), { status: 400, headers: corsHeaders });
+            }
+            subjectId = 'sbj_' + now + '_' + getRandomHex(4);
+            memoryStore.subjects.set(subjectId, { id: subjectId, user_id: user.user_id, name: customerName, dob_hash: dobHash, dob_enc: customerDob, created_at: now });
+          }
         }
       } else {
         return new Response(JSON.stringify({
@@ -1753,6 +2157,214 @@ export default {
       }), { status: 200, headers: corsHeaders });
     }
 
+    // 7g. ROUTE: SUBJECTS API (/api/v1/subjects)
+    if (url.pathname === '/api/v1/subjects') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Cookie'
+      };
+
+      if (request.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+
+      const user = await authenticateUser(request, env);
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'Unauthorized. Please sign in.' }), { status: 401, headers: corsHeaders });
+      }
+
+      if (request.method === 'GET') {
+        let subjects = [];
+        if (env.DB) {
+          const rows = await env.DB.prepare('SELECT id, name, dob_enc as dob, created_at FROM subjects WHERE user_id = ? ORDER BY created_at ASC').bind(user.user_id).all();
+          subjects = (rows && rows.results) || [];
+        } else {
+          for (const s of memoryStore.subjects.values()) {
+            if (s.user_id === user.user_id) {
+              subjects.push({ id: s.id, name: s.name, dob: s.dob_enc || s.dob, created_at: s.created_at });
+            }
+          }
+        }
+        return new Response(JSON.stringify({ subjects }), { status: 200, headers: corsHeaders });
+      }
+
+      if (request.method === 'POST') {
+        const body = await request.json().catch(() => ({}));
+
+        // Statutory DPDP 2023 Consent Check
+        if (body.consent !== true) {
+          return new Response(JSON.stringify({
+            error: 'Statutory DPDP 2023 consent is required to process personal birth details.'
+          }), { status: 400, headers: corsHeaders });
+        }
+
+        const name = (body.name || '').trim();
+        const dob = (body.dob || '').trim();
+        if (!name || !dob) {
+          return new Response(JSON.stringify({
+            error: 'name and dob are required.'
+          }), { status: 400, headers: corsHeaders });
+        }
+
+        const dobInfo = parseDobParts(dob);
+
+        // Cap subjects at 10 per account
+        if (env.DB) {
+          const countRow = await env.DB.prepare('SELECT COUNT(*) as cnt FROM subjects WHERE user_id = ?').bind(user.user_id).first();
+          if (countRow && countRow.cnt >= 10) {
+            return new Response(JSON.stringify({
+              error: 'Maximum limit of 10 subjects per account reached.'
+            }), { status: 400, headers: corsHeaders });
+          }
+        } else {
+          let count = 0;
+          for (const s of memoryStore.subjects.values()) {
+            if (s.user_id === user.user_id) count++;
+          }
+          if (count >= 10) {
+            return new Response(JSON.stringify({
+              error: 'Maximum limit of 10 subjects per account reached.'
+            }), { status: 400, headers: corsHeaders });
+          }
+        }
+
+        const dobHash = await sha256Hex(dobInfo.dob);
+        const now = Date.now();
+        const subjectId = 'sbj_' + now + '_' + getRandomHex(4);
+        const consentId = 'cns_' + now + '_' + getRandomHex(4);
+
+        if (env.DB) {
+          await env.DB.prepare(
+            'INSERT INTO subjects (id, user_id, name, dob_hash, dob_enc, created_at) VALUES (?, ?, ?, ?, ?, ?)'
+          ).bind(subjectId, user.user_id, name, dobHash, dobInfo.dob, now).run();
+
+          await env.DB.prepare(
+            'INSERT INTO consents (id, user_id, purpose, text_version, granted_at) VALUES (?, ?, ?, ?, ?)'
+          ).bind(consentId, user.user_id, 'report_processing_dpdp_2023', 'v1.0_2026', now).run();
+        } else {
+          memoryStore.subjects.set(subjectId, {
+            id: subjectId,
+            user_id: user.user_id,
+            name,
+            dob_hash: dobHash,
+            dob_enc: dobInfo.dob,
+            created_at: now
+          });
+          memoryStore.consents = memoryStore.consents || new Map();
+          memoryStore.consents.set(consentId, {
+            id: consentId,
+            user_id: user.user_id,
+            purpose: 'report_processing_dpdp_2023',
+            text_version: 'v1.0_2026',
+            granted_at: now
+          });
+        }
+
+        return new Response(JSON.stringify({
+          success: true,
+          subject: {
+            id: subjectId,
+            name,
+            dob: dobInfo.dob,
+            created_at: now
+          }
+        }), { status: 201, headers: corsHeaders });
+      }
+
+      return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: corsHeaders });
+    }
+
+    // 7h. ROUTE: DASHBOARD VIEW API (/api/v1/dashboard/view)
+    if (url.pathname === '/api/v1/dashboard/view' && request.method === 'GET') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://numerosvision.com',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Cookie'
+      };
+
+      const user = await authenticateUser(request, env);
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'Unauthorized. Please sign in.' }), { status: 401, headers: corsHeaders });
+      }
+
+      let subjects = [];
+      if (env.DB) {
+        const rows = await env.DB.prepare('SELECT id, name, dob_enc as dob, created_at FROM subjects WHERE user_id = ? ORDER BY created_at ASC').bind(user.user_id).all();
+        subjects = (rows && rows.results) || [];
+      } else {
+        for (const s of memoryStore.subjects.values()) {
+          if (s.user_id === user.user_id) {
+            subjects.push({ id: s.id, name: s.name, dob: s.dob_enc || s.dob, created_at: s.created_at });
+          }
+        }
+      }
+
+      const reqSubjId = (url.searchParams.get('subjectId') || '').trim();
+      let activeSubject = null;
+      if (reqSubjId) {
+        activeSubject = subjects.find(s => s.id === reqSubjId) || null;
+      }
+      if (!activeSubject && subjects.length > 0) {
+        activeSubject = subjects[0];
+      }
+
+      let viewData = null;
+      if (activeSubject) {
+        viewData = await viewFor(user, activeSubject, env);
+      }
+
+      // Charm AI credit balance
+      let charmCredits = 0;
+      if (env.DB) {
+        const credRow = await env.DB.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').bind(user.user_id).first();
+        charmCredits = (credRow && credRow.bal) ? credRow.bal : 0;
+      } else if (memoryStore && memoryStore.creditLedger) {
+        for (const entry of memoryStore.creditLedger.values()) {
+          if (entry.user_id === user.user_id) charmCredits += (entry.delta || 0);
+        }
+      }
+
+      // Invoices
+      let invoices = [];
+      if (env.DB) {
+        const invRows = await env.DB.prepare('SELECT id, invoice_number, service_title, amount_paise, currency, status, created_at FROM invoices WHERE user_id = ? ORDER BY created_at DESC').bind(user.user_id).all();
+        invoices = (invRows && invRows.results) || [];
+      } else if (memoryStore && memoryStore.invoices) {
+        for (const inv of memoryStore.invoices.values()) {
+          if (inv.user_id === user.user_id) invoices.push(inv);
+        }
+      }
+
+      // Orders
+      let orders = [];
+      if (env.DB) {
+        const ordRows = await env.DB.prepare('SELECT id, rzp_order_id, pack_id, subject_id, amount_paise, status, created_at FROM orders WHERE user_id = ? ORDER BY created_at DESC').bind(user.user_id).all();
+        orders = (ordRows && ordRows.results) || [];
+      } else if (memoryStore && memoryStore.orders) {
+        for (const ord of memoryStore.orders.values()) {
+          if (ord.user_id === user.user_id) orders.push(ord);
+        }
+      }
+
+      return new Response(JSON.stringify({
+        user: {
+          userId: user.user_id,
+          phone: user.phone || null,
+          email: user.email || null,
+          name: user.name || (activeSubject ? activeSubject.name : 'Member')
+        },
+        subjects,
+        activeSubject: activeSubject ? { id: activeSubject.id, name: activeSubject.name, dob: activeSubject.dob_enc || activeSubject.dob } : null,
+        subjectCount: subjects.length,
+        charmCredits,
+        view: viewData,
+        invoices,
+        orders
+      }), { status: 200, headers: corsHeaders });
+    }
+
+
     // 7e. ROUTE: RAZORPAY WEBHOOK (/api/v1/payments/webhook & legacy /api/webhook)
     if ((url.pathname === '/api/v1/payments/webhook' || url.pathname === '/api/webhook') && request.method === 'POST') {
       const corsHeaders = {
@@ -1910,9 +2522,39 @@ export default {
         if (order && pmt) {
           const refId = 'ref_' + now + '_' + getRandomHex(4);
           const refundAmount = refundEntity.amount || 0;
+          const isFullRefund = refundAmount >= pmt.amount_paise;
+
+          if (!isFullRefund) {
+            // Partial refund: do NOT auto-revoke; flag in audit_log for manual review
+            if (env.DB) {
+              await env.DB.prepare(
+                "INSERT INTO refunds (id, payment_id, order_id, user_id, rzp_refund_id, amount_paise, reason, status, created_at, processed_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'PARTIAL_PROCESSED', ?, ?)"
+              ).bind(refId, pmt.id, order.id, order.user_id, refundEntity.id, refundAmount, refundEntity.notes?.reason || 'user_request', now, now).run();
+
+              await env.DB.prepare(
+                "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'webhook', 'partial_refund_manual_review_required', 'refunds', ?, ?, ?)"
+              ).bind('aud_' + now + '_' + getRandomHex(4), refId, JSON.stringify({ orderId: order.id, paymentId: pmt.id, paymentAmount: pmt.amount_paise, refundAmount, manual_review_required: true }), now).run();
+            } else {
+              memoryStore.refunds = memoryStore.refunds || new Map();
+              memoryStore.refunds.set(refId, {
+                id: refId,
+                payment_id: pmt.id,
+                order_id: order.id,
+                amount_paise: refundAmount,
+                status: 'PARTIAL_PROCESSED'
+              });
+              memoryStore.auditLog = memoryStore.auditLog || new Map();
+              memoryStore.auditLog.set('aud_' + now, {
+                action: 'partial_refund_manual_review_required',
+                resource_id: refId,
+                details: { orderId: order.id, manual_review_required: true }
+              });
+            }
+            return new Response(JSON.stringify({ status: 'success', message: 'partial_refund_flagged_for_manual_review' }), { status: 200, headers: corsHeaders });
+          }
 
           if (env.DB) {
-            // 1. Record refund in refunds table
+            // 1. Record full refund in refunds table
             await env.DB.prepare(
               "INSERT INTO refunds (id, payment_id, order_id, user_id, rzp_refund_id, amount_paise, reason, status, created_at, processed_at) VALUES (?, ?, ?, ?, ?, ?, ?, 'PROCESSED', ?, ?)"
             ).bind(refId, pmt.id, order.id, order.user_id, refundEntity.id, refundAmount, refundEntity.notes?.reason || 'user_request', now, now).run();

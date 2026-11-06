@@ -52,7 +52,7 @@ async function runTests() {
     if (urlStr.includes('api.razorpay.com/v1/orders')) {
       const body = JSON.parse(options.body || '{}');
       return new Response(JSON.stringify({
-        id: 'order_rzp_mock_' + Date.now(),
+        id: 'order_rzp_mock_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
         entity: 'order',
         amount: body.amount,
         currency: body.currency || 'INR',

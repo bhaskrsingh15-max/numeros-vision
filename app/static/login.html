@@ -499,7 +499,7 @@
 
       <div class="auth-footer-links">
         <div>Don't have an account? <a href="/signup/">Create Free Account</a></div>
-        <div style="margin-top:6px;"><a href="/dashboard/">Continue to Sample Dashboard Preview →</a></div>
+        <div style="margin-top:6px;"><a href="/sample.html">View Sample Report Excerpt →</a></div>
       </div>
     </div>
   
@@ -703,7 +703,7 @@
         }
 
         closeGoogleConnectModal();
-        window.location.href = (data && data.redirect_url) ? data.redirect_url : '/dashboard/';
+        window.location.href = getLoginRedirectUrl(data && data.redirect_url);
       } catch (err) {
         if (btn) {
           btn.disabled = false;
@@ -711,6 +711,16 @@
         }
         alert('Google Sign-In failed: ' + err.message);
       }
+    }
+
+    
+    function getLoginRedirectUrl(defaultUrl) {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const returnTo = params.get('returnTo');
+        if (returnTo && returnTo.startsWith('/')) return returnTo;
+      } catch (e) {}
+      return defaultUrl || '/dashboard/';
     }
 
     async function handleGoogleIdentityCredential(response) {
@@ -742,7 +752,7 @@
           if (synced.dob) localStorage.setItem('nv_user_dob', synced.dob);
         }
 
-        window.location.href = data.redirect_url || '/dashboard/';
+        window.location.href = getLoginRedirectUrl(data && data.redirect_url);
       } catch (err) {
         alert('Google Sign-In error: ' + err.message);
       }
@@ -799,7 +809,7 @@
         if (data.role === 'master_practitioner') {
           window.location.href = '/practitioner';
         } else {
-          window.location.href = data.redirect_url || '/dashboard/';
+          window.location.href = getLoginRedirectUrl(data && data.redirect_url);
         }
       } catch (err) {
         btn.disabled = false;
@@ -908,7 +918,7 @@
           if (synced.name) localStorage.setItem('nv_user_name', synced.name);
           if (synced.dob) localStorage.setItem('nv_user_dob', synced.dob);
         }
-        window.location.href = data.redirect_url || '/dashboard/';
+        window.location.href = getLoginRedirectUrl(data && data.redirect_url);
       } else {
         btn.disabled = false;
         btn.innerHTML = 'Verify OTP &amp; Sign In ➔';
