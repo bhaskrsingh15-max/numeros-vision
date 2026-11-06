@@ -233,6 +233,13 @@ src_redirects = os.path.join(STATIC_SRC, "_redirects")
 if os.path.exists(src_redirects):
     shutil.copy2(src_redirects, os.path.join(DIST_DIR, "_redirects"))
 
+# 6. Synchronize isolated pdf_service directory
+try:
+    from scripts.sync_pdf_service import sync_pdf_service
+    sync_pdf_service()
+except Exception as e:
+    print(f"Warning: could not sync pdf_service: {e}")
+
 total_files = sum(len(files) for _, _, files in os.walk(DIST_DIR))
 print(f"Successfully generated canonical Cloudflare Pages build in {DIST_DIR}")
 print(f"Total physical files generated: {total_files}")

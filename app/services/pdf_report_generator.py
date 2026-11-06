@@ -33,7 +33,8 @@ import io
 import time
 import math
 import hashlib
-from typing import Dict, Any, List, Optional, Tuple
+import datetime
+from typing import Dict, Any, List, Optional, Tuple, Union
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
@@ -370,7 +371,9 @@ def run_deterministic_calculation(
     tier: str = "basic",
     mobile_number: Optional[str] = None,
     vehicle_number: Optional[str] = None,
-    property_number: Optional[str] = None
+    property_number: Optional[str] = None,
+    purchase_date: Optional[Union[str, datetime.date, datetime.datetime]] = None,
+    purchase_year: Optional[int] = None
 ) -> Dict[str, Any]:
     clean_name = name.strip() or "Seeker"
 
@@ -405,8 +408,25 @@ def run_deterministic_calculation(
     kua = 10 - y_sum
     if kua <= 0: kua += 9
 
-    # 5. Personal Year 2026: (Day + Month + 2026) -> (28->1) + (11->2) + (2026->1) = 4
-    py_sum = driver + (sum(int(d) for d in str(month))) + (sum(int(d) for d in str(2026)))
+    # Resolve purchase / target year dynamically from purchase_date / purchase_year / datetime.now()
+    if purchase_year:
+        target_year = int(purchase_year)
+    elif purchase_date:
+        if isinstance(purchase_date, (datetime.date, datetime.datetime)):
+            target_year = purchase_date.year
+        elif isinstance(purchase_date, str):
+            clean_date = purchase_date.strip()[:10]
+            try:
+                target_year = datetime.date.fromisoformat(clean_date).year
+            except Exception:
+                target_year = datetime.datetime.now().year
+        else:
+            target_year = datetime.datetime.now().year
+    else:
+        target_year = datetime.datetime.now().year
+
+    # 5. Personal Year: (Day + Month + target_year)
+    py_sum = driver + (sum(int(d) for d in str(month))) + (sum(int(d) for d in str(target_year)))
     while py_sum > 9:
         py_sum = sum(int(d) for d in str(py_sum))
     personal_year = py_sum
@@ -459,12 +479,17 @@ def run_deterministic_calculation(
     property_res = analyze_property_number(property_number, driver, conductor_root) if property_number else None
 
     # 8. Annual 12-Month Matrix & Blessing Years
-    current_year = 2026
+    current_year = target_year
     current_age = max(18, current_year - year)
     annual_matrix = generate_detailed_annual_matrix(day, month, current_year)
     blessing_data = calculate_blessing_years(day, month, year, current_age)
 
     return {
+        "current_year": current_year,
+        "target_year": current_year,
+        "personal_year": personal_year,
+        "personal_year_theme": annual_matrix.get("personal_year_theme") or PERSONAL_YEAR_INTERPRETATIONS.get(personal_year, {}).get("theme", "Foundation & Structural Infrastructure"),
+        "personal_year_label": f"Personal Year {personal_year}",
         "annual_matrix": annual_matrix,
         "blessing_years": blessing_data,
         "mobile_number": mobile_number,
@@ -572,7 +597,8 @@ class NumerosPdfReportBuilder:
             subtitle = "High-Growth Vocations, Commercial Timing & Wealth Compounding Radar"
             badge = "ADVANCED MASTER DOSSIER · CAREER & WEALTH (12 PAGES · ₹510)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · ENTERPRISE ROADMAP (32 PAGES · ₹1,050)"
             sec3 = "Section 3: High-Growth Enterprise Vocations & Programmatic Scale"
-            sec4 = "Section 4: Commercial Timing Corridors & 5-Year Numerology Dasha Radar (2026–2030)"
+            sec4 = f"Section 4: Commercial Timing Corridors & 5-Year Numerology Dasha Radar ({self.data.get('current_year', datetime.datetime.now().year)}–{self.data.get('current_year', datetime.datetime.now().year)+4})"
+        
             sec5 = "Section 5: Strategic Reputation, Co-Founder Matching & Corporate Naming"
         elif t == "health_vitality":
             title = "HEALTH, VITALITY & AYURVEDIC CHRONOBIOLOGY DOSSIER"
@@ -1184,7 +1210,7 @@ class NumerosPdfReportBuilder:
             [Paragraph("Conductor (Bhagyank)", s['TableCell']), Paragraph("<b>4 · Rahu (North Node)</b>", s['TableCellCenter']), Paragraph("Governs your ultimate destiny path. Pulls you into complex, high-technology, analytical, and revolutionary systems where unconventional solutions prevail.", s['TableCell'])],
             [Paragraph("Calling Name Vibration", s['TableCell']), Paragraph("<b>32 → 5 · Mercury</b>", s['TableCellCenter']), Paragraph("'The Star of the Lion'. Bestows intellectual agility, commercial charisma, negotiation power, and rapid social/business mobility.", s['TableCell'])],
             [Paragraph("Kua Directional Vector", s['TableCell']), Paragraph("<b>1 · Water (East Group)</b>", s['TableCellCenter']), Paragraph("Aligns with North for career acceleration and Southeast for sustained wealth accumulation.", s['TableCell'])],
-            [Paragraph("Personal Year 2026", s['TableCell']), Paragraph("<b>4 · Foundation Phase</b>", s['TableCellCenter']), Paragraph("A rigorous restructuring cycle. Perfect for formalizing patents, scaling platforms, and locking in written equity agreements.", s['TableCell'])],
+            [Paragraph(f"Personal Year {d.get('current_year', 2026)}", s['TableCell']), Paragraph(f"<b>{d.get('personal_year', 4)} · {d.get('personal_year_theme', 'Foundation Phase')}</b>", s['TableCellCenter']), Paragraph("A focused developmental cycle. Perfect for formalizing structures, scaling platforms, and locking in strategic agreements.", s['TableCell'])],
         ]
         t_p3 = Table(p3_table, colWidths=[120, 116, 280])
         t_p3.setStyle(TableStyle([
@@ -1785,13 +1811,13 @@ class NumerosPdfReportBuilder:
              ]),
 
             # Page 15
-            ("Section 13: 10-Year Macro Planetary Timing Radar (2026–2035 Horizon)",
-             f"Looking across the coming decade (2026 to 2035), <b>{d['seeker_name']}</b> transitions through a powerful evolutionary cycle. 2026 is your foundation-locking phase (Personal Year 4). 2027 initiates a high-velocity 3-year commercial expansion window (Personal Years 5, 6, 7). By 2030 (Personal Year 8), you reach a major financial harvest and enterprise culmination, followed by 2031 (Personal Year 9) which marks institutional restructuring. In 2032, a brand-new 9-year cycle begins at Personal Year 1, elevating your career into sovereign board advisory, enterprise equity ownership, and major capital allocation.",
+            (f"Section 13: 10-Year Macro Planetary Timing Radar ({d.get('current_year', 2026)}–{d.get('current_year', 2026)+9} Horizon)",
+             f"Looking across the coming decade ({d.get('current_year', 2026)} to {d.get('current_year', 2026)+9}), <b>{d['seeker_name']}</b> transitions through a powerful evolutionary cycle. {d.get('current_year', 2026)} is your foundation-locking phase (Personal Year {d.get('personal_year', 4)}: {d.get('personal_year_theme', 'Foundation')}). {d.get('current_year', 2026)+1} initiates a high-velocity 3-year commercial expansion window. By {d.get('current_year', 2026)+4}, you reach a major financial harvest and enterprise culmination, followed by institutional restructuring. In {d.get('current_year', 2026)+6}, a brand-new sovereign cycle begins, elevating your career into executive board advisory, enterprise equity ownership, and major capital allocation.",
              [
-                 ("2026–2027 Corridor", "Operational hardening followed by explosive market velocity and tech launch"),
-                 ("2028–2029 Corridor", "Brand prestige consolidation, institutional IP protection, and team scaling"),
-                 ("2030 Milestone", "Peak karmic financial harvest (Saturn 8) — optimal year for major enterprise liquidity"),
-                 ("2032–2035 Era", "New 9-year sovereign cycle — board directorships, venture investing, and legacy assets")
+                 (f"{d.get('current_year', 2026)}–{d.get('current_year', 2026)+1} Corridor", "Operational hardening followed by explosive market velocity and tech launch"),
+                 (f"{d.get('current_year', 2026)+2}–{d.get('current_year', 2026)+3} Corridor", "Brand prestige consolidation, institutional IP protection, and team scaling"),
+                 (f"{d.get('current_year', 2026)+4} Milestone", "Peak karmic financial harvest — optimal year for major enterprise liquidity"),
+                 (f"{d.get('current_year', 2026)+6}–{d.get('current_year', 2026)+9} Era", "New 9-year sovereign cycle — board directorships, venture investing, and legacy assets")
              ]),
 
             # Page 16
@@ -1834,22 +1860,22 @@ class NumerosPdfReportBuilder:
                  ("Capital Allocation Rule", "Reinvest in backend software engineering rather than superficial administrative overhead")
              ]),
 
-            # Page 20
-            ("Section 18: Month-by-Month Auspicious Timing & Monthly Remedies Radar",
-             f"Timing is the bridge between celestial potential and earthly manifest reality. In authentic numerological chronobiology, every calendar year is governed by a Personal Year cycle, which further subdivides into 12 Personal Month corridors. Below is your complete 12-month tactical calendar for 2026 (Personal Year {d.get('personal_year', 4)}: {d.get('personal_year_theme', 'Foundation')}). For each month, your governing planet, high-velocity auspicious dates, and specific Vedic remedies are mapped to optimize decisions and shield against friction.",
+            # Page 20: 12-Month Tactical Roadmap computed from purchase date / target year
+            (f"Section 18: Month-by-Month Auspicious Timing & Monthly Remedies Radar ({d.get('current_year', 2026)})",
+             f"Timing is the bridge between celestial potential and earthly manifest reality. In authentic numerological chronobiology, every calendar year is governed by a Personal Year cycle, which further subdivides into 12 Personal Month corridors. Below is your complete 12-month tactical calendar for {d.get('current_year', 2026)} (Personal Year {d.get('personal_year', 4)}: {d.get('personal_year_theme', 'Foundation')}). For each month, your governing planet, high-velocity auspicious dates, and specific Vedic remedies are mapped to optimize decisions and shield against friction.",
              [
-                 ("Jan 2026 (Personal Month 5 · Mercury)", "Auspicious: 1, 5, 14, 23 | Remedy: Wear emerald green on Wednesdays; chant Om Budhaya Namah 108 times for commercial agility"),
-                 ("Feb 2026 (Personal Month 6 · Venus)", "Auspicious: 6, 15, 24, 28 | Remedy: Apply pure natural sandalwood attar; invest in brand aesthetics, diplomacy, and team welfare"),
-                 ("Mar 2026 (Personal Month 7 · Ketu)", "Auspicious: 7, 16, 25 | Remedy: Take solitary contemplative walks; conduct deep intellectual audits and proprietary research"),
-                 ("Apr 2026 (Personal Month 8 · Saturn)", "Auspicious: 8, 17, 26 | Remedy: Light a mustard oil diya on Saturdays; maintain patience with long-term capital assets and contracts"),
-                 ("May 2026 (Personal Month 9 · Mars)", "Auspicious: 9, 18, 27 | Remedy: Morning physical exercise; eliminate pending obligations; avoid emotional confrontations"),
-                 ("Jun 2026 (Personal Month 1 · Sun)", "Auspicious: 1, 10, 19, 28 | Remedy: Offer water to morning Surya in a copper lota; launch new initiatives and executive proposals"),
-                 ("Jul 2026 (Personal Month 2 · Moon)", "Auspicious: 2, 7, 11, 20 | Remedy: Drink water from a silver cup; prioritize empathy, client relationships, and quiet reflection"),
-                 ("Aug 2026 (Personal Month 3 · Jupiter)", "Auspicious: 3, 12, 21, 30 | Remedy: 40-day haldi water bath ritual; consult trusted legal advisors before signing key pacts"),
-                 ("Sep 2026 (Personal Month 4 · Rahu)", "Auspicious: 1, 10, 19, 23 | Remedy: Keep an electric camphor diffuser in the SE corner; double-check software architecture details"),
-                 ("Oct 2026 (Personal Month 5 · Mercury)", "Auspicious: 5, 14, 23, 27 | Remedy: Distribute green moong daal to birds on Wednesdays; execute digital marketing and media scaling"),
-                 ("Nov 2026 (Personal Month 6 · Venus)", "Auspicious: 6, 15, 24, 28 | Remedy: Decorate living and work spaces with fresh fragrant white flowers; host strategic partnership dinners"),
-                 ("Dec 2026 (Personal Month 7 · Ketu)", "Auspicious: 7, 16, 25 | Remedy: Review annual balance sheets; meditate on long-term sovereign legacy and release completed cycles")
+                 (f"Jan {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 1 - 1) % 9 + 1} · Mercury)", "Auspicious: 1, 5, 14, 23 | Remedy: Wear emerald green on Wednesdays; chant Om Budhaya Namah 108 times for commercial agility"),
+                 (f"Feb {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 2 - 1) % 9 + 1} · Venus)", "Auspicious: 6, 15, 24, 28 | Remedy: Apply pure natural sandalwood attar; invest in brand aesthetics, diplomacy, and team welfare"),
+                 (f"Mar {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 3 - 1) % 9 + 1} · Ketu)", "Auspicious: 7, 16, 25 | Remedy: Take solitary contemplative walks; conduct deep intellectual audits and proprietary research"),
+                 (f"Apr {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 4 - 1) % 9 + 1} · Saturn)", "Auspicious: 8, 17, 26 | Remedy: Light a mustard oil diya on Saturdays; maintain patience with long-term capital assets and contracts"),
+                 (f"May {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 5 - 1) % 9 + 1} · Mars)", "Auspicious: 9, 18, 27 | Remedy: Morning physical exercise; eliminate pending obligations; avoid emotional confrontations"),
+                 (f"Jun {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 6 - 1) % 9 + 1} · Sun)", "Auspicious: 1, 10, 19, 28 | Remedy: Offer water to morning Surya in a copper lota; launch new initiatives and executive proposals"),
+                 (f"Jul {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 7 - 1) % 9 + 1} · Moon)", "Auspicious: 2, 7, 11, 20 | Remedy: Drink water from a silver cup; prioritize empathy, client relationships, and quiet reflection"),
+                 (f"Aug {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 8 - 1) % 9 + 1} · Jupiter)", "Auspicious: 3, 12, 21, 30 | Remedy: 40-day haldi water bath ritual; consult trusted legal advisors before signing key pacts"),
+                 (f"Sep {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 9 - 1) % 9 + 1} · Rahu)", "Auspicious: 1, 10, 19, 23 | Remedy: Keep an electric camphor diffuser in the SE corner; double-check software architecture details"),
+                 (f"Oct {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 10 - 1) % 9 + 1} · Mercury)", "Auspicious: 5, 14, 23, 27 | Remedy: Distribute green moong daal to birds on Wednesdays; execute digital marketing and media scaling"),
+                 (f"Nov {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 11 - 1) % 9 + 1} · Venus)", "Auspicious: 6, 15, 24, 28 | Remedy: Decorate living and work spaces with fresh fragrant white flowers; host strategic partnership dinners"),
+                 (f"Dec {d.get('current_year', 2026)} (Personal Month {(d.get('personal_year', 4) + 12 - 1) % 9 + 1} · Ketu)", "Auspicious: 7, 16, 25 | Remedy: Review annual balance sheets; meditate on long-term sovereign legacy and release completed cycles")
              ]),
 
             # Page 21
@@ -2030,7 +2056,9 @@ def generate_customised_pdf_report(
     tier: str = "basic",
     mobile_number: Optional[str] = None,
     vehicle_number: Optional[str] = None,
-    property_number: Optional[str] = None
+    property_number: Optional[str] = None,
+    purchase_date: Optional[Union[str, datetime.date, datetime.datetime]] = None,
+    purchase_year: Optional[int] = None
 ) -> Tuple[bytes, Dict[str, Any]]:
     """
     Primary API entrypoint: Computes deterministic data and compiles
@@ -2045,7 +2073,9 @@ def generate_customised_pdf_report(
         tier=tier,
         mobile_number=mobile_number,
         vehicle_number=vehicle_number,
-        property_number=property_number
+        property_number=property_number,
+        purchase_date=purchase_date,
+        purchase_year=purchase_year
     )
 
     builder = NumerosPdfReportBuilder(calc_data, tier=tier, topic_id=topic_id)

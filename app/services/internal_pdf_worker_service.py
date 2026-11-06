@@ -24,6 +24,7 @@ import hmac
 import time
 import json
 import hashlib
+import datetime
 from typing import Dict, Any, Tuple, Optional
 
 from fastapi import FastAPI, Request, Response, HTTPException
@@ -213,7 +214,21 @@ def build_calculation_data_from_view(view: Dict[str, Any], pack_id: str, topic_i
     kua = _red(11 - y_sum)
     if kua == 5:
         kua = 2
-    personal_year = _red(day + month + 2026)
+    # Determine purchase / current year dynamically from subject.created_at or datetime.now()
+    subj_created = subj.get("created_at") or subj.get("createdAt")
+    purchase_year = None
+    if subj_created:
+        try:
+            if isinstance(subj_created, (int, float)):
+                ts = subj_created / 1000 if subj_created > 2000000000 else subj_created
+                purchase_year = datetime.datetime.fromtimestamp(ts, tz=datetime.timezone.utc).year
+            elif isinstance(subj_created, str):
+                purchase_year = datetime.date.fromisoformat(subj_created.strip()[:10]).year
+        except Exception:
+            purchase_year = None
+    current_year = purchase_year or datetime.datetime.now().year
+
+    personal_year = _red(day + month + current_year)
 
     report_id = "NV-" + hashlib.sha256(f"{clean_name}:{day}-{month}-{year}:{tier}:{topic_id}".encode()).hexdigest()[:10].upper()
     dob_formatted = f"{day:02d}-{month:02d}-{year}"
@@ -224,11 +239,14 @@ def build_calculation_data_from_view(view: Dict[str, Any], pack_id: str, topic_i
 
     poorak_info = calculate_complementary_poorak(driver, conductor_root, missing_numbers) if (has_advanced or has_premium) else {}
     gharelu_remedies = get_gharelu_remedies_for_chart(driver, conductor_root, present_numbers, missing_numbers) if (has_advanced or has_premium) else {}
-    current_age = max(18, 2026 - year)
-    annual_matrix = generate_detailed_annual_matrix(day, month, 2026) if (has_advanced or has_premium) else []
+    current_age = max(18, current_year - year)
+    annual_matrix = generate_detailed_annual_matrix(day, month, current_year) if (has_advanced or has_premium) else []
     blessing_data = calculate_blessing_years(day, month, year, current_age) if has_premium else {}
 
     return {
+        "current_year": current_year,
+        "target_year": current_year,
+        "personal_year": personal_year,
         "annual_matrix": annual_matrix,
         "blessing_years": blessing_data,
         "mobile_number": None,

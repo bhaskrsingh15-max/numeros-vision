@@ -150,6 +150,20 @@ class TestPdfTierGating(unittest.TestCase):
                 f"PREMIUM LEAK: Found Premium keyword '{kw}' in Advanced 12-Page PDF!"
             )
 
+    def test_advanced_tier_present_numbers_benefic_vs_malefic_matrix(self):
+        pdf_bytes, meta = generate_customised_pdf_report(
+            name="Aaditya Sharma",
+            day=15,
+            month=8,
+            year=1990,
+            tier="advanced",
+            topic_id="present_numbers"
+        )
+        reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
+        self.assertEqual(len(reader.pages), 12, "Advanced present numbers dossier must be exactly 12 pages.")
+        full_text = "\n".join(page.extract_text() for page in reader.pages)
+        self.assertIn("Benefic vs Malefic", full_text, "12-page Present Numbers report must contain Benefic vs Malefic Planetary Operating Matrix.")
+
     def test_premium_tier_32_pages_full_dossier(self):
         pdf_bytes, meta = generate_customised_pdf_report(
             name="Aaditya Sharma",
