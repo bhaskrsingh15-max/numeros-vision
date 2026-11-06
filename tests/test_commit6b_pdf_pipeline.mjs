@@ -19,6 +19,8 @@ import worker, {
   verifySignedDownloadToken,
   dispatchReportJob,
   retryPendingReportJobsForUser,
+  REPORT_JOB_STATUS,
+  doesReportExistOrWasServed,
   memoryStore
 } from '../app/static/_worker.js';
 
@@ -446,6 +448,54 @@ async function runTests() {
     assert.equal(createOrderResp2.status, 503, 'Missing DOWNLOAD_TOKEN_SECRET in production must return 503');
 
     console.log('  [PASS] 6. Required-secrets guard for PDF_SERVICE_URL and DOWNLOAD_TOKEN_SECRET verified');
+
+    // 7. Verify canonical REPORT_JOB_STATUS set and DOB correction refusal for every status meaning a report exists or was served
+    assert.deepEqual(
+      Object.values(REPORT_JOB_STATUS),
+      ['QUEUED', 'PROCESSING', 'COMPLETED', 'DOWNLOADED', 'FAILED', 'CANCELLED'],
+      'Canonical REPORT_JOB_STATUS set must match'
+    );
+    assert.equal(doesReportExistOrWasServed({ status: 'QUEUED' }), false);
+    assert.equal(doesReportExistOrWasServed({ status: 'PROCESSING' }), false);
+    assert.equal(doesReportExistOrWasServed({ status: 'FAILED' }), false);
+    assert.equal(doesReportExistOrWasServed({ status: 'COMPLETED' }), true);
+    assert.equal(doesReportExistOrWasServed({ status: 'DOWNLOADED' }), true);
+    assert.equal(doesReportExistOrWasServed({ status: 'READY' }), true);
+    assert.equal(doesReportExistOrWasServed({ status: 'QUEUED', r2_key: 'reports/u/s/p/j.pdf' }), true);
+
+    for (const blockedState of [
+      { label: 'COMPLETED', status: 'COMPLETED', r2_key: null },
+      { label: 'DOWNLOADED', status: 'DOWNLOADED', r2_key: null },
+      { label: 'READY', status: 'READY', r2_key: null },
+      { label: 'r2_key_present', status: 'QUEUED', r2_key: 'reports/u/s/p/j.pdf' }
+    ]) {
+      const testSubjId = `sbj_dob_refuse_${blockedState.label}`;
+      memoryStore.subjects.set(testSubjId, {
+        id: testSubjId,
+        user_id: userId,
+        name: 'DOB Refusal Test',
+        dob_hash: `hash_${blockedState.label}`,
+        dob_enc: dobEnc,
+        created_at: Date.now()
+      });
+      memoryStore.reportJobs.set(`job_dob_refuse_${blockedState.label}`, {
+        id: `job_dob_refuse_${blockedState.label}`,
+        user_id: userId,
+        subject_id: testSubjId,
+        pack_id: 'report_basic',
+        status: blockedState.status,
+        r2_key: blockedState.r2_key,
+        created_at: Date.now()
+      });
+      const dobReq = new Request('https://numerosvision.com/api/v1/subjects/correct-dob', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Cookie: sessionCookieUser1 },
+        body: JSON.stringify({ subjectId: testSubjId, newDob: '1991-09-16' })
+      });
+      const dobResp = await worker.fetch(dobReq, env);
+      assert.equal(dobResp.status, 400, `DOB correction must refuse (400) for state ${blockedState.label}`);
+    }
+    console.log('  [PASS] 7. Canonical REPORT_JOB_STATUS and DOB correction refusal for COMPLETED/DOWNLOADED/READY/r2_key verified');
     console.log('ALL COMMIT 6b TESTS PASSED!');
   } finally {
     globalThis.fetch = originalFetch;

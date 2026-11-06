@@ -51,12 +51,15 @@ prem_pack = PACKS_DATA["core_reports"]["report_premium"]
 BUILD_TOKENS = {
     "{{PACK_BASIC_NAME}}": str(basic_pack["name"]),
     "{{PACK_BASIC_PRICE_INR}}": f"{int(basic_pack['price_inr']):,}",
+    "{{PACK_BASIC_PER_DAY_INR}}": f"{int(basic_pack['price_inr']) / 365:.2f}",
     "{{PACK_BASIC_PAGES}}": str(basic_pack["pages"]),
     "{{PACK_ADVANCED_NAME}}": str(adv_pack["name"]),
     "{{PACK_ADVANCED_PRICE_INR}}": f"{int(adv_pack['price_inr']):,}",
+    "{{PACK_ADVANCED_PER_DAY_INR}}": f"{int(adv_pack['price_inr']) / 365:.2f}",
     "{{PACK_ADVANCED_PAGES}}": str(adv_pack["pages"]),
     "{{PACK_PREMIUM_NAME}}": str(prem_pack["name"]),
     "{{PACK_PREMIUM_PRICE_INR}}": f"{int(prem_pack['price_inr']):,}",
+    "{{PACK_PREMIUM_PER_DAY_INR}}": f"{int(prem_pack['price_inr']) / 365:.2f}",
     "{{PACK_PREMIUM_PAGES}}": str(prem_pack["pages"]),
 }
 for root, _, files in os.walk(DIST_DIR):
@@ -233,3 +236,33 @@ if os.path.exists(src_redirects):
 total_files = sum(len(files) for _, _, files in os.walk(DIST_DIR))
 print(f"Successfully generated canonical Cloudflare Pages build in {DIST_DIR}")
 print(f"Total physical files generated: {total_files}")
+
+
+def verify_wrangler_no_placeholders(toml_content: str) -> None:
+    """Refuses to deploy while any placeholder database_id (e.g. 00000000-...) remains in wrangler.toml."""
+    import re
+    ids = re.findall(r'database_id\s*=\s*"([^"]*)"', toml_content)
+    if not ids:
+        raise ValueError("No database_id entries found in wrangler.toml.")
+    for db_id in ids:
+        clean = db_id.strip()
+        if (
+            not clean
+            or clean.startswith("00000000-0000-0000-0000-")
+            or "REPLACE" in clean.upper()
+            or "PLACEHOLDER" in clean.upper()
+            or "TODO" in clean.upper()
+        ):
+            raise ValueError(
+                f"DEPLOYMENT BLOCKED: wrangler.toml contains placeholder database_id '{clean}'. "
+                "Replace both production and preview database_ids with real D1 UUIDs before deploying."
+            )
+
+
+if __name__ == "__main__":
+    import sys
+    if "--verify-deploy" in sys.argv:
+        wrangler_path = os.path.join(BASE_DIR, "wrangler.toml")
+        with open(wrangler_path, "r", encoding="utf-8") as wf:
+            verify_wrangler_no_placeholders(wf.read())
+        print("PASS: wrangler.toml verified with real non-placeholder D1 database_ids.")

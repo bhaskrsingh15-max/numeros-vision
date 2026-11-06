@@ -80,10 +80,11 @@ def test_built_site_prices_and_page_counts_match_packs_json():
 
     assert allowed_prices == {0, 199, 510, 1050}, f"Unexpected active prices in packs.json: {allowed_prices}"
     assert allowed_pages == {3, 12, 32}, f"Unexpected active page counts in packs.json: {allowed_pages}"
+    allowed_per_day = {round(p / 365, 2) for p in allowed_prices if p > 0}
 
-    re_rupee = re.compile(r"(?:₹|&#8377;|\\u20b9|\bRs\.?\s*)([\d,]+(?:\.\d+)?)", re.IGNORECASE)
+    re_rupee = re.compile(r"(?:₹|&#8377;|\\u20b9|\bRs\.?\s*)([\d,]+(?:\.\d+)?)(\s*/\s*day)?", re.IGNORECASE)
     re_pages = re.compile(r"\b(\d+)\+?\s*[-–]?\s*[Pp]ages?\b")
-    re_forbidden = re.compile(r"\b210\b|1,500|45\+|\b9\s*[-–]?\s*[Pp]ages?\b|\b21\s*[-–]?\s*[Pp]ages?\b")
+    re_forbidden = re.compile(r"\b210\b|1,500|45\+|\b9\s*[-–]?\s*[Pp]ages?\b|\b21\s*[-–]?\s*[Pp]ages?\b|\{\{PACK_")
 
     violations = []
     for dirpath, _, filenames in os.walk(DIST_DIR):
@@ -97,11 +98,17 @@ def test_built_site_prices_and_page_counts_match_packs_json():
             for line_no, line in enumerate(text.splitlines(), 1):
                 for m in re_rupee.finditer(line):
                     raw_val = m.group(1).replace(",", "")
+                    is_per_day = bool(m.group(2))
                     try:
                         val = float(raw_val)
                     except ValueError:
                         continue
-                    if val not in allowed_prices:
+                    if is_per_day:
+                        if round(val, 2) not in allowed_per_day:
+                            violations.append(
+                                f"{rel_path}:{line_no}: Per-day rupee amount '{m.group(0)}' not in packs.json/365 {sorted(allowed_per_day)}"
+                            )
+                    elif val not in allowed_prices:
                         violations.append(f"{rel_path}:{line_no}: Rupee amount '{m.group(0)}' not in active packs.json {sorted(allowed_prices)}")
 
                 for m in re_pages.finditer(line):
@@ -116,12 +123,41 @@ def test_built_site_prices_and_page_counts_match_packs_json():
         f"Found {len(violations)} price/page-count consistency violations in dist_cloudflare_pages:\n"
         + "\n".join(violations[:30])
     )
+    pricing_built = open(os.path.join(DIST_DIR, "pricing.html"), "r", encoding="utf-8").read()
+    assert "~₹2.88/day" in pricing_built and "₹1.40/day" in pricing_built, (
+        "pricing.html in dist_cloudflare_pages is missing build-time injected per-day price hooks"
+    )
     print(
         f"PASS: All built HTML/JS files in dist_cloudflare_pages strictly match packs.json "
-        f"(prices={sorted(allowed_prices)}, pages={sorted(allowed_pages)})."
+        f"(prices={sorted(allowed_prices)}, per_day={sorted(allowed_per_day)}, pages={sorted(allowed_pages)})."
     )
+
+
+def test_wrangler_placeholder_deploy_guard():
+    sys.path.insert(0, ROOT)
+    from build_bulletproof_dist import verify_wrangler_no_placeholders
+
+    with open(WRANGLER_TOML, "r", encoding="utf-8") as f:
+        current_toml = f.read()
+
+    # Must refuse to deploy while placeholder 00000000-... database_ids remain
+    blocked = False
+    try:
+        verify_wrangler_no_placeholders(current_toml)
+    except ValueError as exc:
+        blocked = "DEPLOYMENT BLOCKED" in str(exc)
+    assert blocked, "verify_wrangler_no_placeholders must block deployment when 00000000-... placeholder database_ids exist"
+
+    # Must pass when real UUIDs replace placeholders
+    valid_toml = (
+        current_toml.replace("00000000-0000-0000-0000-000000000001", "a1b2c3d4-e5f6-4789-8012-3456789abcde")
+        .replace("00000000-0000-0000-0000-000000000002", "b2c3d4e5-f6a7-4890-9123-456789abcdef")
+    )
+    verify_wrangler_no_placeholders(valid_toml)
+    print("PASS: wrangler.toml placeholder deploy guard verified (blocks 00000000-... placeholders, allows real UUIDs).")
 
 
 if __name__ == "__main__":
     test_single_build_path_and_pdf_exclusion()
     test_built_site_prices_and_page_counts_match_packs_json()
+    test_wrangler_placeholder_deploy_guard()

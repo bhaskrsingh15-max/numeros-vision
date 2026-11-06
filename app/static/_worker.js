@@ -1331,6 +1331,28 @@ async function retryPendingReportJobsForUser(userId, env, ctx = null, orderId = 
   return await runPromise;
 }
 
+const REPORT_JOB_STATUS = Object.freeze({
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  DOWNLOADED: 'DOWNLOADED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+});
+
+const REPORT_EXISTS_OR_SERVED_STATUSES = Object.freeze(['COMPLETED', 'DOWNLOADED', 'READY']);
+
+function doesReportExistOrWasServed(job) {
+  if (!job) return false;
+  const st = String(job.status || '').trim().toUpperCase();
+  return (
+    REPORT_EXISTS_OR_SERVED_STATUSES.includes(st) ||
+    Boolean(job.r2_key) ||
+    Boolean(job.completed_at) ||
+    Boolean(job.downloaded_at)
+  );
+}
+
 export {
   viewFor,
   parseDobParts,
@@ -1344,6 +1366,9 @@ export {
   verifySignedDownloadToken,
   dispatchReportJob,
   retryPendingReportJobsForUser,
+  REPORT_JOB_STATUS,
+  REPORT_EXISTS_OR_SERVED_STATUSES,
+  doesReportExistOrWasServed,
   memoryStore
 };
 export default {
@@ -2605,17 +2630,17 @@ export default {
         if (order.user_id && (env.PDF_SERVICE_SECRET || env.ENVIRONMENT === 'local') && (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL)) {
           await retryPendingReportJobsForUser(order.user_id, env, ctx, order.id);
         }
-        let jobStatus = 'preparing';
+        let jobStatus = REPORT_JOB_STATUS.QUEUED;
         let jobId = null;
         if (env.DB) {
           const jRow = await env.DB.prepare('SELECT id, status FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(order.id).first();
-          if (jRow) { jobId = jRow.id; jobStatus = jRow.status; }
+          if (jRow) { jobId = jRow.id; jobStatus = String(jRow.status || REPORT_JOB_STATUS.QUEUED).toUpperCase(); }
         } else {
           for (const j of memoryStore.reportJobs.values()) {
-            if (j.order_id === order.id) { jobId = j.id; jobStatus = j.status; }
+            if (j.order_id === order.id) { jobId = j.id; jobStatus = String(j.status || REPORT_JOB_STATUS.QUEUED).toUpperCase(); }
           }
         }
-        const normalizedReportStatus = (jobStatus === 'QUEUED' || jobStatus === 'PROCESSING' || jobStatus === 'preparing')
+        const normalizedReportStatus = (jobStatus === REPORT_JOB_STATUS.QUEUED || jobStatus === REPORT_JOB_STATUS.PROCESSING)
           ? 'preparing'
           : jobStatus.toLowerCase();
         return new Response(JSON.stringify({
@@ -2625,7 +2650,7 @@ export default {
           packId: order.pack_id,
           subjectId: order.subject_id,
           jobId,
-          jobStatus: jobStatus.toLowerCase(),
+          jobStatus,
           reportStatus: normalizedReportStatus,
           message: 'Your personalized report is being prepared. It will be available shortly.'
         }), { status: 200, headers: corsHeaders });
@@ -2706,15 +2731,15 @@ export default {
         }), { status: 400, headers: corsHeaders });
       }
 
-      // Check for buy-download-correct-download abuse: Block if report is already COMPLETED or DOWNLOADED
+      // Check for buy-download-correct-download abuse: Block if any report exists or was served
       let completedReport = null;
       if (env.DB) {
         completedReport = await env.DB.prepare(
-          "SELECT id, status FROM report_jobs WHERE user_id = ? AND subject_id = ? AND status IN ('COMPLETED', 'DOWNLOADED', 'completed', 'downloaded')"
+          "SELECT id, status, r2_key, completed_at, downloaded_at FROM report_jobs WHERE user_id = ? AND subject_id = ? AND (UPPER(status) IN ('COMPLETED', 'DOWNLOADED', 'READY') OR r2_key IS NOT NULL OR completed_at IS NOT NULL OR downloaded_at IS NOT NULL) LIMIT 1"
         ).bind(user.user_id, subjectId).first();
       } else if (memoryStore.reportJobs) {
         for (const job of memoryStore.reportJobs.values()) {
-          if (job.user_id === user.user_id && job.subject_id === subjectId && (job.status === 'COMPLETED' || job.status === 'DOWNLOADED')) {
+          if (job.user_id === user.user_id && job.subject_id === subjectId && doesReportExistOrWasServed(job)) {
             completedReport = job;
             break;
           }

@@ -416,52 +416,54 @@ async function runTests() {
     }
   });
 
-  // Test 15: Buy-download-correct-download abuse path is blocked
-  await assertCase('DOB correction blocked if report was already COMPLETED/DOWNLOADED (abuse protection)', async () => {
-    // Create new subject
-    const createReq = new Request('https://numerosvision.com/api/v1/payments/create-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie },
-      body: JSON.stringify({ packId: 'report_basic', name: 'Abuse Attempter', dob: '1988-08-08' })
-    });
-    const createRes = await worker.fetch(createReq, mockEnv);
-    const ordData = await createRes.json();
+  // Test 15: Buy-download-correct-download abuse path is blocked across COMPLETED, DOWNLOADED, READY, and existing r2_key
+  await assertCase('DOB correction blocked for every status meaning a report exists or was served (COMPLETED/DOWNLOADED/READY/r2_key)', async () => {
+    const { memoryStore: workerMemoryStore } = await import('../app/static/_worker.js');
+    for (const statusToTest of ['COMPLETED', 'DOWNLOADED', 'READY']) {
+      const createReq = new Request('https://numerosvision.com/api/v1/payments/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie },
+        body: JSON.stringify({
+          packId: 'report_basic',
+          name: `Abuse ${statusToTest}`,
+          dob: statusToTest === 'COMPLETED' ? '1988-08-08' : statusToTest === 'DOWNLOADED' ? '1988-08-18' : '1988-08-28'
+        })
+      });
+      const createRes = await worker.fetch(createReq, mockEnv);
+      const ordData = await createRes.json();
 
-    // Mark report job as completed
-    const hookPayload = JSON.stringify({
-      event: 'order.paid',
-      event_id: 'evt_abuse_' + Date.now(),
-      payload: {
-        order: { entity: { id: ordData.rzpOrderId } },
-        payment: { entity: { id: 'pay_abuse_1', amount: 19900, currency: 'INR', order_id: ordData.rzpOrderId } }
+      const hookPayload = JSON.stringify({
+        event: 'order.paid',
+        event_id: `evt_abuse_${statusToTest}_` + Date.now(),
+        payload: {
+          order: { entity: { id: ordData.rzpOrderId } },
+          payment: { entity: { id: `pay_abuse_${statusToTest}`, amount: 19900, currency: 'INR', order_id: ordData.rzpOrderId } }
+        }
+      });
+      const sig = crypto.createHmac('sha256', mockEnv.RAZORPAY_WEBHOOK_SECRET).update(hookPayload).digest('hex');
+      const whRes = await worker.fetch(new Request('https://numerosvision.com/api/v1/payments/webhook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Razorpay-Signature': sig },
+        body: hookPayload
+      }), mockEnv);
+      const whData = await whRes.json();
+
+      // Transition the report job to the tested status (COMPLETED, DOWNLOADED, or READY)
+      const job = workerMemoryStore.reportJobs.get(whData.jobId);
+      job.status = statusToTest;
+
+      const correctReq = new Request('https://numerosvision.com/api/v1/subjects/correct-dob', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie },
+        body: JSON.stringify({
+          subjectId: ordData.subjectId,
+          newDob: '1988-08-09'
+        })
+      });
+      const blockedRes = await worker.fetch(correctReq, mockEnv);
+      if (blockedRes.status !== 400) {
+        throw new Error(`Expected DOB correction to be refused (400) when report_jobs.status=${statusToTest}, got ${blockedRes.status}`);
       }
-    });
-    const sig = crypto.createHmac('sha256', mockEnv.RAZORPAY_WEBHOOK_SECRET).update(hookPayload).digest('hex');
-    await worker.fetch(new Request('https://numerosvision.com/api/v1/payments/webhook', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Razorpay-Signature': sig },
-      body: hookPayload
-    }), mockEnv);
-
-    // Simulate completed report
-    const correctReq = new Request('https://numerosvision.com/api/v1/subjects/correct-dob', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie },
-      body: JSON.stringify({
-        subjectId: ordData.subjectId,
-        newDob: '1988-08-09'
-      })
-    });
-    // First correction on this fresh subject without completed report succeeds
-    const firstRes = await worker.fetch(correctReq, mockEnv);
-    if (firstRes.status !== 200) {
-      throw new Error(`Expected first correction to succeed, got ${firstRes.status}`);
-    }
-
-    // Now if user tries again, it's blocked by one-time limit
-    const secondRes = await worker.fetch(correctReq, mockEnv);
-    if (secondRes.status !== 400) {
-      throw new Error(`Expected second correction to be blocked (400), got ${secondRes.status}`);
     }
   });
 
