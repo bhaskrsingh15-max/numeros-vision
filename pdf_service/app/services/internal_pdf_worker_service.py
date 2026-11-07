@@ -367,3 +367,113 @@ async def handle_render_pdf(request: Request) -> Response:
             "Cache-Control": "private, no-store",
         },
     )
+
+def render_planner_2027_from_payload(payload: Dict[str, Any]) -> Tuple[bytes, Dict[str, Any]]:
+    """
+    Renders the 2027 Year Ahead Planner 24-page PDF from validated payload.
+    - Zero PII: Accepts only full_name, dob_str, order_id, is_sample.
+    - Fail-Closed: If is_sample is False (paid delivery) and any '{{' placeholder
+      (such as {{DISCLAIMER_APPROVED_TEXT}}) is present in the rendered PDF text,
+      MUST fail closed with HTTPException 422 and release NO PDF.
+    """
+    full_name = str(payload.get("full_name") or payload.get("name") or "").strip()
+    dob_str = str(payload.get("dob_str") or payload.get("dob") or "").strip()
+    order_id = str(payload.get("order_id") or "").strip()
+    is_sample = bool(payload.get("is_sample", False))
+
+    if not full_name or len(full_name) < 2 or len(full_name) > 60:
+        raise HTTPException(status_code=400, detail="Invalid full_name (must be 2-60 characters).")
+    if not dob_str or len(dob_str) != 10:
+        raise HTTPException(status_code=400, detail="Invalid dob_str format (expected YYYY-MM-DD).")
+    try:
+        y, m, d = [int(p) for p in dob_str.split("-")]
+        if not (1900 <= y <= 2026 and 1 <= m <= 12 and 1 <= d <= 31):
+            raise ValueError()
+    except Exception:
+        raise HTTPException(status_code=400, detail="DOB must be between 1900 and 2026.")
+
+    try:
+        from pdf_service.app.services.planner_2027_pdf_generator import generate_planner_2027_pdf
+    except ImportError:
+        from app.services.planner_2027_pdf_generator import generate_planner_2027_pdf
+
+    try:
+        pdf_bytes = generate_planner_2027_pdf(
+            full_name=full_name,
+            dob_str=dob_str,
+            is_sample=is_sample
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"PDF generation error: {exc}") from exc
+
+    # Fail-closed check: if paid generation (is_sample=False), assert NO '{{' or '}}' placeholders exist in the PDF
+    if not is_sample:
+        import io
+        import pypdf
+        reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
+        for page_idx, page in enumerate(reader.pages):
+            text = page.extract_text() or ""
+            if "{{" in text or "}}" in text:
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Fail-closed: unapproved placeholder remains in paid PDF on page {page_idx + 1}"
+                )
+
+    meta = {
+        "order_id": order_id,
+        "is_sample": is_sample,
+        "pdf_size_bytes": len(pdf_bytes),
+    }
+    return pdf_bytes, meta
+
+
+def assert_no_live_razorpay_keys():
+    """Refuse to run if any Razorpay live key is configured anywhere in the environment."""
+    for k, v in os.environ.items():
+        if "RAZORPAY" in k.upper() and isinstance(v, str) and v.strip().startswith("rzp_live"):
+            raise RuntimeError(f"FATAL SECURITY VIOLATION: Live Razorpay key detected in {k}. Execution forbidden in test/preview.")
+
+
+@app.post("/internal/v1/render-planner-2027")
+async def handle_render_planner_2027(request: Request) -> Response:
+    """FastAPI HTTP endpoint verifying HMAC and dispatching to render_planner_2027_from_payload."""
+    assert_no_live_razorpay_keys()
+
+    secret = os.environ.get("PDF_SERVICE_SECRET", "").strip()
+    if not secret:
+        raise HTTPException(status_code=500, detail="PDF_SERVICE_SECRET is not configured.")
+
+    content_length = request.headers.get("content-length")
+    if content_length:
+        try:
+            if int(content_length) > MAX_REQUEST_BODY_BYTES:
+                raise HTTPException(status_code=413, detail=f"Payload exceeds maximum allowed size of {MAX_REQUEST_BODY_BYTES} bytes.")
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid Content-Length header.")
+
+    raw_body = await request.body()
+    if len(raw_body) > MAX_REQUEST_BODY_BYTES:
+        raise HTTPException(status_code=413, detail=f"Payload exceeds maximum allowed size of {MAX_REQUEST_BODY_BYTES} bytes.")
+    ts_header = request.headers.get("X-NV-Timestamp", "")
+    sig_header = request.headers.get("X-NV-Signature", "")
+
+    valid_sig, reason = verify_worker_hmac_signature(raw_body, ts_header, sig_header, secret)
+    if not valid_sig:
+        raise HTTPException(status_code=401, detail=reason)
+
+    try:
+        payload = json.loads(raw_body.decode("utf-8"))
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Invalid JSON body: {exc}") from exc
+
+    pdf_bytes, meta = render_planner_2027_from_payload(payload)
+
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={
+            "X-NV-Order-Id": str(meta.get("order_id", "")),
+            "X-NV-Sample": "1" if meta.get("is_sample") else "0",
+            "Cache-Control": "private, no-store",
+        },
+    )

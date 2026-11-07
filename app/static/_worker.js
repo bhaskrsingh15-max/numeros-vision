@@ -42,6 +42,16 @@ function getRandomHex(bytesCount = 16) {
 }
 
 
+
+function assertRazorpayTestKey(env) {
+  if (!env) return;
+  for (const [k, v] of Object.entries(env)) {
+    if (typeof v === 'string' && k.toUpperCase().includes('RAZORPAY') && v.trim().startsWith('rzp_live')) {
+      throw new Error(`FATAL SECURITY VIOLATION: Live Razorpay key detected in ${k}. Refusing to execute in test/preview environment.`);
+    }
+  }
+}
+
 function requireSecret(env, name) {
   const val = env && typeof env[name] === 'string' ? env[name].trim() : '';
   if (val) return val;
@@ -200,7 +210,8 @@ const memoryStore = {
   reportJobs: new Map(),
   voucherLedger: new Map(),
   refunds: new Map(),
-  r2Objects: new Map()
+  r2Objects: new Map(),
+  planner2027Orders: new Map()
 };
 
 function base64UrlToUint8Array(base64Url) {
@@ -1448,7 +1459,7 @@ export default {
         const url = new URL(request.url);
 
     // CSRF Protection: Verify Origin on state-changing POST endpoints
-    if (request.method === 'POST' && (url.pathname.startsWith('/api/v1/auth/') || url.pathname.startsWith('/api/v1/payments/') || url.pathname === '/api/create-order' || url.pathname === '/api/verify-payment')) {
+    if (request.method === 'POST' && (url.pathname.startsWith('/api/v1/auth/') || url.pathname.startsWith('/api/v1/payments/') || url.pathname === '/api/create-order' || url.pathname === '/api/verify-payment' || url.pathname === '/api/planner-2027/order' || url.pathname === '/api/planner-2027/verify')) {
       if (!verifyOrigin(request, env)) {
         return new Response(JSON.stringify({
           error: 'CSRF origin validation failed.'
@@ -3764,6 +3775,583 @@ export default {
       };
       return new Response(JSON.stringify(PACK_CATALOG), { status: 200, headers: corsHeaders });
     }
+
+    // ── 8. ROUTE: 2027 YEAR AHEAD PLANNER API (/api/planner-2027/*) ──
+    const PLANNER_2027_CONFIG = {
+      product_id: 'planner_2027',
+      name: '2027 Year Ahead Planner',
+      subtitle: '24-Page Personalized Annual Astrological & Vibrational Blueprint',
+      currency: 'INR',
+      list_price_paise: 199900,
+      offer_price_paise: 149900,
+      offer_ends_at: '2027-01-31T23:59:00+05:30',
+      price_includes_gst: false,
+      receipt_type: 'Payment receipt',
+      active: true
+    };
+
+    // 8a. GET /api/planner-2027/price
+    if (url.pathname === '/api/planner-2027/price' && request.method === 'GET') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+      const now = Date.now();
+      const offerEndsAtMs = Date.parse(PLANNER_2027_CONFIG.offer_ends_at);
+      const isOfferActive = now < offerEndsAtMs;
+      const currentPricePaise = isOfferActive ? PLANNER_2027_CONFIG.offer_price_paise : PLANNER_2027_CONFIG.list_price_paise;
+      return new Response(JSON.stringify({
+        list: PLANNER_2027_CONFIG.list_price_paise,
+        offer: PLANNER_2027_CONFIG.offer_price_paise,
+        amount_paise: currentPricePaise,
+        currency: PLANNER_2027_CONFIG.currency,
+        offer_ends_at: PLANNER_2027_CONFIG.offer_ends_at,
+        is_offer_active: isOfferActive,
+        price_includes_gst: PLANNER_2027_CONFIG.price_includes_gst,
+        receipt_type: PLANNER_2027_CONFIG.receipt_type,
+        active: PLANNER_2027_CONFIG.active
+      }), { status: 200, headers: corsHeaders });
+    }
+
+    // 8b. POST /api/planner-2027/order
+    if (url.pathname === '/api/planner-2027/order' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+      assertRazorpayTestKey(env);
+
+      const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+      if (!checkFormRateLimit('planner_order_' + clientIp, 10, 600000)) {
+        return new Response(JSON.stringify({ error: 'Too many order attempts. Please wait 10 minutes.' }), { status: 429, headers: corsHeaders });
+      }
+
+      let body = {};
+      try {
+        body = await request.json();
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON request body.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const rawName = String(body.name || '').trim();
+      const nameRegex = /^[a-zA-Z\s'\-\.]{2,60}$/;
+      if (!rawName || !nameRegex.test(rawName)) {
+        return new Response(JSON.stringify({ error: 'Invalid full name (2-60 letters, spaces, hyphens, dots, apostrophes).' }), { status: 400, headers: corsHeaders });
+      }
+      const nameNormalised = rawName.replace(/\s+/g, ' ');
+
+      const dob = String(body.dob || '').trim();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) {
+        return new Response(JSON.stringify({ error: 'Invalid Date of Birth format (expected YYYY-MM-DD).' }), { status: 400, headers: corsHeaders });
+      }
+      const [year, month, day] = dob.split('-').map(Number);
+      if (year < 1900 || year > 2026 || month < 1 || month > 12 || day < 1 || day > 31) {
+        return new Response(JSON.stringify({ error: 'Date of Birth year must be between 1900 and 2026.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const email = String(body.email || '').trim().toLowerCase();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 120) {
+        return new Response(JSON.stringify({ error: 'Invalid email address.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const phone = body.phone ? String(body.phone).trim() : null;
+
+      if (body.consent !== true && body.consent !== 'true') {
+        return new Response(JSON.stringify({ error: 'Mandatory consent required under DPDP Act 2023.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const now = Date.now();
+      const offerEndsAtMs = Date.parse(PLANNER_2027_CONFIG.offer_ends_at);
+      const amountPaise = now < offerEndsAtMs ? PLANNER_2027_CONFIG.offer_price_paise : PLANNER_2027_CONFIG.list_price_paise;
+
+      const rzpKeyId = (env.RAZORPAY_KEY_ID || '').trim();
+      const rzpSecret = (env.RAZORPAY_KEY_SECRET || '').trim();
+
+      const orderId = 'ord_p27_' + getRandomHex(8);
+      let rzpOrderId = null;
+
+      if (rzpKeyId.startsWith('rzp_test_mock') || env.MOCK_PAYMENTS === 'true' || (!rzpKeyId && env.ENVIRONMENT === 'local')) {
+        rzpOrderId = 'order_mock_' + getRandomHex(8);
+      } else {
+        if (!rzpKeyId || !rzpSecret) {
+          return new Response(JSON.stringify({ error: 'Razorpay payment gateway credentials not configured.' }), { status: 503, headers: corsHeaders });
+        }
+        try {
+          const authHeader = 'Basic ' + btoa(`${rzpKeyId}:${rzpSecret}`);
+          const rzpReq = await fetch('https://api.razorpay.com/v1/orders', {
+            method: 'POST',
+            headers: {
+              'Authorization': authHeader,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              amount: amountPaise,
+              currency: 'INR',
+              receipt: `rcpt_${orderId}`,
+              notes: {
+                product_id: 'planner_2027',
+                name_normalised: nameNormalised
+              }
+            })
+          });
+          if (rzpReq.ok) {
+            const rzpData = await rzpReq.json();
+            rzpOrderId = rzpData.id;
+          } else {
+            const errData = await rzpReq.json().catch(() => ({}));
+            return new Response(JSON.stringify({ error: errData?.error?.description || 'Failed to initiate Razorpay order.' }), { status: 502, headers: corsHeaders });
+          }
+        } catch (rzpErr) {
+          return new Response(JSON.stringify({ error: 'Network error communicating with payment gateway.' }), { status: 502, headers: corsHeaders });
+        }
+      }
+
+      // Store order record in D1 / memoryStore
+      if (env.DB) {
+        await env.DB.prepare(`
+          INSERT INTO planner_2027_orders (
+            id, razorpay_order_id, razorpay_payment_id, status, amount_paise, currency,
+            name_normalised, dob, email, phone, consent_version, consent_at,
+            download_token_hash, token_expires_at, generation_count, pdf_r2_key,
+            created_at, updated_at
+          ) VALUES (?, ?, NULL, 'created', ?, 'INR', ?, ?, ?, ?, 'dpdp_2023_v1.0', ?, NULL, NULL, 0, NULL, ?, ?)
+        `).bind(
+          orderId, rzpOrderId, amountPaise, nameNormalised, dob, email, phone, now, now, now
+        ).run();
+      }
+      memoryStore.planner2027Orders.set(orderId, {
+        id: orderId,
+        razorpay_order_id: rzpOrderId,
+        razorpay_payment_id: null,
+        status: 'created',
+        amount_paise: amountPaise,
+        currency: 'INR',
+        name_normalised: nameNormalised,
+        dob: dob,
+        email: email,
+        phone: phone,
+        consent_version: 'dpdp_2023_v1.0',
+        consent_at: now,
+        download_token_hash: null,
+        token_expires_at: null,
+        generation_count: 0,
+        pdf_r2_key: null,
+        created_at: now,
+        updated_at: now
+      });
+
+      await logWorkerEvent(env, {
+        event: 'order_created',
+        product_id: 'planner_2027',
+        value_inr: amountPaise / 100,
+        meta_json: { order_id: orderId, rzp_order_id: rzpOrderId }
+      });
+
+      return new Response(JSON.stringify({
+        order_id: orderId,
+        razorpay_order_id: rzpOrderId,
+        amount_paise: amountPaise,
+        currency: 'INR',
+        key_id: rzpKeyId
+      }), { status: 200, headers: corsHeaders });
+    }
+
+    // 8c. POST /api/planner-2027/verify
+    if (url.pathname === '/api/planner-2027/verify' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+      assertRazorpayTestKey(env);
+
+      let body = {};
+      try {
+        body = await request.json();
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON body.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const orderId = String(body.order_id || '').trim();
+      const rzpOrderId = String(body.razorpay_order_id || '').trim();
+      const rzpPaymentId = String(body.razorpay_payment_id || '').trim();
+      const rzpSignature = String(body.razorpay_signature || '').trim();
+
+      if (!rzpOrderId || !rzpPaymentId || !rzpSignature) {
+        return new Response(JSON.stringify({ error: 'Missing required Razorpay payment verification fields.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const rzpSecret = (env.RAZORPAY_KEY_SECRET || '').trim();
+      if (!rzpSecret && env.ENVIRONMENT !== 'local' && !env.MOCK_PAYMENTS) {
+        return new Response(JSON.stringify({ error: 'Payment gateway secret not configured.' }), { status: 500, headers: corsHeaders });
+      }
+
+      let isSigValid = false;
+      if (rzpSecret) {
+        try {
+          const expectedSig = await hmacSha256Hex(rzpSecret, `${rzpOrderId}|${rzpPaymentId}`);
+          isSigValid = timingSafeEqual(expectedSig.toLowerCase(), rzpSignature.toLowerCase());
+        } catch (e) {
+          isSigValid = false;
+        }
+      } else if (env.MOCK_PAYMENTS === 'true' || env.ENVIRONMENT === 'local') {
+        isSigValid = true;
+      }
+
+      if (!isSigValid) {
+        return new Response(JSON.stringify({ error: 'Invalid payment signature. Verification failed.' }), { status: 400, headers: corsHeaders });
+      }
+
+      // Query order
+      let order = null;
+      if (env.DB) {
+        order = await env.DB.prepare('SELECT * FROM planner_2027_orders WHERE razorpay_order_id = ? OR id = ?').bind(rzpOrderId, orderId).first();
+      }
+      if (!order) {
+        order = memoryStore.planner2027Orders.get(orderId);
+        if (!order) {
+          for (const o of memoryStore.planner2027Orders.values()) {
+            if (o.razorpay_order_id === rzpOrderId) {
+              order = o;
+              break;
+            }
+          }
+        }
+      }
+
+      if (!order) {
+        return new Response(JSON.stringify({ error: 'Matching order record not found.' }), { status: 404, headers: corsHeaders });
+      }
+
+      if (order.status === 'delivered' && order.pdf_r2_key) {
+        return new Response(JSON.stringify({
+          status: 'delivered',
+          order_id: order.id,
+          message: 'Planner already prepared and available.'
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      // Generate secure download token and hash
+      const rawToken = getRandomHex(32);
+      const downloadTokenHash = await sha256Hex(rawToken);
+      const tokenExpiresAt = Date.now() + 30 * 24 * 3600 * 1000; // 30 days
+      const now = Date.now();
+
+      // Mark order as generating
+      if (env.DB) {
+        await env.DB.prepare(`
+          UPDATE planner_2027_orders
+          SET razorpay_payment_id = ?, download_token_hash = ?, token_expires_at = ?, status = 'generating', updated_at = ?
+          WHERE id = ?
+        `).bind(rzpPaymentId, downloadTokenHash, tokenExpiresAt, now, order.id).run();
+      }
+      const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
+      memOrder.razorpay_payment_id = rzpPaymentId;
+      memOrder.download_token_hash = downloadTokenHash;
+      memOrder.token_expires_at = tokenExpiresAt;
+      memOrder.status = 'generating';
+      memOrder.updated_at = now;
+      memoryStore.planner2027Orders.set(order.id, memOrder);
+
+      // Call Cloud Run generator service
+      let generatorBase = (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL || '').trim();
+      if (!generatorBase && env.ENVIRONMENT === 'local') {
+        generatorBase = 'http://127.0.0.1:8090';
+      }
+      generatorBase = generatorBase.replace(/\/+$/, '');
+      const generatorUrl = `${generatorBase}/internal/v1/render-planner-2027`;
+
+      const pdfPayload = JSON.stringify({
+        order_id: order.id,
+        full_name: order.name_normalised,
+        dob_str: order.dob,
+        is_sample: false
+      });
+      const timestampSec = Math.floor(Date.now() / 1000);
+      const pdfSecret = (env.PDF_SERVICE_SECRET || 'test_pdf_secret').trim();
+      const sigHex = await signPdfServiceRequest(pdfPayload, timestampSec, pdfSecret);
+
+      let genResp = null;
+      let genErr = null;
+      try {
+        genResp = await fetch(generatorUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-NV-Timestamp': String(timestampSec),
+            'X-NV-Signature': sigHex
+          },
+          body: pdfPayload
+        });
+      } catch (err) {
+        genErr = err;
+      }
+
+      if (!genResp || !genResp.ok) {
+        // FAIL CLOSED: Unapproved placeholder remains or generator failed
+        const failNow = Date.now();
+        if (env.DB) {
+          await env.DB.prepare("UPDATE planner_2027_orders SET status = 'needs_attention', updated_at = ? WHERE id = ?").bind(failNow, order.id).run();
+        }
+        memOrder.status = 'needs_attention';
+        memOrder.updated_at = failNow;
+        memoryStore.planner2027Orders.set(order.id, memOrder);
+
+        await logWorkerEvent(env, {
+          event: 'order_needs_attention',
+          product_id: 'planner_2027',
+          meta_json: { order_id: order.id, reason: genResp ? `generator_status_${genResp.status}` : String(genErr) }
+        });
+
+        return new Response(JSON.stringify({
+          status: 'needs_attention',
+          order_id: order.id,
+          message: 'Payment confirmed. Your planner is being prepared by our editorial desk.'
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      const pdfBuffer = await genResp.arrayBuffer();
+      const pdfBytes = new Uint8Array(pdfBuffer);
+      if (pdfBytes.length < 100 || String.fromCharCode(pdfBytes[0], pdfBytes[1], pdfBytes[2], pdfBytes[3]) !== '%PDF') {
+        const failNow = Date.now();
+        if (env.DB) {
+          await env.DB.prepare("UPDATE planner_2027_orders SET status = 'needs_attention', updated_at = ? WHERE id = ?").bind(failNow, order.id).run();
+        }
+        memOrder.status = 'needs_attention';
+        memOrder.updated_at = failNow;
+        memoryStore.planner2027Orders.set(order.id, memOrder);
+        return new Response(JSON.stringify({
+          status: 'needs_attention',
+          order_id: order.id,
+          message: 'Payment confirmed. Document formatting in progress.'
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      const r2Key = `planner_2027/${order.id}_${getRandomHex(6)}.pdf`;
+      await putPrivateR2Report(env, r2Key, pdfBytes);
+
+      const doneNow = Date.now();
+      if (env.DB) {
+        await env.DB.prepare(`
+          UPDATE planner_2027_orders
+          SET status = 'delivered', pdf_r2_key = ?, generation_count = generation_count + 1, updated_at = ?
+          WHERE id = ?
+        `).bind(r2Key, doneNow, order.id).run();
+      }
+      memOrder.status = 'delivered';
+      memOrder.pdf_r2_key = r2Key;
+      memOrder.generation_count = (memOrder.generation_count || 0) + 1;
+      memOrder.updated_at = doneNow;
+      memoryStore.planner2027Orders.set(order.id, memOrder);
+
+      await logWorkerEvent(env, {
+        event: 'payment_verified',
+        product_id: 'planner_2027',
+        value_inr: (order.amount_paise || 149900) / 100,
+        meta_json: { order_id: order.id, rzp_order_id: rzpOrderId }
+      });
+      await logWorkerEvent(env, {
+        event: 'pdf_generated',
+        product_id: 'planner_2027',
+        meta_json: { order_id: order.id, r2_key: r2Key, bytes: pdfBytes.length }
+      });
+
+      return new Response(JSON.stringify({
+        status: 'delivered',
+        order_id: order.id,
+        download_token: rawToken,
+        expires_at: tokenExpiresAt
+      }), { status: 200, headers: corsHeaders });
+    }
+
+    // 8d. POST /api/planner-2027/webhook
+    if (url.pathname === '/api/planner-2027/webhook' && request.method === 'POST') {
+      const corsHeaders = { 'Content-Type': 'application/json' };
+      assertRazorpayTestKey(env);
+
+      const webhookSig = request.headers.get('X-Razorpay-Signature') || '';
+      const webhookSecret = (env.RAZORPAY_WEBHOOK_SECRET || env.RAZORPAY_KEY_SECRET || '').trim();
+      if (!webhookSig || !webhookSecret) {
+        return new Response(JSON.stringify({ error: 'Missing webhook signature or secret.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const rawBody = await request.text();
+      let isSigValid = false;
+      try {
+        const expectedSig = await hmacSha256Hex(webhookSecret, rawBody);
+        isSigValid = timingSafeEqual(expectedSig.toLowerCase(), webhookSig.toLowerCase());
+      } catch (e) {
+        isSigValid = false;
+      }
+
+      if (!isSigValid) {
+        return new Response(JSON.stringify({ error: 'Invalid webhook signature.' }), { status: 400, headers: corsHeaders });
+      }
+
+      let payload = {};
+      try {
+        payload = JSON.parse(rawBody);
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON payload.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const event = payload.event;
+      const payment = payload.payload?.payment?.entity;
+      const rzpOrderId = payment?.order_id;
+
+      if (!rzpOrderId) {
+        return new Response(JSON.stringify({ status: 'ignored_no_rzp_order_id' }), { status: 200, headers: corsHeaders });
+      }
+
+      let order = null;
+      if (env.DB) {
+        order = await env.DB.prepare('SELECT * FROM planner_2027_orders WHERE razorpay_order_id = ?').bind(rzpOrderId).first();
+      }
+      if (!order) {
+        for (const o of memoryStore.planner2027Orders.values()) {
+          if (o.razorpay_order_id === rzpOrderId) {
+            order = o;
+            break;
+          }
+        }
+      }
+
+      if (!order) {
+        return new Response(JSON.stringify({ status: 'order_not_found_ignored' }), { status: 200, headers: corsHeaders });
+      }
+
+      await logWorkerEvent(env, {
+        event: 'webhook_received',
+        product_id: 'planner_2027',
+        meta_json: { order_id: order.id, rzp_event: event }
+      });
+
+      // Idempotency: If already generated, delivered, or undergoing editorial attention, do not double-generate
+      if (order.status === 'delivered' || order.status === 'generating' || order.status === 'needs_attention') {
+        return new Response(JSON.stringify({ status: 'already_processed', current_status: order.status }), { status: 200, headers: corsHeaders });
+      }
+
+      if (event === 'payment.captured' || event === 'order.paid') {
+        const now = Date.now();
+        if (env.DB) {
+          await env.DB.prepare("UPDATE planner_2027_orders SET razorpay_payment_id = ?, status = 'paid', updated_at = ? WHERE id = ?")
+            .bind(payment?.id || 'webhook_captured', now, order.id).run();
+        }
+        const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
+        memOrder.razorpay_payment_id = payment?.id || 'webhook_captured';
+        memOrder.status = 'paid';
+        memOrder.updated_at = now;
+        memoryStore.planner2027Orders.set(order.id, memOrder);
+      }
+
+      return new Response(JSON.stringify({ status: 'ok', event: event }), { status: 200, headers: corsHeaders });
+    }
+
+    // 8e. GET /api/planner-2027/download
+    if (url.pathname === '/api/planner-2027/download' && request.method === 'GET') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+
+      const orderId = String(url.searchParams.get('order') || '').trim();
+      const rawToken = String(url.searchParams.get('token') || '').trim();
+
+      if (!orderId || !rawToken) {
+        return new Response(JSON.stringify({ error: 'Missing required order or download token parameters.' }), { status: 400, headers: corsHeaders });
+      }
+
+      let order = null;
+      if (env.DB) {
+        order = await env.DB.prepare('SELECT * FROM planner_2027_orders WHERE id = ?').bind(orderId).first();
+      } else {
+        order = memoryStore.planner2027Orders.get(orderId);
+      }
+
+      if (!order) {
+        return new Response(JSON.stringify({ error: 'Order not found.' }), { status: 404, headers: corsHeaders });
+      }
+
+      if (order.status === 'needs_attention') {
+        return new Response(JSON.stringify({
+          status: 'needs_attention',
+          message: 'Your personal planner is currently undergoing final quality checks. Please check back shortly.'
+        }), { status: 202, headers: corsHeaders });
+      }
+
+      if (order.status !== 'delivered' || !order.pdf_r2_key) {
+        return new Response(JSON.stringify({ error: 'Planner PDF is not yet ready for download.' }), { status: 404, headers: corsHeaders });
+      }
+
+      if (Date.now() > order.token_expires_at) {
+        return new Response(JSON.stringify({ error: 'Download link has expired (30-day access window).' }), { status: 403, headers: corsHeaders });
+      }
+
+      const computedHash = await sha256Hex(rawToken);
+      if (!timingSafeEqual(computedHash.toLowerCase(), (order.download_token_hash || '').toLowerCase())) {
+        return new Response(JSON.stringify({ error: 'Invalid or incorrect download token.' }), { status: 403, headers: corsHeaders });
+      }
+
+      const pdfBytes = await getPrivateR2Report(env, order.pdf_r2_key);
+      if (!pdfBytes) {
+        return new Response(JSON.stringify({ error: 'Report archive temporarily unavailable.' }), { status: 404, headers: corsHeaders });
+      }
+
+      await logWorkerEvent(env, {
+        event: 'download_served',
+        product_id: 'planner_2027',
+        meta_json: { order_id: order.id }
+      });
+
+      return new Response(pdfBytes, {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'attachment; filename="Numeros_Vision_2027_Year_Ahead_Planner.pdf"',
+          'Cache-Control': 'private, no-store'
+        }
+      });
+    }
+
+    // 8f. GET /api/planner-2027/order-status
+    if (url.pathname === '/api/planner-2027/order-status' && request.method === 'GET') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+
+      const orderId = String(url.searchParams.get('order') || '').trim();
+      if (!orderId) {
+        return new Response(JSON.stringify({ error: 'Missing order parameter.' }), { status: 400, headers: corsHeaders });
+      }
+
+      let order = null;
+      if (env.DB) {
+        order = await env.DB.prepare('SELECT id, status, amount_paise, currency, generation_count, pdf_r2_key, created_at, updated_at FROM planner_2027_orders WHERE id = ?').bind(orderId).first();
+      } else {
+        order = memoryStore.planner2027Orders.get(orderId);
+      }
+
+      if (!order) {
+        return new Response(JSON.stringify({ error: 'Order not found.' }), { status: 404, headers: corsHeaders });
+      }
+
+      return new Response(JSON.stringify({
+        order_id: order.id,
+        status: order.status,
+        amount_paise: order.amount_paise,
+        currency: order.currency,
+        generation_count: order.generation_count,
+        has_pdf: (order.status === 'delivered' && !!order.pdf_r2_key),
+        created_at: order.created_at,
+        updated_at: order.updated_at
+      }), { status: 200, headers: corsHeaders });
+    }
+
 
     // ── ROUTE: IDENTITY SIGNUP & REGISTRATION (/api/v1/identity/signup & /api/v1/auth/signup) ──
     if ((url.pathname === '/api/v1/identity/signup' || url.pathname === '/api/v1/auth/signup') && request.method === 'POST') {
