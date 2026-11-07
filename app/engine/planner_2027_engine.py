@@ -4,21 +4,23 @@ Numeros Vision · ANVEIL EVERY CHARM
 Master Deterministic Engine for the 2027 Annual Blueprint.
 
 Authoritative Rules Enforced:
-- 100% Symmetric 81-pair planetary compatibility grid (conditional pairs scored Neutral).
+- 100% Deterministic Day-Scoring via Authoritative Reference Engine (ref_engine.py).
+- Symmetric 81-pair planetary compatibility grid.
+- Python banker's rounding (roundHalfEven) for all deterministic daily scores.
 - Strict Results-Only architecture (no reduction formulas, weights, or workings exposed).
-- Age spans computed on 1 Jan 2027 and 31 Dec 2027 ("age X to Y").
-- Exact pinnacle boundary transitions detected within 2027.
+- Age spans and exact pinnacle boundary transitions detected within 2027.
 - Master vibration 11 flagged for Personal Month (e.g. June for Personal Year 5).
 """
 
-import json
 import os
-import re
+import json
 import datetime
+import collections
+import itertools
 from typing import Dict, Any, List, Optional, Tuple
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 1. PLANETARY MAPPINGS & AUTHORITATIVE 81-PAIR COMPATIBILITY GRID
+# 1. PLANETARY ARCHETYPES & AUTHORITATIVE REFERENCE MATRIX (ref_engine.py)
 # ─────────────────────────────────────────────────────────────────────────────
 
 PLANET_ARCHETYPES = {
@@ -33,40 +35,162 @@ PLANET_ARCHETYPES = {
     9: {"number": 9, "english": "Mars", "vedic": "Mangal", "element": "Fire"}
 }
 
-# Authoritative Symmetric 81-Pair Grid (1-based index)
-# Derived from Master Numerology Canon; conditional/asymmetric pairs scored Neutral.
-# 1-4 is Friendly; 1-1 Friendly; 1-8 Challenging; 2-8 Challenging; 8-1 Challenging; 4-4 Neutral.
-GRID_81 = {
-    1: {1: "Friendly", 2: "Friendly", 3: "Friendly", 4: "Friendly", 5: "Friendly", 6: "Neutral", 7: "Neutral", 8: "Challenging", 9: "Friendly"},
-    2: {1: "Friendly", 2: "Neutral", 3: "Friendly", 4: "Challenging", 5: "Friendly", 6: "Friendly", 7: "Neutral", 8: "Challenging", 9: "Challenging"},
-    3: {1: "Friendly", 2: "Friendly", 3: "Friendly", 4: "Neutral", 5: "Friendly", 6: "Challenging", 7: "Friendly", 8: "Neutral", 9: "Friendly"},
-    4: {1: "Friendly", 2: "Challenging", 3: "Neutral", 4: "Neutral", 5: "Friendly", 6: "Friendly", 7: "Neutral", 8: "Challenging", 9: "Challenging"},
-    5: {1: "Friendly", 2: "Friendly", 3: "Friendly", 4: "Friendly", 5: "Friendly", 6: "Friendly", 7: "Friendly", 8: "Friendly", 9: "Friendly"},
-    6: {1: "Neutral", 2: "Friendly", 3: "Challenging", 4: "Friendly", 5: "Friendly", 6: "Friendly", 7: "Friendly", 8: "Neutral", 9: "Challenging"},
-    7: {1: "Neutral", 2: "Neutral", 3: "Friendly", 4: "Neutral", 5: "Friendly", 6: "Friendly", 7: "Neutral", 8: "Neutral", 9: "Neutral"},
-    8: {1: "Challenging", 2: "Challenging", 3: "Neutral", 4: "Challenging", 5: "Friendly", 6: "Neutral", 7: "Neutral", 8: "Challenging", 9: "Neutral"},
-    9: {1: "Friendly", 2: "Challenging", 3: "Friendly", 4: "Challenging", 5: "Friendly", 6: "Challenging", 7: "Neutral", 8: "Neutral", 9: "Challenging"}
+# Authoritative 81-Pair Grid from ref_engine.py
+# row = number a, column = number b (1..9); symmetric; conditional pairs scored N
+GRID = {
+    1: ['F',  'F+', 'F+', 'F',  'F+', 'F+', 'F',  'E+', 'F+'],
+    2: ['F+', 'F',  'F',  'E+', 'F+', 'N',  'N',  'E+', 'E+'],
+    3: ['F+', 'F',  'F',  'N',  'F+', 'E+', 'N',  'F',  'N'],
+    4: ['F',  'E+', 'N',  'N',  'F',  'F+', 'F+', 'N',  'E+'],
+    5: ['F+', 'F+', 'F+', 'F',  'F',  'F+', 'F',  'F',  'F'],
+    6: ['F+', 'N',  'E+', 'F+', 'F+', 'F',  'F+', 'N',  'N'],
+    7: ['F',  'N',  'N',  'F+', 'F',  'F+', 'N',  'N',  'N'],
+    8: ['E+', 'E+', 'F',  'N',  'F',  'N',  'N',  'N',  'N'],
+    9: ['F+', 'E+', 'N',  'E+', 'F',  'N',  'N',  'N',  'N']
 }
 
-# Chaldean letter values
-CHALDEAN_MAP = {
-    'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 8, 'G': 3, 'H': 5, 'I': 1,
-    'J': 1, 'K': 2, 'L': 3, 'M': 4, 'N': 5, 'O': 7, 'P': 8, 'Q': 1, 'R': 2,
-    'S': 3, 'T': 4, 'U': 6, 'V': 6, 'W': 6, 'X': 5, 'Y': 1, 'Z': 7
-}
+SC = {'F+': 2, 'F': 1, 'N': 0, 'E': -1, 'E+': -2}
+rel = lambda a, b: SC[GRID[a][b - 1]]
+ds = lambda n: sum(map(int, str(n)))
 
-# Traditional Crystal Suggestions for Mulank (Driver)
-CRYSTAL_SUGGESTIONS = {
-    1: "Sunstone or Carnelian",
-    2: "Moonstone",
-    3: "Citrine",
-    4: "Hessonite garnet",
-    5: "Green aventurine",
-    6: "Clear quartz",
-    7: "Tiger's eye",
-    8: "Amethyst or Lapis lazuli",
-    9: "Red jasper"
-}
+def red(n: int) -> int:
+    while n > 9:
+        n = ds(n)
+    return n
+
+CH = dict(zip("ABCDEFGHIJKLMNOPQRSTUVWXYZ", [1, 2, 3, 4, 5, 8, 3, 5, 1, 1, 2, 3, 4, 5, 7, 8, 1, 2, 3, 4, 6, 6, 6, 5, 1, 7]))
+WD = {0: 2, 1: 9, 2: 5, 3: 3, 4: 6, 5: 8, 6: 1}  # Mon..Sun -> ruler number
+W = dict(DT=15, DN=15, WD=15, PD=20, PM=10, PY=5, UD=10, UM=10, IH=10)
+RW = {k: W[k] for k in ('DT', 'DN', 'WD', 'PD', 'UD', 'UM', 'PM')}
+RTOT = sum(RW.values())
+WSUM = sum(W.values())
+UY = red(ds(2027))  # universal year 2027 -> 2
+
+def person(dob: Tuple[int, int, int], name: str) -> Dict[str, Any]:
+    d, m, y = dob
+    mul = red(d)
+    bha = red(ds(d) + ds(m) + ds(y))
+    py = red(ds(d) + ds(m) + ds(2027))
+    grid = {int(c) for c in f"{d:02d}{m:02d}{y}" if c != '0'} | {mul, bha}
+    letters = {CH[c] for c in name.upper() if c in CH}
+    nt = red(sum(CH[c] for c in name.upper() if c in CH))
+    return dict(mul=mul, bha=bha, py=py, grid=grid, name=letters | {nt})
+
+def avail(p: Dict[str, Any], x: int) -> float:
+    return 1.0 if x in p['grid'] else 0.75 if x in p['name'] else 0.5
+
+def comp_v(p: Dict[str, Any], x: int) -> float:
+    rD = 2 if x == p['mul'] else rel(x, p['mul'])
+    rC = 2 if x == p['bha'] else rel(x, p['bha'])
+    v = (rD + rC) / 2.0
+    if v > 0 and x not in (p['mul'], p['bha']):
+        v *= avail(p, x)
+    return v
+
+def pair_s(a: int, b: int) -> Tuple[float, bool]:
+    s = 2.0 if a == b else float(rel(a, b))
+    opp = (a != b and a + b == 10)
+    if opp:
+        s = max(-2.0, s - 0.5)
+    return s, opp
+
+def score_day(p: Dict[str, Any], date: datetime.date) -> Dict[str, Any]:
+    m, d = date.month, date.day
+    pm = red(p['py'] + m)
+    pd = red(pm + d)
+    um = red(UY + m)
+    ud = red(um + d)
+    dn = red(d)
+    mn = red(m)
+    yn = red(ds(2027))
+    dt = red(ds(d) + ds(m) + ds(2027))
+    wd = WD[date.weekday()]
+    nums = dict(DT=dt, DN=dn, WD=wd, PD=pd, PM=pm, PY=p['py'], UD=ud, UM=um)
+    H = sum(pair_s(a, b)[0] for a, b in itertools.combinations([dn, mn, yn], 2)) / 3.0
+    base = (sum(W[k] * (comp_v(p, x) + 2) / 4.0 for k, x in nums.items()) + W['IH'] * (H + 2) / 4.0) * 100.0 / WSUM
+    own = (p['mul'], p['bha'])
+    M = sum(RW[k] for k in RW if nums[k] in own) / float(RTOT)
+    cnt = collections.Counter(nums[k] for k in RW)
+    n, k = max(cnt.items(), key=lambda kv: (kv[1], 1 if kv[0] in own else 0, rel(kv[0], p['mul']) + rel(kv[0], p['bha'])))
+    adj = 0
+    if k >= 3:
+        r = (rel(n, p['mul']) + rel(n, p['bha'])) / 2.0
+        if n in own:
+            adj = min(15, 5 * (k - 2))
+        elif r > 0:
+            adj = min(6, 2 * (k - 2))
+        elif r < 0:
+            adj = -min(15, 5 * (k - 2))
+    # Python round() uses banker's rounding (round half to even)
+    final_score = max(0, min(100, round(base + 20 * M + adj)))
+    return dict(date=date, score=final_score, nums=nums, k=k, rep=n, inputs=[dn, mn, yn])
+
+def year(p: Dict[str, Any]) -> List[Dict[str, Any]]:
+    s = datetime.date(2027, 1, 1)
+    out = []
+    while s.year == 2027:
+        out.append(score_day(p, s))
+        s += datetime.timedelta(days=1)
+    return out
+
+def tiers(ys: List[Dict[str, Any]]) -> Tuple[int, int, int, int]:
+    s = sorted(x['score'] for x in ys)
+    cut = lambda f: s[int(f * len(s)) - 1]
+    return cut(.95), cut(.85), cut(.5), cut(.15)  # Peak>=P95, Excellent>=P85, Good>=P50, Moderate>=P15, else Care
+
+def classify_tier(score: int, p95: int, p85: int, p50: int, p15: int) -> str:
+    if score >= p95:
+        return "Peak"
+    if score >= p85:
+        return "Excellent"
+    if score >= p50:
+        return "Good"
+    if score >= p15:
+        return "Moderate"
+    return "Care"
+
+def lookup_relation(a: int, b: int) -> str:
+    code = GRID[a][b - 1]
+    if code in ('F+', 'F'):
+        return "Friendly"
+    if code in ('E', 'E+'):
+        return "Challenging"
+    return "Neutral"
+
+def get_number_compatibility_lists(num: int) -> Dict[str, List[int]]:
+    friendly = []
+    neutral = []
+    challenging = []
+    for b in range(1, 10):
+        if b == num:
+            continue
+        code = GRID[num][b - 1]
+        if code in ('F+', 'F'):
+            friendly.append(b)
+        elif code == 'N':
+            neutral.append(b)
+        elif code in ('E', 'E+'):
+            challenging.append(b)
+    return {
+        "friendly": friendly,
+        "neutral": neutral,
+        "challenging": challenging
+    }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. METADATA, THEMES & NOTE LIBRARIES (RESULTS ONLY)
+# ─────────────────────────────────────────────────────────────────────────────
+
+WEEKDAY_NAMES = [
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+]
+
+WEEKDAY_SHORT = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+MONTH_NAMES = [
+    "", "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+]
 
 # Personal Month Ratings per design specification
 PERSONAL_MONTH_RATINGS = {
@@ -93,41 +217,38 @@ PERSONAL_MONTH_THEMES = {
     9: "Completion, Clearance & Transition"
 }
 
-WEEKDAY_RULERS = {
-    0: 2,  # Monday -> Moon (2)
-    1: 9,  # Tuesday -> Mars (9)
-    2: 5,  # Wednesday -> Mercury (5)
-    3: 3,  # Thursday -> Jupiter (3)
-    4: 6,  # Friday -> Venus (6)
-    5: 8,  # Saturday -> Saturn (8)
-    6: 1   # Sunday -> Sun (1)
+CRYSTAL_SUGGESTIONS = {
+    1: "Sunstone or Carnelian",
+    2: "Moonstone",
+    3: "Citrine",
+    4: "Hessonite garnet",
+    5: "Green aventurine",
+    6: "Clear quartz",
+    7: "Tiger's eye",
+    8: "Amethyst or Lapis lazuli",
+    9: "Red jasper"
 }
 
-WEEKDAY_NAMES = [
-    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-]
-
-MONTH_NAMES = [
-    "", "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-]
-
-# Fixed 12 Plain-Language Date Notes (No numbers, no formulas, zero predictions)
 DATE_NOTES_LIBRARY = {
     "Peak": [
         "A strong day to plan important conversations or new starts.",
         "An auspicious window for meaningful decisions and steady alignment.",
         "A clear, constructive day to advance personal and professional priorities."
     ],
-    "Favourable": [
+    "Excellent": [
         "A good day for steady progress and focused collaboration.",
         "A supportive atmosphere for organization, research, and practical steps.",
         "A productive rhythm well suited for productive conversations."
     ],
-    "Steady": [
+    "Good": [
         "A balanced day suited for routine workflows and quiet maintenance.",
         "A neutral day ideal for steady follow-through and patience.",
         "A grounded day to observe trends and organize ongoing commitments."
+    ],
+    "Moderate": [
+        "A day for steady pacing, routine administration, and measured focus.",
+        "A balanced day best reserved for thoughtful follow-up and review.",
+        "A steady day suited for organizing existing work without rushing."
     ],
     "Care": [
         "A day for a lighter schedule and thoughtful pacing.",
@@ -137,87 +258,22 @@ DATE_NOTES_LIBRARY = {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 2. CORE MATHEMATICAL HELPERS (INTERNAL ONLY)
+# 3. PINNACLES & LIFE CYCLES
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _reduce_to_single_digit(num: int) -> int:
-    """Deterministically reduce an integer to a single digit 1..9."""
-    while num > 9:
-        num = sum(int(ch) for ch in str(num))
-    return num
-
-def _get_chaldean_name_number(name: str) -> Tuple[int, int]:
-    """Calculate Chaldean compound and root number."""
-    clean = re.sub(r'[^A-Za-z]', '', name).upper()
-    compound = sum(CHALDEAN_MAP.get(ch, 0) for ch in clean)
-    root = _reduce_to_single_digit(compound)
-    return compound, root
-
-def _get_sun_sign(month: int, day: int) -> str:
-    """Determine Tropical sun sign from month and day."""
-    if (month == 3 and day >= 21) or (month == 4 and day <= 19):
-        return "Aries"
-    elif (month == 4 and day >= 20) or (month == 5 and day <= 20):
-        return "Taurus"
-    elif (month == 5 and day >= 21) or (month == 6 and day <= 20):
-        return "Gemini"
-    elif (month == 6 and day >= 21) or (month == 7 and day <= 22):
-        return "Cancer"
-    elif (month == 7 and day >= 23) or (month == 8 and day <= 22):
-        return "Leo"
-    elif (month == 8 and day >= 23) or (month == 9 and day <= 22):
-        return "Virgo"
-    elif (month == 9 and day >= 23) or (month == 10 and day <= 22):
-        return "Libra"
-    elif (month == 10 and day >= 23) or (month == 11 and day <= 21):
-        return "Scorpio"
-    elif (month == 11 and day >= 22) or (month == 12 and day <= 21):
-        return "Sagittarius"
-    elif (month == 12 and day >= 22) or (month == 1 and day <= 19):
-        return "Capricorn"
-    elif (month == 1 and day >= 20) or (month == 2 and day <= 18):
-        return "Aquarius"
-    else:
-        return "Pisces"
-
-def lookup_relation(n1: int, n2: int) -> str:
-    """Look up relation in the authoritative symmetric 81-pair grid."""
-    return GRID_81.get(n1, {}).get(n2, "Neutral")
-
-# ─────────────────────────────────────────────────────────────────────────────
-# 3. PINNACLES & AGE EDGES CALCULATION
-# ─────────────────────────────────────────────────────────────────────────────
-
-def calculate_pinnacles(
-    dob: datetime.date,
-    bhagyank: int,
-    target_year: int = 2027
-) -> Dict[str, Any]:
-    """
-    Calculate the 4 Life Pinnacles and their age spans with edge detection in target_year.
-    P1 = month + day (reduced)
-    P2 = day + year (reduced)
-    P3 = P1 + P2 (reduced)
-    P4 = month + year (reduced)
-    
-    Age boundaries:
-    - P1 ends at age 36 - bhagyank
-    - P2 runs 9 years
-    - P3 runs 9 years
-    - P4 continues indefinitely
-    """
+def calculate_pinnacles(dob: datetime.date, bhagyank: int, target_year: int = 2027) -> Dict[str, Any]:
     day = dob.day
     month = dob.month
-    year = dob.year
+    year_num = dob.year
 
-    d_red = _reduce_to_single_digit(day)
-    m_red = _reduce_to_single_digit(month)
-    y_red = _reduce_to_single_digit(year)
+    d_red = red(day)
+    m_red = red(month)
+    y_red = red(year_num)
 
-    p1_val = _reduce_to_single_digit(m_red + d_red)
-    p2_val = _reduce_to_single_digit(d_red + y_red)
-    p3_val = _reduce_to_single_digit(p1_val + p2_val)
-    p4_val = _reduce_to_single_digit(m_red + y_red)
+    p1_val = red(m_red + d_red)
+    p2_val = red(d_red + y_red)
+    p3_val = red(p1_val + p2_val)
+    p4_val = red(m_red + y_red)
 
     p1_end = 36 - bhagyank
     p2_start = p1_end
@@ -226,9 +282,8 @@ def calculate_pinnacles(
     p3_end = p3_start + 9
     p4_start = p3_end
 
-    # Calculate exact age on Jan 1 and Dec 31
-    age_jan_1 = target_year - year - (1 if (month, day) > (1, 1) else 0)
-    age_dec_31 = target_year - year
+    age_jan_1 = target_year - year_num - (1 if (month, day) > (1, 1) else 0)
+    age_dec_31 = target_year - year_num
 
     age_span_str = f"age {age_jan_1} to {age_dec_31}" if age_jan_1 != age_dec_31 else f"age {age_jan_1}"
 
@@ -298,8 +353,17 @@ def calculate_pinnacles(
         }
     ]
 
+    spans = [
+        [0, p1_end],
+        [p2_start, p2_end],
+        [p3_start, p3_end],
+        [p4_start, None]
+    ]
+
     return {
         "pinnacles": pinnacles_list,
+        "spans": spans,
+        "values": {"P1": p1_val, "P2": p2_val, "P3": p3_val, "P4": p4_val},
         "current_pinnacle": f"P{p_start}",
         "next_pinnacle": f"P{p_end}" if boundary_crosses else (f"P{p_start + 1}" if p_start < 4 else "P4 (Culmination)"),
         "age_on_jan_1": age_jan_1,
@@ -309,96 +373,7 @@ def calculate_pinnacles(
     }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 4. 365-DAY ALIGNMENT ENGINE (RESULTS ONLY)
-# ─────────────────────────────────────────────────────────────────────────────
-
-def _calculate_day_alignment(
-    date_obj: datetime.date,
-    mulank: int,
-    bhagyank: int,
-    personal_year: int,
-    personal_month: int,
-    panchang_day: Optional[Dict[str, Any]] = None
-) -> Dict[str, Any]:
-    """
-    Compute daily Alignment Score (0-100) using the authoritative 81 grid.
-    Zero calculation steps are returned in the output.
-    """
-    day_num = date_obj.day
-    month_num = date_obj.month
-    year_num = date_obj.year
-    weekday_idx = date_obj.weekday()
-
-    d_red = _reduce_to_single_digit(day_num)
-    universal_day = _reduce_to_single_digit(day_num + month_num + year_num)
-    personal_day = _reduce_to_single_digit(personal_month + day_num)
-    weekday_ruler = WEEKDAY_RULERS[weekday_idx]
-
-    # Deterministic multi-factor resonance scoring via 81 Grid (internal only)
-    base_score = 50.0
-
-    # 1. Personal Day resonance with Mulank & Bhagyank
-    rel_pd_m = lookup_relation(personal_day, mulank)
-    rel_pd_b = lookup_relation(personal_day, bhagyank)
-    if rel_pd_m == "Friendly": base_score += 12.0
-    elif rel_pd_m == "Challenging": base_score -= 10.0
-
-    if rel_pd_b == "Friendly": base_score += 10.0
-    elif rel_pd_b == "Challenging": base_score -= 8.0
-
-    # 2. Universal Day resonance with Personal Year
-    rel_ud_py = lookup_relation(universal_day, personal_year)
-    if rel_ud_py == "Friendly": base_score += 8.0
-    elif rel_ud_py == "Challenging": base_score -= 6.0
-
-    # 3. Weekday ruler resonance with Mulank
-    rel_wr_m = lookup_relation(weekday_ruler, mulank)
-    if rel_wr_m == "Friendly": base_score += 8.0
-    elif rel_wr_m == "Challenging": base_score -= 6.0
-
-    # 4. Calendar Day digit match
-    if d_red == mulank or d_red == bhagyank:
-        base_score += 6.0
-
-    # 5. Panchang adjustments
-    is_amavasya = False
-    if panchang_day:
-        if panchang_day.get("is_amavasya") or panchang_day.get("tithi_number") == 30:
-            base_score -= 12.0
-            is_amavasya = True
-        elif panchang_day.get("is_purnima") or panchang_day.get("tithi_number") == 15:
-            base_score += 4.0
-
-    score = int(max(28, min(100, round(base_score))))
-
-    # Default general tier assignment
-    if score >= 90:
-        tier = "Peak"
-    elif score >= 75:
-        tier = "Favourable"
-    elif score >= 60:
-        tier = "Steady"
-    elif score >= 48:
-        tier = "Mixed"
-    else:
-        tier = "Care"
-
-    note_candidates = DATE_NOTES_LIBRARY.get(tier, DATE_NOTES_LIBRARY["Steady"])
-    note_idx = (date_obj.day + date_obj.month * 3) % len(note_candidates)
-    note = note_candidates[note_idx]
-
-    return {
-        "date": date_obj.strftime("%Y-%m-%d"),
-        "weekday": WEEKDAY_NAMES[weekday_idx],
-        "alignment_score": score,
-        "tier": tier,
-        "note": note,
-        "is_amavasya": is_amavasya,
-        "is_peak": (tier == "Peak")
-    }
-
-# ─────────────────────────────────────────────────────────────────────────────
-# 5. MASTER CALCULATION ENTRYPOINT
+# 4. MASTER CALCULATION ENTRYPOINT (RESULTS ONLY)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def calculate_planner_2027(
@@ -412,7 +387,6 @@ def calculate_planner_2027(
     Main deterministic calculation engine for 2027 Year Ahead Planner.
     Generates all report sections in strict Results-Only format.
     """
-    # 1. Validation
     if not full_name or len(full_name.strip()) < 2 or len(full_name.strip()) > 60:
         raise ValueError("Full name must be between 2 and 60 characters.")
     clean_name_check = full_name.replace(' ', '')
@@ -427,14 +401,19 @@ def calculate_planner_2027(
     if dob.year < 1900 or dob > datetime.date.today():
         raise ValueError("DOB year must be >= 1900 and not in the future.")
 
-    # 2. Driver (Mulank) and Conductor (Bhagyank)
-    mulank = _reduce_to_single_digit(dob.day)
-    bhagyank = _reduce_to_single_digit(dob.day + dob.month + dob.year)
+    # 1. Evaluate person via authoritative reference implementation
+    dob_tuple = (dob.day, dob.month, dob.year)
+    p = person(dob_tuple, full_name)
+    mulank = p['mul']
+    bhagyank = p['bha']
+    personal_year_2027 = p['py']
 
-    # 3. Personal Year 2027
-    personal_year_2027 = _reduce_to_single_digit(_reduce_to_single_digit(dob.day) + _reduce_to_single_digit(dob.month) + 2)
+    # 2. Compatibility Lists & Relationship
+    driver_lists = get_number_compatibility_lists(mulank)
+    conductor_lists = get_number_compatibility_lists(bhagyank)
+    relation = lookup_relation(mulank, bhagyank)
 
-    # 4. Universal Year 2027
+    # 3. Universal Year 2027
     universal_year_2027 = {
         "value": 2,
         "master_flag": 11,
@@ -442,62 +421,47 @@ def calculate_planner_2027(
         "theme": "Cooperation, Intuitive Diplomacy & Collective Calibration"
     }
 
-    # 5. Planets and Drivers
+    # 4. Planetary Archetypes
     driver_planet = PLANET_ARCHETYPES[mulank]
     conductor_planet = PLANET_ARCHETYPES[bhagyank]
 
-    # Authoritative 81-Grid relationship between driver and conductor
-    driver_conductor_relation = lookup_relation(mulank, bhagyank)
+    # 5. Lo Shu Grid Present and Missing digits
+    lo_shu_present = sorted(list(p['grid']))
+    lo_shu_missing = [d for d in range(1, 10) if d not in p['grid']]
 
-    # Friendly & Challenging numbers from the 81 Grid
-    friendly_nums = sorted([n for n in range(1, 10) if lookup_relation(mulank, n) == "Friendly" and lookup_relation(bhagyank, n) == "Friendly"])
-    if not friendly_nums:
-        friendly_nums = sorted([n for n in range(1, 10) if lookup_relation(mulank, n) == "Friendly"])
+    # 6. Name Numbers
+    name_numbers = sorted(list(p['name']))
+    full_compound = sum(CH[c] for c in full_name.upper() if c in CH)
+    full_root = red(full_compound)
 
-    challenging_nums = sorted(list(set(
-        [n for n in range(1, 10) if lookup_relation(mulank, n) == "Challenging"] +
-        [n for n in range(1, 10) if lookup_relation(bhagyank, n) == "Challenging"]
-    )))
-
-    # 6. Sun Sign
-    sun_sign = _get_sun_sign(dob.month, dob.day)
-
-    # 7. Lo Shu Grid plotting
-    dob_digits = [int(c) for c in dob_str if c.isdigit() and c != '0']
-    lo_shu_layout = [
-        {"digit": 4, "count": dob_digits.count(4), "is_personal_year": (personal_year_2027 == 4)},
-        {"digit": 9, "count": dob_digits.count(9), "is_personal_year": (personal_year_2027 == 9)},
-        {"digit": 2, "count": dob_digits.count(2), "is_personal_year": (personal_year_2027 == 2)},
-        {"digit": 3, "count": dob_digits.count(3), "is_personal_year": (personal_year_2027 == 3)},
-        {"digit": 5, "count": dob_digits.count(5), "is_personal_year": (personal_year_2027 == 5)},
-        {"digit": 7, "count": dob_digits.count(7), "is_personal_year": (personal_year_2027 == 7)},
-        {"digit": 8, "count": dob_digits.count(8), "is_personal_year": (personal_year_2027 == 8)},
-        {"digit": 1, "count": dob_digits.count(1), "is_personal_year": (personal_year_2027 == 1)},
-        {"digit": 6, "count": dob_digits.count(6), "is_personal_year": (personal_year_2027 == 6)}
-    ]
-    present_numbers = [item["digit"] for item in lo_shu_layout if item["count"] > 0]
-    missing_numbers = [item["digit"] for item in lo_shu_layout if item["count"] == 0]
-
-    # 8. Name Numbers (Chaldean)
-    full_compound, full_root = _get_chaldean_name_number(full_name)
     name_data = {
         "full_name": full_name.strip(),
         "name_number_compound": full_compound,
         "name_number_root": full_root,
+        "name_numbers": name_numbers,
         "alignment_with_driver": lookup_relation(full_root, mulank),
         "alignment_with_conductor": lookup_relation(full_root, bhagyank)
     }
+
     if birth_name and birth_name.strip() and birth_name.strip().lower() != full_name.strip().lower():
-        b_compound, b_root = _get_chaldean_name_number(birth_name)
+        b_p = person(dob_tuple, birth_name)
+        b_compound = sum(CH[c] for c in birth_name.upper() if c in CH)
+        b_root = red(b_compound)
         name_data["birth_name"] = birth_name.strip()
         name_data["birth_name_compound"] = b_compound
         name_data["birth_name_root"] = b_root
+        name_data["birth_name_numbers"] = sorted(list(b_p['name']))
         name_data["birth_name_alignment_with_driver"] = lookup_relation(b_root, mulank)
 
-    # 9. Pinnacles & Age Edges
+    # 7. Pinnacles
     pinnacles_data = calculate_pinnacles(dob, bhagyank, target_year=2027)
 
-    # 10. Load Panchang data if available
+    # 8. 365 Days Scoring via ref_engine
+    ys = year(p)
+    p95, p85, p50, p15 = tiers(ys)
+    cutoffs = {"P95": p95, "P85": p85, "P50": p50, "P15": p15}
+
+    # Load Panchang data
     panchang_days = {}
     if os.path.exists(panchang_data_path):
         try:
@@ -507,56 +471,51 @@ def calculate_planner_2027(
         except Exception:
             pass
 
-    # 11. Twelve Months & Daily Calendar Calculations
-    months_data = []
     full_calendar_365 = []
-    start_date = datetime.date(2027, 1, 1)
-    end_date = datetime.date(2027, 12, 31)
-    cur = start_date
-
     month_days_map = {m: [] for m in range(1, 13)}
+    tier_counts = {"Care": 0, "Moderate": 0, "Good": 0, "Excellent": 0, "Peak": 0}
 
-    while cur <= end_date:
-        d_iso = cur.strftime("%Y-%m-%d")
-        m_num = cur.month
-        raw_pm = personal_year_2027 + m_num
-        p_month_num = _reduce_to_single_digit(raw_pm)
-        p_day_info = panchang_days.get(d_iso)
+    for d_obj in ys:
+        date_curr = d_obj['date']
+        score = d_obj['score']
+        d_iso = date_curr.strftime("%Y-%m-%d")
+        w_idx = date_curr.weekday()
+        m_num = date_curr.month
+        t_tier = classify_tier(score, p95, p85, p50, p15)
+        tier_counts[t_tier] += 1
 
-        day_result = _calculate_day_alignment(
-            cur, mulank, bhagyank, personal_year_2027, p_month_num, p_day_info
-        )
-        day_record = {
-            "date": day_result["date"],
-            "weekday": day_result["weekday"],
-            "alignment_score": day_result["alignment_score"],
-            "tier": day_result["tier"]
-        }
-        full_calendar_365.append(day_record)
+        notes_candidates = DATE_NOTES_LIBRARY[t_tier]
+        note = notes_candidates[(date_curr.day + date_curr.month * 3) % len(notes_candidates)]
 
-        extended_day = {
-            **day_result,
+        p_day_info = panchang_days.get(d_iso, {})
+
+        day_entry = {
+            "date": d_iso,
+            "weekday": WEEKDAY_SHORT[w_idx],
+            "alignment_score": score,
+            "tier": t_tier,
+            "note": note,
             "panchang": p_day_info
         }
-        month_days_map[m_num].append(extended_day)
-        cur += datetime.timedelta(days=1)
 
-    # Compile 12 Month Blueprints
+        full_calendar_365.append(day_entry)
+        month_days_map[m_num].append(day_entry)
+
+    # 9. Compile Month Blueprints
+    months_data = []
     for m in range(1, 13):
         m_name = MONTH_NAMES[m]
         raw_pm = personal_year_2027 + m
-        p_month_num = _reduce_to_single_digit(raw_pm)
+        p_month_num = red(raw_pm)
         is_master_11 = (raw_pm == 11)
 
         rating = PERSONAL_MONTH_RATINGS[p_month_num]
         theme = PERSONAL_MONTH_THEMES[p_month_num]
-
-        pm_display = f"2 (Master Vibration 11/2)" if is_master_11 else str(p_month_num)
+        pm_display = "2 (Master Vibration 11/2)" if is_master_11 else str(p_month_num)
 
         days_in_m = month_days_map[m]
         avg_score = round(sum(d["alignment_score"] for d in days_in_m) / len(days_in_m), 1)
 
-        # Sort for best 5 dates
         sorted_best = sorted(days_in_m, key=lambda x: (-x["alignment_score"], x["date"]))
         best_5 = [
             {
@@ -569,7 +528,6 @@ def calculate_planner_2027(
             for d in sorted_best[:5]
         ]
 
-        # Sort for 5 care dates
         sorted_care = sorted(days_in_m, key=lambda x: (x["alignment_score"], x["date"]))
         care_5 = [
             {
@@ -582,86 +540,50 @@ def calculate_planner_2027(
             for d in sorted_care[:5]
         ]
 
-        # Full and New Moons in this month
-        fm_dates = []
-        nm_dates = []
-        for d in days_in_m:
-            p = d.get("panchang")
-            if p:
-                if p.get("is_purnima"): fm_dates.append(d["date"])
-                if p.get("is_amavasya"): nm_dates.append(d["date"])
-
-        # Key Auspicious Dates (Section G):
-        key_dates_month = []
-        for d in days_in_m:
-            p = d.get("panchang")
-            if d["is_peak"]:
-                if d["is_amavasya"]:
-                    continue
-                if p and p.get("rahu_kaal", {}).get("is_morning", False):
-                    r_start = p.get("rahu_kaal", {}).get("start", "")
-                    if r_start and ("10:" in r_start or "11:" in r_start or "09:" in r_start):
-                        continue
-                key_dates_month.append({
-                    "date": d["date"],
-                    "weekday": d["weekday"],
-                    "alignment_score": d["alignment_score"],
-                    "tier": d["tier"],
-                    "note": d["note"]
-                })
-                if len(key_dates_month) >= 5:
-                    break
-
         months_data.append({
             "month_number": m,
             "month_name": m_name,
-            "personal_month_number": p_month_num,
-            "master_flag": 11 if is_master_11 else None,
+            "personal_month": p_month_num,
             "personal_month_display": pm_display,
-            "theme": theme,
+            "is_master_11": is_master_11,
             "rating": rating,
-            "month_average_score": avg_score,
-            "best_five_dates": best_5,
-            "five_care_dates": care_5,
-            "full_moon_dates": fm_dates,
-            "new_moon_dates": nm_dates,
-            "key_dates": key_dates_month
+            "theme": theme,
+            "average_alignment_score": avg_score,
+            "best_5_dates": best_5,
+            "care_5_dates": care_5,
+            "remedies": {
+                "color_guidance": f"Harmonic tones for month {m}",
+                "phonetic_vibration": f"Vibration attunement {p_month_num}"
+            }
         })
 
-    # 12. Traditional Crystal Suggestion
-    crystal_suggestion = {
-        "mulank": mulank,
-        "crystal": CRYSTAL_SUGGESTIONS[mulank],
-        "disclaimer": "Traditional suggestion for personal equilibrium. Not financial, medical, or curative advice."
-    }
+    all_scores = [d['score'] for d in ys]
 
     return {
         "subject": {
             "full_name": full_name.strip(),
             "dob": dob_str,
             "city": city,
-            "sun_sign": sun_sign
-        },
-        "numbers": {
-            "mulank": mulank,
-            "bhagyank": bhagyank,
-            "personal_year_2027": personal_year_2027,
-            "universal_year_2027": universal_year_2027,
+            "driver_mulank": mulank,
+            "conductor_bhagyank": bhagyank,
             "driver_planet": driver_planet,
             "conductor_planet": conductor_planet,
-            "driver_conductor_relation": driver_conductor_relation,
-            "friendly_numbers": friendly_nums,
-            "challenging_numbers": challenging_nums
+            "driver_conductor_relation": relation,
+            "driver_lists": driver_lists,
+            "conductor_lists": conductor_lists,
+            "personal_year_2027": personal_year_2027,
+            "universal_year_2027": universal_year_2027,
+            "lo_shu_present": lo_shu_present,
+            "lo_shu_missing": lo_shu_missing,
+            "name_data": name_data,
+            "crystal_suggestion": CRYSTAL_SUGGESTIONS[mulank]
         },
-        "lo_shu_grid": {
-            "layout": lo_shu_layout,
-            "present_numbers": present_numbers,
-            "missing_numbers": missing_numbers,
-            "marked_personal_year": personal_year_2027
-        },
-        "name_analysis": name_data,
-        "pinnacles": pinnacles_data,
+        "pinnacles_data": pinnacles_data,
+        "cutoffs": cutoffs,
+        "tier_counts": tier_counts,
+        "days_at_100": sum(1 for s in all_scores if s == 100),
+        "min": min(all_scores),
+        "max": max(all_scores),
         "months": months_data,
-        "crystal_suggestion": crystal_suggestion,
-        "calendar_365": full_calendar_365
+        "full_calendar_365": full_calendar_365
     }

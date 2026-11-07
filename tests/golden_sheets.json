@@ -1,0 +1,197 @@
+{
+ "A": {
+  "name": "ARUN SHARMA",
+  "dob": [
+   28,
+   11,
+   1981
+  ],
+  "mulank": 1,
+  "bhagyank": 4,
+  "relation": "Friendly",
+  "personal_year_2027": 5,
+  "pinnacles": {
+   "P1": 3,
+   "P2": 2,
+   "P3": 5,
+   "P4": 3,
+   "spans": [
+    [
+     0,
+     32
+    ],
+    [
+     32,
+     41
+    ],
+    [
+     41,
+     50
+    ],
+    [
+     50,
+     null
+    ]
+   ]
+  },
+  "driver_lists": {
+   "friendly": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9
+   ],
+   "neutral": [],
+   "challenging": [
+    8
+   ]
+  },
+  "conductor_lists": {
+   "friendly": [
+    1,
+    5,
+    6,
+    7
+   ],
+   "neutral": [
+    3,
+    8
+   ],
+   "challenging": [
+    2,
+    9
+   ]
+  },
+  "lo_shu_present": [
+   1,
+   2,
+   4,
+   8,
+   9
+  ],
+  "name_numbers": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "cutoffs": {
+   "P95": 92,
+   "P85": 86,
+   "P50": 71,
+   "P15": 59
+  },
+  "tier_counts": {
+   "Care": 51,
+   "Moderate": 129,
+   "Good": 129,
+   "Excellent": 36,
+   "Peak": 20
+  },
+  "days_at_100": 3,
+  "min": 29,
+  "max": 100
+ },
+ "B": {
+  "name": "ANIL KUMAR",
+  "dob": [
+   1,
+   5,
+   1975
+  ],
+  "mulank": 1,
+  "bhagyank": 1,
+  "relation": "Friendly",
+  "personal_year_2027": 8,
+  "pinnacles": {
+   "P1": 6,
+   "P2": 5,
+   "P3": 2,
+   "P4": 9,
+   "spans": [
+    [
+     0,
+     35
+    ],
+    [
+     35,
+     44
+    ],
+    [
+     44,
+     53
+    ],
+    [
+     53,
+     null
+    ]
+   ]
+  },
+  "driver_lists": {
+   "friendly": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9
+   ],
+   "neutral": [],
+   "challenging": [
+    8
+   ]
+  },
+  "conductor_lists": {
+   "friendly": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9
+   ],
+   "neutral": [],
+   "challenging": [
+    8
+   ]
+  },
+  "lo_shu_present": [
+   1,
+   5,
+   7,
+   9
+  ],
+  "name_numbers": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "cutoffs": {
+   "P95": 95,
+   "P85": 91,
+   "P50": 80,
+   "P15": 65
+  },
+  "tier_counts": {
+   "Care": 52,
+   "Moderate": 129,
+   "Good": 122,
+   "Excellent": 42,
+   "Peak": 20
+  },
+  "days_at_100": 7,
+  "min": 28,
+  "max": 100
+ }
+}
