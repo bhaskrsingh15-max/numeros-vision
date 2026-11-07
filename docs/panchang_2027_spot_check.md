@@ -29,16 +29,16 @@
 | 2027-05-02 | Sun | 05:39 | 18:56 | Krishna Ekadashi | Krishna | 17:17 – 18:56 | - |
 | 2027-05-03 | Mon | 05:38 | 18:57 | Krishna Dwadashi | Krishna | 07:18 – 08:58 | - |
 | 2027-05-06 | Thu | 05:36 | 18:59 | Amavasya | Krishna | 13:58 – 15:38 | New Moon (Amavasya) at 16:28 IST |
-| 2027-05-20 | Thu | 05:27 | 19:08 | Krishna Pratipada | Krishna | 14:00 – 15:43 | Full Moon (Purnima) at 16:28 IST |
-| 2027-06-01 | Tue | 05:23 | 19:15 | Krishna Dwadashi | Krishna | 15:47 – 17:31 | - |
-| 2027-06-02 | Wed | 05:23 | 19:15 | Krishna Trayodashi | Krishna | 12:19 – 14:03 | - |
-| 2027-06-03 | Thu | 05:23 | 19:16 | Amavasya | Krishna | 14:03 – 15:47 | - |
-| 2027-06-05 | Sat | 05:22 | 19:16 | Shukla Dwitiya | Shukla | 08:51 – 10:35 | New Moon (Amavasya) at 01:10 IST |
-| 2027-06-19 | Sat | 05:23 | 19:21 | Krishna Pratipada | Krishna | 08:53 – 10:37 | Full Moon (Purnima) at 06:14 IST |
-| 2027-07-01 | Thu | 05:26 | 19:23 | Krishna Trayodashi | Krishna | 14:09 – 15:54 | - |
-| 2027-07-02 | Fri | 05:27 | 19:23 | Krishna Chaturdashi | Krishna | 10:40 – 12:25 | - |
-| 2027-07-03 | Sat | 05:27 | 19:23 | Amavasya | Krishna | 08:56 – 10:41 | - |
-| 2027-07-04 | Sun | 05:28 | 19:23 | Shukla Dwitiya | Shukla | 17:38 – 19:23 | New Moon (Amavasya) at 08:31 IST |
+| 2027-05-20 | Thu | 05:27 | 19:07 | Purnima | Shukla | 14:00 – 15:42 | Full Moon (Purnima) at 16:28 IST |
+| 2027-06-01 | Tue | 05:23 | 19:14 | Krishna Ekadashi | Krishna | 15:46 – 17:30 | - |
+| 2027-06-02 | Wed | 05:23 | 19:15 | Krishna Dwadashi | Krishna | 12:19 – 14:03 | - |
+| 2027-06-03 | Thu | 05:23 | 19:15 | Krishna Trayodashi | Krishna | 14:03 – 15:47 | - |
+| 2027-06-05 | Sat | 05:22 | 19:16 | Shukla Pratipada | Shukla | 08:51 – 10:35 | New Moon (Amavasya) at 01:10 IST |
+| 2027-06-19 | Sat | 05:23 | 19:21 | Purnima | Shukla | 08:52 – 10:37 | Full Moon (Purnima) at 06:14 IST |
+| 2027-07-01 | Thu | 05:26 | 19:23 | Krishna Dwadashi | Krishna | 14:09 – 15:54 | - |
+| 2027-07-02 | Fri | 05:26 | 19:23 | Krishna Trayodashi | Krishna | 10:40 – 12:25 | - |
+| 2027-07-03 | Sat | 05:27 | 19:23 | Krishna Chaturdashi | Krishna | 08:56 – 10:40 | - |
+| 2027-07-04 | Sun | 05:27 | 19:23 | Amavasya | Krishna | 17:38 – 19:23 | New Moon (Amavasya) at 08:31 IST |
 | 2027-07-18 | Sun | 05:34 | 19:20 | Purnima | Shukla | 17:36 – 19:20 | Full Moon (Purnima) at 21:14 IST |
 | 2027-08-01 | Sun | 05:42 | 19:12 | Krishna Chaturdashi | Krishna | 17:31 – 19:12 | - |
 | 2027-08-02 | Mon | 05:42 | 19:11 | Amavasya | Krishna | 07:23 – 09:05 | New Moon (Amavasya) at 15:35 IST |

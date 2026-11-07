@@ -107,12 +107,14 @@ def generate_panchang_2027():
 
     while current_date <= end_date:
         d_str = current_date.strftime("%Y-%m-%d")
-        # Approximate local sunrise search around 00:00 UTC (05:30 IST) of the target day
-        search_start = ephem.Date(current_date.strftime("%Y/%m/%d") + " 00:00:00")
-        delhi.date = search_start
+        # Search from local midnight IST (18:30:00 UTC of previous day) to ensure early summer sunrises (~05:23 IST)
+        # are captured for the target day, avoiding the next-day offset bug
+        local_midnight_ist = datetime.datetime.combine(current_date, datetime.time(0, 0, 0))
+        utc_search_start = local_midnight_ist - datetime.timedelta(hours=5, minutes=30)
+        delhi.date = ephem.Date(utc_search_start)
 
         sun = ephem.Sun()
-        rising_utc = delhi.next_rising(sun, start=search_start).datetime()
+        rising_utc = delhi.next_rising(sun, start=ephem.Date(utc_search_start)).datetime()
         setting_utc = delhi.next_setting(sun, start=rising_utc).datetime()
 
         rising_ist = rising_utc + datetime.timedelta(hours=5, minutes=30)
@@ -231,6 +233,12 @@ def build_spot_check_table(panchang_data):
     # 3. Every New Moon date
     for nm in new_moons:
         spot_dates.add(nm["date"])
+
+    # 4. Mandatory spot assertion audit dates
+    spot_dates.update([
+        "2027-05-20", "2027-06-19", "2027-06-01", "2027-06-02",
+        "2027-06-03", "2027-06-05", "2027-07-03", "2027-07-04"
+    ])
 
     sorted_dates = sorted(list(spot_dates))
 
