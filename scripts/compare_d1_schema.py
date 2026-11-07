@@ -65,3 +65,9 @@ for tbl in tables:
     f_idxs = set(fresh_schema[tbl]['indexes'])
     print(f"Indexes in Preview D1 but NOT in Fresh: {p_idxs - f_idxs}")
     print(f"Indexes in Fresh but NOT in Preview D1: {f_idxs - p_idxs}")
+
+total_col_diffs = sum(len(set(preview_schema[t]['columns'].keys()) ^ set(fresh_schema[t]['columns'].keys())) for t in tables)
+total_idx_diffs = sum(len(set(preview_schema[t]['indexes']) ^ set(fresh_schema[t]['indexes'])) for t in tables)
+print("\n=== SUMMARY ===")
+print(f"Total Column Differences (Missing/Extra): {total_col_diffs}")
+print(f"Total Index Differences (Missing/Extra): {total_idx_diffs}")

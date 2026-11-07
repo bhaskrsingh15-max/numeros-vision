@@ -222,6 +222,7 @@ Set-PagesSecret "WEB3FORMS_ACCESS_KEY"    $WEB3FORMS_ACCESS_KEY     "preview"
 
 # Set all required Cloudflare secrets for production environment (--env production):
 # (Execute only during official production release gate; never deploy untested secrets to production)
+# NOTE: RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET must STAY TEST KEYS (rzp_test_...) until explicit approval of live mode after server-side order, amount and subject checks, no-localStorage-unlock work are complete, and the leak test passes. Do not set any live secret.
 Set-PagesSecret "DATA_ENCRYPTION_KEY"    $PROD_DATA_ENCRYPTION_KEY    "production"
 Set-PagesSecret "SESSION_SECRET"         $PROD_SESSION_SECRET         "production"
 Set-PagesSecret "OTP_HMAC_SECRET"        $PROD_OTP_HMAC_SECRET        "production"
