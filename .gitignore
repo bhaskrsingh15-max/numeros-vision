@@ -3,6 +3,13 @@
 .env.*
 !.env.example
 .dev.vars
+*.har
+*.tmp
+*.secret
+tmp_*
+test_fixtures/
+cloudflared.exe
+*.exe
 
 # Python caches & virtual environments
 __pycache__/

@@ -455,6 +455,12 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
   if (env.DB) {
     // 1. Update order status to PAID
     await env.DB.prepare("UPDATE orders SET status = 'PAID', updated_at = ? WHERE id = ?").bind(now, order.id).run();
+    await logWorkerEvent(env, {
+      event_name: 'payment_verified',
+      product_id: order.pack_id,
+      value_inr: (amountPaise || order.amount_paise) / 100,
+      currency: order.currency || 'INR'
+    });
 
     // 2. Record payment in payments table
     const pmtId = 'pmt_' + now + '_' + getRandomHex(4);
@@ -2047,8 +2053,74 @@ export default {
       }
     }
 
+
+  // In-memory sliding window rate limiter for public forms & telemetry
+  const _formRateLimits = new Map();
+  function checkFormRateLimit(clientIp, limit = 5, windowMs = 600000) {
+    const now = Date.now();
+    const list = _formRateLimits.get(clientIp) || [];
+    const valid = list.filter(t => now - t < windowMs);
+    if (valid.length >= limit) return false;
+    valid.push(now);
+    _formRateLimits.set(clientIp, valid);
+    return true;
+  }
+
+  // Server-side operational telemetry logger (events table - strictly ZERO PII)
+  async function logWorkerEvent(env, eventData) {
+    if (!env || !env.DB) return null;
+    try {
+      const id = 'evt_' + crypto.randomUUID().replace(/-/g, '').slice(0, 16);
+      const eventName = String(eventData.event_name || eventData.event || 'unnamed_event').slice(0, 64);
+      const deviceId = eventData.device_id ? String(eventData.device_id).slice(0, 64) : null;
+      const anonSession = eventData.anonymous_session_id ? String(eventData.anonymous_session_id).slice(0, 64) : null;
+      const pagePath = eventData.page_path ? String(eventData.page_path).slice(0, 255) : null;
+      const productId = eventData.product_id ? String(eventData.product_id).slice(0, 64) : null;
+      const valInr = parseFloat(eventData.value_inr || eventData.value) || 0.0;
+      const currency = String(eventData.currency || 'INR').slice(0, 4);
+      const utmSource = eventData.utm_source ? String(eventData.utm_source).slice(0, 64) : null;
+      const utmMedium = eventData.utm_medium ? String(eventData.utm_medium).slice(0, 64) : null;
+      const utmCampaign = eventData.utm_campaign ? String(eventData.utm_campaign).slice(0, 64) : null;
+      const metaJson = eventData.meta_json ? (typeof eventData.meta_json === 'string' ? eventData.meta_json : JSON.stringify(eventData.meta_json)) : null;
+      const ipHash = eventData.ip_hash || null;
+      const userAgent = eventData.user_agent ? String(eventData.user_agent).slice(0, 255) : null;
+      const createdAt = eventData.created_at || Date.now();
+
+      await env.DB.prepare(`
+        INSERT INTO events (
+          id, event_name, device_id, anonymous_session_id, page_path, product_id,
+          value_inr, currency, utm_source, utm_medium, utm_campaign, meta_json,
+          ip_hash, user_agent, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        id, eventName, deviceId, anonSession, pagePath, productId,
+        valInr, currency, utmSource, utmMedium, utmCampaign, metaJson,
+        ipHash, userAgent, createdAt
+      ).run();
+
+      return id;
+    } catch (err) {
+      console.debug('[Worker_Event_Log_Notice]', err);
+      return null;
+    }
+  }
+
     // 4. ROUTE: 1-ON-1 CONSULTATION ENQUIRY (/api/v1/consultation/enquiry)
     if (url.pathname === '/api/v1/consultation/enquiry' && request.method === 'POST') {
+      const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+      if (!checkFormRateLimit(clientIp, 5, 600000)) {
+        return new Response(JSON.stringify({
+          status: 'error',
+          message: 'Too many enquiry submissions from this IP. Please wait 10 minutes.'
+        }), {
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+            'Vary': 'Origin'
+          }
+        });
+      }
       try {
         const body = await request.json().catch(() => ({}));
         const name = (body.name || '').trim();
@@ -2123,6 +2195,20 @@ export default {
 
     // 5. ROUTE: GENERAL CONTACT / INQUIRY (/api/v1/contact)
     if (url.pathname === '/api/v1/contact' && request.method === 'POST') {
+      const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+      if (!checkFormRateLimit(clientIp, 5, 600000)) {
+        return new Response(JSON.stringify({
+          status: 'error',
+          message: 'Too many contact inquiries from this IP. Please wait 10 minutes.'
+        }), {
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+            'Vary': 'Origin'
+          }
+        });
+      }
       try {
         const body = await request.json().catch(() => ({}));
         const name = (body.name || '').trim();
@@ -2188,7 +2274,70 @@ export default {
         });
       }
     }
-    // 6. ROUTE: BILLING & INVOICES API REMOVED (Replaced by deterministic D1 /api/v1/user/receipts)
+
+    // 6. ROUTE: SERVER-SIDE OPERATIONAL EVENTS API (/api/v1/events) - STRICT ZERO PII
+    if (url.pathname === '/api/v1/events' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      };
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { status: 204, headers: corsHeaders });
+      }
+
+      const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+      if (!checkFormRateLimit('telemetry_' + clientIp, 60, 60000)) {
+        return new Response(JSON.stringify({ status: 'error', error: 'Rate limit exceeded.' }), { status: 429, headers: corsHeaders });
+      }
+
+      try {
+        const body = await request.json().catch(() => ({}));
+        // Verify strict ZERO PII in payload keys
+        const FORBIDDEN_KEYS = new Set([
+          'name', 'full_name', 'first_name', 'last_name', 'email', 'phone', 'mobile',
+          'dob', 'birth_date', 'birthdate', 'birth_time', 'birth_place', 'birth_city',
+          'driver', 'conductor', 'mulank', 'bhagyank', 'destiny', 'lifepath', 'chart', 'grid', 'loshu'
+        ]);
+
+        for (const k of Object.keys(body)) {
+          if (FORBIDDEN_KEYS.has(k.toLowerCase())) {
+            return new Response(JSON.stringify({ status: 'error', error: 'PII field rejected: ' + k }), { status: 400, headers: corsHeaders });
+          }
+          const v = body[k];
+          if (typeof v === 'string') {
+            if (/@[\w.-]+\.\w+/.test(v) || /^\+?[0-9\s-]{10,15}$/.test(v.trim())) {
+              return new Response(JSON.stringify({ status: 'error', error: 'PII pattern detected in ' + k }), { status: 400, headers: corsHeaders });
+            }
+          }
+        }
+
+        const ipHash = await sha256Hex(clientIp + ':nv_event_salt');
+        const userAgent = request.headers.get('User-Agent') || '';
+        const eventId = await logWorkerEvent(env, {
+          event_name: body.event_name || body.event,
+          device_id: body.device_id,
+          anonymous_session_id: body.anonymous_session_id,
+          page_path: body.page_path,
+          product_id: body.product_id,
+          value_inr: body.value_inr || body.value,
+          currency: body.currency,
+          utm_source: body.utm_source,
+          utm_medium: body.utm_medium,
+          utm_campaign: body.utm_campaign,
+          meta_json: body.meta || body.meta_json,
+          ip_hash: ipHash,
+          user_agent: userAgent
+        });
+
+        return new Response(JSON.stringify({ status: 'success', event_id: eventId }), { status: 200, headers: corsHeaders });
+      } catch (err) {
+        return new Response(JSON.stringify({ status: 'error', error: err.message }), { status: 500, headers: corsHeaders });
+      }
+    }
+
 
 
     // 7. ROUTE: PAYMENTS API (/api/v1/payments/*) - SERVER AUTHORITY & D1 SETTLEMENT
@@ -2426,6 +2575,12 @@ export default {
           await env.DB.prepare(
             'INSERT INTO orders (id, user_id, subject_id, pack_id, amount_paise, currency, rzp_order_id, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
           ).bind(internalOrderId, user.user_id, subjectId, pack.pack_id, amountPaise, currency, rzpOrderId, 'CREATED', now, now).run();
+          await logWorkerEvent(env, {
+            event_name: 'order_created',
+            product_id: pack.pack_id,
+            value_inr: amountPaise / 100,
+            currency: currency
+          });
 
           await env.DB.prepare(
             "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'order_created', 'orders', ?, ?, ?)"

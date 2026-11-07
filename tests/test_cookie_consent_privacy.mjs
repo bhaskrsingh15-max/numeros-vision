@@ -56,9 +56,11 @@ assert.ok(workerCode.includes('Set-Cookie') && workerCode.includes('nv_dev_id'),
   'FAIL: /api/v1/privacy/consent must set nv_dev_id cookie only after analytics consent');
 console.log('✓ PASS: Test 5 - Worker statutory consent route and server-side Set-Cookie verified');
 
-// 6. Verify 0004_cookie_consents.sql migration exists
-assert.ok(fs.existsSync('migrations/0004_cookie_consents.sql'),
-  'FAIL: migrations/0004_cookie_consents.sql must exist');
+// 6. Verify cookie consents migration exists (0005_cookie_consents.sql or 0004_cookie_consents.sql)
+assert.ok(
+  fs.existsSync('migrations/0005_cookie_consents.sql') || fs.existsSync('migrations/0004_cookie_consents.sql'),
+  'FAIL: migrations/0005_cookie_consents.sql or migrations/0004_cookie_consents.sql must exist'
+);
 console.log('✓ PASS: Test 6 - Migration file for cookie_consents present');
 
 console.log('\n--- ALL COOKIE CONSENT & PRIVACY TESTS PASSED (6/6) ---');

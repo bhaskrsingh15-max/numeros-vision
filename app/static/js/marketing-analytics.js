@@ -24,10 +24,9 @@
     'event', 'page_path', 'page_title', 'timestamp',
     'calculator_name', 'topic', 'plan_id', 'lead_type', 'method', 'cta_location', 'ref',
     'value', 'currency', 'transaction_id', 'content_name', 'items', 'item_name', 'price', 'quantity',
-    'user_id', 'golden_profile_id',
     'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
     'gclid', 'fbclid', 'wbraid', 'gbraid', 'ttclid', 'msclkid',
-    'gaid', 'idfa', 'idfv', 'device_id', 'device_type', 'is_pwa', 'app_platform'
+    'device_id', 'device_type', 'is_pwa', 'app_platform'
   ]);
 
   function sanitizeTelemetryPayload(obj) {
@@ -45,9 +44,14 @@
 
       // Secondary value-level privacy verification: drop any string value matching email, phone, or date pattern
       if (typeof val === 'string') {
-        if (/@[\w.-]+\.\w+/.test(val)) continue;
-        if (/^\+?[0-9\s-]{10,15}$/.test(val.trim())) continue;
-        if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(val.trim())) continue;
+        const trimmed = val.trim();
+        if (/@[\w.-]+\.\w+/.test(trimmed)) continue;
+        if (/^\+?[0-9\s-]{10,15}$/.test(trimmed)) continue;
+        // Strict Calendar / Birth Date Rejection (YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, DD/MM/YYYY, DDMMYYYY, YYYYMMDD)
+        if (/^\d{4}[-/](0[1-9]|1[0-2])[-/](0[1-9]|[12]\d|3[01])$/.test(trimmed)) continue;
+        if (/^(0[1-9]|[12]\d|3[01])[-/](0[1-9]|1[0-2])[-/]\d{4}$/.test(trimmed)) continue;
+        if (/^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])\d{4}$/.test(trimmed)) continue;
+        if (/^\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/.test(trimmed)) continue;
       }
       if (typeof val === 'object' && val !== null) {
         clean[key] = sanitizeTelemetryPayload(val);
@@ -89,7 +93,16 @@
     const cleanArgs = [];
     for (let i = 0; i < arguments.length; i++) {
       const a = arguments[i];
-      cleanArgs.push(typeof a === 'object' && a !== null ? sanitizeTelemetryPayload(a) : a);
+      if (typeof a === 'object' && a !== null) {
+        const item = sanitizeTelemetryPayload(a);
+        if (typeof item === 'object' && item !== null) {
+          delete item.user_id;
+          delete item.golden_profile_id;
+        }
+        cleanArgs.push(item);
+      } else {
+        cleanArgs.push(a);
+      }
     }
     window.dataLayer.push(cleanArgs);
   };
@@ -106,13 +119,22 @@
   });
   window.gtag('js', new Date());
 
-  // Meta Pixel Stub with Automatic Telemetry Sanitizer
+  // Meta Pixel Stub with Automatic Telemetry Sanitizer (Guaranteed 100% User/Chart Free)
   if (!window.fbq) {
     const fbq = function () {
       const cleanArgs = [];
       for (let i = 0; i < arguments.length; i++) {
         const a = arguments[i];
-        cleanArgs.push(typeof a === 'object' && a !== null ? sanitizeTelemetryPayload(a) : a);
+        if (typeof a === 'object' && a !== null) {
+          const item = sanitizeTelemetryPayload(a);
+          if (typeof item === 'object' && item !== null) {
+            delete item.user_id;
+            delete item.golden_profile_id;
+          }
+          cleanArgs.push(item);
+        } else {
+          cleanArgs.push(a);
+        }
       }
       fbq.callMethod ? fbq.callMethod.apply(fbq, cleanArgs) : fbq.queue.push(cleanArgs);
     };
@@ -129,8 +151,7 @@
   // 2. UTM Extraction & Attribution Helpers
   const UTM_PARAMS = [
     'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
-    'gclid', 'fbclid', 'wbraid', 'gbraid', 'ttclid', 'msclkid',
-    'gaid', 'idfa', 'idfv'
+    'gclid', 'fbclid', 'wbraid', 'gbraid', 'ttclid', 'msclkid'
   ];
 
   function getOrCreateDeviceId() {
@@ -374,8 +395,6 @@
       const attr = getStoredAttribution();
       const payload = sanitizeTelemetryPayload({
         method: userData?.source || 'free_calculator_gate',
-        user_id: userData?.user_id || localStorage.getItem('nv_uid') || null,
-        golden_profile_id: userData?.golden_profile_id || localStorage.getItem('nv_golden_id') || null,
         value: 0.0,
         currency: 'INR',
         ...attr

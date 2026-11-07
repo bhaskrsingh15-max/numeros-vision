@@ -69,7 +69,34 @@ const sandbox = {
   Array: Array
 };
 vm.createContext(sandbox);
-vm.runInContext(fnMatch[1], sandbox);
+const codeToRun = fnMatch[1]
+  .replace('const ALLOWED_TELEMETRY_KEYS', 'this.ALLOWED_TELEMETRY_KEYS')
+  .replace('function sanitizeTelemetryPayload', 'this.sanitizeTelemetryPayload = function');
+vm.runInContext(codeToRun, sandbox);
+
+// Test 8a: Verify gaid, idfa, idfv, user_id, golden_profile_id are NOT in ALLOWED_TELEMETRY_KEYS
+assert.strictEqual(sandbox.ALLOWED_TELEMETRY_KEYS.has('gaid'), false, 'FAIL: gaid must NOT be in ALLOWED_TELEMETRY_KEYS');
+assert.strictEqual(sandbox.ALLOWED_TELEMETRY_KEYS.has('idfa'), false, 'FAIL: idfa must NOT be in ALLOWED_TELEMETRY_KEYS');
+assert.strictEqual(sandbox.ALLOWED_TELEMETRY_KEYS.has('idfv'), false, 'FAIL: idfv must NOT be in ALLOWED_TELEMETRY_KEYS');
+assert.strictEqual(sandbox.ALLOWED_TELEMETRY_KEYS.has('user_id'), false, 'FAIL: user_id must NOT be in ALLOWED_TELEMETRY_KEYS');
+assert.strictEqual(sandbox.ALLOWED_TELEMETRY_KEYS.has('golden_profile_id'), false, 'FAIL: golden_profile_id must NOT be in ALLOWED_TELEMETRY_KEYS');
+console.log('✔ PASS: Test 8a: gaid, idfa, idfv, user_id, golden_profile_id are NOT in ALLOWED_TELEMETRY_KEYS');
+
+// Test 8b: Verify Date format rejection in sanitizeTelemetryPayload
+const dateFormatsToTest = [
+  '1990-05-15',      // YYYY-MM-DD
+  '1990/05/15',      // YYYY/MM/DD
+  '15-05-1990',      // DD-MM-YYYY
+  '15/05/1990',      // DD/MM/YYYY
+  '15051990',        // DDMMYYYY
+  '19900515'         // YYYYMMDD
+];
+
+for (const dateStr of dateFormatsToTest) {
+  const result = sandbox.sanitizeTelemetryPayload({ topic: dateStr });
+  assert.strictEqual(result.topic, undefined, `FAIL: Date format ${dateStr} was not rejected by sanitizeTelemetryPayload`);
+}
+console.log('✔ PASS: Test 8b: Extended date rejection (DD-MM-YYYY, DD/MM/YYYY, DDMMYYYY, YYYYMMDD, YYYY-MM-DD, YYYY/MM/DD) verified');
 
 const testPayload = {
   // Allowed keys

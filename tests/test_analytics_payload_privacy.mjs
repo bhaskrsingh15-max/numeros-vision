@@ -84,7 +84,8 @@ const PROHIBITED_KEYS = [
   'dob', 'birth_date', 'birthdate', 'birth_time', 'birth_place', 'birth_city',
   'city', 'place', 'name', 'full_name', 'first_name', 'last_name', 'user_name',
   'email', 'phone', 'mobile', 'driver', 'conductor', 'driver_mulank', 'conductor_bhagyank',
-  'mulank', 'bhagyank', 'destiny', 'lifepath', 'life_path', 'kua', 'loshu', 'grid', 'chart'
+  'mulank', 'bhagyank', 'destiny', 'lifepath', 'life_path', 'kua', 'loshu', 'grid', 'chart',
+  'gaid', 'idfa', 'idfv', 'user_id', 'golden_profile_id'
 ];
 
 const PROHIBITED_URL_PARAMS = [
@@ -94,7 +95,7 @@ const PROHIBITED_URL_PARAMS = [
 
 const EMAIL_REGEX = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 const PHONE_REGEX = /\b(?:\+?\d{1,3}[- ]?)?\d{10}\b/;
-const DOB_REGEX = /\b\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])\b/;
+const DOB_REGEX = /\b(?:\d{4}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]\d{4}|\d{8})\b/;
 
 function assertNoPIIOrChartData(obj, path = 'root') {
   if (!obj || typeof obj !== 'object') return;
