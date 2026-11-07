@@ -1936,7 +1936,7 @@ export default {
       }
     }
 
-    // 3B. ROUTE: STATUTORY PRIVACY & COOKIE CONSENT (/api/v1/privacy/consent)
+    // 3B. ROUTE: PRIVACY & COOKIE CONSENT (/api/v1/privacy/consent)
     if (url.pathname === '/api/v1/privacy/consent' && (request.method === 'POST' || request.method === 'GET' || request.method === 'OPTIONS')) {
       const corsHeaders = {
         'Content-Type': 'application/json',
@@ -2054,6 +2054,20 @@ export default {
     }
 
 
+
+  // Dormant Cloudflare Email Routing option (prepared; enable via env.SEND_EMAIL binding in dashboard)
+  async function sendEmailViaCloudflare(env, { to, from, subject, bodyText }) {
+    if (!env || !env.SEND_EMAIL) return false;
+    try {
+      // In production, configure Email Routing on domain and add SendEmail binding 'SEND_EMAIL' to Pages
+      // await env.SEND_EMAIL.send({ to: [to], from, subject, text: bodyText });
+      return true;
+    } catch (err) {
+      console.error('[Cloudflare_Email_Error]', err);
+      return false;
+    }
+  }
+
   // In-memory sliding window rate limiter for public forms & telemetry
   const _formRateLimits = new Map();
   function checkFormRateLimit(clientIp, limit = 5, windowMs = 600000) {
@@ -2097,6 +2111,16 @@ export default {
         valInr, currency, utmSource, utmMedium, utmCampaign, metaJson,
         ipHash, userAgent, createdAt
       ).run();
+
+      // Opportunistic data retention purge: delete events older than 90 days (10% sampling on write)
+      if (Math.random() < 0.10) {
+        const cutoff = Date.now() - (90 * 86400 * 1000);
+        try {
+          await env.DB.prepare("DELETE FROM events WHERE created_at < ?").bind(cutoff).run();
+        } catch (purgeErr) {
+          console.debug('[Event_Purge_Notice]', purgeErr);
+        }
+      }
 
       return id;
     } catch (err) {
@@ -2151,28 +2175,12 @@ export default {
         const ipHash = await sha256Hex(clientIp + ':' + enquirySalt);
         const userAgent = (request.headers.get('User-Agent') || '').slice(0, 255);
 
-        // 1. DURABLE D1 STORAGE: Enquiries table
-        if (env.DB) {
-          try {
-            await env.DB.prepare(`
-              INSERT INTO enquiries (
-                id, type, name, email, phone, area_or_category, preferred_contact_method,
-                order_id, message, ip_hash, user_agent, created_at
-              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `).bind(
-              enquiryId, 'consultation', name, email, phone, area, method,
-              null, description, ipHash, userAgent, now
-            ).run();
-          } catch (d1Err) {
-            console.error('[Enquiries_D1_Insert_Error]', d1Err);
-          }
-        }
-
-        // 2. Notification Dispatch: Forward via Web3Forms if configured, otherwise queue in D1
+        // 1. Notification Dispatch: Forward via Web3Forms if configured, recording outcome
+        let notificationStatus = 'notify_failed';
         const web3Key = env.WEB3FORMS_ACCESS_KEY;
         if (web3Key) {
           try {
-            await fetch('https://api.web3forms.com/submit', {
+            const w3Resp = await fetch('https://api.web3forms.com/submit', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -2190,14 +2198,38 @@ export default {
                 timestamp: ts
               })
             });
+            if (w3Resp.ok) {
+              const w3Data = await w3Resp.json().catch(() => ({}));
+              if (w3Data.success) {
+                notificationStatus = 'notified';
+              }
+            }
           } catch (e) {
             console.error('[Web3Forms_Edge_Error]', e);
+          }
+        }
+
+        // 2. DURABLE D1 STORAGE: Enquiries table with visible notification_status
+        if (env.DB) {
+          try {
+            await env.DB.prepare(`
+              INSERT INTO enquiries (
+                id, type, name, email, phone, area_or_category, preferred_contact_method,
+                order_id, message, notification_status, ip_hash, user_agent, created_at
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).bind(
+              enquiryId, 'consultation', name, email, phone, area, method,
+              null, description, notificationStatus, ipHash, userAgent, now
+            ).run();
+          } catch (d1Err) {
+            console.error('[Enquiries_D1_Insert_Error]', d1Err);
           }
         }
 
         return new Response(JSON.stringify({
           status: 'success',
           enquiry_id: enquiryId,
+          notification_status: notificationStatus,
           recipient: 'support@numerosvision.com',
           timestamp: ts,
           message: 'Your consultation enquiry has been securely recorded and routed to the advisory desk.'
@@ -2262,28 +2294,12 @@ export default {
         const ipHash = await sha256Hex(clientIp + ':' + enquirySalt);
         const userAgent = (request.headers.get('User-Agent') || '').slice(0, 255);
 
-        // 1. DURABLE D1 STORAGE: Enquiries table
-        if (env.DB) {
-          try {
-            await env.DB.prepare(`
-              INSERT INTO enquiries (
-                id, type, name, email, phone, area_or_category, preferred_contact_method,
-                order_id, message, ip_hash, user_agent, created_at
-              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `).bind(
-              ticketId, 'contact', name, email, phone, category, 'Email',
-              order || null, message, ipHash, userAgent, now
-            ).run();
-          } catch (d1Err) {
-            console.error('[Contact_D1_Insert_Error]', d1Err);
-          }
-        }
-
-        // 2. Notification Dispatch: Forward via Web3Forms if configured, otherwise queue in D1
+        // 1. Notification Dispatch: Forward via Web3Forms if configured, recording outcome
+        let notificationStatus = 'notify_failed';
         const web3Key = env.WEB3FORMS_ACCESS_KEY;
         if (web3Key) {
           try {
-            await fetch('https://api.web3forms.com/submit', {
+            const w3Resp = await fetch('https://api.web3forms.com/submit', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -2300,14 +2316,38 @@ export default {
                 ticket_id: ticketId
               })
             });
+            if (w3Resp.ok) {
+              const w3Data = await w3Resp.json().catch(() => ({}));
+              if (w3Data.success) {
+                notificationStatus = 'notified';
+              }
+            }
           } catch (e) {
             console.error('[Web3Forms_Edge_Error]', e);
+          }
+        }
+
+        // 2. DURABLE D1 STORAGE: Enquiries table with visible notification_status
+        if (env.DB) {
+          try {
+            await env.DB.prepare(`
+              INSERT INTO enquiries (
+                id, type, name, email, phone, area_or_category, preferred_contact_method,
+                order_id, message, notification_status, ip_hash, user_agent, created_at
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).bind(
+              ticketId, 'contact', name, email, phone, category, 'Email',
+              order || null, message, notificationStatus, ipHash, userAgent, now
+            ).run();
+          } catch (d1Err) {
+            console.error('[Contact_D1_Insert_Error]', d1Err);
           }
         }
 
         return new Response(JSON.stringify({
           status: 'success',
           ticket_id: ticketId,
+          notification_status: notificationStatus,
           recipient: 'support@numerosvision.com',
           message: 'Your inquiry has been securely recorded and routed to the support desk.'
         }), {
@@ -2326,8 +2366,8 @@ export default {
       }
     }
 
-    // 6. ROUTE: SERVER-SIDE OPERATIONAL EVENTS API (/api/v1/events) - STRICT ZERO PII & CONSENT GUARDED
-    // Retention Policy: Statutory DPDP Act 2023 data minimization. Operational telemetry stored for a 90-day rolling window, aggregated for funnel analytics and purged automatically.
+    // 6. ROUTE: SERVER-SIDE OPERATIONAL EVENTS API (/api/v1/events) - ZERO PII & CONSENT GUARDED
+    // Data Retention: 90-day rolling window for aggregated funnel analytics. Events older than 90 days are purged opportunistically on write.
     if (url.pathname === '/api/v1/events' && request.method === 'POST') {
       const allowedOrigin = getCorsOrigin(request, env);
       const corsHeaders = {
@@ -2347,7 +2387,17 @@ export default {
         return new Response(JSON.stringify({ status: 'error', error: 'Forbidden origin.' }), { status: 403, headers: corsHeaders });
       }
 
-      // Require Analytics Consent under DPDP Act 2023
+      // Required Secret: TELEMETRY_SALT must be configured; if missing, fail immediately and log nothing
+      const telemetrySalt = env.TELEMETRY_SALT;
+      if (!telemetrySalt) {
+        return new Response(JSON.stringify({
+          status: 'error',
+          code: 'CONFIGURATION_ERROR',
+          message: 'Telemetry service configuration is missing on server.'
+        }), { status: 503, headers: corsHeaders });
+      }
+
+      // Require Analytics Consent
       const cookieHeader = request.headers.get('Cookie') || '';
       let hasAnalyticsConsent = request.headers.get('X-Consent-Analytics') === 'true';
       if (!hasAnalyticsConsent && cookieHeader.includes('nv_cookie_consent')) {
@@ -2363,7 +2413,7 @@ export default {
         return new Response(JSON.stringify({
           status: 'error',
           code: 'ANALYTICS_CONSENT_REQUIRED',
-          message: 'Operational telemetry requires explicit analytics consent under DPDP Act 2023.'
+          message: 'Analytics consent required to record events.'
         }), { status: 403, headers: corsHeaders });
       }
 
@@ -2423,7 +2473,6 @@ export default {
           }
         }
 
-        const telemetrySalt = env.TELEMETRY_SALT || env.IP_HASH_SALT || 'nv_statutory_telemetry_salt_2026';
         const ipHash = await sha256Hex(clientIp + ':' + telemetrySalt);
         const userAgent = (request.headers.get('User-Agent') || '').slice(0, 255);
         const eventId = await logWorkerEvent(env, {
@@ -3134,10 +3183,10 @@ export default {
       if (request.method === 'POST') {
         const body = await request.json().catch(() => ({}));
 
-        // Statutory DPDP 2023 Consent Check
+        // Consent Check
         if (body.consent !== true) {
           return new Response(JSON.stringify({
-            error: 'Statutory DPDP 2023 consent is required to process personal birth details.'
+            error: 'Consent is required to process personal birth details.'
           }), { status: 400, headers: corsHeaders });
         }
 

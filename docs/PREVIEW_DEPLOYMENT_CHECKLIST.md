@@ -141,6 +141,20 @@ wrangler d1 execute numeros-vision-db --remote --file=migrations/0005_enquiries.
 wrangler d1 execute numeros-vision-db --remote --file=migrations/0006_events.sql
 ```
 
+### Pre-Flight Verification: Production D1 Migration Alignment Check
+Before deploying or modifying production, verify applied migrations against the repository and abort if any differ:
+```powershell
+# 5. Production D1 Pre-Flight Check: Compare remote migrations against repo
+$prodMigrations = (npx wrangler d1 migrations list numeros-vision-db --remote --json | ConvertFrom-Json)
+$repoMigrations = (Get-ChildItem migrations/*.sql | Select-Object -ExpandProperty Name)
+$unapplied = $repoMigrations | Where-Object { $_ -notin $prodMigrations.name }
+if ($unapplied) {
+    Write-Error "STOP: Production D1 does not match repository! Unapplied migrations: $($unapplied -join ', ')"
+    throw "Production D1 migration alignment check failed. Aborting."
+}
+Write-Host "PASS: Production D1 migrations match repository (0 unapplied)."
+```
+
 ---
 
 ## Step 3: Generate & Store Cryptographic Secrets in Cloudflare Pages
@@ -186,6 +200,7 @@ Set-PagesSecret "DATA_ENCRYPTION_KEY"    $DATA_ENCRYPTION_KEY    "preview"
 Set-PagesSecret "SESSION_SECRET"         $SESSION_SECRET         "preview"
 Set-PagesSecret "OTP_HMAC_SECRET"        $OTP_HMAC_SECRET        "preview"
 Set-PagesSecret "IP_HASH_SALT"           $IP_HASH_SALT           "preview"
+Set-PagesSecret "TELEMETRY_SALT"         $TELEMETRY_SALT         "preview"
 Set-PagesSecret "DOWNLOAD_TOKEN_SECRET"  $DOWNLOAD_TOKEN_SECRET  "preview"
 Set-PagesSecret "PDF_SERVICE_SECRET"     $PDF_SERVICE_SECRET     "preview"
 Set-PagesSecret "PDF_SERVICE_URL"        $PDF_SERVICE_URL        "preview"
