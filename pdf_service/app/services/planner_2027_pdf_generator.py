@@ -938,67 +938,102 @@ class Planner2027PdfBuilder:
         self.story.append(Paragraph("<font size=7 color='#7A654D'>Panchang for New Delhi (IST)</font>", s['TableCellCenter']))
         self.story.append(Spacer(1, 4))
 
-        # Monthly Remedy
-        self.story.append(Paragraph(f"<b>Monthly Focus & Lifestyle Attunement:</b> {rem_text}", s['BodyMuted']))
-        self.story.append(Spacer(1, 6))
+        # Monthly Remedy: only the single optional crystal from Year Ahead spec per Point 5
+        crystal_remedy = CRYSTALS_BY_MULANK.get(pm, "Clear quartz")
+        self.story.append(Paragraph(
+            f"<b>Optional Traditional Attunement:</b> In classical traditions, an optional complementary crystal for Personal Month {pm} is <b>{crystal_remedy}</b>. (Optional traditional suggestion).",
+            s['BodyMuted']
+        ))
+        self.story.append(Spacer(1, 4))
 
-        # Best 5 Dates Table
+        # Best 5 Dates Table (with Sunrise Tithi per Point 2 & 4)
         best_rows = [
-            [Paragraph("<b>Date</b>", s['TableHeader']), Paragraph("<b>Day</b>", s['TableHeader']), Paragraph("<b>Score</b>", s['TableHeader']), Paragraph("<b>Tier</b>", s['TableHeader']), Paragraph("<b>Strategic Planning Guidance</b>", s['TableHeader'])]
+            [
+                Paragraph("<b>Date</b>", s['TableHeader']),
+                Paragraph("<b>Day</b>", s['TableHeader']),
+                Paragraph("<b>Score</b>", s['TableHeader']),
+                Paragraph("<b>Tier</b>", s['TableHeader']),
+                Paragraph("<b>Sunrise Tithi</b>", s['TableHeader']),
+                Paragraph("<b>Strategic Planning Guidance</b>", s['TableHeader'])
+            ]
         ]
+        has_nb = False
         for row in m["best_5_dates"]:
             dt = datetime.date.fromisoformat(row["date"])
             tier = row["tier"]
             note = self.lib["date_notes"].get(tier, [row["note"]])[dt.day % len(self.lib["date_notes"].get(tier, [row["note"]]))]
+            p_day = self.panchang.get("days", {}).get(row["date"], {})
+            tithi_name = p_day.get("tithi_name", "")
+            is_nb = abs(p_day.get("minutes_to_tithi_boundary", 999.0)) <= 45.0
+            if is_nb:
+                tithi_name += "*"
+                has_nb = True
             best_rows.append([
                 Paragraph(dt.strftime("%d %b"), s['TableCellCenter']),
                 Paragraph(row["weekday"][:3], s['TableCellCenter']),
                 Paragraph(f"<b>{row['alignment_score']}</b>", s['TableCellCenter']),
                 Paragraph(tier, s['TableCellCenter']),
+                Paragraph(tithi_name, s['TableCellCenter']),
                 Paragraph(note, s['TableCell'])
             ])
-        t_best = Table(best_rows, colWidths=[55, 40, 45, 65, 285])
+        t_best = Table(best_rows, colWidths=[46, 32, 36, 55, 110, 248])
         t_best.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
             ('BOX', (0,0), (-1,-1), 0.8, COLOR_BORDER),
             ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 4),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
-            ('LEFTPADDING', (0,0), (-1,-1), 6),
-            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+            ('TOPPADDING', (0,0), (-1,-1), 2.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
+            ('LEFTPADDING', (0,0), (-1,-1), 4),
+            ('RIGHTPADDING', (0,0), (-1,-1), 4),
         ]))
 
-        # Care 5 Dates Table
+        # Care 5 Dates Table (with Sunrise Tithi per Point 2 & 4)
         care_rows = [
-            [Paragraph("<b>Date</b>", s['TableHeader']), Paragraph("<b>Day</b>", s['TableHeader']), Paragraph("<b>Score</b>", s['TableHeader']), Paragraph("<b>Tier</b>", s['TableHeader']), Paragraph("<b>Mindful Pacing Guidance</b>", s['TableHeader'])]
+            [
+                Paragraph("<b>Date</b>", s['TableHeader']),
+                Paragraph("<b>Day</b>", s['TableHeader']),
+                Paragraph("<b>Score</b>", s['TableHeader']),
+                Paragraph("<b>Tier</b>", s['TableHeader']),
+                Paragraph("<b>Sunrise Tithi</b>", s['TableHeader']),
+                Paragraph("<b>Mindful Pacing Guidance</b>", s['TableHeader'])
+            ]
         ]
         for row in m["care_5_dates"]:
             dt = datetime.date.fromisoformat(row["date"])
             tier = row["tier"]
             note = self.lib["date_notes"].get(tier, [row["note"]])[dt.day % len(self.lib["date_notes"].get(tier, [row["note"]]))]
+            p_day = self.panchang.get("days", {}).get(row["date"], {})
+            tithi_name = p_day.get("tithi_name", "")
+            is_nb = abs(p_day.get("minutes_to_tithi_boundary", 999.0)) <= 45.0
+            if is_nb:
+                tithi_name += "*"
+                has_nb = True
             care_rows.append([
                 Paragraph(dt.strftime("%d %b"), s['TableCellCenter']),
                 Paragraph(row["weekday"][:3], s['TableCellCenter']),
                 Paragraph(f"<b>{row['alignment_score']}</b>", s['TableCellCenter']),
                 Paragraph(tier, s['TableCellCenter']),
+                Paragraph(tithi_name, s['TableCellCenter']),
                 Paragraph(note, s['TableCell'])
             ])
-        t_care = Table(care_rows, colWidths=[55, 40, 45, 65, 285])
+        t_care = Table(care_rows, colWidths=[46, 32, 36, 55, 110, 248])
         t_care.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
             ('BOX', (0,0), (-1,-1), 0.8, COLOR_BORDER),
             ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 4),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
-            ('LEFTPADDING', (0,0), (-1,-1), 6),
-            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+            ('TOPPADDING', (0,0), (-1,-1), 2.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
+            ('LEFTPADDING', (0,0), (-1,-1), 4),
+            ('RIGHTPADDING', (0,0), (-1,-1), 4),
         ]))
 
         self.story.append(Paragraph("<b>Top Favourable Windows for Important Initiatives</b>", s['SectionH2']))
         self.story.append(t_best)
-        self.story.append(Spacer(1, 6))
+        self.story.append(Spacer(1, 4))
         self.story.append(Paragraph("<b>Mindful Pacing Dates (Favour Routine Pacing & Review)</b>", s['SectionH2']))
         self.story.append(t_care)
+        if has_nb:
+            self.story.append(Paragraph("<font size=6.5 color='#7A654D'>* Panchang: the tithi changes shortly after sunrise; check your local Panchang.</font>", s['TableCell']))
 
     def _build_page19_remedies_bank(self):
         s = self.styles

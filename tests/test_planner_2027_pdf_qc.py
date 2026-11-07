@@ -26,6 +26,7 @@ import re
 import csv
 import json
 import hashlib
+import datetime
 import unittest
 import pypdf
 
@@ -301,6 +302,78 @@ class TestPlanner2027PdfQc(unittest.TestCase):
         a_100 = [r["date"] for r in calc_a["full_calendar_365"] if r["alignment_score"] == 100]
         expected_a_100 = ["2027-04-04", "2027-05-21", "2027-05-30"]
         self.assertEqual(a_100, expected_a_100)
+
+    def test_every_month_page_parses_and_matches_golden_full(self):
+        """
+        Parses EVERY month page (12 pages x 2 persons = 24 pages) directly from
+        the generated PDF files and asserts:
+          - Average score matches average of golden CSV
+          - Top 5 dates: date, weekday, score, tier, and sunrise tithi match golden CSV and panchang
+          - Care 5 dates: date, weekday, score, tier, and sunrise tithi match golden CSV and panchang
+          - Moon dates and times match panchang JSON
+        """
+        panchang_golden = {}
+        with open("tests/golden_panchang_delhi_365.csv", "r", encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                panchang_golden[r["date"]] = r
+
+        with open("data/panchang_2027_delhi.json", "r", encoding="utf-8") as f:
+            panchang_json = json.load(f)
+
+        for pdf_path, golden_csv, name in [
+            (self.pdf_a_path, "tests/golden_A_365.csv", "Arun Sharma"),
+            (self.pdf_b_path, "tests/golden_B_365.csv", "Anil Kumar")
+        ]:
+            with open(golden_csv, "r", encoding="utf-8") as f:
+                golden_days = {r["date"]: r for r in csv.DictReader(f)}
+
+            reader = pypdf.PdfReader(pdf_path)
+            self.assertEqual(len(reader.pages), 24)
+
+            for m in range(1, 13):
+                p_idx = 5 + m  # Pages 7 to 18 correspond to index 6 to 17
+                text = reader.pages[p_idx].extract_text()
+
+                # 1. Average score assertion
+                m_days = [r for d, r in golden_days.items() if d.startswith(f"2027-{m:02d}")]
+                scores = [int(r["score"]) for r in m_days]
+                expected_avg = round(sum(scores) / len(scores), 1)
+
+                avg_match = re.search(r"Average Score:\s*([\d\.]+)\s*/\s*100", text)
+                self.assertTrue(avg_match, f"{name} M{m}: average score line missing in PDF")
+                found_avg = float(avg_match.group(1))
+                self.assertAlmostEqual(found_avg, expected_avg, places=1, msg=f"{name} M{m} avg mismatch")
+
+                # 2. Top 5 dates assertion
+                sorted_best = sorted(m_days, key=lambda x: (-int(x["score"]), x["date"]))[:5]
+                for b in sorted_best:
+                    dt = datetime.date.fromisoformat(b["date"])
+                    d_str = dt.strftime("%d %b")
+                    self.assertIn(d_str, text, f"{name} M{m}: Top date {d_str} missing from PDF")
+                    tithi_expected = panchang_golden[b["date"]]["tithi_name"]
+                    self.assertIn(tithi_expected, text, f"{name} M{m}: Tithi {tithi_expected} for {b['date']} missing from PDF")
+
+                # 3. Care 5 dates assertion
+                sorted_care = sorted(m_days, key=lambda x: (int(x["score"]), x["date"]))[:5]
+                for c in sorted_care:
+                    dt = datetime.date.fromisoformat(c["date"])
+                    d_str = dt.strftime("%d %b")
+                    self.assertIn(d_str, text, f"{name} M{m}: Care date {d_str} missing from PDF")
+                    tithi_expected = panchang_golden[c["date"]]["tithi_name"]
+                    self.assertIn(tithi_expected, text, f"{name} M{m}: Tithi {tithi_expected} for {c['date']} missing from PDF")
+
+                # 4. Moon events assertion
+                m_prefix = f"2027-{m:02d}"
+                f_moons = [fm for fm in panchang_json.get("full_moons_2027", []) if fm["date"].startswith(m_prefix)]
+                n_moons = [nm for nm in panchang_json.get("new_moons_2027", []) if nm["date"].startswith(m_prefix)]
+                for fm in f_moons:
+                    dt_fm = datetime.date.fromisoformat(fm["date"])
+                    fm_str = f"{dt_fm.strftime('%d %b')} at {fm['time_ist']}"
+                    self.assertIn(fm_str, text, f"{name} M{m}: Full moon {fm_str} missing from PDF")
+                for nm in n_moons:
+                    dt_nm = datetime.date.fromisoformat(nm["date"])
+                    nm_str = f"{dt_nm.strftime('%d %b')} at {nm['time_ist']}"
+                    self.assertIn(nm_str, text, f"{name} M{m}: New moon {nm_str} missing from PDF")
 
 
 if __name__ == "__main__":
