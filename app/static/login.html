@@ -489,7 +489,7 @@
 
         <div id="loginOtpInputContainer" style="display:none;" class="form-group">
           <label for="loginOtpCode">Enter 6-Digit OTP Code</label>
-          <input type="text" id="loginOtpCode" maxlength="6" class="form-input" placeholder="e.g. 123456" style="letter-spacing:0.18em; font-weight:700; text-align:center; font-size:0.92rem;" />
+          <input type="text" id="loginOtpCode" maxlength="6" class="form-input" placeholder="6-digit code" style="letter-spacing:0.18em; font-weight:700; text-align:center; font-size:0.92rem;" />
           <div id="loginOtpFeedback" style="font-size:0.68rem; margin-top:4px; color:#16835B;"></div>
         </div>
 
@@ -503,31 +503,7 @@
       </div>
     </div>
   
-    <!-- Google Fast Connect Fallback Modal -->
-    <div id="googleConnectModal" style="display:none; position:fixed; inset:0; background:rgba(26,23,20,0.72); backdrop-filter:blur(4px); z-index:999999; align-items:center; justify-content:center; padding:14px;">
-      <div style="background:#FFFFFF; border:1.5px solid #C9A227; border-radius:16px; width:100%; max-width:400px; padding:22px 20px; box-shadow:0 16px 40px rgba(0,0,0,0.25); text-align:center;">
-        <div style="width:40px; height:40px; margin:0 auto 10px; border-radius:50%; background:#FAF7F0; display:flex; align-items:center; justify-content:center; border:1px solid #C9A227;">
-          <svg width="22" height="22" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-          </svg>
-        </div>
-        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.35rem; color:#8B6914; margin:0 0 6px 0;">Sign In with Google Identity</h3>
-        <p style="font-size:0.76rem; color:#6B5E4F; margin:0 0 14px 0; line-height:1.4;">Confirm your Google email to sign in directly to your Numeros Vision dashboard.</p>
-        <div style="margin-bottom:12px; text-align:left;">
-          <label style="font-size:0.65rem; font-weight:700; text-transform:uppercase; color:#8B6914; display:block; margin-bottom:3px;">Google Account Email</label>
-          <input type="email" id="fastGoogleEmail" placeholder="e.g. member@gmail.com" class="form-input" style="padding:8px 12px; font-size:0.84rem;" />
-        </div>
-        <div style="display:flex; gap:8px; justify-content:flex-end;">
-          <button type="button" onclick="closeGoogleConnectModal()" style="padding:7px 14px; font-size:0.75rem; border-radius:8px; border:1px solid #CCC; background:#FFF; color:#555; cursor:pointer;">Cancel</button>
-          <button type="button" id="btnFastGoogleSubmit" onclick="submitFastGoogleLogin()" style="padding:7px 16px; font-size:0.75rem; font-weight:700; border-radius:8px; border:none; background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFF; cursor:pointer;">Sign In ✦</button>
-        </div>
-      </div>
-    </div>
-    
-  </main>
+    </main>
 
   <!-- Unified Footer -->
     <!-- Master Unified Site Footer -->
@@ -629,11 +605,10 @@
       }
     }
 
-    // Google Sign-In handlers
+        // Google Sign-In handlers
     function triggerGoogleSignIn() {
-      const isPreview = window.location.hostname.includes('pages.dev') || window.location.hostname === 'localhost';
-      if (isPreview || !window.google || !window.google.accounts || !window.google.accounts.id) {
-        showGoogleFastConnectModal();
+      if (!window.google || !window.google.accounts || !window.google.accounts.id) {
+        alert('Google Sign-In is initializing. Please sign in with Mobile OTP or try again in a moment.');
         return;
       }
       try {
@@ -643,78 +618,14 @@
         });
         google.accounts.id.prompt((notification) => {
           if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            showGoogleFastConnectModal();
+            console.debug('GSI prompt notification:', notification);
           }
         });
       } catch (e) {
-        showGoogleFastConnectModal();
+        console.warn('Google Sign-In initialization exception:', e);
       }
     }
 
-    function showGoogleFastConnectModal() {
-      const modal = document.getElementById('googleConnectModal');
-      const emailInput = document.getElementById('fastGoogleEmail');
-      const existingEmail = document.getElementById('userEmail') ? document.getElementById('userEmail').value.trim() : '';
-      if (emailInput && existingEmail) emailInput.value = existingEmail;
-      if (modal) modal.style.display = 'flex';
-    }
-
-    function closeGoogleConnectModal() {
-      const modal = document.getElementById('googleConnectModal');
-      if (modal) modal.style.display = 'none';
-    }
-
-    async function submitFastGoogleLogin() {
-      const emailInput = document.getElementById('fastGoogleEmail');
-      const email = emailInput ? emailInput.value.trim() : '';
-      if (!email || !email.includes('@')) {
-        alert('Please enter a valid Google email address.');
-        return;
-      }
-      const btn = document.getElementById('btnFastGoogleSubmit');
-      if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = 'Signing In... ✦';
-      }
-      try {
-        let data = null;
-        try {
-          const resp = await fetch('/api/v1/auth/google', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email })
-          });
-          if (resp.ok) {
-            data = await resp.json();
-          }
-        } catch (apiErr) {
-          console.warn('API fetch notice:', apiErr);
-        }
-
-        const sessionToken = (data && data.session_token) ? data.session_token : ('gauth_' + Date.now());
-        const goldenId = (data && data.golden_profile_id) ? data.golden_profile_id : ('NV-USR-' + Math.floor(100000 + Math.random() * 900000));
-
-        // session handled via HttpOnly __Host-nv_session cookie
-        
-        if (data && data.profile) {
-          const synced = syncGuestCalculationToProfile(data.profile);
-          // Removed legacy localStorage write (DPDP privacy));
-          if (synced.name) // Removed legacy localStorage write (DPDP privacy)
-          if (synced.dob) // Removed legacy localStorage write (DPDP privacy)
-        }
-
-        closeGoogleConnectModal();
-        window.location.href = getLoginRedirectUrl(data && data.redirect_url);
-      } catch (err) {
-        if (btn) {
-          btn.disabled = false;
-          btn.innerHTML = 'Sign In ✦';
-        }
-        alert('Google Sign-In failed: ' + err.message);
-      }
-    }
-
-    
     function getLoginRedirectUrl(defaultUrl) {
       try {
         const params = new URLSearchParams(window.location.search);
@@ -853,13 +764,7 @@
       document.getElementById('loginOtpInputContainer').style.display = 'block';
       document.getElementById('btnOtpLoginSubmit').style.display = 'flex';
       const feedback = document.getElementById('loginOtpFeedback');
-      if (data && data.dev_otp) {
-        feedback.innerHTML = '✦ Preview Mode: Use test code <strong>' + data.dev_otp + '</strong> (or 123456) to sign in.';
-        const codeInput = document.getElementById('loginOtpCode');
-        if (codeInput && !codeInput.value) codeInput.value = data.dev_otp;
-      } else {
-        feedback.innerHTML = '✓ Verification code dispatched to your registered number.';
-      }
+      feedback.innerHTML = '✓ Verification code dispatched to your registered number.';
 
       btn.innerHTML = '🔄 Resend Code';
       startLoginOtpTimer(60);

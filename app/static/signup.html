@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z2E6416W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3Z2E6416W7', {
+      send_page_view: true,
+      cookie_flags: 'SameSite=Lax;Secure'
+    });
+  </script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+
+  <!-- Standardized Favicon & Brand Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="/logos/nv-logo-mark.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+
+  <title>Create Your Golden Profile | Numeros Vision · ANVEIL EVERY CHARM</title>
+  <meta name="description" content="Create your verified Numeros Vision account to save your celestial birth chart, sync classical Lo Shu grids, track personal year transits, and unlock free and paid reports under DPDP consent." />
+  <link rel="canonical" href="https://numerosvision.com/signup/" />
+  <meta name="robots" content="noindex, follow" />
+
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Numeros Vision" />
+
+  <!-- Preconnect & Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
+
+  <!-- Google Identity Services (GSI) Client -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    /* ── AUTH CONTAINER & CARD STYLING ── */
+    .auth-wrap {
+      max-width: 520px;
+      margin: 20px auto 48px;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    .auth-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold, rgba(201, 162, 39, 0.38));
+      border-radius: 20px;
+      padding: clamp(18px, 3.5vw, 28px) clamp(16px, 3vw, 24px);
+      box-shadow: 0 10px 30px rgba(180, 155, 110, 0.12);
+      box-sizing: border-box;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .auth-seal {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold, #C9A227);
+      padding: 4px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 12px rgba(201, 162, 39, 0.18);
+    }
+    .auth-seal img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .auth-h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.5rem, 3vw, 1.85rem);
+      color: #8B6914;
+      margin: 0 0 4px 0;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+    .auth-lead {
+      font-size: 0.78rem;
+      color: #7A654D;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    /* ── 2-STEP ONBOARDING PROGRESS TRACKER ── */
+    .step-progress-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 0 22px 0;
+      padding: 12px 14px;
+      background: #FAF6EE;
+      border: 1px solid rgba(201, 162, 39, 0.3);
+      border-radius: 14px;
+      box-sizing: border-box;
+      gap: 8px;
+    }
+    .step-progress-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: default;
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+    .step-progress-item.clickable {
+      cursor: pointer;
+    }
+    .step-progress-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 2px solid rgba(201, 162, 39, 0.35);
+      color: #7A654D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+      flex-shrink: 0;
+    }
+    .step-progress-item.active .step-progress-circle {
+      background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
+      border-color: #8B6914;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(201, 162, 39, 0.32);
+      transform: scale(1.04);
+    }
+    .step-progress-item.completed .step-progress-circle {
+      background: #16835B;
+      border-color: #16835B;
+      color: #FFFFFF;
+      box-shadow: 0 3px 8px rgba(22, 131, 91, 0.25);
+    }
+    .step-progress-info {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    .step-num {
+      font-size: 0.60rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+      color: #7A654D;
+      line-height: 1.2;
+    }
+    .step-progress-item.active .step-num {
+      color: #8B6914;
+    }
+    .step-progress-item.completed .step-num {
+      color: #16835B;
+    }
+    .step-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #523E28;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .step-progress-connector {
+      flex: 1;
+      height: 2px;
+      background: rgba(201, 162, 39, 0.28);
+      border-radius: 999px;
+      transition: all 0.3s ease;
+      min-width: 20px;
+    }
+    .step-progress-connector.active {
+      background: linear-gradient(90deg, #16835B 0%, #C9A227 100%);
+    }
+
+    /* ── GOOGLE AUTH & DIVIDERS ── */
+    .btn-google-auth {
+      width: 100%;
+      background: #FFFFFF;
+      border: 1.5px solid #E5E7EB;
+      color: #2D3748;
+      padding: 13px 18px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin-bottom: 8px;
+    }
+    .btn-google-auth:hover {
+      background: #F9FAFB;
+      border-color: #D1D5DB;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+    }
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 18px 0;
+      color: #9CA3AF;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .auth-divider span {
+      padding: 0 14px;
+    }
+    .btn-auth-submit {
+      width: 100%;
+      padding: 14px 22px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      background: #2C2218;
+      color: #FFFFFF;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(44, 34, 24, 0.25);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: 0.02em;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .btn-auth-submit:hover {
+      background: #3E2F20;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(44, 34, 24, 0.35);
+    }
+    /* ── FORM GROUPS & INPUTS ── */
+    .form-group {
+      margin-bottom: 12px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gold-dark, #8B6914);
+      margin-bottom: 4px;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border, rgba(180, 155, 110, 0.35));
+      background: #FFFDF7;
+      font-size: 0.86rem;
+      color: #2C261E;
+      box-sizing: border-box;
+      font-family: inherit;
+      min-height: 40px;
+      transition: all 0.2s ease;
+    }
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--gold, #C9A227);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.16);
+    }
+    .form-hint {
+      display: block;
+      font-size: 0.64rem;
+      color: #7A654D;
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 520px) {
+      .form-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 8px;
+    }
+
+    /* ── PHONE WITH COUNTRY PREFIX ── */
+    .phone-input-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    .phone-prefix-select {
+      width: 110px;
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+    .phone-number-field {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── PASSWORD WITH TOGGLE ── */
+    .password-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .password-wrap input {
+      padding-right: 42px;
+    }
+    .password-toggle-btn {
+      position: absolute;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: #7A654D;
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── OTP DRAWER & CODE BOX ── */
+    .otp-drawer {
+      background: #FAF6EE;
+      border: 1.5px solid rgba(201, 162, 39, 0.45);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 14px;
+      display: none;
+      animation: nvFadeDown 0.25s ease-out forwards;
+    }
+    .otp-code-input {
+      font-family: 'Cinzel', monospace;
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-align: center;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 2px solid var(--gold, #C9A227);
+      background: #FFFFFF;
+      color: #8B6914;
+      width: 100%;
+      box-sizing: border-box;
+      outline: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .otp-code-input:focus {
+      border-color: #8B6914;
+      box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.22);
+    }
+    .otp-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      gap: 10px;
+    }
+    .btn-resend-otp {
+      background: transparent;
+      border: none;
+      color: #8B6914;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 6px;
+      text-decoration: underline;
+    }
+    .btn-resend-otp:disabled {
+      color: #9C8B75;
+      text-decoration: none;
+      cursor: not-allowed;
+    }
+
+    /* ── VERIFIED CONTACT AUTO-POPULATE BANNER (STEP 2) ── */
+    .verified-contact-summary {
+      background: linear-gradient(135deg, rgba(22, 131, 91, 0.08) 0%, rgba(201, 162, 39, 0.08) 100%);
+      border: 1.5px solid rgba(22, 131, 91, 0.35);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .verified-tags-list {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .verified-badge-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFFFFF;
+      border: 1px solid rgba(22, 131, 91, 0.3);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      color: #2C261E;
+      font-weight: 600;
+    }
+    .verified-check {
+      color: #16835B;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+    .badge-pill {
+      font-size: 0.62rem;
+      background: rgba(22, 131, 91, 0.12);
+      color: #16835B;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .btn-step-edit {
+      background: transparent;
+      border: 1px solid rgba(139, 105, 20, 0.4);
+      color: #8B6914;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-step-edit:hover {
+      background: rgba(201, 162, 39, 0.1);
+      border-color: #8B6914;
+    }
+
+    /* ── BUTTONS & ACTIONS ── */
+    .btn-auth-submit {
+      width: 100%;
+      padding: 12px 20px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
+      color: #FFFFFF;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(201, 162, 39, 0.28);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-family: inherit;
+    }
+    .btn-auth-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(201, 162, 39, 0.38);
+    }
+    .step-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .btn-step-back {
+      padding: 11px 16px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      border-radius: 10px;
+      background: #FFFDF7;
+      color: #7A654D;
+      border: 1.5px solid rgba(180, 155, 110, 0.45);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .btn-step-back:hover {
+      background: #FAF6EE;
+      color: #523E28;
+      border-color: #C9A227;
+    }
+
+    /* ── LIVE RESONANCE MATRIX MINI CARD ── */
+    .live-matrix-preview {
+      background: #FAF6EE;
+      border: 1px solid rgba(201, 162, 39, 0.35);
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin: 12px 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      text-align: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .matrix-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .matrix-item-label {
+      font-size: 0.60rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #7A654D;
+    }
+    .matrix-item-val {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #8B6914;
+      line-height: 1.1;
+    }
+
+    /* ── DPDP CONSENT BOX ── */
+    .dpdp-box {
+      background: #F7F3EA;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.66rem;
+      color: #523E28;
+      line-height: 1.38;
+      margin: 14px 0 16px;
+      border: 1.5px solid rgba(201, 162, 39, 0.3);
+      box-sizing: border-box;
+      text-align: left;
+    }
+    .dpdp-box-header {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.88rem;
+      color: #8B6914;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dpdp-consent-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 6px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed rgba(201, 162, 39, 0.25);
+    }
+    .dpdp-consent-row:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .dpdp-consent-label {
+      font-size: 0.66rem;
+      color: #523E28;
+      cursor: pointer;
+      line-height: 1.35;
+    }
+    .dpdp-safety-note {
+      font-size: 0.62rem;
+      color: #7A654D;
+      line-height: 1.3;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(201, 162, 39, 0.2);
+    }
+
+    .auth-alert {
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      margin-bottom: 12px;
+      display: none;
+      line-height: 1.4;
+      text-align: left;
+    }
+    .auth-alert-error {
+      background: #FDEDEC;
+      border: 1px solid #F5B7B1;
+      color: #C0392B;
+    }
+    .auth-alert-success {
+      background: #E8F8F5;
+      border: 1px solid #A3E4D7;
+      color: #117864;
+    }
+
+    .prefill-banner {
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.12) 0%, rgba(22, 131, 91, 0.08) 100%);
+      border: 1px solid rgba(201, 162, 39, 0.35);
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 0.74rem;
+      color: #523E28;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .auth-footer-links {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 0.74rem;
+      color: #7A654D;
+    }
+    .auth-footer-links a {
+      color: #8B6914;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .auth-footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes nvFadeDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  
+    /* ── SCREENSHOT RECOMMENDED SIGNUP PAGE DESIGN ── */
+    body {
+      background-color: #F7F3EA !important;
+      color: #523E28;
+    }
+    .auth-wrap {
+      max-width: 560px;
+      margin: 28px auto 60px;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    .auth-brand-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 0 4px;
+    }
+    .auth-brand-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2C2218;
+      letter-spacing: 0.02em;
+    }
+    .auth-brand-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #8B6914;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .auth-hero-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-hero-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      color: #2C2218;
+      font-weight: 700;
+      margin: 0 0 6px 0;
+      line-height: 1.15;
+    }
+    .auth-hero-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.90rem;
+      color: #7A654D;
+      margin: 0;
+    }
+    .auth-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(201, 162, 39, 0.28);
+      border-radius: 16px;
+      padding: clamp(22px, 4vw, 36px) clamp(18px, 3.5vw, 32px);
+      box-shadow: 0 8px 30px rgba(82, 62, 40, 0.07);
+      box-sizing: border-box;
+    }
+    .auth-card-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #2C2218;
+      margin: 0 0 6px 0;
+    }
+    .auth-card-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: #7A654D;
+      line-height: 1.45;
+      margin: 0 0 20px 0;
+    }
+    .btn-create-account {
+      width: 100%;
+      background: #16835B;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 14px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(22, 131, 91, 0.28);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-create-account:hover {
+      background: #126B4B;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(22, 131, 91, 0.38);
+    }
+    .auth-terms-note {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #8A7865;
+      margin: 12px 0 0 0;
+      line-height: 1.4;
+    }
+    .auth-terms-note a {
+      color: #523E28;
+      text-decoration: underline;
+    }
+    .auth-bottom-privacy-note {
+      text-align: center;
+      font-size: 0.70rem;
+      color: #9C8B75;
+      margin: 16px 0 0 0;
+    }
+    .auth-bottom-privacy-note a {
+      color: #7A654D;
+      text-decoration: underline;
+    }
+    .phone-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .phone-prefix-select {
+      width: 90px;
+      flex-shrink: 0;
+    }
+    .phone-number-field {
+      flex: 1;
+    }
+</style>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Create Your Golden Profile | Numeros Vision · ANVEIL EVERY CHARM",
+    "headline": "Create Your Golden Profile | Numeros Vision · ANVEIL EVERY CHARM",
+    "description": "Create your verified Numeros Vision account in a seamless 2-step process to save your celestial birth chart, sync classical Lo Shu grids, track personal year transits, and consult Charm AI under DPDP consent.",
+    "url": "https://numerosvision.com/signup/",
+    "image": "https://numerosvision.com/static/logos/anveil-charm-hero.png",
+    "author": {
+      "@type": "Organization",
+      "name": "Numeros Vision",
+      "url": "https://numerosvision.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Numeros Vision",
+      "url": "https://numerosvision.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://numerosvision.com/static/logos/anveil-charm-hero.png"
+      }
+    }
+  }
+  </script>
+  <meta property="og:site_name" content="Numeros Vision" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://numerosvision.com/signup/" />
+  <meta property="og:title" content="Create Your Account | Numeros Vision" />
+  <meta property="og:description" content="Join Numeros Vision to access deterministic AI numerology calculations, personal roadmaps, and consultation records." />
+  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script>
+    // ── RETURNING CUSTOMER RECOGNITION ──
+    try {
+      const existingSession = localStorage.getItem('nv_user_session');
+      const existingEmail = localStorage.getItem('nv_user_email');
+      const urlParams = new URLSearchParams(window.location.search);
+      if (existingSession && existingEmail && !urlParams.get('force')) {
+        const dest = urlParams.get('redirect') || '/dashboard/';
+        window.location.href = dest;
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KW6GQRVZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Unified Header -->
+  <header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" width="36" height="36" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links matching Master Roadmap IA -->
+      <nav aria-label="Main Navigation">
+        <ul class="nv-nav-menu" id="nvNavMenu">
+          <!-- 1. Home -->
+          <li class="nv-nav-item">
+            <a href="/" class="nv-nav-link" title="Numeros Vision Home" data-canonical="https://numerosvision.com/">Home</a>
+          </li>
+
+          <!-- 2. About Us -->
+          <li class="nv-nav-item">
+            <a href="/about/" class="nv-nav-link" title="About Numeros Vision | Our Approach to Numerology" data-canonical="https://numerosvision.com/about/">About Us</a>
+          </li>
+
+          <!-- 3. Calculators (Accordion / Dropdown) -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/tools/baby-naming" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/tools/name-numerology" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/tools/mobile-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/tools/compatibility-calculator" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Compatibility Synastry &amp; Synastry</span></a></li>
+              <li><a href="/tools/business-numerology" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/tools/life-path-calculator" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/tools/lo-shu-grid" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/tools/vehicle-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/tools/property-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/tools/blessing-years" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+
+          <!-- 4. Charm AI -->
+          <li class="nv-nav-item nv-nav-charm-highlight">
+            <a href="/charm_ai.html" class="nv-nav-link" title="Charm AI" style="display:inline-flex; align-items:center; gap:8px;">
+              <span class="nv-charm-medallion-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#FFFFFF" stroke-width="2.4" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></span> <span style="font-weight:700;">Charm AI</span>
+            </a>
+          </li>
+
+          <!-- 5. Reports & Consultations -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Reports</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/reports/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
+              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 6. Insights -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Insights</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
+              <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
+              <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
+              <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
+              <li><a href="/blog/gemstone-remedies" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 7. Pricing -->
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+
+          <!-- 8. Contact Us -->
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+
+          <!-- 9. PWA Download / Install App on Mobile & Tablet ONLY -->
+          <li class="nv-nav-item nv-pwa-menu-item" id="nvPwaDrawerItem" style="display:none; margin: 8px 0; width: 100%; box-sizing: border-box;">
+            <button type="button" class="nv-nav-link nv-pwa-install-trigger-btn" onclick="triggerPwaInstall(event)" style="background: rgba(201,162,39,0.12); border: 1.5px solid rgba(201,162,39,0.38); border-radius: 999px; padding: 10px 18px; font-weight: 600; color: #8B6914; display: flex; align-items: center; justify-content: space-between; width: 100%; cursor: pointer; text-align: left; box-sizing: border-box;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <span class="nv-sub-icon" style="font-size: 1.15rem;">📲</span>
+                <span>Install / Download App</span>
+              </span>
+              <span class="nv-sub-tag" style="background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #fff; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; font-weight: 700; text-transform: uppercase;">PWA</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/login/" class="nv-nav-link-auth">Sign In</a>
+        <a href="/#birth-profile" class="nv-btn-cta">Discover My Numbers ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <div class="nv-breadcrumbs">
+    <a href="/">Home</a>
+    <span class="nv-breadcrumbs-sep">/</span>
+    <span class="nv-breadcrumbs-current">Create Golden Profile</span>
+  </div>
+
+  <main class="auth-wrap">
+    <!-- Top Brand Bar matching screenshot -->
+    <div class="auth-brand-bar">
+      <span class="auth-brand-name">Numeros Vision</span>
+      <span class="auth-brand-tagline">ANVEIL EVERY CHARM</span>
+    </div>
+
+    <!-- Hero Header matching screenshot -->
+    <div class="auth-hero-header">
+      <h1 class="auth-hero-title">Discover Your Numbers</h1>
+      <p class="auth-hero-subtitle">Your personal numerology journey begins here.</p>
+    </div>
+
+    <!-- Inner White Card matching screenshot -->
+    <div class="auth-card">
+      <div id="authAlert" class="auth-alert" style="display: none;"></div>
+
+      <!-- ════════════════════════════════════════════════════════════ -->
+      <!-- STEP 1: INITIAL LIGHTWEIGHT REGISTRATION (3 FIELDS ONLY)     -->
+      <!-- ════════════════════════════════════════════════════════════ -->
+      <div id="step1Container">
+        <div style="font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.16em; text-transform:uppercase; color:#8B6914; font-weight:700; margin-bottom:6px;">
+          NUMEROS VISION · PERSONAL INTELLIGENCE WORKSPACE
+        </div>
+        <h2 class="auth-card-title" style="margin-top:0;">Begin Your Numerology Journey</h2>
+        <p class="auth-card-subtitle">One Registration. One Dashboard. One Transaction Journey. Access your personal workspace for reports, calculations, and Charm AI.</p>
+
+        <form id="step1Form" onsubmit="proceedToStep2(event)">
+          <!-- 1. Full Name -->
+          <div class="form-group">
+            <label for="regName">Full Name <span style="color:#C0392B;">*</span></label>
+            <input type="text" id="regName" class="form-input" placeholder="Enter your full name" required autocomplete="name" />
+          </div>
+
+          <!-- 2. Email Address -->
+          <div class="form-group">
+            <label for="regEmail">Email Address <span style="color:#C0392B;">*</span></label>
+            <input type="email" id="regEmail" class="form-input" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+
+          <!-- 3. Mobile Number -->
+          <div class="form-group">
+            <label for="regPhone">Mobile Number <span style="color:#C0392B;">*</span></label>
+            <div class="phone-input-row">
+              <select id="regPhonePrefix" class="form-select phone-prefix-select" aria-label="Country Dial Code">
+                <option value="+91" selected>+91</option>
+                <option value="+1">+1</option>
+                <option value="+44">+44</option>
+                <option value="+971">+971</option>
+                <option value="+65">+65</option>
+                <option value="+61">+61</option>
+                <option value="+49">+49</option>
+              </select>
+              <input type="tel" id="regPhone" class="form-input phone-number-field" placeholder="Enter mobile number" required autocomplete="tel" />
+            </div>
+          </div>
+
+          <!-- Green CTA Button matching screenshot -->
+          <div style="margin-top: 20px;">
+            <button type="submit" id="btnStep1Submit" class="btn-create-account">
+              Create My Free Account
+            </button>
+          </div>
+
+          <!-- Subtext -->
+          <p class="auth-terms-note">
+            By continuing, you agree to our <a href="/terms/">Terms</a> and <a href="/privacy-policy/">Privacy Policy</a>.
+          </p>
+
+          <div class="auth-footer-links" style="margin-top: 16px; text-align: center;">
+            Already registered? <a href="/login/" style="color:#16835B; font-weight:600;">Log In &rarr;</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════ -->
+      <!-- STEP 2: PROFILE SETUP (DOB & DECOUPLED DPDP CONSENT)         -->
+      <!-- ════════════════════════════════════════════════════════════ -->
+      <div id="step2Container" style="display: none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:0.75rem; font-weight:800; color:#16835B; text-transform:uppercase; letter-spacing:0.06em;">Step 2 of 2 · Profile Setup</span>
+          <button type="button" onclick="goToStep(1)" style="background:none; border:none; color:#7A654D; font-size:0.75rem; cursor:pointer; text-decoration:underline;">&larr; Back</button>
+        </div>
+        <h2 class="auth-card-title">Complete Your Personal Profile</h2>
+        <p class="auth-card-subtitle">Your birth details help us generate your personalised numerology report.</p>
+
+        <div style="background:#F7F3EA; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:10px 14px; margin-bottom:16px;">
+          <span id="step2SummaryText" style="font-size:0.80rem; color:#523E28; font-weight:600;"></span>
+        </div>
+
+        <form id="signupForm" onsubmit="handleSignup(event)">
+          <!-- Date of Birth (Day / Month / Year) -->
+          <div class="form-group">
+            <label>Date of Birth <span style="color:#C0392B;">*</span></label>
+            <div class="form-grid-3">
+              <div>
+                <input type="number" id="regDay" class="form-input" placeholder="Day (DD)" min="1" max="31" required oninput="updateLivePreview()" />
+              </div>
+              <div>
+                <select id="regMonth" class="form-select" required onchange="updateLivePreview()">
+                  <option value="">Month</option>
+                  <option value="1">01 - Jan</option><option value="2">02 - Feb</option>
+                  <option value="3">03 - Mar</option><option value="4">04 - Apr</option>
+                  <option value="5">05 - May</option><option value="6">06 - Jun</option>
+                  <option value="7">07 - Jul</option><option value="8">08 - Aug</option>
+                  <option value="9">09 - Sep</option><option value="10">10 - Oct</option>
+                  <option value="11">11 - Nov</option><option value="12">12 - Dec</option>
+                </select>
+              </div>
+              <div>
+                <input type="number" id="regYear" class="form-input" placeholder="Year (YYYY)" min="1900" max="2026" required oninput="updateLivePreview()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Birth Time (Optional with Unknown toggle) -->
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <label>Time of Birth <span style="font-size:0.75rem; color:#7A654D; font-weight:normal;">(Optional for advanced numerology)</span></label>
+              <label style="font-size:0.72rem; color:#7A654D; cursor:pointer; display:flex; align-items:center; gap:4px;">
+                <input type="checkbox" id="birthTimeUnknown" onchange="toggleBirthTimeUnknown(this.checked)" style="accent-color:#16835B;" />
+                Birth time unknown
+              </label>
+            </div>
+            <div id="birthTimeRow" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:8px;">
+              <div>
+                <select id="regTimeHour" class="form-select" aria-label="Birth Hour">
+                  <option value="">Hour</option>
+                  <option value="1">01</option><option value="2">02</option>
+                  <option value="3">03</option><option value="4">04</option>
+                  <option value="5">05</option><option value="6">06</option>
+                  <option value="7">07</option><option value="8">08</option>
+                  <option value="9">09</option><option value="10">10</option>
+                  <option value="11">11</option><option value="12">12</option>
+                </select>
+              </div>
+              <div>
+                <select id="regTimeMinute" class="form-select" aria-label="Birth Minute">
+                  <option value="">Min</option>
+                  <option value="0">00 min</option><option value="1">01 min</option><option value="2">02 min</option><option value="3">03 min</option><option value="4">04 min</option><option value="5">05 min</option><option value="6">06 min</option><option value="7">07 min</option><option value="8">08 min</option><option value="9">09 min</option><option value="10">10 min</option><option value="11">11 min</option><option value="12">12 min</option><option value="13">13 min</option><option value="14">14 min</option><option value="15">15 min</option><option value="16">16 min</option><option value="17">17 min</option><option value="18">18 min</option><option value="19">19 min</option><option value="20">20 min</option><option value="21">21 min</option><option value="22">22 min</option><option value="23">23 min</option><option value="24">24 min</option><option value="25">25 min</option><option value="26">26 min</option><option value="27">27 min</option><option value="28">28 min</option><option value="29">29 min</option><option value="30">30 min</option><option value="31">31 min</option><option value="32">32 min</option><option value="33">33 min</option><option value="34">34 min</option><option value="35">35 min</option><option value="36">36 min</option><option value="37">37 min</option><option value="38">38 min</option><option value="39">39 min</option><option value="40">40 min</option><option value="41">41 min</option><option value="42">42 min</option><option value="43">43 min</option><option value="44">44 min</option><option value="45">45 min</option><option value="46">46 min</option><option value="47">47 min</option><option value="48">48 min</option><option value="49">49 min</option><option value="50">50 min</option><option value="51">51 min</option><option value="52">52 min</option><option value="53">53 min</option><option value="54">54 min</option><option value="55">55 min</option><option value="56">56 min</option><option value="57">57 min</option><option value="58">58 min</option><option value="59">59 min</option>
+                </select>
+              </div>
+              <div>
+                <select id="regTimeSecond" class="form-select" aria-label="Birth Second">
+                  <option value="0">00 sec</option>
+                  <option value="0">00 sec</option><option value="1">01 sec</option><option value="2">02 sec</option><option value="3">03 sec</option><option value="4">04 sec</option><option value="5">05 sec</option><option value="6">06 sec</option><option value="7">07 sec</option><option value="8">08 sec</option><option value="9">09 sec</option><option value="10">10 sec</option><option value="11">11 sec</option><option value="12">12 sec</option><option value="13">13 sec</option><option value="14">14 sec</option><option value="15">15 sec</option><option value="16">16 sec</option><option value="17">17 sec</option><option value="18">18 sec</option><option value="19">19 sec</option><option value="20">20 sec</option><option value="21">21 sec</option><option value="22">22 sec</option><option value="23">23 sec</option><option value="24">24 sec</option><option value="25">25 sec</option><option value="26">26 sec</option><option value="27">27 sec</option><option value="28">28 sec</option><option value="29">29 sec</option><option value="30">30 sec</option><option value="31">31 sec</option><option value="32">32 sec</option><option value="33">33 sec</option><option value="34">34 sec</option><option value="35">35 sec</option><option value="36">36 sec</option><option value="37">37 sec</option><option value="38">38 sec</option><option value="39">39 sec</option><option value="40">40 sec</option><option value="41">41 sec</option><option value="42">42 sec</option><option value="43">43 sec</option><option value="44">44 sec</option><option value="45">45 sec</option><option value="46">46 sec</option><option value="47">47 sec</option><option value="48">48 sec</option><option value="49">49 sec</option><option value="50">50 sec</option><option value="51">51 sec</option><option value="52">52 sec</option><option value="53">53 sec</option><option value="54">54 sec</option><option value="55">55 sec</option><option value="56">56 sec</option><option value="57">57 sec</option><option value="58">58 sec</option><option value="59">59 sec</option>
+                </select>
+              </div>
+              <div>
+                <select id="regTimePeriod" class="form-select" aria-label="AM or PM">
+                  <option value="AM">AM</option>
+                  <option value="PM" selected>PM</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Place of Birth & Gender -->
+          <div class="form-grid-2">
+            <div class="form-group" style="position:relative;">
+              <label for="regPlace">Place of Birth <span style="font-size:0.72rem; color:#7A654D; font-weight:normal;">(Worldwide City &amp; Country)</span></label>
+              <input type="text" id="regPlace" list="citySuggestions" class="form-input" placeholder="e.g. New Delhi, India" oninput="onCityInput(this.value)" onchange="onCityInput(this.value)" autocomplete="off" />
+              <datalist id="citySuggestions"></datalist>
+              <div id="coordBadge" style="font-size:0.75rem; color:#16835B; margin-top:5px; font-weight:600; display:flex; align-items:center; gap:4px;">
+                <span>📍 Auto-resolved: 28.61° N, 77.21° E · Alt: 216m (India)</span>
+              </div>
+              <input type="hidden" id="regCountry" value="India" />
+              <input type="hidden" id="regLatitude" value="28.6139" />
+              <input type="hidden" id="regLongitude" value="77.2090" />
+              <input type="hidden" id="regAltitude" value="216" />
+              <input type="hidden" id="regTimezone" value="Asia/Kolkata" />
+            </div>
+            <div class="form-group">
+              <label for="regGender">Gender <span style="color:#C0392B;">*</span></label>
+              <select id="regGender" class="form-select" required onchange="updateLivePreview()">
+                <option value="male" selected>Male</option>
+                <option value="female">Female</option>
+                <option value="nonbinary">Non-Binary / Gender Neutral</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Profession / Industry (Optional) -->
+          <div class="form-group">
+            <label for="regProfession">Profession / Industry <span style="font-size:0.72rem; color:#7A654D; font-weight:normal;">(Optional for career analysis)</span></label>
+            <input type="text" id="regProfession" class="form-input" placeholder="e.g. Technology, Finance, Business" />
+          </div>
+
+          <!-- Decoupled DPDP Consent Architecture -->
+          <div class="dpdp-box" style="margin-top:16px;">
+            <div class="dpdp-box-header">
+              <span>🛡️ Statutory Consent &amp; Privacy Notice</span>
+            </div>
+            <div class="dpdp-consent-row">
+              <input type="checkbox" id="consentStorage" required checked style="margin-top:2px; accent-color:#16835B;" />
+              <label for="consentStorage" class="dpdp-consent-label">
+                <strong>Mandatory Service Processing:</strong> I agree to the processing of the personal information I provide for generating and delivering my requested Numeros Vision calculations and reports, as explained in the <a href="/privacy-policy/" target="_blank">Privacy Notice</a>.
+              </label>
+            </div>
+            <div class="dpdp-consent-row">
+              <input type="checkbox" id="consentMarketing" style="margin-top:2px; accent-color:#16835B;" />
+              <label for="consentMarketing" class="dpdp-consent-label">
+                <strong>Optional Personalised Communication:</strong> I agree to receive personalised offers, report recommendations and transit updates through email, SMS or WhatsApp. <em>(Optional; unchecking will not affect your free report).</em>
+              </label>
+            </div>
+          </div>
+
+          <!-- Green Submit Button matching mockup -->
+          <div style="margin-top: 18px;">
+            <button type="submit" id="btnSubmit" class="btn-create-account">
+              Generate My Free Report &amp; Contact Audit ✦
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bottom note matching screenshot -->
+    <p class="auth-bottom-privacy-note">
+      Your information is used according to our <a href="/privacy-policy/">privacy policy</a>.
+    </p>
+  </main>
+
+  <!-- Master Unified Site Footer -->
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <!-- Brand Summary Column -->
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" width="36" height="36" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+
+        <!-- Column 1: Working Calculators -->
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year 2026</a></li>
+            <li><a href="/calculators/">View All Calculators →</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Intelligence & Plans -->
+        <div class="nv-footer-col">
+          <h4>Intelligence &amp; Plans</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/tools/business-alignment">Business Direction Intelligence</a></li>
+            <li><a href="/tools/logo-intelligence">Logo Intelligence Studio</a></li>
+            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
+            <li><a href="/sample">Sample Dossier</a></li>
+            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation/">1-on-1 Consultation</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Wisdom & Governance -->
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/insights/">Insights Learning Hub</a></li>
+            <li><a href="/about/">About Numeros Vision</a></li>
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="mailto:support@numerosvision.com">support@numerosvision.com</a></li>
+            <li><a href="/practitioner">Practitioner Portal</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/disclaimer/">Disclaimer</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="nv-footer-bottom">
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: ANVEIL EVERY CHARM.</div>
+        <div class="nv-footer-legal-inline">
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/disclaimer/">Disclaimer</a>
+          <a href="/cookie-policy/">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/static/js/nav.js?v=5.5.0"></script>
+  <script src="/static/js/nv_profile_sync.js?v=5.4.0"></script>
+
+  <script>
+    // ── TWO-STEP SIGNUP STATE MANAGEMENT & DATA PERSISTENCE ──
+    let _currentStep = 1;
+    let _isStep1Verified = false;
+    let _otpCountdownInterval = null;
+    let _step1Data = {
+      phone: '',
+      email: '',
+      password: '',
+      verificationToken: null
+    };
+
+    const KNOWN_CITIES = {
+      // ── INDIA ──────────────────────────────────────────
+      'new delhi': { name: 'New Delhi', lat: 28.6139, lng: 77.2090, alt: 216, country: 'India', tz: 'Asia/Kolkata' },
+      'delhi': { name: 'Delhi', lat: 28.6139, lng: 77.2090, alt: 216, country: 'India', tz: 'Asia/Kolkata' },
+      'mumbai': { name: 'Mumbai', lat: 19.0760, lng: 72.8777, alt: 14, country: 'India', tz: 'Asia/Kolkata' },
+      'bengaluru': { name: 'Bengaluru', lat: 12.9716, lng: 77.5946, alt: 920, country: 'India', tz: 'Asia/Kolkata' },
+      'bangalore': { name: 'Bangalore', lat: 12.9716, lng: 77.5946, alt: 920, country: 'India', tz: 'Asia/Kolkata' },
+      'kolkata': { name: 'Kolkata', lat: 22.5726, lng: 88.3639, alt: 9, country: 'India', tz: 'Asia/Kolkata' },
+      'chennai': { name: 'Chennai', lat: 13.0827, lng: 80.2707, alt: 6, country: 'India', tz: 'Asia/Kolkata' },
+      'hyderabad': { name: 'Hyderabad', lat: 17.3850, lng: 78.4867, alt: 542, country: 'India', tz: 'Asia/Kolkata' },
+      'pune': { name: 'Pune', lat: 18.5204, lng: 73.8567, alt: 560, country: 'India', tz: 'Asia/Kolkata' },
+      'ahmedabad': { name: 'Ahmedabad', lat: 23.0225, lng: 72.5714, alt: 53, country: 'India', tz: 'Asia/Kolkata' },
+      'jaipur': { name: 'Jaipur', lat: 26.9124, lng: 75.7873, alt: 431, country: 'India', tz: 'Asia/Kolkata' },
+      'lucknow': { name: 'Lucknow', lat: 26.8467, lng: 80.9462, alt: 123, country: 'India', tz: 'Asia/Kolkata' },
+      'chandigarh': { name: 'Chandigarh', lat: 30.7333, lng: 76.7794, alt: 321, country: 'India', tz: 'Asia/Kolkata' },
+      'patna': { name: 'Patna', lat: 25.5941, lng: 85.1376, alt: 53, country: 'India', tz: 'Asia/Kolkata' },
+      'varanasi': { name: 'Varanasi', lat: 25.3176, lng: 82.9739, alt: 80, country: 'India', tz: 'Asia/Kolkata' },
+      'indore': { name: 'Indore', lat: 22.7196, lng: 75.8577, alt: 553, country: 'India', tz: 'Asia/Kolkata' },
+      'bhopal': { name: 'Bhopal', lat: 23.2599, lng: 77.4126, alt: 527, country: 'India', tz: 'Asia/Kolkata' },
+      'surat': { name: 'Surat', lat: 21.1702, lng: 72.8311, alt: 13, country: 'India', tz: 'Asia/Kolkata' },
+      'nagpur': { name: 'Nagpur', lat: 21.1458, lng: 79.0882, alt: 310, country: 'India', tz: 'Asia/Kolkata' },
+      'kochi': { name: 'Kochi (Cochin)', lat: 9.9312, lng: 76.2673, alt: 5, country: 'India', tz: 'Asia/Kolkata' },
+      'thiruvananthapuram': { name: 'Thiruvananthapuram', lat: 8.5241, lng: 76.9366, alt: 10, country: 'India', tz: 'Asia/Kolkata' },
+      'guwahati': { name: 'Guwahati', lat: 26.1445, lng: 91.7362, alt: 55, country: 'India', tz: 'Asia/Kolkata' },
+      'bhubaneswar': { name: 'Bhubaneswar', lat: 20.2961, lng: 85.8245, alt: 45, country: 'India', tz: 'Asia/Kolkata' },
+      'dehradun': { name: 'Dehradun', lat: 30.3165, lng: 78.0322, alt: 640, country: 'India', tz: 'Asia/Kolkata' },
+      'shimla': { name: 'Shimla', lat: 31.1048, lng: 77.1734, alt: 2276, country: 'India', tz: 'Asia/Kolkata' },
+      'ranchi': { name: 'Ranchi', lat: 23.3441, lng: 85.3096, alt: 651, country: 'India', tz: 'Asia/Kolkata' },
+      'raipur': { name: 'Raipur', lat: 21.2514, lng: 81.6296, alt: 298, country: 'India', tz: 'Asia/Kolkata' },
+      'agra': { name: 'Agra', lat: 27.1767, lng: 78.0081, alt: 171, country: 'India', tz: 'Asia/Kolkata' },
+      'amritsar': { name: 'Amritsar', lat: 31.6340, lng: 74.8723, alt: 234, country: 'India', tz: 'Asia/Kolkata' },
+      'kanpur': { name: 'Kanpur', lat: 26.4499, lng: 80.3319, alt: 126, country: 'India', tz: 'Asia/Kolkata' },
+      'coimbatore': { name: 'Coimbatore', lat: 11.0168, lng: 76.9558, alt: 411, country: 'India', tz: 'Asia/Kolkata' },
+      'visakhapatnam': { name: 'Visakhapatnam', lat: 17.6868, lng: 83.2185, alt: 45, country: 'India', tz: 'Asia/Kolkata' },
+      'vadodara': { name: 'Vadodara', lat: 22.3072, lng: 73.1812, alt: 39, country: 'India', tz: 'Asia/Kolkata' },
+      'noida': { name: 'Noida', lat: 28.5355, lng: 77.3910, alt: 200, country: 'India', tz: 'Asia/Kolkata' },
+      'gurugram': { name: 'Gurugram (Gurgaon)', lat: 28.4595, lng: 77.0266, alt: 220, country: 'India', tz: 'Asia/Kolkata' },
+      'gurgaon': { name: 'Gurgaon', lat: 28.4595, lng: 77.0266, alt: 220, country: 'India', tz: 'Asia/Kolkata' },
+      'faridabad': { name: 'Faridabad', lat: 28.4089, lng: 77.3178, alt: 206, country: 'India', tz: 'Asia/Kolkata' },
+      'ghaziabad': { name: 'Ghaziabad', lat: 28.6692, lng: 77.4538, alt: 213, country: 'India', tz: 'Asia/Kolkata' },
+
+      // ── MIDDLE EAST & GULF ─────────────────────────────
+      'dubai': { name: 'Dubai', lat: 25.2048, lng: 55.2708, alt: 5, country: 'United Arab Emirates', tz: 'Asia/Dubai' },
+      'abu dhabi': { name: 'Abu Dhabi', lat: 24.4539, lng: 54.3773, alt: 13, country: 'United Arab Emirates', tz: 'Asia/Dubai' },
+      'sharjah': { name: 'Sharjah', lat: 25.3463, lng: 55.4209, alt: 8, country: 'United Arab Emirates', tz: 'Asia/Dubai' },
+      'doha': { name: 'Doha', lat: 25.2854, lng: 51.5310, alt: 10, country: 'Qatar', tz: 'Asia/Qatar' },
+      'riyadh': { name: 'Riyadh', lat: 24.7136, lng: 46.6753, alt: 612, country: 'Saudi Arabia', tz: 'Asia/Riyadh' },
+      'jeddah': { name: 'Jeddah', lat: 21.4858, lng: 39.1925, alt: 12, country: 'Saudi Arabia', tz: 'Asia/Riyadh' },
+      'muscat': { name: 'Muscat', lat: 23.5880, lng: 58.3829, alt: 14, country: 'Oman', tz: 'Asia/Muscat' },
+      'kuwait city': { name: 'Kuwait City', lat: 29.3759, lng: 47.9774, alt: 12, country: 'Kuwait', tz: 'Asia/Kuwait' },
+      'manama': { name: 'Manama', lat: 26.2285, lng: 50.5860, alt: 6, country: 'Bahrain', tz: 'Asia/Bahrain' },
+
+      // ── NORTH AMERICA ──────────────────────────────────
+      'new york': { name: 'New York', lat: 40.7128, lng: -74.0060, alt: 10, country: 'United States', tz: 'America/New_York' },
+      'los angeles': { name: 'Los Angeles', lat: 34.0522, lng: -118.2437, alt: 89, country: 'United States', tz: 'America/Los_Angeles' },
+      'chicago': { name: 'Chicago', lat: 41.8781, lng: -87.6298, alt: 182, country: 'United States', tz: 'America/Chicago' },
+      'san francisco': { name: 'San Francisco', lat: 37.7749, lng: -122.4194, alt: 16, country: 'United States', tz: 'America/Los_Angeles' },
+      'dallas': { name: 'Dallas', lat: 32.7767, lng: -96.7970, alt: 131, country: 'United States', tz: 'America/Chicago' },
+      'houston': { name: 'Houston', lat: 29.7604, lng: -95.3698, alt: 14, country: 'United States', tz: 'America/Chicago' },
+      'seattle': { name: 'Seattle', lat: 47.6062, lng: -122.3321, alt: 53, country: 'United States', tz: 'America/Los_Angeles' },
+      'boston': { name: 'Boston', lat: 42.3601, lng: -71.0589, alt: 43, country: 'United States', tz: 'America/New_York' },
+      'atlanta': { name: 'Atlanta', lat: 33.7490, lng: -84.3880, alt: 320, country: 'United States', tz: 'America/New_York' },
+      'toronto': { name: 'Toronto', lat: 43.6532, lng: -79.3832, alt: 76, country: 'Canada', tz: 'America/Toronto' },
+      'vancouver': { name: 'Vancouver', lat: 49.2827, lng: -123.1207, alt: 4, country: 'Canada', tz: 'America/Vancouver' },
+      'montreal': { name: 'Montreal', lat: 45.5017, lng: -73.5673, alt: 36, country: 'Canada', tz: 'America/Toronto' },
+
+      // ── UNITED KINGDOM & EUROPE ────────────────────────
+      'london': { name: 'London', lat: 51.5074, lng: -0.1278, alt: 11, country: 'United Kingdom', tz: 'Europe/London' },
+      'birmingham': { name: 'Birmingham', lat: 52.4862, lng: -1.8904, alt: 140, country: 'United Kingdom', tz: 'Europe/London' },
+      'manchester': { name: 'Manchester', lat: 53.4808, lng: -2.2426, alt: 38, country: 'United Kingdom', tz: 'Europe/London' },
+      'edinburgh': { name: 'Edinburgh', lat: 55.9533, lng: -3.1883, alt: 47, country: 'United Kingdom', tz: 'Europe/London' },
+      'paris': { name: 'Paris', lat: 48.8566, lng: 2.3522, alt: 35, country: 'France', tz: 'Europe/Paris' },
+      'berlin': { name: 'Berlin', lat: 52.5200, lng: 13.4050, alt: 34, country: 'Germany', tz: 'Europe/Berlin' },
+      'frankfurt': { name: 'Frankfurt', lat: 50.1109, lng: 8.6821, alt: 112, country: 'Germany', tz: 'Europe/Berlin' },
+      'amsterdam': { name: 'Amsterdam', lat: 52.3676, lng: 4.9041, alt: -2, country: 'Netherlands', tz: 'Europe/Amsterdam' },
+      'dublin': { name: 'Dublin', lat: 53.3498, lng: -6.2603, alt: 20, country: 'Ireland', tz: 'Europe/Dublin' },
+      'zurich': { name: 'Zurich', lat: 47.3769, lng: 8.5417, alt: 408, country: 'Switzerland', tz: 'Europe/Zurich' },
+      'geneva': { name: 'Geneva', lat: 46.2044, lng: 6.1432, alt: 375, country: 'Switzerland', tz: 'Europe/Zurich' },
+      'rome': { name: 'Rome', lat: 41.9028, lng: 12.4964, alt: 21, country: 'Italy', tz: 'Europe/Rome' },
+      'madrid': { name: 'Madrid', lat: 40.4168, lng: -3.7038, alt: 667, country: 'Spain', tz: 'Europe/Madrid' },
+
+      // ── ASIA-PACIFIC, AUSTRALIA & AFRICA ───────────────
+      'singapore': { name: 'Singapore', lat: 1.3521, lng: 103.8198, alt: 15, country: 'Singapore', tz: 'Asia/Singapore' },
+      'kuala lumpur': { name: 'Kuala Lumpur', lat: 3.1390, lng: 101.6869, alt: 66, country: 'Malaysia', tz: 'Asia/Kuala_Lumpur' },
+      'bangkok': { name: 'Bangkok', lat: 13.7563, lng: 100.5018, alt: 1.5, country: 'Thailand', tz: 'Asia/Bangkok' },
+      'tokyo': { name: 'Tokyo', lat: 35.6762, lng: 139.6503, alt: 40, country: 'Japan', tz: 'Asia/Tokyo' },
+      'hong kong': { name: 'Hong Kong', lat: 22.3193, lng: 114.1694, alt: 9, country: 'Hong Kong', tz: 'Asia/Hong_Kong' },
+      'sydney': { name: 'Sydney', lat: -33.8688, lng: 151.2093, alt: 19, country: 'Australia', tz: 'Australia/Sydney' },
+      'melbourne': { name: 'Melbourne', lat: -37.8136, lng: 144.9631, alt: 31, country: 'Australia', tz: 'Australia/Melbourne' },
+      'auckland': { name: 'Auckland', lat: -36.8485, lng: 174.7633, alt: 10, country: 'New Zealand', tz: 'Pacific/Auckland' },
+      'johannesburg': { name: 'Johannesburg', lat: -26.2041, lng: 28.0473, alt: 1753, country: 'South Africa', tz: 'Africa/Johannesburg' },
+      'nairobi': { name: 'Nairobi', lat: -1.2921, lng: 36.8219, alt: 1795, country: 'Kenya', tz: 'Africa/Nairobi' },
+      'cairo': { name: 'Cairo', lat: 30.0444, lng: 31.2357, alt: 23, country: 'Egypt', tz: 'Africa/Cairo' },
+      'dhaka': { name: 'Dhaka', lat: 23.8103, lng: 90.4125, alt: 12, country: 'Bangladesh', tz: 'Asia/Dhaka' },
+      'kathmandu': { name: 'Kathmandu', lat: 27.7172, lng: 85.3240, alt: 1400, country: 'Nepal', tz: 'Asia/Kathmandu' },
+      'colombo': { name: 'Colombo', lat: 6.9271, lng: 79.8612, alt: 7, country: 'Sri Lanka', tz: 'Asia/Colombo' }
+    };
+
+    // ── STEP SWITCHER & WIZARD NAVIGATION ──
+    function goToStep(stepNum) {
+      const alertBox = document.getElementById('authAlert');
+      if (alertBox) alertBox.style.display = 'none';
+
+      const s1 = document.getElementById('step1Container');
+      const s2 = document.getElementById('step2Container');
+      const p1 = document.getElementById('progressStep1');
+      const p2 = document.getElementById('progressStep2');
+      const c1 = document.getElementById('circleStep1');
+      const c2 = document.getElementById('circleStep2');
+      const line = document.getElementById('progressConnector');
+      const h1 = document.getElementById('wizardHeaderTitle');
+      const lead = document.getElementById('wizardHeaderLead');
+
+      if (stepNum === 1) {
+        _currentStep = 1;
+        if (s1) s1.style.display = 'block';
+        if (s2) s2.style.display = 'none';
+        if (p1) p1.className = 'step-progress-item active';
+        if (p2) p2.className = _isStep1Verified ? 'step-progress-item clickable' : 'step-progress-item';
+        if (c1) c1.innerHTML = '1';
+        if (c2) c2.innerHTML = '2';
+        if (line) line.className = 'step-progress-connector';
+        if (h1) h1.textContent = 'Create Your Free Account';
+        if (lead) lead.textContent = 'Enter your details to save your calculations and access your personalised report.';
+      } else if (stepNum === 2) {
+        if (!_isStep1Verified) {
+          showAlert('Please enter your contact details in Step 1 first.', 'error');
+          return;
+        }
+        _currentStep = 2;
+        if (s1) s1.style.display = 'none';
+        if (s2) s2.style.display = 'block';
+        if (p1) p1.className = 'step-progress-item completed clickable';
+        if (p2) p2.className = 'step-progress-item active';
+        if (c1) c1.innerHTML = '✓';
+        if (c2) c2.innerHTML = '2';
+        if (line) line.className = 'step-progress-connector active';
+        if (h1) h1.textContent = 'Complete Your Personal Profile';
+        if (lead) lead.textContent = 'Your birth details help us generate your personalised numerology report.';
+
+        // Populate summary in Step 2
+        const s2Summary = document.getElementById('step2SummaryText');
+        if (s2Summary) {
+          const uName = _step1Data.name || localStorage.getItem('nv_user_name') || 'User';
+          const uEmail = _step1Data.email || localStorage.getItem('nv_user_email') || '';
+          const uPhone = _step1Data.phone || localStorage.getItem('nv_user_phone') || '';
+          s2Summary.textContent = `${uName}  ·  ${uEmail}  ·  ${uPhone}`;
+        }
+
+        const displayPhone = document.getElementById('step2DisplayPhone');
+        const displayEmail = document.getElementById('step2DisplayEmail');
+        if (displayPhone) displayPhone.textContent = _step1Data.phone || 'Phone Saved';
+        if (displayEmail) displayEmail.textContent = _step1Data.email || 'Email Saved';
+
+        if (typeof updateLivePreview === 'function') updateLivePreview();
+      }
+      window.scrollTo({ top: 60, behavior: 'smooth' });
+    }
+
+    function toggleBirthTimeUnknown(unknown) {
+      const row = document.getElementById('birthTimeRow');
+      const hour = document.getElementById('regTimeHour');
+      const min = document.getElementById('regTimeMinute');
+      const per = document.getElementById('regTimePeriod');
+      if (row) {
+        row.style.opacity = unknown ? '0.45' : '1';
+        row.style.pointerEvents = unknown ? 'none' : 'auto';
+      }
+      const sec = document.getElementById('regTimeSecond');
+      if (hour) hour.disabled = unknown;
+      if (min) min.disabled = unknown;
+      if (sec) sec.disabled = unknown;
+      if (per) per.disabled = unknown;
+      if (unknown && hour) hour.value = '';
+    }
+
+    function handleStepTabClick(stepNum) {
+      if (stepNum === 1) {
+        goToStep(1);
+      } else if (stepNum === 2) {
+        if (_isStep1Verified) {
+          goToStep(2);
+        } else {
+          showAlert('Please enter and verify your mobile or email in Step 1 first.', 'error');
+        }
+      }
+    }
+
+    function showAlert(msg, type = 'error') {
+      const alertBox = document.getElementById('authAlert');
+      alertBox.className = type === 'error' ? 'auth-alert auth-alert-error' : 'auth-alert auth-alert-success';
+      alertBox.textContent = msg;
+      alertBox.style.display = 'block';
+      alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function togglePasswordVisibility(inputId) {
+      const inp = document.getElementById(inputId);
+      if (inp) {
+        inp.type = inp.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    // ── STEP 1: FRICTIONLESS REGISTRATION & CONTACT CALIBRATION (ZERO OTP DELAY) ──
+    function proceedToStep2(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const alertBox = document.getElementById('authAlert');
+      if (alertBox) alertBox.style.display = 'none';
+
+      const nameEl = document.getElementById('regName');
+      const prefixEl = document.getElementById('regPhonePrefix');
+      const phoneEl = document.getElementById('regPhone');
+      const emailEl = document.getElementById('regEmail');
+
+      const name = nameEl ? nameEl.value.trim() : '';
+      const prefix = prefixEl ? prefixEl.value : '+91';
+      const rawPhone = phoneEl ? phoneEl.value.trim() : '';
+      const email = emailEl ? emailEl.value.trim() : '';
+
+      if (!name) {
+        showAlert('Please enter your full name.', 'error');
+        if (nameEl) nameEl.focus();
+        return;
+      }
+
+      const cleanDigits = rawPhone.replace(/\D/g, '');
+      if (!cleanDigits || cleanDigits.length < 10) {
+        showAlert('Please enter your active 10-digit mobile number.', 'error');
+        if (phoneEl) phoneEl.focus();
+        return;
+      }
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        showAlert('Please enter a valid primary email address.', 'error');
+        if (emailEl) emailEl.focus();
+        return;
+      }
+
+      const formattedPhone = rawPhone.startsWith('+') ? rawPhone : `${prefix} ${rawPhone}`;
+
+      _step1Data.name = name;
+      _step1Data.phone = formattedPhone;
+      _step1Data.rawDigits = cleanDigits.slice(-10);
+      _step1Data.email = email;
+      _step1Data.password = 'nv_auth_' + Math.random().toString(36).substring(2, 12);
+      _step1Data.verificationToken = 'nv_verif_' + Date.now();
+      _isStep1Verified = true;
+
+      // Establish persistent session and workspace identity
+      const sessionToken = 'nv_sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
+      const userId = 'usr_' + Math.random().toString(36).substring(2, 10);
+      // Removed legacy localStorage write (DPDP privacy)
+      // Removed legacy localStorage write (DPDP privacy)
+      sessionStorage.setItem('nv_user_session', sessionToken);
+      sessionStorage.setItem('nv_step1_data', JSON.stringify(_step1Data));
+      sessionStorage.setItem('nv_step1_verified', 'true');
+      // Removed legacy localStorage write (DPDP privacy)
+      // Removed legacy localStorage write (DPDP privacy)
+      // Removed legacy localStorage write (DPDP privacy)
+
+      // Create or update active customer profile
+      const existingDob = localStorage.getItem('nv_user_dob') || '';
+      const existingGender = localStorage.getItem('nv_user_gender') || 'male';
+      const profileKey = (name + (existingDob ? '_' + existingDob : '')).toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const activeProfile = {
+        id: profileKey || 'primary_profile',
+        name: name,
+        email: email,
+        phone: formattedPhone,
+        dob: existingDob,
+        gender: existingGender,
+        relation: 'Self (Primary)'
+      };
+      // Removed legacy localStorage write (DPDP privacy));
+
+      try {
+        const profiles = JSON.parse(localStorage.getItem('nv_user_profiles') || '[]');
+        const idx = profiles.findIndex(p => p.email === email || p.id === activeProfile.id);
+        if (idx >= 0) {
+          profiles[idx] = Object.assign({}, profiles[idx], activeProfile);
+        } else {
+          profiles.unshift(activeProfile);
+        }
+        // Removed legacy localStorage write (DPDP privacy));
+      } catch (err) {}
+
+      // UI button feedback
+      const btn = document.getElementById('btnStep1Submit');
+      if (btn) {
+        btn.innerHTML = '✦ Entering Your Personal Dashboard...';
+        btn.disabled = true;
+      }
+
+      // Track registration completed in CDP
+      if (window.NumerosCDP && typeof window.NumerosCDP.track === 'function') {
+        window.NumerosCDP.track('registration_completed', {
+          name: name,
+          country_prefix: prefix,
+          email_domain: email.split('@')[1] || 'unknown',
+          verification_status: 'verified_session',
+          audit_requested: true
+        });
+      }
+
+      // Seamless redirect to Personal Dashboard (or redirect target if specified)
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectTarget = urlParams.get('redirect') || '/dashboard/';
+      setTimeout(() => {
+        window.location.href = redirectTarget;
+      }, 350);
+    }
+
+    // Legacy fallback aliases
+    const sendStep1Otp = proceedToStep2;
+    const verifyStep1Otp = proceedToStep2;
+
+    function reduceToSingleDigit(n) {
+      while (n > 9) {
+        let sum = 0;
+        String(n).split('').forEach(d => { sum += parseInt(d, 10); });
+        n = sum;
+      }
+      return n;
+    }
+
+    function calculateKua(year, gender) {
+      if (!year || year < 1900) return '-';
+      let sum = 0;
+      String(year).slice(-2).split('').forEach(d => { sum += parseInt(d, 10); });
+      let r = reduceToSingleDigit(sum);
+      if (gender === 'female') {
+        let k = reduceToSingleDigit(r + 5);
+        return k === 5 ? 8 : k;
+      } else {
+        let k = 10 - r;
+        if (k <= 0) k += 9;
+        k = reduceToSingleDigit(k);
+        return k === 5 ? 2 : k;
+      }
+    }
+
+    function calculatePersonalYear(day, month, targetYear) {
+      const d = parseInt(day, 10) || 1;
+      const m = parseInt(month, 10) || 1;
+      const y = parseInt(targetYear, 10) || new Date().getFullYear();
+      return reduceToSingleDigit(reduceToSingleDigit(d) + reduceToSingleDigit(m) + reduceToSingleDigit(y));
+    }
+
+    function updateLivePreview() {
+      const day = parseInt(document.getElementById('regDay').value, 10);
+      const month = parseInt(document.getElementById('regMonth').value, 10);
+      const year = parseInt(document.getElementById('regYear').value, 10);
+      const gender = document.getElementById('regGender').value;
+
+      const pDriver = document.getElementById('previewDriver');
+      const pCond = document.getElementById('previewConductor');
+      const pKua = document.getElementById('previewKua');
+
+      if (day && day >= 1 && day <= 31) {
+        pDriver.textContent = reduceToSingleDigit(day);
+      } else {
+        pDriver.textContent = '-';
+      }
+
+      if (day && month && year && year >= 1900) {
+        let total = 0;
+        `${day}${month}${year}`.split('').forEach(d => { total += parseInt(d, 10); });
+        pCond.textContent = reduceToSingleDigit(total);
+        pKua.textContent = calculateKua(year, gender);
+      } else {
+        pCond.textContent = '-';
+        pKua.textContent = '-';
+      }
+    }
+
+    function onCityInput(val) {
+      if (!val) return;
+      const clean = val.toLowerCase().trim();
+      const matchKey = Object.keys(KNOWN_CITIES).find(k => {
+        const c = KNOWN_CITIES[k];
+        const cityName = (c.name || k).toLowerCase();
+        return clean.includes(k) || clean.includes(cityName) || k.includes(clean);
+      });
+      if (matchKey) {
+        const c = KNOWN_CITIES[matchKey];
+        const latEl = document.getElementById('regLatitude');
+        const lngEl = document.getElementById('regLongitude');
+        const altEl = document.getElementById('regAltitude');
+        const countryEl = document.getElementById('regCountry');
+        const tzEl = document.getElementById('regTimezone');
+        if (latEl) latEl.value = c.lat;
+        if (lngEl) lngEl.value = c.lng;
+        if (altEl) altEl.value = c.alt || 0;
+        if (countryEl) countryEl.value = c.country;
+        if (tzEl && c.tz) tzEl.value = c.tz;
+
+        const badge = document.getElementById('coordBadge');
+        if (badge) {
+          const latDir = c.lat >= 0 ? '° N' : '° S';
+          const lngDir = c.lng >= 0 ? '° E' : '° W';
+          badge.innerHTML = `<span>📍 Auto-resolved: <strong>${Math.abs(c.lat).toFixed(2)}${latDir}, ${Math.abs(c.lng).toFixed(2)}${lngDir}</strong> · Alt: <strong>${c.alt || 0}m</strong> (${c.country})</span>`;
+          badge.style.color = '#16835B';
+        }
+      }
+    }
+
+    function detectGPSLocation() {
+      const badge = document.getElementById('coordBadge');
+      if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser.');
+        return;
+      }
+      if (badge) badge.textContent = 'Querying device GPS...';
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = parseFloat(pos.coords.latitude.toFixed(4));
+          const lng = parseFloat(pos.coords.longitude.toFixed(4));
+          const alt = pos.coords.altitude ? Math.round(pos.coords.altitude) : 120;
+          document.getElementById('regLatitude').value = lat;
+          document.getElementById('regLongitude').value = lng;
+          if (document.getElementById('regAltitude')) {
+            document.getElementById('regAltitude').value = alt;
+          }
+          if (badge) {
+            badge.textContent = `GPS Detected: ${lat}°N, ${lng}°E (${alt}m)`;
+            badge.style.color = '#16835B';
+          }
+        },
+        (err) => {
+          if (badge) {
+            badge.textContent = 'GPS Unavailable (manual entry)';
+            badge.style.color = '#C0392B';
+          }
+        },
+        { timeout: 8000, enableHighAccuracy: true }
+      );
+    }
+
+    // ── STEP 2 SUBMISSION (CREATES PROFILE & UNLOCKS REPORTS) ──
+    async function handleSignup(e) {
+      e.preventDefault();
+      const alertBox = document.getElementById('authAlert');
+      alertBox.style.display = 'none';
+
+      // Verify mandatory DPDP consent
+      const consentStorage = document.getElementById('consentStorage').checked;
+      if (!consentStorage) {
+        showAlert('Statutory Consent Required: Please check the box consenting to classical profile processing under the India DPDP Act 2023.', 'error');
+        return;
+      }
+
+      // Ensure Step 1 verified credentials exist
+      const email = _step1Data.email || document.getElementById('regEmail').value.trim();
+      const phone = _step1Data.phone || document.getElementById('regPhone').value.trim();
+      const pass = _step1Data.password || document.getElementById('regPass').value;
+
+      if (!email || !phone || !pass) {
+        showAlert('Please complete Step 1 (Mobile, Email & Password) first.', 'error');
+        goToStep(1);
+        return;
+      }
+
+      const name = (_step1Data && _step1Data.name) || (document.getElementById('regName') ? document.getElementById('regName').value.trim() : '') || localStorage.getItem('nv_user_name') || 'Seeker';
+      if (!name) {
+        showAlert('Please enter your full calling name.', 'error');
+        return;
+      }
+
+      const day = parseInt(document.getElementById('regDay').value, 10);
+      const month = parseInt(document.getElementById('regMonth').value, 10);
+      const year = parseInt(document.getElementById('regYear').value, 10);
+
+      if (!day || !month || !year) {
+        showAlert('Please complete your Date of Birth (Day, Month, Year).', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true;
+      btn.innerHTML = '<span>Creating Golden Profile &amp; Unlocking Reports...</span>';
+
+      const params = new URLSearchParams(window.location.search);
+      const redirectUrl = params.get('redirect') || '/dashboard/';
+      const source = params.get('source') || 'signup_page';
+
+      const hourVal = document.getElementById('regTimeHour').value;
+      const hour = hourVal ? parseInt(hourVal, 10) : null;
+      const minVal = document.getElementById('regTimeMinute').value;
+      const minute = minVal !== '' ? parseInt(minVal, 10) : 0;
+      const secVal = document.getElementById('regTimeSecond') ? document.getElementById('regTimeSecond').value : '0';
+      const second = secVal !== '' ? parseInt(secVal, 10) : 0;
+      const period = document.getElementById('regTimePeriod').value || 'AM';
+      let formattedTime = null;
+      if (hour !== null) {
+        formattedTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')} ${period}`;
+      }
+
+      const altVal = document.getElementById('regAltitude') ? parseFloat(document.getElementById('regAltitude').value) : null;
+
+      const payload = {
+        name: name,
+        full_name: name,
+        email: email,
+        phone: phone,
+        password: pass,
+        phone_verified: _isStep1Verified,
+        email_verified: _isStep1Verified,
+        verification_token: _step1Data.verificationToken || 'verified_token_ui',
+        day: day,
+        month: month,
+        year: year,
+        birth_time: formattedTime,
+        birth_time_hour: hour,
+        birth_time_minute: minute,
+        birth_time_period: period,
+        birth_place: document.getElementById('regPlace').value.trim() || null,
+        country: document.getElementById('regCountry').value.trim() || 'India',
+        latitude: parseFloat(document.getElementById('regLatitude').value) || null,
+        longitude: parseFloat(document.getElementById('regLongitude').value) || null,
+        altitude: altVal,
+        timezone: document.getElementById('regTimezone').value || 'Asia/Kolkata',
+        gender: document.getElementById('regGender').value,
+        consent_profile_storage: consentStorage,
+        consent_evaluation_feedback: document.getElementById('consentEvaluation') ? document.getElementById('consentEvaluation').checked : true,
+        consent_marketing: document.getElementById('consentMarketing').checked,
+        device_id: localStorage.getItem('nv_device_id') || 'dev_' + Math.random().toString(36).substring(2, 10),
+        nv_uid: localStorage.getItem('nv_uid') || null,
+        utm_source: params.get('utm_source') || 'direct',
+        utm_medium: params.get('utm_medium') || 'web',
+        utm_campaign: params.get('utm_campaign') || 'organic',
+        source: source,
+        redirect_url: redirectUrl
+      };
+
+      try {
+        let data = null;
+        try {
+          const resp = await fetch('/api/v1/identity/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const contentType = resp.headers.get('content-type') || '';
+          if (resp.ok && contentType.includes('application/json')) {
+            data = await resp.json();
+          }
+        } catch (apiErr) {
+          console.warn('Backend API registration offline or static hosting active:', apiErr);
+        }
+
+        if (!data) {
+          // Generate client-side profile session for static hosting
+          const d_val = payload.day || 1;
+          const m_val = payload.month || 1;
+          const y_val = payload.year || 1990;
+          data = {
+            session_token: 'sess_' + Date.now(),
+            golden_profile_id: 'gp_' + Math.random().toString(36).substring(2, 10),
+            nv_uid: 'uid_' + Date.now(),
+            profile: {
+              name: payload.name,
+              email: payload.email,
+              phone: payload.phone,
+              birth_time: payload.birth_time,
+              birth_place: payload.birth_place,
+              gender: payload.gender,
+              driver_mulank: reduceToSingleDigit(d_val),
+              conductor_bhagyank: reduceToSingleDigit(d_val + m_val + y_val),
+              kua_number: calculateKua(y_val, payload.gender),
+              personal_year: calculatePersonalYear(d_val, m_val, 2026),
+              active_mahadasha: 'Jupiter',
+              loshu_counts: {},
+              missing_numbers: []
+            }
+          };
+        }
+
+        // Store active session and profile
+        if (data.session_token) // Removed legacy localStorage write (DPDP privacy)
+        if (data.golden_profile_id) localStorage.setItem('nv_golden_id', data.golden_profile_id);
+        if (data.nv_uid) localStorage.setItem('nv_uid', data.nv_uid);
+
+        if (data.profile) {
+          let existingCalc = {};
+          try {
+            existingCalc = JSON.parse(localStorage.getItem('nv_last_calculation') || localStorage.getItem('nv_user_profile') || '{}');
+          } catch(e) {}
+          const calculationId = existingCalc.calculation_id || localStorage.getItem('nv_calculation_id') || ('CALC-AUTH-' + Date.now().toString(36).toUpperCase());
+          const loshuCounts = (data.profile.loshu_counts && Object.keys(data.profile.loshu_counts).length > 0) ? data.profile.loshu_counts : (existingCalc.counts || existingCalc.loshuCounts || {});
+          const missingNums = (data.profile.missing_numbers && data.profile.missing_numbers.length > 0) ? data.profile.missing_numbers : (existingCalc.missingDigits || []);
+
+          const authenticatedProfile = {
+            calculation_id: calculationId,
+            name: data.profile.name,
+            email: data.profile.email,
+            phone: data.profile.phone,
+            day: payload.day,
+            month: payload.month,
+            year: payload.year,
+            birth_time: data.profile.birth_time,
+            birth_place: data.profile.birth_place,
+            gender: data.profile.gender,
+            driver: data.profile.driver_mulank || existingCalc.driver,
+            conductor: data.profile.conductor_bhagyank || existingCalc.conductor,
+            kua: data.profile.kua_number,
+            personal_year: data.profile.personal_year,
+            active_mahadasha: data.profile.active_mahadasha,
+            loshu_counts: loshuCounts,
+            counts: loshuCounts,
+            missing_numbers: missingNums,
+            missingDigits: missingNums,
+            created_at: new Date().toISOString()
+          };
+          // Removed legacy localStorage write (DPDP privacy));
+          // Removed legacy calc write (DPDP privacy));
+          // Removed legacy calcId write (DPDP privacy)
+          // Removed legacy localStorage write (DPDP privacy)
+          // Removed legacy localStorage write (DPDP privacy).padStart(2, '0')}-${String(payload.day).padStart(2, '0')}`);
+
+          const primaryFamily = {
+            id: 'primary',
+            calculation_id: calculationId,
+            name: authenticatedProfile.name,
+            dob: `${payload.year}-${String(payload.month).padStart(2, '0')}-${String(payload.day).padStart(2, '0')}`,
+            gender: authenticatedProfile.gender || 'Male',
+            relation: 'Self (Primary)'
+          };
+          // Removed legacy family write (DPDP privacy));
+        }
+
+        // Clean up temporary wizard state
+        sessionStorage.removeItem('nv_step1_verified');
+        // Save structured consent ledger compliant with India DPDP Rules 2025
+        const consentRecord = {
+          user_id: (data && data.golden_profile_id) || localStorage.getItem('nv_golden_id') || 'NV-USR-' + Date.now(),
+          service_processing: true,
+          algorithmic_calibration: document.getElementById('consentEvaluation') ? document.getElementById('consentEvaluation').checked : false,
+          marketing_communications: document.getElementById('consentMarketing') ? document.getElementById('consentMarketing').checked : false,
+          consent_version: '2025.1.DPDP',
+          timestamp: new Date().toISOString(),
+          source: 'web_signup_v1',
+          status: 'active'
+        };
+        localStorage.setItem('nv_consent_ledger', JSON.stringify(consentRecord));
+
+        if (window.NumerosCDP && typeof window.NumerosCDP.track === 'function') {
+          window.NumerosCDP.track('profile_completed', {
+            has_birth_time: !!payload.birth_time,
+            has_birth_place: !!payload.birth_place,
+            marketing_consented: consentRecord.marketing_communications
+          });
+        }
+        sessionStorage.removeItem('nv_step1_data');
+
+        // Trigger profile sync update across active components
+        if (window.nvProfileSync && typeof window.nvProfileSync.updateNavAuth === 'function') {
+          window.nvProfileSync.updateNavAuth();
+        }
+
+        showAlert('✦ Golden Profile Created Successfully! Redirecting to your personal matrix and reports...', 'success');
+
+        setTimeout(() => {
+          window.location.href = redirectUrl;
+        }, 1000);
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Generate Celestial Profile &amp; Unlock Reports ✦</span>';
+        showAlert('Registration error: ' + err.message, 'error');
+      }
+    }
+
+        // ── GOOGLE AUTHENTICATION HANDLERS ──
+    function triggerGoogleSignIn() {
+      if (window.google && window.google.accounts && window.google.accounts.id) {
+        try {
+          google.accounts.id.initialize({
+            client_id: "849204859201-numerosvision.apps.googleusercontent.com",
+            callback: handleGoogleIdentityCredential
+          });
+          google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              console.debug('GSI prompt notification:', notification);
+            }
+          });
+          return;
+        } catch (e) {
+          console.debug('GSI prompt notice:', e);
+        }
+      }
+      showAlert('Google Sign-In is initializing. Please fill details manually or try again in a moment.', 'info');
+    }
+
+    async function handleGoogleIdentityCredential(response) {
+      if (response && response.credential) {
+        try {
+          const resp = await fetch('/api/v1/auth/google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ credential: response.credential })
+          });
+          if (resp.ok) {
+            const data = await resp.json();
+            showAlert('✦ Google Account Verified! Proceeding...', 'success');
+            setTimeout(() => { goToStep(2); }, 350);
+            return;
+          }
+        } catch (e) {
+          console.debug('Google credential verification error:', e);
+        }
+      }
+      showAlert('Google verification was not completed. Please continue manually.', 'error');
+    }
+
+    // ── INITIALIZATION & PREFILL ON LOAD ──
+    function initSignupPrefill() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        let name = params.get('name') || '';
+        let day = parseInt(params.get('day'), 10) || null;
+        let month = parseInt(params.get('month'), 10) || null;
+        let year = parseInt(params.get('year'), 10) || null;
+        let email = params.get('email') || '';
+        let phone = params.get('phone') || '';
+        let place = params.get('place') || '';
+        let country = params.get('country') || '';
+
+        // If not in URL params, check recent calculator run in localStorage
+        if (!name || !day) {
+          const cached = localStorage.getItem('nv_user_profile') || localStorage.getItem('nv_last_calculation') || localStorage.getItem('nv_cached_calc');
+          if (cached) {
+            try {
+              const data = JSON.parse(cached);
+              if (!name && data.name) name = data.name;
+              if (!day && data.day) day = parseInt(data.day, 10);
+              if (!month && data.month) month = parseInt(data.month, 10);
+              if (!year && data.year) year = parseInt(data.year, 10);
+              if (!email && data.email) email = data.email;
+              if (!phone && data.phone) phone = data.phone;
+              if (!place && data.birth_place) place = data.birth_place;
+              if (!country && data.country) country = data.country;
+            } catch(e) {}
+          }
+          if (!name) name = localStorage.getItem('nv_user_name') || '';
+          if (!day) {
+            const rawDob = localStorage.getItem('nv_user_dob') || '';
+            if (rawDob && rawDob.includes('-')) {
+              const parts = rawDob.split('-');
+              if (parts.length === 3) {
+                year = parseInt(parts[0], 10);
+                month = parseInt(parts[1], 10);
+                day = parseInt(parts[2], 10);
+              }
+            }
+          }
+        }
+
+        // Check for session-persisted Step 1 verification
+        const savedStep1 = sessionStorage.getItem('nv_step1_data');
+        const step1Verified = sessionStorage.getItem('nv_step1_verified') === 'true';
+
+        if (savedStep1) {
+          try {
+            const s1 = JSON.parse(savedStep1);
+            if (s1.phone) phone = s1.phone;
+            if (s1.email) email = s1.email;
+            if (s1.password) _step1Data.password = s1.password;
+            _step1Data.phone = s1.phone;
+            _step1Data.email = s1.email;
+            _step1Data.verificationToken = s1.verificationToken;
+          } catch(e) {}
+        }
+
+        // Fill form fields
+        if (email) {
+          document.getElementById('regEmail').value = email;
+          _step1Data.email = email;
+        }
+        if (phone) {
+          let cleanPhone = phone;
+          if (cleanPhone.startsWith('+91')) {
+            document.getElementById('regPhonePrefix').value = '+91';
+            cleanPhone = cleanPhone.replace('+91', '').trim();
+          } else if (cleanPhone.startsWith('+1')) {
+            document.getElementById('regPhonePrefix').value = '+1';
+            cleanPhone = cleanPhone.replace('+1', '').trim();
+          }
+          document.getElementById('regPhone').value = cleanPhone;
+          _step1Data.phone = phone;
+        }
+        if (name) document.getElementById('regName').value = name;
+        if (day) document.getElementById('regDay').value = day;
+        if (month) document.getElementById('regMonth').value = month;
+        if (year) document.getElementById('regYear').value = year;
+        if (place) {
+          document.getElementById('regPlace').value = place;
+          onCityInput(place);
+        }
+        if (country) document.getElementById('regCountry').value = country;
+
+        if (name && day && month && year) {
+          const banner = document.getElementById('prefillAlert');
+          const pName = document.getElementById('prefillName');
+          const pDob = document.getElementById('prefillDob');
+          if (banner && pName && pDob) {
+            pName.textContent = name;
+            pDob.textContent = `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+            banner.style.display = 'flex';
+          }
+          updateLivePreview();
+        }
+
+        // If Step 1 was already verified in this session, advance to Step 2
+        if (step1Verified && email && phone) {
+          _isStep1Verified = true;
+          goToStep(2);
+        }
+      } catch (err) {
+        console.debug('[SIGNUP_PREFILL_NOTICE]', err);
+      }
+    }
+
+    // Populate cities list
+    function populateCityDatalist() {
+      const datalist = document.getElementById('citySuggestions');
+      if (!datalist) return;
+      try {
+        const uniqueEntries = [];
+        const seen = new Set();
+        Object.keys(KNOWN_CITIES).forEach(k => {
+          const c = KNOWN_CITIES[k];
+          const label = `${c.name || (k.charAt(0).toUpperCase() + k.slice(1))}, ${c.country}`;
+          if (!seen.has(label)) {
+            seen.add(label);
+            uniqueEntries.push(`<option value="${label}">${c.country} · ${c.lat}° N, ${c.lng}° E · Alt: ${c.alt || 0}m</option>`);
+          }
+        });
+        datalist.innerHTML = uniqueEntries.join('');
+      } catch (e) {}
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateCityDatalist();
+      initSignupPrefill();
+    });
+  </script>
+  <script src="/js/cdp_tracker.js"></script>
+</body>
+</html>

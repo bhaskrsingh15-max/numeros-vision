@@ -1964,7 +1964,7 @@
 
       if (isAlreadyUnlocked) {
         // Already paid and unlocked for this DOB: redirect to dashboard to download
-        window.location.href = `/dashboard/?unlocked=${encodeURIComponent(planId)}&dob=${encodeURIComponent(dob)}&status=paid`;
+        window.location.href = '/dashboard/';
         return;
       }
 
@@ -1989,7 +1989,7 @@
           onSuccess: function(inv) {
             console.log('Payment verified, invoice generated:', inv.invoice_id);
             localStorage.setItem('nv_unlocked_' + profileKey + '_' + planId, 'true');
-            window.location.href = `/dashboard/?unlocked=${encodeURIComponent(planId)}&dob=${encodeURIComponent(dob)}&status=paid&payment_id=${encodeURIComponent((inv && (inv.payment_id || inv.paymentId)) || '')}`;
+            window.location.href = '/dashboard/';
           },
           onFailure: function(err) {
             if (btn) {

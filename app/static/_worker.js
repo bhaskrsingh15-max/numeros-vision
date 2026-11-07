@@ -1626,13 +1626,8 @@ export default {
           expires_in: 300,
           message: smsDispatched 
             ? `Verification code dispatched to +91 ******${mobile10.slice(-4)}`
-            : (isNonProd ? `Preview Mode: Test Code is ${otpCode} (or 123456)` : 'Verification code generated for authentication')
+            : 'Verification code dispatched to your registered number.'
         };
-
-        // Dev/Preview OTP gate
-        if (isNonProd) {
-          respPayload.dev_otp = otpCode;
-        }
 
         return new Response(JSON.stringify(respPayload), { status: 200, headers: corsHeaders });
       } catch (err) {
@@ -1706,7 +1701,7 @@ export default {
 
         const isNonProd = env && (env.ENVIRONMENT === 'local' || env.ENVIRONMENT === 'preview');
         const expectedCodeHash = await hmacSha256Hex(otpSecret, `${mobile10}:${code}`);
-        const isValid = timingSafeEqual(expectedCodeHash, challenge.code_hash) || (isNonProd && code === '123456');
+        const isValid = timingSafeEqual(expectedCodeHash, challenge.code_hash);
 
         if (!isValid) {
           const remaining = challenge.max_attempts - newAttempts;
@@ -1748,6 +1743,17 @@ export default {
             user = { id: userId, phoneHash, phone_enc: phoneEnc, createdAt: now };
             memoryStore.users.set(phoneHash, user);
             isNewUser = true;
+            if (memoryStore.creditLedger) {
+              memoryStore.creditLedger.set('crd_' + now + '_free', {
+                id: 'crd_' + now + '_free',
+                user_id: userId,
+                delta: 3,
+                reason: 'signup_bonus',
+                ref_id: 'signup_free_' + userId,
+                balance_after: 3,
+                created_at: now
+              });
+            }
           } else {
             userId = user.id;
           }
@@ -1839,10 +1845,7 @@ export default {
           const tokenInfo = verifyResult.payload;
           verifiedEmail = tokenInfo.email.toLowerCase().trim();
           verifiedName = tokenInfo.name || verifiedEmail.split('@')[0];
-        } else if (isNonProd && (body.email || body.identifier)) {
-          // Preview & Local Fast Connect Fallback (allows instant sign in during testing)
-          verifiedEmail = (body.email || body.identifier).toString().toLowerCase().trim();
-          verifiedName = verifiedEmail.split('@')[0];
+
         } else {
           return new Response(JSON.stringify({
             success: false,
@@ -3195,16 +3198,25 @@ export default {
         await retryPendingReportJobsForUser(user.user_id, env, ctx);
       }
 
-      // Charm AI credit balance
-      let charmCredits = 0;
+      // Charm AI credit balance (defaults to 3 signup credits for new users)
+      let charmCredits = null;
       if (env.DB) {
         const credRow = await env.DB.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').bind(user.user_id).first();
-        charmCredits = (credRow && credRow.bal) ? credRow.bal : 0;
-      } else if (memoryStore && memoryStore.creditLedger) {
-        for (const entry of memoryStore.creditLedger.values()) {
-          if (entry.user_id === user.user_id) charmCredits += (entry.delta || 0);
+        if (credRow && credRow.bal !== null && credRow.bal !== undefined) {
+          charmCredits = credRow.bal;
         }
+      } else if (memoryStore && memoryStore.creditLedger) {
+        let sum = 0;
+        let found = false;
+        for (const entry of memoryStore.creditLedger.values()) {
+          if (entry.user_id === user.user_id) {
+            sum += (entry.delta || 0);
+            found = true;
+          }
+        }
+        if (found) charmCredits = sum;
       }
+      if (charmCredits === null) charmCredits = 3;
 
       // 1. User Reports (Report Jobs)
       let rawReportJobs = [];
