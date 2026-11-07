@@ -319,6 +319,7 @@ app = FastAPI(title="Numeros Vision Private PDF Generator Service", docs_url=Non
 
 
 @app.get("/internal/v1/health")
+@app.get("/healthz")
 async def handle_health() -> Dict[str, Any]:
     return {"ok": True, "service": "numeros-pdf-generator"}
 

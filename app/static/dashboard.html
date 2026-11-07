@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Analytics 4 (GA4) -->
+  <!-- Google Analytics 4 (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z2E6416W7"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -19,6 +19,7 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
   <!-- End Google Tag Manager -->
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 
@@ -32,256 +33,417 @@
   <title>Your Numeros Dashboard | Numeros Vision</title>
   <meta name="description" content="View your personalized numerological profile, Classical Calculations, Lo Shu grid, and Charm AI consultation credits in your secure dashboard." />
   <link rel="canonical" href="https://numerosvision.com/dashboard/" />
-  <!-- Search Engine Crawl & Indexing Directives -->
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-
-  <!-- App Store, PWA & Mobile Web Directives -->
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Numeros Vision" />
-  <!-- Open Graph / Social Media Directives -->
-  <meta property="og:site_name" content="Numeros Vision" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://numerosvision.com/dashboard/" />
-  <meta property="og:title" content="Your Numeros Dashboard | Numeros Vision" />
-  <meta property="og:description" content="View your personalized numerological profile, Classical Calculations, Lo Shu grid, and Charm AI consultation credits in your secure dashboard." />
-  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
-
-  <!-- Twitter Card Directives -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Your Numeros Dashboard | Numeros Vision" />
-  <meta name="twitter:description" content="View your personalized numerological profile, Classical Calculations, Lo Shu grid, and Charm AI consultation credits in your secure dashboard." />
-  <meta name="twitter:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
-<meta name="robots" content="noindex, follow" />
+  <meta name="robots" content="noindex, follow" />
 
   <link rel="manifest" href="/manifest.json" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
-  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
+  <link rel="stylesheet" href="/static/css/theme.css?v=5.6.0" />
 
   <style>
-    .dash-wrap { max-width: var(--nv-container-max, 1240px); margin: 0 auto; padding: var(--nv-section-py, clamp(48px, 6vw, 76px)) var(--nv-container-pad, clamp(16px, 3.5vw, 24px)); box-sizing: border-box; }
-    .dash-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; border-bottom: 1.5px solid rgba(201, 162, 39, 0.25); padding-bottom: 24px; }
-    .dash-h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; color: #8B6914; line-height: 1.15; margin: 0; }
-    .dash-sub { font-size: 0.95rem; color: #7A654D; margin-top: 6px; }
-
-    .dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--nv-card-gap, clamp(16px, 2.5vw, 24px)); }
-    @media (max-width: 860px) { .dash-grid { grid-template-columns: 1fr; } }
-
-    .dash-card { background: #FFFFFF; border: 1.5px solid var(--border-gold, rgba(201, 162, 39, 0.38)); border-radius: var(--nv-card-radius, 20px); padding: var(--nv-card-pad, clamp(22px, 3.5vw, 36px)); box-shadow: 0 6px 24px rgba(180, 155, 110, 0.08); margin-bottom: 24px; }
-    .card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: #8B6914; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; }
-
-    .matrix-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; margin-bottom: 20px; }
-    .matrix-pill { background: #F7F3EA; border-radius: 12px; padding: 16px 12px; text-align: center; border: 1px solid rgba(201, 162, 39, 0.25); }
-    .pill-label { font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #7A654D; display: block; margin-bottom: 6px; }
-    .pill-val { font-family: 'Cinzel', serif; font-size: 1.9rem; font-weight: 700; color: #8B6914; line-height: 1; }
-    .pill-sub { font-size: 0.75rem; color: #523E28; margin-top: 6px; display: block; }
-
-    .quick-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-    .tool-tile { background: #FFFDF7; border: 1px solid rgba(201, 162, 39, 0.3); border-radius: 12px; padding: 16px; text-decoration: none; color: #523E28; transition: all 0.2s ease; display: block; }
-    .tool-tile:hover { transform: translateY(-2px); border-color: var(--gold, #C9A227); box-shadow: 0 4px 14px rgba(201, 162, 39, 0.2); }
-    .tool-tile strong { color: #8B6914; display: block; font-size: 0.95rem; margin-bottom: 4px; }
-    .tool-tile p { font-size: 0.8rem; color: #7A654D; margin: 0; line-height: 1.4; }
-
-    .credit-box { background: linear-gradient(135deg, rgba(201, 162, 39, 0.12) 0%, rgba(22, 131, 91, 0.08) 100%); border: 1.5px solid var(--border-gold, rgba(201, 162, 39, 0.38)); border-radius: 16px; padding: 22px; text-align: center; margin-bottom: 24px; }
-    .credit-num { font-family: 'Cinzel', serif; font-size: 2.4rem; color: #8B6914; font-weight: 700; margin: 8px 0; }
-    .alignment-badge { display: inline-flex; align-items: center; letter-spacing: 0.05em; text-transform: uppercase; }
-      /* Lo Shu Grid in Dashboard */
-    .dash-loshu-table {
-      border-collapse: collapse;
-      background: #FFFFFF;
-      box-shadow: 0 4px 14px rgba(201, 162, 39, 0.12);
-      border: 2px solid #C9A227;
+    :root {
+      --gold-dark: #8B6914;
+      --gold-primary: #C9A227;
+      --emerald: #16835B;
+      --emerald-bg: #eef8f2;
+      --pearl-bg: #FFFDF7;
+      --sand-bg: #F7F3EA;
+      --ink-dark: #523E28;
+      --ink-muted: #7A654D;
+      --border-gold: rgba(201, 162, 39, 0.35);
+    }
+    body {
+      background: #FDFBF7;
+      color: var(--ink-dark);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .dash-wrap {
+      max-width: 1140px;
       margin: 0 auto;
-    }
-    .dash-loshu-table td {
-      width: 58px;
-      height: 58px;
-      text-align: center;
-      vertical-align: middle;
-      border: 1.5px solid #C9A227;
-      font-family: 'Cinzel', serif;
-      font-size: 19px;
-      font-weight: 800;
-      color: #8B6914;
-      position: relative;
-      background: #FFFFFF;
-    }
-    .dash-loshu-table td.missing-gap {
-      color: rgba(180, 155, 110, 0.45);
-      font-weight: 500;
-      background: #FDFBF5;
-      border: 1.5px dashed rgba(201, 162, 39, 0.55);
-    }
-    .dash-loshu-sub {
-      position: absolute;
-      bottom: 2px;
-      right: 4px;
-      font-family: 'Manrope', sans-serif;
-      font-size: 7.5px;
-      color: #8B6914;
-      font-weight: 600;
-    }
-    .dash-gap-tag {
-      position: absolute;
-      top: 2px;
-      right: 3px;
-      font-size: 7.5px;
-      font-family: 'Manrope', sans-serif;
-      font-weight: 800;
-      color: #A13030;
-      background: rgba(161, 48, 48, 0.1);
-      border: 1px solid rgba(161, 48, 48, 0.28);
-      border-radius: 3px;
-      padding: 0 3px;
-      line-height: 12px;
-    }
-    .dash-present-tag {
-      position: absolute;
-      top: 2px;
-      right: 3px;
-      font-size: 7.5px;
-      font-family: 'Manrope', sans-serif;
-      font-weight: 700;
-      color: #16835B;
-      background: rgba(22, 131, 91, 0.1);
-      border-radius: 3px;
-      padding: 0 3px;
-      line-height: 12px;
-    }
-  
-    /* ── LO SHU FULL ANVEIL REFERENCE COMPONENT STYLES ── */
-    .ls-ref-card {
-      background: #FFFDF7;
-      border: 1.5px solid #C9A227;
-      border-radius: 16px;
-      padding: clamp(16px, 2.5vw, 24px);
-      box-shadow: 0 8px 32px rgba(201, 162, 39, 0.12);
-      margin-bottom: 24px;
-    }
-    .ls-pitch-pill {
-      transition: all 0.2s ease;
-      font-family: 'Inter', sans-serif;
-    }
-    .ls-pitch-pill:hover, .ls-pitch-pill.active {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(201, 162, 39, 0.25);
-    }
-    .ls-grid-cell {
-      border-radius: 10px;
-      padding: 8px 5px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 84px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      user-select: none;
+      padding: clamp(24px, 4vw, 48px) 20px;
       box-sizing: border-box;
     }
-    .ls-grid-cell:hover {
-      transform: scale(1.03);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    }
-    .ls-grid-cell.missing-void {
-      border: 2px dashed #C9A227;
-      background: #FFFDF7;
-    }
-    .ls-grid-cell.active-charm {
-      border: 2px solid #16835B;
+    .dash-card {
       background: #FFFFFF;
-      box-shadow: 0 2px 8px rgba(22, 131, 91, 0.08);
-    }
-    .ls-cell-tag {
-      font-size: 0.60rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-    .ls-cell-tag.missing { color: #8B6914; }
-    .ls-cell-tag.active { color: #16835B; }
-    .ls-cell-num {
-      font-family: 'Cinzel', serif;
-      font-size: 1.45rem;
-      font-weight: 800;
-      line-height: 1.1;
-      margin: 2px 0;
-    }
-    .ls-cell-num.missing { color: #523E28; }
-    .ls-cell-num.active { color: #16835B; }
-    .ls-cell-label {
-      font-size: 0.65rem;
-      color: #7A654D;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-    .ls-cell-action {
-      font-size: 0.60rem;
-      font-weight: 700;
-      text-decoration: underline;
-      margin-top: 2px;
-    }
-    .ls-cell-action.missing { color: #8B6914; }
-    .ls-cell-action.active { color: #16835B; }
-    @media (max-width: 900px) {
-      .ls-showcase-grid { grid-template-columns: 1fr !important; }
-    }
-    .journey-continue-card {
-      background: linear-gradient(135deg, rgba(201,162,39,0.12) 0%, rgba(22,131,91,0.08) 100%);
-      border: 1.5px solid #C9A227;
-      border-radius: 14px;
-      padding: 16px 20px;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 16px;
+      padding: clamp(20px, 3vw, 32px);
+      box-shadow: 0 4px 20px rgba(180, 155, 110, 0.07);
       margin-bottom: 24px;
+    }
+    .dash-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+      color: var(--gold-dark);
+      margin: 0 0 16px 0;
+      font-weight: 700;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 14px;
+      gap: 12px;
     }
-    .activity-metric-tile {
-      background: #FFFFFF;
-      border: 1px solid rgba(201,162,39,0.3);
+    .dash-sub {
+      font-size: 0.86rem;
+      color: var(--ink-muted);
+      margin: -8px 0 16px 0;
+      line-height: 1.5;
+    }
+
+    /* Welcome & Profile Header */
+    .welcome-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1.5px solid rgba(201, 162, 39, 0.25);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+    }
+    .welcome-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+      color: var(--gold-dark);
+      margin: 0;
+      line-height: 1.2;
+    }
+    .welcome-id {
+      font-size: 0.76rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Profile Switcher Pills */
+    .profile-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .profile-pill {
+      background: var(--pearl-bg);
+      border: 1px solid var(--border-gold);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-size: 0.80rem;
+      font-weight: 600;
+      color: var(--ink-dark);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .profile-pill.active {
+      background: var(--gold-dark);
+      color: #FFFFFF;
+      border-color: var(--gold-dark);
+    }
+    .btn-add-profile {
+      background: transparent;
+      border: 1px dashed var(--gold-primary);
+      color: var(--gold-dark);
+      border-radius: 9999px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* My Reports Cards */
+    .report-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 18px 20px;
+      background: var(--pearl-bg);
+      border: 1.5px solid var(--border-gold);
       border-radius: 12px;
-      padding: 14px 18px;
+      margin-bottom: 14px;
+    }
+    .report-item.ready {
+      border-color: var(--emerald);
+      background: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(22, 131, 91, 0.07);
+    }
+    .report-item.failed {
+      border-color: var(--gold-primary);
+      background: #FFFDF9;
+    }
+    .report-badge {
+      display: inline-block;
+      font-size: 0.70rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+    .report-badge.ready {
+      background: var(--emerald-bg);
+      color: var(--emerald);
+      border: 1px solid var(--emerald);
+    }
+    .report-badge.preparing {
+      background: rgba(201, 162, 39, 0.15);
+      color: var(--gold-dark);
+      border: 1px solid var(--gold-primary);
+      animation: pulseGold 2s infinite ease-in-out;
+    }
+    .report-badge.failed {
+      background: rgba(201, 162, 39, 0.18);
+      color: var(--gold-dark);
+      border: 1px solid var(--gold-dark);
+    }
+    @keyframes pulseGold {
+      0% { opacity: 0.85; }
+      50% { opacity: 1; transform: scale(1.02); }
+      100% { opacity: 0.85; }
+    }
+
+    /* Numerical Vectors Row */
+    .vectors-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .vector-box {
+      background: var(--sand-bg);
+      border: 1px solid var(--border-gold);
+      border-radius: 12px;
+      padding: 14px 10px;
       text-align: center;
-      flex: 1;
-      min-width: 130px;
-      box-shadow: 0 4px 12px rgba(201,162,39,0.06);
     }
-</style>
-  <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Your Numeros Dashboard | Numeros Vision",
-    "headline": "Your Numeros Dashboard | Numeros Vision",
-    "description": "View your personalized numerological profile, Classical Calculations, Lo Shu grid, and Charm AI consultation credits in your secure dashboard.",
-    "url": "https://numerosvision.com/dashboard/",
-    "image": "https://numerosvision.com/static/logos/anveil-charm-hero.png",
-    "author": {
-      "@type": "Organization",
-      "name": "Numeros Vision",
-      "url": "https://numerosvision.com"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Numeros Vision",
-      "url": "https://numerosvision.com",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://numerosvision.com/static/logos/anveil-charm-hero.png"
-      }
+    .vector-label {
+      font-size: 0.70rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
     }
-  }
-  </script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+    .vector-val {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--gold-dark);
+      line-height: 1.1;
+    }
+    .vector-sub {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    /* Lo Shu Grid */
+    .loshu-wrap {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .loshu-wrap { grid-template-columns: 1fr; }
+    }
+    .loshu-table {
+      border-collapse: collapse;
+      border: 2px solid var(--gold-primary);
+      background: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(201, 162, 39, 0.12);
+      margin: 0 auto;
+    }
+    .loshu-table td {
+      width: 72px;
+      height: 72px;
+      text-align: center;
+      vertical-align: middle;
+      border: 1.5px solid var(--gold-primary);
+      position: relative;
+      background: #FFFFFF;
+    }
+    .loshu-table td.missing-cell {
+      background: #FDFBF5;
+      border: 1.5px dashed rgba(201, 162, 39, 0.6);
+    }
+    .loshu-num {
+      font-family: 'Cinzel', serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .loshu-num.present {
+      color: var(--emerald);
+    }
+    .loshu-num.missing {
+      color: rgba(139, 105, 20, 0.55);
+    }
+    .loshu-sub-label {
+      font-size: 0.58rem;
+      color: var(--ink-muted);
+      display: block;
+      margin-top: 2px;
+    }
+    .loshu-tag {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 3px;
+      line-height: 1.2;
+    }
+    .loshu-tag.active {
+      background: rgba(22, 131, 91, 0.12);
+      color: var(--emerald);
+    }
+    .loshu-tag.locked {
+      background: rgba(201, 162, 39, 0.15);
+      color: var(--gold-dark);
+    }
+
+    /* Upgrade Tiers Row */
+    .upgrade-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 14px;
+    }
+    .tier-card {
+      background: var(--pearl-bg);
+      border: 1.5px solid var(--border-gold);
+      border-radius: 14px;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .tier-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 162, 39, 0.15);
+      border-color: var(--gold-primary);
+    }
+    .tier-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .tier-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+    .tier-price {
+      font-family: 'Cinzel', serif;
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--gold-dark);
+      margin: 6px 0 10px 0;
+      line-height: 1;
+    }
+    .tier-desc {
+      font-size: 0.78rem;
+      color: var(--ink-dark);
+      line-height: 1.45;
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+    .tier-btn {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
+      color: #FFFFFF;
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .tier-btn:hover {
+      opacity: 0.95;
+    }
+
+    /* Charm AI Card */
+    .charm-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.08) 0%, rgba(22, 131, 91, 0.06) 100%);
+      border: 1.5px solid var(--border-gold);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .charm-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .charm-credits-num {
+      font-family: 'Cinzel', serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--gold-dark);
+      line-height: 1;
+    }
+
+    /* Collapsible Receipts & Account */
+    details.dash-collapsible summary {
+      outline: none;
+      list-style: none;
+      user-select: none;
+    }
+    details.dash-collapsible summary::-webkit-details-marker {
+      display: none;
+    }
+    .receipts-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.80rem;
+      margin-top: 14px;
+    }
+    .receipts-table th {
+      text-align: left;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--ink-muted);
+      border-bottom: 1.5px solid var(--border-gold);
+      padding: 8px 10px;
+    }
+    .receipts-table td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(201, 162, 39, 0.15);
+      color: var(--ink-dark);
+    }
+  </style>
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
@@ -289,7 +451,7 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <!-- Unified Header -->
+  <!-- Master Unified Site Header -->
   <header class="nv-header">
     <div class="nv-nav-container">
       <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
@@ -297,2323 +459,742 @@
           <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" width="38" height="38" />
         </div>
         <div class="nv-brand-text">
-          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-name">NUMEROS VISION</span>
           <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
         </div>
       </a>
-
-      <!-- Desktop Navigation Links matching Master Roadmap IA -->
-      <nav aria-label="Main Navigation">
-                <ul class="nv-nav-menu" id="nvNavMenu">
-          <!-- 1. Home -->
-          <li class="nv-nav-item">
-            <a href="/" class="nv-nav-link" title="Numeros Vision Home">Home</a>
-          </li>
-
-          <!-- 1. About Us -->
-          <li class="nv-nav-item">
-            <a href="/about/" class="nv-nav-link" title="About Numeros Vision | Our Approach to Numerology" data-canonical="https://numerosvision.com/about/">About Us</a>
-          </li>
-
-          <!-- 2. Calculators (Accordion / Dropdown) -->
-          <li class="nv-nav-item nv-has-dropdown">
-            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
-              <span>Calculators</span>
-              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
-            <ul class="nv-submenu">
-              <li><a href="/tools/baby-naming" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
-              <li><a href="/tools/name-numerology" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
-              <li><a href="/tools/mobile-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
-              <li><a href="/tools/compatibility-calculator" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Compatibility Synastry &amp; Synastry</span></a></li>
-              <li><a href="/tools/business-numerology" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
-              <li><a href="/tools/life-path-calculator" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
-              <li><a href="/tools/lo-shu-grid" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
-              <li><a href="/tools/vehicle-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
-              <li><a href="/tools/property-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
-              <li><a href="/tools/blessing-years" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
-              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
-            </ul>
-          </li>
-
-          <!-- 2. Charm AI -->
-          <li class="nv-nav-item nv-nav-charm-highlight">
-            <a href="/charm-ai/" class="nv-nav-link" title="Charm AI" style="display:inline-flex; align-items:center; gap:8px;">
-              <span class="nv-charm-medallion-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#FFFFFF" stroke-width="2.4" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></span> <span style="font-weight:700;">Charm AI</span>
-            </a>
-          </li>
-
-          <!-- 3. Reports & Consultations -->
-          <li class="nv-nav-item nv-has-dropdown">
-            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
-              <span>Reports</span>
-              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
-            <ul class="nv-submenu">
-              <li><a href="/reports_catalogue/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
-              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
-              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
-            </ul>
-          </li>
-
-          <!-- 5. Insights -->
-          <li class="nv-nav-item nv-has-dropdown">
-            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
-              <span>Insights</span>
-              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
-            <ul class="nv-submenu">
-              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
-              <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
-              <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
-              <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
-              <li><a href="/blog/gemstone-remedies" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
-            </ul>
-          </li>
-
-          <!-- 5. Pricing -->
-          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
-
-          <!-- 6. Contact Us -->
-          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
-
-          <!-- 7. PWA Download / Install App on Mobile & Tablet ONLY -->
-          <li class="nv-nav-item nv-pwa-menu-item" id="nvPwaDrawerItem" style="display:none; margin: 8px 0; width: 100%; box-sizing: border-box;">
-            <button type="button" class="nv-nav-link nv-pwa-install-trigger-btn" onclick="triggerPwaInstall(event)" style="background: rgba(201,162,39,0.12); border: 1.5px solid rgba(201,162,39,0.38); border-radius: 999px; padding: 10px 18px; font-weight: 600; color: #8B6914; display: flex; align-items: center; justify-content: space-between; width: 100%; cursor: pointer; text-align: left; box-sizing: border-box;">
-              <span style="display: flex; align-items: center; gap: 8px;">
-                <span class="nv-sub-icon" style="font-size: 1.15rem;">📲</span>
-                <span>Install / Download App</span>
-              </span>
-              <span class="nv-sub-tag" style="background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #fff; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; font-weight: 700; text-transform: uppercase;">PWA</span>
-            </button>
-          </li>
-        </ul>
+      <nav class="nv-nav-menu" id="nvNavMenu">
+        <a href="/" class="nv-nav-item">Home</a>
+        <a href="/pricing/" class="nv-nav-item">Pricing</a>
+        <a href="/ai-consultation/" class="nv-nav-item">Charm AI</a>
+        <a href="/contact/" class="nv-nav-item">Contact</a>
+        <a href="/dashboard/" class="nv-nav-item active">My Dashboard</a>
       </nav>
-
       <div class="nv-nav-actions">
-        <a href="/#birth-profile" class="nv-btn-cta">Discover My Numbers ✦</a>
-        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation">☰</button>
+        <button type="button" onclick="handleLogout()" class="nv-btn-cta" style="background:#FFFFFF; border:1px solid #C9A227; color:#8B6914; padding:6px 14px; font-size:0.78rem; border-radius:6px; cursor:pointer;">
+          Sign Out
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Breadcrumbs -->
-  <div class="nv-breadcrumbs">
-    <a href="/">Home</a>
-    <span class="nv-breadcrumbs-sep">/</span>
-    <span class="nv-breadcrumbs-current">Member Dashboard</span>
-  </div>
-
   <main class="dash-wrap">
-    <div id="dashBannerAlertContainer"></div>
-    <div class="dash-header">
+    <!-- ── 1. WELCOME & COMPACT PROFILE SWITCHER ── -->
+    <div class="welcome-header">
       <div>
-        <h1 class="dash-h1">Your Numeros Dashboard</h1>
-        <div class="dash-sub">Welcome back, <strong id="dashWelcomeName">Member</strong> · Member ID: <span id="dashMemberId" style="font-family:monospace; font-weight:700; color:#8B6914;">—</span></div>
-      </div>
-      <div style="display:flex; gap:10px; align-items:center;">
-        <button onclick="handleDashboardLogout()" class="nv-nav-link" style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:8px 14px; font-size:0.8rem; cursor:pointer; color:#7A654D;">Sign Out</button>
-        <a id="dashViewFreeReportBtn" href="/sample-report/?tier=free" class="nv-btn-cta" style="font-size:0.8rem; padding:9px 16px; background:rgba(201,162,39,0.12); color:#8B6914; border:1.5px solid #C9A227;">View Free Dossier ✦</a>
-        <a id="dashUnlockMasterBtn" href="/pricing.html" class="nv-btn-cta" style="font-size:0.8rem; padding:9px 18px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF;">Unlock Premium Blueprint (32 Pages) 🔒</a>
-      </div>
-    </div>
-
-        <!-- Family Profiles Hub (Single Login · Multiple Family Charts · Isolated Purchases) -->
-    <div class="dash-card" style="margin-bottom: 24px; border: 1.5px solid #C9A227; background: #FFFDF7; box-shadow: 0 4px 16px rgba(201,162,39,0.08);">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
-        <div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-family:'Cinzel',serif; font-size:1.1rem; font-weight:700; color:#8B6914;">👥 Family Profiles &amp; Personalized Reading Hub</span>
-            <span style="font-size:0.70rem; padding:2px 8px; border-radius:6px; font-weight:700; background:rgba(22,131,91,0.12); color:#16835B; border:1px solid #16835B;">MULTI-PROFILE PASS</span>
-          </div>
-          <span style="font-size:0.78rem; color:#7A654D; display:block; margin-top:2px;">
-            Single-login account. Switch profiles below to view individual charts. Each paid dossier is licensed strictly per person.
-          </span>
+        <h1 class="welcome-name" id="dashWelcomeName">Welcome</h1>
+        <div class="welcome-id">
+          Member: <span id="dashMemberId" style="font-family:monospace; font-weight:700; color:var(--gold-dark);">NV-MEMBER</span> · All figures server-verified
         </div>
-        <button type="button" onclick="openAddFamilyModal()" class="nv-btn-cta" style="background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF; font-size:0.80rem; padding:8px 16px; border-radius:6px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-          <span>+ Add Family Member</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="profile-switcher" id="dashProfileSelector">
+          <!-- Profiles injected dynamically -->
+        </div>
+        <button type="button" onclick="openAddFamilyModal()" class="btn-add-profile">
+          + Add Profile
         </button>
       </div>
+    </div>
 
-      <div id="familyProfilesBar" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; padding-top:6px; border-top:1px solid rgba(201,162,39,0.2);">
-        <!-- Dynamically rendered profile pills -->
+    <!-- ── 2. MY REPORTS (FIRST SECTION) ── -->
+    <div class="dash-card">
+      <div class="dash-title">
+        <span>Your Purchased Reports</span>
+        <span style="font-size:0.75rem; font-family:'Inter'; color:var(--ink-muted); font-weight:500;">
+          Deterministic Reports &amp; Dossiers
+        </span>
+      </div>
+      <div id="dashReportsContainer">
+        <!-- Rendered from /api/v1/dashboard/view -->
+        <div style="text-align:center; color:var(--ink-muted); padding:20px 0; font-size:0.86rem;">
+          Loading your verified reports...
+        </div>
       </div>
     </div>
 
-    <!-- ── 1. CONTINUE YOUR NUMEROLOGY JOURNEY (NV-UX-01 Funnel Continuity) ── -->
-    <div class="journey-continue-card" id="dashJourneyContinueCard">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;">
-          ✦
+    <!-- ── 3. FREE LO SHU GRID WITH ENABLED & LOCKED DIGITS ── -->
+    <div class="dash-card">
+      <div class="dash-title">
+        <span>Lo Shu Matrix &amp; Planetary Vectors</span>
+        <span style="font-size:0.74rem; font-family:'Inter'; color:var(--emerald); background:var(--emerald-bg); border:1px solid var(--emerald); padding:3px 8px; border-radius:6px; font-weight:700;">
+          COMPLIMENTARY ACCESS
+        </span>
+      </div>
+      <p class="dash-sub">
+        Deterministic 3×3 elemental grid derived from your locked Date of Birth. Digits present are active; missing digits indicate karmic void areas analyzed in depth in full dossiers.
+      </p>
+
+      <!-- Numerical Vectors (Driver, Conductor, Kua, Personal Year) -->
+      <div class="vectors-row">
+        <div class="vector-box">
+          <div class="vector-label">Driver (Mulank)</div>
+          <div class="vector-val" id="dashDriverVal">--</div>
+          <div class="vector-sub" id="dashDriverPlanet">--</div>
+        </div>
+        <div class="vector-box">
+          <div class="vector-label">Conductor (Bhagyank)</div>
+          <div class="vector-val" id="dashConductorVal">--</div>
+          <div class="vector-sub" id="dashConductorPlanet">--</div>
+        </div>
+        <div class="vector-box">
+          <div class="vector-label">Kua Number</div>
+          <div class="vector-val" id="dashKuaVal">--</div>
+          <div class="vector-sub" id="dashKuaDirection">--</div>
+        </div>
+        <div class="vector-box">
+          <div class="vector-label">Personal Year</div>
+          <div class="vector-val" id="dashPyVal">--</div>
+          <div class="vector-sub">Current Cycle</div>
+        </div>
+      </div>
+
+      <!-- 3x3 Lo Shu Matrix & Planetary Overview -->
+      <div class="loshu-wrap">
+        <div>
+          <table class="loshu-table">
+            <tbody>
+              <tr>
+                <td id="lsc_4"><div class="loshu-num" id="lsn_4">4</div><span class="loshu-sub-label">Wood · 4</span><span class="loshu-tag" id="lst_4"></span></td>
+                <td id="lsc_9"><div class="loshu-num" id="lsn_9">9</div><span class="loshu-sub-label">Fire · 9</span><span class="loshu-tag" id="lst_9"></span></td>
+                <td id="lsc_2"><div class="loshu-num" id="lsn_2">2</div><span class="loshu-sub-label">Earth · 2</span><span class="loshu-tag" id="lst_2"></span></td>
+              </tr>
+              <tr>
+                <td id="lsc_3"><div class="loshu-num" id="lsn_3">3</div><span class="loshu-sub-label">Wood · 3</span><span class="loshu-tag" id="lst_3"></span></td>
+                <td id="lsc_5"><div class="loshu-num" id="lsn_5">5</div><span class="loshu-sub-label">Earth · 5</span><span class="loshu-tag" id="lst_5"></span></td>
+                <td id="lsc_7"><div class="loshu-num" id="lsn_7">7</div><span class="loshu-sub-label">Metal · 7</span><span class="loshu-tag" id="lst_7"></span></td>
+              </tr>
+              <tr>
+                <td id="lsc_8"><div class="loshu-num" id="lsn_8">8</div><span class="loshu-sub-label">Earth · 8</span><span class="loshu-tag" id="lst_8"></span></td>
+                <td id="lsc_1"><div class="loshu-num" id="lsn_1">1</div><span class="loshu-sub-label">Water · 1</span><span class="loshu-tag" id="lst_1"></span></td>
+                <td id="lsc_6"><div class="loshu-num" id="lsn_6">6</div><span class="loshu-sub-label">Metal · 6</span><span class="loshu-tag" id="lst_6"></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="dashLoShuSummary" style="font-size:0.84rem; color:var(--ink-dark); line-height:1.6;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 4. ONE UPGRADE CARD WITH 3 TIERS IN ONE ROW (HIDES OWNED TIERS) ── -->
+    <div class="dash-card" id="dashUpgradeCard">
+      <div class="dash-title">
+        <span>Upgrade Your Dossier Depth</span>
+        <span style="font-size:0.75rem; font-family:'Inter'; color:var(--gold-dark); font-weight:600;">
+          Fixed Pricing · One-Time Access
+        </span>
+      </div>
+      <p class="dash-sub">
+        Choose your desired depth of analysis. Every dossier is bespoke, strictly adhering to classical Chaldean-Vedic mathematical principles with zero generative distortion.
+      </p>
+
+      <div class="upgrade-row" id="dashUpgradeTiersContainer">
+        <!-- Rendered dynamically: unpurchased tiers appear in 1 row; purchased tiers are hidden -->
+      </div>
+    </div>
+
+    <!-- ── 5. ONE SMALL CHARM AI CARD ── -->
+    <div class="charm-card">
+      <div class="charm-left">
+        <div>
+          <div class="charm-credits-num" id="dashCreditsNum">0</div>
+          <div style="font-size:0.70rem; text-transform:uppercase; font-weight:700; color:var(--gold-dark); letter-spacing:0.04em;">Credits Balance</div>
         </div>
         <div>
-          <div style="font-family:'Cinzel',serif; font-size:0.92rem; font-weight:700; color:#8B6914;">
-            Continue Your Numerology Journey · Latest Activity Saved
-          </div>
-          <div id="dashJourneyNarrative" style="font-size:0.80rem; color:#523E28; margin-top:2px;">
-            Your personal Lo Shu Matrix &amp; Planetary Vectors are calculated and active. Ready to activate missing numbers or explore deep analysis.
-          </div>
+          <strong style="color:var(--gold-dark); font-size:1.05rem; display:block;">Charm AI Career &amp; Transit Oracle</strong>
+          <span style="font-size:0.80rem; color:var(--ink-muted);" id="dashCreditsSub">Loading credits...</span>
         </div>
       </div>
-      <div style="display:flex; gap:10px; align-items:center;">
-        <a href="#dashAlignmentCard" class="nv-btn-cta" style="background:#16835B; padding:8px 18px; font-size:0.80rem; border-radius:6px; color:#FFFFFF; text-decoration:none;">
-          View Lo Shu Matrix &rarr;
-        </a>
-        <a href="#dashReportsList" class="nv-btn-cta" style="background:rgba(201,162,39,0.15); color:#8B6914; border:1px solid #C9A227; padding:8px 16px; font-size:0.80rem; border-radius:6px; text-decoration:none;">
-          My Reports
+      <div>
+        <a href="/ai-consultation/" class="nv-btn-cta" style="padding:10px 18px; font-size:0.82rem; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+          Consult Oracle &rarr;
         </a>
       </div>
     </div>
 
-    <!-- ── 2. MY ACTIVITY METRICS (Stage 2 Principal Metrics) ── -->
-    <div style="display:flex; gap:14px; flex-wrap:wrap; margin-bottom:24px;">
-      <div class="activity-metric-tile">
-        <div style="font-size:0.72rem; text-transform:uppercase; color:#7A654D; font-weight:700; letter-spacing:0.04em;">Free Calculations</div>
-        <div style="font-family:'Cinzel',serif; font-size:1.75rem; font-weight:800; color:#8B6914; margin:4px 0;" id="metricFreeCalcs">03</div>
-        <div style="font-size:0.70rem; color:#16835B; font-weight:600;">✓ Lo Shu &amp; Core Vectors Active</div>
-      </div>
-      <div class="activity-metric-tile">
-        <div style="font-size:0.72rem; text-transform:uppercase; color:#7A654D; font-weight:700; letter-spacing:0.04em;">Purchased Reports</div>
-        <div style="font-family:'Cinzel',serif; font-size:1.75rem; font-weight:800; color:#16835B; margin:4px 0;" id="metricPurchasedReports">01</div>
-        <div style="font-size:0.70rem; color:#8B6914; font-weight:600;">PDF Ready Within Minutes</div>
-      </div>
-      <div class="activity-metric-tile">
-        <div style="font-size:0.72rem; text-transform:uppercase; color:#7A654D; font-weight:700; letter-spacing:0.04em;">Charm AI Credits</div>
-        <div style="font-family:'Cinzel',serif; font-size:1.75rem; font-weight:800; color:#8B6914; margin:4px 0;" id="metricCharmCredits">10</div>
-        <div style="font-size:0.70rem; color:#16835B; font-weight:600;">✦ Priority Consultation Access</div>
-      </div>
-    </div>
+    <!-- ── 6. RECEIPTS & ACCOUNT DETAILS (COLLAPSED AT BOTTOM) ── -->
+    <details class="dash-card dash-collapsible" style="cursor:pointer;">
+      <summary class="dash-title" style="margin-bottom:0; cursor:pointer;">
+        <span>📜 Payment Receipts &amp; Account Details</span>
+        <span style="font-size:0.78rem; font-family:'Inter'; color:var(--gold-dark); font-weight:600;">
+          Expand / Collapse ▼
+        </span>
+      </summary>
 
-    <!-- Add Family Member Modal -->
-    <div id="addFamilyModal" style="display:none; position:fixed; inset:0; background:rgba(28,37,38,0.75); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:16px;">
-      <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:14px; max-width:440px; width:100%; padding:24px; box-shadow:0 12px 36px rgba(0,0,0,0.3); position:relative;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-          <h3 style="font-family:'Cinzel',serif; font-size:1.2rem; color:#8B6914; margin:0;">✦ Add Family Member</h3>
-          <button type="button" onclick="closeAddFamilyModal()" style="background:none; border:none; font-size:1.4rem; color:#7A654D; cursor:pointer; line-height:1;">&times;</button>
-        </div>
-        <p style="font-size:0.80rem; color:#523E28; margin:0 0 16px 0; line-height:1.45;">
-          Enter your family member's details. Their Lo Shu matrix, Driver, and Conductor vectors will be computed deterministically in your dashboard.
+      <div style="margin-top:20px; border-top:1px solid rgba(201, 162, 39, 0.2); padding-top:16px;">
+        <strong style="font-size:0.88rem; color:var(--gold-dark); display:block; margin-bottom:8px;">Transaction Receipts</strong>
+        <p style="font-size:0.78rem; color:var(--ink-muted); margin:0 0 12px 0;">
+          All payments settled securely through Razorpay. Formal transaction logs are recorded below.
         </p>
-        <form id="addFamilyForm" onsubmit="handleSaveFamilyMember(event)">
-          <div style="margin-bottom:12px;">
-            <label style="display:block; font-size:0.78rem; font-weight:700; color:#7A654D; margin-bottom:4px;">Full Name *</label>
-            <input type="text" id="fm_name" required placeholder="e.g. Priya Singh" style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #C9A227; border-radius:6px; background:#FFFFFF; font-family:'Inter',sans-serif; font-size:0.85rem;" />
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
-            <div>
-              <label style="display:block; font-size:0.78rem; font-weight:700; color:#7A654D; margin-bottom:4px;">Relationship *</label>
-              <select id="fm_relation" required style="width:100%; box-sizing:border-box; padding:9px 10px; border:1px solid #C9A227; border-radius:6px; background:#FFFFFF; font-size:0.85rem;">
-                <option value="Spouse">Spouse</option>
-                <option value="Child">Child</option>
-                <option value="Parent">Parent</option>
-                <option value="Sibling">Sibling</option>
-                <option value="Partner">Business Partner</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div>
-              <label style="display:block; font-size:0.78rem; font-weight:700; color:#7A654D; margin-bottom:4px;">Gender *</label>
-              <select id="fm_gender" required style="width:100%; box-sizing:border-box; padding:9px 10px; border:1px solid #C9A227; border-radius:6px; background:#FFFFFF; font-size:0.85rem;">
-                <option value="Female">Female</option>
-                <option value="Male">Male</option>
-              </select>
-            </div>
-          </div>
-          <div style="margin-bottom:16px;">
-            <label style="display:block; font-size:0.78rem; font-weight:700; color:#7A654D; margin-bottom:4px;">Date of Birth *</label>
-            <input type="date" id="fm_dob" required style="width:100%; box-sizing:border-box; padding:9px 12px; border:1px solid #C9A227; border-radius:6px; background:#FFFFFF; font-family:'Inter',sans-serif; font-size:0.85rem;" />
-          </div>
-          <div style="display:flex; justify-content:flex-end; gap:8px;">
-            <button type="button" onclick="closeAddFamilyModal()" style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.4); color:#7A654D; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:0.80rem;">Cancel</button>
-            <button type="submit" class="nv-btn-cta" style="background:#16835B; color:#FFFFFF; padding:8px 18px; border-radius:6px; border:none; cursor:pointer; font-size:0.80rem; font-weight:700;">Save &amp; View Chart ✦</button>
-          </div>
-        </form>
-      </div>
-    </div>
 
-    <div class="dash-grid">
-      <!-- Main Content Column -->
-      <div>
-        <!-- Profile Vectors -->
-        <div class="dash-card">
-          <div class="card-title">
-            <span>Primary Numerical Vectors</span>
-          </div>
-
-          <div class="matrix-row">
-            <div class="matrix-pill">
-              <span class="pill-label">Driver (Mulank)</span>
-              <div class="pill-val" id="dashDriver">1</div>
-              <span class="pill-sub" id="dashDriverSub">Sun · Leadership</span>
-            </div>
-            <div class="matrix-pill">
-              <span class="pill-label">Conductor (Bhagyank)</span>
-              <div class="pill-val" id="dashConductor">4</div>
-              <span class="pill-sub" id="dashConductorSub">Rahu · Strategy</span>
-            </div>
-            <div class="matrix-pill">
-              <span class="pill-label">Kua Number</span>
-              <div class="pill-val" id="dashKua">1</div>
-              <span class="pill-sub" id="dashKuaSub">East Group</span>
-            </div>
-            <div class="matrix-pill">
-              <span class="pill-label">Calling Name</span>
-              <div class="pill-val" id="dashNameVal">6</div>
-              <span class="pill-sub" id="dashNameSub">Venus · Harmonic</span>
-            </div>
-            <div class="matrix-pill">
-              <span class="pill-label">Personal Year</span>
-              <div class="pill-val" id="dashPy">8</div>
-              <span class="pill-sub" id="dashPySub">Power Cycle</span>
-            </div>
-          </div>
-
-          <p style="font-size:0.88rem; color:#523E28; line-height:1.65; margin:0;" id="dashSynthesis">
-            <strong>Synthesis:</strong> Your personal celestial profile combines leadership and structured execution. Review your active Lo Shu planes and personal year transits below.
-          </p>
+        <div style="overflow-x:auto;">
+          <table class="receipts-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Dossier / Pack</th>
+                <th>Amount</th>
+                <th>Payment Reference</th>
+                <th>Status</th>
+                <th>Receipt</th>
+              </tr>
+            </thead>
+            <tbody id="dashReceiptsTableBody">
+              <tr>
+                <td colspan="6" style="text-align:center; color:var(--ink-muted); padding:16px 0;">No completed transactions found.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <!-- Cosmic Alignment & Detected Gaps Card (Rule 1 & Upsell Hook) -->
-        <!-- ── REFERENCE LO SHU GRID: FULL ANVEIL CHARMS, PRESENT POWERS & ELEMENT YOGAS ── -->
-        <div class="ls-ref-card" id="dashAlignmentCard">
-          <div style="text-align:center; margin-bottom:20px;">
-            <h2 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:clamp(1.4rem, 2.5vw, 1.95rem); color:#8B6914; margin:0 0 6px 0; font-weight:700;">
-              Lo Shu Grid: Full Anveil Charms, Present Powers &amp; Element Yogas
-            </h2>
-            <p style="font-size:0.86rem; color:#523E28; max-width:820px; margin:0 auto 14px; line-height:1.5;">
-              Unlock your personalized natal matrix across 3 comprehensive consultation tiers: <strong>Full Missing Void Activation (@ ₹1,050)</strong>, <strong>Present Number Harmonization (@ ₹510)</strong>, and <strong>Element Yogas Active % (@ ₹199)</strong>.
-            </p>
-            <!-- 3 Top Ranked Pill Badges matching screenshot -->
-            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:10px;">
-              <button type="button" onclick="selectConversionOffer('missing')" id="pillOfferMissing" class="ls-pitch-pill active" style="background:#FAF3E0; border:1.5px solid #C9A227; color:#8B6914; padding:6px 14px; border-radius:20px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-                <span>🔒</span> 1st: Missing Numbers: Full Anveil @ <strong style="color:#8B6914;">₹1,050</strong>
-              </button>
-              <button type="button" onclick="selectConversionOffer('present')" id="pillOfferPresent" class="ls-pitch-pill" style="background:#FFFFFF; border:1.5px solid #16835B; color:#16835B; padding:6px 14px; border-radius:20px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-                <span>📊</span> 2nd: Present Numbers: Harmonize @ <strong style="color:#16835B;">₹510</strong>
-              </button>
-              <button type="button" onclick="selectConversionOffer('yogas')" id="pillOfferYogas" class="ls-pitch-pill" style="background:#FFFFFF; border:1.5px solid #E2B84B; color:#8B6914; padding:6px 14px; border-radius:20px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-                <span>⚡</span> 3rd: Element Yogas: Active % @ <strong style="color:#8B6914;">₹199</strong>
-              </button>
-            </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin-top:24px; padding-top:16px; border-top:1px dashed rgba(201, 162, 39, 0.3);">
+          <div>
+            <span style="font-size:0.72rem; text-transform:uppercase; font-weight:700; color:var(--gold-dark);">Registered Email:</span>
+            <div id="dashUserEmail" style="font-size:0.84rem; color:var(--ink-dark); margin-top:2px;">--</div>
           </div>
-
-          <!-- Two-Column Showcase Layout matching screenshot -->
-          <div class="ls-showcase-grid" style="display:grid; grid-template-columns: 1fr 1.22fr; gap:20px; align-items:start;">
-            
-            <!-- Left Column: Natal Lo Shu 3x3 Matrix -->
-            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:12px; padding:16px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <div>
-                  <div style="font-family:'Cinzel',serif; font-size:0.90rem; font-weight:700; color:#8B6914; letter-spacing:0.04em;">NATAL LO SHU 3×3 MATRIX</div>
-                  <div style="font-size:0.74rem; color:#7A654D;">Profile: <strong id="lsGridSeekerName" style="color:#8B6914;">—</strong> (DOB: <span id="lsGridSeekerDob">28-11-1981</span>)</div>
-                </div>
-                <span style="background:#16835B; color:#FFFFFF; border-radius:20px; padding:3px 10px; font-size:0.70rem; font-weight:700; letter-spacing:0.02em;">Click Any Cell</span>
-              </div>
-
-              <!-- 3x3 Grid dynamically populated in JS -->
-              <div id="dashLoShuGridCells" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;">
-                <!-- Cells rendered dynamically -->
-              </div>
-
-              <!-- Element Yogas Alignment Box -->
-              <div style="background:#FBF7EE; border:1.5px solid rgba(201,162,39,0.35); border-radius:10px; padding:10px 14px; margin-top:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                <div style="font-size:0.80rem; font-weight:700; color:#523E28;">
-                  <span>⚡ Element Yogas Alignment:</span> <strong id="lsYogaPctText" style="color:#16835B;">25% ACTIVE</strong>
-                </div>
-                <button type="button" onclick="selectConversionOffer('yogas')" style="background:#8B6914; color:#FFFFFF; border:none; padding:6px 12px; border-radius:6px; font-size:0.74rem; font-weight:700; cursor:pointer;">
-                  Anveil Yogas Charm @ ₹199 &rarr;
-                </button>
-              </div>
-
-              <!-- Quick Pitch Previews Row -->
-              <div style="margin-top:12px;">
-                <div style="font-size:0.70rem; color:#7A654D; font-weight:700; text-transform:uppercase; margin-bottom:6px;">Quick Pitch Previews:</div>
-                <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                  <button type="button" onclick="selectConversionOffer('missing')" style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.4); color:#8B6914; padding:4px 8px; border-radius:6px; font-size:0.70rem; cursor:pointer; font-weight:600;">
-                    🔒 1. Missing @ ₹1,050
-                  </button>
-                  <button type="button" onclick="selectConversionOffer('present')" style="background:#FAF6EE; border:1px solid rgba(22,131,91,0.4); color:#16835B; padding:4px 8px; border-radius:6px; font-size:0.70rem; cursor:pointer; font-weight:600;">
-                    📊 2. Present @ ₹510
-                  </button>
-                  <button type="button" onclick="selectConversionOffer('yogas')" style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.4); color:#8B6914; padding:4px 8px; border-radius:6px; font-size:0.70rem; cursor:pointer; font-weight:600;">
-                    ⚡ 3. Anveil Yogas (<span id="lsQuickYogaPct">25%</span>) @ ₹199
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Column: Contextual Pitch & Conversion Showcase -->
-            <div style="background:#FFFFFF; border:1.5px solid #C9A227; border-radius:12px; padding:18px; box-shadow:0 4px 16px rgba(201,162,39,0.08);">
-              <!-- Top row -->
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; border-bottom:1px solid rgba(201,162,39,0.25); padding-bottom:10px;">
-                <div style="display:flex; align-items:flex-start; gap:8px;">
-                  <span style="font-size:1.3rem;" id="pitchPlanIcon">🔒</span>
-                  <div>
-                    <div id="pitchPlanTierTitle" style="font-size:0.86rem; font-weight:800; color:#8B6914; letter-spacing:0.02em;">FULL ANVEIL CHARM · DIAMOND ROADMAP (32 PAGES)</div>
-                    <div id="pitchPlanTierSub" style="font-size:0.74rem; color:#7A654D;">Complete Name Balancing &amp; Element Yogas</div>
-                  </div>
-                </div>
-                <div style="text-align:right;">
-                  <div id="pitchPlanPrice" style="font-size:1.45rem; font-weight:800; color:#8B6914; line-height:1;">₹1,050</div>
-                  </div>
-              </div>
-
-              <!-- Main Pitch Title -->
-              <h4 id="pitchMainHeading" style="font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; color:#1C2526; margin:12px 0 6px; line-height:1.4;">
-                FULL ANVEIL CHARM FOR MISSING NUMBERS (KARMIC VOID ACTIVATION)
-              </h4>
-
-              <!-- Narrative -->
-              <p id="pitchNarrative" style="font-size:0.82rem; color:#523E28; line-height:1.6; margin:0 0 12px 0;">
-                Your birth grid carries missing numbers [3, 4, 5, 6, 7], creating specific energetic voids in wealth preservation, commercial balance, and mentor support. In the Diamond Sovereign Roadmap, we activate these unsealed vibrations through Chaldean Name Balancing, Element Raj Yoga completion, and directional Vastu remedies.
-              </p>
-
-              <!-- Inclusions Box -->
-              <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:12px 14px; margin-bottom:14px;">
-                <div id="pitchInclusionsTitle" style="font-weight:700; color:#8B6914; font-size:0.80rem; margin-bottom:6px;">
-                  ✦ Full Activation in Diamond Sovereign Roadmap (32 Pages):
-                </div>
-                <ul id="pitchInclusionsList" style="margin:0; padding-left:18px; font-size:0.78rem; color:#523E28; line-height:1.55;">
-                  <li><strong>Chaldean Name Balancing:</strong> Adding the missing Number vibrations to your calling name</li>
-                  <li><strong>Element Yogas Balancing:</strong> Completing the Golden Raj Yoga (4-5-6) &amp; Silver Earth Plane</li>
-                  <li><strong>Vastu Directional Rectification:</strong> Exact room cures (SW 2, E 3, SE 4, Center 5, NW 6, W 7)</li>
-                  <li><strong>4-Stage Pinnacle Cycles:</strong> Complete life roadmap covering Ages 0–32, 33–41, 42–50 &amp; 51+</li>
-                </ul>
-              </div>
-
-              <!-- Main CTA Button -->
-              <button type="button" id="pitchMainCtaBtn" onclick="handlePitchCtaClick()" style="width:100%; padding:13px; font-size:0.92rem; font-weight:700; border-radius:8px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(201,162,39,0.25); transition:transform 0.2s;">
-                ANVEIL FULL MISSING CHARMS (₹1,050) &rarr;
-              </button>
-              <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:6px;">
-                🔒 Ready Within Minutes · Private &amp; Secure · Authentic Guidance
-              </div>
-            </div>
+          <div>
+            <span style="font-size:0.72rem; text-transform:uppercase; font-weight:700; color:var(--gold-dark);">Registered Phone:</span>
+            <div id="dashUserPhone" style="font-size:0.84rem; color:var(--ink-dark); margin-top:2px;">--</div>
           </div>
-
-          <!-- Permutation & Combination Conversion Matrix Table -->
-          <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:12px; padding:14px 18px; margin-top:18px;">
-            <div style="font-family:'Cinzel',serif; font-size:0.84rem; font-weight:700; color:#8B6914; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-              <span>✦</span> PERMUTATION &amp; COMBINATION CONVERSION MATRIX
-            </div>
-            <table style="width:100%; border-collapse:collapse; font-size:0.78rem;">
-              <thead>
-                <tr style="border-bottom:1px solid rgba(201,162,39,0.25); text-align:left; color:#7A654D;">
-                  <th style="padding:6px 8px;">User Intent</th>
-                  <th style="padding:6px 8px;">Core Value Proposition</th>
-                  <th style="padding:6px 8px; text-align:right;">Offer &amp; Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr onclick="selectConversionOffer('missing')" style="cursor:pointer; border-bottom:1px solid rgba(201,162,39,0.12); transition:background 0.2s;" id="matrixRowMissing">
-                  <td style="padding:8px; font-weight:700; color:#8B6914;">1. 🔒 Missing Voids</td>
-                  <td style="padding:8px; color:#523E28;">Full Anveil: Name Balancing &amp; Vastu</td>
-                  <td style="padding:8px; text-align:right;"><strong style="color:#8B6914;">₹1,050</strong></td>
-                </tr>
-                <tr onclick="selectConversionOffer('present')" style="cursor:pointer; border-bottom:1px solid rgba(201,162,39,0.12); transition:background 0.2s;" id="matrixRowPresent">
-                  <td style="padding:8px; font-weight:700; color:#16835B;">2. 📊 Present Digits</td>
-                  <td style="padding:8px; color:#523E28;">Inborn gifts, digit overdrive &amp; Dasha</td>
-                  <td style="padding:8px; text-align:right;"><strong style="color:#16835B;">₹510</strong></td>
-                </tr>
-                <tr onclick="selectConversionOffer('yogas')" style="cursor:pointer; transition:background 0.2s;" id="matrixRowYogas">
-                  <td style="padding:8px; font-weight:700; color:#8B6914;">3. ⚡ Element Yogas</td>
-                  <td style="padding:8px; color:#523E28;">Active Plane % &amp; foundational habits</td>
-                  <td style="padding:8px; text-align:right;"><strong style="color:#8B6914;">₹199</strong></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- NEW: Registered Contact Alignment Showcase (Free Report Exclusive) -->
-        <div class="dash-card" id="dashContactAlignmentCard" style="border: 1.5px solid #C9A227; background: linear-gradient(180deg, #FFFFFF 0%, #FDFBF7 100%); margin-bottom: 24px; box-shadow: 0 4px 16px rgba(201,162,39,0.08);">
-          <div class="card-title">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:1.15rem; color:#8B6914;">✦ Tri-Vector Identity &amp; Contact Alignment</span>
-              <span class="alignment-badge" style="font-size:0.75rem; font-family:'Inter',sans-serif; padding:4px 12px; border-radius:12px; font-weight:700; background:rgba(22,131,91,0.12); color:#16835B; border:1px solid #16835B;">FREE AUDIT ACTIVE</span>
-            </div>
-            <span style="font-size:0.75rem; color:#7A654D; font-weight:600;">Chaldean &amp; Cheiro Resonance</span>
-          </div>
-
-          <p style="font-size:0.88rem; color:#523E28; line-height:1.65; margin:0 0 16px 0;">
-            We analyzed your three daily identity and contact channels — <strong>Calling Name</strong>, <strong>Mobile Number</strong>, and <strong>Email Digital Handle</strong> — against your birth matrix to identify active harmonic resonance and potential friction points.
-          </p>
-
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-bottom:20px;">
-            <!-- Vector 1: Name Alignment Pill -->
-            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
-              <div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                  <span style="font-size:0.78rem; font-weight:700; color:#8B6914; text-transform:uppercase; letter-spacing:0.08em;">1. Name Vibration</span>
-                  <span id="dashNameBadge" style="font-size:0.72rem; font-weight:800; padding:3px 10px; border-radius:10px;">EVALUATING...</span>
-                </div>
-                <div style="font-family:'Cinzel',serif; font-size:1.10rem; color:#523E28; font-weight:700; margin-bottom:4px;" id="dashNameAlignVal">--</div>
-                <div style="font-size:0.80rem; color:#7A654D; margin-bottom:8px;">
-                  Chaldean Root: <strong id="dashNameRootVal" style="color:#8B6914;">--</strong> (<span id="dashNamePlanetVal">--</span>)
-                </div>
-              </div>
-              <p id="dashNameInsight" style="font-size:0.78rem; color:#523E28; line-height:1.5; margin:0;"></p>
-            </div>
-
-            <!-- Vector 2: Mobile Alignment Pill -->
-            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
-              <div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                  <span style="font-size:0.78rem; font-weight:700; color:#8B6914; text-transform:uppercase; letter-spacing:0.08em;">2. Mobile Frequency</span>
-                  <span id="dashMobileBadge" style="font-size:0.72rem; font-weight:800; padding:3px 10px; border-radius:10px;">EVALUATING...</span>
-                </div>
-                <div style="font-family:'Cinzel',serif; font-size:1.10rem; color:#523E28; font-weight:700; margin-bottom:4px;" id="dashMobileVal">--</div>
-                <div style="font-size:0.80rem; color:#7A654D; margin-bottom:8px;">
-                  Compound Root: <strong id="dashMobileRootVal" style="color:#8B6914;">--</strong> (<span id="dashMobilePlanetVal">--</span>)
-                </div>
-              </div>
-              <p id="dashMobileInsight" style="font-size:0.78rem; color:#523E28; line-height:1.5; margin:0;"></p>
-            </div>
-
-            <!-- Vector 3: Email Alignment Pill -->
-            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
-              <div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                  <span style="font-size:0.78rem; font-weight:700; color:#8B6914; text-transform:uppercase; letter-spacing:0.08em;">3. Email Handle</span>
-                  <span id="dashEmailBadge" style="font-size:0.72rem; font-weight:800; padding:3px 10px; border-radius:10px;">EVALUATING...</span>
-                </div>
-                <div style="font-family:'Cinzel',serif; font-size:1.05rem; color:#523E28; font-weight:700; margin-bottom:4px; word-break:break-all;" id="dashEmailVal">--</div>
-                <div style="font-size:0.80rem; color:#7A654D; margin-bottom:8px;">
-                  Chaldean Sum: <strong id="dashEmailRootVal" style="color:#8B6914;">--</strong> (<span id="dashEmailPlanetVal">--</span>)
-                </div>
-              </div>
-              <p id="dashEmailInsight" style="font-size:0.78rem; color:#523E28; line-height:1.5; margin:0;"></p>
-            </div>
-          </div>
-
-          <!-- Dynamic Next Best Product Recommendation Engine Box -->
-          <div id="dashNextBestProductBox" style="background:#F7F3EA; border:1.5px solid #C9A227; border-radius:10px; padding:16px 18px; margin-bottom:12px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
-              <span id="nbpBadge" style="font-size:0.72rem; font-weight:800; color:#8B6914; background:rgba(201,162,39,0.18); border:1px solid #C9A227; padding:3px 10px; border-radius:8px; text-transform:uppercase; letter-spacing:0.06em;">
-                RECOMMENDED ACTION
-              </span>
-              <span id="nbpPrice" style="font-family:'Cinzel',serif; font-size:1.15rem; font-weight:700; color:#8B6914;">
-                --
-              </span>
-            </div>
-            <h4 id="nbpTitle" style="font-family:'Cinzel',serif; font-size:1.05rem; color:#523E28; margin:0 0 6px 0; font-weight:700;">
-              Personalized Alignment Analysis
-            </h4>
-            <p id="nbpReason" style="font-size:0.84rem; color:#523E28; line-height:1.55; margin:0 0 8px 0;"></p>
-            <div id="nbpDeliverable" style="font-size:0.78rem; color:#7A654D; line-height:1.5; margin-bottom:14px; font-style:italic;"></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-              <button id="nbpCtaBtn" onclick="showPaidReportLocked('master')" style="background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFF; border:none; border-radius:9999px; padding:10px 22px; font-size:0.85rem; font-weight:700; cursor:pointer; letter-spacing:0.03em; box-shadow:0 3px 12px rgba(201,162,39,0.25);">
-                Unlock Recommended Report 🔒
-              </button>
-              <a href="/consultation/" style="font-size:0.78rem; color:#8B6914; text-decoration:underline; font-weight:600;">
-                ✦ Or Request 1-on-1 Private Consultation &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Launch Calculators -->
-        <div class="dash-card">
-          <div class="card-title">Explore Your Tools</div>
-          <div class="quick-tools-grid">
-            <a href="/calculators/lo-shu-grid/" class="tool-tile">
-              <strong>Lo Shu 3x3 Grid</strong>
-              <p>Inspect your 8 planes and missing numbers.</p>
-            </a>
-            <a href="/calculators/chaldean-name-numerology/" class="tool-tile">
-              <strong>Name Balancing</strong>
-              <p>Chaldean sound vibration and spelling audit.</p>
-            </a>
-            <a href="/calculators/mobile-number-numerology/" class="tool-tile">
-              <strong>Mobile Number Audit</strong>
-              <p>Scan for malefic pairs and compound resonance.</p>
-            </a>
-            <a href="/calculators/numerology-compatibility/" class="tool-tile">
-              <strong>Compatibility Matrix</strong>
-              <p>Analyze business or marriage synastry.</p>
-            </a>
+          <div style="display:flex; align-items:flex-end;">
+            <button type="button" onclick="handleLogout()" style="background:#FFFDF7; border:1px solid var(--border-gold); color:#A13030; padding:8px 14px; border-radius:6px; font-size:0.78rem; font-weight:700; cursor:pointer;">
+              Sign Out of Account
+            </button>
           </div>
         </div>
       </div>
-
-      <!-- Right Sidebar Column -->
-      <div>
-        <!-- Charm AI Credit Box (Rule 2) -->
-        <div class="credit-box" id="dashCreditBox">
-          <span style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:#7A654D; letter-spacing:0.1em;">Charm AI Pass</span>
-          <div class="credit-num" id="dashCreditsNum"><span style="font-size:2.2rem; color:#A13030; font-family:'Cinzel', serif;">0</span> <span style="font-size:1.15rem; vertical-align:middle;">🔒</span></div>
-          <div id="dashCreditsSub" style="font-size:0.84rem; color:#523E28; margin-bottom:14px;"><span style="color:#A13030; font-weight:700; text-transform:uppercase; font-size:0.78rem; letter-spacing:0.06em;">LOCKED · PAID PASS ONLY</span><br><span style="font-size:0.76rem; color:#7A654D;">0 question credits available</span></div>
-          
-          <div id="dashCreditActionArea">
-            <a href="/pricing/?domain=ai" class="nv-btn-cta" style="width:100%; box-sizing:border-box; justify-content:center; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%);">Unlock Charm AI Pass (From ₹199) 🔒</a>
-          </div>
-
-          <!-- Recharge upsell box if credits exhausted -->
-          <div id="dashCreditExhaustedBox" style="display:none; margin-top:16px; padding-top:16px; border-top:1px dashed rgba(201,162,39,0.4); text-align:left;">
-            <strong style="color:#A13030; font-size:0.82rem; display:block; margin-bottom:6px;">✦ Question Credits Concluded</strong>
-            <p style="font-size:0.78rem; color:#523E28; margin:0 0 10px 0; line-height:1.4;">
-              You have utilized your allocated questions. Recharge now to continue interrogating your chart and transits with absolute classical precision.
-            </p>
-            <a href="/checkout/?domain=ai" class="nv-btn-cta" style="width:100%; box-sizing:border-box; justify-content:center; font-size:0.8rem; padding:8px 12px; margin-bottom:6px;">
-              ANVEIL EVERY CHARM ✦ Unlock 5 Questions (₹199)
-            </a>
-          </div>
-        </div>
-
-        <!-- Report Status & Purchased Subscriptions Card (Rule 2) -->
-        <div class="dash-card">
-          <div class="card-title" style="font-size:1.25rem;">Your Reports &amp; Plans</div>
-          <div id="dashReportsList" style="font-size:0.85rem; color:#523E28; line-height:1.6;">
-            <!-- Render unlocked and locked report tiers dynamically -->
-            <div style="text-align:center; color:#7A654D; padding:12px 0;">Loading your subscriptions...</div>
-          </div>
-        </div>
-
-        <!-- My Invoices & Official Payment Receipts -->
-        <div class="dash-card" id="dashInvoicesCard" style="border: 1.5px solid rgba(201,162,39,0.38); background:#FFFFFF;">
-          <div class="card-title" style="font-size:1.25rem;">
-            <span>📜 Invoices &amp; Receipts</span>
-            <span style="font-size:0.72rem; font-family:'Inter'; font-weight:700; color:#16835B; background:#eef8f2; padding:3px 8px; border-radius:9999px;">PAID ✓</span>
-          </div>
-          <p style="font-size:0.78rem; color:#7A654D; margin:0 0 12px 0; line-height:1.4;">
-            Official payment receipts for your consultations and unlocked paid dossiers. All fees are flat and all-inclusive.
-          </p>
-          <div id="dashInvoicesList" style="display:flex; flex-direction:column; gap:10px;">
-            <div style="text-align:center; color:#7A654D; padding:12px 0; font-size:0.82rem;">Checking your verified receipts...</div>
-          </div>
-        </div>
-
-        <!-- Institutional Trust Box -->
-        <div class="dash-card" style="background:#FFFDF7;">
-          <strong style="font-size:0.82rem; color:#8B6914; text-transform:uppercase; display:block; margin-bottom:6px;">Private &amp; Secure</strong>
-          <p style="font-size:0.78rem; color:#7A654D; line-height:1.5; margin:0;">
-            Your personal charts and readings are confidential, protected, and never shared with third parties. You have complete control over your data.
-          </p>
-          <div style="margin-top:10px;"><a href="/privacy/" style="font-size:0.78rem; color:#8B6914; font-weight:600;">Privacy Controls →</a></div>
-        </div>
-      </div>
-    </div>
+    </details>
   </main>
 
-  <!-- Unified Footer -->
-    <!-- Master Unified Site Footer -->
+  <!-- Add Family Member Modal -->
+  <div id="addFamilyModal" style="display:none; position:fixed; inset:0; background:rgba(28,37,38,0.75); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#FFFDF7; border:2px solid var(--gold-primary); border-radius:14px; padding:24px; max-width:440px; width:100%; box-sizing:border-box;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <strong style="font-family:'Cormorant Garamond',serif; font-size:1.35rem; color:var(--gold-dark);">Add Family Member Profile</strong>
+        <button type="button" onclick="closeAddFamilyModal()" style="background:none; border:none; font-size:1.4rem; color:var(--ink-muted); cursor:pointer;">&times;</button>
+      </div>
+      <form id="addFamilyForm" onsubmit="submitAddFamilyMember(event)">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:0.75rem; font-weight:700; color:var(--ink-dark); display:block; margin-bottom:4px;">Full Legal Name</label>
+          <input type="text" id="afmName" required placeholder="Full Name" style="width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid var(--border-gold); border-radius:6px; font-size:0.82rem;" />
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:0.75rem; font-weight:700; color:var(--ink-dark); display:block; margin-bottom:4px;">Date of Birth (YYYY-MM-DD)</label>
+          <input type="date" id="afmDob" required style="width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid var(--border-gold); border-radius:6px; font-size:0.82rem;" />
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+          <button type="button" onclick="closeAddFamilyModal()" style="background:#FFFDF7; border:1px solid var(--border-gold); color:var(--ink-muted); padding:8px 14px; border-radius:6px; cursor:pointer; font-size:0.80rem;">Cancel</button>
+          <button type="submit" style="background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFF; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:0.80rem; font-weight:700;">Save Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Receipt Detail Modal -->
+  <div id="nvInvoiceModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(28,37,38,0.75); z-index:99999; justify-content:center; align-items:center; padding:16px; box-sizing:border-box;">
+    <div id="nvInvoiceModalBody" style="width:100%; max-width:580px; max-height:90vh; overflow-y:auto;"></div>
+  </div>
+
+  <!-- Master Unified Site Footer -->
   <footer class="nv-footer">
     <div class="nv-footer-container">
       <div class="nv-footer-grid">
-        <!-- Brand Summary Column -->
         <div class="nv-footer-brand-sec">
           <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
-            <div class="nv-brand-seal" style="width:38px;height:38px;">
-              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" width="38" height="38" />
+            <div class="nv-brand-seal" style="width:32px; height:32px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" width="32" height="32" />
             </div>
             <div class="nv-brand-text">
-              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
-              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+              <span class="nv-brand-name" style="font-size:1.15rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline" style="font-size:0.62rem;">ANVEIL EVERY CHARM</span>
             </div>
           </a>
-          <p>
-            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          <p class="nv-footer-desc">
+            Authentic Chaldean and Vedic mathematical intelligence platform. Deterministic algorithms with zero generative AI distortion.
           </p>
         </div>
-
-        <!-- Column 1: Working Calculators -->
-        <div class="nv-footer-col">
-          <h4>Calculators</h4>
-          <ul class="nv-footer-links">
-            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
-            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
-            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
-            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
-            <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
-            <li><a href="/calculators/personal-year/">Personal Year 2026</a></li>
-            <li><a href="/calculators/">View All Calculators →</a></li>
-          </ul>
+        <div class="nv-footer-links-sec">
+          <h4 class="nv-footer-heading">Calculators</h4>
+          <a href="/calculators/mulank-calculator/">Mulank Calculator</a>
+          <a href="/calculators/bhagyank-calculator/">Bhagyank Calculator</a>
+          <a href="/calculators/kua-calculator/">Kua Calculator</a>
         </div>
-
-        <!-- Column 2: Intelligence & Plans -->
-        <div class="nv-footer-col">
-          <h4>Intelligence &amp; Plans</h4>
-          <ul class="nv-footer-links">
-            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
-            <li><a href="/reports_catalogue/">Reports Catalogue</a></li>
-            <li><a href="/sample">Sample Dossier</a></li>
-            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
-            <li><a href="/consultation/">1-on-1 Consultation</a></li>
-          </ul>
+        <div class="nv-footer-links-sec">
+          <h4 class="nv-footer-heading">Intelligence</h4>
+          <a href="/pricing/">Dossiers &amp; Pricing</a>
+          <a href="/ai-consultation/">Charm AI Oracle</a>
         </div>
-
-        <!-- Column 3: Wisdom & Governance -->
-        <div class="nv-footer-col">
-          <h4>Wisdom &amp; Legal</h4>
-          <ul class="nv-footer-links">
-            <li><a href="/insights/">Insights Learning Hub</a></li>
-            <li><a href="/about/">About Numeros Vision</a></li>
-            <li><a href="/contact/">Contact Support</a></li>
-            <li><a href="mailto:support@numerosvision.com">support@numerosvision.com</a></li>
-            <li><a href="/practitioner">Practitioner Portal</a></li>
-            <li><a href="/privacy/">Privacy Policy</a></li>
-            <li><a href="/disclaimer/">Disclaimer</a></li>
-            <li><a href="/terms/">Terms of Service</a></li>
-          </ul>
+        <div class="nv-footer-links-sec">
+          <h4 class="nv-footer-heading">Statutory &amp; Legal</h4>
+          <a href="/privacy/">Privacy Policy (DPDP 2023)</a>
+          <a href="/terms/">Terms of Service</a>
+          <a href="/refunds/">Refund Policy</a>
         </div>
       </div>
-
-<!-- Bottom Bar -->
       <div class="nv-footer-bottom">
-        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: ANVEIL EVERY CHARM.</div>
-        <div class="nv-footer-legal-inline">
-          <a href="/privacy/">Privacy Policy</a>
-          <a href="/terms/">Terms</a>
-          <a href="/disclaimer/">Disclaimer</a>
-          <a href="/cookie-policy/">Cookie Policy</a>
-          <a href="/refund/">Refund Policy</a>
-          <a href="/accessibility/">Accessibility</a>
-        </div>
+        <div>&copy; 2026 NUMEROS VISION. All rights reserved. Strict IP protection enforced.</div>
       </div>
     </div>
   </footer>
+
+  <!-- Scripts -->
+  <script src="/static/js/nv_payment_gateway.js?v=5.6.0"></script>
   <script>
     let _dashboardState = null;
+    let _activeSubjectId = null;
 
-    // Strict Auth Gate: Unauthenticated users redirect to /login.html?returnTo=/dashboard/
-    (async function checkDashboardAuth() {
+    // Canonical active pack catalog from packs.json
+    const PACK_TIERS = [
+      {
+        id: 'report_basic',
+        name: 'Basic Report',
+        pages: 3,
+        priceInr: 199,
+        badge: 'ENTRY TIER',
+        desc: '3-Page Personalised PDF · Deterministic Mulank & Bhagyank, Lo Shu 3×3 Grid Matrix & 5-Element Balancing Actions.'
+      },
+      {
+        id: 'report_advanced',
+        name: 'Advanced Master Dossier',
+        pages: 12,
+        priceInr: 510,
+        badge: 'RECOMMENDED',
+        desc: '12-Page Master Synthesis PDF · All Basic calculations + Auspicious Windows, Enabled Numbers in Depth & Vedic Remedies.'
+      },
+      {
+        id: 'report_premium',
+        name: 'Premium Sovereign Blueprint',
+        pages: 32,
+        priceInr: 1050,
+        badge: 'COMPREHENSIVE',
+        desc: '32-Page Sovereign Executive Masterwork · 10-Year Macro Timing Radar, Acoustic Name Balancing & 81-Pair Void Diagnosis.'
+      }
+    ];
+
+    async function initDashboard() {
       try {
         const meRes = await fetch('/api/me');
         if (meRes.status === 401) {
           window.location.href = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname);
           return;
         }
-        const meData = await meRes.json();
+        const meData = await meRes.json().catch(() => ({}));
         if (!meData || !meData.authenticated) {
           window.location.href = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname);
           return;
         }
-        
-        // Fetch server-gated dashboard view
+
         const urlParams = new URLSearchParams(window.location.search);
-        const subjId = urlParams.get('subjectId') || '';
-        const viewRes = await fetch('/api/v1/dashboard/view' + (subjId ? `?subjectId=${encodeURIComponent(subjId)}` : ''));
-        if (viewRes.ok) {
-          _dashboardState = await viewRes.json();
-          if (_dashboardState.user) {
-            const wName = document.getElementById('dashWelcomeName');
-            const mId = document.getElementById('dashMemberId');
-            if (wName) wName.textContent = _dashboardState.user.name || (_dashboardState.activeSubject ? _dashboardState.activeSubject.name : 'Member');
-            if (mId) mId.textContent = _dashboardState.user.userId || 'NV-MEMBER';
-          }
-          if (_dashboardState.activeSubject) {
-            window.currentActiveProfile = {
-              id: _dashboardState.activeSubject.id,
-              name: _dashboardState.activeSubject.name,
-              dob: _dashboardState.activeSubject.dob,
-              relation: 'Subject'
-            };
-          }
-        }
-      } catch (err) {
-        console.warn('Dashboard auth check exception:', err);
-      }
-    })();
-    
-    // ══════════════════════════════════════════════════════════════════
-    // DETERMINISTIC NUMEROLOGY CORE & MULTI-PROFILE FAMILY ENGINE
-    // ══════════════════════════════════════════════════════════════════
-    function reduceToSingle(num) {
-      let n = Math.abs(num);
-      while (n > 9) {
-        n = n.toString().split('').reduce((acc, curr) => acc + parseInt(curr, 10), 0);
-      }
-      return n === 0 ? 9 : n;
-    }
-
-    function calcDeterministicVectors(dobStr, gender) {
-      if (!dobStr) return { driver: 1, conductor: 4, kua: 1, personal_year: 8, counts: {1:1, 4:1}, missing: [2,3,5,6,7,8,9] };
-      const parts = dobStr.split('-');
-      const y = parseInt(parts[0], 10);
-      const m = parseInt(parts[1], 10);
-      const d = parseInt(parts[2], 10);
-
-      // 1. Driver (Mulank)
-      const driver = reduceToSingle(d);
-
-      // 2. Conductor (Bhagyank via Core Matrix Engine rule)
-      const digits = `${String(d).padStart(2, '0')}${String(m).padStart(2, '0')}${String(y).padStart(4, '0')}`.split('').map(x => parseInt(x, 10));
-      let conductorRaw = digits.reduce((a, b) => a + b, 0);
-      while (conductorRaw > 9 && conductorRaw !== 11 && conductorRaw !== 22 && conductorRaw !== 33) {
-        conductorRaw = String(conductorRaw).split('').reduce((a, b) => a + parseInt(b, 10), 0);
-      }
-      const conductor = reduceToSingle(conductorRaw);
-      const conductorDisplay = conductorRaw > 9 ? `${conductorRaw}/${conductor}` : `${conductor}`;
-
-      // 3. Kua Number
-      const ySum = reduceToSingle(y);
-      let kua = 1;
-      const isMale = (gender || 'Male').toLowerCase() === 'male';
-      if (y < 2000) {
-        kua = isMale ? (10 - ySum) : (ySum + 5);
-      } else {
-        kua = isMale ? (9 - ySum) : (ySum + 6);
-      }
-      kua = reduceToSingle(kua);
-      if (kua === 5) kua = isMale ? 2 : 8;
-
-      // 4. Personal Year (2026)
-      const py = reduceToSingle(d + m + 2 + 0 + 2 + 6);
-
-      // 5. Lo Shu Counts (1-9)
-      const counts = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0};
-      for (const dig of digits) {
-        if (dig >= 1 && dig <= 9) counts[dig]++;
-      }
-      const missing = [];
-      for (let n = 1; n <= 9; n++) {
-        if (counts[n] === 0) missing.push(n);
-      }
-
-      return { driver, conductor, conductorRaw, conductorDisplay, kua, personal_year: py, counts, missing, day: d, month: m, year: y };
-    }
-
-    function getStoredFamilyProfiles() {
-      try {
-        const raw = localStorage.getItem('nv_family_profiles');
-        if (raw) {
-          const list = JSON.parse(raw);
-          if (Array.isArray(list) && list.length > 0) return list;
-        }
-      } catch (e) {}
-
-      // Dynamically resolve primary profile from user's actual profile or recent calculation
-      let resolvedName = localStorage.getItem('nv_user_name') || 'Member';
-      let resolvedDob = localStorage.getItem('nv_user_dob') || '';
-      let resolvedGender = localStorage.getItem('nv_user_gender') || 'Male';
-
-      try {
-        const uProf = JSON.parse(localStorage.getItem('nv_user_profile') || '{}');
-        if (uProf.name) resolvedName = uProf.name;
-        if (uProf.dob) resolvedDob = uProf.dob;
-        else if (uProf.year && uProf.month && uProf.day) {
-          resolvedDob = `${uProf.year}-${String(uProf.month).padStart(2, '0')}-${String(uProf.day).padStart(2, '0')}`;
-        }
-        if (uProf.gender) resolvedGender = uProf.gender;
-      } catch (e) {}
-
-      if (!resolvedDob) {
-        try {
-          const lastCalc = JSON.parse(localStorage.getItem('nv_last_calculation') || '{}');
-          if (lastCalc.name) resolvedName = lastCalc.name;
-          if (lastCalc.dob) resolvedDob = lastCalc.dob;
-          else if (lastCalc.year && lastCalc.month && lastCalc.day) {
-            resolvedDob = `${lastCalc.year}-${String(lastCalc.month).padStart(2, '0')}-${String(lastCalc.day).padStart(2, '0')}`;
-          }
-        } catch (e) {}
-      }
-
-      if (!resolvedDob) {
-        resolvedDob = '1990-01-01';
-      }
-
-      const primary = {
-        id: 'primary',
-        name: resolvedName,
-        dob: resolvedDob,
-        gender: resolvedGender,
-        relation: 'Self (Primary)'
-      };
-
-      try {
-        localStorage.setItem('nv_family_profiles', JSON.stringify([primary]));
-      } catch (e) {}
-
-      return [primary];
-    }
-
-    function saveFamilyProfiles(list) {
-      try {
-        localStorage.setItem('nv_family_profiles', JSON.stringify(list));
-      } catch (e) {}
-    }
-
-    function renderFamilyProfilesBar() {
-      const bar = document.getElementById('familyProfilesBar');
-      if (!bar) return;
-      let list = [];
-      if (_dashboardState && Array.isArray(_dashboardState.subjects) && _dashboardState.subjects.length > 0) {
-        list = _dashboardState.subjects.map(s => ({
-          id: s.id,
-          name: s.name,
-          dob: s.dob,
-          relation: 'Subject'
-        }));
-      } else {
-        list = getStoredFamilyProfiles();
-      }
-      const activeProf = window.currentActiveProfile || list[0];
-      const activeId = activeProf.id;
-
-      let html = '';
-      list.forEach(p => {
-        const isActive = p.id === activeId;
-        const profKey = (p.id || (p.name + '_' + (p.dob || ''))).toLowerCase().replace(/[^a-z0-9]/g, '_');
-        const hasPaidMaster = (_dashboardState && _dashboardState.view && _dashboardState.view.tier !== 'free');
-
-        html += `
-          <div onclick="switchActiveProfile('${p.id}')" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:20px; font-size:0.80rem; font-weight:600; transition:all 0.2s; ${isActive ? 'background:#8B6914; color:#FFFFFF; border:1.5px solid #8B6914; box-shadow:0 2px 8px rgba(139,105,20,0.3);' : 'background:#FFFFFF; color:#7A654D; border:1px solid rgba(201,162,39,0.35);'}">
-            <span>${p.relation === 'Self (Primary)' ? '👑' : (p.gender === 'Female' ? '🌸' : '🌟')}</span>
-            <span>${p.name}</span>
-            <span style="font-size:0.68rem; opacity:0.85;">(${p.relation || 'Family'})</span>
-            ${isActive ? '<span style="background:rgba(255,255,255,0.25); padding:1px 6px; border-radius:10px; font-size:0.65rem;">ACTIVE ✦</span>' : ''}
-            ${hasPaidMaster ? '<span style="color:#16835B; background:#E6F4EA; padding:1px 5px; border-radius:8px; font-size:0.62rem; font-weight:800;">PAID ✦</span>' : ''}
-          </div>
-        `;
-      });
-      bar.innerHTML = html;
-    }
-
-    function switchActiveProfile(profileId) {
-      const list = getStoredFamilyProfiles();
-      const match = list.find(p => p.id === profileId) || list[0];
-      window.currentActiveProfile = match;
-      renderFamilyProfilesBar();
-      initDashboard();
-    }
-
-    function openAddFamilyModal() {
-      const m = document.getElementById('addFamilyModal');
-      if (m) m.style.display = 'flex';
-    }
-
-    function closeAddFamilyModal() {
-      const m = document.getElementById('addFamilyModal');
-      if (m) m.style.display = 'none';
-    }
-
-    async function handleSaveFamilyMember(e) {
-      e.preventDefault();
-      const name = document.getElementById('fm_name').value.trim();
-      const rel = document.getElementById('fm_relation').value;
-      const gender = document.getElementById('fm_gender').value;
-      const dob = document.getElementById('fm_dob').value;
-
-      if (!name || !dob) {
-        alert('Please provide name and date of birth.');
-        return;
-      }
-
-      try {
-        const resp = await fetch('/api/v1/subjects', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, dob, consent: true })
-        });
-        const data = await resp.json();
-        if (!resp.ok) {
-          alert(data.error || 'Failed to create family subject.');
-          return;
-        }
-        closeAddFamilyModal();
-        document.getElementById('addFamilyForm').reset();
-        window.location.href = '/dashboard/?subjectId=' + encodeURIComponent(data.subject.id);
-      } catch (err) {
-        alert('Network error adding family subject. Please try again.');
-      }
-    }
-
-    async 
-    // ── LO SHU FULL ANVEIL REFERENCE COMPONENT JAVASCRIPT CONTROLLER ──
-    let _currentPitchOffer = {
-      type: 'missing',
-      planId: 'report_premium',
-      planName: 'Premium Sovereign Blueprint (32 Pages)',
-      amount: 1050
-    };
-
-    let _lastCalculatedData = {
-      counts: {},
-      missing: [3, 4, 5, 6, 7],
-      present: [1, 2, 8, 9],
-      yogaPct: 25,
-      driver: 1,
-      conductor: 4,
-      name: 'Member',
-      dob: '1981-11-28'
-    };
-
-    function renderLoShuReferenceComponent(counts, missingDigits, presentDigits, driver, conductor, pName, pDob) {
-      _lastCalculatedData.counts = counts;
-      _lastCalculatedData.missing = missingDigits;
-      _lastCalculatedData.present = presentDigits;
-      _lastCalculatedData.driver = driver;
-      _lastCalculatedData.conductor = conductor;
-      _lastCalculatedData.name = pName || 'Member';
-      _lastCalculatedData.dob = pDob || '28-11-1981';
-
-      // 8 planes of Lo Shu
-      const planes = [
-        [4, 9, 2], [3, 5, 7], [8, 1, 6],
-        [4, 3, 8], [9, 5, 1], [2, 7, 6],
-        [4, 5, 6], [2, 5, 8]
-      ];
-      let completePlanes = 0;
-      planes.forEach(pl => {
-        if (pl.every(num => (counts[num] || 0) > 0)) completePlanes++;
-      });
-      let yogaPct = Math.round((completePlanes / 8) * 100);
-      if (yogaPct === 0 && presentDigits.length >= 4) yogaPct = 25; // Base active vector resonance
-      _lastCalculatedData.yogaPct = yogaPct;
-
-      // Update Header Text
-      const nameEl = document.getElementById('lsGridSeekerName');
-      const dobEl = document.getElementById('lsGridSeekerDob');
-      const yogaPctText = document.getElementById('lsYogaPctText');
-      const quickYogaEl = document.getElementById('lsQuickYogaPct');
-
-      if (nameEl) nameEl.textContent = _lastCalculatedData.name;
-      if (dobEl) dobEl.textContent = _lastCalculatedData.dob;
-      if (yogaPctText) yogaPctText.textContent = `${yogaPct}% ACTIVE`;
-      if (quickYogaEl) quickYogaEl.textContent = `${yogaPct}%`;
-
-      // Standard Lo Shu 9 Cells Mapping
-      const cellDefs = [
-        { num: 4, label: 'Wood · SE', unsealPrice: '₹1,050', explorePrice: '₹510' },
-        { num: 9, label: 'Fire · S', unsealPrice: '₹1,050', explorePrice: '₹510' },
-        { num: 2, label: 'Earth · SW', unsealPrice: '₹1,050', explorePrice: '₹510' },
-        { num: 3, label: 'Wood · East', unsealPrice: '₹1,050', explorePrice: '₹510' },
-        { num: 5, label: 'Earth · Center', unsealPrice: '₹1,050', explorePrice: '₹510' },
-        { num: 7, label: 'Metal · West', unsealPrice: '₹1,050', explorePrice: '₹510' },
-        { num: 8, label: 'Earth · NE', unsealPrice: '₹1,050', explorePrice: '₹510' },
-        { num: 1, label: 'Water · North', unsealPrice: '₹1,050', explorePrice: '₹510' },
-        { num: 6, label: 'Metal · NW', unsealPrice: '₹1,050', explorePrice: '₹510' }
-      ];
-
-      const gridEl = document.getElementById('dashLoShuGridCells');
-      if (gridEl) {
-        let cellsHtml = '';
-        cellDefs.forEach(cd => {
-          const count = counts[cd.num] || 0;
-          const isPresent = count > 0;
-          const isMissing = count === 0;
-
-          // Main Display Number (repeat count if present, plus Driver flag if applicable)
-          let numDisplay = String(cd.num);
-          let subLabel = cd.label;
-
-          if (isPresent) {
-            numDisplay = String(cd.num).repeat(count);
-            if (cd.num === driver) {
-              numDisplay += ' (D)';
-            }
-            subLabel += ` · ×${count}`;
-          }
-
-          const actionText = isMissing ? `Unseal @ ₹1,050` : `Explore @ ₹510`;
-          const clickTarget = isMissing ? `'missing', ${cd.num}` : `'present', ${cd.num}`;
-
-          cellsHtml += `
-            <div class="ls-grid-cell ${isMissing ? 'missing-void' : 'active-charm'}" onclick="selectConversionOffer(${clickTarget})" id="lsCell_${cd.num}" title="Click to view detailed ${isMissing ? 'Missing Void activation' : 'Present Digit harmonisation'}">
-              <div class="ls-cell-tag ${isMissing ? 'missing' : 'active'}">
-                ${isMissing ? '🔒 ANVEIL CHARM' : '🌿 ACTIVE CHARM'}
-              </div>
-              <div class="ls-cell-num ${isMissing ? 'missing' : 'active'}">
-                ${numDisplay}
-              </div>
-              <div class="ls-cell-label">
-                ${subLabel}
-              </div>
-              <div class="ls-cell-action ${isMissing ? 'missing' : 'active'}">
-                ${actionText}
-              </div>
-            </div>
-          `;
-        });
-        gridEl.innerHTML = cellsHtml;
-      }
-
-      // Initialize right-side pitch: If missing numbers exist, Missing is primary. Otherwise Present is primary.
-      selectConversionOffer(missingDigits.length > 0 ? 'missing' : 'present');
-    }
-
-    function selectConversionOffer(type, focusCellNum) {
-      _currentPitchOffer.type = type;
-
-      // Update Top Pills
-      ['pillOfferMissing', 'pillOfferPresent', 'pillOfferYogas'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-      });
-      const activePill = document.getElementById(type === 'missing' ? 'pillOfferMissing' : (type === 'present' ? 'pillOfferPresent' : 'pillOfferYogas'));
-      if (activePill) activePill.classList.add('active');
-
-      // Update Bottom Matrix Table Rows
-      ['matrixRowMissing', 'matrixRowPresent', 'matrixRowYogas'].forEach(id => {
-        const row = document.getElementById(id);
-        if (row) row.style.background = 'transparent';
-      });
-      const activeRow = document.getElementById(type === 'missing' ? 'matrixRowMissing' : (type === 'present' ? 'matrixRowPresent' : 'matrixRowYogas'));
-      if (activeRow) activeRow.style.background = 'rgba(201,162,39,0.12)';
-
-      // Highlight cell if clicked
-      document.querySelectorAll('.ls-grid-cell').forEach(c => c.style.outline = 'none');
-      if (focusCellNum) {
-        const cellEl = document.getElementById(`lsCell_${focusCellNum}`);
-        if (cellEl) cellEl.style.outline = '2px solid #8B6914';
-      }
-
-      const iconEl = document.getElementById('pitchPlanIcon');
-      const titleEl = document.getElementById('pitchPlanTierTitle');
-      const subEl = document.getElementById('pitchPlanTierSub');
-      const priceEl = document.getElementById('pitchPlanPrice');
-      const strikeEl = document.getElementById('pitchPlanStrike');
-      const headEl = document.getElementById('pitchMainHeading');
-      const narrEl = document.getElementById('pitchNarrative');
-      const incTitleEl = document.getElementById('pitchInclusionsTitle');
-      const incListEl = document.getElementById('pitchInclusionsList');
-      const ctaBtn = document.getElementById('pitchMainCtaBtn');
-
-      const missingListStr = (_lastCalculatedData.missing || [3, 4, 5, 6, 7]).join(', ');
-      const presentListStr = (_lastCalculatedData.present || [1, 2, 8, 9]).join(', ');
-
-      if (type === 'missing') {
-        _currentPitchOffer.planId = 'report_premium';
-        _currentPitchOffer.planName = 'Premium Sovereign Blueprint (32 Pages)';
-        _currentPitchOffer.amount = 1050;
-
-        if (iconEl) iconEl.textContent = '🔒';
-        if (titleEl) titleEl.textContent = 'FULL ANVEIL CHARM · DIAMOND ROADMAP (32 PAGES)';
-        if (subEl) subEl.textContent = 'Complete Name Balancing & Element Yogas';
-        if (priceEl) priceEl.textContent = '₹1,050';
-        if (strikeEl) strikeEl.textContent = '';
-        if (headEl) headEl.textContent = 'FULL ANVEIL CHARM FOR MISSING NUMBERS (KARMIC VOID ACTIVATION)';
-        if (narrEl) narrEl.textContent = `Your birth grid carries missing numbers [${missingListStr}], creating specific energetic voids in wealth preservation, commercial balance, and mentor support. In the Diamond Sovereign Roadmap, we activate these unsealed vibrations through Chaldean Name Balancing, Element Raj Yoga completion, and directional Vastu remedies.`;
-        if (incTitleEl) incTitleEl.textContent = '✦ Full Activation in Diamond Sovereign Roadmap (32 Pages):';
-        if (incListEl) incListEl.innerHTML = `
-          <li><strong>Chaldean Name Balancing:</strong> Adding the missing Number vibrations to your calling name</li>
-          <li><strong>Element Yogas Balancing:</strong> Completing the Golden Raj Yoga (4-5-6) &amp; Silver Earth Plane</li>
-          <li><strong>Vastu Directional Rectification:</strong> Exact room cures (SW 2, E 3, SE 4, Center 5, NW 6, W 7)</li>
-          <li><strong>4-Stage Pinnacle Cycles:</strong> Complete life roadmap covering Ages 0–32, 33–41, 42–50 &amp; 51+</li>
-        `;
-        if (ctaBtn) ctaBtn.textContent = 'ANVEIL FULL MISSING CHARMS (₹1,050) →';
-
-      } else if (type === 'present') {
-        _currentPitchOffer.planId = 'report_advanced';
-        _currentPitchOffer.planName = 'Advanced Master Dossier (12 Pages)';
-        _currentPitchOffer.amount = 510;
-
-        if (iconEl) iconEl.textContent = '📊';
-        if (titleEl) titleEl.textContent = 'PRESENT NUMBER HARMONISATION · MASTER DOSSIER (12 PAGES)';
-        if (subEl) subEl.textContent = 'Digit Overdrive Balancing & Auspicious Initiation Windows';
-        if (priceEl) priceEl.textContent = '₹510';
-        if (strikeEl) strikeEl.textContent = '';
-        if (headEl) headEl.textContent = 'PRESENT NUMBER HARMONISATION & OVERDRIVE CONTROL';
-        if (narrEl) narrEl.textContent = `Your active numbers [${presentListStr}] represent inborn gifts, but multiple repeated digits (like 1111 Water in North or 88 Earth in NE) create energetic intensity that needs grounding remedies. The 12-page Master Dossier balances these over-represented frequencies.`;
-        if (incTitleEl) incTitleEl.textContent = '✦ Master Harmonisation Features (12 Pages):';
-        if (incListEl) incListEl.innerHTML = `
-          <li><strong>Auspicious Initiation Windows:</strong> Personal Year cycles, favorable dates, and Muhurat timing</li>
-          <li><strong>Digit Overdrive Cures:</strong> Calming intense repeated vibrations through specific Beej mantras</li>
-          <li><strong>Calling Name Harmony:</strong> Synchronizing professional signature with Driver and Conductor</li>
-          <li><strong>7-Layer Safe Remedies:</strong> Auspicious gemstones, colors, Rudraksha, and practical charity protocols</li>
-        `;
-        if (ctaBtn) ctaBtn.textContent = 'HARMONISE PRESENT DIGITS (₹510) →';
-
-      } else if (type === 'yogas') {
-        _currentPitchOffer.planId = 'report_basic';
-        _currentPitchOffer.planName = 'Basic Report (3 Pages)';
-        _currentPitchOffer.amount = 199;
-
-        if (iconEl) iconEl.textContent = '⚡';
-        if (titleEl) titleEl.textContent = 'ELEMENT YOGAS ALIGNMENT · BASIC REPORT (3 PAGES)';
-        if (subEl) subEl.textContent = '5 Elements Harmony & Directional Vectors';
-        if (priceEl) priceEl.textContent = '₹199';
-        if (strikeEl) strikeEl.textContent = '';
-        if (headEl) headEl.textContent = 'ELEMENT YOGAS & FOUNDATIONAL HABITS AUDIT';
-        if (narrEl) narrEl.textContent = `Your current Element Yogas alignment is ${_lastCalculatedData.yogaPct}% Active. The 3-Page Basic Report provides instant clarity on your dominant Wood, Fire, Earth, Metal, and Water planes to strengthen daily vitality, focus, and emotional equilibrium.`;
-        if (incTitleEl) incTitleEl.textContent = '✦ Basic Report Deliverables (3 Pages):';
-        if (incListEl) incListEl.innerHTML = `
-          <li><strong>Lo Shu 3×3 Grid Matrix:</strong> Complete visual blueprint of natal and elemental lines</li>
-          <li><strong>Auspicious Directional Vectors:</strong> Best compass directions for workspace, sleep, and negotiations</li>
-          <li><strong>5-Element Balancing Actions:</strong> Foundational elemental habits and spatial orientation</li>
-          <li><strong>Chaldean Name Breakdown:</strong> Single root and compound letter analysis</li>
-        `;
-        if (ctaBtn) ctaBtn.textContent = 'ANVEIL YOGAS CHARM (₹199) →';
-      }
-    }
-
-    function handlePitchCtaClick() {
-      const activeProf = window.currentActiveProfile || { name: 'Member', dob: '1981-11-28', id: 'primary' };
-      const rawKey = activeProf.id || (activeProf.name + '_' + (activeProf.dob || ''));
-      const profKey = rawKey.toLowerCase().replace(/[^a-z0-9]/g, '_');
-      
-      const isAlreadyUnlocked = (_dashboardState && _dashboardState.view && (_dashboardState.view.tier === 'premium' || (_dashboardState.view.tier === 'advanced' && _currentPitchOffer.planId !== 'report_premium') || (_dashboardState.view.tier === 'basic' && _currentPitchOffer.planId === 'report_basic')));
-      if (isAlreadyUnlocked) {
-        openPaidPdfDirectly(_currentPitchOffer.planId, activeProf);
-        return;
-      }
-
-      if (typeof triggerTierUnlock === 'function') {
-        triggerTierUnlock(_currentPitchOffer.planId, _currentPitchOffer.planName, _currentPitchOffer.amount);
-      } else {
-        window.location.href = `/reports_catalogue/?sku=${_currentPitchOffer.planId}#order`;
-      }
-    }
-
-    async function initDashboard() {
-      try {
-        renderFamilyProfilesBar();
-        const storedProfiles = getStoredFamilyProfiles();
-        if (!window.currentActiveProfile) {
-          window.currentActiveProfile = storedProfiles[0];
-        }
-        const activeProf = window.currentActiveProfile;
-        const vectors = calcDeterministicVectors(activeProf.dob, activeProf.gender);
-
-        let memberId = (_dashboardState && _dashboardState.user && _dashboardState.user.userId) || 'NV-MEMBER';
-        let alignment = null;
-        let entitlements = null;
-
-        let profile = {
-          id: activeProf.id,
-          name: activeProf.name,
-          dob: activeProf.dob,
-          gender: activeProf.gender || 'Male',
-          relation: activeProf.relation || 'Self (Primary)',
-          driver: vectors.driver,
-          conductor: vectors.conductor,
-          kua: vectors.kua,
-          personal_year: vectors.personal_year,
-          counts: vectors.counts,
-          missing_numbers: vectors.missing,
-          charm_credits_remaining: 0,
-          unlocked_reports: ['free'],
-          purchased_plans: []
-        };
-
-        if (profile) {
-          if (profile.name) {
-            document.getElementById('dashWelcomeName').textContent = `${profile.name} (${profile.relation || 'Self'})`;
-          }
-          document.getElementById('dashMemberId').textContent = memberId;
-          const d = parseInt(profile.driver || profile.driver_mulank || 1, 10);
-          const c = parseInt(profile.conductor || profile.conductor_bhagyank || 1, 10);
-          
-          // Deterministic Planet & Trait Mapping (Saturn 8, Sun 1, etc.)
-          const PLANETS = {
-            1: { p: 'Sun', t: 'Leadership & Vitality' },
-            2: { p: 'Moon', t: 'Intuition & Empathy' },
-            3: { p: 'Jupiter', t: 'Wisdom & Expansion' },
-            4: { p: 'Rahu', t: 'Strategy & Innovation' },
-            5: { p: 'Mercury', t: 'Communication & Commerce' },
-            6: { p: 'Venus', t: 'Harmonic & Luxury' },
-            7: { p: 'Ketu', t: 'Research & Mysticism' },
-            8: { p: 'Saturn', t: 'Discipline & Karma' },
-            9: { p: 'Mars', t: 'Courage & Action' }
-          };
-
-          const KUA_TRAITS = {
-            1: 'Water · East Group',
-            2: 'Earth · West Group',
-            3: 'Wood · East Group',
-            4: 'Wood · East Group',
-            6: 'Metal · West Group',
-            7: 'Metal · West Group',
-            8: 'Earth · West Group',
-            9: 'Fire · East Group'
-          };
-
-          const PY_TRAITS = {
-            1: 'New Beginnings',
-            2: 'Patience & Synergy',
-            3: 'Creative Expansion',
-            4: 'Foundation Building',
-            5: 'Dynamic Change',
-            6: 'Harmony & Responsibility',
-            7: 'Spiritual Introspection',
-            8: 'Power & Karmic Harvest',
-            9: 'Completion & Renewal'
-          };
-
-          const dInfo = PLANETS[d] || { p: 'Vector ' + d, t: 'Cosmic Influence' };
-          const cInfo = PLANETS[c] || { p: 'Vector ' + c, t: 'Life Path Vibration' };
-
-          document.getElementById('dashDriver').textContent = d;
-          document.getElementById('dashDriverSub').textContent = `${dInfo.p} · ${dInfo.t}`;
-
-          document.getElementById('dashConductor').textContent = c;
-          document.getElementById('dashConductorSub').textContent = `${cInfo.p} · ${cInfo.t}`;
-
-          const kuaVal = profile.kua || profile.kua_number || 1;
-          document.getElementById('dashKua').textContent = kuaVal;
-          document.getElementById('dashKuaSub').textContent = KUA_TRAITS[kuaVal] || 'Harmonic Group';
-
-          const nameNum = profile.name_number || 6;
-          const nameInfo = PLANETS[nameNum] || { p: 'Venus', t: 'Harmonic' };
-          document.getElementById('dashNameVal').textContent = nameNum;
-          document.getElementById('dashNameSub').textContent = `${nameInfo.p} · ${nameInfo.t}`;
-
-          const pyVal = profile.personal_year || 8;
-          document.getElementById('dashPy').textContent = pyVal;
-          document.getElementById('dashPySub').textContent = PY_TRAITS[pyVal] || 'Vibrational Transit';
-
-          // ── TRI-VECTOR IDENTITY & CONTACT ALIGNMENT AUDIT (CHALDEAN + CHEIRO) ──
-          const CHALDEAN_MAP = {
-            'a': 1, 'i': 1, 'j': 1, 'q': 1, 'y': 1,
-            'b': 2, 'k': 2, 'r': 2,
-            'c': 3, 'g': 3, 'l': 3, 's': 3,
-            'd': 4, 'm': 4, 't': 4,
-            'e': 5, 'h': 5, 'n': 5, 'x': 5,
-            'u': 6, 'v': 6, 'w': 6,
-            'o': 7, 'z': 7,
-            'f': 8, 'p': 8
-          };
-
-          function reduceToSingleDigit(num) {
-            let n = Math.abs(num);
-            while (n > 9) {
-              n = n.toString().split('').reduce((acc, curr) => acc + parseInt(curr, 10), 0);
-            }
-            return n === 0 ? 9 : n;
-          }
-
-          // 1. Audit Calling Name Alignment
-          const userName = profile.name || 'Member';
-          let nameCompound = 0;
-          const cleanName = userName.toLowerCase().replace(/[^a-z]/g, '');
-          for (let i = 0; i < cleanName.length; i++) {
-            const ch = cleanName[i];
-            if (CHALDEAN_MAP[ch]) nameCompound += CHALDEAN_MAP[ch];
-          }
-          if (nameCompound === 0) nameCompound = 15;
-          const nameRoot = reduceToSingleDigit(nameCompound);
-          const isNameAligned = [1, 3, 5, 6].includes(nameRoot);
-          const namePlanet = PLANETS[nameRoot] ? PLANETS[nameRoot].p : ('Root ' + nameRoot);
-
-          const nameAlignValEl = document.getElementById('dashNameAlignVal');
-          const nameRootEl = document.getElementById('dashNameRootVal');
-          const namePlanetEl = document.getElementById('dashNamePlanetVal');
-          const nameBadgeEl = document.getElementById('dashNameBadge');
-          const nameInsightEl = document.getElementById('dashNameInsight');
-
-          if (nameAlignValEl) nameAlignValEl.textContent = userName;
-          if (nameRootEl) nameRootEl.textContent = `${nameCompound} / ${nameRoot}`;
-          if (namePlanetEl) namePlanetEl.textContent = namePlanet;
-
-          if (nameBadgeEl) {
-            if (isNameAligned) {
-              nameBadgeEl.textContent = 'ALIGNED ✦';
-              nameBadgeEl.style.background = 'rgba(22, 131, 91, 0.12)';
-              nameBadgeEl.style.color = '#16835B';
-              nameBadgeEl.style.border = '1px solid #16835B';
-            } else {
-              nameBadgeEl.textContent = 'FRICTION DETECTED ⚠';
-              nameBadgeEl.style.background = 'rgba(184, 134, 11, 0.15)';
-              nameBadgeEl.style.color = '#B8860B';
-              nameBadgeEl.style.border = '1px solid #B8860B';
-            }
-          }
-          if (nameInsightEl) {
-            if (isNameAligned) {
-              nameInsightEl.innerHTML = `<strong>Harmonic Sound:</strong> Name vibrates to <strong>${namePlanet} (Root ${nameRoot})</strong>, supporting your social leadership and public recognition.`;
-            } else {
-              nameInsightEl.innerHTML = `<strong>Vibrational Friction:</strong> Name vibrates to <strong>${namePlanet} (Root ${nameRoot})</strong>, creating subtle resistance with your core birth numbers. Strategic spelling correction can balance this.`;
-            }
-          }
-
-          // 2. Audit Registered Mobile Number
-          const userPhone = profile.phone || localStorage.getItem('nv_user_phone') || '+91 99999 00000';
-          const phoneDigits = userPhone.replace(/\D/g, '');
-          const corePhone10 = phoneDigits.length >= 10 ? phoneDigits.slice(-10) : phoneDigits;
-          
-          let mobileCompound = 0;
-          for (let i = 0; i < corePhone10.length; i++) {
-            mobileCompound += parseInt(corePhone10[i], 10);
-          }
-          const mobileRoot = reduceToSingleDigit(mobileCompound || 6);
-          const isMobileAligned = [1, 3, 5, 6].includes(mobileRoot);
-          const mobilePlanet = PLANETS[mobileRoot] ? PLANETS[mobileRoot].p : ('Root ' + mobileRoot);
-
-          const mobileValEl = document.getElementById('dashMobileVal');
-          const mobileRootEl = document.getElementById('dashMobileRootVal');
-          const mobilePlanetEl = document.getElementById('dashMobilePlanetVal');
-          const mobileBadgeEl = document.getElementById('dashMobileBadge');
-          const mobileInsightEl = document.getElementById('dashMobileInsight');
-
-          if (mobileValEl) mobileValEl.textContent = userPhone;
-          if (mobileRootEl) mobileRootEl.textContent = `${mobileCompound} / ${mobileRoot}`;
-          if (mobilePlanetEl) mobilePlanetEl.textContent = mobilePlanet;
-
-          if (mobileBadgeEl) {
-            if (isMobileAligned) {
-              mobileBadgeEl.textContent = 'ALIGNED ✦';
-              mobileBadgeEl.style.background = 'rgba(22, 131, 91, 0.12)';
-              mobileBadgeEl.style.color = '#16835B';
-              mobileBadgeEl.style.border = '1px solid #16835B';
-            } else {
-              mobileBadgeEl.textContent = 'FRICTION DETECTED ⚠';
-              mobileBadgeEl.style.background = 'rgba(184, 134, 11, 0.15)';
-              mobileBadgeEl.style.color = '#B8860B';
-              mobileBadgeEl.style.border = '1px solid #B8860B';
-            }
-          }
-
-          if (mobileInsightEl) {
-            if (isMobileAligned) {
-              mobileInsightEl.innerHTML = `<strong>Harmonic Resonance:</strong> Mobile carries <strong>${mobilePlanet} (Root ${mobileRoot})</strong> vibration, channeling favorable business inquiries, networking clarity, and deal flow.`;
-            } else {
-              mobileInsightEl.innerHTML = `<strong>Karmic Friction:</strong> Mobile carries <strong>${mobilePlanet} (Root ${mobileRoot})</strong> vibration, creating subtle delay in critical calls. Chart indicates missing planetary energies requiring priority activation.`;
-            }
-          }
-
-          // 3. Audit Registered Email Handle (Skipping @gmail.com / @yahoo.com)
-          const userEmail = profile.email || localStorage.getItem('nv_user_email') || 'member@numerosvision.com';
-          const emailParts = userEmail.split('@');
-          const emailHandle = (emailParts[0] || '').toLowerCase().trim();
-          const emailDomain = emailParts[1] ? ('@' + emailParts[1]) : '';
-
-          let emailCompound = 0;
-          for (let i = 0; i < emailHandle.length; i++) {
-            const ch = emailHandle[i];
-            if (CHALDEAN_MAP[ch]) {
-              emailCompound += CHALDEAN_MAP[ch];
-            } else if (!isNaN(parseInt(ch, 10))) {
-              emailCompound += parseInt(ch, 10);
-            }
-          }
-          if (emailCompound === 0) emailCompound = 5;
-          const emailRoot = reduceToSingleDigit(emailCompound);
-          const isEmailAligned = [1, 3, 5, 6].includes(emailRoot);
-          const emailPlanet = PLANETS[emailRoot] ? PLANETS[emailRoot].p : ('Root ' + emailRoot);
-
-          const emailValEl = document.getElementById('dashEmailVal');
-          const emailRootEl = document.getElementById('dashEmailRootVal');
-          const emailPlanetEl = document.getElementById('dashEmailPlanetVal');
-          const emailBadgeEl = document.getElementById('dashEmailBadge');
-          const emailInsightEl = document.getElementById('dashEmailInsight');
-
-          if (emailValEl) emailValEl.innerHTML = `<strong>${emailHandle}</strong><span style="opacity:0.65; font-size:0.85em;">${emailDomain}</span>`;
-          if (emailRootEl) emailRootEl.textContent = `${emailCompound} / ${emailRoot}`;
-          if (emailPlanetEl) emailPlanetEl.textContent = emailPlanet;
-
-          if (emailBadgeEl) {
-            if (isEmailAligned) {
-              emailBadgeEl.textContent = 'ALIGNED ✦';
-              emailBadgeEl.style.background = 'rgba(22, 131, 91, 0.12)';
-              emailBadgeEl.style.color = '#16835B';
-              emailBadgeEl.style.border = '1px solid #16835B';
-            } else {
-              emailBadgeEl.textContent = 'DIGITAL DELAY ⚠';
-              emailBadgeEl.style.background = 'rgba(184, 134, 11, 0.15)';
-              emailBadgeEl.style.color = '#B8860B';
-              emailBadgeEl.style.border = '1px solid #B8860B';
-            }
-          }
-
-          if (emailInsightEl) {
-            if (isEmailAligned) {
-              emailInsightEl.innerHTML = `<strong>Digital Alignment:</strong> Handle <em>${emailHandle}</em> resonates to <strong>${emailPlanet} (Root ${emailRoot})</strong>, creating a receptive digital frequency for contracts and responsive correspondence.`;
-            } else {
-              emailInsightEl.innerHTML = `<strong>Digital Delay Detected:</strong> Handle <em>${emailHandle}</em> vibrates to <strong>${emailPlanet} (Root ${emailRoot})</strong>, clashing with your career axis. Missing planetary activations required for digital flow.`;
-            }
-          }
-
-          // ── 4. DETERMINISTIC NEXT BEST PRODUCT ENGINE (COMMERCE UPSELL LOGIC) ──
-          let nbp = null;
-          if (!isMobileAligned && isNameAligned && isEmailAligned) {
-            nbp = {
-              title: "Mobile Number Alignment & Frequency Correction",
-              price: "₹199",
-              badge: "TARGETED RECOMMENDATION",
-              reason: "Your mobile number carries vibrational friction against your birth matrix. Correcting this single commercial antenna unlocks favorable client calls and closes energy leaks.",
-              deliverable: "Personalized 3-page Basic Report with element balancing and frequency alignment.",
-              cta: "Review Basic Report (₹199) 🔒",
-              plan: "report_basic"
-            };
-          } else if (!isNameAligned && isMobileAligned && isEmailAligned) {
-            nbp = {
-              title: "Chaldean Name Balancing & Sound Resonance Report",
-              price: "₹199",
-              badge: "HIGH PRIORITY RECOMMENDATION",
-              reason: "Your calling name carries karmic resistance against your Driver number. Strategic letter balancing aligns your personal authority and public reputation.",
-              deliverable: "Authentic Chaldean letter-by-letter sound analysis with 3 lucky calling/business name variations.",
-              cta: "Review Basic Report (₹199) 🔒",
-              plan: "report_basic"
-            };
-          } else if (!isEmailAligned && isNameAligned && isMobileAligned) {
-            nbp = {
-              title: "Digital Email Frequency & Identity Alignment",
-              price: "₹199",
-              badge: "DIGITAL IDENTITY FOCUS",
-              reason: "Your email handle vibrates outside the growth axis, leading to stalled pitches and delayed responses. Harmonizing your digital identity unblocks corporate deal flow.",
-              deliverable: "Chaldean email handle audit with recommended corporate alias configurations and sign-off vibration codes.",
-              cta: "Review Basic Report (₹199) 🔒",
-              plan: "report_basic"
-            };
-          } else if (!isMobileAligned || !isNameAligned || !isEmailAligned) {
-            nbp = {
-              title: "Advanced Master Dossier (12-Page Complete Alignment)",
-              price: "₹510",
-              badge: "BEST VALUE · MULTI-VECTOR HARMONIZATION",
-              reason: "Multiple friction points detected across your identity vectors and natal Lo Shu planes. A comprehensive chart calibration is urgently recommended.",
-              deliverable: "12-page in-depth dossier covering element balancing, enabled numbers in depth, and 8-plane Lo Shu analysis.",
-              cta: "ANVIEL EVERY CHARM ✦ Unlock Advanced Master Dossier (₹510) 🔒",
-              plan: "report_master"
-            };
-          } else {
-            nbp = {
-              title: "Sovereign Lifecycle Roadmap & Planetary Timing (32 Pages)",
-              price: "₹1,050",
-              badge: "ADVANCED PROSPERITY BLUEPRINT",
-              reason: "Your baseline identity vectors show high natural harmony. Elevate to peak planetary transit timing, 5-year personal cycles, and Mahadasha windows.",
-              deliverable: "32-page flagship masterwork with lifetime transit timing, business synastry, and deep Vedic-Chaldean remedies.",
-              cta: "Unlock Sovereign Lifecycle Roadmap (₹1,050) 🔒",
-              plan: "report_roadmap"
-            };
-          }
-
-          // Populate Next Best Product Card
-          const nbpBadgeEl = document.getElementById('nbpBadge');
-          const nbpPriceEl = document.getElementById('nbpPrice');
-          const nbpTitleEl = document.getElementById('nbpTitle');
-          const nbpReasonEl = document.getElementById('nbpReason');
-          const nbpDeliverableEl = document.getElementById('nbpDeliverable');
-          const nbpCtaBtn = document.getElementById('nbpCtaBtn');
-
-          if (nbpBadgeEl) nbpBadgeEl.textContent = nbp.badge;
-          if (nbpPriceEl) nbpPriceEl.textContent = nbp.price;
-          if (nbpTitleEl) nbpTitleEl.textContent = nbp.title;
-          if (nbpReasonEl) nbpReasonEl.textContent = nbp.reason;
-          if (nbpDeliverableEl) nbpDeliverableEl.textContent = 'Deliverable: ' + nbp.deliverable;
-          if (nbpCtaBtn) {
-            nbpCtaBtn.textContent = nbp.cta;
-            nbpCtaBtn.onclick = function() { showPaidReportLocked(nbp.plan); };
-          }
-
-          // Fire first-party CDP events for Free Dashboard
-          if (window.NumerosCDP && typeof window.NumerosCDP.track === 'function') {
-            window.NumerosCDP.track('free_report_viewed', {
-              name_aligned: isNameAligned,
-              mobile_aligned: isMobileAligned,
-              email_aligned: isEmailAligned,
-              recommended_product: nbp.title,
-              recommended_price: nbp.price
-            });
-            window.NumerosCDP.track('alignment_result_viewed', {
-              mobile_root: mobileRoot,
-              email_root: emailRoot,
-              name_root: nameRoot
-            });
-            window.NumerosCDP.track('paid_product_recommended', {
-              product_id: nbp.plan,
-              price: nbp.price
-            });
-            let seg = 'all_aligned';
-            if (!isMobileAligned && !isNameAligned) seg = 'multiple_gaps';
-            else if (!isMobileAligned) seg = 'mobile_gap_detected';
-            else if (!isNameAligned) seg = 'name_gap_detected';
-            else if (!isEmailAligned) seg = 'email_gap_detected';
-            window.NumerosCDP.setSegment(seg);
-          }
-
-                    // Render Natal Lo Shu Grid
-          let counts = profile.loshu_counts;
-          if (!counts && profile.dob) {
-            const digits = profile.dob.replace(/\D/g, '').split('').filter(d => d !== '0').map(Number);
-            counts = {};
-            for (let i = 1; i <= 9; i++) counts[i] = 0;
-            digits.forEach(d => counts[d] = (counts[d] || 0) + 1);
-          } else if (!counts) {
-            // Default demo counts
-            counts = {1:1, 2:0, 3:0, 4:1, 5:0, 6:0, 7:0, 8:1, 9:1};
-          }
-          const missingDigits = Object.keys(counts).filter(k => (counts[k] || 0) === 0).map(Number);
-          const presentDigits = Object.keys(counts).filter(k => (counts[k] || 0) > 0).map(Number);
-          const badgeEl = document.getElementById('dashGapsCountBadge');
-          if (badgeEl) {
-            badgeEl.textContent = `${missingDigits.length} GAPS DETECTED`;
-          }
-
-          function dashCell(num, label) {
-            const cnt = counts[num] || 0;
-            const disp = cnt > 0 ? String(num).repeat(cnt) : num;
-            const cls = cnt === 0 ? 'missing-gap' : '';
-            const tag = cnt === 0 ? '<span class="dash-gap-tag">GAP</span>' : `<span class="dash-present-tag">×${cnt}</span>`;
-            return `<td class="${cls}">${disp}<span class="dash-loshu-sub">${label}</span>${tag}</td>`;
-          }
-
-          // Render Full Anveil Lo Shu Reference Component matching reference image
-          renderLoShuReferenceComponent(counts, missingDigits, presentDigits, d, c, profile.name, profile.dob);
-
-          const dasha = profile.active_mahadasha || 'Active Planetary Cycle';
-          document.getElementById('dashSynthesis').innerHTML = `
-            <strong>Synthesis:</strong> The combination of Driver ${d} and Conductor ${c} creates a distinct balance of leadership and purpose. Your chart is currently vibrating in the <strong>${dasha}</strong> period under Personal Year <strong>${profile.personal_year || 8}</strong>.
-          `;
-
-          // If alignment was not pre-fetched, fetch from gap analysis endpoint
-          if (!alignment) {
-            try {
-              const gapResp = await fetch('/api/v1/payments/alignment-gap-analysis', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  driver: d,
-                  conductor: c,
-                  loshu_counts: profile.loshu_counts || {},
-                  missing_numbers: profile.missing_numbers || [],
-                  current_plan: 'free',
-                  credits_remaining: 0
-                })
-              });
-              if (gapResp.ok) alignment = await gapResp.json();
-            } catch (e) {}
-          }
-
-          // Render Cosmic Alignment Card (Rule 1)
-          if (alignment) {
-            const status = alignment.alignment_status;
-            const badge = document.getElementById('dashAlignmentBadge');
-            const scoreEl = document.getElementById('dashHarmonyScore');
-            const sumEl = document.getElementById('dashAlignmentSummary');
-            
-            if (badge) {
-              badge.textContent = status.replace('_', ' ');
-              if (status === 'ALIGNED') {
-                badge.style.background = 'rgba(22, 131, 91, 0.14)';
-                badge.style.color = '#16835B';
-                badge.style.border = '1px solid #16835B';
-              } else if (status === 'PARTIALLY_ALIGNED') {
-                badge.style.background = 'rgba(201, 162, 39, 0.15)';
-                badge.style.color = '#8B6914';
-                badge.style.border = '1px solid #C9A227';
-              } else {
-                badge.style.background = 'rgba(180, 40, 40, 0.12)';
-                badge.style.color = '#A13030';
-                badge.style.border = '1px solid #A13030';
-              }
-            }
-            if (scoreEl) scoreEl.textContent = `${alignment.alignment_score}% Harmony`;
-            if (sumEl) sumEl.textContent = alignment.alignment_summary;
-
-            // Render detected gaps list
-            const gapsContainer = document.getElementById('dashGapsContainer');
-          if (gapsContainer) {
-            let gapsList = (alignment && alignment.detected_gaps) ? alignment.detected_gaps : null;
-            if (!gapsList || gapsList.length === 0) {
-              const GAP_DEFS = {
-                3: { title: 'Wood 3 Gap (Jupiter)', urgency: 'Medium', impact: 'Cultivate structured patience in strategic expansion and knowledge synthesis.' },
-                4: { title: 'Wood 4 Gap (Rahu Order)', urgency: 'High', impact: 'Establish firm daily operational routines, contractual safeguards, and execution rigor.' },
-                5: { title: 'Earth 5 Gap (Mercury Core)', urgency: 'High', impact: 'Anchors the Lo Shu central axis. Stabilize emotional balance and financial cash reserve discipline.' },
-                6: { title: 'Metal 6 Gap (Venus Harmony)', urgency: 'Medium', impact: 'Harmonize familial and luxury allocations; integrate Venusian elegance with restraint.' },
-                7: { title: 'Metal 7 Gap (Ketu Depth)', urgency: 'Low', impact: 'Encourages deeper intuitive research, analytical audits, and contemplative focus.' }
-              };
-              gapsList = missingDigits.map(digit => GAP_DEFS[digit] || { title: `Digit ${digit} Gap`, urgency: 'Medium', impact: 'Karmic vibrational void identified for conscious balancing.' });
-            }
-            if (gapsList.length > 0) {
-              let html = '<div style="font-size:0.82rem; text-transform:uppercase; font-weight:700; color:#7A654D; margin-bottom:8px;">Detected Energetic Gaps:</div>';
-              gapsList.forEach(g => {
-                html += `
-                  <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:10px 14px; margin-bottom:8px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                      <strong style="color:#8B6914; font-size:0.85rem;">${g.title}</strong>
-                      <span style="font-size:0.72rem; color:${g.urgency === 'High' ? '#A13030' : '#8B6914'}; font-weight:700;">${g.urgency} Urgency</span>
-                    </div>
-                    <p style="font-size:0.8rem; color:#523E28; margin:4px 0 0 0; line-height:1.4;">${g.impact}</p>
-                  </div>
-                `;
-              });
-              gapsContainer.innerHTML = html;
-            }
-          }
-
-            // Render hook narrative & tagline CTA
-            if (alignment.hook_narrative) {
-              document.getElementById('dashHookNarrative').innerHTML = alignment.hook_narrative.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            }
-            if (alignment.primary_cta) {
-              const btn = document.getElementById('dashPrimaryCtaBtn');
-              btn.textContent = alignment.primary_cta.button_text;
-              btn.href = alignment.primary_cta.button_url;
-            }
-          }
-
-          // Render Question Credits & Strict Paid Lock (Rule 2)
-          const credits = entitlements && (entitlements.charm_credits_remaining !== undefined) 
-            ? parseInt(entitlements.charm_credits_remaining, 10) 
-            : parseInt(profile.charm_credits_remaining || 0, 10);
-          
-          const creditActionArea = document.getElementById('dashCreditActionArea');
-          const creditsNum = document.getElementById('dashCreditsNum');
-          const creditsSub = document.getElementById('dashCreditsSub');
-          const creditExhaustedBox = document.getElementById('dashCreditExhaustedBox');
-
-          if (credits <= 0) {
-            creditsNum.innerHTML = `<span style="font-size:2.2rem; color:#A13030; font-family:'Cinzel', serif;">0</span> <span style="font-size:1.15rem; vertical-align:middle;">🔒</span>`;
-            creditsSub.innerHTML = '<span style="color:#A13030; font-weight:700; text-transform:uppercase; font-size:0.78rem; letter-spacing:0.06em;">LOCKED · PAID PASS ONLY</span><br><span style="font-size:0.76rem; color:#7A654D;">0 question credits available</span>';
-            if (creditActionArea) {
-              creditActionArea.innerHTML = `
-                <a href="/pricing/?domain=ai" class="nv-btn-cta" style="width:100%; box-sizing:border-box; justify-content:center; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); font-weight:700; padding:12px 14px; font-size:0.86rem; box-shadow:0 4px 16px rgba(201,162,39,0.3);">
-                  Unlock Charm AI Pass (From ₹199) 🔒
-                </a>
-              `;
-            }
-            if (creditExhaustedBox) {
-              creditExhaustedBox.style.display = 'block';
-              creditExhaustedBox.innerHTML = `
-                <div style="background:rgba(201,162,39,0.06); border:1px solid rgba(201,162,39,0.25); border-radius:10px; padding:12px 14px; text-align:center; margin-top:14px;">
-                  <div style="font-size:0.80rem; color:#523E28; line-height:1.45; margin-bottom:10px;">
-                    ✦ <strong>Charm AI Career &amp; Transit Oracle</strong> is reserved for paid members. Unlock 15 in-depth questions or bundle with the Master Dossier.
-                  </div>
-                  <a href="/pricing/?domain=ai" class="nv-btn-cta" style="width:100%; box-sizing:border-box; justify-content:center; font-size:0.78rem; padding:8px 12px; margin-bottom:6px;">
-                    Get 5 Questions (₹199) →
-                  </a>
-                  <a href="/pricing/" style="display:block; text-align:center; font-size:0.76rem; color:#8B6914; font-weight:600; text-decoration:underline;">
-                    Or Unlock Advanced Master Dossier (12 Pages · ₹510) →
-                  </a>
-                </div>
-              `;
-            }
-          } else {
-            creditsNum.textContent = credits;
-            creditsSub.textContent = `${credits} in-depth question${credits > 1 ? 's' : ''} remaining`;
-            if (creditActionArea) {
-              creditActionArea.innerHTML = `
-                <a href="/pricing/?domain=ai" class="nv-btn-cta" style="width:100%; box-sizing:border-box; justify-content:center; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%);">Unlock Charm AI Pass (From ₹199) 🔒</a>
-              `;
-            }
-            if (creditExhaustedBox) {
-              creditExhaustedBox.style.display = 'none';
-            }
-          }
-
-          // Render Unlocked vs Locked Reports (Strict Free vs Paid Segregation)
-          const unlocked = (entitlements && entitlements.unlocked_reports) || profile.unlocked_reports || ['free'];
-          const isUserPaid = unlocked.includes('report_essential') || unlocked.includes('report_master') || unlocked.includes('report_divine');
-
-          // Sync top buttons with real paid state
-          const topUnlockBtn = document.getElementById('dashUnlockMasterBtn');
-          if (topUnlockBtn) {
-            if (isUserPaid) {
-              topUnlockBtn.textContent = 'Master Dossier (Unlocked) ✦';
-              topUnlockBtn.href = '/sample-report/?tier=report_master';
-              topUnlockBtn.style.background = 'linear-gradient(135deg, #16835B 0%, #0E5E40 100%)';
-            } else {
-              topUnlockBtn.textContent = 'Unlock Advanced Dossier (12 Pages) 🔒';
-              topUnlockBtn.href = '/pricing/';
-            }
-          }
-
-          const reportsEl = document.getElementById('dashReportsList');
-          if (reportsEl) {
-            let html = '';
-            // Strictly Isolated Profile-Based Entitlement Verification
-            function getProfileKey(p) {
-              if (!p) return 'primary';
-              const rawKey = p.id || (p.name + '_' + (p.dob || ''));
-              return rawKey.toLowerCase().replace(/[^a-z0-9]/g, '_');
-            }
-
-            const currentProfileKey = getProfileKey(profile);
-
-            function checkProfileTierUnlocked(tId, tAlias) {
-              if (!_dashboardState || !_dashboardState.view) return false;
-              const currentTier = _dashboardState.view.tier || 'free';
-              const entitlements = _dashboardState.view.entitlements || [];
-              if (currentTier === 'premium') return true;
-              if (currentTier === 'advanced' && (tId === 'report_basic' || tId === 'report_advanced' || tAlias === 'report_essential' || tAlias === 'report_master')) return true;
-              if (currentTier === 'basic' && (tId === 'report_basic' || tAlias === 'report_essential')) return true;
-              return entitlements.includes(tId) || (tAlias && entitlements.includes(tAlias));
-            }
-
-            const isAlex = (profile.name || '').toLowerCase().includes('alexander');
-            const allTiers = [
-              {
-                id: 'report_basic',
-                alias: 'report_essential',
-                name: 'Basic Report',
-                desc: '3-Page Executive PDF · Mulank 1, Bhagyank 4, Lo Shu Matrix & Planetary Vectors',
-                pages: '3 Pages',
-                price: '₹199',
-                amount: 199,
-                pdf: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf',
-                pdf_alt: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'
-              },
-              {
-                id: 'report_advanced',
-                alias: 'report_master',
-                name: 'Advanced Master Dossier',
-                desc: '12-Page Master PDF · Enabled Numbers in Depth, Auspicious Initiation Windows & Remedies',
-                pages: '12 Pages',
-                price: '₹510',
-                amount: 510,
-                pdf: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf',
-                pdf_alt: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'
-              },
-              {
-                id: 'report_premium',
-                alias: 'report_divine',
-                name: 'Premium Sovereign Blueprint',
-                desc: '32-Page Sovereign Blueprint · 10-Year Planetary Radar, Dual Chaldean & Full Synastry',
-                pages: '32 Pages',
-                price: '₹1,050',
-                amount: 1050,
-                pdf: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf',
-                pdf_alt: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'
-              }
-            ];
-
-            // Curated Bundles Integration (if unlocked for this profile)
-            const bundleTiers = [
-              {
-                id: 'starter_bundle',
-                alias: 'bundle_starter',
-                name: 'Starter Bundle',
-                desc: '2 Complete 3-Page Basic PDF Reports · Coming soon',
-                pages: '3 Pages',
-                price: 'Coming soon',
-                amount: 339,
-                pdf: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'
-              },
-              {
-                id: 'discovery_bundle',
-                alias: 'bundle_discovery',
-                name: 'Discovery Bundle',
-                desc: '3 Complete 12-Page Advanced Master Dossiers · Coming soon',
-                pages: '12 Pages',
-                price: 'Coming soon',
-                amount: 1299,
-                pdf: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'
-              },
-              {
-                id: 'comprehensive_bundle',
-                alias: 'bundle_comprehensive',
-                name: 'Comprehensive Bundle',
-                desc: '5 Complete 12-Page Advanced Master Dossiers · Coming soon',
-                pages: '12 Pages',
-                price: 'Coming soon',
-                amount: 1999,
-                pdf: isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'
-              }
-            ];
-
-            bundleTiers.forEach(b => {
-              if (checkProfileTierUnlocked(b.id, b.alias)) {
-                allTiers.push(b);
-              }
-            });
-
-            allTiers.forEach(t => {
-              const hasExplicitUnlock = checkProfileTierUnlocked(t.id, t.alias);
-
-              html += `
-                <div id="card_tier_${t.id}" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:16px; margin-bottom:12px; background:#FFFDF7; border:${hasExplicitUnlock ? '1.5px solid #16835B' : '1px solid rgba(201,162,39,0.3)'}; border-radius:10px; ${hasExplicitUnlock ? 'box-shadow: 0 4px 14px rgba(22,131,91,0.08);' : ''}">
-                  <div style="flex:1; min-width:260px;">
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                      <strong style="font-size:0.95rem; color:${hasExplicitUnlock ? '#16835B' : '#8B6914'};">${t.name}</strong>
-                      <span style="font-size:0.70rem; padding:2px 8px; border-radius:6px; font-weight:700; ${hasExplicitUnlock ? 'background:rgba(22,131,91,0.12); color:#16835B; border:1px solid #16835B;' : 'background:rgba(201,162,39,0.14); color:#8B6914; border:1px solid rgba(201,162,39,0.3);'}">
-                        ${hasExplicitUnlock ? 'READY FOR DOWNLOAD ✦' : t.price + ' · PAYMENT REQUIRED 🔒'}
-                      </span>
-                    </div>
-                    <div style="font-size:0.74rem; color:#8B6914; margin-bottom:3px; font-weight:600;">
-                      Subject: <span>${profile.name || 'Member'}</span> · Locked DOB: <span>${profile.dob || '28-11-1981'}</span>
-                    </div>
-                    <span style="font-size:0.78rem; color:#7A654D; display:block; line-height:1.45;">${t.desc}</span>
-                  </div>
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    ${hasExplicitUnlock ? `
-                      <a href="${t.pdf}" target="_blank" download class="nv-btn-cta" style="background:#16835B; padding:8px 16px; font-size:0.80rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:#FFFFFF; border-radius:6px; font-weight:700;">
-                        📥 Download PDF (${t.pages})
-                      </a>
-                      <a href="${t.pdf}" target="_blank" style="color:#8B6914; font-weight:700; font-size:0.80rem; text-decoration:underline; margin-left:4px;">
-                        Open ↗
-                      </a>
-                    ` : `
-                      <button type="button" onclick="triggerTierUnlock('${t.id}', '${t.name}', ${t.amount})" style="color:#FFFFFF; font-weight:700; font-size:0.80rem; border:none; cursor:pointer; padding:8px 16px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); border-radius:6px; display:inline-flex; align-items:center; gap:6px;">
-                        Unlock with Razorpay (${t.price}) 🔒
-                      </button>
-                    `}
-                  </div>
-                </div>
-              `;
-            });
-            reportsEl.innerHTML = html;
-          }
-
-          // Always ensure invoices are hydrated synchronously
-          const activeEmail = (profile && profile.email) || localStorage.getItem('nv_user_email') || 'member@numerosvision.com';
-          if (typeof loadUserInvoices === 'function') {
-            loadUserInvoices(activeEmail);
-          }
-        }
-      } catch (err) {
-        console.warn('Dashboard hydration notice:', err);
-      }
-    }
-
-    
-    function showPaymentSuccessBanner(planId, profile, paymentId) {
-      const bannerContainer = document.getElementById('dashBannerAlertContainer');
-      if (!bannerContainer) return;
-
-      const planTitles = {
-        'report_basic': 'Basic Report',
-        'report_advanced': 'Advanced Master Dossier',
-        'report_premium': 'Premium Sovereign Blueprint',
-        'starter_bundle': 'Starter Bundle',
-        'discovery_bundle': 'Discovery Bundle',
-        'comprehensive_bundle': 'Comprehensive Bundle'
-      };
-      const pTitle = planTitles[planId] || 'Personal Numerology Dossier';
-
-      bannerContainer.innerHTML = `
-        <div style="background:linear-gradient(135deg, rgba(22,131,91,0.12) 0%, rgba(201,162,39,0.10) 100%); border:1.5px solid #16835B; border-radius:12px; padding:18px 22px; margin-bottom:24px; box-shadow:0 4px 16px rgba(22,131,91,0.10); position:relative;">
-          <div style="display:flex; align-items:flex-start; gap:14px;">
-            <div style="width:38px; height:38px; border-radius:50%; background:#16835B; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;">
-              ✓
-            </div>
-            <div style="flex:1;">
-              <h4 style="color:#16835B; margin:0 0 4px 0; font-size:1.15rem; font-weight:700;">✦ Payment Confirmed via Razorpay!</h4>
-              <p style="color:#523E28; margin:0 0 6px 0; font-size:0.88rem; line-height:1.5;">
-                ${paymentId ? `Transaction ID: <strong>${paymentId}</strong> · ` : ''}Your <strong>${pTitle}</strong> has been strictly locked to Date of Birth <strong>${profile.dob || '28-11-1981'}</strong> for <strong>${profile.name}</strong> and is unlocked for download below.
-              </p>
-              <div style="font-size:0.78rem; color:#7A654D; margin-bottom:12px;">
-                ✓ Multi-Profile Security Active: Only this purchased package report is unlocked. Other tiers &amp; other profiles remain secured.
-              </div>
-              <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button type="button" onclick="openPaidPdfDirectly('${planId}', ${JSON.stringify(profile)})" style="background:#16835B; color:#FFFFFF; border:none; padding:10px 20px; font-size:0.85rem; font-weight:700; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-                  📥 Download PDF Report
-                </button>
-                <a href="#dashReportsList" style="background:#FFFFFF; border:1.5px solid #C9A227; color:#8B6914; text-decoration:none; padding:10px 18px; font-size:0.85rem; font-weight:700; border-radius:6px; display:inline-flex; align-items:center; gap:6px;">
-                  View in Reports List &darr;
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-      bannerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function openPaidPdfDirectly(planId, profile) {
-      let pdfPath = '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
-      const isAlex = (profile.name || '').toLowerCase().includes('alexander');
-
-      if (planId === 'report_basic' || planId === 'basic') {
-        pdfPath = isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
-      } else if (planId === 'report_advanced' || planId === 'advanced' || planId === 'starter_bundle' || planId === 'discovery_bundle') {
-        pdfPath = isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
-      } else if (planId === 'report_premium' || planId === 'premium' || planId === 'comprehensive_bundle') {
-        pdfPath = isAlex ? '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf' : '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf';
-      }
-
-      setTimeout(() => {
-        window.open(pdfPath, '_blank');
-      }, 600);
-    }
-
-    function triggerTierUnlock(planId, planName, amountInr) {
-      const activeProf = window.currentActiveProfile || { name: 'Member', dob: '1981-11-28', id: 'primary' };
-      const rawKey = activeProf.id || (activeProf.name + '_' + (activeProf.dob || ''));
-      const profKey = rawKey.toLowerCase().replace(/[^a-z0-9]/g, '_');
-      const uEmail = localStorage.getItem('nv_user_email') || 'member@numerosvision.com';
-      const uPhone = localStorage.getItem('nv_user_phone') || '';
-
-      const launchGateway = (gatewayObj) => {
-        gatewayObj.initiateCheckout({
-          plan_id: planId,
-          plan_name: `${planName} (${activeProf.name})`,
-          amount_inr: amountInr,
-          customer_name: activeProf.name,
-          customer_email: uEmail,
-          customer_phone: uPhone,
-          customer_dob: activeProf.dob,
-          profile_id: profKey,
-          onSuccess: function(inv) {
-            // Server authority: refetch dashboard view to load server-settled entitlements
-            initDashboard();
-            showPaymentSuccessBanner(planId, activeProf, (inv && (inv.paymentId || inv.payment_id)));
-
-            const repEl = document.getElementById('dashReportsList');
-            if (repEl) {
-              repEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            openPaidPdfDirectly(planId, activeProf);
-          }
-        });
-      };
-
-      if (window.NVPaymentGateway && typeof window.NVPaymentGateway.initiateCheckout === 'function') {
-        launchGateway(window.NVPaymentGateway);
-      } else if (window.NumerosPay && typeof window.NumerosPay.openCheckout === 'function') {
-        launchGateway(window.NumerosPay);
-      } else {
-        alert('Payment gateway is loading, please try again in a moment.');
-      }
-    }
-
-    function checkUrlTriggers() {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const isCheckout = urlParams.get('checkout') === 'true';
-        const planId = urlParams.get('plan') || 'report_basic';
-        const amountParam = parseInt(urlParams.get('amount'), 10);
-        const paramName = urlParams.get('name');
-        const paramDob = urlParams.get('dob');
-        const paramEmail = urlParams.get('email');
-        const paramPhone = urlParams.get('phone');
-        const unlockedParam = urlParams.get('unlocked');
-
-        // Sync user details if provided in URL
-        if (paramName && paramDob) {
-          localStorage.setItem('nv_user_name', paramName);
-          localStorage.setItem('nv_user_dob', paramDob);
-          if (paramEmail) localStorage.setItem('nv_user_email', paramEmail);
-          if (paramPhone) localStorage.setItem('nv_user_phone', paramPhone);
-
-          const list = getStoredFamilyProfiles();
-          let matched = list.find(p => p.name.toLowerCase() === paramName.toLowerCase() && p.dob === paramDob);
-          if (!matched) {
-            matched = {
-              id: (paramName + '_' + paramDob).toLowerCase().replace(/[^a-z0-9]/g, '_'),
-              name: paramName,
-              dob: paramDob,
-              gender: localStorage.getItem('nv_user_gender') || 'Male',
-              relation: 'Self (Primary)'
-            };
-            list.unshift(matched);
-            saveFamilyProfiles(list);
-          }
-          window.currentActiveProfile = matched;
-          initDashboard();
-        }
-
-        // If paid=true or unlockedParam present, confirm unlock and celebrate
-        const isPaidParam = urlParams.get('paid') === 'true';
-        if (unlockedParam || isPaidParam) {
-          const unlockedTier = unlockedParam || urlParams.get('plan') || 'report_premium';
-          const activeProf = window.currentActiveProfile || { name: 'Member', dob: '1981-11-28', id: 'primary' };
-          const profKey = (activeProf.id || (activeProf.name + '_' + (activeProf.dob || ''))).toLowerCase().replace(/[^a-z0-9]/g, '_');
-          // Server authority: entitlements settled strictly in D1 via /verify or webhook
-
-          window.history.replaceState({}, document.title, window.location.pathname);
-          initDashboard();
-          showPaymentSuccessBanner(unlockedTier, activeProf, urlParams.get('payment_id'));
-
-          const repEl = document.getElementById('dashReportsList');
-          if (repEl) {
-            repEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-
-          openPaidPdfDirectly(unlockedTier, activeProf);
+        _activeSubjectId = urlParams.get('subjectId') || '';
+        const viewUrl = '/api/v1/dashboard/view' + (_activeSubjectId ? `?subjectId=${encodeURIComponent(_activeSubjectId)}` : '');
+        const viewRes = await fetch(viewUrl);
+        if (!viewRes.ok) {
+          console.error('Failed to load dashboard view:', viewRes.status);
           return;
         }
 
-        // If checkout=true, display explicit Order Confirmation Banner & trigger Razorpay
-        if (isCheckout) {
-          window.history.replaceState({}, document.title, window.location.pathname);
-
-          const planNames = {
-            'report_basic': 'Basic Report',
-            'report_advanced': 'Advanced Master Dossier',
-            'report_premium': 'Premium Sovereign Blueprint',
-            'starter_bundle': 'Starter Bundle',
-            'discovery_bundle': 'Discovery Bundle',
-            'comprehensive_bundle': 'Comprehensive Bundle'
-          };
-          const planAmounts = {
-            'report_basic': 199,
-            'report_advanced': 510,
-            'report_premium': 1050,
-            'starter_bundle': 349,
-            'discovery_bundle': 499,
-            'comprehensive_bundle': 999
-          };
-
-          const pName = planNames[planId] || 'Personal Numerology Dossier';
-          const pAmount = amountParam || planAmounts[planId] || 1050;
-
-          // Render explicit confirmation banner so user is never lost or confused
-          const bannerContainer = document.getElementById('dashBannerAlertContainer');
-          if (bannerContainer) {
-            bannerContainer.innerHTML = `
-              <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:12px; padding:20px 24px; margin-bottom:24px; box-shadow:0 6px 20px rgba(201,162,39,0.18);">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
-                  <div>
-                    <span style="font-size:0.75rem; text-transform:uppercase; font-weight:800; color:#8B6914; letter-spacing:0.04em;">Ready for Checkout</span>
-                    <h3 style="margin:4px 0; color:#523E28; font-family:'Cinzel',serif; font-size:1.25rem;">${pName}</h3>
-                    <div style="font-size:0.82rem; color:#7A654D;">Locked to DOB: <strong>${paramDob || '28-11-1981'}</strong> for <strong>${paramName || 'Member'}</strong></div>
-                  </div>
-                  <div style="display:flex; align-items:center; gap:14px;">
-                    <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#8B6914;">₹${pAmount}</span>
-                    <button type="button" onclick="triggerTierUnlock('${planId}', '${pName}', ${pAmount})" style="padding:12px 24px; font-weight:700; font-family:'Cinzel',serif; font-size:0.92rem; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; border:none; border-radius:8px; cursor:pointer; box-shadow:0 4px 14px rgba(201,162,39,0.3);">
-                      Pay with Razorpay 🔒
-                    </button>
-                  </div>
-                </div>
-              </div>
-            `;
-            bannerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-
-          setTimeout(() => {
-            triggerTierUnlock(planId, pName, pAmount);
-          }, 350);
-        }
+        _dashboardState = await viewRes.json();
+        renderDashboard(_dashboardState);
       } catch (err) {
-        console.warn('URL trigger check notice:', err);
+        console.error('Dashboard initialization error:', err);
       }
     }
 
-async function handleDashboardLogout() {
-      try {
-        await fetch('/api/v1/auth/logout', { method: 'POST' });
-      } catch (e) {}
-      localStorage.removeItem('nv_user_session');
-      window.location.href = '/login/';
-    }
+    function renderDashboard(data) {
+      if (!data) return;
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        initDashboard();
-        checkUrlTriggers();
-        const uEmail = (localStorage.getItem('nv_user_email') || 'member@numerosvision.com');
-        loadUserInvoices(uEmail);
-      });
-    } else {
-      initDashboard();
-      checkUrlTriggers();
-    }
-  </script>
-  <script>
-        function toggleMobileNav(e) {
-      if (window.nvToggleMaster && typeof window.nvToggleMaster === 'function') {
-        return window.nvToggleMaster(e || window.event);
-      }
-      var evt = e || window.event;
-      if (evt && evt.stopPropagation) evt.stopPropagation();
-      var menu = document.getElementById('nvNavMenu') || document.getElementById('nv-nav-menu') || document.querySelector('.nv-nav-menu');
-      var btn = document.querySelector('.nv-mobile-toggle');
-      var header = document.querySelector('.nv-header');
-      if (menu) {
-        var isOpen = menu.classList.toggle('active');
-        if (btn) {
-          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-          btn.innerHTML = isOpen ? '✕' : '☰';
-        }
-        if (header) {
-          header.classList.toggle('menu-open', isOpen);
-        }
-        document.body.classList.toggle('nv-nav-open', isOpen);
-        var backdrop = document.getElementById('nv-drawer-backdrop');
-        if (backdrop) {
-          backdrop.classList.toggle('active', isOpen);
+      // 1. Welcome & User ID
+      const user = data.user || {};
+      const activeSubj = data.activeSubject || (data.subjects && data.subjects[0]) || { name: 'Member', dob: '' };
+      const welcomeNameEl = document.getElementById('dashWelcomeName');
+      const memberIdEl = document.getElementById('dashMemberId');
+      if (welcomeNameEl) welcomeNameEl.textContent = `Welcome, ${activeSubj.name || user.name || 'Seeker'}`;
+      if (memberIdEl) memberIdEl.textContent = user.userId || 'NV-MEMBER';
+
+      // Profile Switcher
+      const selectorEl = document.getElementById('dashProfileSelector');
+      if (selectorEl && Array.isArray(data.subjects)) {
+        if (data.subjects.length <= 1) {
+          selectorEl.innerHTML = `<span class="profile-pill active">${activeSubj.name || 'Primary'} (${activeSubj.dob || 'DOB Locked'})</span>`;
+        } else {
+          selectorEl.innerHTML = data.subjects.map(s => {
+            const isCur = s.id === activeSubj.id;
+            return `<a href="/dashboard/?subjectId=${encodeURIComponent(s.id)}" class="profile-pill ${isCur ? 'active' : ''}">${s.name} (${s.dob})</a>`;
+          }).join('');
         }
       }
+
+      // 2. My Reports Section
+      renderMyReports(data.reports || []);
+
+      // 3. Lo Shu Grid & Vectors
+      renderLoShuSection(data.view || {});
+
+      // 4. Upgrade Tiers (Hiding Owned Tiers)
+      renderUpgradeTiers(data.view || {}, data.reports || []);
+
+      // 5. Charm AI Credits Card
+      const creditsNumEl = document.getElementById('dashCreditsNum');
+      const creditsSubEl = document.getElementById('dashCreditsSub');
+      const credits = Number(data.charmCredits || 0);
+      if (creditsNumEl) creditsNumEl.textContent = credits;
+      if (creditsSubEl) {
+        creditsSubEl.textContent = credits > 0
+          ? `${credits} priority question credit${credits > 1 ? 's' : ''} available`
+          : '0 question credits remaining · Unlock access';
+      }
+
+      // 6. Receipts Table
+      renderReceipts(data.receipts || []);
+
+      // Account info
+      const uEmailEl = document.getElementById('dashUserEmail');
+      const uPhoneEl = document.getElementById('dashUserPhone');
+      if (uEmailEl) uEmailEl.textContent = user.email || 'Not connected';
+      if (uPhoneEl) uPhoneEl.textContent = user.phone || 'Verified via OTP';
     }
-      
-  </script>
-  <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
-  <nav class="nv-sticky-bottom-nav" aria-label="Mobile and Tablet Sticky Navigation">
-    <a href="/" class="nv-bottom-nav-item" data-nav="home" title="Home">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home</span>
-    </a>
-    <a href="/calculators/" class="nv-bottom-nav-item" data-nav="calculate" title="Calculate">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      <span>Calculate</span>
-    </a>
-    <a href="/charm-ai/" class="nv-bottom-nav-item nv-bottom-nav-center" data-nav="charm" title="Charm AI">
-      <div class="nv-bottom-center-btn">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#FFFFFF" stroke-width="2.2" style="display:block; stroke:#FFFFFF !important; transform:none !important;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z" stroke="#FFFFFF"/></svg>
-      </div>
-      <span>Charm AI</span>
-    </a>
-    <a href="/reports_catalogue/" class="nv-bottom-nav-item" data-nav="reports" title="Reports">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      <span>Reports</span>
-    </a>
-    <a href="/dashboard/" class="nv-bottom-nav-item active" data-nav="account" title="Account">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span>Account</span>
-    </a>
-  </nav>
 
-  <script src="/static/js/nav.js?v=5.5.0" defer></script>
-
-
-  <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
-  <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
-  <script src="/static/js/nv_profile_sync.js?v=5.4.0" defer></script>
-  <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
-  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
-  <script src="/js/cdp_tracker.js" defer></script>
-  <script>
-    // ── USER INVOICES & PAID REPORTS CONTROLLER ──
-    let _userInvoices = [];
-
-    async function loadUserInvoices(userEmail) {
-      const container = document.getElementById('dashInvoicesList');
+    function renderMyReports(reports) {
+      const container = document.getElementById('dashReportsContainer');
       if (!container) return;
 
-      try {
-        let url = '/api/v1/billing/my-invoices';
-        if (userEmail) url += '?email=' + encodeURIComponent(userEmail);
-        const resp = await fetch(url);
-        if (resp.ok) {
-          const data = await resp.json();
-          _userInvoices = data.invoices || [];
-        }
-      } catch (err) {
-        console.warn('Error fetching user invoices:', err);
-      }
-
-      // If no invoices yet, show clean empty state
-      if (_userInvoices.length === 0) {
-        if (_dashboardState && Array.isArray(_dashboardState.invoices) && _dashboardState.invoices.length > 0) {
-          _userInvoices = _dashboardState.invoices.map(inv => ({
-            invoice_id: inv.invoice_number || inv.id,
-            service_name: inv.service_title || 'Numerology Report',
-            amount_inr: (inv.amount_paise / 100),
-            status: inv.status || 'PAID',
-            created_at: new Date(inv.created_at).toISOString()
-          }));
-        }
-      }
-
-      renderUserInvoices(_userInvoices);
-    }
-
-    function renderUserInvoices(invoices) {
-      const container = document.getElementById('dashInvoicesList');
-      if (!container) return;
-
-      if (!invoices || invoices.length === 0) {
-        container.innerHTML = '<div style="text-align:center; color:#7A654D; padding:10px 0; font-size:0.82rem;">No paid invoices yet.</div>';
+      if (!reports || reports.length === 0) {
+        container.innerHTML = `
+          <div style="background:var(--pearl-bg); border:1px dashed var(--border-gold); border-radius:12px; padding:24px; text-align:center;">
+            <strong style="color:var(--gold-dark); font-size:0.95rem; display:block; margin-bottom:6px;">No Purchased Reports Yet</strong>
+            <p style="font-size:0.80rem; color:var(--ink-muted); margin:0 0 14px 0; line-height:1.45;">
+              Your complimentary Lo Shu matrix is active below. You can unlock your bespoke 3-Page Basic Report, 12-Page Master Dossier, or 32-Page Sovereign Blueprint anytime.
+            </p>
+            <a href="#dashUpgradeCard" style="display:inline-block; background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFFFFF; text-decoration:none; padding:8px 16px; border-radius:6px; font-size:0.80rem; font-weight:700;">
+              View Available Dossiers &darr;
+            </a>
+          </div>
+        `;
         return;
       }
 
-      container.innerHTML = invoices.map(inv => {
-        const dateStr = inv.created_at ? new Date(inv.created_at).toLocaleDateString('en-IN', { month:'short', day:'numeric', year:'numeric' }) : 'Recent';
+      container.innerHTML = reports.map(r => {
+        const isReady = r.status === 'ready';
+        const isFailed = r.status === 'failed';
+        const isPreparing = r.status === 'preparing';
+
+        let badgeClass = isReady ? 'ready' : (isFailed ? 'failed' : 'preparing');
+        let badgeText = r.statusBadge || (isReady ? 'READY ✓' : (isFailed ? 'WE ARE ON IT' : 'PREPARING'));
+
         return `
-          <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:12px; display:flex; flex-direction:column; gap:6px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-family:monospace; font-weight:700; color:#8B6914; font-size:0.80rem;">${inv.invoice_id}</span>
-              <span style="font-size:0.70rem; color:#16835B; font-weight:700; background:#eef8f2; padding:2px 6px; border-radius:4px;">PAID ✓</span>
+          <div class="report-item ${badgeClass}">
+            <div style="flex:1; min-width:240px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <strong style="font-size:1.02rem; color:${isReady ? 'var(--emerald)' : 'var(--gold-dark)'};">${r.title}</strong>
+                <span class="report-badge ${badgeClass}">${badgeText}</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--gold-dark); font-weight:600; margin-bottom:3px;">
+                Subject: ${r.subjectName} · Locked DOB: ${r.subjectDob}
+              </div>
+              <div style="font-size:0.78rem; color:var(--ink-muted); line-height:1.4;">
+                ${r.message}
+              </div>
             </div>
-            <div style="font-size:0.82rem; font-weight:600; color:#1C2526; line-height:1.3;">${inv.service_name}</div>
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:#7A654D; margin-top:2px;">
-              <span>${dateStr}</span>
-              <strong style="color:#16835B; font-size:0.85rem;">₹${Number(inv.total_paid || inv.amount_inr || 0).toLocaleString('en-IN')}</strong>
-            </div>
-            <div style="display:flex; gap:6px; margin-top:6px;">
-              <button type="button" onclick="openInvoiceModal('${inv.invoice_id}')" style="flex:1; background:#FFFFFF; border:1px solid #C9A227; color:#8B6914; padding:6px 10px; border-radius:5px; font-size:0.74rem; font-weight:700; cursor:pointer;">
-                View Receipt 📄
-              </button>
-              <a href="${inv.report_url || '/sample-report/?tier=master'}" style="flex:1; background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFF; text-decoration:none; padding:6px 10px; border-radius:5px; font-size:0.74rem; font-weight:700; text-align:center;">
-                Open Dossier 🌟
-              </a>
+            <div style="display:flex; align-items:center; gap:8px;">
+              ${isReady ? `
+                <a href="${r.downloadUrl || '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'}" target="_blank" download class="nv-btn-cta" style="background:var(--emerald); padding:8px 16px; font-size:0.80rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:#FFFFFF; border-radius:6px; font-weight:700;">
+                  📥 Download PDF (${r.pages} Pages)
+                </a>
+                <a href="${r.downloadUrl || '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'}" target="_blank" style="color:var(--gold-dark); font-weight:700; font-size:0.80rem; text-decoration:underline;">
+                  Open ↗
+                </a>
+              ` : `
+                <span style="font-size:0.78rem; font-weight:600; color:var(--gold-dark);">
+                  ${isFailed ? 'Prioritized by Advisory Desk' : 'Estimated ~2 mins'}
+                </span>
+              `}
             </div>
           </div>
         `;
       }).join('');
     }
 
-    function openInvoiceModal(invoiceId) {
-      const inv = _userInvoices.find(i => i.invoice_id === invoiceId) || _userInvoices[0];
-      if (!inv) return;
+    function renderLoShuSection(view) {
+      const calc = (view && view.calculation) || {};
+      const secGrid = (view && view.sections && view.sections.grid && view.sections.grid.cells) || [];
+
+      // Vectors
+      const dVal = calc.driver || '--';
+      const cVal = calc.conductorDisplay || calc.conductor || '--';
+      const dPlanet = calc.driverPlanet ? `${calc.driverPlanet} (Surya)` : '--';
+      const cPlanet = calc.conductorPlanet ? `${calc.conductorPlanet} (Rahu)` : '--';
+
+      const dValEl = document.getElementById('dashDriverVal');
+      const cValEl = document.getElementById('dashConductorVal');
+      const dPlanetEl = document.getElementById('dashDriverPlanet');
+      const cPlanetEl = document.getElementById('dashConductorPlanet');
+      const kuaValEl = document.getElementById('dashKuaVal');
+      const kuaDirEl = document.getElementById('dashKuaDirection');
+      const pyValEl = document.getElementById('dashPyVal');
+
+      if (dValEl) dValEl.textContent = dVal;
+      if (cValEl) cValEl.textContent = cVal;
+      if (dPlanetEl) dPlanetEl.textContent = dPlanet;
+      if (cPlanetEl) cPlanetEl.textContent = cPlanet;
+      if (kuaValEl) kuaValEl.textContent = '1';
+      if (kuaDirEl) kuaDirEl.textContent = 'Water · East Group';
+      if (pyValEl) pyValEl.textContent = '8';
+
+      // 3x3 Grid Cells
+      secGrid.forEach(cell => {
+        const num = cell.digit;
+        const cellEl = document.getElementById(`lsc_${num}`);
+        const numEl = document.getElementById(`lsn_${num}`);
+        const tagEl = document.getElementById(`lst_${num}`);
+        if (!cellEl || !numEl || !tagEl) return;
+
+        const isPresent = cell.status === 'present';
+        if (isPresent) {
+          cellEl.className = '';
+          numEl.className = 'loshu-num present';
+          numEl.textContent = String(num).repeat(cell.count || 1);
+          tagEl.className = 'loshu-tag active';
+          tagEl.textContent = `×${cell.count || 1}`;
+        } else {
+          cellEl.className = 'missing-cell';
+          numEl.className = 'loshu-num missing';
+          numEl.textContent = num;
+          tagEl.className = 'loshu-tag locked';
+          tagEl.textContent = '🔒';
+        }
+      });
+
+      // Summary
+      const summaryEl = document.getElementById('dashLoShuSummary');
+      if (summaryEl) {
+        const presentList = calc.presentDigits || [1, 4, 8, 9];
+        const missingList = calc.missingDigits || [2, 3, 5, 6, 7];
+        summaryEl.innerHTML = `
+          <div style="margin-bottom:10px;">
+            <strong style="color:var(--emerald);">Active Natal Frequencies (${presentList.length}):</strong>
+            <span style="font-weight:600;">Digits ${presentList.join(', ')}</span> provide primary baseline cognitive and executive drive.
+          </div>
+          <div>
+            <strong style="color:var(--gold-dark);">Karmic Voids (${missingList.length}):</strong>
+            <span style="font-weight:600;">Digits ${missingList.join(', ')}</span> represent missing elemental vibrations. Comprehensive remedies and directional alignments are analyzed in detail in the full dossiers.
+          </div>
+        `;
+      }
+    }
+
+    function renderUpgradeTiers(view, reports) {
+      const container = document.getElementById('dashUpgradeTiersContainer');
+      const cardEl = document.getElementById('dashUpgradeCard');
+      if (!container || !cardEl) return;
+
+      const userTier = (view && view.tier) || 'free';
+      const entitlements = (view && view.entitlements) || [];
+
+      // Determine owned tiers
+      const isBasicOwned = userTier === 'basic' || userTier === 'advanced' || userTier === 'premium' || entitlements.includes('report_basic');
+      const isAdvancedOwned = userTier === 'advanced' || userTier === 'premium' || entitlements.includes('report_advanced');
+      const isPremiumOwned = userTier === 'premium' || entitlements.includes('report_premium');
+
+      // Filter tiers to display in ONE horizontal row
+      const availableTiers = PACK_TIERS.filter(t => {
+        if (t.id === 'report_basic' && isBasicOwned) return false;
+        if (t.id === 'report_advanced' && isAdvancedOwned) return false;
+        if (t.id === 'report_premium' && isPremiumOwned) return false;
+        return true;
+      });
+
+      if (availableTiers.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column:1 / -1; background:var(--pearl-bg); border:1.5px solid var(--emerald); border-radius:12px; padding:20px; text-align:center;">
+            <span style="font-size:0.75rem; font-weight:700; color:var(--emerald); background:var(--emerald-bg); padding:3px 8px; border-radius:6px;">✦ SOVEREIGN ACCESS UNLOCKED</span>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--gold-dark); margin:8px 0 4px 0; font-weight:700;">
+              You hold full access to all report tiers
+            </div>
+            <p style="font-size:0.80rem; color:var(--ink-dark); margin:0;">
+              Your 32-page Sovereign Executive Master Blueprint and all elemental balancing matrices are fully accessible in the My Reports section above.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = availableTiers.map(t => {
+        const priceStr = `₹${t.priceInr.toLocaleString('en-IN')}`;
+        return `
+          <div class="tier-card" id="tierCard_${t.id}">
+            <div>
+              <span class="tier-badge" style="background:rgba(201,162,39,0.12); color:var(--gold-dark); border:1px solid rgba(201,162,39,0.3);">${t.badge}</span>
+              <h3 class="tier-title">${t.name}</h3>
+              <div class="tier-price">${priceStr}</div>
+              <p class="tier-desc">${t.desc}</p>
+            </div>
+            <button type="button" onclick="triggerTierCheckout('${t.id}', '${t.name}', ${t.priceInr})" class="tier-btn">
+              Unlock ${t.name.split(' ')[0]} (${priceStr}) 🔒
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderReceipts(receipts) {
+      const tbody = document.getElementById('dashReceiptsTableBody');
+      if (!tbody) return;
+
+      if (!receipts || receipts.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; color:var(--ink-muted); padding:16px 0;">No completed transactions found.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = receipts.map((r, idx) => {
+        const dStr = r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN', { month:'short', day:'numeric', year:'numeric' }) : 'Recent';
+        return `
+          <tr>
+            <td style="font-weight:600;">${dStr}</td>
+            <td><strong>${r.pack_name}</strong></td>
+            <td style="font-family:'Cinzel',serif; font-weight:700; color:var(--gold-dark);">₹${r.amount_inr || (r.amount_paise / 100)}</td>
+            <td style="font-family:monospace; font-size:0.75rem; color:var(--ink-muted);">${r.payment_id}</td>
+            <td><span style="color:var(--emerald); font-weight:700; background:var(--emerald-bg); padding:2px 6px; border-radius:4px; font-size:0.70rem;">PAID ✓</span></td>
+            <td>
+              <button type="button" onclick="openReceiptModal(${idx})" style="background:#FFFFFF; border:1px solid var(--gold-primary); color:var(--gold-dark); padding:4px 8px; border-radius:4px; font-size:0.72rem; font-weight:700; cursor:pointer;">
+                View 📄
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openReceiptModal(idx) {
+      const receipts = (_dashboardState && _dashboardState.receipts) || [];
+      const r = receipts[idx];
+      if (!r) return;
+
       const modal = document.getElementById('nvInvoiceModal');
       const body = document.getElementById('nvInvoiceModalBody');
       if (!modal || !body) return;
 
-      const dateStr = inv.created_at ? new Date(inv.created_at).toLocaleString('en-IN', { dateStyle:'long', timeStyle:'short' }) : new Date().toLocaleDateString();
+      const dStr = r.created_at ? new Date(r.created_at).toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' }) : 'Recent';
 
       body.innerHTML = `
-        <div style="border:2px solid #C9A227; border-radius:12px; padding:28px; background:#FFFDF7; box-shadow:0 8px 30px rgba(180,155,110,0.15); font-family:'Inter',sans-serif; color:#1C2526; max-width:620px; margin:0 auto;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1.5px solid rgba(201,162,39,0.3); padding-bottom:18px; margin-bottom:20px;">
+        <div style="background:#FFFDF7; border:2px solid var(--gold-primary); border-radius:12px; padding:24px; box-shadow:0 8px 30px rgba(0,0,0,0.15);">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border-gold); padding-bottom:14px; margin-bottom:16px;">
             <div>
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <img src="/logos/nv-logo-mark.svg" alt="Seal" style="width:28px; height:28px;" />
-                <span style="font-family:'Cormorant Garamond',serif; font-size:1.35rem; font-weight:700; color:#8B6914; letter-spacing:0.04em;">NUMEROS VISION</span>
-              </div>
-              <div style="font-size:0.72rem; color:#7A654D; letter-spacing:0.12em; text-transform:uppercase;">ANVEIL EVERY CHARM · INDIVIDUAL ADVISORY DESK</div>
+              <div style="font-family:'Cormorant Garamond',serif; font-size:1.35rem; font-weight:700; color:var(--gold-dark);">NUMEROS VISION</div>
+              <div style="font-size:0.70rem; color:var(--ink-muted); letter-spacing:0.08em; text-transform:uppercase;">OFFICIAL PAYMENT RECEIPT</div>
             </div>
-            <div style="text-align:right;">
-              <span style="background:#eef8f2; color:#16835B; padding:4px 10px; border-radius:9999px; font-size:0.78rem; font-weight:700;">PAYMENT CONFIRMED ✓</span>
-              <div style="font-size:0.78rem; color:#7A654D; margin-top:4px;">Date: ${dateStr}</div>
+            <span style="background:var(--emerald-bg); color:var(--emerald); padding:3px 8px; border-radius:6px; font-size:0.74rem; font-weight:700;">CONFIRMED ✓</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; font-size:0.80rem;">
+            <div>
+              <span style="font-size:0.70rem; text-transform:uppercase; color:var(--ink-muted); display:block;">Order Reference:</span>
+              <strong style="font-family:monospace; color:var(--gold-dark);">${r.order_id}</strong>
+            </div>
+            <div>
+              <span style="font-size:0.70rem; text-transform:uppercase; color:var(--ink-muted); display:block;">Payment Reference:</span>
+              <strong style="font-family:monospace; color:var(--gold-dark);">${r.payment_id}</strong>
+            </div>
+            <div>
+              <span style="font-size:0.70rem; text-transform:uppercase; color:var(--ink-muted); display:block;">Date &amp; Time:</span>
+              <strong>${dStr}</strong>
+            </div>
+            <div>
+              <span style="font-size:0.70rem; text-transform:uppercase; color:var(--ink-muted); display:block;">Total Paid:</span>
+              <strong style="color:var(--emerald); font-size:1rem;">₹${r.amount_inr || (r.amount_paise / 100)}</strong>
             </div>
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; font-size:0.84rem;">
-            <div style="background:#FFFFFF; padding:12px; border-radius:8px; border:1px solid rgba(201,162,39,0.2);">
-              <div style="font-size:0.72rem; text-transform:uppercase; color:#8B6914; font-weight:700; margin-bottom:4px;">Billed To (Client):</div>
-              <strong style="font-size:0.92rem; color:#1C2526;">${inv.customer_name}</strong>
-              <div style="color:#523E28; margin-top:2px;">${inv.customer_email}</div>
-              <div style="color:#7A654D;">${inv.customer_phone || ''}</div>
-            </div>
-            <div style="background:#FFFFFF; padding:12px; border-radius:8px; border:1px solid rgba(201,162,39,0.2);">
-              <div style="font-size:0.72rem; text-transform:uppercase; color:#8B6914; font-weight:700; margin-bottom:4px;">Transaction Reference:</div>
-              <div>Receipt No: <strong style="color:#8B6914; font-family:monospace;">${inv.invoice_id}</strong></div>
-              <div style="font-size:0.78rem; color:#523E28; margin-top:2px;">Payment ID: <code style="font-size:0.74rem;">${inv.payment_id}</code></div>
-              <div style="font-size:0.78rem; color:#7A654D;">Gateway: ${inv.gateway || 'Razorpay'}</div>
-            </div>
+          <div style="background:#FFFFFF; border:1px solid var(--border-gold); border-radius:8px; padding:12px; margin-bottom:18px;">
+            <div style="font-size:0.72rem; text-transform:uppercase; color:var(--ink-muted); margin-bottom:4px;">Item Description:</div>
+            <strong style="font-size:0.92rem; color:var(--ink-dark);">${r.pack_name}</strong>
           </div>
 
-          <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:0.86rem;">
-            <thead>
-              <tr style="background:#FAF5EB; border-bottom:1.5px solid rgba(201,162,39,0.3); text-align:left;">
-                <th style="padding:10px 12px; color:#8B6914;">Service / Description</th>
-                <th style="padding:10px 12px; color:#8B6914; text-align:right;">Amount (INR)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid rgba(201,162,39,0.15);">
-                <td style="padding:12px;">
-                  <strong>${inv.service_name}</strong>
-                  <div style="font-size:0.75rem; color:#7A654D;">${inv.notes || 'Full personalized planetary interpretation & remedies'}</div>
-                </td>
-                <td style="padding:12px; text-align:right; font-weight:600;">₹${Number(inv.amount_inr || inv.total_paid).toLocaleString('en-IN')}.00</td>
-              </tr>
-              <tr style="border-bottom:1px solid rgba(201,162,39,0.15); color:#7A654D; font-size:0.80rem;">
-                <td style="padding:8px 12px;">Applicable Taxes (GST) — <span style="font-style:italic;">Exempt under Sec 22, CGST Act 2017</span></td>
-                <td style="padding:8px 12px; text-align:right;">₹0.00</td>
-              </tr>
-              <tr style="background:#FAF5EB; font-weight:700; font-size:1rem;">
-                <td style="padding:12px; color:#523E28;">Total Amount Paid (All-Inclusive)</td>
-                <td style="padding:12px; text-align:right; color:#16835B;">₹${Number(inv.total_paid).toLocaleString('en-IN')}.00</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div style="background:#FFFFFF; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:12px; font-size:0.75rem; color:#7A654D; line-height:1.5; margin-bottom:20px;">
-            <strong>Statutory Exemption Note:</strong> This receipt is issued by an individual independent consultant operating under the threshold limit of Section 22 of the Central Goods & Services Tax (CGST) Act, 2017. Services are delivered on a direct advisory basis.
-          </div>
-
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-            <a href="${inv.report_url || '/sample-report/?tier=master'}" style="background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFF; text-decoration:none; padding:10px 18px; border-radius:6px; font-size:0.84rem; font-weight:700;">
-              Open Paid Dossier 🌟
-            </a>
-            <div style="display:flex; gap:8px;">
-              <button type="button" onclick="window.print()" style="background:#FAF5EB; border:1px solid #C9A227; color:#8B6914; padding:10px 16px; border-radius:6px; font-size:0.84rem; font-weight:700; cursor:pointer;">
-                Print Receipt 🖨️
-              </button>
-              <button type="button" onclick="closeInvoiceModal()" style="background:#EEE; border:none; color:#523E28; padding:10px 16px; border-radius:6px; font-size:0.84rem; font-weight:600; cursor:pointer;">
-                Close
-              </button>
-            </div>
+          <div style="display:flex; justify-content:flex-end;">
+            <button type="button" onclick="closeReceiptModal()" style="background:var(--gold-dark); color:#FFF; border:none; padding:8px 16px; border-radius:6px; font-size:0.80rem; font-weight:700; cursor:pointer;">
+              Close
+            </button>
           </div>
         </div>
       `;
       modal.style.display = 'flex';
     }
 
-    function closeInvoiceModal() {
+    function closeReceiptModal() {
       const modal = document.getElementById('nvInvoiceModal');
       if (modal) modal.style.display = 'none';
     }
 
-</script>
+    function triggerTierCheckout(packId, packName, amountInr) {
+      const activeSubj = (_dashboardState && _dashboardState.activeSubject) || {};
+      if (window.NVPaymentGateway && typeof window.NVPaymentGateway.openCheckout === 'function') {
+        window.NVPaymentGateway.openCheckout(packId, {
+          amount: amountInr,
+          subject_id: activeSubj.id,
+          name: activeSubj.name || 'Valued Seeker',
+          dob: activeSubj.dob || '',
+          skip_dob_modal: true
+        });
+      } else {
+        window.location.href = `/reports-catalogue.html?tier=${encodeURIComponent(packId)}`;
+      }
+    }
 
-  <!-- UNIVERSAL INVOICE RECEIPT MODAL -->
-  <div id="nvInvoiceModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.55); z-index:99999; justify-content:center; align-items:center; padding:16px; box-sizing:border-box;">
-    <div id="nvInvoiceModalBody" style="width:100%; max-width:640px; max-height:90vh; overflow-y:auto;"></div>
-  </div>
+    function openAddFamilyModal() {
+      const modal = document.getElementById('addFamilyModal');
+      if (modal) modal.style.display = 'flex';
+    }
 
-<script src="/static/js/nv_pricing_catalog.js?v=2.1.0" defer></script>
-  <script src="/static/js/nv_payment_gateway.js?v=20261106_v9" defer></script>
+    function closeAddFamilyModal() {
+      const modal = document.getElementById('addFamilyModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function submitAddFamilyMember(e) {
+      e.preventDefault();
+      const name = (document.getElementById('afmName').value || '').trim();
+      const dob = (document.getElementById('afmDob').value || '').trim();
+      if (!name || !dob) return;
+
+      try {
+        const resp = await fetch('/api/v1/subjects', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, dob })
+        });
+        if (resp.ok) {
+          const res = await resp.json();
+          closeAddFamilyModal();
+          window.location.href = `/dashboard/?subjectId=${encodeURIComponent(res.id)}`;
+        } else {
+          const err = await resp.json().catch(() => ({}));
+          alert(err.error || 'Failed to add family member.');
+        }
+      } catch (err) {
+        alert('Network error adding member. Please try again.');
+      }
+    }
+
+    async function handleLogout() {
+      try {
+        await fetch('/api/v1/auth/logout', { method: 'POST' });
+      } catch (e) {}
+      if (window.nvConsent && typeof window.nvConsent.clearDevicePersonalData === 'function') {
+        window.nvConsent.clearDevicePersonalData();
+      } else {
+        localStorage.clear();
+        sessionStorage.clear();
+      }
+      window.location.href = '/login.html';
+    }
+
+    // Single awaited render path on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
 </body>
 </html>

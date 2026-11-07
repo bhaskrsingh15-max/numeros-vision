@@ -186,12 +186,13 @@ ROUTING_MAP = {
     "local/dubai": "local_dubai.html",
 }
 
-for route_dir, src_file in ROUTING_MAP.items():
+for route_name, src_file in ROUTING_MAP.items():
     source_path = os.path.join(DIST_DIR, src_file)
     if os.path.exists(source_path):
-        target_dir = os.path.join(DIST_DIR, route_dir)
-        os.makedirs(target_dir, exist_ok=True)
-        shutil.copy2(source_path, os.path.join(target_dir, "index.html"))
+        target_file = os.path.join(DIST_DIR, f"{route_name}.html")
+        if os.path.normpath(target_file) != os.path.normpath(source_path):
+            os.makedirs(os.path.dirname(target_file), exist_ok=True)
+            shutil.copy2(source_path, target_file)
 
 # 4. Standard Cloudflare _headers file
 headers_content = """/*
@@ -232,6 +233,11 @@ with open(os.path.join(DIST_DIR, "_headers"), "w", encoding="utf-8") as f:
 src_redirects = os.path.join(STATIC_SRC, "_redirects")
 if os.path.exists(src_redirects):
     shutil.copy2(src_redirects, os.path.join(DIST_DIR, "_redirects"))
+
+# 5b. Cloudflare Pages _routes.json (limits Worker invocations to /api/* only)
+src_routes = os.path.join(STATIC_SRC, "_routes.json")
+if os.path.exists(src_routes):
+    shutil.copy2(src_routes, os.path.join(DIST_DIR, "_routes.json"))
 
 # 6. Synchronize isolated pdf_service directory
 try:
