@@ -62,6 +62,26 @@
     } catch (e) {}
   }
 
+  // 2b. GTM Dynamic Injection (Only invoked when analytics consent is explicitly granted)
+  function loadGtmOnce() {
+    if (window._nvGtmInjected) return;
+    window._nvGtmInjected = true;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'gtm.start': new Date().getTime(),
+      event: 'gtm.js'
+    });
+    const f = document.getElementsByTagName('script')[0];
+    const j = document.createElement('script');
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-KW6GQRVZ';
+    if (f && f.parentNode) {
+      f.parentNode.insertBefore(j, f);
+    } else {
+      (document.head || document.documentElement).appendChild(j);
+    }
+  }
+
   // 3. Inject CSS styles for the Consent Banner, Modal & Switches
   function ensureConsentStyles() {
     if (document.getElementById('nv-consent-styles')) return;
@@ -567,6 +587,11 @@
     },
 
     dispatchChoices: function (choices, userTriggered) {
+      // 0. Dynamic GTM Injection: Load GTM ONLY if analytics consent is granted
+      if (choices && choices.analytics) {
+        loadGtmOnce();
+      }
+
       // 1. Google Consent Mode v2 synchronization
       if (typeof window.gtag === 'function') {
         window.gtag('consent', 'update', {
