@@ -214,6 +214,9 @@ const memoryStore = {
   planner2027Orders: new Map()
 };
 
+// In-memory sliding window rate limiter for public forms & telemetry (module-scoped)
+const _formRateLimits = new Map();
+
 function base64UrlToUint8Array(base64Url) {
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const pad = base64.length % 4;
@@ -1459,7 +1462,7 @@ export default {
         const url = new URL(request.url);
 
     // CSRF Protection: Verify Origin on state-changing POST endpoints
-    if (request.method === 'POST' && (url.pathname.startsWith('/api/v1/auth/') || url.pathname.startsWith('/api/v1/payments/') || url.pathname === '/api/create-order' || url.pathname === '/api/verify-payment' || url.pathname === '/api/planner-2027/order' || url.pathname === '/api/planner-2027/verify')) {
+    if (request.method === 'POST' && (url.pathname.startsWith('/api/v1/auth/') || url.pathname.startsWith('/api/v1/payments/') || url.pathname === '/api/create-order' || url.pathname === '/api/verify-payment' || url.pathname === '/api/planner-2027/order' || url.pathname === '/api/planner-2027/verify' || url.pathname === '/api/planner-2027/resend-link')) {
       if (!verifyOrigin(request, env)) {
         return new Response(JSON.stringify({
           error: 'CSRF origin validation failed.'
@@ -2109,8 +2112,7 @@ export default {
 
 
 
-  // In-memory sliding window rate limiter for public forms & telemetry
-  const _formRateLimits = new Map();
+  // Sliding window checkFormRateLimit uses module-scoped _formRateLimits
   function checkFormRateLimit(clientIp, limit = 5, windowMs = 600000) {
     const now = Date.now();
     const list = _formRateLimits.get(clientIp) || [];
@@ -4004,7 +4006,7 @@ export default {
         return new Response(JSON.stringify({ error: 'Invalid payment signature. Verification failed.' }), { status: 400, headers: corsHeaders });
       }
 
-      // Query order
+      // Query order strictly from database
       let order = null;
       if (env.DB) {
         order = await env.DB.prepare('SELECT * FROM planner_2027_orders WHERE razorpay_order_id = ? OR id = ?').bind(rzpOrderId, orderId).first();
@@ -4033,29 +4035,52 @@ export default {
         }), { status: 200, headers: corsHeaders });
       }
 
+      // 3-regeneration cap check
+      if ((order.generation_count || 0) >= 3) {
+        return new Response(JSON.stringify({ error: 'Maximum generation limit reached for this order.' }), { status: 429, headers: corsHeaders });
+      }
+
       // Generate secure download token and hash
       const rawToken = getRandomHex(32);
       const downloadTokenHash = await sha256Hex(rawToken);
       const tokenExpiresAt = Date.now() + 30 * 24 * 3600 * 1000; // 30 days
       const now = Date.now();
 
-      // Mark order as generating
+      // ATOMIC CONCURRENCY TRANSITION: created/paid -> generating
+      let transitionOk = false;
       if (env.DB) {
-        await env.DB.prepare(`
+        const updateRes = await env.DB.prepare(`
           UPDATE planner_2027_orders
           SET razorpay_payment_id = ?, download_token_hash = ?, token_expires_at = ?, status = 'generating', updated_at = ?
-          WHERE id = ?
+          WHERE id = ? AND status IN ('created', 'paid')
         `).bind(rzpPaymentId, downloadTokenHash, tokenExpiresAt, now, order.id).run();
+        transitionOk = updateRes && updateRes.meta && updateRes.meta.changes > 0;
+      } else {
+        const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
+        if (memOrder.status === 'created' || memOrder.status === 'paid') {
+          memOrder.status = 'generating';
+          memOrder.razorpay_payment_id = rzpPaymentId;
+          memOrder.download_token_hash = downloadTokenHash;
+          memOrder.token_expires_at = tokenExpiresAt;
+          memOrder.updated_at = now;
+          memoryStore.planner2027Orders.set(order.id, memOrder);
+          transitionOk = true;
+        }
       }
-      const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
-      memOrder.razorpay_payment_id = rzpPaymentId;
-      memOrder.download_token_hash = downloadTokenHash;
-      memOrder.token_expires_at = tokenExpiresAt;
-      memOrder.status = 'generating';
-      memOrder.updated_at = now;
-      memoryStore.planner2027Orders.set(order.id, memOrder);
 
-      // Call Cloud Run generator service
+      if (!transitionOk) {
+        // Concurrently handled by webhook or another verify request
+        const currentOrder = env.DB ? await env.DB.prepare('SELECT * FROM planner_2027_orders WHERE id = ?').bind(order.id).first() : memoryStore.planner2027Orders.get(order.id);
+        return new Response(JSON.stringify({
+          status: currentOrder ? currentOrder.status : 'generating',
+          order_id: order.id,
+          message: 'Order generation is already in progress or completed.'
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
+
+      // Call Cloud Run generator service with STRICTLY STORED NAME AND DOB ONLY (tamper-proof)
       let generatorBase = (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL || '').trim();
       if (!generatorBase && env.ENVIRONMENT === 'local') {
         generatorBase = 'http://127.0.0.1:8090';
@@ -4137,7 +4162,7 @@ export default {
         await env.DB.prepare(`
           UPDATE planner_2027_orders
           SET status = 'delivered', pdf_r2_key = ?, generation_count = generation_count + 1, updated_at = ?
-          WHERE id = ?
+          WHERE id = ? AND status = 'generating'
         `).bind(r2Key, doneNow, order.id).run();
       }
       memOrder.status = 'delivered';
@@ -4162,6 +4187,7 @@ export default {
         status: 'delivered',
         order_id: order.id,
         download_token: rawToken,
+        download_url: `/api/planner-2027/download?order=${order.id}&token=${rawToken}`,
         expires_at: tokenExpiresAt
       }), { status: 200, headers: corsHeaders });
     }
@@ -4234,16 +4260,118 @@ export default {
       }
 
       if (event === 'payment.captured' || event === 'order.paid') {
-        const now = Date.now();
-        if (env.DB) {
-          await env.DB.prepare("UPDATE planner_2027_orders SET razorpay_payment_id = ?, status = 'paid', updated_at = ? WHERE id = ?")
-            .bind(payment?.id || 'webhook_captured', now, order.id).run();
+        // Enforce 3-regeneration cap
+        if ((order.generation_count || 0) >= 3) {
+          return new Response(JSON.stringify({ status: 'limit_reached' }), { status: 200, headers: corsHeaders });
         }
+
+        const rawToken = getRandomHex(32);
+        const downloadTokenHash = await sha256Hex(rawToken);
+        const tokenExpiresAt = Date.now() + 30 * 24 * 3600 * 1000;
+        const now = Date.now();
+
+        // ATOMIC TRANSITION: created/paid -> generating
+        let transitionOk = false;
+        if (env.DB) {
+          const updateRes = await env.DB.prepare(`
+            UPDATE planner_2027_orders
+            SET razorpay_payment_id = ?, download_token_hash = ?, token_expires_at = ?, status = 'generating', updated_at = ?
+            WHERE id = ? AND status IN ('created', 'paid')
+          `).bind(payment?.id || 'webhook_captured', downloadTokenHash, tokenExpiresAt, now, order.id).run();
+          transitionOk = updateRes && updateRes.meta && updateRes.meta.changes > 0;
+        } else {
+          const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
+          if (memOrder.status === 'created' || memOrder.status === 'paid') {
+            memOrder.status = 'generating';
+            memOrder.razorpay_payment_id = payment?.id || 'webhook_captured';
+            memOrder.download_token_hash = downloadTokenHash;
+            memOrder.token_expires_at = tokenExpiresAt;
+            memOrder.updated_at = now;
+            memoryStore.planner2027Orders.set(order.id, memOrder);
+            transitionOk = true;
+          }
+        }
+
+        if (!transitionOk) {
+          return new Response(JSON.stringify({ status: 'already_processed', current_status: order.status }), { status: 200, headers: corsHeaders });
+        }
+
         const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
-        memOrder.razorpay_payment_id = payment?.id || 'webhook_captured';
-        memOrder.status = 'paid';
-        memOrder.updated_at = now;
+
+        // Call generator
+        let generatorBase = (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL || '').trim();
+        if (!generatorBase && env.ENVIRONMENT === 'local') {
+          generatorBase = 'http://127.0.0.1:8090';
+        }
+        generatorBase = generatorBase.replace(/\/+$/, '');
+        const generatorUrl = `${generatorBase}/internal/v1/render-planner-2027`;
+
+        const pdfPayload = JSON.stringify({
+          order_id: order.id,
+          full_name: order.name_normalised,
+          dob_str: order.dob,
+          is_sample: false
+        });
+        const timestampSec = Math.floor(Date.now() / 1000);
+        const pdfSecret = (env.PDF_SERVICE_SECRET || 'test_pdf_secret').trim();
+        const sigHex = await signPdfServiceRequest(pdfPayload, timestampSec, pdfSecret);
+
+        let genResp = null;
+        let genErr = null;
+        try {
+          genResp = await fetch(generatorUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-NV-Timestamp': String(timestampSec),
+              'X-NV-Signature': sigHex
+            },
+            body: pdfPayload
+          });
+        } catch (err) {
+          genErr = err;
+        }
+
+        if (!genResp || !genResp.ok) {
+          const failNow = Date.now();
+          if (env.DB) {
+            await env.DB.prepare("UPDATE planner_2027_orders SET status = 'needs_attention', updated_at = ? WHERE id = ?").bind(failNow, order.id).run();
+          }
+          memOrder.status = 'needs_attention';
+          memOrder.updated_at = failNow;
+          memoryStore.planner2027Orders.set(order.id, memOrder);
+          await logWorkerEvent(env, {
+            event: 'order_needs_attention',
+            product_id: 'planner_2027',
+            meta_json: { order_id: order.id, reason: genResp ? `generator_status_${genResp.status}` : String(genErr) }
+          });
+          return new Response(JSON.stringify({ status: 'needs_attention', order_id: order.id }), { status: 200, headers: corsHeaders });
+        }
+
+        const pdfBuffer = await genResp.arrayBuffer();
+        const pdfBytes = new Uint8Array(pdfBuffer);
+        const r2Key = `planner_2027/${order.id}_${getRandomHex(6)}.pdf`;
+        await putPrivateR2Report(env, r2Key, pdfBytes);
+
+        const doneNow = Date.now();
+        if (env.DB) {
+          await env.DB.prepare(`
+            UPDATE planner_2027_orders
+            SET status = 'delivered', pdf_r2_key = ?, generation_count = generation_count + 1, updated_at = ?
+            WHERE id = ? AND status = 'generating'
+          `).bind(r2Key, doneNow, order.id).run();
+        }
+        memOrder.status = 'delivered';
+        memOrder.pdf_r2_key = r2Key;
+        memOrder.generation_count = (memOrder.generation_count || 0) + 1;
+        memOrder.updated_at = doneNow;
         memoryStore.planner2027Orders.set(order.id, memOrder);
+
+        await logWorkerEvent(env, {
+          event: 'pdf_generated',
+          product_id: 'planner_2027',
+          meta_json: { order_id: order.id, r2_key: r2Key, bytes: pdfBytes.length }
+        });
       }
 
       return new Response(JSON.stringify({ status: 'ok', event: event }), { status: 200, headers: corsHeaders });
@@ -4316,7 +4444,7 @@ export default {
       });
     }
 
-    // 8f. GET /api/planner-2027/order-status
+    // 8f. GET /api/planner-2027/order-status (STRICTLY ZERO PII)
     if (url.pathname === '/api/planner-2027/order-status' && request.method === 'GET') {
       const corsHeaders = {
         'Content-Type': 'application/json',
@@ -4352,6 +4480,170 @@ export default {
       }), { status: 200, headers: corsHeaders });
     }
 
+    // 8g. POST /api/planner-2027/resend-link (DELIVERY WITHOUT BROWSER)
+    if (url.pathname === '/api/planner-2027/resend-link' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+
+      const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+      if (!checkFormRateLimit('resend_link_' + clientIp, 5, 900000)) {
+        return new Response(JSON.stringify({ error: 'Too many resend attempts. Please wait 15 minutes.' }), { status: 429, headers: corsHeaders });
+      }
+
+      let body = {};
+      try {
+        body = await request.json();
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'Invalid JSON request body.' }), { status: 400, headers: corsHeaders });
+      }
+
+      const orderId = String(body.order_id || '').trim();
+      const email = String(body.email || '').trim().toLowerCase();
+
+      if (!orderId || !email) {
+        return new Response(JSON.stringify({ error: 'Both order_id and email are required to retrieve your download link.' }), { status: 400, headers: corsHeaders });
+      }
+
+      let order = null;
+      if (env.DB) {
+        order = await env.DB.prepare('SELECT * FROM planner_2027_orders WHERE id = ? OR razorpay_order_id = ?').bind(orderId, orderId).first();
+      } else {
+        order = memoryStore.planner2027Orders.get(orderId);
+        if (!order) {
+          for (const o of memoryStore.planner2027Orders.values()) {
+            if (o.razorpay_order_id === orderId) {
+              order = o;
+              break;
+            }
+          }
+        }
+      }
+
+      if (!order || String(order.email).trim().toLowerCase() !== email) {
+        return new Response(JSON.stringify({ error: 'No matching order found for the provided order ID and email address.' }), { status: 404, headers: corsHeaders });
+      }
+
+      if (order.status === 'created') {
+        return new Response(JSON.stringify({ status: 'created', message: 'Payment has not yet been confirmed for this order.' }), { status: 400, headers: corsHeaders });
+      }
+
+      if (order.status === 'needs_attention') {
+        return new Response(JSON.stringify({
+          status: 'needs_attention',
+          message: 'Your personal planner is undergoing editorial quality checks. Your download link will be active as soon as review completes.'
+        }), { status: 202, headers: corsHeaders });
+      }
+
+      if (order.status === 'delivered' && order.pdf_r2_key) {
+        // Enforce 3-regeneration cap
+        if ((order.generation_count || 0) > 3) {
+          return new Response(JSON.stringify({ error: 'Maximum link regeneration limit reached. Please contact support.' }), { status: 429, headers: corsHeaders });
+        }
+
+        // Mint a fresh 30-day token
+        const rawToken = getRandomHex(32);
+        const downloadTokenHash = await sha256Hex(rawToken);
+        const tokenExpiresAt = Date.now() + 30 * 24 * 3600 * 1000;
+        const now = Date.now();
+
+        if (env.DB) {
+          await env.DB.prepare(`
+            UPDATE planner_2027_orders
+            SET download_token_hash = ?, token_expires_at = ?, updated_at = ?
+            WHERE id = ?
+          `).bind(downloadTokenHash, tokenExpiresAt, now, order.id).run();
+        }
+        const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
+        memOrder.download_token_hash = downloadTokenHash;
+        memOrder.token_expires_at = tokenExpiresAt;
+        memOrder.updated_at = now;
+        memoryStore.planner2027Orders.set(order.id, memOrder);
+
+        await logWorkerEvent(env, {
+          event: 'resend_link_served',
+          product_id: 'planner_2027',
+          meta_json: { order_id: order.id }
+        });
+
+        return new Response(JSON.stringify({
+          status: 'delivered',
+          order_id: order.id,
+          download_token: rawToken,
+          download_url: `/api/planner-2027/download?order=${order.id}&token=${rawToken}`,
+          expires_at: tokenExpiresAt
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      return new Response(JSON.stringify({
+        status: order.status,
+        message: 'Order is currently being processed.'
+      }), { status: 202, headers: corsHeaders });
+    }
+
+    // 8h. GET /api/planner-2027/admin/stuck-orders (STUCK ORDER ALERT & AUDIT ROUTE)
+    if (url.pathname === '/api/planner-2027/admin/stuck-orders' && request.method === 'GET') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+
+      const authHeader = request.headers.get('Authorization') || '';
+      const adminTokenHeader = request.headers.get('X-Admin-Token') || '';
+      let providedToken = '';
+      if (authHeader.startsWith('Bearer ')) {
+        providedToken = authHeader.slice(7).trim();
+      } else if (adminTokenHeader) {
+        providedToken = adminTokenHeader.trim();
+      } else if (url.searchParams.get('admin_token')) {
+        providedToken = url.searchParams.get('admin_token').trim();
+      }
+
+      const expectedToken = (env.ADMIN_TOKEN || env.PDF_SERVICE_SECRET || 'test_admin_token').trim();
+      if (!providedToken || !timingSafeEqual(providedToken, expectedToken)) {
+        return new Response(JSON.stringify({ error: 'Unauthorized: Admin authentication required.' }), { status: 401, headers: corsHeaders });
+      }
+
+      let stuckOrders = [];
+      if (env.DB) {
+        const res = await env.DB.prepare(`
+          SELECT id, status, amount_paise, currency, generation_count, created_at, updated_at
+          FROM planner_2027_orders
+          WHERE status = 'needs_attention'
+          ORDER BY updated_at DESC
+        `).all();
+        stuckOrders = (res && res.results) ? res.results : [];
+      } else {
+        for (const o of memoryStore.planner2027Orders.values()) {
+          if (o.status === 'needs_attention') {
+            stuckOrders.push({
+              id: o.id,
+              status: o.status,
+              amount_paise: o.amount_paise,
+              currency: o.currency,
+              generation_count: o.generation_count,
+              created_at: o.created_at,
+              updated_at: o.updated_at
+            });
+          }
+        }
+      }
+
+      await logWorkerEvent(env, {
+        event: 'stuck_orders_inspected',
+        product_id: 'planner_2027',
+        meta_json: { count: stuckOrders.length }
+      });
+
+      return new Response(JSON.stringify({
+        status: 'ok',
+        count: stuckOrders.length,
+        orders: stuckOrders
+      }), { status: 200, headers: corsHeaders });
+    }
 
     // ── ROUTE: IDENTITY SIGNUP & REGISTRATION (/api/v1/identity/signup & /api/v1/auth/signup) ──
     if ((url.pathname === '/api/v1/identity/signup' || url.pathname === '/api/v1/auth/signup') && request.method === 'POST') {

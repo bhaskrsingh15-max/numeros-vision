@@ -73,6 +73,19 @@ class TestPlanner2027Backend(unittest.TestCase):
         self.assertEqual(price_after["amount_paise"], 199900)
         self.assertFalse(price_after["is_offer_active"])
 
+    def test_pricing_files_sha256_parity(self):
+        """Asserts app/config and pdf_service/app/config pricing JSON files are byte-for-byte identical."""
+        path1 = os.path.join(_ROOT, "app", "config", "planner_2027_pricing.json")
+        path2 = os.path.join(_ROOT, "pdf_service", "app", "config", "planner_2027_pricing.json")
+        self.assertTrue(os.path.exists(path1), f"Missing {path1}")
+        self.assertTrue(os.path.exists(path2), f"Missing {path2}")
+        with open(path1, "rb") as f1, open(path2, "rb") as f2:
+            data1 = f1.read()
+            data2 = f2.read()
+            h1 = hashlib.sha256(data1).hexdigest()
+            h2 = hashlib.sha256(data2).hexdigest()
+            self.assertEqual(h1, h2, "app/config and pdf_service/app/config pricing JSON files must have identical SHA-256")
+
     # ─────────────────────────────────────────────────────────────────
     # 2. LIVE KEY REFUSAL TEST
     # ─────────────────────────────────────────────────────────────────
