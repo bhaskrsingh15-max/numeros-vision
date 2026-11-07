@@ -378,6 +378,59 @@ class TestPlanner2027PdfQc(unittest.TestCase):
                     nm_str = f"{dt_nm.strftime('%d %b')} at {nm['time_ist']}"
                     self.assertIn(nm_str, text, f"{name} M{m}: New moon {nm_str} missing from PDF")
 
+    def test_amavasya_replacements_explicit(self):
+        """
+        Explicitly asserts that Amavasya is excluded from the month's Top 5,
+        and that the exact golden replacement dates appear on their respective pages:
+        - Arun Jan (Page 7): 19 Jan (86, Shukla Ekadashi)
+        - Arun Feb (Page 8): 3 Feb (85, Krishna Dwadashi)
+        - Arun Jul (Page 13): 22 Jul (86, Krishna Chaturthi)
+        - Anil Apr (Page 10): 18 Apr (84, Shukla Dwadashi)
+        - Anil Nov (Page 17): 15 Nov (94, Krishna Pratipada) [14 Nov stays as Purnima, 96]
+        """
+        reader_a = pypdf.PdfReader(self.pdf_a_path)
+        reader_b = pypdf.PdfReader(self.pdf_b_path)
+
+        def get_top_5_table_text(page_text):
+            return page_text.split("Top Favourable Windows for Important Initiatives")[1].split("Mindful Pacing Dates")[0]
+
+        # Arun Jan (Page 7)
+        jan_a_text = reader_a.pages[6].extract_text()
+        top_jan_a = get_top_5_table_text(jan_a_text)
+        self.assertNotIn("Amavasya", top_jan_a)
+        self.assertIn("19 Jan", top_jan_a)
+        self.assertIn("Shukla Ekadashi", top_jan_a)
+
+        # Arun Feb (Page 8)
+        feb_a_text = reader_a.pages[7].extract_text()
+        top_feb_a = get_top_5_table_text(feb_a_text)
+        self.assertNotIn("Amavasya", top_feb_a)
+        self.assertIn("03 Feb", top_feb_a)
+        self.assertIn("Krishna Dwadashi", top_feb_a)
+
+        # Arun Jul (Page 13)
+        jul_a_text = reader_a.pages[12].extract_text()
+        top_jul_a = get_top_5_table_text(jul_a_text)
+        self.assertNotIn("Amavasya", top_jul_a)
+        self.assertIn("22 Jul", top_jul_a)
+        self.assertIn("Krishna Chaturthi", top_jul_a)
+
+        # Anil Apr (Page 10)
+        apr_b_text = reader_b.pages[9].extract_text()
+        top_apr_b = get_top_5_table_text(apr_b_text)
+        self.assertNotIn("Amavasya", top_apr_b)
+        self.assertIn("18 Apr", top_apr_b)
+        self.assertIn("Shukla Dwadashi", top_apr_b)
+
+        # Anil Nov (Page 17)
+        nov_b_text = reader_b.pages[16].extract_text()
+        top_nov_b = get_top_5_table_text(nov_b_text)
+        self.assertNotIn("Amavasya", top_nov_b)
+        self.assertIn("15 Nov", top_nov_b)
+        self.assertIn("Krishna Pratipada", top_nov_b)
+        self.assertIn("14 Nov", top_nov_b)
+        self.assertIn("Purnima", top_nov_b)
+
     def test_rasterization_all_pages_non_background(self):
         """
         Rasterizes EVERY page of both generated PDFs with pypdfium2
