@@ -181,6 +181,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 314.3,
       "moon_phase_deg": 285.12,
       "rahu_kaal": {
         "start": "11:06",
@@ -204,6 +206,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 370.9,
       "moon_phase_deg": 296.61,
       "rahu_kaal": {
         "start": "09:49",
@@ -227,6 +231,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 452.3,
       "moon_phase_deg": 307.86,
       "rahu_kaal": {
         "start": "16:19",
@@ -250,6 +256,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 552.4,
       "moon_phase_deg": 318.95,
       "rahu_kaal": {
         "start": "08:32",
@@ -273,6 +281,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 645.2,
       "moon_phase_deg": 329.9,
       "rahu_kaal": {
         "start": "15:02",
@@ -296,6 +306,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 522.1,
       "moon_phase_deg": 340.78,
       "rahu_kaal": {
         "start": "12:26",
@@ -319,6 +331,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 393.2,
       "moon_phase_deg": 351.6,
       "rahu_kaal": {
         "start": "13:45",
@@ -342,6 +356,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 261.9,
       "moon_phase_deg": 2.4,
       "rahu_kaal": {
         "start": "11:09",
@@ -367,6 +383,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 131.5,
       "moon_phase_deg": 13.2,
       "rahu_kaal": {
         "start": "09:51",
@@ -390,6 +408,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 5.3,
       "moon_phase_deg": 24.05,
       "rahu_kaal": {
         "start": "16:23",
@@ -413,6 +433,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 112.2,
       "moon_phase_deg": 34.97,
       "rahu_kaal": {
         "start": "08:33",
@@ -436,6 +458,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 216.1,
       "moon_phase_deg": 46.02,
       "rahu_kaal": {
         "start": "15:06",
@@ -459,6 +483,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 300.3,
       "moon_phase_deg": 57.25,
       "rahu_kaal": {
         "start": "12:29",
@@ -482,6 +508,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 358.2,
       "moon_phase_deg": 68.72,
       "rahu_kaal": {
         "start": "13:48",
@@ -505,6 +533,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 382.6,
       "moon_phase_deg": 80.5,
       "rahu_kaal": {
         "start": "11:11",
@@ -528,6 +558,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 366.7,
       "moon_phase_deg": 92.64,
       "rahu_kaal": {
         "start": "09:52",
@@ -551,6 +583,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 305.1,
       "moon_phase_deg": 105.21,
       "rahu_kaal": {
         "start": "16:28",
@@ -574,6 +608,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 195.0,
       "moon_phase_deg": 118.22,
       "rahu_kaal": {
         "start": "08:33",
@@ -597,6 +633,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 37.7,
       "moon_phase_deg": 131.66,
       "rahu_kaal": {
         "start": "15:10",
@@ -620,6 +658,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 160.5,
       "moon_phase_deg": 145.47,
       "rahu_kaal": {
         "start": "12:32",
@@ -643,6 +683,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 387.8,
       "moon_phase_deg": 159.55,
       "rahu_kaal": {
         "start": "13:52",
@@ -666,6 +708,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 628.1,
       "moon_phase_deg": 173.75,
       "rahu_kaal": {
         "start": "11:12",
@@ -691,6 +735,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 448.2,
       "moon_phase_deg": 187.9,
       "rahu_kaal": {
         "start": "09:53",
@@ -714,6 +760,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 235.7,
       "moon_phase_deg": 201.84,
       "rahu_kaal": {
         "start": "16:33",
@@ -737,6 +785,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 60.0,
       "moon_phase_deg": 215.45,
       "rahu_kaal": {
         "start": "08:32",
@@ -760,6 +810,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 69.7,
       "moon_phase_deg": 228.64,
       "rahu_kaal": {
         "start": "15:14",
@@ -783,6 +835,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 149.6,
       "moon_phase_deg": 241.37,
       "rahu_kaal": {
         "start": "12:33",
@@ -806,6 +860,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 180.3,
       "moon_phase_deg": 253.65,
       "rahu_kaal": {
         "start": "13:54",
@@ -829,6 +885,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 166.0,
       "moon_phase_deg": 265.52,
       "rahu_kaal": {
         "start": "11:13",
@@ -852,6 +910,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 113.2,
       "moon_phase_deg": 277.04,
       "rahu_kaal": {
         "start": "09:52",
@@ -875,6 +935,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 29.4,
       "moon_phase_deg": 288.27,
       "rahu_kaal": {
         "start": "16:38",
@@ -898,6 +960,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 77.4,
       "moon_phase_deg": 299.29,
       "rahu_kaal": {
         "start": "08:30",
@@ -921,6 +985,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 199.6,
       "moon_phase_deg": 310.17,
       "rahu_kaal": {
         "start": "15:18",
@@ -944,6 +1010,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 330.2,
       "moon_phase_deg": 320.98,
       "rahu_kaal": {
         "start": "12:35",
@@ -967,6 +1035,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 463.1,
       "moon_phase_deg": 331.76,
       "rahu_kaal": {
         "start": "13:57",
@@ -990,6 +1060,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 593.1,
       "moon_phase_deg": 342.57,
       "rahu_kaal": {
         "start": "11:13",
@@ -1013,6 +1085,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 595.7,
       "moon_phase_deg": 353.45,
       "rahu_kaal": {
         "start": "09:50",
@@ -1038,6 +1112,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 484.1,
       "moon_phase_deg": 4.43,
       "rahu_kaal": {
         "start": "16:42",
@@ -1061,6 +1137,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 386.8,
       "moon_phase_deg": 15.54,
       "rahu_kaal": {
         "start": "08:27",
@@ -1084,6 +1162,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 307.0,
       "moon_phase_deg": 26.81,
       "rahu_kaal": {
         "start": "15:21",
@@ -1107,6 +1187,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 247.6,
       "moon_phase_deg": 38.27,
       "rahu_kaal": {
         "start": "12:35",
@@ -1130,6 +1212,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 212.0,
       "moon_phase_deg": 49.94,
       "rahu_kaal": {
         "start": "13:58",
@@ -1153,6 +1237,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 203.5,
       "moon_phase_deg": 61.86,
       "rahu_kaal": {
         "start": "11:12",
@@ -1176,6 +1262,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 225.4,
       "moon_phase_deg": 74.06,
       "rahu_kaal": {
         "start": "09:48",
@@ -1199,6 +1287,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 280.7,
       "moon_phase_deg": 86.57,
       "rahu_kaal": {
         "start": "16:46",
@@ -1222,6 +1312,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 371.2,
       "moon_phase_deg": 99.4,
       "rahu_kaal": {
         "start": "08:23",
@@ -1245,6 +1337,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 496.7,
       "moon_phase_deg": 112.54,
       "rahu_kaal": {
         "start": "15:23",
@@ -1268,6 +1362,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 654.5,
       "moon_phase_deg": 125.99,
       "rahu_kaal": {
         "start": "12:35",
@@ -1291,6 +1387,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 473.2,
       "moon_phase_deg": 139.67,
       "rahu_kaal": {
         "start": "13:59",
@@ -1314,6 +1412,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 273.0,
       "moon_phase_deg": 153.5,
       "rahu_kaal": {
         "start": "11:10",
@@ -1337,6 +1437,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 69.0,
       "moon_phase_deg": 167.37,
       "rahu_kaal": {
         "start": "09:45",
@@ -1360,6 +1462,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 125.0,
       "moon_phase_deg": 181.14,
       "rahu_kaal": {
         "start": "16:50",
@@ -1385,6 +1489,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 295.3,
       "moon_phase_deg": 194.7,
       "rahu_kaal": {
         "start": "08:18",
@@ -1408,6 +1514,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 430.5,
       "moon_phase_deg": 207.94,
       "rahu_kaal": {
         "start": "15:25",
@@ -1431,6 +1539,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 523.0,
       "moon_phase_deg": 220.79,
       "rahu_kaal": {
         "start": "12:34",
@@ -1454,6 +1564,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 569.3,
       "moon_phase_deg": 233.21,
       "rahu_kaal": {
         "start": "14:00",
@@ -1477,6 +1589,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 569.9,
       "moon_phase_deg": 245.21,
       "rahu_kaal": {
         "start": "11:08",
@@ -1500,6 +1614,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 528.9,
       "moon_phase_deg": 256.84,
       "rahu_kaal": {
         "start": "09:41",
@@ -1523,6 +1639,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 452.9,
       "moon_phase_deg": 268.14,
       "rahu_kaal": {
         "start": "16:53",
@@ -1546,6 +1664,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 349.7,
       "moon_phase_deg": 279.2,
       "rahu_kaal": {
         "start": "08:13",
@@ -1569,6 +1689,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 228.3,
       "moon_phase_deg": 290.09,
       "rahu_kaal": {
         "start": "15:27",
@@ -1592,6 +1714,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 97.4,
       "moon_phase_deg": 300.89,
       "rahu_kaal": {
         "start": "12:33",
@@ -1615,6 +1739,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 34.5,
       "moon_phase_deg": 311.68,
       "rahu_kaal": {
         "start": "14:00",
@@ -1638,6 +1764,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 159.8,
       "moon_phase_deg": 322.54,
       "rahu_kaal": {
         "start": "11:05",
@@ -1661,6 +1789,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 272.0,
       "moon_phase_deg": 333.51,
       "rahu_kaal": {
         "start": "09:36",
@@ -1684,6 +1814,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 365.8,
       "moon_phase_deg": 344.65,
       "rahu_kaal": {
         "start": "16:56",
@@ -1707,6 +1839,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 437.4,
       "moon_phase_deg": 356.0,
       "rahu_kaal": {
         "start": "08:07",
@@ -1732,6 +1866,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 484.5,
       "moon_phase_deg": 7.57,
       "rahu_kaal": {
         "start": "15:29",
@@ -1755,6 +1891,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 506.2,
       "moon_phase_deg": 19.37,
       "rahu_kaal": {
         "start": "12:31",
@@ -1778,6 +1916,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 502.5,
       "moon_phase_deg": 31.4,
       "rahu_kaal": {
         "start": "14:00",
@@ -1801,6 +1941,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 474.4,
       "moon_phase_deg": 43.66,
       "rahu_kaal": {
         "start": "11:02",
@@ -1824,6 +1966,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 423.1,
       "moon_phase_deg": 56.13,
       "rahu_kaal": {
         "start": "09:32",
@@ -1847,6 +1991,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 350.2,
       "moon_phase_deg": 68.8,
       "rahu_kaal": {
         "start": "16:59",
@@ -1870,6 +2016,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 256.9,
       "moon_phase_deg": 81.65,
       "rahu_kaal": {
         "start": "08:01",
@@ -1893,6 +2041,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 144.8,
       "moon_phase_deg": 94.68,
       "rahu_kaal": {
         "start": "15:30",
@@ -1916,6 +2066,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 15.8,
       "moon_phase_deg": 107.86,
       "rahu_kaal": {
         "start": "12:29",
@@ -1939,6 +2091,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 127.2,
       "moon_phase_deg": 121.16,
       "rahu_kaal": {
         "start": "13:59",
@@ -1962,6 +2116,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 279.7,
       "moon_phase_deg": 134.56,
       "rahu_kaal": {
         "start": "10:58",
@@ -1985,6 +2141,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 435.5,
       "moon_phase_deg": 147.98,
       "rahu_kaal": {
         "start": "09:27",
@@ -2008,6 +2166,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 586.3,
       "moon_phase_deg": 161.36,
       "rahu_kaal": {
         "start": "17:01",
@@ -2031,6 +2191,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 588.6,
       "moon_phase_deg": 174.61,
       "rahu_kaal": {
         "start": "07:54",
@@ -2056,6 +2218,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 475.6,
       "moon_phase_deg": 187.65,
       "rahu_kaal": {
         "start": "15:31",
@@ -2079,6 +2243,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 394.4,
       "moon_phase_deg": 200.39,
       "rahu_kaal": {
         "start": "12:27",
@@ -2102,6 +2268,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 350.4,
       "moon_phase_deg": 212.79,
       "rahu_kaal": {
         "start": "13:59",
@@ -2125,6 +2293,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 346.2,
       "moon_phase_deg": 224.83,
       "rahu_kaal": {
         "start": "10:55",
@@ -2148,6 +2318,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 380.8,
       "moon_phase_deg": 236.52,
       "rahu_kaal": {
         "start": "09:22",
@@ -2171,6 +2343,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 450.0,
       "moon_phase_deg": 247.88,
       "rahu_kaal": {
         "start": "17:04",
@@ -2194,6 +2368,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 547.3,
       "moon_phase_deg": 258.99,
       "rahu_kaal": {
         "start": "07:47",
@@ -2217,6 +2393,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 646.9,
       "moon_phase_deg": 269.92,
       "rahu_kaal": {
         "start": "15:31",
@@ -2240,6 +2418,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 519.0,
       "moon_phase_deg": 280.75,
       "rahu_kaal": {
         "start": "12:25",
@@ -2263,6 +2443,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 390.0,
       "moon_phase_deg": 291.57,
       "rahu_kaal": {
         "start": "13:58",
@@ -2286,6 +2468,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 269.5,
       "moon_phase_deg": 302.47,
       "rahu_kaal": {
         "start": "10:51",
@@ -2309,6 +2493,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 166.0,
       "moon_phase_deg": 313.52,
       "rahu_kaal": {
         "start": "09:17",
@@ -2332,6 +2518,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 87.0,
       "moon_phase_deg": 324.8,
       "rahu_kaal": {
         "start": "17:06",
@@ -2355,6 +2543,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 38.0,
       "moon_phase_deg": 336.35,
       "rahu_kaal": {
         "start": "07:41",
@@ -2378,6 +2568,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 22.3,
       "moon_phase_deg": 348.2,
       "rahu_kaal": {
         "start": "15:32",
@@ -2401,6 +2593,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 40.3,
       "moon_phase_deg": 0.37,
       "rahu_kaal": {
         "start": "12:23",
@@ -2426,6 +2620,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 89.9,
       "moon_phase_deg": 12.82,
       "rahu_kaal": {
         "start": "13:58",
@@ -2449,6 +2645,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 166.6,
       "moon_phase_deg": 25.52,
       "rahu_kaal": {
         "start": "10:47",
@@ -2472,6 +2670,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 264.3,
       "moon_phase_deg": 38.42,
       "rahu_kaal": {
         "start": "09:12",
@@ -2495,6 +2695,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 376.4,
       "moon_phase_deg": 51.44,
       "rahu_kaal": {
         "start": "17:09",
@@ -2518,6 +2720,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 496.9,
       "moon_phase_deg": 64.55,
       "rahu_kaal": {
         "start": "07:35",
@@ -2541,6 +2745,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 621.1,
       "moon_phase_deg": 77.68,
       "rahu_kaal": {
         "start": "15:33",
@@ -2564,6 +2770,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 566.0,
       "moon_phase_deg": 90.82,
       "rahu_kaal": {
         "start": "12:21",
@@ -2587,6 +2795,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 443.6,
       "moon_phase_deg": 103.94,
       "rahu_kaal": {
         "start": "13:57",
@@ -2610,6 +2820,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 324.9,
       "moon_phase_deg": 117.03,
       "rahu_kaal": {
         "start": "10:44",
@@ -2633,6 +2845,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 212.0,
       "moon_phase_deg": 130.06,
       "rahu_kaal": {
         "start": "09:07",
@@ -2656,6 +2870,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 108.0,
       "moon_phase_deg": 143.01,
       "rahu_kaal": {
         "start": "17:11",
@@ -2679,6 +2895,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 16.9,
       "moon_phase_deg": 155.84,
       "rahu_kaal": {
         "start": "07:29",
@@ -2702,6 +2920,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 55.9,
       "moon_phase_deg": 168.51,
       "rahu_kaal": {
         "start": "15:35",
@@ -2725,6 +2945,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 105.1,
       "moon_phase_deg": 180.96,
       "rahu_kaal": {
         "start": "12:20",
@@ -2750,6 +2972,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 126.2,
       "moon_phase_deg": 193.15,
       "rahu_kaal": {
         "start": "13:57",
@@ -2773,6 +2997,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 116.1,
       "moon_phase_deg": 205.06,
       "rahu_kaal": {
         "start": "10:41",
@@ -2796,6 +3022,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 74.3,
       "moon_phase_deg": 216.68,
       "rahu_kaal": {
         "start": "09:03",
@@ -2819,6 +3047,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 2.7,
       "moon_phase_deg": 228.02,
       "rahu_kaal": {
         "start": "17:14",
@@ -2842,6 +3072,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 94.2,
       "moon_phase_deg": 239.14,
       "rahu_kaal": {
         "start": "07:23",
@@ -2865,6 +3097,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 209.9,
       "moon_phase_deg": 250.08,
       "rahu_kaal": {
         "start": "15:36",
@@ -2888,6 +3122,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 335.9,
       "moon_phase_deg": 260.93,
       "rahu_kaal": {
         "start": "12:18",
@@ -2911,6 +3147,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 462.9,
       "moon_phase_deg": 271.76,
       "rahu_kaal": {
         "start": "13:57",
@@ -2934,6 +3172,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 581.0,
       "moon_phase_deg": 282.68,
       "rahu_kaal": {
         "start": "10:39",
@@ -2957,6 +3197,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 631.2,
       "moon_phase_deg": 293.78,
       "rahu_kaal": {
         "start": "08:59",
@@ -2980,6 +3222,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 559.9,
       "moon_phase_deg": 305.12,
       "rahu_kaal": {
         "start": "17:17",
@@ -3003,6 +3247,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 524.2,
       "moon_phase_deg": 316.8,
       "rahu_kaal": {
         "start": "07:18",
@@ -3026,6 +3272,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 529.2,
       "moon_phase_deg": 328.84,
       "rahu_kaal": {
         "start": "15:38",
@@ -3049,6 +3297,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 576.9,
       "moon_phase_deg": 341.28,
       "rahu_kaal": {
         "start": "12:18",
@@ -3072,6 +3322,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 646.4,
       "moon_phase_deg": 354.09,
       "rahu_kaal": {
         "start": "13:58",
@@ -3097,6 +3349,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 523.9,
       "moon_phase_deg": 7.21,
       "rahu_kaal": {
         "start": "10:37",
@@ -3120,6 +3374,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 376.4,
       "moon_phase_deg": 20.56,
       "rahu_kaal": {
         "start": "08:56",
@@ -3143,6 +3399,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 215.2,
       "moon_phase_deg": 34.03,
       "rahu_kaal": {
         "start": "17:20",
@@ -3166,6 +3424,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 51.4,
       "moon_phase_deg": 47.53,
       "rahu_kaal": {
         "start": "07:14",
@@ -3189,6 +3449,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 105.6,
       "moon_phase_deg": 60.97,
       "rahu_kaal": {
         "start": "15:40",
@@ -3212,6 +3474,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 249.1,
       "moon_phase_deg": 74.28,
       "rahu_kaal": {
         "start": "12:17",
@@ -3235,6 +3499,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 375.5,
       "moon_phase_deg": 87.44,
       "rahu_kaal": {
         "start": "13:59",
@@ -3258,6 +3524,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 483.2,
       "moon_phase_deg": 100.42,
       "rahu_kaal": {
         "start": "10:36",
@@ -3281,6 +3549,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 572.0,
       "moon_phase_deg": 113.23,
       "rahu_kaal": {
         "start": "08:54",
@@ -3304,6 +3574,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 642.1,
       "moon_phase_deg": 125.88,
       "rahu_kaal": {
         "start": "17:23",
@@ -3327,6 +3599,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 618.2,
       "moon_phase_deg": 138.34,
       "rahu_kaal": {
         "start": "07:11",
@@ -3350,6 +3624,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 586.7,
       "moon_phase_deg": 150.63,
       "rahu_kaal": {
         "start": "15:42",
@@ -3373,6 +3649,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 576.4,
       "moon_phase_deg": 162.73,
       "rahu_kaal": {
         "start": "12:17",
@@ -3396,6 +3674,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 589.1,
       "moon_phase_deg": 174.61,
       "rahu_kaal": {
         "start": "14:00",
@@ -3421,6 +3701,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 625.8,
       "moon_phase_deg": 186.27,
       "rahu_kaal": {
         "start": "10:35",
@@ -3444,6 +3726,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 624.6,
       "moon_phase_deg": 197.72,
       "rahu_kaal": {
         "start": "08:52",
@@ -3467,6 +3751,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 540.7,
       "moon_phase_deg": 208.95,
       "rahu_kaal": {
         "start": "17:26",
@@ -3490,6 +3776,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 436.9,
       "moon_phase_deg": 220.0,
       "rahu_kaal": {
         "start": "07:09",
@@ -3513,6 +3801,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 318.4,
       "moon_phase_deg": 230.91,
       "rahu_kaal": {
         "start": "15:44",
@@ -3536,6 +3826,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 191.8,
       "moon_phase_deg": 241.76,
       "rahu_kaal": {
         "start": "12:18",
@@ -3559,6 +3851,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 65.2,
       "moon_phase_deg": 252.6,
       "rahu_kaal": {
         "start": "14:01",
@@ -3582,6 +3876,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 52.3,
       "moon_phase_deg": 263.52,
       "rahu_kaal": {
         "start": "10:35",
@@ -3605,6 +3901,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 150.9,
       "moon_phase_deg": 274.62,
       "rahu_kaal": {
         "start": "08:51",
@@ -3628,6 +3926,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 220.9,
       "moon_phase_deg": 285.98,
       "rahu_kaal": {
         "start": "17:29",
@@ -3651,6 +3951,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 253.5,
       "moon_phase_deg": 297.68,
       "rahu_kaal": {
         "start": "07:07",
@@ -3674,6 +3976,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 241.5,
       "moon_phase_deg": 309.79,
       "rahu_kaal": {
         "start": "15:46",
@@ -3697,6 +4001,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 181.1,
       "moon_phase_deg": 322.34,
       "rahu_kaal": {
         "start": "12:19",
@@ -3720,6 +4026,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 72.5,
       "moon_phase_deg": 335.34,
       "rahu_kaal": {
         "start": "14:03",
@@ -3743,6 +4051,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 79.1,
       "moon_phase_deg": 348.72,
       "rahu_kaal": {
         "start": "10:35",
@@ -3766,6 +4076,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 263.7,
       "moon_phase_deg": 2.41,
       "rahu_kaal": {
         "start": "08:51",
@@ -3791,6 +4103,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 467.7,
       "moon_phase_deg": 16.28,
       "rahu_kaal": {
         "start": "17:32",
@@ -3814,6 +4128,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 635.6,
       "moon_phase_deg": 30.18,
       "rahu_kaal": {
         "start": "07:07",
@@ -3837,6 +4153,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 437.2,
       "moon_phase_deg": 44.0,
       "rahu_kaal": {
         "start": "15:49",
@@ -3860,6 +4178,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 259.7,
       "moon_phase_deg": 57.62,
       "rahu_kaal": {
         "start": "12:20",
@@ -3883,6 +4203,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 110.3,
       "moon_phase_deg": 70.99,
       "rahu_kaal": {
         "start": "14:05",
@@ -3906,6 +4228,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 7.4,
       "moon_phase_deg": 84.07,
       "rahu_kaal": {
         "start": "10:36",
@@ -3929,6 +4253,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 93.1,
       "moon_phase_deg": 96.85,
       "rahu_kaal": {
         "start": "08:51",
@@ -3952,6 +4278,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 148.0,
       "moon_phase_deg": 109.35,
       "rahu_kaal": {
         "start": "17:35",
@@ -3975,6 +4303,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 174.5,
       "moon_phase_deg": 121.6,
       "rahu_kaal": {
         "start": "07:07",
@@ -3998,6 +4328,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 175.0,
       "moon_phase_deg": 133.6,
       "rahu_kaal": {
         "start": "15:51",
@@ -4021,6 +4353,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 151.6,
       "moon_phase_deg": 145.39,
       "rahu_kaal": {
         "start": "12:21",
@@ -4044,6 +4378,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 106.3,
       "moon_phase_deg": 156.97,
       "rahu_kaal": {
         "start": "14:06",
@@ -4067,6 +4403,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 40.5,
       "moon_phase_deg": 168.37,
       "rahu_kaal": {
         "start": "10:37",
@@ -4090,6 +4428,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 43.8,
       "moon_phase_deg": 179.6,
       "rahu_kaal": {
         "start": "08:52",
@@ -4115,6 +4455,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 144.5,
       "moon_phase_deg": 190.68,
       "rahu_kaal": {
         "start": "17:37",
@@ -4138,6 +4480,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 258.6,
       "moon_phase_deg": 201.63,
       "rahu_kaal": {
         "start": "07:08",
@@ -4161,6 +4505,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 382.1,
       "moon_phase_deg": 212.5,
       "rahu_kaal": {
         "start": "15:52",
@@ -4184,6 +4530,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 509.6,
       "moon_phase_deg": 223.34,
       "rahu_kaal": {
         "start": "12:23",
@@ -4207,6 +4555,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 635.0,
       "moon_phase_deg": 234.19,
       "rahu_kaal": {
         "start": "14:08",
@@ -4230,6 +4580,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 561.0,
       "moon_phase_deg": 245.13,
       "rahu_kaal": {
         "start": "10:38",
@@ -4253,6 +4605,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 463.6,
       "moon_phase_deg": 256.24,
       "rahu_kaal": {
         "start": "08:54",
@@ -4276,6 +4630,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 393.2,
       "moon_phase_deg": 267.6,
       "rahu_kaal": {
         "start": "17:38",
@@ -4299,6 +4655,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 358.5,
       "moon_phase_deg": 279.28,
       "rahu_kaal": {
         "start": "07:10",
@@ -4322,6 +4680,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 367.1,
       "moon_phase_deg": 291.36,
       "rahu_kaal": {
         "start": "15:53",
@@ -4345,6 +4705,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 424.6,
       "moon_phase_deg": 303.89,
       "rahu_kaal": {
         "start": "12:24",
@@ -4368,6 +4730,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 533.1,
       "moon_phase_deg": 316.88,
       "rahu_kaal": {
         "start": "14:09",
@@ -4391,6 +4755,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 621.5,
       "moon_phase_deg": 330.31,
       "rahu_kaal": {
         "start": "10:40",
@@ -4414,6 +4780,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 424.0,
       "moon_phase_deg": 344.12,
       "rahu_kaal": {
         "start": "08:56",
@@ -4437,6 +4805,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 198.5,
       "moon_phase_deg": 358.18,
       "rahu_kaal": {
         "start": "17:38",
@@ -4462,6 +4832,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 38.9,
       "moon_phase_deg": 12.36,
       "rahu_kaal": {
         "start": "07:12",
@@ -4485,6 +4857,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 271.1,
       "moon_phase_deg": 26.48,
       "rahu_kaal": {
         "start": "15:54",
@@ -4508,6 +4882,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 482.9,
       "moon_phase_deg": 40.42,
       "rahu_kaal": {
         "start": "12:25",
@@ -4531,6 +4907,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 648.9,
       "moon_phase_deg": 54.06,
       "rahu_kaal": {
         "start": "14:10",
@@ -4554,6 +4932,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 508.6,
       "moon_phase_deg": 67.35,
       "rahu_kaal": {
         "start": "10:42",
@@ -4577,6 +4957,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 410.6,
       "moon_phase_deg": 80.24,
       "rahu_kaal": {
         "start": "08:58",
@@ -4600,6 +4982,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 354.1,
       "moon_phase_deg": 92.76,
       "rahu_kaal": {
         "start": "17:38",
@@ -4623,6 +5007,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 336.2,
       "moon_phase_deg": 104.92,
       "rahu_kaal": {
         "start": "07:15",
@@ -4646,6 +5032,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 352.5,
       "moon_phase_deg": 116.77,
       "rahu_kaal": {
         "start": "15:54",
@@ -4669,6 +5057,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 398.0,
       "moon_phase_deg": 128.36,
       "rahu_kaal": {
         "start": "12:26",
@@ -4692,6 +5082,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 467.7,
       "moon_phase_deg": 139.72,
       "rahu_kaal": {
         "start": "14:10",
@@ -4715,6 +5107,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 557.0,
       "moon_phase_deg": 150.9,
       "rahu_kaal": {
         "start": "10:43",
@@ -4738,6 +5132,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 650.0,
       "moon_phase_deg": 161.95,
       "rahu_kaal": {
         "start": "09:00",
@@ -4761,6 +5157,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 534.4,
       "moon_phase_deg": 172.89,
       "rahu_kaal": {
         "start": "17:36",
@@ -4786,6 +5184,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 411.4,
       "moon_phase_deg": 183.76,
       "rahu_kaal": {
         "start": "07:18",
@@ -4809,6 +5209,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 285.1,
       "moon_phase_deg": 194.61,
       "rahu_kaal": {
         "start": "15:53",
@@ -4832,6 +5234,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 159.8,
       "moon_phase_deg": 205.46,
       "rahu_kaal": {
         "start": "12:27",
@@ -4855,6 +5259,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 40.4,
       "moon_phase_deg": 216.37,
       "rahu_kaal": {
         "start": "14:10",
@@ -4878,6 +5284,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 67.6,
       "moon_phase_deg": 227.38,
       "rahu_kaal": {
         "start": "10:44",
@@ -4901,6 +5309,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 158.0,
       "moon_phase_deg": 238.55,
       "rahu_kaal": {
         "start": "09:02",
@@ -4924,6 +5334,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 224.1,
       "moon_phase_deg": 249.95,
       "rahu_kaal": {
         "start": "17:34",
@@ -4947,6 +5359,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 258.8,
       "moon_phase_deg": 261.63,
       "rahu_kaal": {
         "start": "07:20",
@@ -4970,6 +5384,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 255.4,
       "moon_phase_deg": 273.66,
       "rahu_kaal": {
         "start": "15:51",
@@ -4993,6 +5409,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 208.3,
       "moon_phase_deg": 286.09,
       "rahu_kaal": {
         "start": "12:27",
@@ -5016,6 +5434,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 114.0,
       "moon_phase_deg": 298.96,
       "rahu_kaal": {
         "start": "14:09",
@@ -5039,6 +5459,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 27.7,
       "moon_phase_deg": 312.25,
       "rahu_kaal": {
         "start": "10:45",
@@ -5062,6 +5484,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 212.4,
       "moon_phase_deg": 325.94,
       "rahu_kaal": {
         "start": "09:04",
@@ -5085,6 +5509,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 431.3,
       "moon_phase_deg": 339.95,
       "rahu_kaal": {
         "start": "17:31",
@@ -5108,6 +5534,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 640.6,
       "moon_phase_deg": 354.14,
       "rahu_kaal": {
         "start": "07:23",
@@ -5133,6 +5561,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 397.0,
       "moon_phase_deg": 8.37,
       "rahu_kaal": {
         "start": "15:49",
@@ -5156,6 +5586,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 166.4,
       "moon_phase_deg": 22.48,
       "rahu_kaal": {
         "start": "12:27",
@@ -5179,6 +5611,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 35.9,
       "moon_phase_deg": 36.33,
       "rahu_kaal": {
         "start": "14:07",
@@ -5202,6 +5636,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 198.5,
       "moon_phase_deg": 49.82,
       "rahu_kaal": {
         "start": "10:46",
@@ -5225,6 +5661,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 314.6,
       "moon_phase_deg": 62.88,
       "rahu_kaal": {
         "start": "09:06",
@@ -5248,6 +5686,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 382.2,
       "moon_phase_deg": 75.5,
       "rahu_kaal": {
         "start": "17:27",
@@ -5271,6 +5711,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 403.4,
       "moon_phase_deg": 87.69,
       "rahu_kaal": {
         "start": "07:26",
@@ -5294,6 +5736,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 383.0,
       "moon_phase_deg": 99.5,
       "rahu_kaal": {
         "start": "15:46",
@@ -5317,6 +5761,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 327.5,
       "moon_phase_deg": 111.0,
       "rahu_kaal": {
         "start": "12:26",
@@ -5340,6 +5786,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 244.1,
       "moon_phase_deg": 122.23,
       "rahu_kaal": {
         "start": "14:05",
@@ -5363,6 +5811,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 140.1,
       "moon_phase_deg": 133.28,
       "rahu_kaal": {
         "start": "10:46",
@@ -5386,6 +5836,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 22.4,
       "moon_phase_deg": 144.2,
       "rahu_kaal": {
         "start": "09:07",
@@ -5409,6 +5861,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 102.8,
       "moon_phase_deg": 155.06,
       "rahu_kaal": {
         "start": "17:22",
@@ -5432,6 +5886,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 229.9,
       "moon_phase_deg": 165.9,
       "rahu_kaal": {
         "start": "07:29",
@@ -5455,6 +5911,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 354.2,
       "moon_phase_deg": 176.76,
       "rahu_kaal": {
         "start": "15:42",
@@ -5480,6 +5938,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 471.4,
       "moon_phase_deg": 187.69,
       "rahu_kaal": {
         "start": "12:24",
@@ -5503,6 +5963,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 577.7,
       "moon_phase_deg": 198.71,
       "rahu_kaal": {
         "start": "14:02",
@@ -5526,6 +5988,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 642.0,
       "moon_phase_deg": 209.87,
       "rahu_kaal": {
         "start": "10:46",
@@ -5549,6 +6013,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 568.6,
       "moon_phase_deg": 221.2,
       "rahu_kaal": {
         "start": "09:08",
@@ -5572,6 +6038,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 517.4,
       "moon_phase_deg": 232.73,
       "rahu_kaal": {
         "start": "17:16",
@@ -5595,6 +6063,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 492.5,
       "moon_phase_deg": 244.51,
       "rahu_kaal": {
         "start": "07:31",
@@ -5618,6 +6088,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 498.4,
       "moon_phase_deg": 256.56,
       "rahu_kaal": {
         "start": "15:37",
@@ -5641,6 +6113,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 538.9,
       "moon_phase_deg": 268.93,
       "rahu_kaal": {
         "start": "12:23",
@@ -5664,6 +6138,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 617.3,
       "moon_phase_deg": 281.65,
       "rahu_kaal": {
         "start": "13:59",
@@ -5687,6 +6163,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 576.4,
       "moon_phase_deg": 294.73,
       "rahu_kaal": {
         "start": "10:46",
@@ -5710,6 +6188,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 420.4,
       "moon_phase_deg": 308.15,
       "rahu_kaal": {
         "start": "09:09",
@@ -5733,6 +6213,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 230.9,
       "moon_phase_deg": 321.89,
       "rahu_kaal": {
         "start": "17:10",
@@ -5756,6 +6238,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 16.7,
       "moon_phase_deg": 335.85,
       "rahu_kaal": {
         "start": "07:33",
@@ -5779,6 +6263,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 209.5,
       "moon_phase_deg": 349.92,
       "rahu_kaal": {
         "start": "15:32",
@@ -5804,6 +6290,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 432.4,
       "moon_phase_deg": 3.96,
       "rahu_kaal": {
         "start": "12:21",
@@ -5827,6 +6315,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 636.1,
       "moon_phase_deg": 17.82,
       "rahu_kaal": {
         "start": "13:56",
@@ -5850,6 +6340,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 504.9,
       "moon_phase_deg": 31.38,
       "rahu_kaal": {
         "start": "10:45",
@@ -5873,6 +6365,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 377.8,
       "moon_phase_deg": 44.54,
       "rahu_kaal": {
         "start": "09:10",
@@ -5896,6 +6390,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 299.7,
       "moon_phase_deg": 57.26,
       "rahu_kaal": {
         "start": "17:04",
@@ -5919,6 +6415,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 271.1,
       "moon_phase_deg": 69.52,
       "rahu_kaal": {
         "start": "07:35",
@@ -5942,6 +6440,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 288.4,
       "moon_phase_deg": 81.36,
       "rahu_kaal": {
         "start": "15:27",
@@ -5965,6 +6465,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 345.2,
       "moon_phase_deg": 92.84,
       "rahu_kaal": {
         "start": "12:18",
@@ -5988,6 +6490,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 433.3,
       "moon_phase_deg": 104.03,
       "rahu_kaal": {
         "start": "13:52",
@@ -6011,6 +6515,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 543.9,
       "moon_phase_deg": 115.02,
       "rahu_kaal": {
         "start": "10:44",
@@ -6034,6 +6540,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 643.6,
       "moon_phase_deg": 125.89,
       "rahu_kaal": {
         "start": "09:10",
@@ -6057,6 +6565,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 514.5,
       "moon_phase_deg": 136.71,
       "rahu_kaal": {
         "start": "16:57",
@@ -6080,6 +6590,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 387.8,
       "moon_phase_deg": 147.55,
       "rahu_kaal": {
         "start": "07:37",
@@ -6103,6 +6615,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 269.8,
       "moon_phase_deg": 158.47,
       "rahu_kaal": {
         "start": "15:22",
@@ -6126,6 +6640,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 165.6,
       "moon_phase_deg": 169.52,
       "rahu_kaal": {
         "start": "12:16",
@@ -6149,6 +6665,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 78.8,
       "moon_phase_deg": 180.72,
       "rahu_kaal": {
         "start": "13:48",
@@ -6174,6 +6692,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 11.9,
       "moon_phase_deg": 192.11,
       "rahu_kaal": {
         "start": "10:43",
@@ -6197,6 +6717,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 33.4,
       "moon_phase_deg": 203.69,
       "rahu_kaal": {
         "start": "09:11",
@@ -6220,6 +6742,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 56.5,
       "moon_phase_deg": 215.48,
       "rahu_kaal": {
         "start": "16:50",
@@ -6243,6 +6767,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 56.5,
       "moon_phase_deg": 227.48,
       "rahu_kaal": {
         "start": "07:39",
@@ -6266,6 +6792,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 33.0,
       "moon_phase_deg": 239.7,
       "rahu_kaal": {
         "start": "15:16",
@@ -6289,6 +6817,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 15.2,
       "moon_phase_deg": 252.14,
       "rahu_kaal": {
         "start": "12:13",
@@ -6312,6 +6842,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 89.0,
       "moon_phase_deg": 264.81,
       "rahu_kaal": {
         "start": "13:44",
@@ -6335,6 +6867,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 189.5,
       "moon_phase_deg": 277.73,
       "rahu_kaal": {
         "start": "10:42",
@@ -6358,6 +6892,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 316.8,
       "moon_phase_deg": 290.9,
       "rahu_kaal": {
         "start": "09:11",
@@ -6381,6 +6917,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 469.2,
       "moon_phase_deg": 304.29,
       "rahu_kaal": {
         "start": "16:43",
@@ -6404,6 +6942,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 642.3,
       "moon_phase_deg": 317.88,
       "rahu_kaal": {
         "start": "07:41",
@@ -6427,6 +6967,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 483.0,
       "moon_phase_deg": 331.58,
       "rahu_kaal": {
         "start": "15:11",
@@ -6450,6 +6992,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 294.4,
       "moon_phase_deg": 345.31,
       "rahu_kaal": {
         "start": "12:11",
@@ -6473,6 +7017,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 116.5,
       "moon_phase_deg": 358.93,
       "rahu_kaal": {
         "start": "13:40",
@@ -6498,6 +7044,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 37.7,
       "moon_phase_deg": 12.35,
       "rahu_kaal": {
         "start": "10:41",
@@ -6521,6 +7069,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 156.7,
       "moon_phase_deg": 25.43,
       "rahu_kaal": {
         "start": "09:12",
@@ -6544,6 +7094,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 232.8,
       "moon_phase_deg": 38.13,
       "rahu_kaal": {
         "start": "16:36",
@@ -6567,6 +7119,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 262.6,
       "moon_phase_deg": 50.4,
       "rahu_kaal": {
         "start": "07:43",
@@ -6590,6 +7144,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 247.2,
       "moon_phase_deg": 62.26,
       "rahu_kaal": {
         "start": "15:06",
@@ -6613,6 +7169,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 191.5,
       "moon_phase_deg": 73.75,
       "rahu_kaal": {
         "start": "12:09",
@@ -6636,6 +7194,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 102.9,
       "moon_phase_deg": 84.94,
       "rahu_kaal": {
         "start": "13:36",
@@ -6659,6 +7219,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": true,
+      "minutes_to_tithi_boundary": 9.3,
       "moon_phase_deg": 95.91,
       "rahu_kaal": {
         "start": "10:40",
@@ -6682,6 +7244,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 135.5,
       "moon_phase_deg": 106.76,
       "rahu_kaal": {
         "start": "09:13",
@@ -6705,6 +7269,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 265.5,
       "moon_phase_deg": 117.57,
       "rahu_kaal": {
         "start": "16:30",
@@ -6728,6 +7294,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 390.3,
       "moon_phase_deg": 128.43,
       "rahu_kaal": {
         "start": "07:46",
@@ -6751,6 +7319,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 501.5,
       "moon_phase_deg": 139.41,
       "rahu_kaal": {
         "start": "15:01",
@@ -6774,6 +7344,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 592.6,
       "moon_phase_deg": 150.58,
       "rahu_kaal": {
         "start": "12:07",
@@ -6797,6 +7369,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 652.8,
       "moon_phase_deg": 161.97,
       "rahu_kaal": {
         "start": "13:33",
@@ -6820,6 +7394,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 614.1,
       "moon_phase_deg": 173.62,
       "rahu_kaal": {
         "start": "10:40",
@@ -6845,6 +7421,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 603.3,
       "moon_phase_deg": 185.52,
       "rahu_kaal": {
         "start": "09:14",
@@ -6868,6 +7446,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 618.9,
       "moon_phase_deg": 197.66,
       "rahu_kaal": {
         "start": "16:24",
@@ -6891,6 +7471,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 653.6,
       "moon_phase_deg": 210.02,
       "rahu_kaal": {
         "start": "07:48",
@@ -6914,6 +7496,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 594.6,
       "moon_phase_deg": 222.56,
       "rahu_kaal": {
         "start": "14:57",
@@ -6937,6 +7521,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 518.9,
       "moon_phase_deg": 235.25,
       "rahu_kaal": {
         "start": "12:05",
@@ -6960,6 +7546,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 429.1,
       "moon_phase_deg": 248.07,
       "rahu_kaal": {
         "start": "13:30",
@@ -6983,6 +7571,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 326.6,
       "moon_phase_deg": 261.01,
       "rahu_kaal": {
         "start": "10:40",
@@ -7006,6 +7596,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 212.5,
       "moon_phase_deg": 274.06,
       "rahu_kaal": {
         "start": "09:15",
@@ -7029,6 +7621,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 87.4,
       "moon_phase_deg": 287.2,
       "rahu_kaal": {
         "start": "16:18",
@@ -7052,6 +7646,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 46.8,
       "moon_phase_deg": 300.43,
       "rahu_kaal": {
         "start": "07:52",
@@ -7075,6 +7671,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 186.7,
       "moon_phase_deg": 313.71,
       "rahu_kaal": {
         "start": "14:53",
@@ -7098,6 +7696,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 326.5,
       "moon_phase_deg": 326.99,
       "rahu_kaal": {
         "start": "12:04",
@@ -7121,6 +7721,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 458.3,
       "moon_phase_deg": 340.19,
       "rahu_kaal": {
         "start": "13:28",
@@ -7144,6 +7746,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 572.6,
       "moon_phase_deg": 353.24,
       "rahu_kaal": {
         "start": "10:41",
@@ -7169,6 +7773,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 650.9,
       "moon_phase_deg": 6.04,
       "rahu_kaal": {
         "start": "09:17",
@@ -7192,6 +7798,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 596.7,
       "moon_phase_deg": 18.54,
       "rahu_kaal": {
         "start": "16:14",
@@ -7215,6 +7823,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 580.7,
       "moon_phase_deg": 30.69,
       "rahu_kaal": {
         "start": "07:55",
@@ -7238,6 +7848,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 603.8,
       "moon_phase_deg": 42.47,
       "rahu_kaal": {
         "start": "14:50",
@@ -7261,6 +7873,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 648.0,
       "moon_phase_deg": 53.93,
       "rahu_kaal": {
         "start": "12:04",
@@ -7284,6 +7898,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 557.4,
       "moon_phase_deg": 65.1,
       "rahu_kaal": {
         "start": "13:27",
@@ -7307,6 +7923,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 443.7,
       "moon_phase_deg": 76.06,
       "rahu_kaal": {
         "start": "10:42",
@@ -7330,6 +7948,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 316.2,
       "moon_phase_deg": 86.89,
       "rahu_kaal": {
         "start": "09:20",
@@ -7353,6 +7973,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 185.0,
       "moon_phase_deg": 97.69,
       "rahu_kaal": {
         "start": "16:10",
@@ -7376,6 +7998,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 60.3,
       "moon_phase_deg": 108.55,
       "rahu_kaal": {
         "start": "07:59",
@@ -7399,6 +8023,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 48.3,
       "moon_phase_deg": 119.56,
       "rahu_kaal": {
         "start": "14:47",
@@ -7422,6 +8048,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 132.2,
       "moon_phase_deg": 130.79,
       "rahu_kaal": {
         "start": "12:04",
@@ -7445,6 +8073,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 184.9,
       "moon_phase_deg": 142.31,
       "rahu_kaal": {
         "start": "13:26",
@@ -7468,6 +8098,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 202.1,
       "moon_phase_deg": 154.15,
       "rahu_kaal": {
         "start": "10:44",
@@ -7491,6 +8123,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 182.7,
       "moon_phase_deg": 166.33,
       "rahu_kaal": {
         "start": "09:23",
@@ -7514,6 +8148,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 128.8,
       "moon_phase_deg": 178.82,
       "rahu_kaal": {
         "start": "16:07",
@@ -7539,6 +8175,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 45.3,
       "moon_phase_deg": 191.59,
       "rahu_kaal": {
         "start": "08:03",
@@ -7562,6 +8200,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 60.7,
       "moon_phase_deg": 204.56,
       "rahu_kaal": {
         "start": "14:46",
@@ -7585,6 +8225,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 181.2,
       "moon_phase_deg": 217.66,
       "rahu_kaal": {
         "start": "12:05",
@@ -7608,6 +8250,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 308.9,
       "moon_phase_deg": 230.83,
       "rahu_kaal": {
         "start": "13:26",
@@ -7631,6 +8275,8 @@
       "tithi_number": 21,
       "tithi_name": "Krishna Shashthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 437.9,
       "moon_phase_deg": 244.01,
       "rahu_kaal": {
         "start": "10:46",
@@ -7654,6 +8300,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 563.9,
       "moon_phase_deg": 257.16,
       "rahu_kaal": {
         "start": "09:26",
@@ -7677,6 +8325,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 626.9,
       "moon_phase_deg": 270.26,
       "rahu_kaal": {
         "start": "16:05",
@@ -7700,6 +8350,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 513.1,
       "moon_phase_deg": 283.3,
       "rahu_kaal": {
         "start": "08:08",
@@ -7723,6 +8375,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 407.7,
       "moon_phase_deg": 296.27,
       "rahu_kaal": {
         "start": "14:46",
@@ -7746,6 +8400,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 312.7,
       "moon_phase_deg": 309.14,
       "rahu_kaal": {
         "start": "12:07",
@@ -7769,6 +8425,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 231.4,
       "moon_phase_deg": 321.88,
       "rahu_kaal": {
         "start": "13:27",
@@ -7792,6 +8450,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 167.6,
       "moon_phase_deg": 334.47,
       "rahu_kaal": {
         "start": "10:49",
@@ -7815,6 +8475,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 126.0,
       "moon_phase_deg": 346.85,
       "rahu_kaal": {
         "start": "09:30",
@@ -7838,6 +8500,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 110.7,
       "moon_phase_deg": 358.99,
       "rahu_kaal": {
         "start": "16:05",
@@ -7863,6 +8527,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 124.6,
       "moon_phase_deg": 10.86,
       "rahu_kaal": {
         "start": "08:12",
@@ -7886,6 +8552,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 168.7,
       "moon_phase_deg": 22.46,
       "rahu_kaal": {
         "start": "14:46",
@@ -7909,6 +8577,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 241.7,
       "moon_phase_deg": 33.79,
       "rahu_kaal": {
         "start": "12:09",
@@ -7932,6 +8602,8 @@
       "tithi_number": 4,
       "tithi_name": "Shukla Chaturthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 340.0,
       "moon_phase_deg": 44.89,
       "rahu_kaal": {
         "start": "13:28",
@@ -7955,6 +8627,8 @@
       "tithi_number": 5,
       "tithi_name": "Shukla Panchami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 457.9,
       "moon_phase_deg": 55.81,
       "rahu_kaal": {
         "start": "10:52",
@@ -7978,6 +8652,8 @@
       "tithi_number": 6,
       "tithi_name": "Shukla Shashthi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 588.0,
       "moon_phase_deg": 66.62,
       "rahu_kaal": {
         "start": "09:34",
@@ -8001,6 +8677,8 @@
       "tithi_number": 7,
       "tithi_name": "Shukla Saptami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 590.0,
       "moon_phase_deg": 77.4,
       "rahu_kaal": {
         "start": "16:06",
@@ -8024,6 +8702,8 @@
       "tithi_number": 8,
       "tithi_name": "Shukla Ashtami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 462.7,
       "moon_phase_deg": 88.23,
       "rahu_kaal": {
         "start": "08:17",
@@ -8047,6 +8727,8 @@
       "tithi_number": 9,
       "tithi_name": "Shukla Navami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 351.5,
       "moon_phase_deg": 99.22,
       "rahu_kaal": {
         "start": "14:48",
@@ -8070,6 +8752,8 @@
       "tithi_number": 10,
       "tithi_name": "Shukla Dashami",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 265.7,
       "moon_phase_deg": 110.43,
       "rahu_kaal": {
         "start": "12:12",
@@ -8093,6 +8777,8 @@
       "tithi_number": 11,
       "tithi_name": "Shukla Ekadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 214.0,
       "moon_phase_deg": 121.96,
       "rahu_kaal": {
         "start": "13:31",
@@ -8116,6 +8802,8 @@
       "tithi_number": 12,
       "tithi_name": "Shukla Dwadashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 202.6,
       "moon_phase_deg": 133.85,
       "rahu_kaal": {
         "start": "10:55",
@@ -8139,6 +8827,8 @@
       "tithi_number": 13,
       "tithi_name": "Shukla Trayodashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 235.2,
       "moon_phase_deg": 146.15,
       "rahu_kaal": {
         "start": "09:38",
@@ -8162,6 +8852,8 @@
       "tithi_number": 14,
       "tithi_name": "Shukla Chaturdashi",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 311.8,
       "moon_phase_deg": 158.85,
       "rahu_kaal": {
         "start": "16:07",
@@ -8185,6 +8877,8 @@
       "tithi_number": 15,
       "tithi_name": "Purnima",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 428.2,
       "moon_phase_deg": 171.92,
       "rahu_kaal": {
         "start": "08:22",
@@ -8210,6 +8904,8 @@
       "tithi_number": 16,
       "tithi_name": "Krishna Pratipada",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 576.2,
       "moon_phase_deg": 185.27,
       "rahu_kaal": {
         "start": "14:50",
@@ -8233,6 +8929,8 @@
       "tithi_number": 17,
       "tithi_name": "Krishna Dwitiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 566.5,
       "moon_phase_deg": 198.82,
       "rahu_kaal": {
         "start": "12:16",
@@ -8256,6 +8954,8 @@
       "tithi_number": 18,
       "tithi_name": "Krishna Tritiya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 389.0,
       "moon_phase_deg": 212.44,
       "rahu_kaal": {
         "start": "13:34",
@@ -8279,6 +8979,8 @@
       "tithi_number": 19,
       "tithi_name": "Krishna Chaturthi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 214.4,
       "moon_phase_deg": 226.04,
       "rahu_kaal": {
         "start": "10:59",
@@ -8302,6 +9004,8 @@
       "tithi_number": 20,
       "tithi_name": "Krishna Panchami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 52.1,
       "moon_phase_deg": 239.52,
       "rahu_kaal": {
         "start": "09:42",
@@ -8325,6 +9029,8 @@
       "tithi_number": 22,
       "tithi_name": "Krishna Saptami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 91.0,
       "moon_phase_deg": 252.83,
       "rahu_kaal": {
         "start": "16:10",
@@ -8348,6 +9054,8 @@
       "tithi_number": 23,
       "tithi_name": "Krishna Ashtami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 210.9,
       "moon_phase_deg": 265.93,
       "rahu_kaal": {
         "start": "08:26",
@@ -8371,6 +9079,8 @@
       "tithi_number": 24,
       "tithi_name": "Krishna Navami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 305.7,
       "moon_phase_deg": 278.8,
       "rahu_kaal": {
         "start": "14:53",
@@ -8394,6 +9104,8 @@
       "tithi_number": 25,
       "tithi_name": "Krishna Dashami",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 375.0,
       "moon_phase_deg": 291.43,
       "rahu_kaal": {
         "start": "12:19",
@@ -8417,6 +9129,8 @@
       "tithi_number": 26,
       "tithi_name": "Krishna Ekadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 419.2,
       "moon_phase_deg": 303.84,
       "rahu_kaal": {
         "start": "13:37",
@@ -8440,6 +9154,8 @@
       "tithi_number": 27,
       "tithi_name": "Krishna Dwadashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 438.8,
       "moon_phase_deg": 316.01,
       "rahu_kaal": {
         "start": "11:02",
@@ -8463,6 +9179,8 @@
       "tithi_number": 28,
       "tithi_name": "Krishna Trayodashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 434.2,
       "moon_phase_deg": 327.97,
       "rahu_kaal": {
         "start": "09:45",
@@ -8486,6 +9204,8 @@
       "tithi_number": 29,
       "tithi_name": "Krishna Chaturdashi",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 406.0,
       "moon_phase_deg": 339.71,
       "rahu_kaal": {
         "start": "16:14",
@@ -8509,6 +9229,8 @@
       "tithi_number": 30,
       "tithi_name": "Amavasya",
       "paksha": "Krishna",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 354.6,
       "moon_phase_deg": 351.24,
       "rahu_kaal": {
         "start": "08:29",
@@ -8532,6 +9254,8 @@
       "tithi_number": 1,
       "tithi_name": "Shukla Pratipada",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 281.1,
       "moon_phase_deg": 2.57,
       "rahu_kaal": {
         "start": "14:57",
@@ -8557,6 +9281,8 @@
       "tithi_number": 2,
       "tithi_name": "Shukla Dwitiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 187.2,
       "moon_phase_deg": 13.71,
       "rahu_kaal": {
         "start": "12:22",
@@ -8580,6 +9306,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 75.9,
       "moon_phase_deg": 24.69,
       "rahu_kaal": {
         "start": "13:41",
@@ -8603,6 +9331,8 @@
       "tithi_number": 3,
       "tithi_name": "Shukla Tritiya",
       "paksha": "Shukla",
+      "near_boundary": false,
+      "minutes_to_tithi_boundary": 49.0,
       "moon_phase_deg": 35.55,
       "rahu_kaal": {
         "start": "11:06",

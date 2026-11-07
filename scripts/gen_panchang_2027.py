@@ -135,6 +135,13 @@ def generate_panchang_2027():
         tithi_name = TITHI_NAMES[tithi_idx]
         paksha = "Shukla" if tithi_number <= 15 else "Krishna"
 
+        # Tithi boundary proximity (within 45 minutes of sunrise)
+        # 1 tithi = 12 deg. Mean motion rate ~ 0.549 deg/hour => 60 / 0.549 min/deg
+        rem_deg = diff_deg % 12
+        dist_to_boundary_deg = min(rem_deg, 12.0 - rem_deg)
+        minutes_to_boundary = dist_to_boundary_deg * (60.0 / 0.549)
+        near_boundary = (minutes_to_boundary <= 45.0)
+
         # Rahu Kaal calculation (1/8th of daytime)
         day_seconds = (setting_ist - rising_ist).total_seconds()
         slot_seconds = day_seconds / 8.0
@@ -175,6 +182,8 @@ def generate_panchang_2027():
             "tithi_number": tithi_number,
             "tithi_name": tithi_name,
             "paksha": paksha,
+            "near_boundary": near_boundary,
+            "minutes_to_tithi_boundary": round(minutes_to_boundary, 1),
             "moon_phase_deg": round(diff_deg, 2),
             "rahu_kaal": {
                 "start": rahu_start.strftime("%H:%M"),
@@ -248,14 +257,15 @@ def build_spot_check_table(panchang_data):
     lines.append("**Location**: New Delhi (28.6139° N, 77.2090° E, 216m) · Timezone: IST (UTC+05:30)")
     lines.append(f"**Total Spot-Check Dates**: {len(sorted_dates)} dates (First 3 days of each month + all Full Moons + all New Moons)")
     lines.append("")
-    lines.append("| Date | Weekday | Sunrise (IST) | Sunset (IST) | Tithi at Sunrise | Paksha | Rahu Kaal (IST) | Astronomical Event |")
-    lines.append("| :--- | :--- | :---: | :---: | :--- | :--- | :---: | :--- |")
+    lines.append("| Date | Weekday | Sunrise (IST) | Sunset (IST) | Tithi at Sunrise | Paksha | Near boundary | Rahu Kaal (IST) | Astronomical Event |")
+    lines.append("| :--- | :--- | :---: | :---: | :--- | :--- | :---: | :---: | :--- |")
 
     for d in sorted_dates:
         row = days[d]
         events_str = "; ".join(row["events"]) if row["events"] else "-"
         rahu_str = f"{row['rahu_kaal']['start']} – {row['rahu_kaal']['end']}"
-        lines.append(f"| {row['date']} | {row['weekday'][:3]} | {row['sunrise_short']} | {row['sunset_short']} | {row['tithi_name']} | {row['paksha']} | {rahu_str} | {events_str} |")
+        near_str = "Yes" if row.get("near_boundary") else "-"
+        lines.append(f"| {row['date']} | {row['weekday'][:3]} | {row['sunrise_short']} | {row['sunset_short']} | {row['tithi_name']} | {row['paksha']} | {near_str} | {rahu_str} | {events_str} |")
 
     table_md = "\n".join(lines)
     os.makedirs("docs", exist_ok=True)
