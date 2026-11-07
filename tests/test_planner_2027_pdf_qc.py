@@ -1,7 +1,7 @@
 """
 Tests for 2027 Year Ahead Planner PDF Report & Deliverables Quality Control.
 Validates:
-1. Exact 16-page count and file size < 3 MB.
+1. Exact 24-page count and file size < 3 MB.
 2. PDF metadata: Title and Author only.
 3. Results-Only compliance: Zero calculation formulas, weights, reduction steps (->),
    grid scores (F+, E+), resonance bonus, or internal component names in PDF text.
@@ -11,17 +11,30 @@ Validates:
 5. 730 daily comparisons against golden_A_365.csv and golden_B_365.csv.
 6. Personal Month ratings and Pinnacle spans against golden_sheets.json.
 7. Explicit named dates for 100-score days for Person A and Person B.
+8. Month rating table spec (1 Favourable, 2 Neutral, 3 Favourable, 4 Neutral, 5 Asks for care,
+   6 Favourable, 7 Neutral, 8 Neutral, 9 Asks for care; June for PY 5 shows master flag as 2).
+9. Crystal suggestion text for Mulank and non-medical notice.
+10. Each month page (7-18) contains Full Moon and New Moon dates/times in IST from panchang.
+11. No SAMPLE watermark when is_sample=False.
+12. SHA-256 difference and strict person isolation between Arun Sharma and Anil Kumar.
+13. Near-boundary panchang annotations on key dates.
 """
 
 import os
+import io
 import re
 import csv
 import json
+import hashlib
 import unittest
 import pypdf
 
 from app.engine.planner_2027_engine import calculate_planner_2027
-from pdf_service.app.services.planner_2027_pdf_generator import generate_planner_2027_pdf
+from pdf_service.app.services.planner_2027_pdf_generator import (
+    generate_planner_2027_pdf,
+    MONTH_RATINGS_SPEC,
+    CRYSTALS_BY_MULANK
+)
 
 FORBIDDEN_WORDS = [
     "luck", "lucky", "guaranteed", "will bring", "will fix",
@@ -43,7 +56,7 @@ class TestPlanner2027PdfQc(unittest.TestCase):
         cls.pdf_a_path = os.path.join(cls.out_dir, "sample_arun_sharma_2027.pdf")
         cls.pdf_b_path = os.path.join(cls.out_dir, "sample_anil_kumar_2027.pdf")
 
-        # Generate both sample PDFs
+        # Generate both sample PDFs (with is_sample=True)
         cls.pdf_a_bytes = generate_planner_2027_pdf(
             "Arun Sharma", "1981-11-28", cls.pdf_a_path, is_sample=True
         )
@@ -83,9 +96,9 @@ class TestPlanner2027PdfQc(unittest.TestCase):
         reader_a = pypdf.PdfReader(self.pdf_a_path)
         reader_b = pypdf.PdfReader(self.pdf_b_path)
 
-        # Exactly 16 pages
-        self.assertEqual(len(reader_a.pages), 16, f"Arun PDF has {len(reader_a.pages)} pages, expected 16")
-        self.assertEqual(len(reader_b.pages), 16, f"Anil PDF has {len(reader_b.pages)} pages, expected 16")
+        # Exactly 24 pages
+        self.assertEqual(len(reader_a.pages), 24, f"Arun PDF has {len(reader_a.pages)} pages, expected 24")
+        self.assertEqual(len(reader_b.pages), 24, f"Anil PDF has {len(reader_b.pages)} pages, expected 24")
 
         # Under 3 MB (3,145,728 bytes)
         size_a = os.path.getsize(self.pdf_a_path)
@@ -119,6 +132,109 @@ class TestPlanner2027PdfQc(unittest.TestCase):
             full_text = "\n".join(p.extract_text() for p in reader.pages)
             for term in CALCULATION_JARGON:
                 self.assertNotIn(term, full_text, f"Calculation jargon '{term}' found in PDF {path}")
+
+    def test_month_rating_table_spec(self):
+        expected_spec = {
+            1: "Favourable",
+            2: "Neutral",
+            3: "Favourable",
+            4: "Neutral",
+            5: "Asks for care",
+            6: "Favourable",
+            7: "Neutral",
+            8: "Neutral",
+            9: "Asks for care"
+        }
+        self.assertEqual(MONTH_RATINGS_SPEC, expected_spec)
+
+        # June for Person A (PY 5): Personal Month 11/2 has master flag 2
+        reader_a = pypdf.PdfReader(self.pdf_a_path)
+        june_page_text = reader_a.pages[11].extract_text()  # Page 12 is June (index 11)
+        self.assertIn("JUNE 2027", june_page_text)
+        self.assertIn("Master Flag: 2", june_page_text)
+        self.assertIn("Personal Month 2", june_page_text)
+        self.assertIn("Neutral", june_page_text)
+
+    def test_crystal_text_present(self):
+        reader_a = pypdf.PdfReader(self.pdf_a_path)
+        p19_text_a = reader_a.pages[18].extract_text()  # Page 19 (index 18)
+        self.assertIn("Sunstone or Carnelian", p19_text_a)
+        self.assertIn("traditional suggestion, not medical or financial advice", p19_text_a)
+
+        # Verify crystal dictionary equals spec
+        expected_crystals = {
+            1: "Sunstone or Carnelian",
+            2: "Moonstone",
+            3: "Citrine",
+            4: "Hessonite garnet",
+            5: "Green aventurine",
+            6: "Clear quartz",
+            7: "Tiger's eye",
+            8: "Amethyst or Lapis lazuli",
+            9: "Red jasper"
+        }
+        self.assertEqual(CRYSTALS_BY_MULANK, expected_crystals)
+
+    def test_each_month_page_has_moon_dates(self):
+        reader_a = pypdf.PdfReader(self.pdf_a_path)
+        for page_num in range(6, 18):  # Pages 7 to 18 (index 6 to 17)
+            page_text = reader_a.pages[page_num].extract_text()
+            self.assertIn("Full Moon", page_text, f"Page {page_num+1} missing Full Moon")
+            self.assertIn("New Moon", page_text, f"Page {page_num+1} missing New Moon")
+            self.assertIn("IST", page_text, f"Page {page_num+1} missing IST timezone indicator")
+
+    def test_no_sample_watermark_when_flag_off(self):
+        paid_pdf_bytes = generate_planner_2027_pdf(
+            "Arun Sharma", "1981-11-28", is_sample=False
+        )
+        # Verify paid PDF is valid PDF
+        reader = pypdf.PdfReader(io.BytesIO(paid_pdf_bytes))
+        self.assertEqual(len(reader.pages), 24)
+        full_text = "\n".join(p.extract_text() for p in reader.pages)
+        self.assertNotIn("SAMPLE", full_text)
+
+    def test_sha256_difference_and_person_isolation(self):
+        def sha256_file(path):
+            h = hashlib.sha256()
+            with open(path, "rb") as f:
+                while chunk := f.read(8192):
+                    h.update(chunk)
+            return h.hexdigest()
+
+        sha_a = sha256_file(self.pdf_a_path)
+        sha_b = sha256_file(self.pdf_b_path)
+        self.assertNotEqual(sha_a, sha_b, "Sample PDFs must have distinct SHA-256 hashes")
+
+        reader_a = pypdf.PdfReader(self.pdf_a_path)
+        text_a = "\n".join(p.extract_text() for p in reader_a.pages).upper()
+
+        reader_b = pypdf.PdfReader(self.pdf_b_path)
+        text_b = "\n".join(p.extract_text() for p in reader_b.pages).upper()
+
+        self.assertIn("ARUN SHARMA", text_a)
+        self.assertNotIn("ANIL KUMAR", text_a)
+
+        self.assertIn("ANIL KUMAR", text_b)
+        self.assertNotIn("ARUN SHARMA", text_b)
+
+        # DOB Isolation
+        self.assertIn("1981", text_a)
+        self.assertNotIn("1975", text_a)
+
+        self.assertIn("1975", text_b)
+        self.assertNotIn("1981", text_b)
+
+    def test_key_dates_near_boundary_annotations(self):
+        # 10 Jan is near-boundary (6.4 min) and has score 95 for Person A, 100 for Person B
+        reader_a = pypdf.PdfReader(self.pdf_a_path)
+        page6_a = " ".join(reader_a.pages[5].extract_text().split())  # Page 6 (index 5)
+        self.assertIn("10 Jan", page6_a)
+        self.assertIn("Panchang: the tithi changes shortly after sunrise; check your local Panchang", page6_a)
+
+        reader_b = pypdf.PdfReader(self.pdf_b_path)
+        page6_b = " ".join(reader_b.pages[5].extract_text().split())  # Page 6 (index 5)
+        self.assertIn("10 Jan", page6_b)
+        self.assertIn("Panchang: the tithi changes shortly after sunrise; check your local Panchang", page6_b)
 
     def test_golden_calendar_comparisons_365(self):
         # Arun Sharma (Person A)
