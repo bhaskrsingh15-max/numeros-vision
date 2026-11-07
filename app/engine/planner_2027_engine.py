@@ -521,6 +521,12 @@ def calculate_planner_2027(
         avg_score = round(sum(d["alignment_score"] for d in days_in_m) / len(days_in_m), 1)
 
         sorted_best = sorted(days_in_m, key=lambda x: (-x["alignment_score"], x["date"]))
+        # Amavasya days must not appear in "Top Favourable Windows" (Point 6); replaced with next best day
+        eligible_best = [
+            d for d in sorted_best
+            if not d.get("panchang", {}).get("is_amavasya", False)
+            and d.get("panchang", {}).get("tithi_name", "") != "Amavasya"
+        ]
         best_5 = [
             {
                 "date": d["date"],
@@ -529,7 +535,7 @@ def calculate_planner_2027(
                 "tier": d["tier"],
                 "note": d["note"]
             }
-            for d in sorted_best[:5]
+            for d in eligible_best[:5]
         ]
 
         sorted_care = sorted(days_in_m, key=lambda x: (x["alignment_score"], x["date"]))

@@ -131,6 +131,17 @@ def get_tropical_sun_sign(month: int, day: int) -> str:
         return "Pisces"
 
 
+def draw_page_background(canvas_obj, doc):
+    """
+    Draws the background tint FIRST on every page, before any story flowables or tables.
+    """
+    canvas_obj.saveState()
+    w, h = doc.pagesize
+    canvas_obj.setFillColor(COLOR_PEARL_BG)
+    canvas_obj.rect(0, 0, w, h, fill=1, stroke=0)
+    canvas_obj.restoreState()
+
+
 class Planner2027ReportCanvas(canvas.Canvas):
     """
     Two-pass canvas drawing luxury gold frames, running headers/footers,
@@ -163,11 +174,7 @@ class Planner2027ReportCanvas(canvas.Canvas):
         self.saveState()
         w, h = self._pagesize
 
-        # 1. Background tint
-        self.setFillColor(COLOR_PEARL_BG)
-        self.rect(0, 0, w, h, fill=1, stroke=0)
-
-        # 2. Luxury Double Gold Document Frame
+        # 1. Luxury Double Gold Document Frame (stroke only, NO fill so background/text are preserved)
         self.setStrokeColor(COLOR_GOLD)
         self.setLineWidth(1.1)
         self.rect(18, 18, w - 36, h - 36, stroke=1, fill=0)
@@ -176,14 +183,14 @@ class Planner2027ReportCanvas(canvas.Canvas):
         self.setLineWidth(0.6)
         self.rect(21, 21, w - 42, h - 42, stroke=1, fill=0)
 
-        # 3. Running Header (Pages 2+)
+        # 2. Running Header (Pages 2+)
         if self._pageNumber > 1:
             logo_icon = os.path.join(os.path.dirname(__file__), "..", "..", "..", "app", "static", "logos", "nv-logo-mark.png")
             if not os.path.exists(logo_icon):
                 logo_icon = os.path.join("app", "static", "logos", "nv-logo-mark.png")
             if os.path.exists(logo_icon):
                 try:
-                    self.drawImage(logo_icon, 34, h - 31, width=13, height=13, mask='auto', preserveAspectRatio=True)
+                    self.drawImage(os.path.abspath(logo_icon), 34, h - 31, width=13, height=13, mask='auto', preserveAspectRatio=True)
                 except Exception:
                     pass
 
@@ -203,7 +210,7 @@ class Planner2027ReportCanvas(canvas.Canvas):
             self.setLineWidth(0.6)
             self.line(34, h - 33, w - 34, h - 33)
 
-        # 4. Running Footer
+        # 3. Running Footer
         self.setStrokeColor(COLOR_BORDER)
         self.setLineWidth(0.6)
         self.line(34, 38, w - 34, 38)
@@ -219,15 +226,17 @@ class Planner2027ReportCanvas(canvas.Canvas):
         page_str = f"Page {self._pageNumber} of {total_pages}"
         self.drawRightString(w - 34, 26, page_str)
 
-        # 5. SAMPLE Watermark (Only when is_sample is True)
+        # 4. SAMPLE Watermark (Only when is_sample is True)
         if self.is_sample:
             self.saveState()
+            self.setFillAlpha(0.08)
             self.setFont("Times-Bold", 54)
-            self.setFillColor(colors.Color(0.79, 0.64, 0.15, alpha=0.065))
+            self.setFillColor(COLOR_GOLD_DARK)
             self.translate(w / 2.0, h / 2.0)
             self.rotate(45)
             self.drawCentredString(0, 0, "SAMPLE")
             self.restoreState()
+            self.setFillAlpha(1.0)
 
         self.restoreState()
 
@@ -380,7 +389,12 @@ class Planner2027PdfBuilder:
                 **kwargs
             )
 
-        doc.build(self.story, canvasmaker=make_canvas)
+        doc.build(
+            self.story,
+            canvasmaker=make_canvas,
+            onFirstPage=draw_page_background,
+            onLaterPages=draw_page_background
+        )
         return buf.getvalue()
 
     def _build_page1_cover(self):

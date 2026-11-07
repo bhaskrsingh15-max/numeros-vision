@@ -344,8 +344,11 @@ class TestPlanner2027PdfQc(unittest.TestCase):
                 found_avg = float(avg_match.group(1))
                 self.assertAlmostEqual(found_avg, expected_avg, places=1, msg=f"{name} M{m} avg mismatch")
 
-                # 2. Top 5 dates assertion
-                sorted_best = sorted(m_days, key=lambda x: (-int(x["score"]), x["date"]))[:5]
+                # 2. Top 5 dates assertion (Amavasya days excluded per Point 6)
+                sorted_best = [
+                    r for r in sorted(m_days, key=lambda x: (-int(x["score"]), x["date"]))
+                    if panchang_golden[r["date"]]["tithi_name"] != "Amavasya"
+                ][:5]
                 for b in sorted_best:
                     dt = datetime.date.fromisoformat(b["date"])
                     d_str = dt.strftime("%d %b")
@@ -374,6 +377,29 @@ class TestPlanner2027PdfQc(unittest.TestCase):
                     dt_nm = datetime.date.fromisoformat(nm["date"])
                     nm_str = f"{dt_nm.strftime('%d %b')} at {nm['time_ist']}"
                     self.assertIn(nm_str, text, f"{name} M{m}: New moon {nm_str} missing from PDF")
+
+    def test_rasterization_all_pages_non_background(self):
+        """
+        Rasterizes EVERY page of both generated PDFs with pypdfium2
+        and asserts:
+          - No page is entirely white
+          - Every page has >= 1.0% non-background pixels
+        """
+        import pypdfium2 as pdfium
+        import numpy as np
+
+        for pdf_path, name in [(self.pdf_a_path, "Arun Sharma"), (self.pdf_b_path, "Anil Kumar")]:
+            doc = pdfium.PdfDocument(pdf_path)
+            self.assertEqual(len(doc), 24)
+            for i in range(len(doc)):
+                img = doc[i].render(scale=80/72).to_pil()
+                arr = np.array(img)
+                bg_mask = ((arr[:,:,0] >= 253) & (arr[:,:,1] >= 250) & (arr[:,:,2] >= 244))
+                non_bg_pct = (1.0 - np.mean(bg_mask)) * 100
+                self.assertGreaterEqual(
+                    non_bg_pct, 1.0,
+                    f"{name} Page {i+1} has under 1% non-bg pixels ({non_bg_pct:.2f}%). Blank page detected!"
+                )
 
 
 if __name__ == "__main__":
