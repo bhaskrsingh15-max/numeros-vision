@@ -134,50 +134,40 @@
         gap: 10px;
         flex-wrap: wrap;
         align-items: center;
+        margin-top: 14px;
       }
-      .nv-consent-btn-all {
-        background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
-        color: #FFFFFF !important;
-        border: none;
-        border-radius: 20px;
-        padding: 8px 18px;
-        font-size: 0.81rem;
-        font-weight: 700;
-        letter-spacing: 0.03em;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(201, 162, 39, 0.28);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-      }
-      .nv-consent-btn-all:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(201, 162, 39, 0.38);
-      }
-      .nv-consent-btn-essential {
+      .nv-consent-btn {
+        flex: 1 1 0;
+        min-width: 105px;
         background: #FAF6EE;
         color: #523E28;
-        border: 1px solid rgba(201, 162, 39, 0.45);
+        border: 1.5px solid rgba(201, 162, 39, 0.55);
         border-radius: 20px;
-        padding: 8px 14px;
+        padding: 9px 14px;
+        font-family: inherit;
         font-size: 0.81rem;
         font-weight: 600;
+        letter-spacing: 0.02em;
         cursor: pointer;
-        transition: background 0.15s ease;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(30, 24, 16, 0.06);
+        transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
       }
-      .nv-consent-btn-essential:hover {
+      .nv-consent-btn:hover {
         background: #F2ECE0;
-      }
-      .nv-consent-link-pref {
-        font-size: 0.78rem;
+        border-color: #8B6914;
         color: #8B6914;
-        font-weight: 600;
-        text-decoration: underline;
-        cursor: pointer;
-        background: transparent;
-        border: none;
-        padding: 4px 6px;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(201, 162, 39, 0.18);
       }
-      .nv-consent-link-pref:hover {
-        color: #C9A227;
+      .nv-consent-btn:focus-visible {
+        outline: 2px solid #8B6914;
+        outline-offset: 2px;
+      }
+      .nv-consent-btn-all,
+      .nv-consent-btn-essential,
+      .nv-consent-btn-customize {
+        /* Equal visual prominence across all consent options */
       }
       .nv-consent-close {
         position: absolute;
@@ -339,13 +329,12 @@
           <div class="nv-consent-content">
             <h4 class="nv-consent-title">Cookie &amp; Privacy Choices</h4>
             <p class="nv-consent-text">
-              We process essential mathematical session coordinates and anonymous telemetry under the <strong>DPDP Act 2023 (India)</strong> and <strong>GDPR (EU/UK)</strong>. We strictly enforce zero third-party data broker sharing and zero cross-site advertising pixels.
-              <a href="/cookie-policy/">Read Cookie Policy</a> • <a href="/privacy-policy/">Privacy Policy</a>.
+              We use essential cookies to keep your session secure and process your orders. With your permission, we also use analytics cookies (Google Analytics) to understand how our tools are used, and marketing cookies to measure our advertising. We do not send your birth details, charts or payment details to advertising networks. You can change your choices or withdraw consent at any time from Cookie Preferences in the footer.
             </p>
             <div class="nv-consent-actions">
-              <button class="nv-consent-btn-all" onclick="window.nvConsent.acceptChoice('all')">Accept All ✦</button>
-              <button class="nv-consent-btn-essential" onclick="window.nvConsent.acceptChoice('essential')">Essential Only</button>
-              <button type="button" class="nv-consent-link-pref" onclick="window.nvConsent.openPreferences(event)">Customize Choices</button>
+              <button type="button" class="nv-consent-btn nv-consent-btn-essential" onclick="window.nvConsent.acceptChoice('essential')">Essential Only</button>
+              <button type="button" class="nv-consent-btn nv-consent-btn-customize" onclick="window.nvConsent.openPreferences(event)">Customize</button>
+              <button type="button" class="nv-consent-btn nv-consent-btn-all" onclick="window.nvConsent.acceptChoice('all')">Accept All</button>
             </div>
           </div>
         </div>

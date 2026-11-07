@@ -2763,7 +2763,7 @@ export default {
         subjectId: order ? order.subject_id : null,
         jobId: fulfillRes ? fulfillRes.jobId : null,
         reportStatus: 'preparing',
-        message: 'Your payment has been verified. Your personalized report is being prepared.'
+        message: 'Your payment has been verified. Your personalized report is being prepared. It will be ready within a few minutes.'
       }), { status: 200, headers: corsHeaders });
     }
 
@@ -2838,7 +2838,7 @@ export default {
           jobId,
           jobStatus,
           reportStatus: normalizedReportStatus,
-          message: 'Your personalized report is being prepared. It will be available shortly.'
+          message: 'Your personalized report is being prepared. It will be ready within a few minutes.'
         }), { status: 200, headers: corsHeaders });
       }
 
@@ -3239,7 +3239,7 @@ export default {
         
         let displayStatus = 'preparing';
         let statusBadge = 'Preparing';
-        let message = 'Your personalized report is being prepared. It will be available shortly.';
+        let message = 'Your personalized report is being prepared. It will be ready within a few minutes.';
         let isDownloadable = false;
 
         if (st === 'COMPLETED' || st === 'DOWNLOADED' || job.r2_key) {
@@ -3250,7 +3250,7 @@ export default {
         } else if (st === 'FAILED' || attempts >= 3) {
           displayStatus = 'failed';
           statusBadge = 'We are on it';
-          message = 'We are on it. Our advisory desk has been notified to finalize your bespoke dossier.';
+          message = 'We hit a problem preparing your report and are retrying automatically. If it isn\'t ready within 30 minutes, write to support@numerosvision.com.';
         }
 
         return {

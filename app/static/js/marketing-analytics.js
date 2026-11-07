@@ -18,30 +18,70 @@
 (function () {
   'use strict';
 
+  // PII & Numerological Chart Data Filter (DPDP Act 2023 & GDPR Privacy Compliance)
+  const RESTRICTED_PII_KEYS = new Set([
+    'dob', 'birth_date', 'birthdate', 'birth_time', 'birth_place', 'birth_city',
+    'city', 'place', 'location', 'name', 'full_name', 'first_name', 'last_name', 'user_name',
+    'email', 'phone', 'mobile', 'driver', 'conductor', 'driver_mulank', 'conductor_bhagyank',
+    'mulank', 'bhagyank', 'destiny', 'lifepath', 'life_path', 'kua', 'loshu', 'grid', 'chart',
+    'pan', 'card_number', 'cvv'
+  ]);
+
+  function sanitizeTelemetryPayload(obj) {
+    if (!obj || typeof obj !== 'object') return obj;
+    if (Array.isArray(obj)) return obj.map(sanitizeTelemetryPayload);
+    const clean = {};
+    for (const [key, val] of Object.entries(obj)) {
+      const lowerKey = key.toLowerCase();
+      if (RESTRICTED_PII_KEYS.has(lowerKey)) continue;
+      if (typeof val === 'string') {
+        if (/@[\w.-]+\.\w+/.test(val)) continue;
+        if (/^\+?[0-9\s-]{10,15}$/.test(val.trim())) continue;
+        if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(val.trim())) continue;
+      }
+      if (typeof val === 'object' && val !== null) {
+        clean[key] = sanitizeTelemetryPayload(val);
+      } else {
+        clean[key] = val;
+      }
+    }
+    return clean;
+  }
+
   // 1. DataLayer & Global Stubs
   window.dataLayer = window.dataLayer || [];
   // Google Tag Manager (v5) Mobile Native Bridges (Android & iOS)
   // Forwards web dataLayer events into native Firebase Analytics & GTM v5 runtimes
   const originalDataLayerPush = window.dataLayer.push.bind(window.dataLayer);
   window.dataLayer.push = function() {
+    const sanitizedArgs = [];
     for (let i = 0; i < arguments.length; i++) {
       const item = arguments[i];
       if (item && typeof item === 'object') {
-        const eventName = item.event || item[0] || 'dataLayer_push';
+        const cleanItem = sanitizeTelemetryPayload(item);
+        const eventName = cleanItem.event || cleanItem[0] || 'dataLayer_push';
         // 1. Android GTM v5 Bridge
         if (window.AndroidBridge && typeof window.AndroidBridge.logEvent === 'function') {
           try {
-            window.AndroidBridge.logEvent(String(eventName), JSON.stringify(item));
+            window.AndroidBridge.logEvent(String(eventName), JSON.stringify(cleanItem));
           } catch (e) {
             console.debug('[AndroidBridge] GTM event forward error:', e);
           }
         }
+        sanitizedArgs.push(cleanItem);
+      } else {
+        sanitizedArgs.push(item);
       }
     }
-    return originalDataLayerPush.apply(window.dataLayer, arguments);
+    return originalDataLayerPush.apply(window.dataLayer, sanitizedArgs);
   };
   window.gtag = window.gtag || function () {
-    window.dataLayer.push(arguments);
+    const cleanArgs = [];
+    for (let i = 0; i < arguments.length; i++) {
+      const a = arguments[i];
+      cleanArgs.push(typeof a === 'object' && a !== null ? sanitizeTelemetryPayload(a) : a);
+    }
+    window.dataLayer.push(cleanArgs);
   };
 
   // Google Consent Mode v2 Defaults:
@@ -56,10 +96,15 @@
   });
   window.gtag('js', new Date());
 
-  // Meta Pixel Stub
+  // Meta Pixel Stub with Automatic Telemetry Sanitizer
   if (!window.fbq) {
     const fbq = function () {
-      fbq.callMethod ? fbq.callMethod.apply(fbq, arguments) : fbq.queue.push(arguments);
+      const cleanArgs = [];
+      for (let i = 0; i < arguments.length; i++) {
+        const a = arguments[i];
+        cleanArgs.push(typeof a === 'object' && a !== null ? sanitizeTelemetryPayload(a) : a);
+      }
+      fbq.callMethod ? fbq.callMethod.apply(fbq, cleanArgs) : fbq.queue.push(cleanArgs);
     };
     if (!window._fbq) window._fbq = fbq;
     fbq.push = fbq;
@@ -303,11 +348,24 @@
     // A. Page View
     pageView: function (pagePath, pageTitle) {
       const attr = getStoredAttribution();
-      const payload = {
-        page_path: pagePath || window.location.pathname,
+      let rawPath = pagePath || (window.location.pathname + (window.location.search || ''));
+      let cleanPath = rawPath;
+      try {
+        if (cleanPath.includes('?')) {
+          const [pathPart, queryPart] = cleanPath.split('?');
+          const pairs = queryPart.split('&').filter(function (p) {
+            const k = (p.split('=')[0] || '').trim().toLowerCase();
+            return !RESTRICTED_PII_KEYS.has(k);
+          });
+          cleanPath = pathPart + (pairs.length ? '?' + pairs.join('&') : '');
+        }
+      } catch (e) {}
+
+      const payload = sanitizeTelemetryPayload({
+        page_path: cleanPath,
         page_title: pageTitle || document.title,
         ...attr
-      };
+      });
 
       if (typeof window.gtag === 'function') {
         window.gtag('event', 'page_view', payload);
@@ -323,12 +381,12 @@
     // B. Calculator Interaction / Diagnostic
     calculatorUsed: function (toolName, details) {
       const attr = getStoredAttribution();
-      const payload = {
+      const payload = sanitizeTelemetryPayload({
         calculator_name: toolName || 'lo_shu_grid',
         timestamp: new Date().toISOString(),
         ...attr,
         ...(details || {})
-      };
+      });
 
       if (typeof window.gtag === 'function') {
         window.gtag('event', 'calculator_used', payload);
@@ -344,16 +402,14 @@
     // C. Free Seeker Signup / Lead Generation
     freeSignup: function (userData) {
       const attr = getStoredAttribution();
-      const payload = {
+      const payload = sanitizeTelemetryPayload({
         method: userData?.source || 'free_calculator_gate',
         user_id: userData?.user_id || localStorage.getItem('nv_uid') || null,
         golden_profile_id: userData?.golden_profile_id || localStorage.getItem('nv_golden_id') || null,
-        driver_mulank: userData?.driver_mulank || null,
-        conductor_bhagyank: userData?.conductor_bhagyank || null,
         value: 0.0,
         currency: 'INR',
         ...attr
-      };
+      });
 
       // 1. Google Analytics 4
       if (typeof window.gtag === 'function') {
@@ -407,13 +463,13 @@
     // D. Initiate Checkout
     initiateCheckout: function (planName, amount, details) {
       const attr = getStoredAttribution();
-      const payload = {
+      const payload = sanitizeTelemetryPayload({
         content_name: planName || 'Numeros Vision Report',
         value: parseFloat(amount) || 0.0,
         currency: 'INR',
         ...attr,
         ...(details || {})
-      };
+      });
 
       if (typeof window.gtag === 'function') {
         window.gtag('event', 'begin_checkout', {
@@ -438,14 +494,14 @@
       const val = parseFloat(amount) || 0.0;
       const curr = currency || 'INR';
 
-      const payload = {
+      const payload = sanitizeTelemetryPayload({
         transaction_id: orderId || 'order_' + Date.now(),
         content_name: planName || 'Numerology Report',
         value: val,
         currency: curr,
         ...attr,
         ...(details || {})
-      };
+      });
 
       // 1. Google Analytics 4
       if (typeof window.gtag === 'function') {
