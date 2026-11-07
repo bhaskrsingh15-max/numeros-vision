@@ -18,22 +18,32 @@
 (function () {
   'use strict';
 
-  // PII & Numerological Chart Data Filter (DPDP Act 2023 & GDPR Privacy Compliance)
-  const RESTRICTED_PII_KEYS = new Set([
-    'dob', 'birth_date', 'birthdate', 'birth_time', 'birth_place', 'birth_city',
-    'city', 'place', 'location', 'name', 'full_name', 'first_name', 'last_name', 'user_name',
-    'email', 'phone', 'mobile', 'driver', 'conductor', 'driver_mulank', 'conductor_bhagyank',
-    'mulank', 'bhagyank', 'destiny', 'lifepath', 'life_path', 'kua', 'loshu', 'grid', 'chart',
-    'pan', 'card_number', 'cvv'
+  // Telemetry Allowlist (Strict Allowlist — DPDP Act 2023 & GDPR Privacy Compliance)
+  // Only explicitly designated telemetry and attribution dimensions are permitted.
+  const ALLOWED_TELEMETRY_KEYS = new Set([
+    'event', 'page_path', 'page_title', 'timestamp',
+    'calculator_name', 'topic', 'plan_id', 'lead_type', 'method', 'cta_location', 'ref',
+    'value', 'currency', 'transaction_id', 'content_name', 'items', 'item_name', 'price', 'quantity',
+    'user_id', 'golden_profile_id',
+    'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+    'gclid', 'fbclid', 'wbraid', 'gbraid', 'ttclid', 'msclkid',
+    'gaid', 'idfa', 'idfv', 'device_id', 'device_type', 'is_pwa', 'app_platform'
   ]);
 
   function sanitizeTelemetryPayload(obj) {
     if (!obj || typeof obj !== 'object') return obj;
-    if (Array.isArray(obj)) return obj.map(sanitizeTelemetryPayload);
+    if (Array.isArray(obj)) {
+      return obj
+        .map(sanitizeTelemetryPayload)
+        .filter(function (item) { return item !== null && item !== undefined; });
+    }
     const clean = {};
     for (const [key, val] of Object.entries(obj)) {
       const lowerKey = key.toLowerCase();
-      if (RESTRICTED_PII_KEYS.has(lowerKey)) continue;
+      // Strict ALLOWLIST: Any key not explicitly in ALLOWED_TELEMETRY_KEYS is dropped immediately
+      if (!ALLOWED_TELEMETRY_KEYS.has(lowerKey)) continue;
+
+      // Secondary value-level privacy verification: drop any string value matching email, phone, or date pattern
       if (typeof val === 'string') {
         if (/@[\w.-]+\.\w+/.test(val)) continue;
         if (/^\+?[0-9\s-]{10,15}$/.test(val.trim())) continue;
@@ -212,21 +222,8 @@
     }
     if (_isInitialized) return;
 
-    // Check if configuration is provided in window or needs backend fetch
-    if (!_trackingConfig || (!(_trackingConfig.ga4_measurement_id || _trackingConfig.meta_pixel_id || _trackingConfig.google_ads_id))) {
-      try {
-        const resp = await fetch('/api/v1/cdp/config/analytics');
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data && data.config) {
-            _trackingConfig = Object.assign({}, _trackingConfig || {}, data.config);
-            window.NV_TRACKING_CONFIG = _trackingConfig;
-          }
-        }
-      } catch (e) {
-        console.debug('[NV Tracking] Config fetch notice:', e);
-      }
-    }
+    // Static Tracking Configuration Resolution
+    _trackingConfig = Object.assign({ ga4_measurement_id: 'G-3Z2E6416W7' }, window.NV_TRACKING_CONFIG || {});
 
     _trackingConfig = _trackingConfig || {};
     const cfg = _trackingConfig;
@@ -253,14 +250,7 @@
       window.fbq('track', 'PageView');
     }
 
-    // C. Initialize Microsoft Clarity
-    if (cfg.clarity_project_id) {
-      (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window, document, "clarity", "script", cfg.clarity_project_id);
-    }
+    // Clarity Removed per CDP & Privacy Directive
 
     // D. Initialize Google Tag Manager (Optional)
     if (cfg.gtm_container_id) {
@@ -271,23 +261,7 @@
       })(window,document,'script','dataLayer',cfg.gtm_container_id);
     }
 
-    // E. Initialize Firebase Web Analytics (Optional)
-    if (cfg.firebase && cfg.firebase.apiKey && cfg.firebase.projectId) {
-      loadScript('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js', 'nv-firebase-app', false);
-      setTimeout(function () {
-        loadScript('https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js', 'nv-firebase-analytics', false);
-        setTimeout(function () {
-          try {
-            if (window.firebase && !window.firebase.apps.length) {
-              window.firebase.initializeApp(cfg.firebase);
-              window.nvFirebaseAnalytics = window.firebase.analytics();
-            }
-          } catch (e) {
-            console.debug('[NV Tracking] Firebase init notice:', e);
-          }
-        }, 300);
-      }, 200);
-    }
+    // Firebase Web Analytics Removed per CDP & Privacy Directive
 
     _isInitialized = true;
     checkAndApplyConsent();
@@ -355,7 +329,7 @@
           const [pathPart, queryPart] = cleanPath.split('?');
           const pairs = queryPart.split('&').filter(function (p) {
             const k = (p.split('=')[0] || '').trim().toLowerCase();
-            return !RESTRICTED_PII_KEYS.has(k);
+            return ALLOWED_TELEMETRY_KEYS.has(k);
           });
           cleanPath = pathPart + (pairs.length ? '?' + pairs.join('&') : '');
         }
@@ -373,9 +347,7 @@
       if (typeof window.fbq === 'function') {
         window.fbq('track', 'PageView', payload);
       }
-      if (window.nvFirebaseAnalytics) {
-        window.nvFirebaseAnalytics.logEvent('page_view', payload);
-      }
+
     },
 
     // B. Calculator Interaction / Diagnostic
@@ -394,9 +366,7 @@
       if (typeof window.fbq === 'function') {
         window.fbq('trackCustom', 'CalculatorUsed', payload);
       }
-      if (window.nvFirebaseAnalytics) {
-        window.nvFirebaseAnalytics.logEvent('calculator_used', payload);
-      }
+
     },
 
     // C. Free Seeker Signup / Lead Generation
@@ -431,29 +401,9 @@
         window.fbq('track', 'CompleteRegistration', payload);
       }
 
-      // 4. Firebase Analytics
-      if (window.nvFirebaseAnalytics) {
-        window.nvFirebaseAnalytics.logEvent('sign_up', payload);
-      }
 
-      // 5. Ingest into internal CDP
-      try {
-        fetch('/api/v1/cdp/capture', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: userData?.name || null,
-            email: userData?.email || null,
-            phone: userData?.phone || null,
-            device_id: attr.device_id,
-            device_type: attr.device_type,
-            utm_source: attr.utm_source,
-            utm_medium: attr.utm_medium,
-            utm_campaign: attr.utm_campaign,
-            category: 'free_signup'
-          })
-        }).catch(function () {});
-      } catch (e) {}
+
+
 
       if (_trackingConfig && _trackingConfig.debug_mode) {
         console.info('[NV Tracking] Free Signup / Lead Tracked Across All Pixels:', payload);
@@ -483,9 +433,7 @@
         window.fbq('track', 'InitiateCheckout', payload);
       }
 
-      if (window.nvFirebaseAnalytics) {
-        window.nvFirebaseAnalytics.logEvent('begin_checkout', payload);
-      }
+
     },
 
     // E. Paid Purchase / Report Order Completion
@@ -533,24 +481,9 @@
         });
       }
 
-      // 4. Firebase Analytics
-      if (window.nvFirebaseAnalytics) {
-        window.nvFirebaseAnalytics.logEvent('purchase', payload);
-      }
 
-      // 5. Ingest into internal CDP with spend update
-      try {
-        fetch('/api/v1/cdp/capture', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            device_id: attr.device_id,
-            device_type: attr.device_type,
-            total_spend_inr: val,
-            category: 'paid_report_purchase'
-          })
-        }).catch(function () {});
-      } catch (e) {}
+
+
 
       if (_trackingConfig && _trackingConfig.debug_mode) {
         console.info('[NV Tracking] Paid Purchase Tracked Across All Pixels:', payload);
@@ -565,9 +498,7 @@
       if (typeof window.gtag === 'function') {
         window.gtag('event', 'charm_ai_query', payload);
       }
-      if (window.nvFirebaseAnalytics) {
-        window.nvFirebaseAnalytics.logEvent('charm_ai_query', payload);
-      }
+
     },
 
     // G. WhatsApp / Contact Click

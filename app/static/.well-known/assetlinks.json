@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.numerosvision.app",
+      "sha256_cert_fingerprints": [
+        "14:6D:E9:01:07:52:07:71:02:85:63:F6:44:9F:65:4F:92:49:EE:12:12:F1:C7:A7:F3:33:43:24:B9:4C:6D:8F"
+      ]
+    }
+  }
+]

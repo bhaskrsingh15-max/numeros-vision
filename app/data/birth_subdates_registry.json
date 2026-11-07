@@ -1,0 +1,1973 @@
+{
+  "1": {
+    "day": 1,
+    "root": 1,
+    "code": "1(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "Balanced Potency",
+    "strength_potency_score": 78,
+    "planet": "Sun (Surya)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Primal Originator & Sovereign Pioneer",
+    "classical_symbol": "The Golden Monad / Solar Spark",
+    "planetary_composition": "Pure Sun (Surya) Energy",
+    "strength_value_breakdown": "Pure single-digit solar energy grants strong independence, executive willpower, and pioneering courage. Graded as Category B (Normal Strength) because single-digit 1 requires conscious cultivation of diplomatic partnership skills and team delegation to prevent autocratic isolation.",
+    "core_personality": "Naturally self-directed, ambitious, and original. You despise being micromanaged and thrive when leading projects from inception. You project natural authority and expect excellence from peers.",
+    "superpowers": [
+      "Pioneering initiative",
+      "Clear executive focus",
+      "Unwavering self-trust",
+      "Decisive crisis leadership",
+      "Original conceptual vision"
+    ],
+    "shadow_vulnerabilities": [
+      "Impatience with slower minds",
+      "Autocratic stubbornness",
+      "Difficulty asking for assistance",
+      "Ego sensitivity to perceived disrespect"
+    ],
+    "career_and_wealth": "Supreme suitability for startup founders, corporate executive management, government administration, political strategy, and solo consulting.",
+    "love_and_relationships": "Generous and protective partner, but requires an equal who respects personal autonomy and does not challenge basic independence.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Practice active listening in meetings without interrupting; delegate at least one key daily task to build team trust.",
+      "universal_secular_remedy": "Drink water from a pure copper bottle; start morning with 15 minutes of natural sunlight; Solfeggio 528 Hz for vitality.",
+      "traditional_vedic_remedy": "Daily morning Surya Arghya (water offering with pinch of red kumkum/sandalwood in copper lota); Gayatri Mantra or Om Suryaya Namaha 108 times.",
+      "auspicious_colors": [
+        "Gold",
+        "Amber",
+        "Warm Yellow",
+        "Saffron"
+      ],
+      "auspicious_days": [
+        "Sunday",
+        "Monday"
+      ],
+      "compatible_dates": [
+        1,
+        10,
+        19,
+        28,
+        2,
+        3,
+        5,
+        9
+      ],
+      "challenging_dates": [
+        8,
+        17,
+        26,
+        4
+      ]
+    },
+    "report_narrative": "Born on the 1st, you carry the primal creative vibration of the Sun. Your life path is structured around self-reliance, original leadership, and visionary execution. While your executive willpower allows you to launch bold enterprises, your greatest evolution lies in turning solo brilliance into collaborative triumph.",
+    "charm_ai_dialogue": "You are born on the 1st—pure solar power! You are a natural pioneer who thrives in autonomy. Your Category B strength gives you steady, focused drive. Remember: true kings don't command from isolation; they empower their circle. Balance your fiery ambition with patient delegation to see your vision soar."
+  },
+  "10": {
+    "day": 10,
+    "root": 1,
+    "code": "10(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "Karmic 10",
+    "strength_potency_score": 80,
+    "planet": "Sun (Surya)",
+    "is_karmic": true,
+    "is_master": false,
+    "archetype": "The Sovereign of the Wheel & Self-Made Architect",
+    "classical_symbol": "The Wheel of Fortune (Classical Chaldean Canon)",
+    "planetary_composition": "Sun (1) + Cosmic Void (0) = Solar Infinity",
+    "strength_value_breakdown": "The cipher (0) magnifies the Sun's ambition and introduces cyclical karmic turning points. Categorized as Category B (Normal Strength) because monumental rise and fall depend strictly on personal ethical choices and discipline.",
+    "core_personality": "Possesses a charismatic, self-confident aura with a remarkable capacity to reinvent yourself after life disruptions. You believe deeply in your own destiny and reject defeat.",
+    "superpowers": [
+      "Rapid regenerative recovery",
+      "Magnetic public confidence",
+      "Systemic big-picture foresight",
+      "Fearless commercial enterprise",
+      "Natural executive gravity"
+    ],
+    "shadow_vulnerabilities": [
+      "Extreme all-or-nothing mindset",
+      "Sudden detachment from routine commitments",
+      "Over-confidence leading to financial overreach",
+      "Resistance to emotional vulnerability"
+    ],
+    "career_and_wealth": "Thrives in large enterprise management, venture building, investment banking, media production, and turn-around corporate stewardship.",
+    "love_and_relationships": "Warm, generous, and dignified. Seeks a partner who celebrates accomplishments and provides a grounded, stable home base.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Document long-term contingency plans rather than relying purely on momentum; celebrate milestones with heartfelt gratitude to your team.",
+      "universal_secular_remedy": "Place a brass sun emblem or golden paperweight in the East sector of your workspace; hydrate regularly; practice evening reflection.",
+      "traditional_vedic_remedy": "Aditya Hridaya Stotra on Sundays; donate golden wheat or jaggery (gur) to community kitchens; respect father figures.",
+      "auspicious_colors": [
+        "Golden Yellow",
+        "Copper Orange",
+        "Cream"
+      ],
+      "auspicious_days": [
+        "Sunday",
+        "Tuesday"
+      ],
+      "compatible_dates": [
+        1,
+        10,
+        19,
+        28,
+        5,
+        23,
+        9
+      ],
+      "challenging_dates": [
+        8,
+        17,
+        26,
+        18
+      ]
+    },
+    "report_narrative": "Born on the 10th, you operate under the vibration of the Wheel of Fortune. The cosmic zero acts as an amplifier of your solar drive. You possess an innate ability to bounce back from any career setback stronger than before.",
+    "charm_ai_dialogue": "Day 10 connects you to the Wheel of Fortune! With Category B strength, the zero behind your 1 amplifies your solar destiny. You are built to rise, rebuild, and conquer. Keep your ethical foundation rock-solid and every turn of the wheel will elevate your status."
+  },
+  "19": {
+    "day": 19,
+    "root": 1,
+    "code": "19(a)",
+    "tier": "a",
+    "strength_category": "A",
+    "strength_title": "Karmic 19",
+    "strength_potency_score": 94,
+    "planet": "Sun (Surya)",
+    "is_karmic": true,
+    "is_master": false,
+    "archetype": "The Sovereign Conqueror & Radiant Champion",
+    "classical_symbol": "The Prince of Heaven / The Radiant Sun (Classical Chaldean Canon)",
+    "planetary_composition": "Sun (1) + Mars (9) = 10 -> 1 (Fire + Fire Harmony)",
+    "strength_value_breakdown": "Sun (Surya) and Mars (Mangal) are natural fire allies, creating unstoppable executive drive, supreme courage, and royal magnetism. Rated Category A (Good Strength / 94% Potency). Karmic 19 lesson: must overcome the shadow of carrying all burdens alone and asking no help.",
+    "core_personality": "Radiant, high-octane, trendsetting, and fiercely ambitious. You carry royal pride and an instinct to protect others while pioneering new frontiers. Failure is never an option in your lexicon.",
+    "superpowers": [
+      "Unstoppable manifestation drive",
+      "Heroic courage under pressure",
+      "Trend-setting magnetic vision",
+      "Rapid social and career ascendancy",
+      "Protective leadership loyalty"
+    ],
+    "shadow_vulnerabilities": [
+      "Burdening yourself with everything alone",
+      "Fierce temper when disrespect is perceived",
+      "Resistance to admitting weakness",
+      "Tendency to dominate peers"
+    ],
+    "career_and_wealth": "Top-tier defense and security leadership, venture capitalism, high-stakes corporate law, disruptive tech founders, surgical specialties, and political office.",
+    "love_and_relationships": "Passionate, protective, and generous. Demands absolute fidelity and deep mutual respect. Needs an emotionally secure partner who is not intimidated by high ambition.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Practice asking for and receiving help with grace; share credit publicly with subordinates; cool your internal fire with mindful breathing.",
+      "universal_secular_remedy": "Carry a red jasper or carnelian stone; use 432 Hz calming frequencies; keep a dedicated water carafe on your desk.",
+      "traditional_vedic_remedy": "Recite Hanuman Chalisa daily; offer copper water arghya to early morning Sun; feed cows with soaked chana dal and jaggery on Tuesdays.",
+      "auspicious_colors": [
+        "Bright Gold",
+        "Ruby Red",
+        "Saffron",
+        "Crimson"
+      ],
+      "auspicious_days": [
+        "Sunday",
+        "Tuesday"
+      ],
+      "compatible_dates": [
+        1,
+        10,
+        19,
+        28,
+        9,
+        18,
+        27,
+        5,
+        14
+      ],
+      "challenging_dates": [
+        8,
+        17,
+        26,
+        2
+      ]
+    },
+    "report_narrative": "Born on the 19th, you hold the royal vibration known as the Prince of Heaven. With Category A strength and 94% intrinsic potency, the fusion of Sun and Mars grants you supreme executive charisma and pioneering authority. Transmuting the karmic test of isolation into collaborative strength unlocks effortless global influence.",
+    "charm_ai_dialogue": "You are a Day 19 soul—the Prince of Heaven! This is Category A Good Strength at 94% potency. You blend the radiant vision of the Sun with the fearless courage of Mars. You're designed to set trends, lead from the front, and win. Just remember: true sovereigns don't fight alone—build your army, trust your allies, and your reign will be timeless."
+  },
+  "28": {
+    "day": 28,
+    "root": 1,
+    "code": "28(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "The Tested Strategist · Enduring Mastery",
+    "strength_potency_score": 64,
+    "planet": "Sun (Surya)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Tested Strategist & Legal Architect",
+    "classical_symbol": "The Dual Trial / Overcoming Opposition (Chaldean Canon)",
+    "planetary_composition": "Moon (2) + Saturn (8) = 10 -> 1 (Intuitive Depth & Enduring Discipline)",
+    "strength_value_breakdown": "Moon (Chandra) and Saturn (Shani) are natural astrological adversaries. Combining sensitive emotion (2) with rigid karmic discipline (8) to yield Sun (1) causes internal emotional-material friction, delayed success, and legal/trust disputes. Graded Category C (64% Direct Ease) requiring conscious remedial architecture.",
+    "core_personality": "Deeply analytical, cautious, and resilient. You experience intense early challenges that forge an ironclad strategic intellect. You have acute financial sense but tend to view the world with skepticism.",
+    "superpowers": [
+      "Unbreakable crisis resilience",
+      "Exceptional risk and forensic financial analysis",
+      "Shrewd corporate legal acumen",
+      "Endurance through prolonged adversity",
+      "Mastery of operational systems"
+    ],
+    "shadow_vulnerabilities": [
+      "Cynicism and trust issues",
+      "Inner emotional anxiety under stress",
+      "Vulnerability to partner deception or legal disputes",
+      "Tendency to isolate emotionally"
+    ],
+    "career_and_wealth": "Corporate litigation, restructuring finance, real estate development, supply chain logistics, institutional auditing, and forensic risk governance.",
+    "love_and_relationships": "Guarded heart that opens slowly. Prone to feeling misunderstood or carrying unequal burdens in relationships. Fiercely devoted once trust is permanently proven.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Never enter verbal business partnerships—mandate independent legal contracts for every financial agreement; cultivate emotional vulnerability with safe loved ones.",
+      "universal_secular_remedy": "Wear a dual-tone silver and gold/brass metallic watch; practice earthing (barefoot grass walking) weekly; avoid all-black clothing in major negotiations.",
+      "traditional_vedic_remedy": "Water a Peepal tree on Saturdays; donate mustard oil or black sesame to laborers; wear a silver ring on the little finger to calm lunar anxiety.",
+      "auspicious_colors": [
+        "Pearl White",
+        "Muted Gold",
+        "Steel Blue",
+        "Cream"
+      ],
+      "auspicious_days": [
+        "Monday",
+        "Sunday"
+      ],
+      "compatible_dates": [
+        1,
+        10,
+        12,
+        21,
+        5,
+        23
+      ],
+      "challenging_dates": [
+        8,
+        17,
+        26,
+        4,
+        13,
+        22
+      ]
+    },
+    "report_narrative": "Born on the 28th, you are a battle-tested master builder. While the compound of Moon and Saturn brings early struggle and trust lessons, it shapes you into an exceptional strategist. Your success matures steadily through patient discipline and meticulous legal-financial frameworks.",
+    "charm_ai_dialogue": "Born on the 28th, you carry Category C tested strength. Moon (2) and Saturn (8) merge into Sun (1)—a path of deep grit and resilience. Early hurdles and trust tests are your training ground. When you formalize contracts, protect your emotional boundaries, and honor patience, your financial and executive structures become unshakeable."
+  },
+  "2": {
+    "day": 2,
+    "root": 2,
+    "code": "2(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "Balanced Intuition",
+    "strength_potency_score": 75,
+    "planet": "Moon (Chandra)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Empathetic Diplomat & Intuitive Harmonizer",
+    "classical_symbol": "The Silver Crescent / High Priestess Mirror",
+    "planetary_composition": "Pure Moon (Chandra) Energy",
+    "strength_value_breakdown": "Pure single-digit lunar energy brings high sensitivity, artistic imagination, and diplomatic empathy. Graded Category B (Normal Strength) because emotional equilibrium depends heavily on the surrounding environment and requires grounding against mood swings.",
+    "core_personality": "Gentle, imaginative, peacemaking, and perceptive. You sense what others feel before they speak. You excel as a partner, mediator, and creative conduit.",
+    "superpowers": [
+      "Intuitive emotional reading",
+      "Master dispute mediation",
+      "Subtle artistic elegance",
+      "Collaborative team cohesion",
+      "Deep listening and empathy"
+    ],
+    "shadow_vulnerabilities": [
+      "Hypersensitivity to harsh words",
+      "Indecisiveness and over-analyzing",
+      "Moody withdrawal under pressure",
+      "Tendency to play the martyr"
+    ],
+    "career_and_wealth": "Diplomacy, psychology, human resources, interior aesthetics, nursing/healthcare, counseling, and culinary arts.",
+    "love_and_relationships": "Deeply romantic, nurturing, and devoted. Thrives in an environment of gentle, steady emotional validation; wounded deeply by cold criticism.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Set firm conversational boundaries; don't take on colleagues' emotional problems as your own; make decisions within 24 hours to cure hesitation.",
+      "universal_secular_remedy": "Drink water from a silver cup; keep a clear quartz crystal on your nightstand; listen to 432 Hz frequency before sleep.",
+      "traditional_vedic_remedy": "Chandra Beej Mantra (Om Som Somaya Namaha) on Mondays; donate white rice, milk, or sugar to mothers or poor women; respect your mother.",
+      "auspicious_colors": [
+        "Pearl White",
+        "Silver",
+        "Cream",
+        "Sea Green"
+      ],
+      "auspicious_days": [
+        "Monday",
+        "Sunday"
+      ],
+      "compatible_dates": [
+        2,
+        11,
+        20,
+        1,
+        10,
+        3,
+        5
+      ],
+      "challenging_dates": [
+        4,
+        8,
+        9,
+        29
+      ]
+    },
+    "report_narrative": "Born on the 2nd, your soul is governed by the gentle illumination of the Moon. You possess remarkable emotional intelligence and a natural gift for diplomacy. Your greatest success blossoms through creative partnerships and intuitive advisory roles.",
+    "charm_ai_dialogue": "You are a Day 2 soul—ruled by the Moon! With Category B strength, your intuition and emotional intelligence are your greatest assets. You bring harmony and gentle brilliance everywhere you go. Protect your sensitive heart with firm boundaries and let your intuitive wisdom guide your decisions."
+  },
+  "11": {
+    "day": 11,
+    "root": 2,
+    "code": "11(a)",
+    "tier": "a",
+    "strength_category": "A",
+    "strength_title": "Master Number 11",
+    "strength_potency_score": 92,
+    "planet": "Moon (Chandra)",
+    "is_karmic": false,
+    "is_master": true,
+    "archetype": "The Spiritual Illuminator & Visionary Conduit",
+    "classical_symbol": "The Illuminator / The Double Pillar (11)",
+    "planetary_composition": "Sun (1) + Sun (1) = Double Solar Intensity channeled through Lunar Intuition (2)",
+    "strength_value_breakdown": "Two 1s generate double solar intensity funneling through the intuitive lunar receiver. Rated Category A (Good Strength / 92% Potency) due to visionary foresight and magnetic spiritual inspiration. Must ground nervous tension to prevent mental overload.",
+    "core_personality": "A visionary conduit between the seen and unseen. You experience flashes of uncanny insight, prophetic dreams, and intense aesthetic sensitivity. You hold yourself to exacting ideals.",
+    "superpowers": [
+      "Visionary prophetic insight",
+      "Charismatic spiritual leadership",
+      "Original artistic inspiration",
+      "Transformational healing presence",
+      "High-frequency pattern recognition"
+    ],
+    "shadow_vulnerabilities": [
+      "Nervous anxiety and insomnia",
+      "Acute self-doubt and imposter syndrome",
+      "Extreme perfectionism",
+      "Feeling misunderstood by mainstream society"
+    ],
+    "career_and_wealth": "Spiritual teaching, advanced neuroscience, cutting-edge AI philosophy, architectural design, inspirational media, and high-level psychotherapy.",
+    "love_and_relationships": "Seeks an authentic soul connection. Requires emotional depth and spiritual alignment; shallow interactions leave you exhausted.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Ground high psychic energy through daily physical exercise; write down creative inspirations immediately; release perfectionism.",
+      "universal_secular_remedy": "Daily barefoot walking on earth; wear natural rudraksha or white quartz crystal bracelet; practice 4-7-8 breathing.",
+      "traditional_vedic_remedy": "Meditate on Lord Shiva or divine light; wear a genuine Pearl or Moonstone in silver on little finger on Monday evening; chant Om Namah Shivaya.",
+      "auspicious_colors": [
+        "Luminous White",
+        "Silver",
+        "Pale Yellow",
+        "Lavender"
+      ],
+      "auspicious_days": [
+        "Monday",
+        "Thursday"
+      ],
+      "compatible_dates": [
+        1,
+        2,
+        7,
+        11,
+        20,
+        25,
+        29
+      ],
+      "challenging_dates": [
+        4,
+        8,
+        9,
+        26
+      ]
+    },
+    "report_narrative": "Born on the 11th, you embody Master Number 11—The Illuminator. Your life operates at a higher spiritual voltage, blending double solar power with profound lunar intuition. When you ground your nervous energy into practical projects, your insights transform entire communities.",
+    "charm_ai_dialogue": "Day 11 is Master Number 11—The Spiritual Illuminator! Holding Category A strength at 92% potency, you are wired for prophetic vision and deep insight. Ground your high-frequency energy with daily mindfulness and physical discipline. Your voice has the power to inspire millions."
+  },
+  "20": {
+    "day": 20,
+    "root": 2,
+    "code": "20(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "The Awakening",
+    "strength_potency_score": 76,
+    "planet": "Moon (Chandra)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Contemplative Sage & Awakening Spirit",
+    "classical_symbol": "The Awakening / The Judgment Call (Classical Chaldean Canon)",
+    "planetary_composition": "Moon (2) + Cosmic Void (0) = Deep Lunar Receptivity",
+    "strength_value_breakdown": "The cipher (0) deepens lunar introspection and spiritual reflection. Graded Category B (Normal Strength) because material manifestation requires overcoming initial hesitation and emotional indecision.",
+    "core_personality": "Quietly observant, deeply peaceful, family-oriented, and patient. You possess profound emotional depth and are naturally drawn to music, philosophy, and spiritual service.",
+    "superpowers": [
+      "Deep contemplative calm",
+      "Nurturing maternal/protective wisdom",
+      "Psychological discernment",
+      "Harmonious domestic governance",
+      "Patient long-term loyalty"
+    ],
+    "shadow_vulnerabilities": [
+      "Procrastination and passive waiting",
+      "Nostalgic attachment to past memories",
+      "Fear of confrontation",
+      "Tendency to suppress personal ambition"
+    ],
+    "career_and_wealth": "Childhood education, healthcare counseling, archive curation, documentary photography, non-profit community leadership, and mediation.",
+    "love_and_relationships": "Deeply loving and devoted. Prioritizes family peace above all. Needs a partner who provides stability and encourages outward self-expression.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Set firm deadlines for personal goals; speak up immediately when boundaries are crossed; engage in public expressive hobbies.",
+      "universal_secular_remedy": "Keep a silver fountain or water feature in the North sector of home; listen to calming ambient nature sounds; wear silver accents.",
+      "traditional_vedic_remedy": "Feed birds with water and grains daily; offer white flowers at temple or sacred space on Mondays; wear silver ornament touching chest.",
+      "auspicious_colors": [
+        "Milky White",
+        "Soft Silver",
+        "Light Gray",
+        "Aqua"
+      ],
+      "auspicious_days": [
+        "Monday",
+        "Friday"
+      ],
+      "compatible_dates": [
+        2,
+        11,
+        20,
+        1,
+        5,
+        23
+      ],
+      "challenging_dates": [
+        4,
+        8,
+        9,
+        29
+      ]
+    },
+    "report_narrative": "Born on the 20th, your consciousness is attuned to the Awakening. The zero alongside the Moon deepens your contemplative and healing capacities. Your path unfolds gracefully when you pair your gentle wisdom with proactive worldly action.",
+    "charm_ai_dialogue": "Day 20 brings you the gift of the Awakening! With Category B strength, you carry a soothing, peaceful aura that heals those around you. Trust your inner voice and don't hesitate to take bold practical steps in the material world. Your quiet strength is your secret weapon."
+  },
+  "29": {
+    "day": 29,
+    "root": 2,
+    "code": "29(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "Mystic Ocean",
+    "strength_potency_score": 62,
+    "planet": "Moon (Chandra)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Mystic Warrior & Emotional Alchemist",
+    "classical_symbol": "The Stormy Sea / Emotional Crucible",
+    "planetary_composition": "Moon (2) + Mars (9) = 11 -> 2 (Water + Fire Contradiction)",
+    "strength_value_breakdown": "Moon (softness, water) and Mars (fire, aggression) are mutually contradictory forces when unchanneled. Categorized as Category C (Lower Strength / 62% Direct Ease) due to intense relationship turbulence, sudden mood polarities, and vulnerability to deceit. Requires conscious emotional mastery.",
+    "core_personality": "Intensely passionate, intuitive, and complex. You feel everything at maximum intensity. You alternate between deep empathetic tenderness and fierce, volcanic defensiveness.",
+    "superpowers": [
+      "Fierce defense of underdogs",
+      "Unmatched emotional grit",
+      "Hypnotic charismatic intensity",
+      "Deep psychic insight",
+      "Transformational emotional alchemy"
+    ],
+    "shadow_vulnerabilities": [
+      "Severe emotional mood swings",
+      "Suspiciousness and jealousy",
+      "Sudden explosive outbursts",
+      "Vulnerability to betrayal in close partnerships"
+    ],
+    "career_and_wealth": "Crisis psychology, investigative journalism, maritime leadership, trauma surgery, high-stakes arbitration, and martial arts therapy.",
+    "love_and_relationships": "Deeply intense and demanding. Prone to stormy, all-consuming attachments. Must consciously choose calm, emotionally grounded partners.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Channel emotional turbulence into vigorous daily physical workouts; practice cooling breathing exercises (Sheetali pranayama); count to 10 before reacting in arguments.",
+      "universal_secular_remedy": "Drink water from a silver vessel; stay away from overly spicy foods at night; swim or spend time near flowing water.",
+      "traditional_vedic_remedy": "Worship Lord Shiva with milk abhishek on Mondays; recite Hanuman Chalisa on Tuesdays; wear a silver kada (bangle) on right wrist.",
+      "auspicious_colors": [
+        "White",
+        "Silver",
+        "Ice Blue",
+        "Soft Pink"
+      ],
+      "auspicious_days": [
+        "Monday",
+        "Tuesday"
+      ],
+      "compatible_dates": [
+        2,
+        11,
+        20,
+        1,
+        7,
+        25
+      ],
+      "challenging_dates": [
+        4,
+        8,
+        9,
+        18,
+        27
+      ]
+    },
+    "report_narrative": "Born on the 29th, you carry the dynamic polarity of Moon and Mars reducing to Master 11 and root 2. This creates an emotional crucible that tests your resilience. Once you master the fire within your water, you become an unstoppable emotional healer and protector.",
+    "charm_ai_dialogue": "You are a Day 29 soul—the Mystic Ocean! With Category C strength, Moon and Mars create high emotional waves. You feel deeply and fight fiercely for what you love. Channel your intense passion into physical discipline and creative mastery to turn every wave into personal triumph."
+  },
+  "3": {
+    "day": 3,
+    "root": 3,
+    "code": "3(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "Scattered Creative Energy",
+    "strength_potency_score": 68,
+    "planet": "Jupiter (Guru)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Joyful Creative & Expressive Philosopher",
+    "classical_symbol": "The Golden Triad / Creative Spark",
+    "planetary_composition": "Pure Jupiter (Guru / Brihaspati) Energy",
+    "strength_value_breakdown": "Single-digit 3 carries high wisdom, creative imagination, and social optimism. our classical taxonomy classifies pure single 3 as Category C (Lower Strength / 68% Ease) because without rigorous grounding, its expansive energy easily scatters into superficial pursuits, unfinished projects, and over-generosity.",
+    "core_personality": "Witty, creative, optimistic, and articulate. You light up rooms with humor and intellectual curiosity. You love freedom and resist rigid constraints.",
+    "superpowers": [
+      "Infectious optimism and humor",
+      "Brilliant verbal storytelling",
+      "Creative conceptual design",
+      "Natural counseling warmth",
+      "Philosophical expansiveness"
+    ],
+    "shadow_vulnerabilities": [
+      "Scattering energy across too many goals",
+      "Procrastination on detailed follow-through",
+      "Superficiality when bored",
+      "Financial carelessness through excessive optimism"
+    ],
+    "career_and_wealth": "Content creation, media journalism, advertising creative direction, public speaking, coaching, and stage arts.",
+    "love_and_relationships": "Playful, affectionate, and charming. Needs intellectual banter and freedom; suffocates in jealous or overly routine partnerships.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Enforce a strict 'rule of one'—finish one major project completely before starting another; establish an automated monthly investment plan.",
+      "universal_secular_remedy": "Keep yellow flowers or a citrine crystal on your study desk; listen to uplifting classical harmonies; wear yellow or saffron accents.",
+      "traditional_vedic_remedy": "Apply saffron or turmeric tilak on throat and forehead on Thursdays; offer chana dal and jaggery to a cow; Guru Mantra (Om Brihaspataye Namaha).",
+      "auspicious_colors": [
+        "Yellow",
+        "Saffron",
+        "Golden Amber",
+        "Light Orange"
+      ],
+      "auspicious_days": [
+        "Thursday",
+        "Tuesday"
+      ],
+      "compatible_dates": [
+        3,
+        12,
+        21,
+        30,
+        1,
+        5,
+        9
+      ],
+      "challenging_dates": [
+        6,
+        15,
+        24
+      ]
+    },
+    "report_narrative": "Born on the 3rd, you are blessed with Jupiterian creativity and communicative flair. Your radiant optimism attracts opportunities effortlessly. By anchoring your brilliant imagination into daily disciplined habits, your ideas translate into lasting commercial and intellectual wealth.",
+    "charm_ai_dialogue": "You are a Day 3 soul—full of Jupiterian warmth! Graded Category C, your creative imagination is immense, but your secret to victory is focus. Don't scatter your gold into ten buckets; master one craft, finish what you begin, and your voice will inspire the world."
+  },
+  "12": {
+    "day": 12,
+    "root": 3,
+    "code": "12(a)",
+    "tier": "a",
+    "strength_category": "A",
+    "strength_title": "Noble Counselor & Diplomat",
+    "strength_potency_score": 91,
+    "planet": "Jupiter (Guru)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Enlightened Mentor & Cosmic Diplomat",
+    "classical_symbol": "The Golden Sceptre / Harmonious Council (12)",
+    "planetary_composition": "Sun (1) + Moon (2) = 3 (Jupiter Wisdom)",
+    "strength_value_breakdown": "Sun (sovereign executive will) and Moon (public grace and diplomacy) merge to manifest Jupiter (divine counsel). Graded Category A (Good Strength / 91% Potency) due to magnetic articulation, broad social respect, and respected mentorship.",
+    "core_personality": "Wise, dignified, articulate, and deeply ethical. You possess a natural gift for uniting opposing parties and guiding others toward their highest potential.",
+    "superpowers": [
+      "Magnetic articulation and teaching",
+      "Diplomatic consensus building",
+      "High ethical integrity",
+      "Inspiring mentorship authority",
+      "Creative intellectual balance"
+    ],
+    "shadow_vulnerabilities": [
+      "Carrying other people's burdens excessively",
+      "Vulnerability to guilt or sacrifice complex",
+      "Difficulty declining requests for aid",
+      "Over-intellectualizing emotional pain"
+    ],
+    "career_and_wealth": "Higher education leadership, judicial law, publishing, ambassadorial diplomacy, philanthropic foundations, and strategic executive coaching.",
+    "love_and_relationships": "Noble, loving, and deeply supportive. Creates a harmonious, cultured home. Needs a partner who respects their ethical standards.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Set healthy boundaries on pro-bono advice; ensure financial agreements are documented; take dedicated time for personal rest.",
+      "universal_secular_remedy": "Wear a natural wood or rudraksha bracelet to ground your aura; keep an amethyst cluster on your desk.",
+      "traditional_vedic_remedy": "Feed cows with soaked chana dal and bananas on Thursdays; respect elders and teachers; chant Om Gurave Namaha.",
+      "auspicious_colors": [
+        "Golden Yellow",
+        "Royal Blue",
+        "Saffron",
+        "Cream"
+      ],
+      "auspicious_days": [
+        "Thursday",
+        "Sunday"
+      ],
+      "compatible_dates": [
+        1,
+        2,
+        3,
+        12,
+        21,
+        9,
+        27
+      ],
+      "challenging_dates": [
+        6,
+        15,
+        24
+      ]
+    },
+    "report_narrative": "Born on the 12th, you embody the union of Sun and Moon resolving into Jupiter's wisdom. With Category A strength and 91% potency, your natural diplomacy and mentoring presence command immense respect. You turn sacrifice into purposeful leadership.",
+    "charm_ai_dialogue": "Day 12 is a mark of nobility! Rated Category A Good Strength at 91% potency, Sun (1) and Moon (2) come together to empower your Jupiterian wisdom (3). You are a natural teacher, counselor, and leader. Guide others boldly, but always remember to keep your own boundaries secure."
+  },
+  "21": {
+    "day": 21,
+    "root": 3,
+    "code": "21(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "The Crown of the Magi",
+    "strength_potency_score": 82,
+    "planet": "Jupiter (Guru)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Victorious Cosmopolitan & Crowned Achiever",
+    "classical_symbol": "The Crown of the Magi / The Universe (Classical Chaldean Canon)",
+    "planetary_composition": "Moon (2) + Sun (1) = 3 (Jupiterian Elevation)",
+    "strength_value_breakdown": "Moon intuition leads Sun initiative into Jupiterian achievement. Graded Category B (Normal Strength) because monumental success compounds progressively after persistent effort; confers late-blooming honor and global connections.",
+    "core_personality": "Cosmopolitan, socially graceful, magnetic, and worldly. You attract support from influential people and possess a knack for international or cross-cultural success.",
+    "superpowers": [
+      "Global perspective and networking",
+      "Graceful public communication",
+      "Progressive career elevation",
+      "Charming diplomatic presence",
+      "Artistic and commercial versatility"
+    ],
+    "shadow_vulnerabilities": [
+      "Complacency after early milestones",
+      "Over-optimism in commercial deals",
+      "Susceptibility to flattering acquaintances",
+      "Restless desire for constant acclaim"
+    ],
+    "career_and_wealth": "International trade, travel and hospitality, media broadcasting, corporate communications, luxury public relations, and diplomatic affairs.",
+    "love_and_relationships": "Charming, social, and affectionate. Seeks a worldly, cultured partner who enjoys social gatherings and cultural exploration.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Reinvest early financial windfalls into long-term compounding assets; avoid casual lending to social acquaintances.",
+      "universal_secular_remedy": "Keep a world map or globe in the North-West zone of your study; wear a yellow sapphire or citrine pendant in silver/gold.",
+      "traditional_vedic_remedy": "Donate books or educational supplies to needy students on Thursdays; Guru Puja; wear light yellow or cream attire.",
+      "auspicious_colors": [
+        "Golden Yellow",
+        "Turquoise",
+        "Cream",
+        "Emerald"
+      ],
+      "auspicious_days": [
+        "Thursday",
+        "Monday"
+      ],
+      "compatible_dates": [
+        3,
+        12,
+        21,
+        30,
+        1,
+        5,
+        7
+      ],
+      "challenging_dates": [
+        6,
+        15,
+        24
+      ]
+    },
+    "report_narrative": "Born on the 21st, you carry the vibration of the Crown of the Magi. With Category B strength, your life trajectory resembles a steady mountain ascent. Each hurdle overcome elevates your reputation, culminating in broad public honor and international success.",
+    "charm_ai_dialogue": "You are a Day 21 soul—blessed with the Crown of the Magi! With Category B strength, your intuitive grace and worldly charm open doors across cultures. Keep climbing steadily, invest your gains wisely, and you will wear your crown of success with honor."
+  },
+  "30": {
+    "day": 30,
+    "root": 3,
+    "code": "30(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "Abstract Theorist",
+    "strength_potency_score": 66,
+    "planet": "Jupiter (Guru)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Solitary Philosopher & Abstract Theorist",
+    "classical_symbol": "The Luminous Sage / The Silent Academy",
+    "planetary_composition": "Jupiter (3) + Cosmic Void (0) = Philosophical Detachment",
+    "strength_value_breakdown": "The cipher (0) magnifies intellectual contemplation and philosophical detachment. Graded Category C (66% Direct Material Ease) because worldly execution and financial monetization can be neglected in favor of abstract contemplation.",
+    "core_personality": "Deeply reflective, mentally superior, independent, and intellectually uncompromising. You value knowledge above shallow material competition.",
+    "superpowers": [
+      "High-altitude philosophical vision",
+      "Pedagogical genius in complex subjects",
+      "Unbiased analytical detachment",
+      "Creative original theories",
+      "Deep meditative concentration"
+    ],
+    "shadow_vulnerabilities": [
+      "Commercial indifference and under-monetization",
+      "Intellectual arrogance or aloofness",
+      "Social withdrawal into theory",
+      "Procrastination on routine practical duties"
+    ],
+    "career_and_wealth": "University professorship, pure mathematics, theology, rare archive preservation, intellectual property strategy, and specialized editorial writing.",
+    "love_and_relationships": "Requires deep mental communion before emotional warmth can ignite. Can appear aloof or detached; needs a partner who appreciates intellectual solitude.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Ground theories into commercial deliverables with strict monetization milestones; engage in team discussions weekly.",
+      "universal_secular_remedy": "Place a brass owl or globe in your library/office; practice daily walking in bustling markets to stay grounded.",
+      "traditional_vedic_remedy": "Donate yellow lentils (chana dal) and saffron sweets at an educational or religious center on Thursdays; chant Gayatri Mantra.",
+      "auspicious_colors": [
+        "Bright Yellow",
+        "Saffron",
+        "Cream",
+        "Sky Blue"
+      ],
+      "auspicious_days": [
+        "Thursday",
+        "Tuesday"
+      ],
+      "compatible_dates": [
+        3,
+        12,
+        21,
+        1,
+        9
+      ],
+      "challenging_dates": [
+        6,
+        15,
+        24
+      ]
+    },
+    "report_narrative": "Born on the 30th, you possess an intellectual altitude that few can match. The cosmic zero elevates your Jupiterian mind into deep philosophical insight. By marrying your visionary concepts to practical commercial frameworks, your brilliance earns lasting worldly prosperity.",
+    "charm_ai_dialogue": "Day 30 gives you a profound, philosophical mind! Graded Category C, the zero behind your 3 elevates your intellect to the stars. Your mission is to bring those lofty ideas down to earth—commercialize your knowledge, set practical targets, and turn your wisdom into lasting wealth."
+  },
+  "4": {
+    "day": 4,
+    "root": 4,
+    "code": "4(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "Sudden Disruptions",
+    "strength_potency_score": 64,
+    "planet": "Rahu (North Node)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Unconventional Architect & Disruptor",
+    "classical_symbol": "The Lightning Bolt / Square of Opposition",
+    "planetary_composition": "Pure Rahu Energy",
+    "strength_value_breakdown": "Single-digit 4 is governed by Rahu. Prone to sudden disruptions, unexpected career reversals, stubborn friction with conservative authorities, and feeling misunderstood. Categorized as Category C (64% Ease) because material stability requires conscious patience and non-rebellious systems.",
+    "core_personality": "Logical, methodical, unconventional, rebellious, and fiercely disciplined. You see structural flaws that others miss and build robust frameworks to fix them.",
+    "superpowers": [
+      "Disruptive technological innovation",
+      "Complex system architecture",
+      "Forensic investigative rigor",
+      "Iron endurance under pressure",
+      "Unconventional out-of-the-box strategy"
+    ],
+    "shadow_vulnerabilities": [
+      "Rebellious stubbornness",
+      "Sudden impulsive temper flares",
+      "Difficulty trusting established authorities",
+      "Feeling perpetually alienated or isolated"
+    ],
+    "career_and_wealth": "Software engineering, cybersecurity architecture, structural engineering, forensic accounting, alternative tech, and regulatory compliance.",
+    "love_and_relationships": "Deeply loyal and protective, but slow to trust. Often struggles to express soft emotions; shows love through practical duty and problem-solving.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Avoid sudden argumentative confrontations with supervisors; cultivate diplomatic phrasing; maintain a predictable daily routine.",
+      "universal_secular_remedy": "Wear a natural wood or rudraksha bracelet to balance your Wood element; avoid all forms of speculative gambling; keep your workspace uncluttered.",
+      "traditional_vedic_remedy": "Feed black dogs or street animals; donate blue blankets or mustard oil on Saturdays; Rahu Mantra (Om Raam Rahave Namaha); wear gomed (hessonite) only under expert astrological supervision.",
+      "auspicious_colors": [
+        "Smoky Blue",
+        "Steel Gray",
+        "Khaki",
+        "Forest Green"
+      ],
+      "auspicious_days": [
+        "Saturday",
+        "Sunday"
+      ],
+      "compatible_dates": [
+        1,
+        5,
+        6,
+        7
+      ],
+      "challenging_dates": [
+        2,
+        4,
+        8,
+        9,
+        13,
+        22
+      ]
+    },
+    "report_narrative": "Born on the 4th, your life is governed by Rahu's unconventional, structural genius. You are an architect of future systems. While sudden disruptions test your patience, your steadfast discipline transforms chaos into ironclad enterprise.",
+    "charm_ai_dialogue": "You are a Day 4 soul—ruled by Rahu! With Category C strength, life tests you with sudden shifts and unconventional paths. You have the mind of a master engineer. Channel your rebellious streak into building flawless systems and you will outlast every competitor."
+  },
+  "13": {
+    "day": 13,
+    "root": 4,
+    "code": "13(d)",
+    "tier": "d",
+    "strength_category": "D",
+    "strength_title": "The Phoenix Builder",
+    "strength_potency_score": 58,
+    "planet": "Rahu (North Node)",
+    "is_karmic": true,
+    "is_master": false,
+    "archetype": "The Phoenix Builder & Alchemical Transformer",
+    "classical_symbol": "The Skeleton Transmuted / Phoenix from the Ashes (13)",
+    "planetary_composition": "Sun (1) + Jupiter (3) = 4 (Rahu Karmic Debt 13)",
+    "strength_value_breakdown": "Karmic Debt Number 13 carries the soul lesson of discipline, accountability, and persistent labor without shortcuts. Categorized as Category D (58% Initial Ease leaping to 92% Post-Mastery). Tests the individual with heavy early obstacles; once meticulous craftsmanship is embraced, they become unbeatable empire builders.",
+    "core_personality": "Intensely resilient, serious, disciplined, and transformative. You have lived through crucibles that would break ordinary people. You possess an iron will and zero tolerance for superficial excuses.",
+    "superpowers": [
+      "Monumental crisis perseverance",
+      "Rebuilding empires from ruins",
+      "Relentless work ethic post-awakening",
+      "High structural and organizational mastery",
+      "Unshakeable honesty under pressure"
+    ],
+    "shadow_vulnerabilities": [
+      "Chronic frustration with delayed rewards",
+      "Temptation to take risky shortcuts when exhausted",
+      "Severe burnout and physical fatigue",
+      "Bitter resentment toward peers who advance effortlessly"
+    ],
+    "career_and_wealth": "Heavy infrastructure, corporate turnaround restructuring, mining/metallurgy, forensic litigation, high-risk industrial safety, and deep research.",
+    "love_and_relationships": "Demands absolute fidelity and dependability. Disdains superficial pretense. Values practical acts of service and enduring loyalty over flowery romance.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Never take shortcuts in paperwork, taxes, or contracts; embrace daily structure; take mandatory rest days to prevent burnout.",
+      "universal_secular_remedy": "Wear a 5-Mukhi Rudraksha bracelet on left wrist; listen to 528 Hz Solfeggio sound therapy; practice rigorous time-blocking.",
+      "traditional_vedic_remedy": "Worship Lord Ganesha to remove obstacles (Sankat Nashan Stotra); feed street dogs daily; donate food to construction laborers on Saturdays.",
+      "auspicious_colors": [
+        "Earthy Brown",
+        "Navy Blue",
+        "Deep Green",
+        "Gray"
+      ],
+      "auspicious_days": [
+        "Saturday",
+        "Thursday"
+      ],
+      "compatible_dates": [
+        1,
+        5,
+        7,
+        10,
+        14,
+        23
+      ],
+      "challenging_dates": [
+        2,
+        4,
+        8,
+        9,
+        13,
+        18,
+        26
+      ]
+    },
+    "report_narrative": "Born on the 13th, you walk the sacred path of Karmic Debt 13—The Phoenix Builder. Your soul is assigned to transform heavy trials into unshakeable mastery. By rejecting shortcuts and committing to meticulous discipline, you rise from every trial to construct enduring legacies.",
+    "charm_ai_dialogue": "You are a Day 13 soul—the Phoenix! Classified in Category D Karmic Debt, your journey is an intense crucible designed to forge an unbreakable leader. Every obstacle you face is burning away shortcuts. When you build with pure discipline, your success will stand for generations."
+  },
+  "22": {
+    "day": 22,
+    "root": 4,
+    "code": "22(a)",
+    "tier": "a",
+    "strength_category": "A",
+    "strength_title": "Master Number 22",
+    "strength_potency_score": 96,
+    "planet": "Rahu (North Node)",
+    "is_karmic": false,
+    "is_master": true,
+    "archetype": "The Sovereign Master Builder & Architect of Empires",
+    "classical_symbol": "The Master Builder / The Golden Compass (22)",
+    "planetary_composition": "Moon (2) + Moon (2) = 4 (Master Builder Vibration)",
+    "strength_value_breakdown": "Master Number 22 fuses profound intuitive vision (double Moon) with practical physical manifestation (Rahu 4). Rated Category A (Good Strength / 96% Potency), representing supreme capacity to manifest monumental institutions, global systems, and legacy infrastructure.",
+    "core_personality": "A visionary titan. You combine grand philosophical ideals with practical, common-sense execution. You think in decades and centuries, not weeks.",
+    "superpowers": [
+      "Monumental megaproject execution",
+      "Intuitive systemic engineering",
+      "Pragmatic visionary idealism",
+      "Commanding leadership presence",
+      "Lasting multi-generational legacy creation"
+    ],
+    "shadow_vulnerabilities": [
+      "Overwhelming anxiety from scale of ambitions",
+      "Paralyzing fear of failure",
+      "Severe workaholism neglecting personal health",
+      "Authoritarian impatience with mundane human limitations"
+    ],
+    "career_and_wealth": "Multinational conglomerate leadership, urban mega-infrastructure, international banking architecture, national policy frameworks, and transformative clean-tech.",
+    "love_and_relationships": "Deeply loyal, steady, and protective. Seeks a visionary partner who offers an emotional sanctuary from massive professional burdens.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Break gigantic vision into quarterly actionable milestones; take weekly nature retreats to discharge mental tension; celebrate small wins.",
+      "universal_secular_remedy": "Wear a dual-tone metallic watch; place a solid brass pyramid in the South-East of your office; practice grounding meditation.",
+      "traditional_vedic_remedy": "Worship Goddess Saraswati for balance of intellect; donate green vegetables or grains to charity; chant Rahu Stotra; wear sandalwood.",
+      "auspicious_colors": [
+        "Royal Navy Blue",
+        "Emerald Green",
+        "Earth Brown",
+        "Gold"
+      ],
+      "auspicious_days": [
+        "Sunday",
+        "Wednesday"
+      ],
+      "compatible_dates": [
+        1,
+        5,
+        6,
+        7,
+        10,
+        14,
+        23
+      ],
+      "challenging_dates": [
+        2,
+        4,
+        8,
+        9
+      ]
+    },
+    "report_narrative": "Born on the 22nd, you hold Master Number 22—The Master Builder. With Category A strength and 96% potency, you possess the rare ability to manifest grand visions into physical reality. Your destiny is to construct systems that serve humanity for generations.",
+    "charm_ai_dialogue": "Day 22 is Master Number 22—The Master Builder! Holding Category A strength at 96% potency, you are equipped with the power to manifest monumental dreams. Don't let the scale of your vision overwhelm you. Build one brick at a time, and you will construct an empire."
+  },
+  "31": {
+    "day": 31,
+    "root": 4,
+    "code": "31(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "The Focused Pioneer",
+    "strength_potency_score": 80,
+    "planet": "Rahu (North Node)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Meticulous Pioneer & Pragmatic Innovator",
+    "classical_symbol": "The Focused Compass / Fortified Intellect",
+    "planetary_composition": "Jupiter (3) + Sun (1) = 4 (Rahu)",
+    "strength_value_breakdown": "Jupiter's wisdom (3) guides the Sun's executive will (1) into Rahu's structural focus (4). Graded Category B (Normal Strength) because success is achieved steadily through organized research, technical skill, and disciplined self-sufficiency.",
+    "core_personality": "Methodical, determined, intellectually acute, and organized. You possess strong mental stamina and dislike relying on anyone else to complete your tasks.",
+    "superpowers": [
+      "Systematic project organization",
+      "Independent intellectual stamina",
+      "Deep analytical research",
+      "Steadfast reliable execution",
+      "Original technical problem-solving"
+    ],
+    "shadow_vulnerabilities": [
+      "Emotional reserve and aloofness",
+      "Tendency toward isolation and stubbornness",
+      "Difficulty expressing romantic affection",
+      "Pessimism when plans deviate"
+    ],
+    "career_and_wealth": "Scientific R&D, intellectual property law, financial auditing, system database administration, precision manufacturing, and corporate planning.",
+    "love_and_relationships": "Slow to open up emotionally, but remarkably steadfast once committed. Needs a warm, communicative partner who understands their need for focus.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Schedule deliberate social interaction weekly to counter isolation; express verbal appreciation to family and colleagues.",
+      "universal_secular_remedy": "Keep a clear quartz or fluorite crystal on your desk; practice daily gratitude journaling; wear blue or green accents.",
+      "traditional_vedic_remedy": "Donate yellow grains or bananas on Thursdays; recite Gayatri Mantra; feed birds daily in the morning.",
+      "auspicious_colors": [
+        "Electric Blue",
+        "Golden Amber",
+        "Olive Green",
+        "Charcoal"
+      ],
+      "auspicious_days": [
+        "Thursday",
+        "Sunday"
+      ],
+      "compatible_dates": [
+        1,
+        3,
+        5,
+        7,
+        10,
+        12,
+        23
+      ],
+      "challenging_dates": [
+        2,
+        4,
+        8,
+        9
+      ]
+    },
+    "report_narrative": "Born on the 31st, you combine the wisdom of Jupiter and the executive drive of the Sun into Rahu's structured discipline. With Category B strength, you advance steadily through methodical persistence and independent brilliance.",
+    "charm_ai_dialogue": "You are a Day 31 soul—the Focused Pioneer! With Category B strength, you merge Jupiter's counsel and the Sun's fire into practical mastery. Your methodical persistence is your golden ticket. Stay connected with your circle, keep your heart open, and your efforts will bear massive fruit."
+  },
+  "5": {
+    "day": 5,
+    "root": 5,
+    "code": "5(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "Restless Versatility",
+    "strength_potency_score": 66,
+    "planet": "Mercury (Budh)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Free-Spirited Explorer & Restless Communicator",
+    "classical_symbol": "The Winged Messenger / Quicksilver",
+    "planetary_composition": "Pure Mercury (Budh) Energy",
+    "strength_value_breakdown": "Single-digit 5 is adaptable, communicative, and versatile. In our classical taxonomy, it is classified as Category C (Lower Strength / 66% Direct Ease) because unregulated versatility leads to laziness, procrastination, scattered ventures, and loss of momentum without a grounding anchor.",
+    "core_personality": "Charming, adaptable, curious, entertaining, and fast-thinking. You crave adventure, commercial variety, and intellectual novelty.",
+    "superpowers": [
+      "Rapid commercial pattern recognition",
+      "Effortless conversational charm",
+      "Instant adaptability to change",
+      "Speed of calculation and thought",
+      "Versatile multi-tasking"
+    ],
+    "shadow_vulnerabilities": [
+      "Procrastination and sudden laziness",
+      "Restless boredom with routine",
+      "Inconsistent financial discipline",
+      "Tendency to abandon projects midway"
+    ],
+    "career_and_wealth": "Commercial brokerage, sales marketing, travel media, digital trading, public relations, event management, and networking.",
+    "love_and_relationships": "Fun, witty, and engaging. Suffocates in clingy, predictable relationships; requires an intellectually exciting partner.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Pick one core commercial pursuit and commit to it for 12 months minimum; maintain a daily financial ledger.",
+      "universal_secular_remedy": "Wear a green aventurine or emerald pendant; keep a green indoor plant on your desk; practice mindful stillness for 10 minutes daily.",
+      "traditional_vedic_remedy": "Budh Beej Mantra (Om Bum Budhaya Namaha) on Wednesdays; feed green fodder or spinach to cows; donate green moong dal.",
+      "auspicious_colors": [
+        "Emerald Green",
+        "Mint",
+        "Turquoise",
+        "White"
+      ],
+      "auspicious_days": [
+        "Wednesday",
+        "Friday"
+      ],
+      "compatible_dates": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        14,
+        23
+      ],
+      "challenging_dates": [
+        null
+      ]
+    },
+    "report_narrative": "Born on the 5th, your soul dances to the quicksilver rhythm of Mercury. Your adaptability and commercial wit are unmatched. By anchoring your restless energy to a singular goal, your versatile genius turns into massive worldly success.",
+    "charm_ai_dialogue": "You are a Day 5 soul—the Winged Messenger! With Category C strength, you have brilliant wit and speed, but your challenge is restlessness. Anchor your curiosity to one major ambition, stay consistent through the quiet phases, and you will achieve remarkable commercial milestones."
+  },
+  "14": {
+    "day": 14,
+    "root": 5,
+    "code": "14(a)",
+    "tier": "a",
+    "strength_category": "A",
+    "strength_title": "Karmic 14",
+    "strength_potency_score": 92,
+    "planet": "Mercury (Budh)",
+    "is_karmic": true,
+    "is_master": false,
+    "archetype": "The Dynamic Dealmaker & Commercial Alchemist",
+    "classical_symbol": "The Golden Caduceus / Market Master (14)",
+    "planetary_composition": "Sun (1) + Rahu (4) = 5 (Mercury Commercial Mastery)",
+    "strength_value_breakdown": "Sun (executive authority) and Rahu (unconventional ambition) combine to turbocharge Mercury (commerce). Rated Category A (Good Strength / 92% Potency) due to sharp business acumen and commercial magnetism. Karmic 14 lesson: must maintain moderation and avoid speculative gambling.",
+    "core_personality": "Dynamic, commercial, magnetic, persuasive, and sharp. You spot market trends before anyone else and thrive in fast-paced dealmaking.",
+    "superpowers": [
+      "High-stakes commercial magnetism",
+      "Flawless negotiation genius",
+      "Rapid financial pattern recognition",
+      "Charismatic public persuasion",
+      "Intuitive speculative agility"
+    ],
+    "shadow_vulnerabilities": [
+      "Temptation toward speculative gambling",
+      "Restlessness and sensory overindulgence",
+      "Impatience with slow administrative processes",
+      "Tendency to take reckless risks"
+    ],
+    "career_and_wealth": "Fintech entrepreneurship, venture capital, high-volume import/export, mergers & acquisitions, media brokerage, and real estate dealmaking.",
+    "love_and_relationships": "Exciting, magnetic, and generous. Needs a modern, confident partner who enjoys an active lifestyle.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Never speculate with money you cannot afford to lose; cultivate emotional moderation; maintain a strict savings allocation.",
+      "universal_secular_remedy": "Wear a green tourmaline or peridot ring in silver/gold; practice breath-hold meditation to steady nervous energy.",
+      "traditional_vedic_remedy": "Feed green vegetables to cows on Wednesdays; worship Lord Vishnu with Vishnu Sahasranama; donate green cloth to students.",
+      "auspicious_colors": [
+        "Emerald Green",
+        "Bright Gold",
+        "Teal",
+        "White"
+      ],
+      "auspicious_days": [
+        "Wednesday",
+        "Sunday"
+      ],
+      "compatible_dates": [
+        1,
+        5,
+        14,
+        23,
+        6,
+        15,
+        24
+      ],
+      "challenging_dates": [
+        8,
+        17,
+        26
+      ]
+    },
+    "report_narrative": "Born on the 14th, you carry Karmic Debt 14—The Commercial Alchemist. With Category A strength and 92% potency, your business instincts are razor-sharp. Mastering personal moderation and ethical discipline elevates your wealth into an enduring empire.",
+    "charm_ai_dialogue": "Day 14 is a powerhouse of commerce! Holding Category A strength at 92% potency, Sun (1) and Rahu (4) fuse into Mercury's gold (5). You have an uncanny instinct for wealth and dealmaking. Guard against reckless speculation, stay disciplined, and your financial growth will be meteoric."
+  },
+  "23": {
+    "day": 23,
+    "root": 5,
+    "code": "23(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "Royal Star of the Lion",
+    "strength_potency_score": 86,
+    "planet": "Mercury (Budh)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Royal Star of the Lion & Favored Diplomat",
+    "classical_symbol": "The Royal Star of the Lion (Classical Chaldean Canon)",
+    "planetary_composition": "Moon (2) + Jupiter (3) = 5 (Mercurial Diplomacy)",
+    "strength_value_breakdown": "Moon intuition and Jupiter wisdom fuse into brilliant Mercurial charm. Graded Category B (Normal Strength / 86% Potency) because it enjoys consistent divine protection, royal favor from superiors, and steady social popularity across all undertakings.",
+    "core_personality": "Charming, diplomatic, popular, articulate, and fortunate. You attract assistance from influential mentors effortlessly and resolve disputes with a smile.",
+    "superpowers": [
+      "Magnetic personal charm",
+      "Favor and patronage from superiors",
+      "Effortless verbal persuasion",
+      "Gift for peace and mediation",
+      "Natural good fortune in social connections"
+    ],
+    "shadow_vulnerabilities": [
+      "Complacency due to easy luck",
+      "Avoiding tough confrontations",
+      "Over-reliance on charisma over deep research",
+      "Taking friends for granted"
+    ],
+    "career_and_wealth": "Corporate diplomacy, brand ambassadorship, international banking, luxury marketing, executive talent acquisition, and public governance.",
+    "love_and_relationships": "Harmonious, romantic, and socially admired. Builds a warm, welcoming home filled with laughter and mutual respect.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Back your natural charisma with rigorous technical preparation; mentor someone less privileged to balance your fortune.",
+      "universal_secular_remedy": "Wear a dual-tone watch or clear quartz crystal; keep a brass lion figurine in the North sector of your home.",
+      "traditional_vedic_remedy": "Worship Lord Vishnu or Laxmi-Narayana; wear a green emerald on little finger; donate yellow fruits on Thursdays.",
+      "auspicious_colors": [
+        "Light Green",
+        "Gold",
+        "Cream",
+        "Sky Blue"
+      ],
+      "auspicious_days": [
+        "Wednesday",
+        "Thursday"
+      ],
+      "compatible_dates": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        14,
+        23
+      ],
+      "challenging_dates": [
+        null
+      ]
+    },
+    "report_narrative": "Born on the 23rd, you are blessed by the Royal Star of the Lion. With Category B strength and 86% potency, your life carries a golden touch. Mentors and patrons naturally step forward to support your path, elevating you into honored leadership.",
+    "charm_ai_dialogue": "You are a Day 23 soul—blessed by the Royal Star of the Lion! With Category B strength, you hold the charm of the Moon, the wisdom of Jupiter, and the wit of Mercury. Doors open for you where others find walls. Stay humble, prepare thoroughly, and enjoy your royal favor."
+  },
+  "6": {
+    "day": 6,
+    "root": 6,
+    "code": "6(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "Venusian Harmony",
+    "strength_potency_score": 79,
+    "planet": "Venus (Shukra)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Harmonizer & Aesthetic Protector",
+    "classical_symbol": "The Mirror of Venus / The Sacred Hearth",
+    "planetary_composition": "Pure Venus (Shukra) Energy",
+    "strength_value_breakdown": "Pure single-digit Venus brings love of family, elegance, luxury, and artistic beauty. Graded Category B (Normal Strength) because life progresses steadily, though emotional over-protectiveness and susceptibility to flattery require conscious management.",
+    "core_personality": "Affectionate, artistic, family-devoted, responsible, and graceful. You seek peace, beautiful surroundings, and harmonious relationships.",
+    "superpowers": [
+      "Aesthetic harmony and interior grace",
+      "Deep domestic loyalty and protection",
+      "Empathetic community counseling",
+      "Refined artistic taste",
+      "Diplomatic charm"
+    ],
+    "shadow_vulnerabilities": [
+      "Over-protectiveness suffocating loved ones",
+      "Susceptibility to sweet flattery",
+      "Difficulty establishing boundaries",
+      "Obstinate stubbornness when challenged"
+    ],
+    "career_and_wealth": "Interior architecture, luxury hospitality, fashion aesthetics, family law, counseling, fine culinary arts, and high-end retail.",
+    "love_and_relationships": "Deeply loving, romantic, and devoted. The family home is your sacred temple; thrives when love and appreciation are vocalized regularly.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Allow loved ones the freedom to make their own mistakes; do not take on family conflicts as personal failures.",
+      "universal_secular_remedy": "Wear a gold metallic watch or brass accessories; use natural rose or sandalwood fragrance daily; keep spaces elegant and clean.",
+      "traditional_vedic_remedy": "Shukra Beej Mantra (Om Shum Shukraya Namaha) on Fridays; donate white sweets or curd to needy girls; wear white zircon or diamond.",
+      "auspicious_colors": [
+        "White",
+        "Silver",
+        "Pastel Pink",
+        "Sky Blue"
+      ],
+      "auspicious_days": [
+        "Friday",
+        "Tuesday"
+      ],
+      "compatible_dates": [
+        6,
+        15,
+        24,
+        5,
+        14,
+        23,
+        1
+      ],
+      "challenging_dates": [
+        3,
+        12,
+        21,
+        30
+      ]
+    },
+    "report_narrative": "Born on the 6th, your soul reflects Venusian grace and magnetic harmony. You are the emotional anchor of your circle. When you balance your generous care with healthy personal boundaries, your life blossoms into material abundance and deep relational fulfillment.",
+    "charm_ai_dialogue": "You are a Day 6 soul—ruled by Venus! With Category B strength, you bring beauty, love, and comfort wherever you go. Your home is your palace. Just remember to set gentle boundaries so you don't deplete your own reservoir of care. True luxury begins within."
+  },
+  "15": {
+    "day": 15,
+    "root": 6,
+    "code": "15(a)",
+    "tier": "a",
+    "strength_category": "A",
+    "strength_title": "Magnetic Enchanter",
+    "strength_potency_score": 93,
+    "planet": "Venus (Shukra)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Magnetic Enchanter & High Charisma Icon",
+    "classical_symbol": "The Star of Eloquence and Luxury (15)",
+    "planetary_composition": "Sun (1) + Mercury (5) = 6 (Venusian Magnetic Glory)",
+    "strength_value_breakdown": "Sun (radiance) and Mercury (wit) combine to energize Venus (luxury and beauty). Rated Category A (Good Strength / 93% Potency) due to hypnotic personal magnetism, artistic eloquence, commercial charm, and financial luxury attraction.",
+    "core_personality": "Irresistibly magnetic, eloquent, glamorous, and persuasive. You have a natural gift for speech, media arts, and drawing wealth into your orbit.",
+    "superpowers": [
+      "Hypnotic interpersonal charisma",
+      "Artistic eloquence and media presence",
+      "Effortless luxury manifestation",
+      "Commercial persuasiveness",
+      "Diplomatic mastery"
+    ],
+    "shadow_vulnerabilities": [
+      "Temptation to use charm manipulatively",
+      "Over-indulgence in sensory pleasures",
+      "Vanity and ego attachments",
+      "Impatience with unglamorous routine"
+    ],
+    "career_and_wealth": "Entertainment industry, celebrity management, luxury brand marketing, cinematic arts, diplomatic ambassadorship, and high-end hospitality.",
+    "love_and_relationships": "Passionate, romantic, and expressive. Attracts admirers effortlessly; needs a grounded, loyal partner who loves your authentic soul, not just your glamour.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Use your persuasive gifts for selfless upliftment; maintain strict financial budgeting for luxury expenses; cultivate inner spiritual depth.",
+      "universal_secular_remedy": "Wear a gold metallic watch; use natural non-alcoholic attar (rose/sandalwood); practice morning mirror affirmations.",
+      "traditional_vedic_remedy": "Worship Goddess Lakshmi with Sri Suktam on Fridays; offer white flowers at temple; wear a diamond or high-grade white zircon in silver/platinum.",
+      "auspicious_colors": [
+        "Cream",
+        "Diamond White",
+        "Rose Gold",
+        "Royal Blue"
+      ],
+      "auspicious_days": [
+        "Friday",
+        "Sunday"
+      ],
+      "compatible_dates": [
+        1,
+        5,
+        6,
+        15,
+        24,
+        14,
+        23
+      ],
+      "challenging_dates": [
+        3,
+        12,
+        21,
+        8
+      ]
+    },
+    "report_narrative": "Born on the 15th, you carry the radiant vibration of the Magnetic Enchanter. With Category A strength and 93% potency, Sun and Mercury amplify your Venusian magnetism. You hold the rare gift of effortless persuasion and luxury manifestation.",
+    "charm_ai_dialogue": "Day 15 is sheer magnetism! Holding Category A strength at 93% potency, the Sun's light (1) and Mercury's wit (5) merge into Venus's glory (6). You captivate rooms and attract abundance with ease. Ground your brilliance in integrity, and your influence will be legendary."
+  },
+  "24": {
+    "day": 24,
+    "root": 6,
+    "code": "24(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "Sacrificial Guardian",
+    "strength_potency_score": 67,
+    "planet": "Venus (Shukra)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Sacrificial Guardian & Sensitive Nurturer",
+    "classical_symbol": "The Sheltered Haven / Heavy Emotional Hearth",
+    "planetary_composition": "Moon (2) + Rahu (4) = 6 (Venusian Family Duty)",
+    "strength_value_breakdown": "Moon (sensitivity) and Rahu (illusions, burdens) channel into Venus (family). Graded Category C (Lower Strength / 67% Ease) because natives frequently carry disproportionate family burdens, suffer emotional exploitation by relatives, and struggle with setting personal boundaries.",
+    "core_personality": "Selfless, deeply nurturing, domestic, and dependable. You put everyone else's comfort before your own, often carrying family secrets or financial debts.",
+    "superpowers": [
+      "Unconditional caregiving and loyalty",
+      "Culinary and hospitality mastery",
+      "Domestic financial resilience",
+      "Gentle empathetic counseling",
+      "Unshakeable family devotion"
+    ],
+    "shadow_vulnerabilities": [
+      "Martyr complex and inability to say no",
+      "Emotional exploitation by relatives",
+      "Financial losses through blind trust in family",
+      "Resentment from unreciprocated care"
+    ],
+    "career_and_wealth": "Healthcare administration, culinary catering, residential real estate, child welfare, interior decoration, and social enterprise.",
+    "love_and_relationships": "Deeply devoted, romantic, and faithful. Prone to over-giving; must select an appreciative partner who reciprocates affection equally.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Practice saying 'no' to non-essential requests without guilt; establish independent personal savings; do not co-sign financial loans for relatives.",
+      "universal_secular_remedy": "Drink water from a silver cup; wear a dual-tone metallic watch; place a small water fountain in the North-East zone of your living room.",
+      "traditional_vedic_remedy": "Offer milk and white sweets to young girls on Fridays; chant Mahamrityunjaya Mantra for family protection; wear a pearl or opal in silver.",
+      "auspicious_colors": [
+        "Pastel Pink",
+        "Pearl White",
+        "Soft Peach",
+        "Mint Green"
+      ],
+      "auspicious_days": [
+        "Friday",
+        "Monday"
+      ],
+      "compatible_dates": [
+        6,
+        15,
+        24,
+        2,
+        5,
+        14
+      ],
+      "challenging_dates": [
+        3,
+        12,
+        21,
+        9
+      ]
+    },
+    "report_narrative": "Born on the 24th, you are a guardian of the heart. While Moon and Rahu channel deep emotional duties into your Venusian path, your capacity for care is immense. Learning to honor your own needs first allows your nurturing gifts to thrive without burnout.",
+    "charm_ai_dialogue": "You are a Day 24 soul—the Sacrificial Guardian! With Category C strength, you pour your heart into caring for others. Your empathy is pure gold, but remember: you cannot pour from an empty cup. Guard your financial and emotional boundaries, and let others care for you too."
+  },
+  "7": {
+    "day": 7,
+    "root": 7,
+    "code": "7(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "The Introspective Mystic",
+    "strength_potency_score": 65,
+    "planet": "Ketu (South Node)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Introspective Mystic & Solitary Researcher",
+    "classical_symbol": "The Hidden Temple / Mystic Veil",
+    "planetary_composition": "Pure Ketu Energy",
+    "strength_value_breakdown": "Single-digit 7 is ruled by Ketu (body without head). Introspective, philosophical, occult-minded, and detached from materialistic games. Classified as Category C (65% Direct Ease) due to low confidence in aggressive commercial negotiations, introversion, and emotional isolation.",
+    "core_personality": "Analytical, intuitive, philosophical, secretive, and truth-seeking. You see straight through deception and seek the deeper meaning behind existence.",
+    "superpowers": [
+      "Deep analytical research",
+      "Psychic intuition and lie detection",
+      "Esoteric and occult mastery",
+      "Spiritual diagnosis and healing",
+      "Forensic problem-solving"
+    ],
+    "shadow_vulnerabilities": [
+      "Social anxiety and aloofness",
+      "Low confidence in aggressive business deals",
+      "Cynical skepticism",
+      "Emotional detachment hurting close relationships"
+    ],
+    "career_and_wealth": "Scientific research, data analytics, astrology/occult consulting, cybersecurity forensics, spiritual philosophy, and clinical psychology.",
+    "love_and_relationships": "Needs profound mental and spiritual communion. Superficial small talk repels you. Requires an understanding partner who honors your need for solitude.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Avoid speculative partnerships or risky business investments; partner with grounded practical leaders for commercial execution.",
+      "universal_secular_remedy": "Wear a silver metallic watch on your wrist; practice daily silence (Maun Vrat) for 30 minutes; keep a smoky quartz crystal on your desk.",
+      "traditional_vedic_remedy": "Feed street dogs daily (especially black or multi-colored dogs); recite Ketu Beej Mantra (Om Kem Ketave Namaha); wear Cat's Eye (Lehsuniya) only under expert guidance.",
+      "auspicious_colors": [
+        "Silver",
+        "Smoky Gray",
+        "White",
+        "Pale Yellow"
+      ],
+      "auspicious_days": [
+        "Thursday",
+        "Tuesday"
+      ],
+      "compatible_dates": [
+        7,
+        16,
+        25,
+        1,
+        2,
+        4
+      ],
+      "challenging_dates": [
+        8,
+        9
+      ]
+    },
+    "report_narrative": "Born on the 7th, your soul belongs to Ketu's temple of wisdom. You are a truth-seeker and intuitive analyst. When you channel your deep intellect into specialized research or healing arts rather than speculative business, your authority becomes unmatched.",
+    "charm_ai_dialogue": "You are a Day 7 soul—the Introspective Mystic! With Category C strength, Ketu grants you uncanny intuition and sharp investigative eyes. Avoid risky speculative business partnerships. Focus on research, consulting, or healing where your depth of insight makes you indispensable."
+  },
+  "16": {
+    "day": 16,
+    "root": 7,
+    "code": "16(a)",
+    "tier": "a",
+    "strength_category": "A",
+    "strength_title": "The Strategic Awakener & Deep Visionary",
+    "strength_potency_score": 91,
+    "planet": "Ketu (South Node)",
+    "is_karmic": true,
+    "is_master": false,
+    "archetype": "The Strategic Visionary & Healer of Truth",
+    "classical_symbol": "The Transformative Awakening (16)",
+    "planetary_composition": "Sun (1) + Venus (6) = 7 (Ketu Intuitive Wisdom)",
+    "strength_value_breakdown": "Number 16 reflects deep intellectual foresight and personal resilience. The Sun (clarity) and Venus (harmony) resolve into Ketu (analytical specialization), equipping the native with profound problem-solving, strategic clarity, and endurance.",
+    "core_personality": "Profound, transformative, spiritually awakened, and resilient. You have experienced sudden awakenings that dismantled superficial illusions. You see into souls with uncanny clarity.",
+    "superpowers": [
+      "Transcendent spiritual awakening",
+      "Occult healing and psychic diagnostic power",
+      "Unmasking illusions and false pretenses",
+      "Forensic scientific brilliance",
+      "Emotional and spiritual rebirth"
+    ],
+    "shadow_vulnerabilities": [
+      "Sudden ego collapses and humbling experiences",
+      "Cynicism toward material achievements",
+      "Pride preceding sudden falls",
+      "Fear of emotional intimacy"
+    ],
+    "career_and_wealth": "Alternative medicine, trauma therapy, deep scientific innovation, spiritual authorship, forensic auditing, and crisis consulting.",
+    "love_and_relationships": "Walks through intense karmic relationships that teach unconditional love and non-possessiveness. Deeply loyal once spiritual alignment is reached.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Practice humility proactively; never boast about material wealth; study spiritual and philosophical classics daily.",
+      "universal_secular_remedy": "Wear a natural silver chain watch; use 528 Hz sound therapy; keep an amethyst or selenite wand in your bedroom.",
+      "traditional_vedic_remedy": "Worship Lord Shiva (Mahamrityunjaya Mantra); donate white blankets or food to hermits and monks; feed street dogs on Tuesdays.",
+      "auspicious_colors": [
+        "Silver Gray",
+        "Electric White",
+        "Purple",
+        "Sky Blue"
+      ],
+      "auspicious_days": [
+        "Monday",
+        "Thursday"
+      ],
+      "compatible_dates": [
+        1,
+        2,
+        7,
+        16,
+        25,
+        4
+      ],
+      "challenging_dates": [
+        8,
+        9,
+        18
+      ]
+    },
+    "report_narrative": "Born on the 16th, you walk a transformative path of profound insight and wisdom. The synthesis of executive focus and harmonious intuition clears the way for deep technical and analytical mastery.",
+    "charm_ai_dialogue": "Day 16 gives you a sharp, intuitive mind and high strategic foresight! Combining the drive of the Sun with the balance of Venus, you have an exceptional capacity to see the core truth in complex situations."
+  },
+  "25": {
+    "day": 25,
+    "root": 7,
+    "code": "25(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "The Sage Observer",
+    "strength_potency_score": 83,
+    "planet": "Ketu (South Node)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Sage Observer & Discernment Master",
+    "classical_symbol": "The Keen Observer / The Alchemical Crucible (25)",
+    "planetary_composition": "Moon (2) + Mercury (5) = 7 (Ketu Analytical Depth)",
+    "strength_value_breakdown": "Moon (intuition) and Mercury (sharp commercial intellect) combine into Ketu (analytical depth). Graded Category B (Normal Strength / 83% Potency) because wisdom and wealth mature steadily through lived experience, keen observation, and foreign travels.",
+    "core_personality": "Perceptive, shrewd, analytical, calm, and intellectually observant. You learn through quiet observation rather than trial-and-error.",
+    "superpowers": [
+      "Acute psychological observation",
+      "Intellectual discernment and data analysis",
+      "Success in foreign lands and cross-cultural trade",
+      "Intuitive commercial foresight",
+      "Calm composure under crisis"
+    ],
+    "shadow_vulnerabilities": [
+      "Over-analyzing simple feelings",
+      "Cynical detachment and aloofness",
+      "Secretiveness creating distance with partners",
+      "Hesitation to take emotional leaps"
+    ],
+    "career_and_wealth": "Foreign trade, market intelligence, quantitative analytics, investigative journalism, university research, and psychological profiling.",
+    "love_and_relationships": "Thoughtful, observant, and dependable. Needs an emotionally secure, cultured partner who respects their quiet introspection.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Share your observations openly with trusted colleagues; maintain an analytical journal; avoid bottling up feelings.",
+      "universal_secular_remedy": "Wear a silver metallic watch; keep a green fluorite stone on your desk; spend time walking near natural lakes or rivers.",
+      "traditional_vedic_remedy": "Feed fish with wheat flour balls on Wednesdays or Thursdays; chant Ketu Gayatri Mantra; wear pearl or cat's eye under guidance.",
+      "auspicious_colors": [
+        "Silver",
+        "Sea Green",
+        "Smoky White",
+        "Light Blue"
+      ],
+      "auspicious_days": [
+        "Wednesday",
+        "Monday"
+      ],
+      "compatible_dates": [
+        2,
+        5,
+        7,
+        16,
+        25,
+        1,
+        23
+      ],
+      "challenging_dates": [
+        8,
+        9
+      ]
+    },
+    "report_narrative": "Born on the 25th, you carry the acute discernment of the Sage Observer. With Category B strength, Moon and Mercury blend into Ketu's deep analytical vision. Success comes through foreign connections, data mastery, and patient observation.",
+    "charm_ai_dialogue": "You are a Day 25 soul—the Sage Observer! With Category B strength, Moon (2) and Mercury (5) give you razor-sharp eyes and intuitive depth (7). You learn from everything you see. Trust your observations, explore foreign or specialized fields, and you will achieve profound success."
+  },
+  "8": {
+    "day": 8,
+    "root": 8,
+    "code": "8(a)",
+    "tier": "a",
+    "strength_category": "A",
+    "strength_title": "Pure Saturnian Authority",
+    "strength_potency_score": 92,
+    "planet": "Saturn (Shani)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Karmic Sovereign & Master of Governance",
+    "classical_symbol": "The Scales of Justice / The Infinite Loop (8)",
+    "planetary_composition": "Pure Saturn (Shani) Energy",
+    "strength_value_breakdown": "Pure Saturnian energy. Categorized as Category A (Good Strength / 92% Potency) because while early life demands laborious hard work and struggle, it confers unyielding stamina, mastery of law and finance, and massive institutional power in adulthood.",
+    "core_personality": "Determined, stoic, disciplined, just, and unyielding. You understand karma, law, and compounding effort. You build structures meant to last decades.",
+    "superpowers": [
+      "Ironclad endurance and stamina",
+      "Systemic financial and institutional governance",
+      "Unshakeable commitment to justice",
+      "Monumental compounding wealth building",
+      "Steely composure in adversity"
+    ],
+    "shadow_vulnerabilities": [
+      "Stern, unapproachable demeanor",
+      "Argumentative stubbornness",
+      "Difficulty expressing emotional warmth",
+      "Holding onto grievances and workaholism"
+    ],
+    "career_and_wealth": "Judiciary and litigation, institutional investment banking, real estate governance, mining and heavy metallurgy, corporate regulatory compliance, and industrial manufacturing.",
+    "love_and_relationships": "Deeply loyal, stable, and protective. Expresses love through enduring responsibility, practical security, and steadfast duty.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Consciously smile and express warmth to family and subordinates; engage in regular physical stretching; don't let work consume your weekends.",
+      "universal_secular_remedy": "Wear a white quartz crystal bracelet to cool internal heat; hydrate well; avoid pure black or harsh dark clothes in celebrations.",
+      "traditional_vedic_remedy": "Light a mustard oil lamp under a Peepal tree on Saturday evenings; donate black umbrellas, footwear, or food to physical laborers; Shani Chalisa.",
+      "auspicious_colors": [
+        "Navy Blue",
+        "Charcoal Gray",
+        "Steel Blue",
+        "Dark Olive"
+      ],
+      "auspicious_days": [
+        "Saturday",
+        "Wednesday"
+      ],
+      "compatible_dates": [
+        3,
+        5,
+        6,
+        8,
+        17,
+        26,
+        14,
+        23
+      ],
+      "challenging_dates": [
+        1,
+        2,
+        4,
+        9,
+        10,
+        19,
+        28
+      ]
+    },
+    "report_narrative": "Born on the 8th, you are governed by the sovereign justice of Saturn. With Category A strength and 92% potency, your life is an epic of endurance and mastery. Early laborious trials forge you into an institutional pillar, achieving massive compounding authority in maturity.",
+    "charm_ai_dialogue": "You are a Day 8 soul—ruled by Saturn! Graded Category A Good Strength at 92% potency, your life is built on iron discipline. Early struggles are simply Saturn's boot camp. Stay righteous, keep compounding, and you will rise to commanding wealth and authority."
+  },
+  "17": {
+    "day": 17,
+    "root": 8,
+    "code": "17(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "The Star of the Magi",
+    "strength_potency_score": 85,
+    "planet": "Saturn (Shani)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Star of the Magi & Immortal Strategist",
+    "classical_symbol": "The Star of the Magi / Star of Venus (Classical Chaldean Canon)",
+    "planetary_composition": "Sun (1) + Ketu (7) = 8 (Saturnian Victory)",
+    "strength_value_breakdown": "Sun (radiant will) and Ketu (spiritual detachment) resolve into Saturn (karmic victory). Graded Category B (Normal Strength / 85% Potency) because it promises lasting peace, financial authority, and enduring reputation after overcoming early trials.",
+    "core_personality": "Resilient, strategic, spiritual, intellectually formidable, and ambitious. You combine high executive drive with philosophical detachment.",
+    "superpowers": [
+      "Visionary long-range strategy",
+      "Immortal public reputation",
+      "Shrewd macro-financial acumen",
+      "Spiritual resilience over obstacles",
+      "Victorious perseverance through trials"
+    ],
+    "shadow_vulnerabilities": [
+      "Feeling burdened by a solitary destiny",
+      "Slow to open up emotionally",
+      "Perfectionism creating high stress",
+      "Tendency to isolate when challenged"
+    ],
+    "career_and_wealth": "Macro-economics, judicial consulting, literary authorship, scientific research institutions, legacy wealth management, and strategic policy leadership.",
+    "love_and_relationships": "Dignified, protective, and deeply dependable. Seeks a mature, intelligent partner who shares their life mission.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Share your strategic vision with a trusted inner circle; allow yourself time for leisure and creative hobbies.",
+      "universal_secular_remedy": "Wear a dual-tone metallic watch; carry an amethyst stone; practice evening contemplation.",
+      "traditional_vedic_remedy": "Donate food and warm clothing to the elderly or disabled; chant Hanuman Chalisa or Shani Mantra; wear amethyst or blue sapphire under advice.",
+      "auspicious_colors": [
+        "Royal Navy",
+        "Silver",
+        "Charcoal",
+        "Deep Indigo"
+      ],
+      "auspicious_days": [
+        "Saturday",
+        "Sunday"
+      ],
+      "compatible_dates": [
+        1,
+        5,
+        6,
+        7,
+        17,
+        23,
+        25
+      ],
+      "challenging_dates": [
+        2,
+        4,
+        8,
+        9
+      ]
+    },
+    "report_narrative": "Born on the 17th, you walk under the blessing of the Star of the Magi. With Category B strength, Sun and Ketu elevate Saturn into enduring victory. After navigating early karmic tests, your name and achievements earn lasting renown.",
+    "charm_ai_dialogue": "Day 17 is the Star of the Magi! With Category B strength, the Sun's light (1) and Ketu's depth (7) elevate Saturn (8) into victorious mastery. Early trials were simply paving your road to glory. Stay disciplined, and your legacy will shine brightly."
+  },
+  "26": {
+    "day": 26,
+    "root": 8,
+    "code": "26(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "Partnership Crucible",
+    "strength_potency_score": 63,
+    "planet": "Saturn (Shani)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Tested Steward & Partnership Crucible",
+    "classical_symbol": "The Heavy Crucible of Love & Finance (26)",
+    "planetary_composition": "Moon (2) + Venus (6) = 8 (Saturnian Duty)",
+    "strength_value_breakdown": "Moon (emotions) and Venus (desire, love) collide with Saturn's strict karmic balance. Graded Category C (Lower Strength / 63% Ease) because natives face severe trials in business partnerships, financial contracts, and marital disputes, requiring strict caution.",
+    "core_personality": "Warm, artistic, hardworking, family-devoted, and serious. You care deeply about financial security and family duty, but often feel taken for granted.",
+    "superpowers": [
+      "Heavy asset stewardship",
+      "Artistic and material patience",
+      "Managing complex family or estate finances",
+      "Endurance through partnership trials",
+      "Deep loyalty to duty"
+    ],
+    "shadow_vulnerabilities": [
+      "Financial losses through blind trust in partners",
+      "Emotional exploitation by loved ones",
+      "Vulnerability to contractual disputes",
+      "Pessimism under prolonged stress"
+    ],
+    "career_and_wealth": "Real estate asset management, luxury estate governance, family enterprise stewardship, commercial contract law, banking oversight, and hospitality.",
+    "love_and_relationships": "Deeply romantic yet prone to disillusionment. Must strictly separate emotional love from financial and legal business partnerships.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Never co-mingle personal relationships with joint business contracts without strict independent legal review; establish personal financial autonomy.",
+      "universal_secular_remedy": "Drink water from a silver cup; wear a white quartz crystal bracelet; avoid all-black attire in social gatherings.",
+      "traditional_vedic_remedy": "Donate black sesame seeds and milk to temple on Saturdays; feed cows with green grass on Fridays; chant Om Namah Shivaya.",
+      "auspicious_colors": [
+        "Silver Gray",
+        "Cream",
+        "Steel Blue",
+        "Pastel Violet"
+      ],
+      "auspicious_days": [
+        "Friday",
+        "Saturday"
+      ],
+      "compatible_dates": [
+        3,
+        5,
+        6,
+        14,
+        23,
+        24
+      ],
+      "challenging_dates": [
+        1,
+        4,
+        8,
+        9,
+        18,
+        28
+      ]
+    },
+    "report_narrative": "Born on the 26th, your soul navigates the partnership crucible. Moon and Venus pour emotional and material devotion into Saturn's strict ledger. Success flourishes when you enforce firm legal and personal boundaries.",
+    "charm_ai_dialogue": "You are a Day 26 soul—the Tested Steward! With Category C strength, Moon (2) and Venus (6) channel into Saturn (8). You have immense love and financial capability, but beware of blind trust in business partners. Protect your contracts, guard your boundaries, and your estate will thrive."
+  },
+  "9": {
+    "day": 9,
+    "root": 9,
+    "code": "9(a)",
+    "tier": "a",
+    "strength_category": "A",
+    "strength_title": "Pure Martian Champion",
+    "strength_potency_score": 93,
+    "planet": "Mars (Mangal)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Fearless Warrior & Humanitarian Champion",
+    "classical_symbol": "The Blazing Sword / Sovereign Shield (9)",
+    "planetary_composition": "Pure Mars (Mangal) Energy",
+    "strength_value_breakdown": "Pure Mars energy. Categorized as Category A (Good Strength / 93% Potency) due to fearless courage, rough-and-tough resilience, decisive executive action, and passionate defense of humanity.",
+    "core_personality": "Courageous, rough-and-tough, energetic, hot-tempered, and deeply humanitarian. You fight fearlessly for the oppressed and lead from the front lines.",
+    "superpowers": [
+      "Decisive, fearless courage",
+      "Heroic humanitarian advocacy",
+      "Immense physical and mental stamina",
+      "Crisis intervention leadership",
+      "Unshakeable protective loyalty"
+    ],
+    "shadow_vulnerabilities": [
+      "Explosive temper and impatience",
+      "Impulsive aggression when crossed",
+      "Difficulty with gentle diplomacy",
+      "Vulnerability to accidental physical injuries"
+    ],
+    "career_and_wealth": "Defense and armed forces, emergency surgery, sports management, civil rights advocacy, heavy machinery engineering, and crisis leadership.",
+    "love_and_relationships": "Passionate, protective, and ardent. Demands absolute loyalty; tempers fiery outbursts with genuine, warm devotion.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Channel fiery physical energy into regular intense athletic workouts; practice taking three deep breaths before responding in anger.",
+      "universal_secular_remedy": "Tie a red thread (mauli) on right wrist; apply red tilak (ashtagandha); do morning sun salutations; hydrate regularly.",
+      "traditional_vedic_remedy": "Recite Hanuman Chalisa daily; offer red flowers or vermilion (sindoor) to Lord Hanuman on Tuesdays; wear red coral in copper only after consultation.",
+      "auspicious_colors": [
+        "Crimson Red",
+        "Maroon",
+        "Gold",
+        "Warm Saffron"
+      ],
+      "auspicious_days": [
+        "Tuesday",
+        "Sunday"
+      ],
+      "compatible_dates": [
+        1,
+        9,
+        10,
+        19,
+        27,
+        3,
+        5
+      ],
+      "challenging_dates": [
+        2,
+        4,
+        8,
+        18,
+        26
+      ]
+    },
+    "report_narrative": "Born on the 9th, you are crowned with the fearless flame of Mars. With Category A strength and 93% potency, you are a natural warrior and humanitarian protector. Directing your fiery energy toward noble causes elevates you into a legendary champion.",
+    "charm_ai_dialogue": "You are a Day 9 soul—the Fearless Warrior! Holding Category A strength at 93% potency, you possess raw courage, fierce loyalty, and a champion's heart. Channel your fire into discipline and sports, protect the underdogs, and your leadership will be unstoppable."
+  },
+  "18": {
+    "day": 18,
+    "root": 9,
+    "code": "18(c)",
+    "tier": "c",
+    "strength_category": "C",
+    "strength_title": "The Purposeful Warrior · Noble Perseverance",
+    "strength_potency_score": 61,
+    "planet": "Mars (Mangal)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Tested Commander & Karmic Warrior",
+    "classical_symbol": "The Rayed Moon / Conflict of Light and Shadow (Classical Chaldean Canon)",
+    "planetary_composition": "Sun (1) + Saturn (8) = 9 (Vision & Resilience)",
+    "strength_value_breakdown": "Sun (light, ego, father) and Saturn (shadow, restriction, karma) are arch-enemies, resolving into Mars (war). Categorized as Category C (61% Ease) due to bitter family/business feuds, deception from close associates, and intense internal friction.",
+    "core_personality": "Battle-hardened, strategic, skeptical, resilient, and formidable. You have navigated fierce rivalries and understand the harsh realities of power.",
+    "superpowers": [
+      "Titanic crisis resilience",
+      "Battle-hardened strategic acumen",
+      "Mastery of hostile environments",
+      "Fierce humanitarian loyalty",
+      "Unyielding defense in conflict"
+    ],
+    "shadow_vulnerabilities": [
+      "Bitter quarrels and family feuds",
+      "Deception by trusted associates",
+      "Explosive defensive temper",
+      "Deep-seated skepticism and cynicism"
+    ],
+    "career_and_wealth": "Criminal litigation, corporate crisis management, defense strategy, industrial turnarounds, and high-conflict arbitration.",
+    "love_and_relationships": "Complex and guarded. Needs an emotionally mature partner who offers peace and avoids engaging in petty power struggles.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Avoid petty disputes and inheritance battles; practice forgiveness daily; surround yourself with calm, transparent advisors.",
+      "universal_secular_remedy": "Drink water from a copper bottle; wear a white quartz crystal bracelet to cool internal heat; practice evening meditation.",
+      "traditional_vedic_remedy": "Feed stray dogs on Tuesdays and Saturdays; worship Lord Hanuman and Lord Shiva; avoid wearing pure black and bright red together.",
+      "auspicious_colors": [
+        "Maroon",
+        "Steel Gray",
+        "Gold",
+        "Navy Blue"
+      ],
+      "auspicious_days": [
+        "Tuesday",
+        "Saturday"
+      ],
+      "compatible_dates": [
+        1,
+        3,
+        5,
+        9,
+        27
+      ],
+      "challenging_dates": [
+        2,
+        4,
+        8,
+        18,
+        28
+      ]
+    },
+    "report_narrative": "Born on the 18th, you navigate the sacred battle between Sun and Saturn resolving into Mars. With Category C strength, life tests your resilience through intense trials of strength. By choosing peace over pointless conflict, you become an unconquerable protector.",
+    "charm_ai_dialogue": "Day 18 brings you the mantle of the Purposeful Warrior. Sun (1) and Saturn (8) unite into Mars (9), forging immense stamina and noble perseverance. Choose your battles with wisdom, and your battle-tested leadership will triumph."
+  },
+  "27": {
+    "day": 27,
+    "root": 9,
+    "code": "27(b)",
+    "tier": "b",
+    "strength_category": "B",
+    "strength_title": "The Sceptre of Command",
+    "strength_potency_score": 86,
+    "planet": "Mars (Mangal)",
+    "is_karmic": false,
+    "is_master": false,
+    "archetype": "The Sceptre of Command & Intuitive General",
+    "classical_symbol": "The Sceptre of Command (Classical Chaldean Canon)",
+    "planetary_composition": "Moon (2) + Ketu (7) = 9 (Mars Wisdom & Command)",
+    "strength_value_breakdown": "Moon (mind) and Ketu (spiritual insight) unite into Mars (command). Graded Category B (Normal Strength / 86% Potency) because it confers an intellectual sceptre of authority, brilliant strategic vision, and respected leadership that advances steadily through wisdom.",
+    "core_personality": "Commanding, intuitive, noble, disciplined, and humanitarian. You blend warrior courage with spiritual insight, leading with quiet authority.",
+    "superpowers": [
+      "Executive command and authority",
+      "Intuitive strategic foresight",
+      "High mental clarity under pressure",
+      "Protective humanitarian advocacy",
+      "Dignified moral composure"
+    ],
+    "shadow_vulnerabilities": [
+      "Aloofness and emotional detachment",
+      "Stubborn defense of opinions",
+      "Sensitivity hidden behind a tough exterior",
+      "Impatience with dishonesty"
+    ],
+    "career_and_wealth": "High-level corporate strategy, defense intelligence, investigative surgery, international governance, publishing, and public policy.",
+    "love_and_relationships": "Noble, protective, and deeply intuitive. Detects unspoken feelings instantly; requires an honest, dignified partner.",
+    "remedial_blueprint": {
+      "practical_growth_action": "Listen patiently to contrary perspectives; temper your command with gentle empathy; engage in charitable service.",
+      "universal_secular_remedy": "Wear a silver metallic watch; keep a red jasper stone on your desk; practice swimming or water meditation.",
+      "traditional_vedic_remedy": "Support charitable hospitals or animal shelters on Tuesdays; chant Hanuman Chalisa; wear a pearl and coral combination only under guidance.",
+      "auspicious_colors": [
+        "Crimson",
+        "Silver",
+        "Gold",
+        "Royal Red"
+      ],
+      "auspicious_days": [
+        "Tuesday",
+        "Monday"
+      ],
+      "compatible_dates": [
+        1,
+        2,
+        7,
+        9,
+        18,
+        27,
+        3,
+        5
+      ],
+      "challenging_dates": [
+        4,
+        8,
+        26
+      ]
+    },
+    "report_narrative": "Born on the 27th, you hold the Sceptre of Command. With Category B strength and 86% potency, Moon and Ketu endow Mars with visionary wisdom. You are an intuitive general whose authority stems from moral clarity and disciplined strategy.",
+    "charm_ai_dialogue": "You are a Day 27 soul—holding the Sceptre of Command! With Category B strength, Moon (2) and Ketu (7) give Mars (9) visionary insight. You lead with dignity, courage, and intuition. Lead with compassion, and your authority will command universal respect."
+  }
+}

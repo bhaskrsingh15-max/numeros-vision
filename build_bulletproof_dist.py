@@ -137,7 +137,6 @@ ROUTING_MAP = {
     "signup": "signup.html",
     "register": "signup.html",
     "dashboard": "dashboard.html",
-    "cdp": "cdp.html",
     "charm-ai": "charm_ai.html",
 
     # Dedicated Tools

@@ -3440,7 +3440,8 @@
       } catch (e) {}
       
       const q = encodeURIComponent(`Is 2026 favorable for my career and wealth with Driver ${driver} and Conductor ${conductor}?`);
-      window.location.href = `/charm-ai/?name=${encodeURIComponent(name)}&day=${d}&month=${m}&year=${y}&q=${q}&auto=true`;
+      try { sessionStorage.setItem('nv_charm_prefill', JSON.stringify({ name, day: d, month: m, year: y, q })); } catch(e){}
+      window.location.href = '/charm-ai/?auto=true';
     }
 
     function initFromUrlParams() {

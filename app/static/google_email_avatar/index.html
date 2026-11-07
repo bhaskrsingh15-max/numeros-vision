@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Analytics 4 (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z2E6416W7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3Z2E6416W7', {
+      send_page_view: true,
+      cookie_flags: 'SameSite=Lax;Secure'
+    });
+  </script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
+  <!-- End Google Tag Manager -->
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Email Avatar & Logo Suite — NUMEROS VISION</title>
+  <link rel="icon" type="image/svg+xml" href="/logos/nv-logo-mark.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/theme.css" />
+  <link rel="stylesheet" href="/static/css/roadmap_components.css" />
+  <style>
+    :root {
+      --bg-pearl: #FFFDF7;
+      --gold-primary: #C9A227;
+      --gold-dark: #8B6914;
+      --emerald-accent: #16835B;
+      --sandalwood-ink: #523E28;
+      --border-gold: rgba(201, 162, 39, 0.28);
+    }
+    body {
+      background-color: var(--bg-pearl);
+      color: var(--sandalwood-ink);
+      font-family: 'Inter', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .avatar-hero {
+      max-width: 1040px;
+      margin: 40px auto 20px;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(201, 162, 39, 0.12);
+      border: 1px solid var(--gold-primary);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+    .page-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+      margin: 0 0 12px;
+      letter-spacing: 0.04em;
+    }
+    .page-subtitle {
+      font-size: 1.05rem;
+      color: var(--sandalwood-ink);
+      max-width: 680px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+
+    /* Live Simulation Row */
+    .sim-container {
+      max-width: 1040px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .sim-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    .sim-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(139, 105, 20, 0.06);
+    }
+    .sim-header {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gold-dark);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .gmail-preview {
+      background: #F8F9FA;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .gmail-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .gmail-avatar-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--gold-primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+      background: #FFFDF7;
+    }
+    .gmail-avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .gmail-info h4 {
+      margin: 0 0 2px;
+      font-size: 0.95rem;
+      color: #202124;
+      font-weight: 600;
+    }
+    .gmail-info p {
+      margin: 0;
+      font-size: 0.82rem;
+      color: #5F6368;
+    }
+
+    /* Avatar Grid Cards */
+    .avatar-grid {
+      max-width: 1040px;
+      margin: 0 auto 50px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+    }
+    .avatar-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(139, 105, 20, 0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+    .avatar-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(139, 105, 20, 0.12);
+    }
+    .avatar-card.recommended {
+      border: 2px solid var(--gold-primary);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF7 100%);
+    }
+    .card-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #C9A227, #8B6914);
+      color: #FFFFFF;
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(139, 105, 20, 0.3);
+    }
+    .avatar-preview-box {
+      width: 190px;
+      height: 190px;
+      margin: 16px auto 20px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--gold-primary);
+      box-shadow: 0 4px 16px rgba(139, 105, 20, 0.18);
+      position: relative;
+    }
+    .avatar-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.18rem;
+      color: var(--gold-dark);
+      margin: 0 0 6px;
+      font-weight: 700;
+    }
+    .card-desc {
+      font-size: 0.84rem;
+      color: var(--sandalwood-ink);
+      line-height: 1.5;
+      margin: 0 0 20px;
+      min-height: 48px;
+    }
+    .btn-download-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
+      color: #FFFFFF !important;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(139, 105, 20, 0.25);
+      transition: filter 0.2s ease;
+      margin-bottom: 8px;
+    }
+    .btn-download-primary:hover {
+      filter: brightness(1.1);
+    }
+    .btn-download-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 8px 14px;
+      background: rgba(201, 162, 39, 0.08);
+      color: var(--gold-dark) !important;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid var(--border-gold);
+      text-decoration: none;
+    }
+    .btn-download-secondary:hover {
+      background: rgba(201, 162, 39, 0.15);
+    }
+
+    /* Instructions Box */
+    .instructions-box {
+      max-width: 1040px;
+      margin: 0 auto 60px;
+      padding: 32px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(139, 105, 20, 0.06);
+    }
+    .instructions-box h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.35rem;
+      color: var(--gold-dark);
+      margin: 0 0 16px;
+    }
+    .step-list {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.8;
+      font-size: 0.92rem;
+      color: var(--sandalwood-ink);
+    }
+    .step-list li {
+      margin-bottom: 10px;
+    }
+    .step-list a {
+      color: var(--gold-dark);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KW6GQRVZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+
+  <!-- Master Unified Site Header -->
+  <header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — Anviel Every Charm">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVIEL EVERY CHARM</span>
+        </div>
+      </a>
+      <nav aria-label="Main Navigation">
+        <ul class="nv-nav-menu" id="nvNavMenu">
+          <li class="nv-nav-item"><a href="/calculators/" class="nv-nav-link">Calculators</a></li>
+          <li class="nv-nav-item"><a href="/charm-ai/" class="nv-nav-link">Charm AI</a></li>
+          <li class="nv-nav-item"><a href="/reports/" class="nv-nav-link">Reports</a></li>
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link">Contact Us</a></li>
+        </ul>
+      </nav>
+      <div class="nv-nav-actions">
+        <a href="/" class="nv-btn-cta">Portal Home ✦</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="avatar-hero">
+      <div class="badge-pill">✦ Official Brand Asset Kit ✦</div>
+      <h1 class="page-title">Google Email Avatar &amp; Profile Picture</h1>
+      <p class="page-subtitle">
+        Optimized specifically for Google Workspace, Gmail, and Google Account profile pictures. Pre-formatted with exact circular safe zones to ensure 100% full-circle visibility without edge-clipping.
+      </p>
+    </section>
+
+    <!-- Live Simulation Preview -->
+    <section class="sim-container">
+      <!-- Gmail Inbox Simulation -->
+      <div class="sim-card">
+        <div class="sim-header">
+          <span>📧</span> Live Gmail Thread Simulation
+        </div>
+        <div class="gmail-preview">
+          <div class="gmail-row">
+            <div class="gmail-avatar-wrap">
+              <img src="/static/google_email_avatar/numeros_vision_google_avatar_pearl_512.png" alt="Numeros Vision Avatar" />
+            </div>
+            <div class="gmail-info">
+              <h4>Numeros Vision &lt;support@numerosvision.com&gt;</h4>
+              <p>Your Vedic Numerology Dossier is ready for review...</p>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:0.78rem; color:#7A654D; margin:12px 0 0; line-height:1.4;">
+          ✓ The circular avatar renders with clean Jupiter Gold border and high-legibility monogram in standard Gmail and mobile apps.
+        </p>
+      </div>
+
+      <!-- Google Profile Simulation -->
+      <div class="sim-card">
+        <div class="sim-header">
+          <span>👤</span> Google Account &amp; Workspace Circle
+        </div>
+        <div class="gmail-preview" style="display:flex; align-items:center; justify-content:center; padding:18px;">
+          <div style="width:110px; height:110px; border-radius:50%; border:3px solid var(--gold-primary); overflow:hidden; box-shadow:0 4px 14px rgba(139,105,20,0.18);">
+            <img src="/static/google_email_avatar/google_circular_crop_simulation.png" style="width:100%; height:100%; object-fit:cover;" alt="Circular crop simulation" />
+          </div>
+        </div>
+        <p style="font-size:0.78rem; color:#7A654D; margin:12px 0 0; line-height:1.4; text-align:center;">
+          ✓ 100% of the gold seal, 12 o'clock solar star, and brand tagline sit comfortably within Google's circular crop boundary.
+        </p>
+      </div>
+    </section>
+
+    <!-- Download Cards -->
+    <section class="avatar-grid">
+      <!-- 1. Master Venus Pearl (Recommended) -->
+      <div class="avatar-card recommended">
+        <div class="card-badge">★ Recommended for Google Email</div>
+        <div class="avatar-preview-box" style="background:#FFFDF7;">
+          <img src="/static/google_email_avatar/numeros_vision_google_avatar_pearl_512.png" alt="Venus Pearl Master Avatar" />
+        </div>
+        <h3 class="card-title">Venus Pearl Edition</h3>
+        <p class="card-desc">
+          Solid Venus Pearl background with safe margin. Renders identically across Light &amp; Dark mode in Gmail, Outlook, and Apple Mail.
+        </p>
+        <a href="/static/google_email_avatar/numeros_vision_google_avatar_pearl_1024.png" download="numeros_vision_google_avatar_pearl_1024.png" class="btn-download-primary">
+          📥 Download Master 1024×1024 PNG
+        </a>
+        <a href="/static/google_email_avatar/numeros_vision_google_avatar_pearl_512.png" download="numeros_vision_google_avatar_pearl_512.png" class="btn-download-secondary">
+          Download 512×512 PNG
+        </a>
+      </div>
+
+      <!-- 2. Transparent Background -->
+      <div class="avatar-card">
+        <div class="avatar-preview-box" style="background: repeating-conic-gradient(#F5EFE6 0% 25%, #FFFDF7 0% 50%) 50% / 16px 16px;">
+          <img src="/static/google_email_avatar/numeros_vision_google_avatar_transparent_512.png" alt="Transparent Master Avatar" />
+        </div>
+        <h3 class="card-title">Transparent Edition</h3>
+        <p class="card-desc">
+          Circular gold seal with fully transparent canvas. Ideal if your email client applies a custom theme background.
+        </p>
+        <a href="/static/google_email_avatar/numeros_vision_google_avatar_transparent_1024.png" download="numeros_vision_google_avatar_transparent_1024.png" class="btn-download-primary">
+          📥 Download Master 1024×1024 PNG
+        </a>
+        <a href="/static/google_email_avatar/numeros_vision_google_avatar_transparent_512.png" download="numeros_vision_google_avatar_transparent_512.png" class="btn-download-secondary">
+          Download 512×512 PNG
+        </a>
+      </div>
+
+      <!-- 3. Imperial Dark Sandalwood -->
+      <div class="avatar-card">
+        <div class="avatar-preview-box" style="background:#24190F;">
+          <img src="/static/google_email_avatar/numeros_vision_google_avatar_dark_512.png" alt="Dark Sandalwood Avatar" />
+        </div>
+        <h3 class="card-title">Imperial Dark Edition</h3>
+        <p class="card-desc">
+          Deep Sandalwood Ink canvas with radiant gold star. Gives an ultra-luxury, high-contrast presence in inboxes.
+        </p>
+        <a href="/static/google_email_avatar/numeros_vision_google_avatar_dark_1024.png" download="numeros_vision_google_avatar_dark_1024.png" class="btn-download-primary">
+          📥 Download Master 1024×1024 PNG
+        </a>
+        <a href="/static/google_email_avatar/numeros_vision_google_avatar_dark_512.png" download="numeros_vision_google_avatar_dark_512.png" class="btn-download-secondary">
+          Download 512×512 PNG
+        </a>
+      </div>
+    </section>
+
+    <!-- Upload Instructions -->
+    <section class="instructions-box">
+      <h3>How to Upload This Avatar to Your Google Email ID (30 Seconds)</h3>
+      <ol class="step-list">
+        <li>
+          <strong>For Google Workspace / Custom Domain Email (e.g., support@numerosvision.com):</strong><br />
+          Go to <a href="https://admin.google.com" target="_blank" rel="noopener">Google Admin Console (admin.google.com)</a> → <strong>Directory</strong> → <strong>Users</strong> → Click on <strong>Support</strong> → Click on the circular photo icon → Upload <code>numeros_vision_google_avatar_pearl_1024.png</code>.
+        </li>
+        <li>
+          <strong>For standard Google Account / Gmail ID:</strong><br />
+          Open <a href="https://myaccount.google.com/personal-info" target="_blank" rel="noopener">Google Account Personal Info (myaccount.google.com)</a> → In the <strong>Basic Info</strong> section, click on <strong>Profile Picture</strong> → Click <strong>Add profile picture</strong> or <strong>Change</strong> → Select the downloaded <code>numeros_vision_google_avatar_pearl_1024.png</code> → Click <strong>Save as profile picture</strong>.
+        </li>
+        <li>
+          <strong>Instant propagation:</strong> Your verified Numeros Vision logo will immediately appear next to all outgoing emails sent from <code>support@numerosvision.com</code>!
+        </li>
+      </ol>
+    </section>
+  </main>
+
+  <!-- Master Unified Site Footer -->
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVIEL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            AI-powered numerological intelligence combining deterministic Vedic, Chaldean, and Lo Shu mathematical frameworks. Unveil every charm with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/">View All Calculators →</a></li>
+          </ul>
+        </div>
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="mailto:support@numerosvision.com">support@numerosvision.com</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="nv-footer-bottom">
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: Anviel Every Charm.</div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

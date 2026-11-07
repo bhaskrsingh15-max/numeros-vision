@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" width="320" height="120" fill="none">
+  <rect width="320" height="120" fill="#FFFDF7"/>
+  
+  <!-- Left: Square Icon Badge with Yellow Outline & Space Around NV -->
+  <g transform="translate(16, 16)">
+    <rect x="0" y="0" width="88" height="88" fill="#FFFDF7" stroke="#E2B84B" stroke-width="2.5"/>
+    <text x="30" y="58" font-family="'Cormorant Garamond', 'Cinzel', Georgia, serif" font-size="44" font-weight="700" fill="#16835B" text-anchor="middle">N</text>
+    <text x="58" y="58" font-family="'Cormorant Garamond', 'Cinzel', Georgia, serif" font-size="44" font-weight="700" fill="#C9A227" text-anchor="middle">V</text>
+    <rect x="18" y="68" width="52" height="2" fill="#16835B"/>
+  </g>
+  
+  <!-- Vertical Divider Separator -->
+  <rect x="122" y="20" width="1.6" height="80" fill="#E2B84B" opacity="0.65"/>
+  
+  <!-- Right: Wordmark Block -->
+  <g transform="translate(142, 34)">
+    <text x="0" y="24" font-family="'Cinzel', serif" font-size="20" font-weight="800" fill="#1C1917" letter-spacing="2.6">NUMEROS VISION</text>
+    <rect x="0" y="34" width="150" height="2.2" fill="#16835B"/>
+    <text x="0" y="50" font-family="'Cinzel', 'Inter', sans-serif" font-size="8.8" font-weight="700" fill="#8B6914" letter-spacing="2.2">ANVEIL EVERY CHARM</text>
+  </g>
+</svg>

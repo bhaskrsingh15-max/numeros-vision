@@ -74,23 +74,24 @@ gcloud secrets add-iam-policy-binding nv-pdf-service-secret-preview `
   --project=$GCP_PROJECT
 
 # 7. Deploy container to Cloud Run with 64KB body protection and memory limit
-# Authentication is enforced at the application layer via timestamped HMAC-SHA256 signatures (X-NV-Signature); concurrency 4 and max-instances 3 prevent memory exhaustion under concurrent ReportLab rendering.
-gcloud run deploy nv-pdf-service-preview `
+# Authentication is enforced at the application layer via timestamped HMAC-SHA256 signatures (X-NV-Signature); concurrency 4 and max-instances 2 prevent memory exhaustion under concurrent ReportLab rendering (1Gi RAM per instance).
+gcloud run deploy pdf-service `
   --source="." `
   --region=$GCP_REGION `
   --platform=managed `
   --service-account=$SERVICE_ACCOUNT `
   --set-secrets="PDF_SERVICE_SECRET=nv-pdf-service-secret-preview:latest" `
-  --memory=512Mi `
+  --memory=1Gi `
   --cpu=1 `
-  --max-instances=3 `
+  --min-instances=0 `
+  --max-instances=2 `
   --concurrency=4 `
   --timeout=60s `
   --allow-unauthenticated `
   --project=$GCP_PROJECT
 
 # 8. Obtain the deployed service URL
-$CLOUD_RUN_URL = (gcloud run services describe nv-pdf-service-preview --region=$GCP_REGION --project=$GCP_PROJECT --format="value(status.url)").Trim()
+$CLOUD_RUN_URL = (gcloud run services describe pdf-service --region=$GCP_REGION --project=$GCP_PROJECT --format="value(status.url)").Trim()
 Write-Host "Cloud Run Base URL: $CLOUD_RUN_URL"
 
 # The Worker expects either the base URL or the full endpoint URL; normalize:

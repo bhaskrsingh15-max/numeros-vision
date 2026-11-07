@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180" fill="none">
+  <rect width="180" height="180" fill="#FFFDF7"/>
+  
+  <!-- Outer Yellow/Gold Square -->
+  <rect x="16" y="16" width="148" height="148" stroke="#C9A227" stroke-width="2.4" fill="none"/>
+  
+  <!-- Inner Fine Yellow Hairline with 7px inset space -->
+  <rect x="23" y="23" width="134" height="134" stroke="#E2B84B" stroke-width="1" stroke-dasharray="4 2" fill="none"/>
+  
+  <!-- Corner Diamond Accents in Gold -->
+  <polygon points="16,16 22,16 16,22" fill="#C9A227"/>
+  <polygon points="164,16 158,16 164,22" fill="#C9A227"/>
+  <polygon points="16,164 22,164 16,158" fill="#C9A227"/>
+  <polygon points="164,164 158,164 164,158" fill="#C9A227"/>
+  
+  <!-- NV Monogram centered with generous inner space -->
+  <text x="65" y="96" font-family="'Cormorant Garamond', 'Cinzel', Georgia, serif" font-size="62" font-weight="700" fill="#16835B" text-anchor="middle">N</text>
+  <text x="115" y="96" font-family="'Cormorant Garamond', 'Cinzel', Georgia, serif" font-size="62" font-weight="700" fill="#C9A227" text-anchor="middle">V</text>
+  
+  <!-- Emerald Green Rectangle Divider -->
+  <rect x="44" y="110" width="92" height="2" fill="#16835B"/>
+  
+  <!-- Official Brand Name & Tagline -->
+  <text x="90" y="126" font-family="'Cinzel', 'Inter', sans-serif" font-size="7.5" font-weight="800" fill="#8B6914" text-anchor="middle" letter-spacing="2.2">NUMEROS VISION</text>
+  <text x="90" y="140" font-family="'Cinzel', 'Inter', sans-serif" font-size="6.8" font-weight="700" fill="#16835B" text-anchor="middle" letter-spacing="1.8">ANVEIL EVERY CHARM</text>
+</svg>

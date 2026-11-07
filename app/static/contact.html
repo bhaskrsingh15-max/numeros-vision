@@ -591,10 +591,7 @@
         localStorage.setItem('nv_contact_tickets', JSON.stringify(existing));
       } catch (e) {}
 
-      // 3. Track in CDP if active
-      if (window.NumerosCDP && typeof window.NumerosCDP.track === 'function') {
-        window.NumerosCDP.track('contact_inquiry_submitted', { ticket_id: ticketId, category });
-      }
+      
 
       function escapeHtml(s) {
         return String(s || '').replace(/[&<>"']/g, function(c) {

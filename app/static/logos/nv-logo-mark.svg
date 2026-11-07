@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" fill="none" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+  <defs>
+    <!-- Jupiter Gold Gradient for Ring & Star -->
+    <linearGradient id="goldGradMark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F3CA52"/>
+      <stop offset="35%" stop-color="#C9A227"/>
+      <stop offset="70%" stop-color="#E2B84B"/>
+      <stop offset="100%" stop-color="#9E7B15"/>
+    </linearGradient>
+    
+    <!-- Mercury Emerald Gradient for Letter N & Tagline -->
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2AAE7A"/>
+      <stop offset="100%" stop-color="#16835B"/>
+    </linearGradient>
+
+    <!-- Sun Yellow Radiant Gradient for Straight Line -->
+    <linearGradient id="sunYellowLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C9A227"/>
+      <stop offset="25%" stop-color="#E2B84B"/>
+      <stop offset="50%" stop-color="#FCE182"/>
+      <stop offset="75%" stop-color="#E2B84B"/>
+      <stop offset="100%" stop-color="#C9A227"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Venus Pearl Base Circle with Clean Single Jupiter Gold Ring -->
+  <circle cx="100" cy="100" r="95" fill="#FFFDF7" stroke="url(#goldGradMark)" stroke-width="2.5"/>
+
+  <!-- 12 o'clock Solar / Gold Star Accent -->
+  <path d="M100 15 L102.5 24 L111 26.5 L102.5 29 L100 37 L97.5 29 L89 26.5 L97.5 24 Z" fill="url(#goldGradMark)"/>
+
+  <!-- Monogram NV Letters — Centered at x=100.0 directly in middle of yellow line -->
+  <!-- N in Rich Mercury Emerald (#16835B) -->
+  <text x="73.9" y="117" font-family="'Cormorant Garamond', Georgia, serif" font-size="78" font-weight="700" fill="url(#emeraldGrad)" text-anchor="middle">N</text>
+  
+  <!-- V in Radiant Jupiter Gold (#C9A227) -->
+  <text x="127.9" y="117" font-family="'Cormorant Garamond', Georgia, serif" font-size="78" font-weight="700" fill="url(#goldGradMark)" text-anchor="middle">V</text>
+
+  <!-- Straight Line in Radiant Sun Yellow Gradient — V-side slightly goes to left side (ends at x=155, flush with V serif 154.6, width=121px) -->
+  <rect x="34" y="116.8" width="121" height="2.4" rx="0.5" fill="url(#sunYellowLine)"/>
+
+  <!-- High-Clarity Brand Text & Tagline — Screenshot 1 Font Style with Website Theme Colors & Zero Pixelation -->
+  <text x="100" y="137.5" font-family="'Cinzel', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#9E7B15" text-anchor="middle" letter-spacing="2.2" text-rendering="geometricPrecision">NUMEROS VISION</text>
+  <text x="100" y="153.5" font-family="'Cinzel', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="10.2" font-weight="800" fill="#16835B" text-anchor="middle" letter-spacing="1.8" text-rendering="geometricPrecision">ANVIEL EVERY CHARM</text>
+</svg>

@@ -211,21 +211,8 @@
   function trackEvent(eventName, productId, metadata) {
     try {
       if (localStorage.getItem('nv_marketing_opt_out') === 'true') return;
-      const payload = {
-        event: eventName,
-        product_id: productId || 'unknown',
-        stage: 'CONSIDERATION',
-        metadata: metadata || {}
-      };
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon('/api/v1/payments/funnel/event', JSON.stringify(payload));
-      } else {
-        fetch('/api/v1/payments/funnel/event', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          keepalive: true
-        }).catch(() => {});
+      if (typeof window.trackMarketingEvent === 'function') {
+        window.trackMarketingEvent(eventName, { product_id: productId || 'unknown', ...(metadata || {}) });
       }
     } catch (e) {}
   }

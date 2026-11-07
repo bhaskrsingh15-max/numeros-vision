@@ -513,7 +513,7 @@
 
       const btnAsk = document.getElementById("btnAskCharm");
       if (btnAsk) {
-        btnAsk.href = `/charm-ai/?day=${dayInput}&q=What+are+the+core+strengths+and+remedies+for+my+Birth+Number+${n}%3F&auto=true`;
+        btnAsk.href = '/charm-ai/?auto=true';
       }
 
       try {
@@ -533,13 +533,13 @@
       if (window.nvFunnel && typeof window.nvFunnel.renderOfferBridge === "function") {
         window.nvFunnel.renderOfferBridge("res-funnel-offer", {
           productId: "birth_number",
-          askCharmUrl: `/charm-ai/?day=${dayInput}&q=What+are+the+core+strengths+and+remedies+for+my+Birth+Number+${n}%3F&auto=true`
+          askCharmUrl: '/charm-ai/?auto=true'
         });
       }
       if (window.nvFunnel && typeof window.nvFunnel.renderOfferBridge === "function") {
         window.nvFunnel.renderOfferBridge("res-funnel-offer", {
           productId: "birth_number",
-          askCharmUrl: `/charm-ai/?day=${dayInput}&q=What+are+the+core+strengths+and+remedies+for+my+Birth+Number+${n}%3F&auto=true`
+          askCharmUrl: '/charm-ai/?auto=true'
         });
       }
       disp.scrollIntoView({ behavior: "smooth", block: "nearest" });

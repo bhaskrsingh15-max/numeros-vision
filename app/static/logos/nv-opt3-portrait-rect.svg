@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 210" width="180" height="210" fill="none">
+  <rect width="180" height="210" fill="#FFFDF7"/>
+  
+  <!-- Yellow / Jupiter Gold Vertical Rectangle Outline -->
+  <rect x="22" y="16" width="136" height="178" stroke="#E2B84B" stroke-width="2.4" fill="none"/>
+  
+  <!-- Top Celestial Solar Star Accent in Gold -->
+  <path d="M90 28 L92 34 L98 36 L92 38 L90 44 L88 38 L82 36 L88 34 Z" fill="#C9A227"/>
+  
+  <!-- NV Monogram centered with expansive vertical breathing room -->
+  <text x="66" y="105" font-family="'Cormorant Garamond', 'Cinzel', Georgia, serif" font-size="64" font-weight="700" fill="#16835B" text-anchor="middle">N</text>
+  <text x="114" y="105" font-family="'Cormorant Garamond', 'Cinzel', Georgia, serif" font-size="64" font-weight="700" fill="#C9A227" text-anchor="middle">V</text>
+  
+  <!-- Emerald Green Rectangle Divider -->
+  <rect x="42" y="122" width="96" height="2.2" fill="#16835B"/>
+  
+  <!-- Official Brand Name & Tagline -->
+  <text x="90" y="142" font-family="'Cinzel', 'Inter', sans-serif" font-size="8" font-weight="800" fill="#8B6914" text-anchor="middle" letter-spacing="2.4">NUMEROS VISION</text>
+  <text x="90" y="158" font-family="'Cinzel', 'Inter', sans-serif" font-size="7" font-weight="700" fill="#16835B" text-anchor="middle" letter-spacing="2">ANVEIL EVERY CHARM</text>
+</svg>

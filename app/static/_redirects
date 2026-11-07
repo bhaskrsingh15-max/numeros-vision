@@ -1,0 +1,3 @@
+# Cloudflare Pages Redirects & Clean URL Rewrites
+# Static asset alias for FastAPI /static/ path parity
+/static/*                   /:splat                     200

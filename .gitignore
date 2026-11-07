@@ -19,6 +19,9 @@ dist_cloudflare_pages/
 backups/
 *.zip
 *.tar.gz
+*.backup
+*_backup
+*.log
 
 # Sensitive Customer Data & PII
 data/*.jsonl

@@ -548,14 +548,22 @@
       syncCharmAiGatingUi();
       try {
         const params = new URLSearchParams(window.location.search);
+          let sessPrefill = {};
+          try {
+            const raw = sessionStorage.getItem('nv_charm_prefill');
+            if (raw) {
+              sessPrefill = JSON.parse(raw);
+              sessionStorage.removeItem('nv_charm_prefill');
+            }
+          } catch(e){}
         let hydrated = false;
 
         // 1. Check URL parameters
-        const urlName = params.get('name') || params.get('ai_user_name');
-        const urlDay = params.get('day') || params.get('d');
-        const urlMonth = params.get('month') || params.get('m');
-        const urlYear = params.get('year') || params.get('y');
-        const urlQuery = params.get('q') || params.get('query');
+        const urlName = sessPrefill.name || params.get('name') || params.get('ai_user_name');
+        const urlDay = sessPrefill.day || params.get('day') || params.get('d');
+        const urlMonth = sessPrefill.month || params.get('month') || params.get('m');
+        const urlYear = sessPrefill.year || params.get('year') || params.get('y');
+        const urlQuery = sessPrefill.q || params.get('q') || params.get('query');
 
         if (urlName && document.getElementById('ai_user_name')) {
           document.getElementById('ai_user_name').value = urlName;
