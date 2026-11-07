@@ -1,16 +1,37 @@
 """
-NUMEROS VISION — 2027 YEAR AHEAD PLANNER PDF REPORT GENERATOR
+NUMEROS VISION — 2027 YEAR AHEAD PLANNER PDF REPORT GENERATOR (v2.0)
 Tagline: ANVEIL EVERY CHARM
 
 Architecture & Constraints:
 - Results-Only format: Zero calculation formulas, weights, reduction steps (e.g. 28 -> 10 -> 1),
   grid scores (F+, E+), or internal component names exposed.
-- Theme palette: Venus Pearl (#FFFDF7, #F7F3EA), Jupiter Gold (#8B6914, #C9A227, #E2B84B),
-  Mercury Emerald (#16835B), Sandalwood Ink (#523E28, #7A654D). Strictly ZERO raw black (#000000).
-- Exactly 16 pages, deterministic page breaks, file size under 3 MB.
+- Theme palette & typography strictly identical to existing 12-page and 32-page generator:
+  Source: pdf_service/app/services/pdf_report_generator.py (lines 76-86, 89-229).
+  COLOR_PEARL_BG   = #FFFDF7
+  COLOR_PEARL_MID  = #F7F3EA
+  COLOR_GOLD_DARK  = #8B6914
+  COLOR_GOLD       = #C9A227
+  COLOR_GOLD_LIGHT = #E2B84B
+  COLOR_INK_DARK   = #523E28
+  COLOR_INK_MUTED  = #7A654D
+  COLOR_EMERALD    = #16835B
+  COLOR_BORDER     = #EEDDB8
+  COLOR_CARD_BG    = #FFFFFF
+  COLOR_RED_ALERT  = #A13030
+  Fonts: Times-Bold, Times-Roman, Times-Italic.
+  Strictly ZERO raw black (#000000).
+- Exactly 24 pages:
+  Page 1: Cover
+  Page 2: Section 1 — Core Numerological Archetypes & 2027 Cycles
+  Page 3: Section 2 — 2027 Macro Strategic Horizon (PY, Sun Sign, 7 Life Areas)
+  Page 4: Section 3 — Lo Shu Magic Square & 8 Elemental Planes
+  Page 5: Section 4 — Calling Name Resonance & 4-Stage Pinnacles
+  Page 6: Section 5 — Key Strategic Auspicious Dates (with Panchang annotations)
+  Pages 7-18: Section 6 — 12 Monthly Blueprints (1 page per month, with full moon & new moon IST times, rating, remedy)
+  Page 19: Section 7 — 2027 Remedies Bank (Annual remedy, Traditional Crystal for Mulank, 9 daily micro-actions)
+  Pages 20-23: Section 8 — 365-Day Daily Alignment Calendar Appendix (4 quarterly pages, font size 7.2 pt matching TableCellDense)
+  Page 24: Section 9 — How to Read This Report & Statutory Legal Notice (with restored {{DISCLAIMER_APPROVED_TEXT}})
 - Metadata: Title and Author only.
-- Strictly zero forbidden terms: luck, lucky, guaranteed, will bring, will fix, prediction,
-  prescription, consecrated, cure, exact.
 """
 
 import os
@@ -30,7 +51,7 @@ from reportlab.pdfgen import canvas
 
 from app.engine.planner_2027_engine import calculate_planner_2027
 
-# Approved Brand Color Palette
+# Palette from pdf_service/app/services/pdf_report_generator.py lines 76-86
 COLOR_PEARL_BG   = colors.HexColor("#FFFDF7")
 COLOR_PEARL_MID  = colors.HexColor("#F7F3EA")
 COLOR_GOLD_DARK  = colors.HexColor("#8B6914")
@@ -41,17 +62,7 @@ COLOR_INK_MUTED  = colors.HexColor("#7A654D")
 COLOR_EMERALD    = colors.HexColor("#16835B")
 COLOR_BORDER     = colors.HexColor("#EEDDB8")
 COLOR_CARD_BG    = colors.HexColor("#FFFFFF")
-COLOR_ALERT      = colors.HexColor("#A13030")
-
-# Approved Disclaimer Text
-APPROVED_DISCLAIMER_TEXT = (
-    "Numeros Vision operates as an analytical synthesizer of classical numerological traditions. "
-    "Calculations and cyclical rhythms represent symbolic, philosophical, and reflective frameworks "
-    "designed to foster personal mindfulness and self-inquiry. They do not constitute empirical scientific "
-    "certainties or promises of commercial or personal success, nor do they replace licensed medical, "
-    "healthcare, legal, tax, or investment counsel. Every user retains sovereign responsibility for their choices, "
-    "decisions, and personal outcomes."
-)
+COLOR_RED_ALERT  = colors.HexColor("#A13030")
 
 PLANET_NAMES = {
     1: ("Sun", "Surya"),
@@ -63,6 +74,33 @@ PLANET_NAMES = {
     7: ("Ketu", "South Node"),
     8: ("Saturn", "Shani"),
     9: ("Mars", "Mangal"),
+}
+
+# Spec: 1 Favourable, 2 Neutral, 3 Favourable, 4 Neutral, 5 Asks for care,
+# 6 Favourable, 7 Neutral, 8 Neutral, 9 Asks for care; June for PY 5 shows master flag as 2
+MONTH_RATINGS_SPEC = {
+    1: "Favourable",
+    2: "Neutral",
+    3: "Favourable",
+    4: "Neutral",
+    5: "Asks for care",
+    6: "Favourable",
+    7: "Neutral",
+    8: "Neutral",
+    9: "Asks for care"
+}
+
+# Spec table: traditional crystal for Mulank
+CRYSTALS_BY_MULANK = {
+    1: "Sunstone or Carnelian",
+    2: "Moonstone",
+    3: "Citrine",
+    4: "Hessonite garnet",
+    5: "Green aventurine",
+    6: "Clear quartz",
+    7: "Tiger's eye",
+    8: "Amethyst or Lapis lazuli",
+    9: "Red jasper"
 }
 
 def get_tropical_sun_sign(month: int, day: int) -> str:
@@ -96,7 +134,8 @@ def get_tropical_sun_sign(month: int, day: int) -> str:
 class Planner2027ReportCanvas(canvas.Canvas):
     """
     Two-pass canvas drawing luxury gold frames, running headers/footers,
-    page counts, SAMPLE watermark, and clean metadata (Title and Author only).
+    page counts, SAMPLE watermark (controlled by is_sample flag),
+    and clean metadata (Title and Author only).
     """
     def __init__(self, *args, **kwargs):
         self.seeker_name = kwargs.pop("seeker_name", "Valued Client")
@@ -180,7 +219,7 @@ class Planner2027ReportCanvas(canvas.Canvas):
         page_str = f"Page {self._pageNumber} of {total_pages}"
         self.drawRightString(w - 34, 26, page_str)
 
-        # 5. SAMPLE Watermark
+        # 5. SAMPLE Watermark (Only when is_sample is True)
         if self.is_sample:
             self.saveState()
             self.setFont("Times-Bold", 54)
@@ -210,7 +249,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
         ),
         'SectionH2': ParagraphStyle(
             'SectionH2', parent=base['Normal'], fontName='Times-Bold', fontSize=10, leading=13,
-            textColor=COLOR_INK_DARK, spaceBefore=3, spaceAfter=2, keepWithNext=True
+            textColor=COLOR_INK_DARK, spaceBefore=4, spaceAfter=2, keepWithNext=True
         ),
         'Body': ParagraphStyle(
             'Body', parent=base['Normal'], fontName='Times-Roman', fontSize=8.5, leading=11.5,
@@ -232,12 +271,12 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
             'TableCellCenter', parent=base['Normal'], fontName='Times-Roman', fontSize=8, leading=10.5,
             textColor=COLOR_INK_DARK, alignment=1
         ),
-        'TableCellSmall': ParagraphStyle(
-            'TableCellSmall', parent=base['Normal'], fontName='Times-Roman', fontSize=5.5, leading=6.8,
+        'TableCellDense': ParagraphStyle(
+            'TableCellDense', parent=base['Normal'], fontName='Times-Roman', fontSize=7.2, leading=9.2,
             textColor=COLOR_INK_DARK
         ),
-        'TableCellSmallCenter': ParagraphStyle(
-            'TableCellSmallCenter', parent=base['Normal'], fontName='Times-Roman', fontSize=5.5, leading=6.8,
+        'TableCellDenseCenter': ParagraphStyle(
+            'TableCellDenseCenter', parent=base['Normal'], fontName='Times-Roman', fontSize=7.2, leading=9.2,
             textColor=COLOR_INK_DARK, alignment=1
         ),
         'MetaKey': ParagraphStyle(
@@ -248,16 +287,12 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
             'MetaVal', parent=base['Normal'], fontName='Times-Roman', fontSize=8.5, leading=11,
             textColor=COLOR_INK_DARK
         ),
-        'TierTag': ParagraphStyle(
-            'TierTag', parent=base['Normal'], fontName='Times-Bold', fontSize=7.5, leading=9.5,
-            textColor=COLOR_GOLD_DARK, alignment=1
-        )
     }
 
 
 class Planner2027PdfBuilder:
     """
-    Compiles the 16-page 2027 Year Ahead Planner report in Results-Only format.
+    Compiles the 24-page 2027 Year Ahead Planner report in Results-Only format.
     """
     def __init__(
         self,
@@ -283,7 +318,7 @@ class Planner2027PdfBuilder:
         self.bhagyank = self.subject["conductor_bhagyank"]
 
     def build(self) -> bytes:
-        # Exactly 16 pages, 15 page breaks
+        # Exactly 24 pages, 23 page breaks
         self._build_page1_cover()
         self.story.append(PageBreak())
         
@@ -302,22 +337,28 @@ class Planner2027PdfBuilder:
         self._build_page6_key_dates()
         self.story.append(PageBreak())
         
-        # Pages 7-12: 12 Monthly Blueprints (2 months per page)
-        for m_idx in range(0, 12, 2):
-            self._build_monthly_page(self.d["months"][m_idx], self.d["months"][m_idx + 1])
+        # Pages 7-18: 12 Monthly Blueprints (1 page per month)
+        for m_idx in range(12):
+            self._build_single_monthly_page(self.d["months"][m_idx])
             self.story.append(PageBreak())
         
-        self._build_page13_remedies_bank()
+        self._build_page19_remedies_bank()
         self.story.append(PageBreak())
         
-        # Pages 14-15: 365-Day Daily Alignment Calendar Appendix
-        self._build_page14_calendar_p1()
+        # Pages 20-23: 365-Day Daily Alignment Calendar Appendix (4 quarterly pages)
+        self._build_calendar_quarter_page(1, "QUARTER 1 (JANUARY – MARCH 2027)", 1, 3, 0, 90)
+        self.story.append(PageBreak())
+
+        self._build_calendar_quarter_page(2, "QUARTER 2 (APRIL – JUNE 2027)", 4, 6, 90, 181)
+        self.story.append(PageBreak())
+
+        self._build_calendar_quarter_page(3, "QUARTER 3 (JULY – SEPTEMBER 2027)", 7, 9, 181, 273)
+        self.story.append(PageBreak())
+
+        self._build_calendar_quarter_page(4, "QUARTER 4 (OCTOBER – DECEMBER 2027)", 10, 12, 273, 365)
         self.story.append(PageBreak())
         
-        self._build_page15_calendar_p2()
-        self.story.append(PageBreak())
-        
-        self._build_page16_how_to_read()
+        self._build_page24_how_to_read()
 
         buf = io.BytesIO()
         doc = SimpleDocTemplate(
@@ -566,7 +607,6 @@ class Planner2027PdfBuilder:
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
         ]))
 
-        # Container table to center grid
         wrap_table = Table([[t_grid]], colWidths=[490])
         wrap_table.setStyle(TableStyle([('ALIGN', (0,0), (-1,-1), 'CENTER')]))
         self.story.append(wrap_table)
@@ -611,7 +651,6 @@ class Planner2027PdfBuilder:
         s = self.styles
         self.story.append(Paragraph("SECTION 4: CALLING NAME RESONANCE & 4-STAGE PINNACLES", s['SectionH1']))
         
-        # Name Section
         nd = self.subject.get("name_data", {})
         c_num = nd.get("name_number_compound", 0)
         r_num = nd.get("name_number_root", 0)
@@ -683,27 +722,22 @@ class Planner2027PdfBuilder:
             "Across the 365 days of 2027, certain dates exhibit peak personal resonance where your driver and conductor "
             "energies align smoothly with universal daily cycles. In accordance with classical panchang wisdom, dates falling on "
             "New Moon (Amavasya) or subject to full-morning Rahu Kaal have been filtered or adjusted to support high clarity. "
-            "These dates serve as optimal windows for contract signings, key launches, strategic meetings, and important decisions.",
+            "For dates where a lunar tithi transitions within 45 minutes of sunrise, an explicit panchang notice is provided.",
             s['Body']
         ))
         self.story.append(Spacer(1, 8))
 
-        # Select top curated dates across 4 quarters
         calendar_365 = self.d["full_calendar_365"]
         panchang_days = self.panchang.get("days", {})
 
         def is_eligible_key_date(row):
             d_str = row["date"]
             p_info = panchang_days.get(d_str, {})
-            # Drop Amavasya
+            # Omit Amavasya
             if p_info.get("is_amavasya", False):
-                return False
-            # Check near boundary - if very close, avoid in key dates
-            if p_info.get("near_boundary", False):
                 return False
             return True
 
-        # Group by Quarter
         quarters = {
             "Q1 (January – March)": [r for r in calendar_365 if r["date"].startswith("2027-01") or r["date"].startswith("2027-02") or r["date"].startswith("2027-03")],
             "Q2 (April – June)": [r for r in calendar_365 if r["date"].startswith("2027-04") or r["date"].startswith("2027-05") or r["date"].startswith("2027-06")],
@@ -718,14 +752,21 @@ class Planner2027PdfBuilder:
         notes_peak = self.lib["date_notes"]["Peak"]
         for q_name, q_days in quarters.items():
             eligible = [r for r in q_days if is_eligible_key_date(r)]
-            # Sort by score descending, then date
             sorted_q = sorted(eligible, key=lambda x: (-x["alignment_score"], x["date"]))
-            top_3 = sorted_q[:3] # Top 3 per quarter = 12 curated dates
+            top_3 = sorted_q[:3]
             for idx, item in enumerate(top_3):
                 dt = datetime.date.fromisoformat(item["date"])
                 dt_disp = dt.strftime("%d %b (%a)")
                 score_disp = f"<b>{item['alignment_score']}</b> · {item['tier']}"
-                note_txt = notes_peak[idx % len(notes_peak)]
+                base_note = notes_peak[idx % len(notes_peak)]
+                
+                # Near-boundary check
+                p_day = panchang_days.get(item["date"], {})
+                if p_day.get("near_boundary", False):
+                    note_txt = f"<b>Panchang: the tithi changes shortly after sunrise; check your local Panchang.</b> {base_note}"
+                else:
+                    note_txt = base_note
+
                 q_label = f"<b>{q_name.split()[0]}</b>" if idx == 0 else ""
                 key_rows.append([
                     Paragraph(q_label, s['TableCellCenter']),
@@ -754,108 +795,154 @@ class Planner2027PdfBuilder:
         )
         self.story.append(Paragraph(guide_note, s['BodyMuted']))
 
-    def _build_monthly_page(self, m1: Dict[str, Any], m2: Dict[str, Any]):
+    def _build_single_monthly_page(self, m: Dict[str, Any]):
+        """
+        Builds a dedicated, full-page monthly blueprint (Pages 7 to 18).
+        """
         s = self.styles
-        if m1["month_number"] == 1:
-            self.story.append(Paragraph("SECTION 6: 12-MONTH STRATEGIC BLUEPRINTS", s['SectionH1']))
-            self.story.append(Spacer(1, 2))
+        m_num = m["month_number"]
+        m_name = m["month_name"]
+        pm = m["personal_month"]
+        avg_score = m["average_alignment_score"]
+        theme_text = self.lib["personal_months"].get(str(pm), m["theme"])
+        rem_text = self.lib["remedies_library"]["month_remedies"].get(str(pm), "")
 
-        for idx, m in enumerate([m1, m2]):
-            m_num = m["month_number"]
-            m_name = m["month_name"]
-            pm = m["personal_month"]
-            avg_score = m["average_alignment_score"]
-            theme_text = self.lib["personal_months"].get(str(pm), m["theme"])
-            rem_text = self.lib["remedies_library"]["month_remedies"].get(str(pm), "")
+        # Spec rating: 1 Favourable, 2 Neutral, 3 Favourable, 4 Neutral, 5 Asks for care,
+        # 6 Favourable, 7 Neutral, 8 Neutral, 9 Asks for care; June for PY 5 shows master flag as 2
+        spec_rating = MONTH_RATINGS_SPEC.get(pm, "Neutral")
+        
+        # Display header
+        self.story.append(Paragraph(f"SECTION 6: MONTHLY BLUEPRINT · {m_name.upper()} 2027", s['SectionH1']))
+        self.story.append(Spacer(1, 4))
 
-            self.story.append(Paragraph(f"<b>{m_name.upper()} 2027 · PERSONAL MONTH {pm}</b>", s['SectionH1']))
-            
-            # Meta line: Avg Score & Theme
-            meta_bar = [
-                [
-                    Paragraph(f"<b>Monthly Alignment Average:</b> {avg_score:.1f} / 100", s['MetaKey']),
-                    Paragraph(f"<b>Operating Theme:</b> {m['rating']} Outlook", s['MetaVal'])
-                ]
+        # Personal Month Indicator line
+        if m_num == 6 and self.py == 5:
+            pm_title = f"Personal Month 2 (Master Vibration 11/2) · Master Flag: 2"
+        elif m.get("is_master_11", False):
+            pm_title = f"Personal Month {pm} (Master Vibration 11/2) · Master Flag: 2"
+        else:
+            pm_title = f"Personal Month {pm} · Vibration Archetype"
+
+        # Meta Bar Table
+        meta_bar = [
+            [
+                Paragraph(f"<b>{pm_title}</b>", s['MetaKey']),
+                Paragraph(f"<b>Monthly Rating:</b> {spec_rating}", s['MetaVal']),
+                Paragraph(f"<b>Average Score:</b> {avg_score:.1f} / 100", s['MetaVal'])
             ]
-            t_bar = Table(meta_bar, colWidths=[245, 245])
-            t_bar.setStyle(TableStyle([
-                ('BACKGROUND', (0,0), (-1,-1), COLOR_PEARL_MID),
-                ('BOX', (0,0), (-1,-1), 0.6, COLOR_BORDER),
-                ('TOPPADDING', (0,0), (-1,-1), 3),
-                ('BOTTOMPADDING', (0,0), (-1,-1), 3),
-                ('LEFTPADDING', (0,0), (-1,-1), 6),
-                ('RIGHTPADDING', (0,0), (-1,-1), 6),
-            ]))
-            self.story.append(t_bar)
-            self.story.append(Spacer(1, 3))
+        ]
+        t_bar = Table(meta_bar, colWidths=[200, 150, 140])
+        t_bar.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,-1), COLOR_PEARL_MID),
+            ('BOX', (0,0), (-1,-1), 0.8, COLOR_BORDER),
+            ('TOPPADDING', (0,0), (-1,-1), 5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 5),
+            ('LEFTPADDING', (0,0), (-1,-1), 8),
+            ('RIGHTPADDING', (0,0), (-1,-1), 8),
+        ]))
+        self.story.append(t_bar)
+        self.story.append(Spacer(1, 6))
 
-            self.story.append(Paragraph(theme_text, s['Body']))
-            self.story.append(Paragraph(f"<b>Monthly Focus Protocol:</b> {rem_text}", s['BodyMuted']))
-            self.story.append(Spacer(1, 3))
+        # Theme & Narrative
+        self.story.append(Paragraph(f"<b>Monthly Theme & Operating Horizon:</b> {m['theme']}", s['SectionH2']))
+        self.story.append(Paragraph(theme_text, s['Body']))
+        self.story.append(Spacer(1, 4))
 
-            # Best 5 Dates Table
-            best_rows = [
-                [Paragraph("<b>Date</b>", s['TableHeader']), Paragraph("<b>Day</b>", s['TableHeader']), Paragraph("<b>Score</b>", s['TableHeader']), Paragraph("<b>Tier</b>", s['TableHeader']), Paragraph("<b>Strategic Planning Guidance</b>", s['TableHeader'])]
+        # Moon Phases for this month from Panchang
+        m_prefix = f"2027-{m_num:02d}"
+        f_moons = [fm for fm in self.panchang.get("full_moons_2027", []) if fm.get("date", "").startswith(m_prefix)]
+        n_moons = [nm for nm in self.panchang.get("new_moons_2027", []) if nm.get("date", "").startswith(m_prefix)]
+
+        def fmt_moon_list(m_list):
+            if not m_list:
+                return "None in calendar month"
+            parts = []
+            for item in m_list:
+                dt = datetime.date.fromisoformat(item["date"])
+                parts.append(f"{dt.strftime('%d %b')} at {item['time_ist']} IST")
+            return " · ".join(parts)
+
+        moon_rows = [
+            [
+                Paragraph(f"<b>🌕 Full Moon (Purnima):</b> {fmt_moon_list(f_moons)}", s['TableCell']),
+                Paragraph(f"<b>🌑 New Moon (Amavasya):</b> {fmt_moon_list(n_moons)}", s['TableCell'])
             ]
-            for row in m["best_5_dates"]:
-                dt = datetime.date.fromisoformat(row["date"])
-                tier = row["tier"]
-                note = self.lib["date_notes"].get(tier, [row["note"]])[dt.day % len(self.lib["date_notes"].get(tier, [row["note"]]))]
-                best_rows.append([
-                    Paragraph(dt.strftime("%d %b"), s['TableCellCenter']),
-                    Paragraph(row["weekday"][:3], s['TableCellCenter']),
-                    Paragraph(f"<b>{row['alignment_score']}</b>", s['TableCellCenter']),
-                    Paragraph(tier, s['TableCellCenter']),
-                    Paragraph(note, s['TableCell'])
-                ])
-            t_best = Table(best_rows, colWidths=[45, 30, 35, 55, 325])
-            t_best.setStyle(TableStyle([
-                ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
-                ('BOX', (0,0), (-1,-1), 0.8, COLOR_BORDER),
-                ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-                ('TOPPADDING', (0,0), (-1,-1), 2.2),
-                ('BOTTOMPADDING', (0,0), (-1,-1), 2.2),
-                ('LEFTPADDING', (0,0), (-1,-1), 5),
-                ('RIGHTPADDING', (0,0), (-1,-1), 5),
-            ]))
+        ]
+        t_moon = Table(moon_rows, colWidths=[245, 245])
+        t_moon.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,-1), COLOR_CARD_BG),
+            ('BOX', (0,0), (-1,-1), 0.6, COLOR_GOLD),
+            ('TOPPADDING', (0,0), (-1,-1), 4),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+            ('LEFTPADDING', (0,0), (-1,-1), 8),
+            ('RIGHTPADDING', (0,0), (-1,-1), 8),
+        ]))
+        self.story.append(t_moon)
+        self.story.append(Spacer(1, 6))
 
-            # Care 5 Dates Table
-            care_rows = [
-                [Paragraph("<b>Date</b>", s['TableHeader']), Paragraph("<b>Day</b>", s['TableHeader']), Paragraph("<b>Score</b>", s['TableHeader']), Paragraph("<b>Tier</b>", s['TableHeader']), Paragraph("<b>Mindful Pacing Guidance</b>", s['TableHeader'])]
-            ]
-            for row in m["care_5_dates"]:
-                dt = datetime.date.fromisoformat(row["date"])
-                tier = row["tier"]
-                note = self.lib["date_notes"].get(tier, [row["note"]])[dt.day % len(self.lib["date_notes"].get(tier, [row["note"]]))]
-                care_rows.append([
-                    Paragraph(dt.strftime("%d %b"), s['TableCellCenter']),
-                    Paragraph(row["weekday"][:3], s['TableCellCenter']),
-                    Paragraph(f"<b>{row['alignment_score']}</b>", s['TableCellCenter']),
-                    Paragraph(tier, s['TableCellCenter']),
-                    Paragraph(note, s['TableCell'])
-                ])
-            t_care = Table(care_rows, colWidths=[45, 30, 35, 55, 325])
-            t_care.setStyle(TableStyle([
-                ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
-                ('BOX', (0,0), (-1,-1), 0.8, COLOR_BORDER),
-                ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-                ('TOPPADDING', (0,0), (-1,-1), 2.2),
-                ('BOTTOMPADDING', (0,0), (-1,-1), 2.2),
-                ('LEFTPADDING', (0,0), (-1,-1), 5),
-                ('RIGHTPADDING', (0,0), (-1,-1), 5),
-            ]))
+        # Monthly Remedy
+        self.story.append(Paragraph(f"<b>Monthly Focus & Lifestyle Attunement:</b> {rem_text}", s['BodyMuted']))
+        self.story.append(Spacer(1, 6))
 
-            self.story.append(Paragraph("<b>Top Favourable Windows</b>", s['SectionH2']))
-            self.story.append(t_best)
-            self.story.append(Spacer(1, 2))
-            self.story.append(Paragraph("<b>Mindful Pacing Dates</b>", s['SectionH2']))
-            self.story.append(t_care)
+        # Best 5 Dates Table
+        best_rows = [
+            [Paragraph("<b>Date</b>", s['TableHeader']), Paragraph("<b>Day</b>", s['TableHeader']), Paragraph("<b>Score</b>", s['TableHeader']), Paragraph("<b>Tier</b>", s['TableHeader']), Paragraph("<b>Strategic Planning Guidance</b>", s['TableHeader'])]
+        ]
+        for row in m["best_5_dates"]:
+            dt = datetime.date.fromisoformat(row["date"])
+            tier = row["tier"]
+            note = self.lib["date_notes"].get(tier, [row["note"]])[dt.day % len(self.lib["date_notes"].get(tier, [row["note"]]))]
+            best_rows.append([
+                Paragraph(dt.strftime("%d %b"), s['TableCellCenter']),
+                Paragraph(row["weekday"][:3], s['TableCellCenter']),
+                Paragraph(f"<b>{row['alignment_score']}</b>", s['TableCellCenter']),
+                Paragraph(tier, s['TableCellCenter']),
+                Paragraph(note, s['TableCell'])
+            ])
+        t_best = Table(best_rows, colWidths=[55, 40, 45, 65, 285])
+        t_best.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
+            ('BOX', (0,0), (-1,-1), 0.8, COLOR_BORDER),
+            ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
+            ('TOPPADDING', (0,0), (-1,-1), 4),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+            ('LEFTPADDING', (0,0), (-1,-1), 6),
+            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+        ]))
 
-            if idx == 0:
-                self.story.append(Spacer(1, 10))
-                self.story.append(HRFlowable(width="100%", thickness=0.6, color=COLOR_BORDER, spaceBefore=4, spaceAfter=8))
+        # Care 5 Dates Table
+        care_rows = [
+            [Paragraph("<b>Date</b>", s['TableHeader']), Paragraph("<b>Day</b>", s['TableHeader']), Paragraph("<b>Score</b>", s['TableHeader']), Paragraph("<b>Tier</b>", s['TableHeader']), Paragraph("<b>Mindful Pacing Guidance</b>", s['TableHeader'])]
+        ]
+        for row in m["care_5_dates"]:
+            dt = datetime.date.fromisoformat(row["date"])
+            tier = row["tier"]
+            note = self.lib["date_notes"].get(tier, [row["note"]])[dt.day % len(self.lib["date_notes"].get(tier, [row["note"]]))]
+            care_rows.append([
+                Paragraph(dt.strftime("%d %b"), s['TableCellCenter']),
+                Paragraph(row["weekday"][:3], s['TableCellCenter']),
+                Paragraph(f"<b>{row['alignment_score']}</b>", s['TableCellCenter']),
+                Paragraph(tier, s['TableCellCenter']),
+                Paragraph(note, s['TableCell'])
+            ])
+        t_care = Table(care_rows, colWidths=[55, 40, 45, 65, 285])
+        t_care.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
+            ('BOX', (0,0), (-1,-1), 0.8, COLOR_BORDER),
+            ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
+            ('TOPPADDING', (0,0), (-1,-1), 4),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+            ('LEFTPADDING', (0,0), (-1,-1), 6),
+            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+        ]))
 
-    def _build_page13_remedies_bank(self):
+        self.story.append(Paragraph("<b>Top Favourable Windows for Important Initiatives</b>", s['SectionH2']))
+        self.story.append(t_best)
+        self.story.append(Spacer(1, 6))
+        self.story.append(Paragraph("<b>Mindful Pacing Dates (Favour Routine Pacing & Review)</b>", s['SectionH2']))
+        self.story.append(t_care)
+
+    def _build_page19_remedies_bank(self):
         s = self.styles
         self.story.append(Paragraph("SECTION 7: 2027 REMEDIES BANK & DAILY ATTUNEMENT", s['SectionH1']))
         self.story.append(Paragraph(
@@ -864,13 +951,55 @@ class Planner2027PdfBuilder:
             "they reinforce personal discipline, clarity, and daily poise.",
             s['Body']
         ))
-        self.story.append(Spacer(1, 6))
+        self.story.append(Spacer(1, 4))
 
         # Year Remedy
         y_rem = self.lib["remedies_library"]["year_remedies"].get(str(self.py), "")
         self.story.append(Paragraph(f"<b>Annual Lifestyle Attunement for Personal Year {self.py}</b>", s['SectionH2']))
         self.story.append(Paragraph(y_rem, s['Body']))
-        self.story.append(Spacer(1, 8))
+        self.story.append(Spacer(1, 6))
+
+        # Traditional Crystal Suggestion for Mulank
+        self.story.append(Paragraph("Traditional Mineral & Crystal Attunement by Driver Number", s['SectionH2']))
+        seeker_crystal = CRYSTALS_BY_MULANK.get(self.mulank, "Sunstone or Carnelian")
+        c_intro = (
+            f"In classical gemological philosophy, subtle mineral vibrations are associated with each primary driver number. "
+            f"For your Driver Number <b>{self.mulank}</b>, the traditional attunement crystal is <b>{seeker_crystal}</b>."
+        )
+        self.story.append(Paragraph(c_intro, s['Body']))
+        self.story.append(Spacer(1, 3))
+
+        c_rows = [
+            [Paragraph("<b>Driver</b>", s['TableHeader']), Paragraph("<b>Planet Ruler</b>", s['TableHeader']), Paragraph("<b>Traditional Crystal Suggestion</b>", s['TableHeader']), Paragraph("<b>Status</b>", s['TableHeader'])]
+        ]
+        for num in range(1, 10):
+            pname = PLANET_NAMES.get(num, ("Sun", "Surya"))
+            c_name = CRYSTALS_BY_MULANK.get(num, "")
+            is_seeker = (num == self.mulank)
+            stat = "<b><font color='#8B6914'>Your Driver</font></b>" if is_seeker else "<font color='#7A654D'>Reference</font>"
+            c_rows.append([
+                Paragraph(f"Number {num}", s['TableCellCenter']),
+                Paragraph(f"{pname[0]} ({pname[1]})", s['TableCellCenter']),
+                Paragraph(c_name, s['TableCell']),
+                Paragraph(stat, s['TableCellCenter'])
+            ])
+        t_cryst = Table(c_rows, colWidths=[70, 110, 210, 100])
+        t_cryst.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
+            ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
+            ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
+            ('TOPPADDING', (0,0), (-1,-1), 2.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
+            ('LEFTPADDING', (0,0), (-1,-1), 6),
+            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+        ]))
+        self.story.append(t_cryst)
+        self.story.append(Spacer(1, 2))
+        self.story.append(Paragraph(
+            "<b>Note:</b> This is a traditional suggestion, not medical or financial advice.",
+            s['BodyMuted']
+        ))
+        self.story.append(Spacer(1, 6))
 
         # 9 Daily Grounding Micro-Actions
         self.story.append(Paragraph("Daily Grounding Protocols (Based on Daily Numerological Rhythms)", s['SectionH2']))
@@ -890,107 +1019,79 @@ class Planner2027PdfBuilder:
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
             ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
             ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 4),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+            ('TOPPADDING', (0,0), (-1,-1), 2.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
             ('LEFTPADDING', (0,0), (-1,-1), 6),
             ('RIGHTPADDING', (0,0), (-1,-1), 6),
         ]))
         self.story.append(t_drem)
 
-    def _build_calendar_table_for_month(self, m_num: int, start_idx: int, end_idx: int) -> Table:
+    def _build_calendar_table_for_month_quarter(self, m_num: int, start_idx: int, end_idx: int) -> Table:
         s = self.styles
         m_name = self.d["months"][m_num - 1]["month_name"]
         rows = [
-            [Paragraph(f"<b>{m_name.upper()}</b>", s['TableCellSmallCenter']), Paragraph("", s['TableCellSmallCenter']), Paragraph("", s['TableCellSmallCenter']), Paragraph("", s['TableCellSmallCenter'])],
-            [Paragraph("<b>Date</b>", s['TableCellSmallCenter']), Paragraph("<b>Day</b>", s['TableCellSmallCenter']), Paragraph("<b>Score</b>", s['TableCellSmallCenter']), Paragraph("<b>Tier</b>", s['TableCellSmallCenter'])]
+            [Paragraph(f"<b>{m_name.upper()}</b>", s['TableHeader']), Paragraph("", s['TableHeader']), Paragraph("", s['TableHeader']), Paragraph("", s['TableHeader'])],
+            [Paragraph("<b>Date</b>", s['TableCellDenseCenter']), Paragraph("<b>Day</b>", s['TableCellDenseCenter']), Paragraph("<b>Score</b>", s['TableCellDenseCenter']), Paragraph("<b>Tier</b>", s['TableCellDenseCenter'])]
         ]
         days_slice = self.d["full_calendar_365"][start_idx:end_idx]
         for row in days_slice:
             dt = datetime.date.fromisoformat(row["date"])
             t_color = "#8B6914" if row["tier"] == "Peak" else ("#16835B" if row["tier"] == "Excellent" else ("#C9A227" if row["tier"] == "Good" else "#7A654D"))
             rows.append([
-                Paragraph(f"{dt.day:02d}", s['TableCellSmallCenter']),
-                Paragraph(row["weekday"][:2], s['TableCellSmallCenter']),
-                Paragraph(f"<b>{row['alignment_score']}</b>", s['TableCellSmallCenter']),
-                Paragraph(f"<font color='{t_color}'>{row['tier'][:4]}</font>", s['TableCellSmallCenter'])
+                Paragraph(f"{dt.day:02d}", s['TableCellDenseCenter']),
+                Paragraph(row["weekday"][:2], s['TableCellDenseCenter']),
+                Paragraph(f"<b>{row['alignment_score']}</b>", s['TableCellDenseCenter']),
+                Paragraph(f"<font color='{t_color}'>{row['tier'][:4]}</font>", s['TableCellDenseCenter'])
             ])
-        t = Table(rows, colWidths=[36, 28, 36, 42])
+        t = Table(rows, colWidths=[38, 30, 38, 48])
         t.setStyle(TableStyle([
             ('SPAN', (0,0), (-1,0)),
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
             ('BACKGROUND', (0,1), (-1,1), COLOR_CARD_BG),
-            ('BOX', (0,0), (-1,-1), 0.5, COLOR_BORDER),
+            ('BOX', (0,0), (-1,-1), 0.6, COLOR_BORDER),
             ('INNERGRID', (0,0), (-1,-1), 0.3, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 0.4),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 0.4),
-            ('LEFTPADDING', (0,0), (-1,-1), 1),
-            ('RIGHTPADDING', (0,0), (-1,-1), 1),
+            ('TOPPADDING', (0,0), (-1,-1), 1.2),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 1.2),
+            ('LEFTPADDING', (0,0), (-1,-1), 2),
+            ('RIGHTPADDING', (0,0), (-1,-1), 2),
         ]))
         return t
 
-    def _build_page14_calendar_p1(self):
+    def _build_calendar_quarter_page(self, q_num: int, q_title: str, m_start: int, m_end: int, start_idx: int, end_idx: int):
         s = self.styles
-        self.story.append(Paragraph("SECTION 8: 365-DAY DAILY ALIGNMENT CALENDAR (JANUARY – JUNE 2027)", s['SectionH1']))
+        self.story.append(Paragraph(f"SECTION 8: 365-DAY DAILY ALIGNMENT CALENDAR ({q_title})", s['SectionH1']))
         self.story.append(Paragraph(
-            "Every day of 2027 evaluated under your natal parameters. Tiers: Peak (P), Excellent (Exce), Good (Good), Moderate (Mode), Care (Care).",
+            "Every day evaluated under your natal parameters. Legible format matching TableCellDense (7.2 pt). "
+            "Tiers: Peak (Peak), Excellent (Exce), Good (Good), Moderate (Mode), Care (Care).",
             s['BodyMuted']
         ))
-        self.story.append(Spacer(1, 2))
+        self.story.append(Spacer(1, 4))
 
-        # 6 months: Jan (31), Feb (28), Mar (31), Apr (30), May (31), Jun (30)
-        # 3 columns of 2 months each: Col 1: Jan & Feb; Col 2: Mar & Apr; Col 3: May & Jun
-        t_jan = self._build_calendar_table_for_month(1, 0, 31)
-        t_feb = self._build_calendar_table_for_month(2, 31, 31+28)
-        t_mar = self._build_calendar_table_for_month(3, 59, 59+31)
-        t_apr = self._build_calendar_table_for_month(4, 90, 90+30)
-        t_may = self._build_calendar_table_for_month(5, 120, 120+31)
-        t_jun = self._build_calendar_table_for_month(6, 151, 151+30)
+        days_per_month = {
+            1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30,
+            7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31
+        }
+        
+        col_tables = []
+        cur_idx = start_idx
+        for m in range(m_start, m_end + 1):
+            d_count = days_per_month[m]
+            tbl = self._build_calendar_table_for_month_quarter(m, cur_idx, cur_idx + d_count)
+            col_tables.append(tbl)
+            cur_idx += d_count
 
-        col1_wrap = Table([[t_jan], [Spacer(1, 2)], [t_feb]], colWidths=[150])
-        col1_wrap.setStyle(TableStyle([('LEFTPADDING', (0,0), (-1,-1), 0), ('RIGHTPADDING', (0,0), (-1,-1), 0), ('TOPPADDING', (0,0), (-1,-1), 0), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
+        quarter_grid = Table([col_tables], colWidths=[163, 163, 163])
+        quarter_grid.setStyle(TableStyle([
+            ('VALIGN', (0,0), (-1,-1), 'TOP'),
+            ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+            ('LEFTPADDING', (0,0), (-1,-1), 2),
+            ('RIGHTPADDING', (0,0), (-1,-1), 2),
+            ('TOPPADDING', (0,0), (-1,-1), 0),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+        ]))
+        self.story.append(quarter_grid)
 
-        col2_wrap = Table([[t_mar], [Spacer(1, 2)], [t_apr]], colWidths=[150])
-        col2_wrap.setStyle(TableStyle([('LEFTPADDING', (0,0), (-1,-1), 0), ('RIGHTPADDING', (0,0), (-1,-1), 0), ('TOPPADDING', (0,0), (-1,-1), 0), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
-
-        col3_wrap = Table([[t_may], [Spacer(1, 2)], [t_jun]], colWidths=[150])
-        col3_wrap.setStyle(TableStyle([('LEFTPADDING', (0,0), (-1,-1), 0), ('RIGHTPADDING', (0,0), (-1,-1), 0), ('TOPPADDING', (0,0), (-1,-1), 0), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
-
-        main_grid = Table([[col1_wrap, col2_wrap, col3_wrap]], colWidths=[163, 163, 163])
-        main_grid.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('ALIGN', (0,0), (-1,-1), 'CENTER')]))
-        self.story.append(main_grid)
-
-    def _build_page15_calendar_p2(self):
-        s = self.styles
-        self.story.append(Paragraph("SECTION 8 (CONTINUED): 365-DAY DAILY ALIGNMENT CALENDAR (JULY – DECEMBER 2027)", s['SectionH1']))
-        self.story.append(Paragraph(
-            "Every day of 2027 evaluated under your natal parameters. Tiers: Peak (P), Excellent (Exce), Good (Good), Moderate (Mode), Care (Care).",
-            s['BodyMuted']
-        ))
-        self.story.append(Spacer(1, 2))
-
-        # 6 months: Jul (31), Aug (31), Sep (30), Oct (31), Nov (30), Dec (31)
-        # Col 1: Jul & Aug; Col 2: Sep & Oct; Col 3: Nov & Dec
-        t_jul = self._build_calendar_table_for_month(7, 181, 181+31)
-        t_aug = self._build_calendar_table_for_month(8, 212, 212+31)
-        t_sep = self._build_calendar_table_for_month(9, 243, 243+30)
-        t_oct = self._build_calendar_table_for_month(10, 273, 273+31)
-        t_nov = self._build_calendar_table_for_month(11, 304, 304+30)
-        t_dec = self._build_calendar_table_for_month(12, 334, 334+31)
-
-        col1_wrap = Table([[t_jul], [Spacer(1, 2)], [t_aug]], colWidths=[150])
-        col1_wrap.setStyle(TableStyle([('LEFTPADDING', (0,0), (-1,-1), 0), ('RIGHTPADDING', (0,0), (-1,-1), 0), ('TOPPADDING', (0,0), (-1,-1), 0), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
-
-        col2_wrap = Table([[t_sep], [Spacer(1, 2)], [t_oct]], colWidths=[150])
-        col2_wrap.setStyle(TableStyle([('LEFTPADDING', (0,0), (-1,-1), 0), ('RIGHTPADDING', (0,0), (-1,-1), 0), ('TOPPADDING', (0,0), (-1,-1), 0), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
-
-        col3_wrap = Table([[t_nov], [Spacer(1, 2)], [t_dec]], colWidths=[150])
-        col3_wrap.setStyle(TableStyle([('LEFTPADDING', (0,0), (-1,-1), 0), ('RIGHTPADDING', (0,0), (-1,-1), 0), ('TOPPADDING', (0,0), (-1,-1), 0), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
-
-        main_grid = Table([[col1_wrap, col2_wrap, col3_wrap]], colWidths=[163, 163, 163])
-        main_grid.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'TOP'), ('ALIGN', (0,0), (-1,-1), 'CENTER')]))
-        self.story.append(main_grid)
-
-    def _build_page16_how_to_read(self):
+    def _build_page24_how_to_read(self):
         s = self.styles
         self.story.append(Paragraph("SECTION 9: HOW TO READ THIS REPORT & STATUTORY NOTICE", s['SectionH1']))
         
@@ -1027,10 +1128,10 @@ class Planner2027PdfBuilder:
         self.story.append(Paragraph(htr["planning_aid_note"], s['Body']))
         self.story.append(Spacer(1, 10))
 
-        # Statutory Disclaimer Box
+        # Restored {{DISCLAIMER_APPROVED_TEXT}} Box
         self.story.append(Paragraph("Statutory Legal Notice & Practitioner Boundaries", s['SectionH2']))
-        disc_text = APPROVED_DISCLAIMER_TEXT
-        d_card = Table([[Paragraph(f"<b>STATUTORY DISCLAIMER:</b> {disc_text}", s['BodyMuted'])]], colWidths=[490])
+        disc_text = htr.get("disclaimer_text", "{{DISCLAIMER_APPROVED_TEXT}}")
+        d_card = Table([[Paragraph(f"<b>STATUTORY NOTICE:</b> {disc_text}", s['BodyMuted'])]], colWidths=[490])
         d_card.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), COLOR_CARD_BG),
             ('BOX', (0,0), (-1,-1), 1, COLOR_GOLD),
@@ -1050,6 +1151,8 @@ def generate_planner_2027_pdf(
 ) -> bytes:
     """
     Main generator entrypoint for the 2027 Year Ahead Planner PDF.
+    - is_sample: controls the SAMPLE watermark. Defaults to True for sample generation.
+                 Set to False for paid deliveries.
     """
     # 1. Deterministic Calculation
     calc_data = calculate_planner_2027(full_name=full_name, dob_str=dob_str)
