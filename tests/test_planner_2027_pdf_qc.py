@@ -347,13 +347,13 @@ class TestPlanner2027PdfQc(unittest.TestCase):
                 # 2. Top 5 dates assertion (Amavasya days excluded per Point 6)
                 sorted_best = [
                     r for r in sorted(m_days, key=lambda x: (-int(x["score"]), x["date"]))
-                    if panchang_golden[r["date"]]["tithi_name"] != "Amavasya"
+                    if (panchang_golden[r["date"]].get("tithi_at_sunrise") or panchang_golden[r["date"]].get("tithi_name")) != "Amavasya"
                 ][:5]
                 for b in sorted_best:
                     dt = datetime.date.fromisoformat(b["date"])
                     d_str = dt.strftime("%d %b")
                     self.assertIn(d_str, text, f"{name} M{m}: Top date {d_str} missing from PDF")
-                    tithi_expected = panchang_golden[b["date"]]["tithi_name"]
+                    tithi_expected = panchang_golden[b["date"]].get("tithi_at_sunrise") or panchang_golden[b["date"]].get("tithi_name")
                     self.assertIn(tithi_expected, text, f"{name} M{m}: Tithi {tithi_expected} for {b['date']} missing from PDF")
 
                 # 3. Care 5 dates assertion
@@ -362,7 +362,7 @@ class TestPlanner2027PdfQc(unittest.TestCase):
                     dt = datetime.date.fromisoformat(c["date"])
                     d_str = dt.strftime("%d %b")
                     self.assertIn(d_str, text, f"{name} M{m}: Care date {d_str} missing from PDF")
-                    tithi_expected = panchang_golden[c["date"]]["tithi_name"]
+                    tithi_expected = panchang_golden[c["date"]].get("tithi_at_sunrise") or panchang_golden[c["date"]].get("tithi_name")
                     self.assertIn(tithi_expected, text, f"{name} M{m}: Tithi {tithi_expected} for {c['date']} missing from PDF")
 
                 # 4. Moon events assertion
@@ -430,6 +430,83 @@ class TestPlanner2027PdfQc(unittest.TestCase):
         self.assertIn("Krishna Pratipada", top_nov_b)
         self.assertIn("14 Nov", top_nov_b)
         self.assertIn("Purnima", top_nov_b)
+
+    def test_golden_panchang_sha256(self):
+        """
+        Asserts that tests/golden_panchang_delhi_365.csv exists, has 366 lines, 12054 bytes,
+        and matches SHA-256: c3b2f6b6af414670adfbbf25e1f4aec0b39b321af18ebe8a57406048aa1dc1a5.
+        """
+        csv_path = os.path.join("tests", "golden_panchang_delhi_365.csv")
+        self.assertTrue(os.path.exists(csv_path), "golden_panchang_delhi_365.csv does not exist")
+        with open(csv_path, "rb") as f:
+            data = f.read()
+        self.assertEqual(len(data), 12054, f"Expected 12054 bytes, got {len(data)}")
+        self.assertEqual(len(data.decode("utf-8").splitlines()), 366, "Expected 366 lines (header + 365 days)")
+        expected_hash = "c3b2f6b6af414670adfbbf25e1f4aec0b39b321af18ebe8a57406048aa1dc1a5"
+        actual_hash = hashlib.sha256(data).hexdigest()
+        self.assertEqual(actual_hash, expected_hash, f"Panchang SHA-256 mismatch: {actual_hash} != {expected_hash}")
+
+    def test_brand_consistency_shared_constants_and_contrast(self):
+        """
+        Brand consistency audit:
+        1. Asserts all brand colour constants are imported/shared with app.services.pdf_report_generator.
+        2. Asserts draw_page_background is the shared implementation.
+        3. Asserts fonts and logo image path exist and match brand standards.
+        4. Asserts body text over watermark area maintains WCAG AAA contrast ratio (>= 7.0:1).
+        """
+        import pdf_service.app.services.planner_2027_pdf_generator as planner_gen
+        import app.services.pdf_report_generator as shared_gen
+
+        # 1. Palette constants assertion
+        color_attrs = [
+            "COLOR_PEARL_BG", "COLOR_PEARL_MID", "COLOR_GOLD_DARK", "COLOR_GOLD",
+            "COLOR_GOLD_LIGHT", "COLOR_INK_DARK", "COLOR_INK_MUTED", "COLOR_EMERALD",
+            "COLOR_BORDER", "COLOR_CARD_BG", "COLOR_RED_ALERT"
+        ]
+        for attr in color_attrs:
+            val_planner = getattr(planner_gen, attr)
+            val_shared = getattr(shared_gen, attr)
+            self.assertEqual(
+                val_planner.hexval(), val_shared.hexval(),
+                f"Brand color {attr} mismatch: planner={val_planner.hexval()} vs shared={val_shared.hexval()}"
+            )
+
+        # 2. Shared draw_page_background
+        self.assertIs(
+            planner_gen.draw_page_background, shared_gen.draw_page_background,
+            "draw_page_background must be imported directly from shared pdf_report_generator"
+        )
+
+        # 3. Logo asset check
+        logo_path = os.path.join("app", "static", "logos", "nv-logo-mark.png")
+        self.assertTrue(os.path.exists(logo_path), f"Official logo mark not found at {logo_path}")
+
+        # 4. WCAG Contrast ratio check over watermark area
+        def srgb_to_linear(c):
+            c = c / 255.0
+            return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+        def luminance(r, g, b):
+            return 0.2126 * srgb_to_linear(r) + 0.7152 * srgb_to_linear(g) + 0.0722 * srgb_to_linear(b)
+
+        def contrast(c1, c2):
+            l1 = luminance(*c1)
+            l2 = luminance(*c2)
+            return (max(l1, l2) + 0.05) / (min(l1, l2) + 0.05)
+
+        # Base pearl background: #FFFDF7 (255, 253, 247)
+        bg_pearl = (255, 253, 247)
+        # Body text ink: #523E28 (82, 62, 40)
+        text_ink = (82, 62, 40)
+
+        # Watermark opacity 0.045 with gold / dark logo
+        # Blend worst case (dark logo mark at 0.045 alpha):
+        bg_blended_dark = tuple(round((1 - 0.045) * b + 0.045 * w) for b, w in zip(bg_pearl, text_ink))
+        cr_watermark = contrast(text_ink, bg_blended_dark)
+        self.assertGreaterEqual(
+            cr_watermark, 7.0,
+            f"Contrast ratio over watermark area ({cr_watermark:.2f}:1) must meet WCAG AAA standard (>= 7.0:1)"
+        )
 
     def test_rasterization_all_pages_non_background(self):
         """

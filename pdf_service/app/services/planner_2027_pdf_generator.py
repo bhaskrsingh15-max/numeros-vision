@@ -51,18 +51,21 @@ from reportlab.pdfgen import canvas
 
 from app.engine.planner_2027_engine import calculate_planner_2027
 
-# Palette from pdf_service/app/services/pdf_report_generator.py lines 76-86
-COLOR_PEARL_BG   = colors.HexColor("#FFFDF7")
-COLOR_PEARL_MID  = colors.HexColor("#F7F3EA")
-COLOR_GOLD_DARK  = colors.HexColor("#8B6914")
-COLOR_GOLD       = colors.HexColor("#C9A227")
-COLOR_GOLD_LIGHT = colors.HexColor("#E2B84B")
-COLOR_INK_DARK   = colors.HexColor("#523E28")
-COLOR_INK_MUTED  = colors.HexColor("#7A654D")
-COLOR_EMERALD    = colors.HexColor("#16835B")
-COLOR_BORDER     = colors.HexColor("#EEDDB8")
-COLOR_CARD_BG    = colors.HexColor("#FFFFFF")
-COLOR_RED_ALERT  = colors.HexColor("#A13030")
+# Canonical brand palette, background yantra, and logo watermark from shared module
+from app.services.pdf_report_generator import (
+    COLOR_PEARL_BG,
+    COLOR_PEARL_MID,
+    COLOR_GOLD_DARK,
+    COLOR_GOLD,
+    COLOR_GOLD_LIGHT,
+    COLOR_INK_DARK,
+    COLOR_INK_MUTED,
+    COLOR_EMERALD,
+    COLOR_BORDER,
+    COLOR_CARD_BG,
+    COLOR_RED_ALERT,
+    draw_page_background,
+)
 
 PLANET_NAMES = {
     1: ("Sun", "Surya"),
@@ -129,17 +132,6 @@ def get_tropical_sun_sign(month: int, day: int) -> str:
         return "Aquarius"
     else:
         return "Pisces"
-
-
-def draw_page_background(canvas_obj, doc):
-    """
-    Draws the background tint FIRST on every page, before any story flowables or tables.
-    """
-    canvas_obj.saveState()
-    w, h = doc.pagesize
-    canvas_obj.setFillColor(COLOR_PEARL_BG)
-    canvas_obj.rect(0, 0, w, h, fill=1, stroke=0)
-    canvas_obj.restoreState()
 
 
 class Planner2027ReportCanvas(canvas.Canvas):
