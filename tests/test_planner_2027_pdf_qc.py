@@ -477,7 +477,19 @@ class TestPlanner2027PdfQc(unittest.TestCase):
             "draw_page_background must be imported directly from shared pdf_report_generator"
         )
 
-        # 3. Logo asset check
+        # 3. Typography font sizes assertion
+        planner_styles = planner_gen._build_styles()
+        shared_styles = shared_gen._build_styles()
+
+        self.assertEqual(planner_styles['CoverTitle'].fontSize, shared_styles['CoverTitle'].fontSize, "CoverTitle size mismatch")
+        self.assertEqual(planner_styles['CoverSubtitle'].fontSize, shared_styles['CoverSubtitle'].fontSize, "CoverSubtitle size mismatch")
+        self.assertEqual(planner_styles['SectionH1'].fontSize, shared_styles['SectionH1'].fontSize, "SectionH1 size mismatch")
+        self.assertEqual(planner_styles['SectionH2'].fontSize, shared_styles['SectionH2'].fontSize, "SectionH2 size mismatch")
+        self.assertEqual(planner_styles['Body'].fontSize, shared_styles['ReportBody'].fontSize, "Body text size mismatch")
+        self.assertEqual(planner_styles['TableHeader'].fontSize, shared_styles['TableHeader'].fontSize, "TableHeader size mismatch")
+        self.assertEqual(planner_styles['TableCell'].fontSize, shared_styles['TableCell'].fontSize, "TableCell size mismatch")
+
+        # 4. Logo asset check
         logo_path = os.path.join("app", "static", "logos", "nv-logo-mark.png")
         self.assertTrue(os.path.exists(logo_path), f"Official logo mark not found at {logo_path}")
 

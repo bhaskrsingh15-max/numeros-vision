@@ -196,7 +196,7 @@ class Planner2027ReportCanvas(canvas.Canvas):
 
             self.setFont("Times-Roman", 7.5)
             self.setFillColor(COLOR_GOLD_DARK)
-            self.drawRightString(w - 34, h - 28, "2027 YEAR AHEAD PLANNER · ANNUAL BLUEPRINT")
+            self.drawRightString(w - 34, h - 28, "2027 YEAR AHEAD PLANNER")
 
             self.setStrokeColor(COLOR_BORDER)
             self.setLineWidth(0.6)
@@ -213,7 +213,7 @@ class Planner2027ReportCanvas(canvas.Canvas):
 
         self.setFont("Times-Bold", 8)
         self.setFillColor(COLOR_GOLD_DARK)
-        self.drawCentredString(w / 2.0, 26, "2027 ANNUAL MASTER BLUEPRINT")
+        self.drawCentredString(w / 2.0, 26, "✦ VERIFIED ROYAL SEAL ✦")
 
         page_str = f"Page {self._pageNumber} of {total_pages}"
         self.drawRightString(w - 34, 26, page_str)
@@ -237,19 +237,19 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     base = getSampleStyleSheet()
     return {
         'CoverTitle': ParagraphStyle(
-            'CoverTitle', parent=base['Normal'], fontName='Times-Bold', fontSize=26, leading=30,
-            textColor=COLOR_GOLD_DARK, alignment=1, spaceAfter=8
+            'CoverTitle', parent=base['Normal'], fontName='Times-Bold', fontSize=24, leading=28,
+            textColor=COLOR_GOLD_DARK, alignment=1, spaceAfter=6
         ),
         'CoverSubtitle': ParagraphStyle(
-            'CoverSubtitle', parent=base['Normal'], fontName='Times-Roman', fontSize=12, leading=16,
-            textColor=COLOR_INK_MUTED, alignment=1, spaceAfter=18
+            'CoverSubtitle', parent=base['Normal'], fontName='Times-Roman', fontSize=10, leading=14,
+            textColor=COLOR_INK_MUTED, alignment=1, spaceAfter=14
         ),
         'SectionH1': ParagraphStyle(
-            'SectionH1', parent=base['Normal'], fontName='Times-Bold', fontSize=13, leading=16,
-            textColor=COLOR_GOLD_DARK, spaceBefore=2, spaceAfter=4, keepWithNext=True
+            'SectionH1', parent=base['Normal'], fontName='Times-Bold', fontSize=14, leading=17,
+            textColor=COLOR_GOLD_DARK, spaceBefore=0, spaceAfter=4, keepWithNext=True
         ),
         'SectionH2': ParagraphStyle(
-            'SectionH2', parent=base['Normal'], fontName='Times-Bold', fontSize=10, leading=13,
+            'SectionH2', parent=base['Normal'], fontName='Times-Bold', fontSize=10.5, leading=13,
             textColor=COLOR_INK_DARK, spaceBefore=4, spaceAfter=2, keepWithNext=True
         ),
         'Body': ParagraphStyle(
@@ -261,15 +261,19 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
             textColor=COLOR_INK_MUTED, spaceAfter=2
         ),
         'TableHeader': ParagraphStyle(
-            'TableHeader', parent=base['Normal'], fontName='Times-Bold', fontSize=8, leading=10,
+            'TableHeader', parent=base['Normal'], fontName='Times-Bold', fontSize=8.5, leading=11,
+            textColor=COLOR_GOLD_DARK, alignment=1
+        ),
+        'TableHeaderDense': ParagraphStyle(
+            'TableHeaderDense', parent=base['Normal'], fontName='Times-Bold', fontSize=7.2, leading=9.2,
             textColor=COLOR_GOLD_DARK, alignment=1
         ),
         'TableCell': ParagraphStyle(
-            'TableCell', parent=base['Normal'], fontName='Times-Roman', fontSize=8, leading=10.5,
+            'TableCell', parent=base['Normal'], fontName='Times-Roman', fontSize=8.2, leading=11,
             textColor=COLOR_INK_DARK
         ),
         'TableCellCenter': ParagraphStyle(
-            'TableCellCenter', parent=base['Normal'], fontName='Times-Roman', fontSize=8, leading=10.5,
+            'TableCellCenter', parent=base['Normal'], fontName='Times-Roman', fontSize=8.2, leading=11,
             textColor=COLOR_INK_DARK, alignment=1
         ),
         'TableCellDense': ParagraphStyle(
