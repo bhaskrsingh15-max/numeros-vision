@@ -1469,12 +1469,7 @@ export default {
       /^\/data\//i,
       /^\/app\//i,
       /^\/scripts\//i,
-      /^\/reports\//i,
-      /^\/static\/reports\//i,
-      /^\/reports\//i,
-      /^\/static\/reports\//i,
-      /^\/reports\//i,
-      /^\/static\/reports\//i,
+      /^\/pdf_service\//i,
       /^\/reports\//i,
       /^\/static\/reports\//i,
       /\.py$/i,
@@ -1483,8 +1478,8 @@ export default {
       /^\/_worker\.js$/i
     ];
     if (forbiddenPatterns.some(pattern => pattern.test(url.pathname))) {
-      return new Response('403 Forbidden: Direct access to administrative and configuration resources is strictly prohibited.', {
-        status: 403,
+      return new Response('404 Not Found', {
+        status: 404,
         headers: { 'Content-Type': 'text/plain; charset=utf-8' }
       });
     }
