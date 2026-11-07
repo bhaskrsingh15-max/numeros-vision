@@ -1,0 +1,6 @@
+{
+  "description": "Configurable panchang exclusion rules for 2027 Key Strategic Auspicious Dates.",
+  "exclude_amavasya": true,
+  "exclude_rikta_tithis": false,
+  "exclude_krishna_chaturdashi": false
+}

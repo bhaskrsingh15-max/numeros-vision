@@ -1,5 +1,5 @@
 """
-NUMEROS VISION — 2027 YEAR AHEAD PLANNER PDF REPORT GENERATOR (v2.0)
+NUMEROS VISION — 2027 YEAR AHEAD PLANNER PDF REPORT GENERATOR (v2.1)
 Tagline: ANVEIL EVERY CHARM
 
 Architecture & Constraints:
@@ -22,12 +22,12 @@ Architecture & Constraints:
   Strictly ZERO raw black (#000000).
 - Exactly 24 pages:
   Page 1: Cover
-  Page 2: Section 1 — Core Numerological Archetypes & 2027 Cycles
+  Page 2: Section 1 — Core Numerological Archetypes & 2027 Cycles (Separate Driver & Conductor Lists)
   Page 3: Section 2 — 2027 Macro Strategic Horizon (PY, Sun Sign, 7 Life Areas)
   Page 4: Section 3 — Lo Shu Magic Square & 8 Elemental Planes
   Page 5: Section 4 — Calling Name Resonance & 4-Stage Pinnacles
-  Page 6: Section 5 — Key Strategic Auspicious Dates (with Panchang annotations)
-  Pages 7-18: Section 6 — 12 Monthly Blueprints (1 page per month, with full moon & new moon IST times, rating, remedy)
+  Page 6: Section 5 — Key Strategic Auspicious Dates (with Sunrise Tithi, near-boundary annotations, distinct notes)
+  Pages 7-18: Section 6 — 12 Monthly Blueprints (1 page per month, with full moon & new moon IST times, no emoji, rating, remedy)
   Page 19: Section 7 — 2027 Remedies Bank (Annual remedy, Traditional Crystal for Mulank, 9 daily micro-actions)
   Pages 20-23: Section 8 — 365-Day Daily Alignment Calendar Appendix (4 quarterly pages, font size 7.2 pt matching TableCellDense)
   Page 24: Section 9 — How to Read This Report & Statutory Legal Notice (with restored {{DISCLAIMER_APPROVED_TEXT}})
@@ -214,7 +214,7 @@ class Planner2027ReportCanvas(canvas.Canvas):
 
         self.setFont("Times-Bold", 8)
         self.setFillColor(COLOR_GOLD_DARK)
-        self.drawCentredString(w / 2.0, 26, "✦ 2027 ANNUAL MASTER BLUEPRINT ✦")
+        self.drawCentredString(w / 2.0, 26, "2027 ANNUAL MASTER BLUEPRINT")
 
         page_str = f"Page {self._pageNumber} of {total_pages}"
         self.drawRightString(w - 34, 26, page_str)
@@ -299,11 +299,13 @@ class Planner2027PdfBuilder:
         calc_data: Dict[str, Any],
         content_library: Dict[str, Any],
         panchang_data: Optional[Dict[str, Any]] = None,
+        key_dates_rules: Optional[Dict[str, Any]] = None,
         is_sample: bool = True
     ):
         self.d = calc_data
         self.lib = content_library
         self.panchang = panchang_data or {}
+        self.kd_rules = key_dates_rules or {"exclude_amavasya": True, "exclude_rikta_tithis": False, "exclude_krishna_chaturdashi": False}
         self.is_sample = is_sample
         self.styles = _build_styles()
         self.story: List[Any] = []
@@ -426,11 +428,12 @@ class Planner2027PdfBuilder:
         self.story.append(t_cover)
         self.story.append(Spacer(1, 35))
 
+        # Softer wording per instruction: "a personal planning guide", "to support your daily focus and routines"
         intro_text = (
-            "This dossier provides your definitive personal navigation roadmap for 2027. "
+            "This dossier provides a personal planning guide for 2027. "
             "By synthesizing your core birth archetypes with the mathematical cycles of the year ahead, "
             "it establishes clear timing windows, monthly strategic blueprints, and practical remedies "
-            "designed to support your daily focus, leadership, and peace of mind."
+            "designed to support your daily focus and routines."
         )
         self.story.append(Paragraph(intro_text, ParagraphStyle('CoverIntro', parent=s['Body'], alignment=1, fontSize=9, leading=13)))
 
@@ -442,7 +445,7 @@ class Planner2027PdfBuilder:
             "and interpersonal resonance. In 2027, these individual currents interact with the broader Universal Year 2.",
             s['Body']
         ))
-        self.story.append(Spacer(1, 6))
+        self.story.append(Spacer(1, 4))
 
         # Core Indicators Table
         d_pname = PLANET_NAMES.get(self.mulank, ("Sun", "Surya"))
@@ -482,49 +485,61 @@ class Planner2027PdfBuilder:
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
             ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
             ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 6),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+            ('TOPPADDING', (0,0), (-1,-1), 5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 5),
             ('LEFTPADDING', (0,0), (-1,-1), 8),
             ('RIGHTPADDING', (0,0), (-1,-1), 8),
         ]))
         self.story.append(t)
-        self.story.append(Spacer(1, 10))
+        self.story.append(Spacer(1, 8))
 
-        # Resonance Lists
-        f_list = ", ".join(map(str, self.subject["driver_lists"]["friendly"])) or "None"
-        n_list = ", ".join(map(str, self.subject["driver_lists"]["neutral"])) or "None"
-        c_list = ", ".join(map(str, self.subject["driver_lists"]["challenging"])) or "None"
+        # Page 2 Requirement 5: Show separate number lists for DRIVER and CONDUCTOR
+        d_f = ", ".join(map(str, self.subject["driver_lists"]["friendly"])) or "None"
+        d_n = ", ".join(map(str, self.subject["driver_lists"]["neutral"])) or "None"
+        d_c = ", ".join(map(str, self.subject["driver_lists"]["challenging"])) or "None"
 
-        self.story.append(Paragraph("Natural Number Resonance Framework", s['SectionH2']))
-        res_data = [
-            [Paragraph("<b>Resonance Tier</b>", s['TableHeader']), Paragraph("<b>Numbers</b>", s['TableHeader']), Paragraph("<b>Practical Planning Guidance</b>", s['TableHeader'])],
-            [
-                Paragraph("<b>Supportive Rhythms</b>", s['TableCell']),
-                Paragraph(f"<b>{f_list}</b>", s['TableCellCenter']),
-                Paragraph("Numbers carrying natural harmonic ease for scheduling key initiatives, meetings, and signings.", s['TableCell'])
-            ],
-            [
-                Paragraph("<b>Balanced Rhythms</b>", s['TableCell']),
-                Paragraph(f"<b>{n_list}</b>", s['TableCellCenter']),
-                Paragraph("Neutral numbers well suited for regular operational tasks, administrative work, and steady pacing.", s['TableCell'])
-            ],
-            [
-                Paragraph("<b>Conscious Pacing</b>", s['TableCell']),
-                Paragraph(f"<b>{c_list}</b>", s['TableCellCenter']),
-                Paragraph("Numbers calling for mindful attention, deliberate double-checking, and patient communication.", s['TableCell'])
-            ]
+        c_f = ", ".join(map(str, self.subject["conductor_lists"]["friendly"])) or "None"
+        c_n = ", ".join(map(str, self.subject["conductor_lists"]["neutral"])) or "None"
+        c_c = ", ".join(map(str, self.subject["conductor_lists"]["challenging"])) or "None"
+
+        self.story.append(Paragraph(f"<b>Driver (Mulank {self.mulank} · {d_pname[0]}) Number Resonance Framework</b>", s['SectionH2']))
+        d_res_data = [
+            [Paragraph("<b>Resonance Tier</b>", s['TableHeader']), Paragraph("<b>Numbers</b>", s['TableHeader']), Paragraph("<b>Practical Daily Planning Guidance</b>", s['TableHeader'])],
+            [Paragraph("<b>Supportive Rhythms</b>", s['TableCell']), Paragraph(f"<b>{d_f}</b>", s['TableCellCenter']), Paragraph("Numbers carrying natural harmonic ease for scheduling personal initiatives and conversations.", s['TableCell'])],
+            [Paragraph("<b>Balanced Rhythms</b>", s['TableCell']), Paragraph(f"<b>{d_n}</b>", s['TableCellCenter']), Paragraph("Neutral numbers well suited for regular operational tasks, administrative work, and steady pacing.", s['TableCell'])],
+            [Paragraph("<b>Conscious Pacing</b>", s['TableCell']), Paragraph(f"<b>{d_c}</b>", s['TableCellCenter']), Paragraph("Numbers calling for mindful attention, deliberate double-checking, and patient communication.", s['TableCell'])]
         ]
-        t_res = Table(res_data, colWidths=[110, 80, 300])
-        t_res.setStyle(TableStyle([
+        t_dres = Table(d_res_data, colWidths=[110, 80, 300])
+        t_dres.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
-            ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
+            ('BOX', (0,0), (-1,-1), 0.8, COLOR_BORDER),
             ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 6),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 6),
-            ('LEFTPADDING', (0,0), (-1,-1), 8),
-            ('RIGHTPADDING', (0,0), (-1,-1), 8),
+            ('TOPPADDING', (0,0), (-1,-1), 3.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 3.5),
+            ('LEFTPADDING', (0,0), (-1,-1), 6),
+            ('RIGHTPADDING', (0,0), (-1,-1), 6),
         ]))
-        self.story.append(t_res)
+        self.story.append(t_dres)
+        self.story.append(Spacer(1, 6))
+
+        self.story.append(Paragraph(f"<b>Conductor (Bhagyank {self.bhagyank} · {c_pname[0]}) Number Resonance Framework</b>", s['SectionH2']))
+        c_res_data = [
+            [Paragraph("<b>Resonance Tier</b>", s['TableHeader']), Paragraph("<b>Numbers</b>", s['TableHeader']), Paragraph("<b>Practical Vocational Planning Guidance</b>", s['TableHeader'])],
+            [Paragraph("<b>Supportive Rhythms</b>", s['TableCell']), Paragraph(f"<b>{c_f}</b>", s['TableCellCenter']), Paragraph("Numbers carrying structural harmony for major career milestones, contract reviews, and partnerships.", s['TableCell'])],
+            [Paragraph("<b>Balanced Rhythms</b>", s['TableCell']), Paragraph(f"<b>{c_n}</b>", s['TableCellCenter']), Paragraph("Neutral numbers suited for standard business workflow, routine meetings, and internal maintenance.", s['TableCell'])],
+            [Paragraph("<b>Conscious Pacing</b>", s['TableCell']), Paragraph(f"<b>{c_c}</b>", s['TableCellCenter']), Paragraph("Numbers calling for measured pacing, avoiding impulsive commitments, and reviewing fine details.", s['TableCell'])]
+        ]
+        t_cres = Table(c_res_data, colWidths=[110, 80, 300])
+        t_cres.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
+            ('BOX', (0,0), (-1,-1), 0.8, COLOR_BORDER),
+            ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
+            ('TOPPADDING', (0,0), (-1,-1), 3.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 3.5),
+            ('LEFTPADDING', (0,0), (-1,-1), 6),
+            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+        ]))
+        self.story.append(t_cres)
 
     def _build_page3_annual_outlook(self):
         s = self.styles
@@ -722,20 +737,33 @@ class Planner2027PdfBuilder:
             "Across the 365 days of 2027, certain dates exhibit peak personal resonance where your driver and conductor "
             "energies align smoothly with universal daily cycles. In accordance with classical panchang wisdom, dates falling on "
             "New Moon (Amavasya) or subject to full-morning Rahu Kaal have been filtered or adjusted to support high clarity. "
-            "For dates where a lunar tithi transitions within 45 minutes of sunrise, an explicit panchang notice is provided.",
+            "Panchang calculations anchored for New Delhi (IST).",
             s['Body']
         ))
-        self.story.append(Spacer(1, 8))
+        self.story.append(Spacer(1, 6))
 
         calendar_365 = self.d["full_calendar_365"]
         panchang_days = self.panchang.get("days", {})
 
+        rikta_names = ["Chaturthi", "Navami", "Chaturdashi"]
+
         def is_eligible_key_date(row):
             d_str = row["date"]
             p_info = panchang_days.get(d_str, {})
-            # Omit Amavasya
-            if p_info.get("is_amavasya", False):
+            t_name = p_info.get("tithi_name", "")
+
+            # Configurable rules from key_dates_rules.json
+            if self.kd_rules.get("exclude_amavasya", True) and p_info.get("is_amavasya", False):
                 return False
+
+            if self.kd_rules.get("exclude_rikta_tithis", False):
+                if any(r in t_name for r in rikta_names):
+                    return False
+
+            if self.kd_rules.get("exclude_krishna_chaturdashi", False):
+                if "Krishna Chaturdashi" in t_name:
+                    return False
+
             return True
 
         quarters = {
@@ -745,11 +773,20 @@ class Planner2027PdfBuilder:
             "Q4 (October – December)": [r for r in calendar_365 if r["date"].startswith("2027-10") or r["date"].startswith("2027-11") or r["date"].startswith("2027-12")]
         }
 
+        # Page 6 Requirement 6(a): Show Sunrise Tithi next to every Key Date
         key_rows = [
-            [Paragraph("<b>Quarter</b>", s['TableHeader']), Paragraph("<b>Date & Day</b>", s['TableHeader']), Paragraph("<b>Score & Tier</b>", s['TableHeader']), Paragraph("<b>Strategic Planning Guidance</b>", s['TableHeader'])]
+            [
+                Paragraph("<b>Quarter</b>", s['TableHeader']),
+                Paragraph("<b>Date & Day</b>", s['TableHeader']),
+                Paragraph("<b>Score & Tier</b>", s['TableHeader']),
+                Paragraph("<b>Sunrise Tithi (New Delhi)</b>", s['TableHeader']),
+                Paragraph("<b>Strategic Planning Guidance</b>", s['TableHeader'])
+            ]
         ]
 
-        notes_peak = self.lib["date_notes"]["Peak"]
+        notes_pool = self.lib["date_notes"]["Peak"] + self.lib["date_notes"]["Excellent"]
+        used_notes = set()
+
         for q_name, q_days in quarters.items():
             eligible = [r for r in q_days if is_eligible_key_date(r)]
             sorted_q = sorted(eligible, key=lambda x: (-x["alignment_score"], x["date"]))
@@ -758,10 +795,28 @@ class Planner2027PdfBuilder:
                 dt = datetime.date.fromisoformat(item["date"])
                 dt_disp = dt.strftime("%d %b (%a)")
                 score_disp = f"<b>{item['alignment_score']}</b> · {item['tier']}"
-                base_note = notes_peak[idx % len(notes_peak)]
                 
-                # Near-boundary check
+                # Fetch sunrise tithi from panchang
                 p_day = panchang_days.get(item["date"], {})
+                tithi_name = p_day.get("tithi_name", "Shukla Pratipada")
+
+                # Requirement 6(c): distinct note for every single Key Date (never repeated)
+                base_note = None
+                tier_notes = self.lib["date_notes"].get(item["tier"], self.lib["date_notes"]["Peak"])
+                for note_candidate in tier_notes:
+                    if note_candidate not in used_notes:
+                        base_note = note_candidate
+                        break
+                if not base_note:
+                    for note_candidate in notes_pool:
+                        if note_candidate not in used_notes:
+                            base_note = note_candidate
+                            break
+                if not base_note:
+                    base_note = tier_notes[0]
+                used_notes.add(base_note)
+
+                # Requirement 6(b): Near-boundary annotation
                 if p_day.get("near_boundary", False):
                     note_txt = f"<b>Panchang: the tithi changes shortly after sunrise; check your local Panchang.</b> {base_note}"
                 else:
@@ -772,24 +827,25 @@ class Planner2027PdfBuilder:
                     Paragraph(q_label, s['TableCellCenter']),
                     Paragraph(dt_disp, s['TableCellCenter']),
                     Paragraph(score_disp, s['TableCellCenter']),
+                    Paragraph(tithi_name, s['TableCellCenter']),
                     Paragraph(note_txt, s['TableCell'])
                 ])
 
-        t_key = Table(key_rows, colWidths=[90, 85, 80, 235])
+        t_key = Table(key_rows, colWidths=[55, 75, 75, 105, 180])
         t_key.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
             ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
             ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 4.5),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 4.5),
-            ('LEFTPADDING', (0,0), (-1,-1), 6),
-            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+            ('TOPPADDING', (0,0), (-1,-1), 4),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+            ('LEFTPADDING', (0,0), (-1,-1), 5),
+            ('RIGHTPADDING', (0,0), (-1,-1), 5),
         ]))
         self.story.append(t_key)
         self.story.append(Spacer(1, 8))
 
         guide_note = (
-            "<b>Panchang Timing Practice:</b> For high-priority commercial actions on these dates, "
+            "<b>Panchang Timing Practice (New Delhi IST):</b> For high-priority commercial actions on these dates, "
             "prioritize initiation windows between 09:30 AM and 11:30 AM or mid-afternoon between 02:00 PM and 04:30 PM. "
             "Observing these windows avoids local midday Rahu Kaal periods, ensuring steady momentum."
         )
@@ -848,7 +904,7 @@ class Planner2027PdfBuilder:
         self.story.append(Paragraph(theme_text, s['Body']))
         self.story.append(Spacer(1, 4))
 
-        # Moon Phases for this month from Panchang
+        # Moon Phases for this month from Panchang (Plain text, no emoji per Point 4)
         m_prefix = f"2027-{m_num:02d}"
         f_moons = [fm for fm in self.panchang.get("full_moons_2027", []) if fm.get("date", "").startswith(m_prefix)]
         n_moons = [nm for nm in self.panchang.get("new_moons_2027", []) if nm.get("date", "").startswith(m_prefix)]
@@ -862,10 +918,11 @@ class Planner2027PdfBuilder:
                 parts.append(f"{dt.strftime('%d %b')} at {item['time_ist']} IST")
             return " · ".join(parts)
 
+        # Point 4 & Point 8: Plain text "Full Moon (Purnima)" / "New Moon (Amavasya)", Panchang for New Delhi (IST)
         moon_rows = [
             [
-                Paragraph(f"<b>🌕 Full Moon (Purnima):</b> {fmt_moon_list(f_moons)}", s['TableCell']),
-                Paragraph(f"<b>🌑 New Moon (Amavasya):</b> {fmt_moon_list(n_moons)}", s['TableCell'])
+                Paragraph(f"<b>Full Moon (Purnima):</b> {fmt_moon_list(f_moons)}", s['TableCell']),
+                Paragraph(f"<b>New Moon (Amavasya):</b> {fmt_moon_list(n_moons)}", s['TableCell'])
             ]
         ]
         t_moon = Table(moon_rows, colWidths=[245, 245])
@@ -878,7 +935,8 @@ class Planner2027PdfBuilder:
             ('RIGHTPADDING', (0,0), (-1,-1), 8),
         ]))
         self.story.append(t_moon)
-        self.story.append(Spacer(1, 6))
+        self.story.append(Paragraph("<font size=7 color='#7A654D'>Panchang for New Delhi (IST)</font>", s['TableCellCenter']))
+        self.story.append(Spacer(1, 4))
 
         # Monthly Remedy
         self.story.append(Paragraph(f"<b>Monthly Focus & Lifestyle Attunement:</b> {rem_text}", s['BodyMuted']))
@@ -959,7 +1017,7 @@ class Planner2027PdfBuilder:
         self.story.append(Paragraph(y_rem, s['Body']))
         self.story.append(Spacer(1, 6))
 
-        # Traditional Crystal Suggestion for Mulank
+        # Traditional Crystal Suggestion for Mulank (Point 6)
         self.story.append(Paragraph("Traditional Mineral & Crystal Attunement by Driver Number", s['SectionH2']))
         seeker_crystal = CRYSTALS_BY_MULANK.get(self.mulank, "Sunstone or Carnelian")
         c_intro = (
@@ -1173,11 +1231,21 @@ def generate_planner_2027_pdf(
         with open(panchang_path, "r", encoding="utf-8") as f:
             panchang_data = json.load(f)
 
-    # 4. Build PDF
+    # 4. Load Key Dates Rules
+    rules_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "data", "key_dates_rules.json")
+    if not os.path.exists(rules_path):
+        rules_path = "data/key_dates_rules.json"
+    key_dates_rules = {}
+    if os.path.exists(rules_path):
+        with open(rules_path, "r", encoding="utf-8") as f:
+            key_dates_rules = json.load(f)
+
+    # 5. Build PDF
     builder = Planner2027PdfBuilder(
         calc_data=calc_data,
         content_library=content_lib,
         panchang_data=panchang_data,
+        key_dates_rules=key_dates_rules,
         is_sample=is_sample
     )
     pdf_bytes = builder.build()

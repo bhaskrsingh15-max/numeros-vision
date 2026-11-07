@@ -191,5 +191,30 @@
         "Credits valid for 12 months with rollover"
       ]
     }
+  },
+  "annual_planners": {
+    "planner_2027": {
+      "pack_id": "planner_2027",
+      "tier_id": "year_ahead_2027",
+      "name": "2027 Year Ahead Planner",
+      "display_name": "2027 Year Ahead Planner \u00b7 Annual Blueprint",
+      "pages": 16,
+      "list_price_inr": 1999,
+      "list_price_paise": 199900,
+      "offer_price_inr": 1499,
+      "offer_price_paise": 149900,
+      "offer_ends_at": "2027-01-31T23:59:59+05:30",
+      "price_includes_gst": false,
+      "currency": "INR",
+      "status": "active",
+      "deliverables": [
+        "16-Page High-Precision 2027 Annual Master Planner PDF",
+        "Personal Year 2027 Governing Archetype & Macro Trajectory",
+        "12-Month Tactical Matrix with Auspicious Decision Windows",
+        "Quarterly Pivot Radar (Q1\u2013Q4 Strategic Milestones)",
+        "Commercial, Vocational & Relationship Timing Corridors",
+        "Vedic Gharelu Remedies & 40-Day Aural Attunement for 2027"
+      ]
+    }
   }
 }
