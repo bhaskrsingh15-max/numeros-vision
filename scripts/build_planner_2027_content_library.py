@@ -1,0 +1,334 @@
+"""
+Build the 2027 Year Ahead Planner Content Library.
+Strict adherence to:
+- "status": "DRAFT pending Bhaskr's review"
+- 2-4 sentences per reading
+- Outlook wording only ("tends to", "may suit", "a good time to consider", "favours", "supports", "suggests", etc.)
+- Zero event promises
+- Lifestyle-only wellbeing (rest, hydration, daily rhythms, gentle movement)
+- Strictly zero forbidden words: luck, lucky, guaranteed, will bring, will fix, prediction, prescription, consecrated, cure, exact
+"""
+
+import json
+import re
+
+FORBIDDEN_WORDS = [
+    "luck", "lucky", "guaranteed", "will bring", "will fix",
+    "prediction", "prescription", "consecrated", "cure", "exact"
+]
+
+def check_forbidden(text, path=""):
+    lower = text.lower()
+    for word in FORBIDDEN_WORDS:
+        # Check whole word / phrase
+        pattern = r'\b' + re.escape(word) + r'\b'
+        if re.search(pattern, lower):
+            raise ValueError(f"Forbidden word '{word}' found at {path}: {text}")
+
+def count_sentences(text):
+    # Match sentences ending with . ! ?
+    # Exclude common abbreviations like Mr. Dr. etc.
+    cleaned = text.strip()
+    sentences = [s.strip() for s in re.split(r'[.!?]+(?:\s+|$)', cleaned) if s.strip()]
+    return len(sentences)
+
+def validate_library(lib):
+    print("Validating content library...")
+    errors = []
+    
+    def walk(obj, path=""):
+        if isinstance(obj, str):
+            check_forbidden(obj, path)
+            # If path indicates a reading, verify sentence count
+            if any(k in path for k in ["overviews", "life_areas", "tropical_sun_signs", "personal_months", "mulank_notes", "pinnacles"]):
+                n = count_sentences(obj)
+                if n < 2 or n > 4:
+                    errors.append(f"Sentence count {n} out of bounds (2-4) at {path}: '{obj}'")
+        elif isinstance(obj, dict):
+            for k, v in obj.items():
+                walk(v, f"{path}.{k}" if path else k)
+        elif isinstance(obj, list):
+            for i, v in enumerate(obj):
+                walk(v, f"{path}[{i}]")
+
+    walk(lib)
+    if errors:
+        for e in errors:
+            print("ERROR:", e)
+        raise ValueError(f"Validation failed with {len(errors)} errors.")
+    print("All checks passed successfully!")
+
+# Build data structures
+content = {
+    "status": "DRAFT pending Bhaskr's review",
+    "version": "1.0.0",
+    "description": "Comprehensive content library for the 2027 Year Ahead Planner report.",
+    "how_to_read": {
+        "title": "How to Read Your 2027 Personal Planner",
+        "intro": "This annual planner is designed as a structured scheduling companion tailored to your personal numerical cycles. The calendar serves as a supportive planning aid derived from your core birth numbers and the universal rhythms of 2027, helping you allocate time with greater focus and clarity.",
+        "tiers": {
+            "Peak": "Days of exceptional personal alignment where your individual numbers and universal cycles harmonise smoothly. These dates offer supportive momentum for launching major projects, leading key meetings, or taking decisive personal steps.",
+            "Excellent": "High-harmony days well suited for meaningful progress and constructive collaboration. Consider scheduling contract discussions, strategic planning sessions, or milestone presentations during these windows.",
+            "Good": "Balanced and productive days ideal for steady workflow and ongoing tasks. These periods support consistent execution, standard communications, and systematic follow-through.",
+            "Moderate": "Neutral days best suited for routine responsibilities, maintenance, and internal review. They provide a calm backdrop for desk work, administrative clearing, and thoughtful preparation.",
+            "Care": "Dates calling for patient pacing, thorough double-checking, and deliberate communication. Use these days for reflective tasks, rest, and careful organisation rather than hasty commitments."
+        },
+        "planning_aid_note": "Every personal cycle offers natural ebbs and flows throughout the calendar year. By viewing these scores as navigational indicators rather than rigid boundaries, you can structure your weekly priorities with greater intention and poise.",
+        "disclaimer_text": "{{DISCLAIMER_APPROVED_TEXT}}"
+    },
+    "key_dates_guidelines": {
+        "rule_amavasya": "New Moon (Amavasya) days are omitted from key launch recommendations to support quiet inward pacing.",
+        "rule_rahu_kaal": "Days with extended morning Rahu Kaal intervals are adjusted to prioritise afternoon windows.",
+        "rule_near_boundary": "When a lunar tithi transitions within 45 minutes of local sunrise, the report highlights the shift so activities can be timed with mindful awareness."
+    },
+    "personal_year_overviews": {
+        "1": "Personal Year 1 opens a fresh nine-year chapter centered on self-reliance, initiative, and planting new seeds. It invites you to define clear priorities and take early steps toward meaningful independent goals. A focused and decisive approach tends to serve you well as this foundation takes shape.",
+        "2": "Personal Year 2 emphasizes patience, emotional equilibrium, and supportive partnerships. This cycle invites you to build relationships with tact, listen attentively, and allow plans to develop at a natural pace. Diplomatic collaboration and quiet persistence often yield the most sustainable results.",
+        "3": "Personal Year 3 brings an energetic focus on creative expression, communication, and widening your social horizons. It offers an inspiring climate for sharing ideas, writing, public speaking, and pursuing artistic interests. Maintaining focus on core commitments helps channel this vibrant enthusiasm effectively.",
+        "4": "Personal Year 4 centers on practical organisation, diligent work, and establishing reliable foundations. This period favours methodical scheduling, attention to fine details, and strengthening your financial or physical security. Consistent discipline and orderly routines provide steady peace of mind throughout the months ahead.",
+        "5": "Personal Year 5 introduces a dynamic tempo characterised by adaptability, learning, and expanding interests. It encourages you to embrace constructive transitions, explore fresh perspectives, and remain flexible as circumstances evolve. Balancing curious exploration with grounded daily routines supports steady personal equilibrium.",
+        "6": "Personal Year 6 highlights domestic harmony, family commitments, and service to your community. This cycle invites you to nurture close bonds, beautify your living space, and accept heartfelt responsibilities with grace. A balanced attitude toward giving and receiving ensures that caring for others remains deeply fulfilling.",
+        "7": "Personal Year 7 encourages introspective reflection, thoughtful study, and personal refinement. It offers a quieter atmosphere conducive to deepening professional knowledge, meditation, and clarifying your inner values. Setting aside regular periods for contemplation and nature walks helps restore mental clarity.",
+        "8": "Personal Year 8 directs attention toward strategic management, vocational achievement, and sound financial stewardship. It favours disciplined executive leadership, efficient resource allocation, and practical long-term planning. Balancing ambitious pursuits with fair-minded integrity creates enduring stability and respect.",
+        "9": "Personal Year 9 marks a culminating epoch dedicated to completion, reflection, and releasing outdated patterns. It provides a helpful perspective for wrapping up long-standing projects, decluttering your environment, and engaging in charitable service. Letting go with gratitude prepares a clear canvas for the upcoming cycle."
+    },
+    "personal_year_life_areas": {
+        "1": {
+            "home_and_family": "A Personal Year 1 encourages setting clear personal boundaries while establishing supportive domestic routines. You may feel motivated to reorganise your living quarters to reflect your evolving aspirations. Open communication with family members helps align household priorities with your forward-looking plans.",
+            "work_and_career": "This cycle strongly favours initiating new professional pathways, proposing original concepts, or stepping into leadership roles. Your drive to work autonomously helps you spearhead pioneering efforts. Keeping realistic timelines ensures steady momentum as fresh projects get underway.",
+            "money_habits": "Financial planning in Year 1 benefits from establishing a dedicated savings strategy for your new ventures. It is an opportune time to review regular expenses and streamline banking structures. Thoughtful budgeting creates the necessary runway for upcoming independent initiatives.",
+            "relationships": "Year 1 invites honest self-definition within your personal and professional relationships. You are encouraged to connect with peers who appreciate your individuality and shared sense of purpose. Balancing personal independence with attentive listening fosters genuine mutual respect.",
+            "wellbeing": "Establishing consistent morning routines and engaging in invigorating physical movement supports your vitality during this busy chapter. Prioritising structured hydration and balanced meals keeps energy steady throughout demanding days. Setting aside quiet moments before sleep helps quiet an active mind.",
+            "learning": "This period suits acquiring foundational knowledge in emerging domains or developing distinct vocational capabilities. Self-directed study and practical short courses often align well with your independent focus. Applying newly gained insights directly to daily projects reinforces your progress.",
+            "travel": "Travel during Year 1 tends to be purposeful and oriented toward exploring new environments or scouting professional possibilities. Solo journeys or brief exploratory visits may offer valuable perspective. Keeping your itinerary flexible allows space for spontaneous observations."
+        },
+        "2": {
+            "home_and_family": "Personal Year 2 highlights warmth, mutual accommodation, and thoughtful harmony within the household. It is a good time to resolve lingering domestic misunderstandings through calm and empathetic dialogue. Creating a serene and peaceful home environment fosters emotional comfort for everyone.",
+            "work_and_career": "Professional activities benefit from consensus building, alliance formation, and supportive teamwork. Your capacity to mediate differing viewpoints can prove especially constructive in complex discussions. Allowing collaborative projects to mature without rushing yields reliable outcomes.",
+            "money_habits": "Financial matters call for joint planning, cautious spending, and building liquid safety reserves. Discussing budget allocations with trusted partners or family members promotes shared financial peace of mind. Steady patience protects you from hasty transactional choices.",
+            "relationships": "Relationships take central stage in Year 2, inviting deeper emotional sensitivity and meaningful listening. Taking time to appreciate loved ones and acknowledging quiet contributions strengthens relational bonds. Gentle diplomacy helps preserve harmony even when perspectives diverge.",
+            "wellbeing": "Gentle movement such as mindful stretching, swimming, or restorative walking suits your rhythm this year. Maintaining consistent sleep hygiene and soothing evening habits aids in releasing accumulated tension. Mindful breathing pauses throughout the workday provide gentle grounding.",
+            "learning": "Learning through collaborative study groups, mentorship discussions, or reflective reading flourishes during this cycle. Subjects involving psychology, mediation, human relations, and history may hold special appeal. Reflecting on ideas before applying them enriches your understanding.",
+            "travel": "Travel plans are best shared with a companion or designed around peaceful, restorative settings. Relaxed retreats near water or quiet countryside retreats support your need for calm. Avoiding overly packed schedules keeps journeys pleasant and refreshing."
+        },
+        "3": {
+            "home_and_family": "Personal Year 3 brings warmth, conversational vitality, and social cheer to the home front. Hosting gatherings with family and friends can brighten the household atmosphere. Adding uplifting decor or creative touches brings an inspiring feeling to your living space.",
+            "work_and_career": "Your communicative flair and creative presentation skills are well highlighted in this professional cycle. It is a favourable period for marketing, drafting proposals, teaching, or sharing creative work. Organising your daily tasks prevents scattered energy from delaying key deadlines.",
+            "money_habits": "Financial discipline requires mindful tracking of discretionary expenses and social spending during Year 3. Allocating funds intentionally toward creative development while keeping savings steady maintains balance. Periodic reviews of your monthly budget keep financial plans on track.",
+            "relationships": "Social interactions flourish as your natural warmth and conversational ease draw companions near. It is a wonderful cycle for making new acquaintances and celebrating joyful moments with close friends. Sincere and attentive communication ensures that connections remain meaningful.",
+            "wellbeing": "Active hobbies that blend physical vitality with creative expression, such as dance, light cycling, or group walks, support your wellbeing. Staying mindful of restful downtime balances high social engagement. Incorporating fresh wholesome foods sustains your vibrant energy levels.",
+            "learning": "Educational pursuits related to creative writing, public communication, digital arts, or languages are especially well suited. Interactive seminars and workshops provide stimulating environments for growth. Channeling your enthusiasm into tangible practice leads to satisfying achievements.",
+            "travel": "Travel in Year 3 tends to be lively, social, and culturally enriching. Visiting vibrant cities, creative festivals, or scenic cultural hubs provides refreshing inspiration. Traveling with friends or family often creates memorable shared experiences."
+        },
+        "4": {
+            "home_and_family": "Personal Year 4 invites practical improvements to the home, such as structural repairs, deep organising, and solidifying family routines. Establishing clear household responsibilities promotes collective order and peace. Investing effort into making your living space secure and functional brings lasting satisfaction.",
+            "work_and_career": "Professional life calls for disciplined execution, attention to operational systems, and steady persistence. Methodically clearing administrative backlogs and refining workflows builds an enduring foundation for future growth. Your dependability and structured oversight earn valuable professional regard.",
+            "money_habits": "Prudent financial management is a hallmark of Year 4, making it an excellent time to reduce debt and strengthen long-term reserves. Tracking cash inflows and outflows methodically highlights practical areas for savings. Sticking to conservative, well-researched financial choices serves you best.",
+            "relationships": "Interpersonal connections value dependability, honest commitments, and practical support this year. Demonstrating loyalty through everyday helpfulness strengthens trust with family and colleagues alike. Clear and transparent expectations prevent misunderstandings in important partnerships.",
+            "wellbeing": "Consistent daily routines, regular mealtimes, and disciplined sleep patterns provide the core foundation for physical endurance. Posture-strengthening exercises, mindful core work, and regular walking help manage physical tension. Adequate rest days ensure your focused effort remains sustainable.",
+            "learning": "Structured study in technical fields, financial literacy, project management, or regulatory frameworks is strongly favoured. Methodical coursework with clear milestones suits your practical mindset. Mastery comes through systematic repetition and thorough application of fundamental principles.",
+            "travel": "Travel during Year 4 is typically practical, family-focused, or tied to specific work objectives. Well-organised travel itineraries with confirmed reservations reduce unnecessary delays. Choosing orderly and calm accommodations supports your comfort on the road."
+        },
+        "5": {
+            "home_and_family": "Personal Year 5 brings a refreshing breeze of change and dynamic activity into domestic life. Family members may embrace new routines, hobbies, or adjustments to living arrangements. Cultivating flexibility and open-minded communication helps everyone adapt smoothly to evolving schedules.",
+            "work_and_career": "This cycle offers opportunities to pivot, explore versatile projects, or adopt modern workplace methodologies. Your ability to adapt quickly to shifting demands proves a distinct asset in dynamic environments. Focusing on two or three primary initiatives prevents multitasking from diluting your impact.",
+            "money_habits": "Financial management during Year 5 benefits from maintaining flexible reserves alongside disciplined spending habits. Occasional unexpected expenses can be handled with ease when a dedicated buffer is in place. Resisting impulsive financial opportunities ensures steady fiscal footing.",
+            "relationships": "Your social circle may broaden as you encounter people from diverse backgrounds and perspectives. Engaging in spontaneous conversations and exchanging fresh ideas brings genuine intellectual vitality. Maintaining clear communication with established partners balances new social connections.",
+            "wellbeing": "Maintaining physical vitality calls for varied, engaging exercise routines that keep boredom at bay. Outdoor trail walking, functional bodyweight training, and mindful breathing support agility. Establishing a grounding evening routine helps calm your nervous system after lively days.",
+            "learning": "Fast-paced courses, experiential workshops, and multi-disciplinary subjects capture your attention effectively this year. You may enjoy studying modern communication tools, languages, or global market trends. Hands-on learning experiences provide rapid and stimulating progress.",
+            "travel": "Year 5 is naturally suited for travel, exploratory road trips, and venturing into unfamiliar regions. Changing scenery often sparks valuable fresh ideas and personal renewal. Keeping packing minimal and travel plans adaptable makes journeys especially enjoyable."
+        },
+        "6": {
+            "home_and_family": "Personal Year 6 centres on home comfort, family welfare, and nurturing domestic tranquility. It is a wonderful period for home decoration, gardening, and hosting warm family dinners. Balancing loving support with healthy respect for individual autonomy keeps family bonds harmonious.",
+            "work_and_career": "Vocational matters highlight mentoring, client care, community leadership, and fostering collaborative team environments. Your dedication to high standards and ethical service garners steady respect. Establishing realistic boundaries around work hours protects your personal and family time.",
+            "money_habits": "Financial allocations often focus on family security, home enhancement, and long-term domestic comfort. Thoughtful planning for household improvements ensures expenditures remain within comfortable means. Regular reviews of joint financial goals foster shared confidence and clarity.",
+            "relationships": "This year invites deep emotional connection, romantic warmth, and committed relationship building. Open-hearted appreciation and dependable presence nurture lasting closeness with loved ones. Addressing sensitive matters with kindness and patience strengthens relational trust.",
+            "wellbeing": "Wholesome home-cooked meals, mindful nourishment, and rhythmic daily walks support your vitality in Year 6. Creating a peaceful bedtime sanctuary encourages restorative and deep sleep. Gentle stretching and spending time in green outdoor spaces promote emotional grounding.",
+            "learning": "Studies related to design, counseling, nutritional wellness, community leadership, and practical arts flourish in this cycle. Engaging in courses that serve a direct practical or interpersonal purpose brings satisfaction. Sharing what you learn with family or colleagues enriches your mastery.",
+            "travel": "Travel plans are ideally family-centered, leisurely, and oriented toward visiting scenic landscapes or loved ones. Comfort, restful amenities, and pleasant surroundings take priority over hectic itineraries. A relaxed pace allows you to unwind and savour the journey."
+        },
+        "7": {
+            "home_and_family": "Personal Year 7 encourages a calm, quiet atmosphere at home that supports mental rest and personal reflection. Family members will appreciate understanding your periodic need for personal space and quiet hours. Keeping domestic clutter minimal fosters a tranquil sanctuary for thought.",
+            "work_and_career": "This cycle favours specialist research, data analysis, strategy formulation, and refining technical expertise. Taking time to step back and evaluate long-term career directions yields valuable insight. Quality and thoughtful depth matter far more than rapid outward expansion during this phase.",
+            "money_habits": "Financial matters benefit from meticulous auditing of accounts, analyzing investments, and eliminating redundant subscriptions. A conservative and analytical approach protects your resources effectively. Taking time to understand the fine print before entering agreements serves you well.",
+            "relationships": "Year 7 invites deep, authentic, one-on-one connections over large superficial gatherings. Meaningful conversations about personal values and philosophy strengthen true friendships. Communicating your need for occasional quiet time helps partners feel secure and respected.",
+            "wellbeing": "Restorative sleep, quiet meditation, and regular walks in natural surroundings are essential during this introspective cycle. Mindful hydration and minimizing excessive screen time before bed support mental calmness. Gentle yoga or contemplative breathing helps release mental fatigue.",
+            "learning": "Deep study, philosophical reading, advanced research, and analytical training are exceptionally well favoured. You may feel drawn to exploring classical traditions, advanced technical subjects, or self-development literature. Solitary study hours provide profound clarity and intellectual mastery.",
+            "travel": "Travel in Year 7 tends to be contemplative, quiet, and reflective in nature. Retreats in mountainous regions, quiet coastal towns, or spiritual heritage sites offer deep refreshment. Traveling without rigid schedules allows you to absorb peaceful surroundings fully."
+        },
+        "8": {
+            "home_and_family": "Personal Year 8 invites responsible household leadership, efficient domestic management, and long-term property planning. Establishing orderly systems for family administration keeps domestic affairs running smoothly. Demonstrating fair-minded guidance helps family members navigate practical decisions with confidence.",
+            "work_and_career": "This is a significant cycle for commercial execution, managerial responsibility, and professional advancement. Your capacity for strategic vision and pragmatic decision-making helps you steer demanding projects successfully. Grounding your leadership in ethical standards earns enduring professional respect.",
+            "money_habits": "Financial discipline is central in Year 8, calling for strategic asset allocation and prudent capital management. It is a suitable time to structure long-term savings and review business contracts thoroughly. Maintaining a balanced perspective prevents material concerns from overshadowing personal priorities.",
+            "relationships": "Interpersonal relationships benefit from mutual respect, clear commitments, and practical cooperation. Working together with partners toward shared goals builds durable alignment. Ensuring that professional ambitions do not crowd out quality personal time preserves warmth.",
+            "wellbeing": "Maintaining physical stamina through structured strength training, balanced nutrition, and consistent rest is vital. Consciously releasing workday stress before entering the home preserves mental peace. Scheduled relaxation breaks during intense work weeks protect your long-term vitality.",
+            "learning": "Vocational studies focused on executive leadership, financial markets, organizational strategy, and governance are highly productive. Learning from seasoned mentors or case studies provides actionable insights. Applying structured frameworks directly to current responsibilities accelerates your growth.",
+            "travel": "Travel during Year 8 is often linked to executive meetings, industry conferences, or strategic commercial opportunities. Selecting efficient travel arrangements and punctual itineraries ensures productive outcomes. Setting aside brief moments to rest between appointments keeps your focus sharp."
+        },
+        "9": {
+            "home_and_family": "Personal Year 9 encourages decluttering the living space, completing delayed domestic projects, and fostering forgiveness. It is a compassionate period for letting go of past grievances and supporting relatives through transitions. Creating an open, unburdened home environment fosters peace for the whole household.",
+            "work_and_career": "Professional activities focus on wrapping up extended projects, evaluating achievements, and mentoring colleagues. It is an ideal phase to refine existing workflows rather than rushing into unvetted new ventures. Concluding commitments with diligence and professional grace ensures a clean slate ahead.",
+            "money_habits": "Financial planning in Year 9 benefits from resolving outstanding obligations and reviewing charitable giving. It is wise to maintain conservative financial reserves as you prepare for the upcoming cycle. Avoiding speculative commitments protects your peace of mind.",
+            "relationships": "This year invites compassionate understanding, emotional closure, and deepening broad-minded friendships. Cultivating empathy and letting go of relationships that no longer align occurs naturally. Cherishing meaningful connections while honoring healthy boundaries keeps your heart light.",
+            "wellbeing": "Engaging in restorative wellness practices, gentle swimming, and regular walks in nature supports your vitality. Establishing intentional habits to release emotional tension before sleep promotes refreshing rest. Nourishing meals and adequate hydration help maintain steady vitality.",
+            "learning": "Educational interests often lean toward humanitarian subjects, cultural studies, philosophy, and integrative wellness. Reviewing and synthesizing knowledge gained over previous years provides satisfying perspective. Sharing your insights through teaching or writing can be deeply rewarding.",
+            "travel": "Travel in Year 9 often involves commemorative journeys, visiting ancestral places, or participating in meaningful retreats. Journeys that offer cultural immersion or an opportunity to disconnect from routine provide deep renewal. Traveling with an open, reflective mindset enriches your experiences."
+        }
+    },
+    "tropical_sun_signs": {
+        "Aries": "For Aries, 2027 brings an encouraging climate for pioneering action and decisive leadership. Channeling your natural boldness into well-structured initiatives helps prevent scattered efforts. Taking measured pauses before committing to major paths supports consistent forward momentum throughout the year.",
+        "Taurus": "For Taurus, 2027 emphasizes consolidating financial stability, nurturing patient growth, and enhancing domestic comfort. Your grounded dedication helps you build enduring value across personal and professional projects. Staying open to practical modern methods ensures steady progress without unnecessary rigidity.",
+        "Gemini": "For Gemini, 2027 highlights communication, intellectual curiosity, and expanding versatile social connections. Your natural adaptability serves you well as new learning opportunities emerge throughout the year. Focusing your lively interests on two or three key goals ensures that your talents yield tangible results.",
+        "Cancer": "For Cancer, 2027 fosters emotional depth, domestic harmony, and strengthening foundational security. Dedicating time to cultivate a serene home sanctuary provides the restorative foundation you value. Balancing caring support for others with healthy personal boundaries preserves your peace of mind.",
+        "Leo": "For Leo, 2027 offers an inspiring stage for creative self-expression, mentorship, and purposeful leadership. Your natural warmth encourages and uplifts colleagues and family members alike. Leading with inclusive generosity and attentive listening creates lasting loyalty and shared accomplishments.",
+        "Virgo": "For Virgo, 2027 supports methodical organization, refining daily routines, and providing valuable practical service. Your sharp eye for detail and commitment to quality make you a trusted anchor in complex projects. Remembering to balance disciplined standards with gentle self-compassion sustains your wellbeing.",
+        "Libra": "For Libra, 2027 brings a harmonious focus to interpersonal diplomacy, aesthetic balance, and collaborative partnerships. Your skill in reconciling differing perspectives proves particularly beneficial in both work and family life. Making clear, timely decisions supports steady equilibrium across all your endeavors.",
+        "Scorpio": "For Scorpio, 2027 invites focused determination, deep research, and meaningful personal transformation. Your capacity for strategic concentration allows you to navigate intricate challenges with quiet resilience. Cultivating transparency and open trust in close relationships fosters enduring mutual support.",
+        "Sagittarius": "For Sagittarius, 2027 encourages intellectual expansion, philosophical exploration, and optimistic pursuit of broader horizons. Your adventurous spirit finds expression through meaningful study, writing, or purposeful travel. Grounding your expansive ideas in practical daily schedules ensures lasting achievements.",
+        "Capricorn": "For Capricorn, 2027 highlights structured advancement, prudent resource management, and long-term vocational governance. Your disciplined patience and strategic vision position you well for substantial milestones. Scheduling deliberate periods for family warmth and personal relaxation balances your vocational drive.",
+        "Aquarius": "For Aquarius, 2027 stimulates forward-thinking ideas, collaborative community involvement, and innovative problem-solving. Your original perspective inspires colleagues to explore creative alternative pathways. Pairing progressive concepts with consistent follow-through transforms thoughtful ideals into reality.",
+        "Pisces": "For Pisces, 2027 nurtures empathetic understanding, creative imagination, and reflective personal development. Creating dedicated space for artistic expression or quiet contemplation enriches your daily outlook. Maintaining clear practical boundaries ensures your compassionate nature remains an enduring source of strength."
+    },
+    "personal_months": {
+        "1": "A Personal Month 1 introduces an energetic impulse to take initiative and set clear monthly priorities. It is a constructive period for beginning fresh routines, proposing new ideas, and organizing your immediate workspace. Decisive action taken with patience tends to build positive momentum for the weeks ahead.",
+        "2": "A Personal Month 2 favours diplomatic cooperation, attentive listening, and steady partnership building. Rushing outcomes is rarely helpful now; allowing matters to unfold with gentle patience serves you best. Fostering mutual understanding in both personal and professional discussions brings quiet harmony.",
+        "3": "A Personal Month 3 brings social cheer, creative enthusiasm, and lively communication into focus. It is an enjoyable month for networking, writing, and engaging in collaborative brainstorming sessions. Keeping track of daily priorities ensures that vibrant enthusiasm leads to productive completions.",
+        "4": "A Personal Month 4 calls for practical discipline, methodical planning, and attending to fine operational details. Methodically organizing schedules and addressing administrative tasks strengthens your foundation. Your dependable follow-through creates a reassuring sense of order and security.",
+        "5": "A Personal Month 5 brings a dynamic pace with opportunities to adapt to new information and unexpected developments. Maintaining flexibility in your schedule allows you to navigate changes with confidence. Balancing curious exploration with grounded daily routines keeps your focus clear.",
+        "6": "A Personal Month 6 highlights domestic responsibility, family relationships, and personal service. It is a warm and supportive time for beautifying your home, resolving household matters, and supporting loved ones. Balancing caring generosity with personal rest preserves your emotional equilibrium.",
+        "7": "A Personal Month 7 invites thoughtful reflection, analytical research, and personal study. Setting aside quiet periods for contemplation and mental rest helps clarify important upcoming decisions. Deepening your specialized knowledge during this period brings enduring confidence.",
+        "8": "A Personal Month 8 emphasizes practical execution, commercial organization, and sound decision-making. It is an opportune month to review financial allocations and direct key vocational projects with authority. Grounding your leadership in fairness and accountability ensures lasting success.",
+        "9": "A Personal Month 9 encourages completion, decluttering, and releasing outmoded routines. Wrapping up pending tasks and settling outstanding obligations prepares you for upcoming cycles. Approaching endings with grace and thoughtful perspective clears the way for fresh progress."
+    },
+    "mulank_notes": {
+        "1": "Driven by Driver 1 (Sun), you possess an innate inclination toward leadership, initiative, and clear self-direction. Throughout 2027, pairing your natural confidence with active listening enhances your collaborative effectiveness. Leading by supportive example inspires genuine trust and cooperation from those around you.",
+        "2": "Driven by Driver 2 (Moon), you naturally bring empathy, diplomatic sensitivity, and peaceful mediation to your interactions. In 2027, honoring your intuitive perceptions while maintaining healthy boundaries protects your peace of mind. Your gentle guidance provides a calming influence in both family and professional circles.",
+        "3": "Driven by Driver 3 (Jupiter), your life approach is enriched by optimism, expressive communication, and intellectual warmth. The 2027 cycles invite you to channel your creative versatility into dedicated, structured projects. Sustained focus allows your imaginative ideas to reach their fullest expression.",
+        "4": "Driven by Driver 4 (Rahu), you are characterized by practical thoroughness, organizational resilience, and methodical discipline. During 2027, applying your systematic approach to clear milestones builds durable security. Remaining receptive to adaptable methods ensures your steady work flows with greater ease.",
+        "5": "Driven by Driver 5 (Mercury), you thrive on adaptability, quick mental processing, and versatile problem-solving. In 2027, your flexibility helps you navigate evolving opportunities with agility and poise. Anchoring your dynamic curiosity with consistent daily grounding routines supports sustained focus.",
+        "6": "Driven by Driver 6 (Venus), you are motivated by harmony, visual aesthetics, and compassionate responsibility toward family and community. The rhythms of 2027 support your efforts to create peaceful, well-ordered environments. Balancing caring devotion with intentional personal downtime keeps your vitality vibrant.",
+        "7": "Driven by Driver 7 (Ketu), you bring depth of thought, independent analytical insight, and introspective wisdom to your pursuits. Throughout 2027, carving out quiet intervals for study and reflection enriches your clarity. Sharing your well-considered insights thoughtfully enriches your collaborative circles.",
+        "8": "Driven by Driver 8 (Saturn), you carry a strong capacity for administrative endurance, executive focus, and realistic management. The 2027 landscape rewards your persistent discipline and ethical stewardship of resources. Balancing rigorous standards with patience and empathy fosters enduring vocational respect.",
+        "9": "Driven by Driver 9 (Mars), you are energized by courage, broad-minded ideals, and a generous humanitarian spirit. In 2027, directing your dynamic vigor into constructive, well-planned endeavors produces meaningful results. Pairing bold action with calm composure keeps your efforts centered and sustainable."
+    },
+    "pinnacles": {
+        "P1": {
+            "1": "The first pinnacle under vibration 1 emphasizes developing early independence and learning to trust your own judgment. It encourages taking initiative and forming an authentic sense of personal agency. Establishing healthy self-reliance during these formative years builds lasting inner confidence.",
+            "2": "The first pinnacle under vibration 2 highlights learning diplomacy, patience, and harmonious cooperation with others. It invites gentle accommodation and developing emotional sensitivity within family environments. Valuing peaceful collaboration helps establish cooperative life patterns.",
+            "3": "The first pinnacle under vibration 3 fosters early creative expression, sociability, and communication skills. It encourages exploring artistic, verbal, or musical talents in an encouraging environment. Learning to channel lively enthusiasm into structured hobbies supports balanced growth.",
+            "4": "The first pinnacle under vibration 4 establishes foundational discipline, practical habits, and methodical learning. It provides an early framework of responsibility and appreciation for honest work. Building steady routines during this period prepares you well for future responsibilities.",
+            "5": "The first pinnacle under vibration 5 brings early experiences of adaptability, diverse interests, and personal freedom. It encourages curiosity about different cultures, ideas, and active learning environments. Developing thoughtful discernment helps you channel versatile energy constructively.",
+            "6": "The first pinnacle under vibration 6 centers on domestic responsibility, family caring, and developing community values. It invites warm participation in household harmony and learning to support loved ones. Nurturing a balanced approach to responsibility fosters genuine emotional maturity.",
+            "7": "The first pinnacle under vibration 7 encourages an early inclination toward quiet study, reading, and thoughtful contemplation. It supports deep intellectual curiosity and an appreciation for independent exploration. Allowing space for personal reflection helps cultivate profound discernment.",
+            "8": "The first pinnacle under vibration 8 directs attention toward practical capability, material responsibility, and organizational skill. It encourages understanding resource management and fair conduct from an early age. Learning to pair ambitious focus with integrity creates a solid basis for future success.",
+            "9": "The first pinnacle under vibration 9 emphasizes developing broad empathy, cultural appreciation, and a generous outlook. It encourages participation in collective activities that foster understanding and community goodwill. Learning to view life through a wide, compassionate lens enriches personal character."
+        },
+        "P2": {
+            "1": "The second pinnacle under vibration 1 supports establishing your unique identity and spearheading personal projects. It invites you to step forward with self-directed courage in your educational or early career choices. Building confidence in your own vision opens fresh pathways.",
+            "2": "The second pinnacle under vibration 2 emphasizes strengthening diplomatic alliances and developing mutual trust. It highlights the value of patient partnership, negotiation, and balancing mutual priorities. Thoughtful communication helps resolve complex interpersonal dynamics smoothly.",
+            "3": "The second pinnacle under vibration 3 enriches your communicative confidence, social engagement, and creative pursuits. It offers an inspiring period for writing, presenting, and expanding your professional network. Maintaining focus on core commitments ensures that creative ventures bear fruit.",
+            "4": "The second pinnacle under vibration 4 calls for diligent building of professional competence and domestic security. It is a period where steady effort and systematic organization produce tangible results. Embracing methodical routines establishes an enduring platform for future progress.",
+            "5": "The second pinnacle under vibration 5 brings dynamic transitions, travel opportunities, and versatile learning experiences. It encourages adaptable thinking as your professional and personal interests broaden. Maintaining a grounded daily foundation keeps adventurous explorations constructive.",
+            "6": "The second pinnacle under vibration 6 focuses on deepening family bonds, home stability, and communal service. It invites you to take on supportive leadership in domestic and neighborhood circles. Balancing devotion to others with healthy personal rest sustains your vitality.",
+            "7": "The second pinnacle under vibration 7 invites specialization, technical refinement, and intellectual self-discovery. It is a productive cycle for advanced research, contemplative study, and developing expertise. Trusting your analytical acumen allows you to navigate complex concepts with ease.",
+            "8": "The second pinnacle under vibration 8 highlights vocational advancement, executive responsibility, and practical management. It favours disciplined long-term planning and ethical commercial administration. Your steady capacity for stewardship earns lasting respect and stability.",
+            "9": "The second pinnacle under vibration 9 encourages philanthropic involvement, international perspectives, and broad-minded leadership. It invites you to contribute your skills toward projects that serve the greater good. Cultivating an inclusive and generous outlook brings deep personal fulfillment."
+        },
+        "P3": {
+            "1": "The third pinnacle under vibration 1 encourages mature executive initiative and independent leadership in your chosen field. It invites you to pioneer new initiatives with seasoned confidence and clarity of purpose. Leading by example inspires those who collaborate with you.",
+            "2": "The third pinnacle under vibration 2 emphasizes seasoned diplomacy, cooperative governance, and peaceful consensus. It offers an effective framework for mediating complex organizational or family matters. Cultivating calm patience ensures lasting harmony in all partnerships.",
+            "3": "The third pinnacle under vibration 3 brings an uplifting period of creative sharing, public communication, and social warmth. It supports writing, publishing, teaching, or mentoring emerging talents. Balancing joyful sociability with steady work habits keeps projects on course.",
+            "4": "The third pinnacle under vibration 4 provides solid stability, consolidation of assets, and structural endurance. It is an opportune phase to protect long-term security through prudent systems and reliable management. Your consistent dependability serves as a pillar of strength for your community.",
+            "5": "The third pinnacle under vibration 5 brings versatile horizons, international connections, and stimulating intellectual shifts. It invites you to stay mentally adaptable and explore emerging ideas with curiosity. Structuring your freedom allows you to make the most of new opportunities.",
+            "6": "The third pinnacle under vibration 6 deepens family legacy, mentorship of younger generations, and community welfare. It offers a warm atmosphere for enjoying domestic tranquility and aesthetic comfort. Sharing your life experience with kindness enriches your relationships.",
+            "7": "The third pinnacle under vibration 7 fosters profound philosophical insight, specialist mastery, and inner contentment. It is a rewarding period for authoring research, contemplative reflection, and personal study. Quiet contemplation in natural surroundings brings deep restoration.",
+            "8": "The third pinnacle under vibration 8 highlights peak managerial capability, substantial enterprise stewardship, and material organization. It invites disciplined oversight of important commercial or organizational ventures. Conducting affairs with scrupulous fairness ensures enduring honor.",
+            "9": "The third pinnacle under vibration 9 brings broad humanitarian perspective, charitable contributions, and graceful completions. It encourages sharing your resources and insights to benefit wider societal needs. Letting go of outdated concerns leaves your life richly focused and peaceful."
+        },
+        "P4": {
+            "1": "The fourth pinnacle under vibration 1 supports sovereign self-determination and independent pursuits during your mature years. It encourages maintaining active engagement with personal interests and leading by inspiring example. Cultivating your unique outlook keeps your spirit youthful and engaged.",
+            "2": "The fourth pinnacle under vibration 2 brings gentle companionship, peaceful living, and quiet diplomatic wisdom. It highlights enjoying supportive friendships and maintaining a harmonious domestic environment. Patient listening and kind presence remain your most valued gifts.",
+            "3": "The fourth pinnacle under vibration 3 encourages lively social connections, creative storytelling, and sharing joyful memories. It offers a cheerful climate for pursuing artistic hobbies, writing, or enjoying community events. Your optimistic warmth brightens gatherings with family and friends.",
+            "4": "The fourth pinnacle under vibration 4 provides enduring peace through orderly habits, stable living, and well-maintained foundations. It supports practical peace of mind and preserving accumulated security for future generations. Consistent routines foster comfortable and dignified living.",
+            "5": "The fourth pinnacle under vibration 5 encourages continued intellectual curiosity, travel, and engaging with modern ideas. It invites you to enjoy personal freedom and pursue diverse interests at your own tempo. Maintaining an adaptable attitude keeps your outlook vibrant and open.",
+            "6": "The fourth pinnacle under vibration 6 brings rich domestic fulfillment, warm relationships with family, and community regard. It offers a serene phase for enjoying your home, gardening, and offering wise counsel to loved ones. Your loving presence provides an anchor of comfort and peace.",
+            "7": "The fourth pinnacle under vibration 7 supports contemplative peace, spiritual reflection, and quiet intellectual pursuits. It is an enriching epoch for reading, nature observation, and enjoying solitary contemplation. Inner clarity and tranquility become your faithful companions.",
+            "8": "The fourth pinnacle under vibration 8 offers respected elder stewardship, practical governance, and sound advisory influence. It allows you to guide community or family affairs with seasoned, fair-minded wisdom. Your legacy of integrity and careful management provides lasting security.",
+            "9": "The fourth pinnacle under vibration 9 represents a comprehensive culmination marked by compassion, generosity, and philosophical poise. It encourages sharing your life's wisdom and supporting meaningful charitable causes. Living with an unburdened and grateful heart brings profound peace."
+        }
+    },
+    "name_number_alignments": {
+        "friendly": "Your calling name vibration shares a supportive and harmonious resonance with your natal core numbers. This natural alignment tends to facilitate smoother communication, social ease, and clear self-expression in daily life. It provides an encouraging background vibration for your personal and vocational pursuits.",
+        "neutral": "Your calling name vibration operates with a steady, neutral relationship to your natal core numbers. This balanced dynamic allows you to adapt flexibly to diverse environments without strong energetic pulls. It supports steady focus and reliable application across your professional activities.",
+        "challenging": "Your calling name vibration introduces a dynamic tension with your natal core numbers, calling for conscious focus and discipline. This interplay often motivates personal growth, resilience, and attention to deliberate communication. Approaching important conversations with structured clarity turns this dynamic into an asset."
+    },
+    "remedies_library": {
+        "year_remedies": {
+            "1": "Wear clean, bright clothing tones such as warm gold or cream on Sundays to align with solar clarity. Spend ten quiet minutes outdoors welcoming early morning sunlight to support daytime focus. Maintaining an organized desk space encourages fresh initiative and purpose.",
+            "2": "Incorporate soothing white, cream, or soft silver tones into your wardrobe, especially on Mondays. Drink water from a clean silver or ceramic cup to foster calming hydration habits. Practicing mindful breathing pauses throughout the day supports emotional balance.",
+            "3": "Introduce cheerful yellow or warm saffron accents into your daily notes and work environment on Thursdays. Dedicate time each week to read uplifting literature or engage in creative study. Keeping fresh yellow flowers at home brings a gentle feeling of optimism.",
+            "4": "Choose structured, grounded tones such as soft grey, navy, or slate blue, particularly on Saturdays. Maintain an uncluttered workspace and keep daily checklists to support orderly progress. Spending time caring for indoor green plants promotes practical grounding.",
+            "5": "Favour refreshing emerald or gentle sage green shades on Wednesdays to support clear communication. Enjoy a morning cup of warm herbal tea while reviewing your daily schedule. Taking brisk nature walks helps refresh mental agility and concentration.",
+            "6": "Embrace elegant pastel tones, gentle rose, or soft ivory shades on Fridays to enhance harmony. Introduce pleasant natural aromas like sandalwood or lavender into your home. Expressing appreciation to family members cultivates warm domestic peace.",
+            "7": "Incorporate light smoke, olive, or soft earth tones into your surroundings, particularly on Tuesdays. Set aside thirty minutes of quiet, device-free reflection or reading before bedtime. Gentle evening walks under open skies support peaceful mental clarity.",
+            "8": "Opt for deep navy, charcoal, or dark blue hues on Saturdays to reflect disciplined focus. Maintain punctual habits and dedicate time to organized community or charitable service. Keeping footwear clean and well ordered reinforces a grounded mindset.",
+            "9": "Wear warm coral, terracotta, or soft rose shades on Tuesdays to support purposeful vitality. Channel physical energy through regular morning stretches or moderate cardiovascular exercise. Engaging in deliberate acts of kindness brings emotional warmth and balance."
+        },
+        "month_remedies": {
+            "1": "Start the month by drafting a concise list of primary goals to maintain clear focus. Take a brief morning walk to welcome daylight and clear your thoughts. Keep your immediate workspace tidy and free from outdated papers.",
+            "2": "Practice active and patient listening in all important meetings this month. Keep a glass of water nearby to ensure regular, mindful hydration throughout the day. Set aside quiet evening moments to unwind without digital screens.",
+            "3": "Express your ideas through written notes or constructive group discussions. Add a touch of bright colour to your daily planner to keep enthusiasm high. Celebrate small milestones with colleagues or family to foster goodwill.",
+            "4": "Review your weekly schedules and establish consistent routines for sleep and meals. Dedicate an afternoon to sorting files, records, and administrative paperwork. Ground yourself by maintaining steady, deliberate pacing across tasks.",
+            "5": "Remain flexible when unexpected schedule changes arise by maintaining brief pauses. Try refreshing your daily route or adjusting your study habits to stay engaged. Balance social interactions with adequate periods of quiet rest.",
+            "6": "Invest time in tidying and beautifying shared living spaces with pleasant touches. Prepare wholesome meals at home and share warm conversations with loved ones. Establish healthy boundaries between work hours and family time.",
+            "7": "Dedicate a few evenings each week to quiet reading, study, or solitary contemplation. Reduce unnecessary digital notifications to preserve mental space and calm. Spend time near quiet natural settings to restore your inner poise.",
+            "8": "Audit your monthly expenses carefully and plan practical allocations for the weeks ahead. Conduct all vocational discussions with transparent fairness and clear documentation. Engage in moderate physical exercise to release accumulated tension.",
+            "9": "Sort through personal belongings and donate items you no longer require. Take time to mentally acknowledge and release lingering grievances or frustrations. Conclude ongoing projects thoroughly before considering fresh commitments."
+        },
+        "day_remedies": {
+            "1": "Take five deep, conscious breaths before beginning your morning tasks. Prioritize your single most important responsibility and address it first. Maintain a poised, confident posture throughout your conversations.",
+            "2": "Approach all communications today with calm patience and an open mind. Pause for a mindful glass of water whenever you transition between tasks. Choose gentle words and acknowledge the contributions of those around you.",
+            "3": "Share a warm greeting or words of encouragement with someone you meet today. Write down three positive observations in a notebook before concluding your day. Keep your conversational tone uplifting and constructive.",
+            "4": "Organize your immediate workspace before starting your primary work tasks. Follow your planned checklist steadily without jumping between unrelated items. Take a five-minute stretch break midway through your afternoon.",
+            "5": "Embrace minor adjustments to your schedule today with good-humored flexibility. Step outdoors for ten minutes during lunch to enjoy fresh air and movement. Keep your communications concise, clear, and adaptable.",
+            "6": "Bring a thoughtful touch of comfort or beauty to your home or desk today. Offer a kind word or supportive gesture to a family member or friend. Enjoy a calm, home-cooked meal without rushing.",
+            "7": "Spend fifteen minutes in quiet reflection or reading a thoughtful book today. Limit screen time in the evening to allow your thoughts to settle naturally. Enjoy a peaceful walk in a quiet neighborhood or garden.",
+            "8": "Approach your responsibilities today with methodical focus and punctuality. Review financial transactions or documents with careful, thorough attention. Maintain fairness and composure in every professional interaction.",
+            "9": "Clear away any clutter from your desk or living area before the day ends. Practice letting go of minor irritations with a calm and generous perspective. Conclude your day with quiet gratitude for your steady progress."
+        }
+    },
+    "date_notes": {
+        "Peak": [
+            "A supportive day to initiate key plans and hold meaningful discussions.",
+            "Fosters strong personal clarity and decisive forward movement.",
+            "An encouraging atmosphere for creative vision and important milestones."
+        ],
+        "Excellent": [
+            "Favours steady progress, constructive teamwork, and clear communication.",
+            "Well suited for signing documents and advancing ongoing commitments.",
+            "Encourages productive discussions and purposeful coordination."
+        ],
+        "Good": [
+            "A helpful day for routine execution and consistent follow-through.",
+            "Supports practical tasks, steady habits, and organised scheduling.",
+            "A balanced day to consolidate ongoing work and maintain positive momentum."
+        ],
+        "Moderate": [
+            "Suitable for internal reviews, tidying records, and thoughtful preparation.",
+            "Encourages a measured tempo with space for reflection and planning.",
+            "Ideal for quieter desk work and attending to pending administrative tasks."
+        ],
+        "Care": [
+            "Invites a lighter schedule, patience, and deliberate attention to detail.",
+            "A day to favour rest, thoughtful pauses, and avoiding rushed decisions.",
+            "Encourages calm listening, personal grounding, and steady pacing."
+        ]
+    }
+}
+
+if __name__ == "__main__":
+    validate_library(content)
+    out_path = "data/planner_2027_content_library.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(content, f, indent=2, ensure_ascii=False)
+    print(f"Successfully generated {out_path}")
