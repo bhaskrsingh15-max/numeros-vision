@@ -111,8 +111,8 @@ assert.ok(workerJs.includes('if (!telemetrySalt)'), 'FAIL: _worker.js missing !t
 assert.strictEqual(workerJs.includes('nv_statutory_telemetry_salt_2026'), false, 'FAIL: Hardcoded fallback salt still present');
 assert.ok(workerJs.includes('Analytics consent required to record events.'), 'FAIL: Neutral consent error message missing');
 assert.strictEqual(workerJs.includes('under DPDP Act 2023'), false, 'FAIL: Legal claim "under DPDP Act 2023" still in worker');
-assert.ok(workerJs.includes('sendEmailViaCloudflare'), 'FAIL: Cloudflare email routing dormant option not prepared');
-console.log('✔ PASS: Test 3: _worker.js requires TELEMETRY_SALT (no fallback), records notification_status, uses neutral wording, and includes prepared email worker helper');
+assert.strictEqual(workerJs.includes('sendEmailViaCloudflare'), false, 'FAIL: sendEmailViaCloudflare should be completely removed');
+console.log('✔ PASS: Test 3: _worker.js requires TELEMETRY_SALT (no fallback), records notification_status, uses neutral wording, and has no fake email stubs');
 
 // Test 4: Evaluate checkFormRateLimit behavior
 const rateLimiterCode = `

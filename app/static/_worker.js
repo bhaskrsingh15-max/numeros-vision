@@ -2055,18 +2055,6 @@ export default {
 
 
 
-  // Dormant Cloudflare Email Routing option (prepared; enable via env.SEND_EMAIL binding in dashboard)
-  async function sendEmailViaCloudflare(env, { to, from, subject, bodyText }) {
-    if (!env || !env.SEND_EMAIL) return false;
-    try {
-      // In production, configure Email Routing on domain and add SendEmail binding 'SEND_EMAIL' to Pages
-      // await env.SEND_EMAIL.send({ to: [to], from, subject, text: bodyText });
-      return true;
-    } catch (err) {
-      console.error('[Cloudflare_Email_Error]', err);
-      return false;
-    }
-  }
 
   // In-memory sliding window rate limiter for public forms & telemetry
   const _formRateLimits = new Map();
