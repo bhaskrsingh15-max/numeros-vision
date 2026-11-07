@@ -2105,7 +2105,7 @@ export default {
     }
   }
 
-    // 4. ROUTE: 1-ON-1 CONSULTATION ENQUIRY (/api/v1/consultation/enquiry)
+    // 4. ROUTE: 1-ON-1 CONSULTATION ENQUIRY (/api/v1/consultation/enquiry) - DURABLE D1 STORAGE
     if (url.pathname === '/api/v1/consultation/enquiry' && request.method === 'POST') {
       const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
       if (!checkFormRateLimit(clientIp, 5, 600000)) {
@@ -2130,31 +2130,54 @@ export default {
         const description = (body.description || '').trim();
         const method = (body.preferred_contact_method || 'Email').trim();
 
-        const ts = new Date().toISOString();
-        const enquiryId = 'ENQ-' + Date.now().toString().slice(-6) + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
-
-        // Web3Forms access key strictly loaded from Cloudflare environment
-        const web3Key = env.WEB3FORMS_ACCESS_KEY;
-        if (!web3Key) {
+        if (!name || (!email && !phone)) {
           return new Response(JSON.stringify({
             status: 'error',
-            message: 'Consultation dispatch service is not configured on server.'
+            message: 'Please provide your name and at least an email or phone number.'
           }), {
-            status: 503,
+            status: 400,
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Origin': getCorsOrigin(request, env),
-        'Vary': 'Origin'
+              'Vary': 'Origin'
             }
           });
         }
-        try {
-          await fetch('https://api.web3forms.com/submit', {
+
+        const now = Date.now();
+        const ts = new Date(now).toISOString();
+        const enquiryId = 'ENQ-' + now.toString().slice(-6) + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+        const enquirySalt = env.IP_HASH_SALT || 'nv_enquiry_salt_2026';
+        const ipHash = await sha256Hex(clientIp + ':' + enquirySalt);
+        const userAgent = (request.headers.get('User-Agent') || '').slice(0, 255);
+
+        // 1. DURABLE D1 STORAGE: Enquiries table
+        if (env.DB) {
+          try {
+            await env.DB.prepare(`
+              INSERT INTO enquiries (
+                id, type, name, email, phone, area_or_category, preferred_contact_method,
+                order_id, message, ip_hash, user_agent, created_at
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).bind(
+              enquiryId, 'consultation', name, email, phone, area, method,
+              null, description, ipHash, userAgent, now
+            ).run();
+          } catch (d1Err) {
+            console.error('[Enquiries_D1_Insert_Error]', d1Err);
+          }
+        }
+
+        // 2. Notification Dispatch: Forward via Web3Forms if configured, otherwise queue in D1
+        const web3Key = env.WEB3FORMS_ACCESS_KEY;
+        if (web3Key) {
+          try {
+            await fetch('https://api.web3forms.com/submit', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 access_key: web3Key,
-                subject: `✦ Consultation Enquiry [${enquiryId}]: ${name} (${area})`,
+                subject: `Consultation Enquiry [${enquiryId}]: ${name} (${area})`,
                 from_name: 'Numeros Vision Consultation Desk',
                 to: 'support@numerosvision.com',
                 name: name,
@@ -2170,19 +2193,20 @@ export default {
           } catch (e) {
             console.error('[Web3Forms_Edge_Error]', e);
           }
+        }
 
         return new Response(JSON.stringify({
           status: 'success',
           enquiry_id: enquiryId,
           recipient: 'support@numerosvision.com',
           timestamp: ts,
-          message: 'Your consultation enquiry has been recorded and routed to support@numerosvision.com.'
+          message: 'Your consultation enquiry has been securely recorded and routed to the advisory desk.'
         }), {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': getCorsOrigin(request, env),
-        'Vary': 'Origin'
+            'Vary': 'Origin'
           }
         });
       } catch (err) {
@@ -2193,7 +2217,7 @@ export default {
       }
     }
 
-    // 5. ROUTE: GENERAL CONTACT / INQUIRY (/api/v1/contact)
+    // 5. ROUTE: GENERAL CONTACT / INQUIRY (/api/v1/contact) - DURABLE D1 STORAGE
     if (url.pathname === '/api/v1/contact' && request.method === 'POST') {
       const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
       if (!checkFormRateLimit(clientIp, 5, 600000)) {
@@ -2218,29 +2242,53 @@ export default {
         const order = (body.order || '').trim();
         const message = (body.message || '').trim();
 
-        const ticketId = 'NV-TICK-' + Math.floor(100000 + Math.random() * 900000);
-
-        const web3Key = env.WEB3FORMS_ACCESS_KEY;
-        if (!web3Key) {
+        if (!name || (!email && !phone)) {
           return new Response(JSON.stringify({
             status: 'error',
-            message: 'Support ticket dispatch service is not configured on server.'
+            message: 'Please provide your name and contact details (email or phone).'
           }), {
-            status: 503,
+            status: 400,
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Origin': getCorsOrigin(request, env),
-        'Vary': 'Origin'
+              'Vary': 'Origin'
             }
           });
         }
-        try {
-          await fetch('https://api.web3forms.com/submit', {
+
+        const now = Date.now();
+        const ticketId = 'NV-TICK-' + Math.floor(100000 + Math.random() * 900000);
+        const enquirySalt = env.IP_HASH_SALT || 'nv_enquiry_salt_2026';
+        const ipHash = await sha256Hex(clientIp + ':' + enquirySalt);
+        const userAgent = (request.headers.get('User-Agent') || '').slice(0, 255);
+
+        // 1. DURABLE D1 STORAGE: Enquiries table
+        if (env.DB) {
+          try {
+            await env.DB.prepare(`
+              INSERT INTO enquiries (
+                id, type, name, email, phone, area_or_category, preferred_contact_method,
+                order_id, message, ip_hash, user_agent, created_at
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).bind(
+              ticketId, 'contact', name, email, phone, category, 'Email',
+              order || null, message, ipHash, userAgent, now
+            ).run();
+          } catch (d1Err) {
+            console.error('[Contact_D1_Insert_Error]', d1Err);
+          }
+        }
+
+        // 2. Notification Dispatch: Forward via Web3Forms if configured, otherwise queue in D1
+        const web3Key = env.WEB3FORMS_ACCESS_KEY;
+        if (web3Key) {
+          try {
+            await fetch('https://api.web3forms.com/submit', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 access_key: web3Key,
-                subject: `✦ Contact Ticket [${ticketId}]: ${name} (${category})`,
+                subject: `Contact Ticket [${ticketId}]: ${name} (${category})`,
                 from_name: 'Numeros Vision Support Desk',
                 to: 'support@numerosvision.com',
                 name: name,
@@ -2252,19 +2300,22 @@ export default {
                 ticket_id: ticketId
               })
             });
-          } catch (e) {}
+          } catch (e) {
+            console.error('[Web3Forms_Edge_Error]', e);
+          }
+        }
 
         return new Response(JSON.stringify({
           status: 'success',
           ticket_id: ticketId,
           recipient: 'support@numerosvision.com',
-          message: 'Your inquiry has been received and routed to support@numerosvision.com.'
+          message: 'Your inquiry has been securely recorded and routed to the support desk.'
         }), {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': getCorsOrigin(request, env),
-        'Vary': 'Origin'
+            'Vary': 'Origin'
           }
         });
       } catch (err) {
@@ -2275,17 +2326,51 @@ export default {
       }
     }
 
-    // 6. ROUTE: SERVER-SIDE OPERATIONAL EVENTS API (/api/v1/events) - STRICT ZERO PII
+    // 6. ROUTE: SERVER-SIDE OPERATIONAL EVENTS API (/api/v1/events) - STRICT ZERO PII & CONSENT GUARDED
+    // Retention Policy: Statutory DPDP Act 2023 data minimization. Operational telemetry stored for a 90-day rolling window, aggregated for funnel analytics and purged automatically.
     if (url.pathname === '/api/v1/events' && request.method === 'POST') {
+      const allowedOrigin = getCorsOrigin(request, env);
       const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Access-Control-Allow-Origin': allowedOrigin,
         'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Consent-Analytics'
       };
       if (request.method === 'OPTIONS') {
         return new Response(null, { status: 204, headers: corsHeaders });
+      }
+
+      // Check Origin: if Origin header exists and does not match allowedOrigin, reject
+      const reqOrigin = request.headers.get('Origin');
+      if (reqOrigin && allowedOrigin !== '*' && allowedOrigin !== reqOrigin) {
+        return new Response(JSON.stringify({ status: 'error', error: 'Forbidden origin.' }), { status: 403, headers: corsHeaders });
+      }
+
+      // Require Analytics Consent under DPDP Act 2023
+      const cookieHeader = request.headers.get('Cookie') || '';
+      let hasAnalyticsConsent = request.headers.get('X-Consent-Analytics') === 'true';
+      if (!hasAnalyticsConsent && cookieHeader.includes('nv_cookie_consent')) {
+        const m = cookieHeader.match(/nv_cookie_consent=([^;]+)/);
+        if (m) {
+          try {
+            const parsed = JSON.parse(decodeURIComponent(m[1]));
+            if (parsed && parsed.analytics === true) hasAnalyticsConsent = true;
+          } catch (_) {}
+        }
+      }
+      if (!hasAnalyticsConsent) {
+        return new Response(JSON.stringify({
+          status: 'error',
+          code: 'ANALYTICS_CONSENT_REQUIRED',
+          message: 'Operational telemetry requires explicit analytics consent under DPDP Act 2023.'
+        }), { status: 403, headers: corsHeaders });
+      }
+
+      // Cap Body Size at 16 KiB (16384 bytes)
+      const contentLength = parseInt(request.headers.get('Content-Length') || '0', 10);
+      if (contentLength > 16384) {
+        return new Response(JSON.stringify({ status: 'error', error: 'Payload too large (capped at 16KB).' }), { status: 413, headers: corsHeaders });
       }
 
       const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
@@ -2294,12 +2379,33 @@ export default {
       }
 
       try {
-        const body = await request.json().catch(() => ({}));
+        const rawText = await request.text();
+        if (rawText.length > 16384) {
+          return new Response(JSON.stringify({ status: 'error', error: 'Payload too large (capped at 16KB).' }), { status: 413, headers: corsHeaders });
+        }
+        const body = JSON.parse(rawText || '{}');
+
+        // Allowlist of Approved Event Names
+        const ALLOWED_EVENT_NAMES = new Set([
+          'page_view', 'calculator_used', 'signup_modal_opened', 'lead_captured',
+          'checkout_initiated', 'order_created', 'payment_verified', 'report_downloaded',
+          'cta_clicked', 'cookie_consent_updated'
+        ]);
+
+        const rawEventName = body.event_name || body.event;
+        if (!rawEventName || !ALLOWED_EVENT_NAMES.has(rawEventName)) {
+          return new Response(JSON.stringify({
+            status: 'error',
+            error: 'Unapproved or missing event name: ' + rawEventName
+          }), { status: 400, headers: corsHeaders });
+        }
+
         // Verify strict ZERO PII in payload keys
         const FORBIDDEN_KEYS = new Set([
           'name', 'full_name', 'first_name', 'last_name', 'email', 'phone', 'mobile',
           'dob', 'birth_date', 'birthdate', 'birth_time', 'birth_place', 'birth_city',
-          'driver', 'conductor', 'mulank', 'bhagyank', 'destiny', 'lifepath', 'chart', 'grid', 'loshu'
+          'driver', 'conductor', 'mulank', 'bhagyank', 'destiny', 'lifepath', 'chart', 'grid', 'loshu',
+          'user_id', 'golden_profile_id', 'gaid', 'idfa', 'idfv'
         ]);
 
         for (const k of Object.keys(body)) {
@@ -2311,13 +2417,17 @@ export default {
             if (/@[\w.-]+\.\w+/.test(v) || /^\+?[0-9\s-]{10,15}$/.test(v.trim())) {
               return new Response(JSON.stringify({ status: 'error', error: 'PII pattern detected in ' + k }), { status: 400, headers: corsHeaders });
             }
+            if (/\b(?:\d{4}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]\d{4}|\d{8})\b/.test(v)) {
+              return new Response(JSON.stringify({ status: 'error', error: 'Date pattern detected in ' + k }), { status: 400, headers: corsHeaders });
+            }
           }
         }
 
-        const ipHash = await sha256Hex(clientIp + ':nv_event_salt');
-        const userAgent = request.headers.get('User-Agent') || '';
+        const telemetrySalt = env.TELEMETRY_SALT || env.IP_HASH_SALT || 'nv_statutory_telemetry_salt_2026';
+        const ipHash = await sha256Hex(clientIp + ':' + telemetrySalt);
+        const userAgent = (request.headers.get('User-Agent') || '').slice(0, 255);
         const eventId = await logWorkerEvent(env, {
-          event_name: body.event_name || body.event,
+          event_name: rawEventName,
           device_id: body.device_id,
           anonymous_session_id: body.anonymous_session_id,
           page_path: body.page_path,

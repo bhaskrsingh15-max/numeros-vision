@@ -129,10 +129,16 @@ wrangler d1 migrations apply numeros-vision-db --remote
 wrangler d1 execute numeros-vision-db-preview --remote --file=migrations/0001_initial_schema.sql
 wrangler d1 execute numeros-vision-db-preview --remote --file=migrations/0002_invoices_refunds_audit.sql
 wrangler d1 execute numeros-vision-db-preview --remote --file=migrations/0003_report_jobs_lifecycle.sql
+wrangler d1 execute numeros-vision-db-preview --remote --file=migrations/0004_cookie_consents.sql
+wrangler d1 execute numeros-vision-db-preview --remote --file=migrations/0005_enquiries.sql
+wrangler d1 execute numeros-vision-db-preview --remote --file=migrations/0006_events.sql
 
 wrangler d1 execute numeros-vision-db --remote --file=migrations/0001_initial_schema.sql
 wrangler d1 execute numeros-vision-db --remote --file=migrations/0002_invoices_refunds_audit.sql
 wrangler d1 execute numeros-vision-db --remote --file=migrations/0003_report_jobs_lifecycle.sql
+wrangler d1 execute numeros-vision-db --remote --file=migrations/0004_cookie_consents.sql
+wrangler d1 execute numeros-vision-db --remote --file=migrations/0005_enquiries.sql
+wrangler d1 execute numeros-vision-db --remote --file=migrations/0006_events.sql
 ```
 
 ---

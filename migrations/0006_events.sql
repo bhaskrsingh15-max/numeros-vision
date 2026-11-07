@@ -1,6 +1,7 @@
--- 0004_events.sql
+-- 0006_events.sql
 -- Server-side operational telemetry and journey events (DPDP Act 2023 & GDPR Privacy Compliance)
 -- Strict Zero-PII schema: no names, emails, phones, dates of birth, or astrological vectors.
+-- Retention Policy: Statutory 90-day rolling window for aggregated funnel optimization. Telemetry records older than 90 days are purged automatically.
 
 CREATE TABLE IF NOT EXISTS events (
     id TEXT PRIMARY KEY,
