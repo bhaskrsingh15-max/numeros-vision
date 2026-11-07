@@ -522,7 +522,7 @@
         if (raw) existing = JSON.parse(raw);
         existing.day = dayInput;
         existing.driver = n;
-        localStorage.setItem('nv_user_profile', JSON.stringify(existing));
+        // Removed legacy localStorage write (DPDP privacy));
         if (!localStorage.getItem('nv_premium_token')) {
           localStorage.setItem('nv_premium_token', 'test_master_pass');
         }

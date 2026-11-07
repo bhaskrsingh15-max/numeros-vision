@@ -36,14 +36,6 @@
             console.debug('[AndroidBridge] GTM event forward error:', e);
           }
         }
-        // 2. iOS GTM v5 WebKit Message Handler Bridge
-        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.iosBridge) {
-          try {
-            window.webkit.messageHandlers.iosBridge.postMessage(item);
-          } catch (e) {
-            console.debug('[iOSBridge] GTM event forward error:', e);
-          }
-        }
       }
     }
     return originalDataLayerPush.apply(window.dataLayer, arguments);

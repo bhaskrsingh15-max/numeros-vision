@@ -944,11 +944,11 @@
         calculated_at: new Date().toISOString()
       };
       try {
-        localStorage.setItem('nv_user_profile', JSON.stringify(calcRecord));
+        // Removed legacy localStorage write (DPDP privacy));
         localStorage.setItem('nv_last_calculation', JSON.stringify(calcRecord));
         localStorage.setItem('nv_calculation_id', calculationId);
-        localStorage.setItem('nv_user_dob', `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`);
-        localStorage.setItem('nv_user_name', seekerName);
+        // Removed legacy localStorage write (DPDP privacy).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`);
+        // Removed legacy localStorage write (DPDP privacy)
       } catch (e) {
         console.warn('Calculation persistence error:', e);
       }
@@ -1381,10 +1381,10 @@
       }
 
       try {
-        localStorage.setItem('nv_user_name', name);
-        localStorage.setItem('nv_user_dob', dob);
-        localStorage.setItem('nv_user_email', email);
-        if (phone) localStorage.setItem('nv_user_phone', phone);
+        // Removed legacy localStorage write (DPDP privacy)
+        // Removed legacy localStorage write (DPDP privacy)
+        // Removed legacy localStorage write (DPDP privacy)
+        // Removed legacy conditional localStorage write (DPDP privacy)
       } catch (err) {}
 
       closeCheckout();
@@ -1421,7 +1421,7 @@
                 locked_dob: dob,
                 created_at: new Date().toISOString()
               });
-              localStorage.setItem('nv_user_invoices', JSON.stringify(invs));
+              // Removed legacy localStorage write (DPDP privacy));
             } catch (e) {}
 
             sessionStorage.setItem('nv_pending_subject', JSON.stringify({ name, dob, email, phone, planId: planKey }));
@@ -1446,8 +1446,8 @@
       const nameVal = (document.getElementById('ls-name') && document.getElementById('ls-name').value.trim()) || localStorage.getItem('nv_user_name') || 'Seeker';
       const dobStr = `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`;
       
-      localStorage.setItem('nv_user_name', nameVal);
-      localStorage.setItem('nv_user_dob', dobStr);
+      // Removed legacy localStorage write (DPDP privacy)
+      // Removed legacy localStorage write (DPDP privacy)
       
       const profileKey = (nameVal + '_' + dobStr).toLowerCase().replace(/[^a-z0-9]/g, '_');
       const activeProf = {
@@ -1459,7 +1459,7 @@
         phone: localStorage.getItem('nv_user_phone') || '',
         relation: 'Self (Primary)'
       };
-      localStorage.setItem('nv_active_profile', JSON.stringify(activeProf));
+      // Removed legacy localStorage active profile write (DPDP privacy));
       
       // Open in-page modal directly (no jarring redirects)
       openCheckout(planId, planName, amountInr);

@@ -141,12 +141,15 @@ def test_wrangler_placeholder_deploy_guard():
         current_toml = f.read()
 
     # Must refuse to deploy while placeholder 00000000-... database_ids remain
+    placeholder_toml = 'database_id = "00000000-0000-0000-0000-000000000001"'
     blocked = False
     try:
-        verify_wrangler_no_placeholders(current_toml)
+        verify_wrangler_no_placeholders(placeholder_toml)
     except ValueError as exc:
         blocked = "DEPLOYMENT BLOCKED" in str(exc)
     assert blocked, "verify_wrangler_no_placeholders must block deployment when 00000000-... placeholder database_ids exist"
+    # And verify current real toml passes
+    verify_wrangler_no_placeholders(current_toml)
 
     # Must pass when real UUIDs replace placeholders
     valid_toml = (

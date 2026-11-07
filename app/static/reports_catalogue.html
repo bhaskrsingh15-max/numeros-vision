@@ -1900,13 +1900,13 @@
 
       // Save user session profile to localStorage
       try {
-        localStorage.setItem('nv_user_name', name);
-        localStorage.setItem('nv_user_dob', dob);
-        localStorage.setItem('nv_user_email', email);
-        if (phone) localStorage.setItem('nv_user_phone', phone);
-        localStorage.setItem('nv_user_gender', gender);
-        localStorage.setItem('nv_user_city', city);
-        localStorage.setItem('nv_user_time', timeOfBirth);
+        // Removed legacy localStorage write (DPDP privacy)
+        // Removed legacy localStorage write (DPDP privacy)
+        // Removed legacy localStorage write (DPDP privacy)
+        if (phone) // Removed legacy localStorage write (DPDP privacy)
+        // Removed legacy localStorage write (DPDP privacy)
+        // Removed legacy localStorage write (DPDP privacy)
+        // Removed legacy localStorage write (DPDP privacy)
 
         const profileKey = (name + '_' + dob).toLowerCase().replace(/[^a-z0-9]/g, '_');
         const activeProfile = {
@@ -1920,7 +1920,7 @@
           phone: phone,
           relation: 'Self (Primary)'
         };
-        localStorage.setItem('nv_active_profile', JSON.stringify(activeProfile));
+        // Removed legacy active profile write (DPDP privacy));
 
         const profiles = JSON.parse(localStorage.getItem('nv_user_profiles') || '[]');
         const existingIdx = profiles.findIndex(p => p.id === profileKey || (p.name.toLowerCase() === name.toLowerCase() && p.dob === dob));
@@ -1929,7 +1929,7 @@
         } else {
           profiles.unshift(activeProfile);
         }
-        localStorage.setItem('nv_user_profiles', JSON.stringify(profiles));
+        // Removed legacy localStorage write (DPDP privacy));
       } catch (err) {}
 
       // Resolve plan amount and ID

@@ -40,11 +40,7 @@ const APP_SHELL = [
   'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap',
 ];
 
-// API routes to cache with network-first strategy
-const API_ROUTES = [
-  '/api/v1/readings/free',
-  '/health',
-];
+
 
 // ── INSTALL: Cache app shell ──────────────────────────────────
 self.addEventListener('install', (event) => {
@@ -121,7 +117,7 @@ self.addEventListener('fetch', (event) => {
 // ── STRATEGIES ────────────────────────────────────────────────
 
 async function networkFirstStrategy(request) {
-  const cache = await caches.open(API_CACHE);
+  const cache = await caches.open(STATIC_CACHE);
   try {
     const networkResponse = await fetch(request.clone(), { timeout: 5000 });
     if (networkResponse.ok) {

@@ -456,9 +456,43 @@
     });
   }
 
+  // 5b. One-Time Legacy Storage Migration & Cache Scrub (PWA Hygiene)
+  function runOneTimeLegacyStorageMigration() {
+    var MIGRATION_FLAG = 'nv_storage_migrated_v5';
+    try {
+      if (localStorage.getItem(MIGRATION_FLAG)) return;
+      var legacyPiiKeys = [
+        'nv_user_dob', 'nv_user_name', 'nv_user_email', 'nv_user_phone',
+        'nv_user_time', 'nv_user_city', 'nv_user_gender', 'nv_user_profile',
+        'nv_cached_calc', 'nv_last_calculation', 'nv_calculation_id',
+        'nv_active_profile', 'nv_user_profiles', 'nv_family_profiles',
+        'nv_user_invoices', 'nv_consultation_enquiries', 'nv_contact_tickets',
+        'nv_pending_subject', 'nv_cdp_events', 'nv_customer_segment',
+        'nv_user_session', 'nv_user_tier', 'nv_paid_verified'
+      ];
+      legacyPiiKeys.forEach(function (k) {
+        try { localStorage.removeItem(k); } catch (e) {}
+        try { sessionStorage.removeItem(k); } catch (e) {}
+      });
+
+      // Clear legacy Service Worker caches (old API or report caches)
+      if ('caches' in window) {
+        caches.keys().then(function (keys) {
+          keys.forEach(function (key) {
+            if (key.indexOf('api') !== -1 || key.indexOf('charm') !== -1 || key.indexOf('report') !== -1 || key.indexOf('v5.5.0') !== -1) {
+              caches.delete(key);
+            }
+          });
+        }).catch(function () {});
+      }
+      localStorage.setItem(MIGRATION_FLAG, 'true');
+    } catch (e) {}
+  }
+
   // 6. Master Consent Controller API
   const nvConsent = {
     init: function () {
+      runOneTimeLegacyStorageMigration();
       ensureConsentStyles();
       ensureConsentElements();
       ensureFooterLink();

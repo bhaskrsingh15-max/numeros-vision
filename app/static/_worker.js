@@ -1378,7 +1378,25 @@ export {
 export default {
   async fetch(request, env, ctx) {
     try {
-      return await this._handleRequest(request, env, ctx);
+      const response = await this._handleRequest(request, env, ctx);
+      const url = new URL(request.url);
+      if (
+        url.pathname.startsWith('/api/') ||
+        url.pathname.startsWith('/dashboard') ||
+        url.pathname.includes('/reports/download') ||
+        url.pathname.endsWith('.pdf')
+      ) {
+        const newHeaders = new Headers(response.headers);
+        newHeaders.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+        newHeaders.set('Pragma', 'no-cache');
+        newHeaders.set('Expires', '0');
+        return new Response(response.body, {
+          status: response.status,
+          statusText: response.statusText,
+          headers: newHeaders
+        });
+      }
+      return response;
     } catch (err) {
       if (err && err.code === 'MISSING_SECRET') {
         return new Response(JSON.stringify({

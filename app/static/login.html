@@ -698,9 +698,9 @@
         
         if (data && data.profile) {
           const synced = syncGuestCalculationToProfile(data.profile);
-          localStorage.setItem('nv_user_profile', JSON.stringify(synced));
-          if (synced.name) localStorage.setItem('nv_user_name', synced.name);
-          if (synced.dob) localStorage.setItem('nv_user_dob', synced.dob);
+          // Removed legacy localStorage write (DPDP privacy));
+          if (synced.name) // Removed legacy localStorage write (DPDP privacy)
+          if (synced.dob) // Removed legacy localStorage write (DPDP privacy)
         }
 
         closeGoogleConnectModal();
@@ -748,9 +748,9 @@
 
                         if (data.profile) {
           const synced = syncGuestCalculationToProfile(data.profile);
-          localStorage.setItem('nv_user_profile', JSON.stringify(synced));
-          if (synced.name) localStorage.setItem('nv_user_name', synced.name);
-          if (synced.dob) localStorage.setItem('nv_user_dob', synced.dob);
+          // Removed legacy localStorage write (DPDP privacy));
+          if (synced.name) // Removed legacy localStorage write (DPDP privacy)
+          if (synced.dob) // Removed legacy localStorage write (DPDP privacy)
         }
 
         window.location.href = getLoginRedirectUrl(data && data.redirect_url);
@@ -802,9 +802,9 @@
 
                         if (data.profile) {
           const synced = syncGuestCalculationToProfile(data.profile);
-          localStorage.setItem('nv_user_profile', JSON.stringify(synced));
-          if (synced.name) localStorage.setItem('nv_user_name', synced.name);
-          if (synced.dob) localStorage.setItem('nv_user_dob', synced.dob);
+          // Removed legacy localStorage write (DPDP privacy));
+          if (synced.name) // Removed legacy localStorage write (DPDP privacy)
+          if (synced.dob) // Removed legacy localStorage write (DPDP privacy)
         }
 
         if (data.role === 'master_practitioner') {
@@ -921,9 +921,9 @@
       if (loggedInOnServer && data) {
                         if (data.profile) {
           const synced = syncGuestCalculationToProfile(data.profile);
-          localStorage.setItem('nv_user_profile', JSON.stringify(synced));
-          if (synced.name) localStorage.setItem('nv_user_name', synced.name);
-          if (synced.dob) localStorage.setItem('nv_user_dob', synced.dob);
+          // Removed legacy localStorage write (DPDP privacy));
+          if (synced.name) // Removed legacy localStorage write (DPDP privacy)
+          if (synced.dob) // Removed legacy localStorage write (DPDP privacy)
         }
         window.location.href = getLoginRedirectUrl(data && data.redirect_url);
       } else {

@@ -10,7 +10,7 @@ ALLOWED_ORIGINS = "https://numerosvision.com,https://www.numerosvision.com"
 [[d1_databases]]
 binding = "DB"
 database_name = "numeros-vision-db"
-database_id = "00000000-0000-0000-0000-000000000001"
+database_id = "18c0b0aa-b252-4c3f-bfee-37c9b8062d83"
 migrations_dir = "migrations"
 
 # Cloudflare R2 Bucket Binding (Production Private PDF Storage)
@@ -26,7 +26,7 @@ ALLOWED_ORIGINS = "https://preview.numeros-vision.pages.dev,https://numeros-visi
 [[env.preview.d1_databases]]
 binding = "DB"
 database_name = "numeros-vision-db-preview"
-database_id = "00000000-0000-0000-0000-000000000002"
+database_id = "5c8c33e5-8782-48cd-8404-41b881e9eb4b"
 migrations_dir = "migrations"
 
 [[env.preview.r2_buckets]]

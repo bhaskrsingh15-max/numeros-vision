@@ -1031,14 +1031,7 @@
         const m = parseInt(parts[1], 10);
         const d = parseInt(parts[2], 10);
         try {
-          localStorage.setItem('nv_user_profile', JSON.stringify({
-            name: name,
-            day: d,
-            month: m,
-            year: y,
-            driver: driver,
-            conductor: conductor
-          }));
+          // Removed legacy localStorage write (DPDP privacy)
           // Security verified: client-side premium pass injection removed
         } catch (e) {}
 
