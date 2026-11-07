@@ -1234,6 +1234,17 @@ class Planner2027PdfBuilder:
         # Restored {{DISCLAIMER_APPROVED_TEXT}} Box
         self.story.append(Paragraph("Statutory Legal Notice & Practitioner Boundaries", s['SectionH2']))
         disc_text = htr.get("disclaimer_text", "{{DISCLAIMER_APPROVED_TEXT}}")
+        allow_preview = os.environ.get("PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW", "").strip().lower() in ("true", "1", "yes")
+        if allow_preview:
+            # Enforce production refusal
+            from app.services.internal_pdf_worker_service import assert_no_preview_flag_on_production
+            assert_no_preview_flag_on_production()
+            if "{{DISCLAIMER_APPROVED_TEXT}}" in disc_text:
+                disc_text = (
+                    "<b><font color='#922B21'>[PREVIEW ONLY]</font></b> "
+                    "Statutory legal disclaimer text pending formal advocate approval. "
+                    "This document has been compiled exclusively in the pre-launch preview environment for testing and verification purposes."
+                )
         d_card = Table([[Paragraph(f"<b>STATUTORY NOTICE:</b> {disc_text}", s['BodyMuted'])]], colWidths=[490])
         d_card.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), COLOR_CARD_BG),

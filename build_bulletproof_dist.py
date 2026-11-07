@@ -1,6 +1,8 @@
 import os
+import re
 import json
 import shutil
+import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_SRC = os.path.join(BASE_DIR, "app", "static")
@@ -77,6 +79,32 @@ for root, _, files in os.walk(DIST_DIR):
                     updated = updated.replace(k, v)
             if updated != txt:
                 open(fp, "w", encoding="utf-8").write(updated)
+
+# 1d. Inject build-time JSON-LD for 2027 Year Ahead Planner derived from planner_2027_pricing.json
+try:
+    from app.config.planner_2027_jsonld import generate_planner_2027_jsonld
+    planner_pricing_file = os.path.join(BASE_DIR, "app", "config", "planner_2027_pricing.json")
+    with open(planner_pricing_file, "r", encoding="utf-8") as ppf:
+        p_cfg = json.load(ppf)
+    jsonld_obj = generate_planner_2027_jsonld(p_cfg)
+    jsonld_str = json.dumps(jsonld_obj, indent=2)
+
+    dist_y2027 = os.path.join(DIST_DIR, "year_2027.html")
+    if os.path.exists(dist_y2027):
+        with open(dist_y2027, "r", encoding="utf-8") as yf:
+            y_content = yf.read()
+        # Replace script tag content
+        new_y_content = re.sub(
+            r'<script type="application/ld\+json">.*?</script>',
+            f'<script type="application/ld+json">\n{jsonld_str}\n  </script>',
+            y_content,
+            flags=re.DOTALL
+        )
+        with open(dist_y2027, "w", encoding="utf-8") as yf:
+            yf.write(new_y_content)
+        print("PASS: Injected build-time JSON-LD into dist_cloudflare_pages/year_2027.html")
+except Exception as e:
+    print(f"Warning: could not inject build-time JSON-LD: {e}")
 
 # 2. Mirror essential static assets into dist/static/ (css, js, icons) for FastAPI path parity
 static_mirror = os.path.join(DIST_DIR, "static")

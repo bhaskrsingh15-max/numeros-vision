@@ -55,6 +55,33 @@ async function runWorkerTestSuite() {
     console.log('  ✓ Live key correctly rejected with fatal error');
   }
 
+  // 1B. Preview Flag Refusal on Production Host / Environment
+  {
+    console.log('[TEST 1B] Testing PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW production refusal...');
+    const prodEnv = {
+      ...baseEnv,
+      PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW: 'true',
+      ENVIRONMENT: 'production'
+    };
+    const req = new Request('http://localhost/api/planner-2027/price', {
+      method: 'GET',
+      headers: { 'Origin': 'http://localhost' }
+    });
+
+    let threw = false;
+    try {
+      await worker._handleRequest(req, prodEnv);
+    } catch (e) {
+      threw = true;
+      assert(e.message.includes('cannot be enabled on a production host/environment'));
+    }
+    assert(threw, 'Worker must throw when preview flag is set on production');
+
+    const res = await worker.fetch(req, prodEnv, {});
+    assert.strictEqual(res.status, 500);
+    console.log('  ✓ Preview flag on production correctly rejected with fatal error');
+  }
+
   // 2. Pricing endpoint
   {
     console.log('[TEST 2] Testing GET /api/planner-2027/price...');

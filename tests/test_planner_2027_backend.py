@@ -323,5 +323,125 @@ class TestPlanner2027Backend(unittest.TestCase):
                 )
 
 
+    # ─────────────────────────────────────────────────────────────────
+    # 9. FINAL PREVIEW CHECKS: META ALIGNMENT, BUILD-TIME JSON-LD, PREVIEW FLAG
+    # ─────────────────────────────────────────────────────────────────
+    def test_meta_description_matches_pdf_life_dimensions(self):
+        """Derives life dimensions count directly from Page 3 of generated PDF and asserts description matches."""
+        import pypdf
+        import io
+        import re
+
+        payload = {
+            "full_name": "Arun Sharma",
+            "dob_str": "1980-01-01",
+            "order_id": "test_meta_derive_1",
+            "is_sample": True
+        }
+        pdf_bytes, _ = render_planner_2027_from_payload(payload)
+        reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
+        p3_text = reader.pages[2].extract_text() or ""
+
+        expected_dimensions = [
+            "Work & Career",
+            "Money Habits",
+            "Home & Family",
+            "Relationships",
+            "Wellbeing (Lifestyle)",
+            "Learning",
+            "Travel"
+        ]
+        found_dimensions = [d for d in expected_dimensions if d.lower() in p3_text.lower()]
+        derived_count = len(found_dimensions)
+        self.assertEqual(derived_count, 7, f"Expected 7 life dimensions on Page 3, found: {found_dimensions}")
+
+        html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
+        with open(html_path, "r", encoding="utf-8") as hf:
+            html = hf.read()
+
+        desc_m = re.search(r'<meta\s+name="description"\s+content="([^"]*)"', html)
+        self.assertIsNotNone(desc_m)
+        desc = desc_m.group(1).strip()
+        expected_phrase = f"across {derived_count} key life dimensions for 2027"
+        self.assertIn(expected_phrase, desc, f"Meta description must contain '{expected_phrase}', got: '{desc}'")
+
+    def test_jsonld_build_time_pricing_derivation(self):
+        """Asserts JSON-LD Product & Offer data correctly transitions at offer cutoff."""
+        from app.config.planner_2027_jsonld import generate_planner_2027_jsonld
+        cfg = load_planner_2027_config()
+
+        # Before offer cutoff: ₹1499
+        dt_before = datetime.datetime(2027, 1, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        ld_before = generate_planner_2027_jsonld(cfg, now=dt_before)
+        self.assertEqual(ld_before["offers"]["price"], "1499")
+        self.assertEqual(ld_before["offers"]["priceValidUntil"], "2027-01-31")
+        self.assertEqual(ld_before["offers"]["availability"], "https://schema.org/InStock")
+
+        # After offer cutoff: ₹1999
+        dt_after = datetime.datetime(2027, 2, 5, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        ld_after = generate_planner_2027_jsonld(cfg, now=dt_after)
+        self.assertEqual(ld_after["offers"]["price"], "1999")
+        self.assertEqual(ld_after["offers"]["priceValidUntil"], "2027-12-31")
+        self.assertEqual(ld_after["offers"]["availability"], "https://schema.org/InStock")
+
+    def test_price_offer_note_class_renamed(self):
+        """Asserts .price-tax-note is renamed to .price-offer-note in CSS and markup."""
+        html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
+        with open(html_path, "r", encoding="utf-8") as hf:
+            html = hf.read()
+
+        self.assertNotIn(".price-tax-note", html)
+        self.assertNotIn('class="price-tax-note"', html)
+        self.assertIn(".price-offer-note", html)
+        self.assertIn('class="price-offer-note"', html)
+
+    def test_preview_flag_production_refusal_and_banner(self):
+        """Asserts PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW refuses production and shows PREVIEW ONLY banner."""
+        from app.services.internal_pdf_worker_service import assert_no_preview_flag_on_production
+        import pypdf
+        import io
+
+        # 1. Refusal on production environment
+        os.environ["PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW"] = "true"
+        os.environ["ENVIRONMENT"] = "production"
+        try:
+            with self.assertRaises(RuntimeError) as cm:
+                assert_no_preview_flag_on_production()
+            self.assertIn("cannot be enabled on a production host/environment", str(cm.exception))
+        finally:
+            os.environ.pop("ENVIRONMENT", None)
+
+        # 2. Refusal on production host
+        os.environ["HOST"] = "numerosvision.com"
+        try:
+            with self.assertRaises(RuntimeError) as cm2:
+                assert_no_preview_flag_on_production()
+            self.assertIn("cannot be enabled on a production host/environment", str(cm2.exception))
+        finally:
+            os.environ.pop("HOST", None)
+
+        # 3. Successful generation on preview showing PREVIEW ONLY banner
+        os.environ["ENVIRONMENT"] = "preview"
+        try:
+            payload = {
+                "full_name": "Arun Sharma",
+                "dob_str": "1980-01-01",
+                "order_id": "test_preview_flag_1",
+                "is_sample": False  # Paid generation!
+            }
+            pdf_bytes, meta = render_planner_2027_from_payload(payload)
+            self.assertTrue(pdf_bytes.startswith(b"%PDF"))
+
+            # Check Page 24 for PREVIEW ONLY banner
+            reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
+            p24_text = reader.pages[23].extract_text() or ""
+            self.assertIn("PREVIEW ONLY", p24_text)
+            self.assertNotIn("{{DISCLAIMER_APPROVED_TEXT}}", p24_text)
+            self.assertNotIn("{{", p24_text)
+        finally:
+            os.environ.pop("PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW", None)
+            os.environ.pop("ENVIRONMENT", None)
+
+
 if __name__ == "__main__":
     unittest.main()

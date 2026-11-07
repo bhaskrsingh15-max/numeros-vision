@@ -427,7 +427,27 @@ def render_planner_2027_from_payload(payload: Dict[str, Any]) -> Tuple[bytes, Di
     return pdf_bytes, meta
 
 
+def assert_no_preview_flag_on_production():
+    """Refuse to run if PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW is enabled on a production host/env."""
+    flag = os.environ.get("PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW", "").strip().lower()
+    if flag in ("true", "1", "yes"):
+        env = os.environ.get("ENVIRONMENT", "").strip().lower()
+        env_legacy = os.environ.get("ENV", "").strip().lower()
+        k_service = os.environ.get("K_SERVICE", "").strip().lower()
+        host = os.environ.get("HOST", "").strip().lower()
+        is_prod = (
+            env in ("production", "prod")
+            or env_legacy in ("production", "prod")
+            or "prod" in k_service
+            or "numerosvision.com" in host
+        )
+        if is_prod:
+            raise RuntimeError(
+                "FATAL SECURITY VIOLATION: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW cannot be enabled on a production host/environment."
+            )
+
 def assert_no_live_razorpay_keys():
+    assert_no_preview_flag_on_production()
     """Refuse to run if any Razorpay live key is configured anywhere in the environment."""
     for k, v in os.environ.items():
         if "RAZORPAY" in k.upper() and isinstance(v, str) and v.strip().startswith("rzp_live"):
@@ -438,6 +458,7 @@ def assert_no_live_razorpay_keys():
 async def handle_render_planner_2027(request: Request) -> Response:
     """FastAPI HTTP endpoint verifying HMAC and dispatching to render_planner_2027_from_payload."""
     assert_no_live_razorpay_keys()
+    assert_no_preview_flag_on_production()
 
     secret = os.environ.get("PDF_SERVICE_SECRET", "").strip()
     if not secret:

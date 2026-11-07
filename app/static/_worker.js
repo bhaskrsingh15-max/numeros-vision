@@ -43,6 +43,19 @@ function getRandomHex(bytesCount = 16) {
 
 
 
+function assertNoPreviewFlagOnProduction(env, request) {
+  if (!env) return;
+  const flag = (env.PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW || '').toString().trim().toLowerCase();
+  if (flag === 'true' || flag === '1' || flag === 'yes') {
+    const environment = (env.ENVIRONMENT || '').toString().trim().toLowerCase();
+    const host = request ? (request.headers.get('host') || '').toLowerCase() : '';
+    const isProd = environment === 'production' || environment === 'prod' || host === 'numerosvision.com' || host === 'www.numerosvision.com';
+    if (isProd) {
+      throw new Error('FATAL SECURITY VIOLATION: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW cannot be enabled on a production host/environment.');
+    }
+  }
+}
+
 function assertRazorpayTestKey(env) {
   if (!env) return;
   for (const [k, v] of Object.entries(env)) {
@@ -3792,6 +3805,11 @@ export default {
       active: true
     };
 
+    if (url.pathname.startsWith('/api/planner-2027/')) {
+      assertRazorpayTestKey(env);
+      assertNoPreviewFlagOnProduction(env, request);
+    }
+
     // 8a. GET /api/planner-2027/price
     if (url.pathname === '/api/planner-2027/price' && request.method === 'GET') {
       const corsHeaders = {
@@ -3824,6 +3842,7 @@ export default {
         'Vary': 'Origin'
       };
       assertRazorpayTestKey(env);
+    assertNoPreviewFlagOnProduction(env, request);
 
       const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
       if (!checkFormRateLimit('planner_order_' + clientIp, 10, 600000)) {
@@ -3968,6 +3987,7 @@ export default {
         'Vary': 'Origin'
       };
       assertRazorpayTestKey(env);
+    assertNoPreviewFlagOnProduction(env, request);
 
       let body = {};
       try {
@@ -4196,6 +4216,7 @@ export default {
     if (url.pathname === '/api/planner-2027/webhook' && request.method === 'POST') {
       const corsHeaders = { 'Content-Type': 'application/json' };
       assertRazorpayTestKey(env);
+    assertNoPreviewFlagOnProduction(env, request);
 
       const webhookSig = request.headers.get('X-Razorpay-Signature') || '';
       const webhookSecret = (env.RAZORPAY_WEBHOOK_SECRET || env.RAZORPAY_KEY_SECRET || '').trim();
