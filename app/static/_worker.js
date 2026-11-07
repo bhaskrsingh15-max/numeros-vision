@@ -108,7 +108,7 @@ function verifyOrigin(request, env) {
   const origin = request.headers.get('Origin');
   if (!origin) return true;
 
-  // 1. Same-Origin Check: Origin matches the worker request URL origin
+  // 1. Same-Origin Check: Origin matches the worker request URL origin (covers preview and production self-calls)
   try {
     const requestOrigin = new URL(request.url).origin;
     if (origin === requestOrigin) return true;
@@ -117,21 +117,12 @@ function verifyOrigin(request, env) {
   // 2. Production domains
   if (origin === 'https://numerosvision.com' || origin === 'https://www.numerosvision.com') return true;
 
-  // 3. Preview Pages deployments
-  if (origin.endsWith('.numeros-vision.pages.dev') || origin === 'https://numeros-vision.pages.dev') {
-    return true;
-  }
-
-  // 4. Configured ALLOWED_ORIGINS
+  // 3. Configured ALLOWED_ORIGINS
   if (env && env.ALLOWED_ORIGINS) {
     const list = env.ALLOWED_ORIGINS.split(',').map(s => s.trim()).filter(Boolean);
     if (list.includes(origin)) return true;
   }
 
-  // 5. Local development
-  if (env && env.ENVIRONMENT === 'local' && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:'))) {
-    return true;
-  }
   return false;
 }
 
@@ -145,7 +136,6 @@ function getCorsOrigin(request, env) {
   } catch (e) {}
 
   if (origin === 'https://numerosvision.com' || origin === 'https://www.numerosvision.com') return origin;
-  if (origin.endsWith('.numeros-vision.pages.dev') || origin === 'https://numeros-vision.pages.dev') return origin;
 
   const allowedList = ['https://numerosvision.com', 'https://www.numerosvision.com'];
   if (env && env.ALLOWED_ORIGINS) {
@@ -155,9 +145,7 @@ function getCorsOrigin(request, env) {
     });
   }
   if (allowedList.includes(origin)) return origin;
-  if (env && env.ENVIRONMENT === 'local' && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:'))) {
-    return origin;
-  }
+
   return 'https://numerosvision.com';
 }
 

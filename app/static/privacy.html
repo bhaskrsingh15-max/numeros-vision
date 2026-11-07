@@ -315,13 +315,14 @@
         </div>
 
         <div style="display:flex; gap:12px; flex-wrap:wrap;">
-          <button class="btn-gold" onclick="alert('Consent preferences updated and synchronized with salt-hashed vault.')" style="padding:10px 20px; font-size:0.82rem;">
+          <button class="btn-gold" onclick="window.nvConsent ? window.nvConsent.reopen(event) : null" style="padding:10px 20px; font-size:0.82rem;">
             Update Consent Preferences
           </button>
           <button class="btn-ghost" onclick="executeFullRevocation()" style="padding:10px 20px; font-size:0.82rem; color:#B42828; border-color:rgba(180,40,40,0.3);">
             Execute Complete Data Erasure (Cascade Revoke)
           </button>
         </div>
+        <div id="revocation-status" style="margin-top:14px; font-size:0.85rem; color:#16835B; display:none;" aria-live="polite"></div>
       </div>
 
       <h2>6. Data Security &amp; Encryption Standards</h2>
@@ -468,24 +469,48 @@
 
   <script>
     async function executeFullRevocation() {
-      if (confirm('Are you sure you want to execute cascading data erasure? This will delete your local profile, purge stored session tokens, reset all optional permissions, and invoke the backend DPDP 2023 / GDPR Right to Erasure ledger.')) {
+      try {
+        const pseudoId = localStorage.getItem('nv_client_identity_id') || 'revoked_' + Date.now().toString(36);
+        
+        // 1. Record revocation event via backend API
         try {
-          const identityId = localStorage.getItem('nv_client_identity_id');
-          if (identityId) {
-            await fetch('/api/v1/privacy/consent/withdraw', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ identity_id: identityId, cascade: true })
-            });
-            await fetch(`/api/v1/privacy/data/${identityId}`, { method: 'DELETE' });
-          }
-        } catch (e) {
-          console.debug('[Privacy Center] Backend erasure sync:', e);
+          await fetch('/api/v1/privacy/consent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              pseudonymous_id: pseudoId,
+              choices: { essential: true, analytics: false, marketing: false },
+              banner_version: '2026.2.DPDP_GDPR'
+            })
+          });
+        } catch (netErr) {
+          console.debug('[Privacy] Revocation network sync error:', netErr);
         }
-        localStorage.clear();
-        sessionStorage.clear();
-        alert('All profile state, session tokens, and consent records purged successfully under DPDP Act 2023 & GDPR Right to Erasure.');
-        window.location.reload();
+
+        // 2. Stop analytics & call consent withdrawal if available
+        if (window.nvConsent && typeof window.nvConsent.withdraw === 'function') {
+          window.nvConsent.withdraw();
+        }
+        Object.keys(window).forEach(k => {
+          if (k.indexOf('ga-disable-') === 0) window[k] = true;
+        });
+
+        // 3. Delete nv_dev_id cookie
+        document.cookie = 'nv_dev_id=; path=/; max-age=0; SameSite=Lax';
+
+        // 4. Clear ONLY analytics and marketing consent storage (preserve session & orders)
+        localStorage.removeItem('nv_client_identity_id');
+        localStorage.removeItem('nv_cookie_consent_v4');
+        localStorage.removeItem('nv_cookie_consent_v5');
+
+        // 5. Update UI status with plain text only
+        const statusEl = document.getElementById('revocation-status');
+        if (statusEl) {
+          statusEl.textContent = 'Consent revoked. Analytics disabled and device identifier removed.';
+          statusEl.style.display = 'block';
+        }
+      } catch (err) {
+        console.error('[Privacy] Revocation failed:', err);
       }
     }
   </script>
