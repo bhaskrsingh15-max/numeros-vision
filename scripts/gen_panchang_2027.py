@@ -53,6 +53,43 @@ RAHU_KAAL_SLOTS = {
     6: 7   # Sunday -> 8th part
 }
 
+def get_elongation_deg(obs, utc_dt):
+    obs.date = ephem.Date(utc_dt)
+    sun_obs = ephem.Sun(obs)
+    moon_obs = ephem.Moon(obs)
+    sun_ecl = ephem.Ecliptic(sun_obs)
+    moon_ecl = ephem.Ecliptic(moon_obs)
+    diff = (moon_ecl.lon - sun_ecl.lon) % (2 * math.pi)
+    return math.degrees(diff)
+
+def find_exact_boundary_minutes(obs, rising_utc):
+    e0 = get_elongation_deg(obs, rising_utc)
+    t_idx = int(e0 // 12)
+    prev_target = (t_idx * 12) % 360
+    next_target = ((t_idx + 1) * 12) % 360
+
+    dist_prev = (e0 - prev_target) % 360
+    dist_next = (next_target - e0) % 360
+
+    target = prev_target if dist_prev < dist_next else next_target
+    sign = -1.0 if dist_prev < dist_next else 1.0
+
+    approx_minutes = min(dist_prev, dist_next) * (60.0 / 0.549) * sign
+    t_current = rising_utc + datetime.timedelta(minutes=approx_minutes)
+
+    for _ in range(6):
+        e_curr = get_elongation_deg(obs, t_current)
+        err = (e_curr - target + 180) % 360 - 180
+        e_step = get_elongation_deg(obs, t_current + datetime.timedelta(seconds=60))
+        rate_deg_per_sec = ((e_step - e_curr + 180) % 360 - 180) / 60.0
+        delta_sec = err / rate_deg_per_sec
+        t_current = t_current - datetime.timedelta(seconds=delta_sec)
+        if abs(delta_sec) < 0.001:
+            break
+
+    diff_sec = (t_current - rising_utc).total_seconds()
+    return diff_sec / 60.0
+
 def get_astronomical_moons_2027():
     start_date = ephem.Date('2027/01/01 00:00:00')
     end_date = ephem.Date('2028/01/01 00:00:00')
@@ -135,11 +172,9 @@ def generate_panchang_2027():
         tithi_name = TITHI_NAMES[tithi_idx]
         paksha = "Shukla" if tithi_number <= 15 else "Krishna"
 
-        # Tithi boundary proximity (within 45 minutes of sunrise)
-        # 1 tithi = 12 deg. Mean motion rate ~ 0.549 deg/hour => 60 / 0.549 min/deg
-        rem_deg = diff_deg % 12
-        dist_to_boundary_deg = min(rem_deg, 12.0 - rem_deg)
-        minutes_to_boundary = dist_to_boundary_deg * (60.0 / 0.549)
+        # Exact tithi boundary proximity via root-finding (flagged if |minutes| <= 45.0)
+        exact_mins = find_exact_boundary_minutes(delhi, rising_utc)
+        minutes_to_boundary = round(abs(exact_mins), 1)
         near_boundary = (minutes_to_boundary <= 45.0)
 
         # Rahu Kaal calculation (1/8th of daytime)

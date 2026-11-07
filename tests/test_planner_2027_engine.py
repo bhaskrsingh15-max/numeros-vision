@@ -76,6 +76,18 @@ class TestPlanner2027GoldenSuite(unittest.TestCase):
         self.assertEqual(res["min"], sheet["min"])
         self.assertEqual(res["max"], sheet["max"])
 
+        # Specific dates at 100 assertion by name (Arun Sharma)
+        days_at_100_names = [d["date"] for d in res["full_calendar_365"] if d["alignment_score"] == 100]
+        self.assertEqual(days_at_100_names, ["2027-04-04", "2027-05-21", "2027-05-30"])
+
+        # Lo Shu digit counts assertions
+        self.assertEqual(res["lo_shu_counts"][1], 5)
+        self.assertEqual(res["lo_shu_counts"][2], 1)
+        self.assertEqual(res["lo_shu_counts"][4], 1)
+        self.assertEqual(res["lo_shu_counts"][8], 2)
+        self.assertEqual(res["lo_shu_counts"][9], 1)
+        self.assertEqual(res["dob_digit_counts"][1], 4)
+
     def test_person_b_golden_number_sheet(self):
         """Verify Anil Kumar's full profile against golden_sheets.json (strict equality)."""
         sheet = self.golden_sheets["B"]
@@ -104,6 +116,20 @@ class TestPlanner2027GoldenSuite(unittest.TestCase):
         self.assertEqual(res["days_at_100"], sheet["days_at_100"])
         self.assertEqual(res["min"], sheet["min"])
         self.assertEqual(res["max"], sheet["max"])
+
+        # Specific dates at 100 assertion by name (Anil Kumar)
+        days_at_100_names = [d["date"] for d in res["full_calendar_365"] if d["alignment_score"] == 100]
+        self.assertEqual(days_at_100_names, [
+            "2027-01-10", "2027-02-28", "2027-03-14", "2027-07-28",
+            "2027-10-10", "2027-11-28", "2027-12-05"
+        ])
+
+        # Lo Shu digit counts assertions
+        self.assertEqual(res["lo_shu_counts"][1], 4)
+        self.assertEqual(res["lo_shu_counts"][5], 2)
+        self.assertEqual(res["lo_shu_counts"][7], 1)
+        self.assertEqual(res["lo_shu_counts"][9], 1)
+        self.assertEqual(res["dob_digit_counts"][1], 2)
 
     def test_person_a_365_days_exact_equality(self):
         """Every single day of 365 days for Person A must match golden_A_365.csv in score AND tier."""

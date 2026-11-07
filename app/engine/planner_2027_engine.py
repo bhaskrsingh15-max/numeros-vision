@@ -425,7 +425,11 @@ def calculate_planner_2027(
     driver_planet = PLANET_ARCHETYPES[mulank]
     conductor_planet = PLANET_ARCHETYPES[bhagyank]
 
-    # 5. Lo Shu Grid Present and Missing digits
+    # 5. Lo Shu Grid Present and Missing digits + Counts per digit
+    dob_str_clean = f"{dob.day:02d}{dob.month:02d}{dob.year}"
+    dob_digit_counts = {digit: dob_str_clean.count(str(digit)) for digit in range(1, 10)}
+    grid_digits = [int(c) for c in dob_str_clean if c != '0'] + [mulank, bhagyank]
+    lo_shu_counts = {digit: grid_digits.count(digit) for digit in range(1, 10)}
     lo_shu_present = sorted(list(p['grid']))
     lo_shu_missing = [d for d in range(1, 10) if d not in p['grid']]
 
@@ -575,9 +579,13 @@ def calculate_planner_2027(
             "universal_year_2027": universal_year_2027,
             "lo_shu_present": lo_shu_present,
             "lo_shu_missing": lo_shu_missing,
+            "lo_shu_counts": lo_shu_counts,
+            "dob_digit_counts": dob_digit_counts,
             "name_data": name_data,
             "crystal_suggestion": CRYSTAL_SUGGESTIONS[mulank]
         },
+        "lo_shu_counts": lo_shu_counts,
+        "dob_digit_counts": dob_digit_counts,
         "pinnacles_data": pinnacles_data,
         "cutoffs": cutoffs,
         "tier_counts": tier_counts,
