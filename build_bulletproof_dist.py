@@ -34,6 +34,10 @@ for root, dirs, files in os.walk(DIST_DIR):
             rel_path = os.path.relpath(full_path, DIST_DIR).replace("\\", "/")
             if not rel_path.startswith("samples/"):
                 os.remove(full_path)
+            else:
+                with open(full_path, "rb") as pf:
+                    if b"{{" in pf.read():
+                        raise ValueError(f"BUILD BLOCKED: Public PDF '{rel_path}' contains unapproved placeholder '{{{{'")
 
 # Ensure dist_cloudflare_pages/reports does not exist
 reports_dir = os.path.join(DIST_DIR, "reports")

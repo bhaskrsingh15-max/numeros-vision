@@ -216,5 +216,112 @@ class TestPlanner2027Backend(unittest.TestCase):
             self.assertNotIn(term, sql.lower(), f"Forbidden card storage term '{term}' found in migration 0008")
 
 
+    # ─────────────────────────────────────────────────────────────────
+    # 8. COMMIT B2: SALES PAGE, LABELS, LEGAL & SEO INTEGRITY
+    # ─────────────────────────────────────────────────────────────────
+    def test_sample_labels_match_golden_sheets(self):
+        """Asserts sample labels on year_2027.html match golden_sheets.json real calculations."""
+        golden_path = os.path.join(_ROOT, "tests", "golden_sheets.json")
+        with open(golden_path, "r", encoding="utf-8") as gf:
+            golden = json.load(gf)
+
+        a = golden["A"]
+        b = golden["B"]
+        expected_a = f"Sample A: {a['name'].title()} (Mulank {a['mulank']}, Bhagyank {a['bhagyank']}, Personal Year {a['personal_year_2027']})"
+        expected_b = f"Sample B: {b['name'].title()} (Mulank {b['mulank']}, Bhagyank {b['bhagyank']}, Personal Year {b['personal_year_2027']})"
+
+        html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
+        with open(html_path, "r", encoding="utf-8") as hf:
+            html = hf.read()
+
+        self.assertIn(expected_a, html, f"Missing expected Sample A label: {expected_a}")
+        self.assertIn(expected_b, html, f"Missing expected Sample B label: {expected_b}")
+
+    def test_no_placeholders_in_public_pdfs(self):
+        """Asserts zero public PDFs in app/static or dist_cloudflare_pages contain '{{' unapproved placeholders."""
+        for search_dir in [os.path.join(_ROOT, "app", "static"), os.path.join(_ROOT, "dist_cloudflare_pages")]:
+            if not os.path.exists(search_dir):
+                continue
+            for root, _, files in os.walk(search_dir):
+                for f in files:
+                    if f.lower().endswith(".pdf"):
+                        pdf_path = os.path.join(root, f)
+                        with open(pdf_path, "rb") as pf:
+                            pdf_bytes = pf.read()
+                            self.assertNotIn(
+                                b"{{",
+                                pdf_bytes,
+                                f"Public PDF '{pdf_path}' contains unapproved '{{{{' placeholder"
+                            )
+
+    def test_no_tax_claims_and_pricing_only(self):
+        """Asserts year_2027.html does not claim statutory GST or payment receipt, showing price only."""
+        html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
+        with open(html_path, "r", encoding="utf-8") as hf:
+            html = hf.read()
+
+        self.assertNotIn("Excludes statutory GST", html)
+        self.assertNotIn("statutory GST", html)
+        self.assertIn("Offer ends 31 January 2027", html)
+        self.assertIn("₹1,499", html)
+
+    def test_seo_meta_and_structured_data(self):
+        """Asserts SEO title (50-60 chars), description (140-160 chars), canonical, OG, Twitter & JSON-LD."""
+        import re
+        html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
+        with open(html_path, "r", encoding="utf-8") as hf:
+            html = hf.read()
+
+        # Title: 50-60 chars
+        title_m = re.search(r"<title>(.*?)</title>", html)
+        self.assertIsNotNone(title_m)
+        title = title_m.group(1).strip()
+        self.assertTrue(50 <= len(title) <= 60, f"Title length {len(title)} not in [50, 60]: '{title}'")
+
+        # Description: 140-160 chars
+        desc_m = re.search(r'<meta\s+name="description"\s+content="([^"]*)"', html)
+        self.assertIsNotNone(desc_m)
+        desc = desc_m.group(1).strip()
+        self.assertTrue(140 <= len(desc) <= 160, f"Description length {len(desc)} not in [140, 160]: '{desc}'")
+
+        # Canonical
+        self.assertIn('<link rel="canonical" href="https://numerosvision.com/year_2027.html" />', html)
+
+        # OG and Twitter
+        self.assertIn('<meta property="og:title"', html)
+        self.assertIn('<meta name="twitter:card"', html)
+
+        # JSON-LD Product & Offer
+        jsonld_m = re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.DOTALL)
+        self.assertIsNotNone(jsonld_m)
+        ld = json.loads(jsonld_m.group(1))
+        self.assertEqual(ld["@type"], "Product")
+        self.assertEqual(ld["name"], "2027 Year Ahead Planner")
+        self.assertEqual(ld["offers"]["price"], "1499")
+        self.assertEqual(ld["offers"]["priceCurrency"], "INR")
+        self.assertEqual(ld["offers"]["priceValidUntil"], "2027-01-31")
+        self.assertNotIn("aggregateRating", ld, "Zero review/rating markup allowed")
+        self.assertNotIn("review", ld, "Zero review/rating markup allowed")
+
+    def test_forbidden_words_in_sales_page(self):
+        """Asserts no forbidden words appear in app/static/year_2027.html."""
+        import re
+        forbidden = [
+            "luck", "lucky", "guaranteed", "will bring", "will fix",
+            "prediction", "prescription", "consecrated", "cure", "exact", "mrp"
+        ]
+        pattern = re.compile(r"\b(" + "|".join(forbidden) + r")\b", re.IGNORECASE)
+
+        html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
+        with open(html_path, "r", encoding="utf-8") as hf:
+            for lno, line in enumerate(hf, 1):
+                # Ignore script tag content that defines the test list itself
+                m = pattern.search(line)
+                self.assertIsNone(
+                    m,
+                    f"Forbidden word '{m.group() if m else ''}' found at line {lno}: {line.strip()}"
+                )
+
+
 if __name__ == "__main__":
     unittest.main()
