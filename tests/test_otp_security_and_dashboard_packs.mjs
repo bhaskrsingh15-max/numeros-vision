@@ -7,6 +7,16 @@ console.log('--- STARTING OTP SECURITY & DASHBOARD PACKS TEST SUITE ---');
 
 // Test 1: Worker OTP endpoint NEVER returns dev_otp or fixed code in any environment
 async function testOtpNeverExposesCode() {
+  const origFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    if (String(url).includes('fast2sms.com')) {
+      return new Response(JSON.stringify({ return: true, message: ['SMS sent'] }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    return origFetch(url);
+  };
   const env = {
     ENVIRONMENT: 'preview',
     OTP_HMAC_SECRET: 'test_otp_hmac_secret_32bytes_long',
@@ -51,6 +61,7 @@ async function testOtpNeverExposesCode() {
   const verifyData = await verifyRes.json();
   assert.strictEqual(verifyRes.status >= 400 || !verifyData.success, true, 'Fixed OTP 123456 must be rejected');
   console.log('✓ PASS: Worker OTP verify rejects fixed code 123456');
+  globalThis.fetch = origFetch;
 }
 
 // Test 2: Static audit - No dev_otp or hardcoded 123456 test bypass in dist client code
