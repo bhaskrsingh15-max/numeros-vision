@@ -222,7 +222,9 @@ const memoryStore = {
   voucherLedger: new Map(),
   refunds: new Map(),
   r2Objects: new Map(),
-  planner2027Orders: new Map()
+  planner2027Orders: new Map(),
+  freeChatUsage: new Map(),
+  charmRateLimits: new Map()
 };
 
 // In-memory sliding window rate limiter for public forms & telemetry (module-scoped)
@@ -512,14 +514,42 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
       "INSERT OR IGNORE INTO entitlements (id, user_id, subject_id, pack_id, order_id, granted_at) VALUES (?, ?, ?, ?, ?, ?)"
     ).bind(entId, order.user_id, order.subject_id, order.pack_id, order.id, now).run();
 
-    // 4. Credit ledger accounting for Charm AI packs
+    // 4. Credit ledger accounting for Charm AI packs (Idempotent unique ref per order)
     if (pack && pack.questions_count) {
-      const crdId = 'crd_' + now + '_' + getRandomHex(4);
-      const prevBalRow = await env.DB.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').bind(order.user_id).first();
-      const newBal = ((prevBalRow && prevBalRow.bal) ? prevBalRow.bal : 0) + pack.questions_count;
-      await env.DB.prepare(
-        'INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
-      ).bind(crdId, order.user_id, pack.questions_count, 'pack_purchase', 'order_' + order.id, newBal, now).run();
+      const orderRefId = 'order_' + order.id;
+      let alreadyCredited = false;
+      if (env.DB) {
+        const row = await env.DB.prepare('SELECT id FROM credit_ledger WHERE ref_id = ?').bind(orderRefId).first();
+        if (row) alreadyCredited = true;
+      } else {
+        for (const c of memoryStore.creditLedger.values()) {
+          if (c.ref_id === orderRefId) { alreadyCredited = true; break; }
+        }
+      }
+      if (!alreadyCredited) {
+        const crdId = 'crd_' + now + '_' + getRandomHex(4);
+        if (env.DB) {
+          const prevBalRow = await env.DB.prepare('SELECT COALESCE(SUM(delta), 0) as bal FROM credit_ledger WHERE user_id = ?').bind(order.user_id).first();
+          const newBal = (prevBalRow ? prevBalRow.bal : 0) + pack.questions_count;
+          await env.DB.prepare(
+            'INSERT OR IGNORE INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+          ).bind(crdId, order.user_id, pack.questions_count, 'pack_purchase', orderRefId, newBal, now).run();
+        } else {
+          let prevBal = 0;
+          for (const c of memoryStore.creditLedger.values()) {
+            if (c.user_id === order.user_id) prevBal += c.delta;
+          }
+          memoryStore.creditLedger.set(crdId, {
+            id: crdId,
+            user_id: order.user_id,
+            delta: pack.questions_count,
+            reason: 'pack_purchase',
+            ref_id: orderRefId,
+            balance_after: prevBal + pack.questions_count,
+            created_at: now
+          });
+        }
+      }
     }
 
     // 5. Voucher ledger allocation for bundles
@@ -559,12 +589,27 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
       granted_at: now
     });
     if (pack && pack.questions_count) {
-      memoryStore.creditLedger.set('order_' + order.id, {
-        user_id: order.user_id,
-        delta: pack.questions_count,
-        reason: 'pack_purchase',
-        ref_id: 'order_' + order.id
-      });
+      const orderRefId = 'order_' + order.id;
+      let alreadyCredited = false;
+      for (const c of memoryStore.creditLedger.values()) {
+        if (c.ref_id === orderRefId) { alreadyCredited = true; break; }
+      }
+      if (!alreadyCredited) {
+        let prevBal = 0;
+        for (const c of memoryStore.creditLedger.values()) {
+          if (c.user_id === order.user_id) prevBal += c.delta;
+        }
+        const crdId = 'crd_' + now + '_' + getRandomHex(4);
+        memoryStore.creditLedger.set(crdId, {
+          id: crdId,
+          user_id: order.user_id,
+          delta: pack.questions_count,
+          reason: 'pack_purchase',
+          ref_id: orderRefId,
+          balance_after: prevBal + pack.questions_count,
+          created_at: now
+        });
+      }
     }
     const jobId = 'job_' + now + '_' + getRandomHex(4);
     createdJobId = jobId;
@@ -1417,6 +1462,7 @@ export {
   REPORT_JOB_STATUS,
   REPORT_EXISTS_OR_SERVED_STATUSES,
   doesReportExistOrWasServed,
+  fulfillPaidOrder,
   memoryStore
 };
 export default {
@@ -2132,6 +2178,163 @@ export default {
     valid.push(now);
     _formRateLimits.set(clientIp, valid);
     return true;
+  }
+
+  // Cross-isolate durable rate limiter backed by D1 (with memory fallback)
+  async function checkDurableRateLimit(env, key, limit, windowMs) {
+    const now = Date.now();
+    if (env && env.DB) {
+      try {
+        const row = await env.DB.prepare('SELECT count, window_start, expires_at FROM charm_rate_limits WHERE key = ?').bind(key).first();
+        if (!row || now >= row.expires_at) {
+          await env.DB.prepare(
+            'INSERT INTO charm_rate_limits (key, count, window_start, expires_at) VALUES (?, 1, ?, ?) ON CONFLICT(key) DO UPDATE SET count = 1, window_start = ?, expires_at = ?'
+          ).bind(key, now, now + windowMs, now, now + windowMs).run();
+          return true;
+        }
+        if (row.count >= limit) {
+          return false;
+        }
+        await env.DB.prepare('UPDATE charm_rate_limits SET count = count + 1 WHERE key = ?').bind(key).run();
+        return true;
+      } catch (e) {
+        console.warn('Durable rate limit check error:', e);
+      }
+    }
+    if (!memoryStore.charmRateLimits) memoryStore.charmRateLimits = new Map();
+    const entry = memoryStore.charmRateLimits.get(key);
+    if (!entry || now >= entry.expires_at) {
+      memoryStore.charmRateLimits.set(key, { count: 1, window_start: now, expires_at: now + windowMs });
+      return true;
+    }
+    if (entry.count >= limit) {
+      return false;
+    }
+    entry.count += 1;
+    return true;
+  }
+
+  async function getOrCreateVisitorId(request, env) {
+    let visitorId = getCookie(request, 'nv_visitor_id');
+    let isNew = false;
+    if (!visitorId || visitorId.length < 16) {
+      visitorId = 'vis_' + Date.now() + '_' + getRandomHex(8);
+      isNew = true;
+    }
+    const ipSalt = (env && (env.CHARM_IP_HASH_SALT || env.IP_HASH_SALT)) || 'default_salt_charm_secure';
+    const visitorHash = await sha256Hex(visitorId + ipSalt);
+    return { visitorId, visitorHash, isNew };
+  }
+
+  async function getUserCreditBalance(userId, env) {
+    if (env && env.DB) {
+      try {
+        const row = await env.DB.prepare('SELECT COALESCE(SUM(delta), 0) as bal FROM credit_ledger WHERE user_id = ?').bind(userId).first();
+        return row ? row.bal : 0;
+      } catch (e) {}
+    }
+    let bal = 0;
+    if (memoryStore.creditLedger) {
+      for (const c of memoryStore.creditLedger.values()) {
+        if (c.user_id === userId) bal += c.delta;
+      }
+    }
+    return bal;
+  }
+
+  async function getGuestUsage(visitorHash, env) {
+    if (env && env.DB) {
+      try {
+        const row = await env.DB.prepare('SELECT questions_used FROM free_chat_usage WHERE visitor_hash = ?').bind(visitorHash).first();
+        if (row) return row.questions_used;
+      } catch (e) {}
+    }
+    if (!memoryStore.freeChatUsage) memoryStore.freeChatUsage = new Map();
+    const entry = memoryStore.freeChatUsage.get(visitorHash);
+    return entry ? entry.questions_used : 0;
+  }
+
+  async function incrementGuestUsage(visitorHash, ipHash, env) {
+    const now = Date.now();
+    if (env && env.DB) {
+      try {
+        const row = await env.DB.prepare('SELECT questions_used FROM free_chat_usage WHERE visitor_hash = ?').bind(visitorHash).first();
+        if (row) {
+          await env.DB.prepare('UPDATE free_chat_usage SET questions_used = questions_used + 1, updated_at = ? WHERE visitor_hash = ?').bind(now, visitorHash).run();
+          return row.questions_used + 1;
+        } else {
+          const id = 'fcu_' + now + '_' + getRandomHex(4);
+          await env.DB.prepare('INSERT INTO free_chat_usage (id, visitor_hash, questions_used, max_free, ip_hash, created_at, updated_at) VALUES (?, ?, 1, 3, ?, ?, ?)').bind(id, visitorHash, ipHash, now, now).run();
+          return 1;
+        }
+      } catch (e) {}
+    }
+    if (!memoryStore.freeChatUsage) memoryStore.freeChatUsage = new Map();
+    const current = memoryStore.freeChatUsage.get(visitorHash) || { questions_used: 0 };
+    const updated = current.questions_used + 1;
+    memoryStore.freeChatUsage.set(visitorHash, { questions_used: updated });
+    return updated;
+  }
+
+  async function decrementGuestUsage(visitorHash, env) {
+    const now = Date.now();
+    if (env && env.DB) {
+      try {
+        await env.DB.prepare('UPDATE free_chat_usage SET questions_used = MAX(0, questions_used - 1), updated_at = ? WHERE visitor_hash = ?').bind(now, visitorHash).run();
+      } catch (e) {}
+    }
+    if (memoryStore.freeChatUsage) {
+      const entry = memoryStore.freeChatUsage.get(visitorHash);
+      if (entry && entry.questions_used > 0) entry.questions_used -= 1;
+    }
+  }
+
+  async function ensureUserFreeAllowance(userId, visitorHash, env) {
+    const now = Date.now();
+    const freeRefId = 'free_' + userId;
+    if (env && env.DB) {
+      try {
+        const existing = await env.DB.prepare('SELECT id FROM credit_ledger WHERE user_id = ? AND reason = ?').bind(userId, 'free_allowance').first();
+        if (!existing) {
+          let guestUsed = 0;
+          if (visitorHash) {
+            const usageRow = await env.DB.prepare('SELECT questions_used FROM free_chat_usage WHERE visitor_hash = ?').bind(visitorHash).first();
+            if (usageRow) {
+              guestUsed = usageRow.questions_used;
+              await env.DB.prepare('UPDATE free_chat_usage SET user_id = ?, updated_at = ? WHERE visitor_hash = ?').bind(userId, now, visitorHash).run();
+            }
+          }
+          const delta = Math.max(0, 3 - guestUsed);
+          const crdId = 'crd_free_' + now + '_' + getRandomHex(4);
+          await env.DB.prepare(
+            'INSERT OR IGNORE INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+          ).bind(crdId, userId, delta, 'free_allowance', freeRefId, delta, now).run();
+        }
+      } catch (e) {}
+    } else {
+      if (!memoryStore.creditLedger) memoryStore.creditLedger = new Map();
+      let hasFree = false;
+      for (const c of memoryStore.creditLedger.values()) {
+        if (c.user_id === userId && c.reason === 'free_allowance') { hasFree = true; break; }
+      }
+      if (!hasFree) {
+        let guestUsed = 0;
+        if (visitorHash && memoryStore.freeChatUsage && memoryStore.freeChatUsage.has(visitorHash)) {
+          guestUsed = memoryStore.freeChatUsage.get(visitorHash).questions_used;
+        }
+        const delta = Math.max(0, 3 - guestUsed);
+        const crdId = 'crd_free_' + now + '_' + getRandomHex(4);
+        memoryStore.creditLedger.set(crdId, {
+          id: crdId,
+          user_id: userId,
+          delta: delta,
+          reason: 'free_allowance',
+          ref_id: freeRefId,
+          balance_after: delta,
+          created_at: now
+        });
+      }
+    }
   }
 
   // Server-side operational telemetry logger (events table - strictly ZERO PII)
@@ -4857,6 +5060,42 @@ export default {
     }
 
     // ── ROUTE: CHARM AI PREDICTION ENGINE (/api/charm/chat & /api/v1/readings/ask) ──
+        // ── ROUTE: CHARM AI BALANCE & ENTITLEMENTS (/api/charm/credits) ──
+    if (url.pathname === '/api/charm/credits' && request.method === 'GET') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      };
+      const user = await authenticateUser(request, env);
+      const visitorInfo = await getOrCreateVisitorId(request, env);
+      if (visitorInfo.isNew) {
+        corsHeaders['Set-Cookie'] = `nv_visitor_id=${visitorInfo.visitorId}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`;
+      }
+      if (user) {
+        await ensureUserFreeAllowance(user.user_id, visitorInfo.visitorHash, env);
+        const bal = await getUserCreditBalance(user.user_id, env);
+        return new Response(JSON.stringify({
+          authenticated: true,
+          user_id: user.user_id,
+          credits_remaining: Math.max(0, bal),
+          tier: bal > 0 ? 'paid' : 'exhausted'
+        }), { status: 200, headers: corsHeaders });
+      } else {
+        const guestUsed = await getGuestUsage(visitorInfo.visitorHash, env);
+        const remaining = Math.max(0, 3 - guestUsed);
+        return new Response(JSON.stringify({
+          authenticated: false,
+          user_id: null,
+          credits_remaining: remaining,
+          tier: remaining > 0 ? 'guest' : 'exhausted'
+        }), { status: 200, headers: corsHeaders });
+      }
+    }
+
+    // ── ROUTE: CHARM AI CONSULTATION CHAT (/api/charm/chat & /api/v1/readings/ask) ──
     if ((url.pathname === '/api/charm/chat' || url.pathname === '/api/v1/readings/ask') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
@@ -4865,41 +5104,169 @@ export default {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
+
+      // 1. Kill-Switch Check
+      if (env && (env.CHARM_KILL_SWITCH === 'true' || env.CHARM_KILL_SWITCH === '1')) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'SERVICE_TEMPORARILY_UNAVAILABLE',
+          error: 'Charm AI is temporarily paused for scheduled calibration. Please try again shortly.'
+        }), { status: 503, headers: corsHeaders });
+      }
+
+      // 2. Global Daily Spend Cap Check (Durable across isolates)
+      const now = Date.now();
+      const todayKey = new Date(now).toISOString().slice(0, 10);
+      const globalDailyCap = parseInt((env && env.CHARM_GLOBAL_DAILY_CAP) || '500', 10);
+      const globalDailyAllowed = await checkDurableRateLimit(env, 'charm_global_daily_' + todayKey, globalDailyCap, 86400000);
+      if (!globalDailyAllowed) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'SERVICE_TEMPORARILY_BUSY',
+          error: 'Charm AI is experiencing high consultation volume today. Please try again tomorrow or consult our reading reports.'
+        }), { status: 429, headers: corsHeaders });
+      }
+
+      // 3. Per-IP Daily Cap & Per-IP Burst Limit Check (Durable across isolates)
+      const ipSalt = (env && (env.CHARM_IP_HASH_SALT || env.IP_HASH_SALT)) || 'default_salt_charm_secure';
+      const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+      const ipHash = await sha256Hex(clientIp + ipSalt);
+
+      const ipDailyAllowed = await checkDurableRateLimit(env, 'charm_ip_daily_' + ipHash + '_' + todayKey, 15, 86400000);
+      if (!ipDailyAllowed) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'DAILY_IP_LIMIT_EXCEEDED',
+          error: 'Daily consultation limit reached for this connection. Please try again tomorrow.'
+        }), { status: 429, headers: corsHeaders });
+      }
+
+      const ipBurstAllowed = await checkDurableRateLimit(env, 'charm_ip_burst_' + ipHash, 5, 60000);
+      if (!ipBurstAllowed) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'TOO_MANY_REQUESTS',
+          error: 'Too many requests in a short time. Please wait a moment before sending your next inquiry.'
+        }), { status: 429, headers: corsHeaders });
+      }
+
       const body = await request.json().catch(() => ({}));
       const message = (body.message || body.question || 'Is 2026 favorable for my career progression?').trim();
+      if (message.length > 500) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'QUERY_TOO_LONG',
+          error: 'Inquiry exceeds maximum allowed length of 500 characters.'
+        }), { status: 400, headers: corsHeaders });
+      }
+
       const name = (body.name || body.user_name || 'Seeker').trim();
       const d = parseInt(body.day, 10) || 28;
       const m = parseInt(body.month, 10) || 11;
       const y = parseInt(body.year, 10) || 1981;
 
-      // Deterministic reductions
-      function red(n) {
-        while (n > 9) {
-          n = String(n).split('').reduce((a, b) => a + parseInt(b, 10), 0);
-        }
-        return n;
+      // 4. Identity & Credit Gate
+      const user = await authenticateUser(request, env);
+      const visitorInfo = await getOrCreateVisitorId(request, env);
+      if (visitorInfo.isNew) {
+        corsHeaders['Set-Cookie'] = `nv_visitor_id=${visitorInfo.visitorId}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`;
       }
-      const driver = red(d);
-      const conductor = red(d + m + y);
-      const personalYear = red(driver + red(m) + red(new Date().getFullYear()));
 
-      const traceId = 'NV-TRC-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+      let userReservationId = null;
+      let newRemainingCredits = 0;
+
+      if (user) {
+        // Authenticated: Ensure lifetime free allowance (carrying over guest usage, max 3)
+        await ensureUserFreeAllowance(user.user_id, visitorInfo.visitorHash, env);
+
+        // Reserve-then-refund: Atomically insert -1 row only if SUM(delta) > 0
+        const resId = 'crd_res_' + now + '_' + getRandomHex(6);
+        let reserved = false;
+
+        if (env && env.DB) {
+          const insertRes = await env.DB.prepare(`
+            INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at)
+            SELECT ?, ?, -1, 'question_asked', ?, (SELECT COALESCE(SUM(delta), 0) - 1 FROM credit_ledger WHERE user_id = ?), ?
+            WHERE (SELECT COALESCE(SUM(delta), 0) FROM credit_ledger WHERE user_id = ?) > 0
+          `).bind(resId, user.user_id, resId, user.user_id, now, user.user_id).run();
+
+          if (insertRes && insertRes.meta && insertRes.meta.changes > 0) {
+            reserved = true;
+          }
+        } else {
+          let curBal = 0;
+          for (const c of memoryStore.creditLedger.values()) {
+            if (c.user_id === user.user_id) curBal += c.delta;
+          }
+          if (curBal > 0) {
+            memoryStore.creditLedger.set(resId, {
+              id: resId,
+              user_id: user.user_id,
+              delta: -1,
+              reason: 'question_asked',
+              ref_id: resId,
+              balance_after: curBal - 1,
+              created_at: now
+            });
+            reserved = true;
+          }
+        }
+
+        if (!reserved) {
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'CREDITS_EXHAUSTED',
+            error: 'No consultation questions remaining in your balance. Please recharge your pack.',
+            credits_remaining: 0
+          }), { status: 402, headers: corsHeaders });
+        }
+        userReservationId = resId;
+        newRemainingCredits = await getUserCreditBalance(user.user_id, env);
+      } else {
+        // Guest: Check lifetime total of 3 free questions
+        const guestUsed = await getGuestUsage(visitorInfo.visitorHash, env);
+        if (guestUsed >= 3) {
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'FREE_TIER_EXHAUSTED',
+            error: 'You have used your 3 complimentary questions. Please sign in or recharge your pack.',
+            credits_remaining: 0
+          }), { status: 402, headers: corsHeaders });
+        }
+        const updatedUsed = await incrementGuestUsage(visitorInfo.visitorHash, ipHash, env);
+        newRemainingCredits = Math.max(0, 3 - updatedUsed);
+      }
+
+      // 5. Model Execution with Automatic Refund on Failure
+      let assistantText = '';
+      const traceId = 'NV-TRC-' + getRandomHex(6).toUpperCase();
       const predId = 'pred_' + Date.now();
 
-      // Governed Classical Guidance Text
-      const planets = {
-        1: 'Sun (Surya) — Sovereign Leadership & High Vitality',
-        2: 'Moon (Chandra) — Deep Intuition & Diplomatic Harmony',
-        3: 'Jupiter (Brihaspati) — Wisdom, Advisory & Expansion',
-        4: 'Rahu (North Node) — Strategic Innovation & Breakthrough Execution',
-        5: 'Mercury (Budh) — Analytical Speed, Commerce & Negotiation',
-        6: 'Venus (Shukra) — Creative Refinement, Harmony & Abundance',
-        7: 'Ketu (South Node) — Technical Depth, Research & Intuition',
-        8: 'Saturn (Shani) — Structural Mastery, Discipline & Enduring Wealth',
-        9: 'Mars (Mangal) — Direct Courage, Initiative & Decisive Action'
-      };
+      try {
+        // Deterministic reductions
+        function red(n) {
+          while (n > 9) {
+            n = String(n).split('').reduce((a, b) => a + parseInt(b, 10), 0);
+          }
+          return n;
+        }
+        const driver = red(d);
+        const conductor = red(d + m + y);
+        const personalYear = red(driver + red(m) + red(new Date().getFullYear()));
 
-      const assistantText = `### ✦ Classical Astrological & Numerological Reading for ${name}
+        const planets = {
+          1: 'Sun (Surya) — Sovereign Leadership & High Vitality',
+          2: 'Moon (Chandra) — Deep Intuition & Diplomatic Harmony',
+          3: 'Jupiter (Brihaspati) — Wisdom, Advisory & Expansion',
+          4: 'Rahu (North Node) — Strategic Innovation & Breakthrough Execution',
+          5: 'Mercury (Budh) — Analytical Speed, Commerce & Negotiation',
+          6: 'Venus (Shukra) — Creative Refinement, Harmony & Abundance',
+          7: 'Ketu (South Node) — Technical Depth, Research & Intuition',
+          8: 'Saturn (Shani) — Structural Mastery, Discipline & Enduring Wealth',
+          9: 'Mars (Mangal) — Direct Courage, Initiative & Decisive Action'
+        };
+
+        assistantText = `### ✦ Classical Astrological & Numerological Reading for ${name}
 
 **Query Analysis:** "${message}"
 
@@ -4917,8 +5284,50 @@ export default {
 2. **Harmonizing Colors:** Integrate **Gold, Warm Amber, and Forest Green** into high-stakes meetings and formal presentations.
 3. **Daily Alignment:** Begin high-priority strategic initiatives during morning hours (08:00 AM – 10:30 AM) to capitalize on dominant Solar and Mercurial frequencies.`;
 
+        // Filter / Banned-word audit check:
+        const bannedWords = ['luck', 'lucky', 'guaranteed', 'will bring', 'will fix', 'prediction', 'prescription', 'consecrated', 'cure', 'exact'];
+        for (const w of bannedWords) {
+          if (assistantText.toLowerCase().includes(w)) {
+            assistantText = assistantText.replace(new RegExp(w, 'gi'), '');
+          }
+        }
+      } catch (genErr) {
+        // Automatic refund if execution failed
+        if (user && userReservationId) {
+          const refRefundId = 'crd_ref_' + now + '_' + getRandomHex(6);
+          if (env && env.DB) {
+            await env.DB.prepare(`
+              INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at)
+              SELECT ?, ?, 1, 'refund', ?, (SELECT COALESCE(SUM(delta), 0) + 1 FROM credit_ledger WHERE user_id = ?), ?
+            `).bind(refRefundId, user.user_id, 'refund_' + userReservationId, user.user_id, now).run();
+          } else {
+            let curBal = 0;
+            for (const c of memoryStore.creditLedger.values()) {
+              if (c.user_id === user.user_id) curBal += c.delta;
+            }
+            memoryStore.creditLedger.set(refRefundId, {
+              id: refRefundId,
+              user_id: user.user_id,
+              delta: 1,
+              reason: 'refund',
+              ref_id: 'refund_' + userReservationId,
+              balance_after: curBal + 1,
+              created_at: now
+            });
+          }
+        } else if (!user) {
+          await decrementGuestUsage(visitorInfo.visitorHash, env);
+        }
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'MODEL_GENERATION_FAILED',
+          error: 'Unable to complete consultation analysis. Your credit has been safely refunded.'
+        }), { status: 500, headers: corsHeaders });
+      }
+
       return new Response(JSON.stringify({
         status: 'success',
+        credits_remaining: newRemainingCredits,
         consensus_status: 'VERIFIED_SUPPORTED',
         audit_trace_id: traceId,
         prediction_id: predId,
@@ -4940,11 +5349,10 @@ export default {
         },
         missing_requirements: [],
         practical_next_steps: [
-          'Position key professional negotiations within the upcoming auspicious lunar fortnights.',
-          'Align executive work desk towards East or South-East for focus and cognitive stamina.',
-          'Maintain regular financial compounding and avoid speculative commitments outside core domain expertise.'
+          'Position key professional negotiations within the upcoming Q2/Q3 dasha corridor.',
+          'Align primary decisions with your core driver frequencies.'
         ],
-        follow_up_question: 'Would you like to examine your specific business partnership synastry or evaluate an optimal date for contract execution?'
+        follow_up_prompt: 'Would you like to examine your specific business partnership synastry or evaluate an optimal date for contract execution?'
       }), { status: 200, headers: corsHeaders });
     }
 

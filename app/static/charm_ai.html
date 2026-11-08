@@ -525,6 +525,7 @@
 
     // Auto-hydrate profile from localStorage or URL query parameters on load
     function initCharmAiProfile() {
+      syncCharmAiCreditsFromServer();
       syncCharmAiGatingUi();
       try {
         const params = new URLSearchParams(window.location.search);
@@ -699,38 +700,26 @@
     }
 
     
-    // ✦ Strict Paid Gating for Charm AI ✦
-    function getCharmAiAccess() {
-      try {
-        const premiumToken = localStorage.getItem('nv_premium_token');
-        const activeTier = localStorage.getItem('nv_active_tier');
-        const sessionRaw = localStorage.getItem('nv_session') || localStorage.getItem('nv_user_session');
-        const profileRaw = localStorage.getItem('nv_user_profile');
-        let session = sessionRaw ? JSON.parse(sessionRaw) : null;
-        let profile = profileRaw ? JSON.parse(profileRaw) : null;
-        
-        let isPaid = !!(premiumToken || ['paid', 'growth_10q', 'starter_5q', 'complete_report', 'report_master', 'report_divine', 'tier1', 'tier2', 'tier3'].includes(activeTier));
-        let credits = 0;
-        
-        const entitlements = (session && session.entitlements) || (profile && profile.entitlements);
-        if (entitlements && entitlements.charm_credits_remaining !== undefined) {
-          credits = parseInt(entitlements.charm_credits_remaining, 10);
-        } else if (profile && profile.charm_credits_remaining !== undefined) {
-          credits = parseInt(profile.charm_credits_remaining, 10);
-        } else if (isPaid) {
-          credits = 15;
-        }
-        
-        const unlocked = (entitlements && entitlements.unlocked_reports) || (profile && profile.unlocked_reports) || [];
-        if (unlocked.includes('report_essential') || unlocked.includes('report_master') || unlocked.includes('report_divine') || unlocked.includes('charm_ai_pass')) {
-          isPaid = true;
-          if (credits <= 0) credits = 15;
-        }
+    // ✦ Server-Authoritative Gating for Charm AI (localStorage is never an authority) ✦
+    let _cachedCharmCredits = null;
+    let _charmIsAuthenticated = false;
 
-        return { isPaid, credits };
-      } catch (e) {
-        return { isPaid: false, credits: 0 };
-      }
+    async function syncCharmAiCreditsFromServer() {
+      try {
+        const res = await fetch('/api/charm/credits');
+        if (res.ok) {
+          const data = await res.json();
+          _cachedCharmCredits = data.credits_remaining !== undefined ? data.credits_remaining : 0;
+          _charmIsAuthenticated = !!data.authenticated;
+          syncCharmAiGatingUi();
+        }
+      } catch (e) {}
+    }
+
+    function getCharmAiAccess() {
+      const credits = _cachedCharmCredits !== null ? _cachedCharmCredits : 3;
+      const isPaid = _charmIsAuthenticated && credits > 0;
+      return { isPaid, credits };
     }
 
     function syncCharmAiGatingUi() {
@@ -948,17 +937,42 @@
 
         if (resp.ok) {
           data = await resp.json();
+          if (data.credits_remaining !== undefined) {
+            _cachedCharmCredits = data.credits_remaining;
+            syncCharmAiGatingUi();
+          }
+        } else if (resp.status === 402) {
+          const errData = await resp.json().catch(() => ({}));
+          _cachedCharmCredits = 0;
+          syncCharmAiGatingUi();
+          openCharmPaywallModal();
+          panel.innerHTML = `
+            <div style="background:#FFFDF7; border:1.5px solid #C9A227; border-radius:14px; padding:28px 24px; text-align:center;">
+              <h3 style="font-family:'Cormorant Garamond', serif; color:#8B6914; font-size:1.4rem; margin:0 0 10px;">Consultation Limit Reached</h3>
+              <p style="color:#7A654D; font-size:0.92rem; margin:0 0 18px;">${errData.error || 'You have used all available consultation questions. Please recharge your pack to continue.'}</p>
+              <button onclick="openCharmPaywallModal()" class="btn-gold-action" style="padding:10px 24px; font-weight:700; border-radius:8px; cursor:pointer; border:none; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#fff;">View Recharge Packs ✦</button>
+            </div>
+          `;
+          return;
+        } else if (resp.status === 429) {
+          const errData = await resp.json().catch(() => ({}));
+          panel.innerHTML = `
+            <div style="background:#FFFDF7; border:1.5px solid #C9A227; border-radius:14px; padding:28px 24px; text-align:center;">
+              <h3 style="font-family:'Cormorant Garamond', serif; color:#8B6914; font-size:1.4rem; margin:0 0 10px;">High-Volume Notice</h3>
+              <p style="color:#7A654D; font-size:0.92rem; margin:0 0 18px;">${errData.error || 'Too many requests. Please wait a moment before trying again.'}</p>
+            </div>
+          `;
+          return;
         } else {
-          throw new Error('Fallback needed');
+          throw new Error('Server error');
         }
       } catch (fetchErr) {
-        data = generateClientSideCharmReading({
-          message: q,
-          name: name,
-          day: day,
-          month: month,
-          year: year
-        });
+        panel.innerHTML = `
+          <div style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.3); border-radius:14px; padding:24px; text-align:center; color:#7A654D;">
+            <p>Unable to connect to Charm AI. Please verify your connection and refresh.</p>
+          </div>
+        `;
+        return;
       }
         const traceId = data.audit_trace_id || ('NV-TRC-' + Math.random().toString(36).substring(2, 9).toUpperCase());
         const topicTitle = (data.career_event_assessment && data.career_event_assessment.event_type) ? data.career_event_assessment.event_type.replace(/_/g, ' ') : 'Career Alignment';
