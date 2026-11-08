@@ -294,7 +294,8 @@
 
             }));
 
-            window.location.href = '/login?returnTo=/dashboard/';
+            const retUrl = (window.location.pathname + window.location.search) || '/dashboard/';
+            window.location.href = '/login?returnTo=' + encodeURIComponent(retUrl);
 
             return;
 

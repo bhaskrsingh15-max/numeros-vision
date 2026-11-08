@@ -1446,7 +1446,25 @@ function doesReportExistOrWasServed(job) {
   );
 }
 
+
+function sanitizeBannedWords(text) {
+  if (!text || typeof text !== 'string') return text;
+  // Whole-word matching with word boundaries (\b), case-insensitive
+  // Preserves legitimate words like 'secure', 'obscure', 'accurate', 'exactly'
+  const bannedPatterns = [
+    /\bwill\s+bring\b/gi,
+    /\bwill\s+fix\b/gi,
+    /\b(luck|lucky|guaranteed|prediction|prescription|consecrated|cure|exact)\b/gi
+  ];
+  let cleaned = text;
+  for (const pattern of bannedPatterns) {
+    cleaned = cleaned.replace(pattern, '');
+  }
+  return cleaned.replace(/[ \t]{2,}/g, ' ');
+}
+
 export {
+  sanitizeBannedWords,
   viewFor,
   parseDobParts,
   encryptField,
@@ -2180,9 +2198,18 @@ export default {
     return true;
   }
 
-  // Cross-isolate durable rate limiter backed by D1 (with memory fallback)
+  // Cross-isolate durable rate limiter backed by D1 (fails closed outside tests if D1 is missing)
   async function checkDurableRateLimit(env, key, limit, windowMs) {
     const now = Date.now();
+    const isTestEnv = Boolean(
+      env && (
+        env.ENVIRONMENT === 'local' ||
+        env.MOCK_PAYMENTS === 'true' ||
+        env.NODE_ENV === 'test' ||
+        env.__TEST__ === true
+      )
+    );
+
     if (env && env.DB) {
       try {
         const row = await env.DB.prepare('SELECT count, window_start, expires_at FROM charm_rate_limits WHERE key = ?').bind(key).first();
@@ -2199,8 +2226,19 @@ export default {
         return true;
       } catch (e) {
         console.warn('Durable rate limit check error:', e);
+        if (!isTestEnv) {
+          // Fail closed outside tests when DB query errors
+          return false;
+        }
       }
     }
+
+    // Fail closed: outside test environments, missing D1 rate-limit binding rejects request
+    if (!isTestEnv) {
+      console.error('Durable rate limit rejected: missing D1 DB binding outside test environment');
+      return false;
+    }
+
     if (!memoryStore.charmRateLimits) memoryStore.charmRateLimits = new Map();
     const entry = memoryStore.charmRateLimits.get(key);
     if (!entry || now >= entry.expires_at) {
@@ -2258,22 +2296,43 @@ export default {
     const now = Date.now();
     if (env && env.DB) {
       try {
-        const row = await env.DB.prepare('SELECT questions_used FROM free_chat_usage WHERE visitor_hash = ?').bind(visitorHash).first();
-        if (row) {
-          await env.DB.prepare('UPDATE free_chat_usage SET questions_used = questions_used + 1, updated_at = ? WHERE visitor_hash = ?').bind(now, visitorHash).run();
-          return row.questions_used + 1;
+        const id = 'fcu_' + now + '_' + getRandomHex(6);
+        // Ensure visitor row exists with 0 questions used
+        await env.DB.prepare(`
+          INSERT OR IGNORE INTO free_chat_usage (id, visitor_hash, questions_used, max_free, ip_hash, created_at, updated_at)
+          VALUES (?, ?, 0, 3, ?, ?, ?)
+        `).bind(id, visitorHash, ipHash, now, now).run();
+
+        // Atomic conditional increment: only updates if questions_used < 3
+        const updateRes = await env.DB.prepare(`
+          UPDATE free_chat_usage
+          SET questions_used = questions_used + 1, updated_at = ?
+          WHERE visitor_hash = ? AND questions_used < 3
+        `).bind(now, visitorHash).run();
+
+        const changes = (updateRes && updateRes.meta && updateRes.meta.changes !== undefined)
+          ? updateRes.meta.changes
+          : (updateRes && updateRes.changes !== undefined ? updateRes.changes : 0);
+
+        if (changes > 0) {
+          const row = await env.DB.prepare('SELECT questions_used FROM free_chat_usage WHERE visitor_hash = ?').bind(visitorHash).first();
+          return { success: true, questions_used: row ? row.questions_used : 1 };
         } else {
-          const id = 'fcu_' + now + '_' + getRandomHex(4);
-          await env.DB.prepare('INSERT INTO free_chat_usage (id, visitor_hash, questions_used, max_free, ip_hash, created_at, updated_at) VALUES (?, ?, 1, 3, ?, ?, ?)').bind(id, visitorHash, ipHash, now, now).run();
-          return 1;
+          return { success: false, questions_used: 3 };
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn('incrementGuestUsage DB error:', e);
+        return { success: false, questions_used: 3 };
+      }
     }
     if (!memoryStore.freeChatUsage) memoryStore.freeChatUsage = new Map();
     const current = memoryStore.freeChatUsage.get(visitorHash) || { questions_used: 0 };
-    const updated = current.questions_used + 1;
-    memoryStore.freeChatUsage.set(visitorHash, { questions_used: updated });
-    return updated;
+    if (current.questions_used >= 3) {
+      return { success: false, questions_used: 3 };
+    }
+    current.questions_used += 1;
+    memoryStore.freeChatUsage.set(visitorHash, current);
+    return { success: true, questions_used: current.questions_used };
   }
 
   async function decrementGuestUsage(visitorHash, env) {
@@ -5105,6 +5164,32 @@ export default {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
 
+      // Fail-Closed Validation: Outside test environments, strictly require CHARM_IP_HASH_SALT and D1 DB binding
+      const isTestEnv = Boolean(
+        env && (
+          env.ENVIRONMENT === 'local' ||
+          env.MOCK_PAYMENTS === 'true' ||
+          env.NODE_ENV === 'test' ||
+          env.__TEST__ === true
+        )
+      );
+      if (!isTestEnv) {
+        if (!env || !env.CHARM_IP_HASH_SALT) {
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'SERVICE_MISCONFIGURED',
+            error: 'Consultation service is temporarily unavailable due to configuration. Please try again shortly.'
+          }), { status: 503, headers: corsHeaders });
+        }
+        if (!env || !env.DB) {
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'SERVICE_DATABASE_UNAVAILABLE',
+            error: 'Consultation service is temporarily unavailable. Please try again shortly.'
+          }), { status: 503, headers: corsHeaders });
+        }
+      }
+
       // 1. Kill-Switch Check
       if (env && (env.CHARM_KILL_SWITCH === 'true' || env.CHARM_KILL_SWITCH === '1')) {
         return new Response(JSON.stringify({
@@ -5223,9 +5308,9 @@ export default {
         userReservationId = resId;
         newRemainingCredits = await getUserCreditBalance(user.user_id, env);
       } else {
-        // Guest: Check lifetime total of 3 free questions
-        const guestUsed = await getGuestUsage(visitorInfo.visitorHash, env);
-        if (guestUsed >= 3) {
+        // Guest: Atomic conditional check and increment of lifetime total of 3 free questions
+        const guestInc = await incrementGuestUsage(visitorInfo.visitorHash, ipHash, env);
+        if (!guestInc.success) {
           return new Response(JSON.stringify({
             success: false,
             code: 'FREE_TIER_EXHAUSTED',
@@ -5233,8 +5318,7 @@ export default {
             credits_remaining: 0
           }), { status: 402, headers: corsHeaders });
         }
-        const updatedUsed = await incrementGuestUsage(visitorInfo.visitorHash, ipHash, env);
-        newRemainingCredits = Math.max(0, 3 - updatedUsed);
+        newRemainingCredits = Math.max(0, 3 - guestInc.questions_used);
       }
 
       // 5. Model Execution with Automatic Refund on Failure
@@ -5243,6 +5327,10 @@ export default {
       const predId = 'pred_' + Date.now();
 
       try {
+        if (body.__force_failure__ && isTestEnv) {
+          throw new Error('Forced model failure for test verification');
+        }
+        memoryStore.charmModelInvocations = (memoryStore.charmModelInvocations || 0) + 1;
         // Deterministic reductions
         function red(n) {
           while (n > 9) {
@@ -5284,13 +5372,8 @@ export default {
 2. **Harmonizing Colors:** Integrate **Gold, Warm Amber, and Forest Green** into high-stakes meetings and formal presentations.
 3. **Daily Alignment:** Begin high-priority strategic initiatives during morning hours (08:00 AM – 10:30 AM) to capitalize on dominant Solar and Mercurial frequencies.`;
 
-        // Filter / Banned-word audit check:
-        const bannedWords = ['luck', 'lucky', 'guaranteed', 'will bring', 'will fix', 'prediction', 'prescription', 'consecrated', 'cure', 'exact'];
-        for (const w of bannedWords) {
-          if (assistantText.toLowerCase().includes(w)) {
-            assistantText = assistantText.replace(new RegExp(w, 'gi'), '');
-          }
-        }
+        // Whole-word boundary banned-word audit check (preserves words like 'secure', 'obscure', 'accurate', 'exactly'):
+        assistantText = sanitizeBannedWords(assistantText);
       } catch (genErr) {
         // Automatic refund if execution failed
         if (user && userReservationId) {
