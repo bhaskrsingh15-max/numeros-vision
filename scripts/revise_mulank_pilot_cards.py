@@ -1,14 +1,14 @@
 """
 Canonical generator for Numeros Vision Mulank Pilot Cards (Mulank 1 to 9) and Compound Cards.
 Strictly implements founder directives:
-1. Rebuilt 27-trait trace table:
-   - Quote marks only for exact source wording of 12 words or fewer, otherwise paraphrase with no quote marks.
-   - Labeled: supported / partly supported / synthesised (no page).
-   - Dropped unsupported Cooper claims: Mulank 1 (details), 3 (budgeting), 4 (roadmap), 5 (bandwidth), 7 (over-analysis).
-   - Fixed Mulank 8: overwork -> Aleka pp 20-21; pace -> Cooper pp 29-31 with accurate meaning.
-   - Removed unverified Webster phrases: 'chameleon-like', 'smothering', 'spreads compassion too thinly'.
-   - Mulank 2 'absorbing ambient tension' = synthesised (no page).
-   - Mulank 7 'over-complicating straightforward actions' = synthesised (no page).
+1. Rebuilt 53-trait trace table:
+   - Rule: A row may say "supported" only for verified rows. Every other row = "synthesised (tradition-wide theme)", no page, no bracketed gist.
+   - M3 "Speaking before full reflection": source = Cooper p.19 (foot-in-mouth). Remove Aleka. (supported)
+   - M3 "Underestimating delivery effort": partly supported. Cooper p.19-20: threes struggle to put ideas into practice. Remove the "commit to more than can be finished" gist.
+   - M3 "Scattered focus": Aleka lists scattered energies and unfinished projects; Cooper p.20 says threes flit between forms. Keep. (supported)
+   - M5 "Restless switching": Cooper p.24 = flighty and fidgety, NOT "easily bored". Aleka lists restlessness and boredom. (supported)
+   - M8: removed "reluctant to delegate", "carrying burdens in silence" and "ethical administration" as Aleka claims. Aleka's 8 negatives = workaholic, overly ambitious, repressing subordinates, impatient with people, mismanaging money.
+   - M8 merged pace row: Cooper pp.29-31 means eights set a pace others can't keep up with. (supported)
 2. Plain public layer labels: 'Chaldean tradition', 'Lo Shu grid', 'Western tradition'.
 3. Customer headings: 'Your numbers at a glance', 'How this shows up day to day', 'What tends to drive you', 'Strengths and watch-outs', 'Traditional note'.
 4. Zero author names, titles, or page citations on customer copy.
@@ -93,76 +93,76 @@ WESTERN_PLANET_MAP = {
 }
 
 TRAIT_TRACE_REGISTRY = [
-    # Mulank 1
-    {"mulank": 1, "type": "Strength", "trait": "Self-starting initiative", "status": "supported", "provenance": "Aleka Ghose pp. 11-12 (pioneering impulse, leadership ambition); Webster Life Path (p. 5)"},
-    {"mulank": 1, "type": "Strength", "trait": "Clear decision-making", "status": "supported", "provenance": "Webster Day of Birth (p. 20 strong determination, independent mind); Cooper pp. 15-16"},
-    {"mulank": 1, "type": "Strength", "trait": "Comfort leading from scratch", "status": "supported", "provenance": "Aleka Ghose p. 11 (originating enterprises independently); Webster Life Path (p. 5)"},
-    {"mulank": 1, "type": "Watch-out", "trait": "Temptation to overrule others", "status": "supported", "provenance": "Aleka Ghose p. 12 (domineering tendency); Cooper p. 16"},
-    {"mulank": 1, "type": "Watch-out", "trait": "Impatience with slower paces", "status": "supported", "provenance": "Webster Life Path (p. 6 impatience with slower associates); Cooper p. 15"},
-    {"mulank": 1, "type": "Watch-out", "trait": "Can cool quickly on a new idea", "status": "supported", "provenance": "Cooper pp. 15-16 (initial enthusiasm can drop once project is launched)"},
+    # Mulank 1 (6 traits)
+    {"mulank": 1, "type": "Strength", "trait": "Self-starting initiative", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 1, "type": "Strength", "trait": "Clear decision-making", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 1, "type": "Strength", "trait": "Comfort leading from scratch", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 1, "type": "Watch-out", "trait": "Temptation to overrule others", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 1, "type": "Watch-out", "trait": "Impatience with slower paces", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 1, "type": "Watch-out", "trait": "Can cool quickly on a new idea", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
 
-    # Mulank 2
-    {"mulank": 2, "type": "Strength", "trait": "Diplomatic tact", "status": "supported", "provenance": "Aleka Ghose p. 13 (gentle peacemaker, diplomatic mediator); Webster Life Path (p. 8)"},
-    {"mulank": 2, "type": "Strength", "trait": "Loyal partnership", "status": "supported", "provenance": "Webster Life Path (pp. 8-9 supportive alliance); Cooper pp. 17-18"},
-    {"mulank": 2, "type": "Strength", "trait": "Emotional attunement", "status": "partly supported", "provenance": "Cooper pp. 17-18 (intuitive sensitivity to feelings); Aleka Ghose p. 13"},
-    {"mulank": 2, "type": "Watch-out", "trait": "Over-relying on others' approval", "status": "supported", "provenance": "Webster Life Path (p. 8 sensitivity to criticism, seeking approval); Cooper p. 18"},
-    {"mulank": 2, "type": "Watch-out", "trait": "Absorbing ambient tension", "status": "synthesised (no page)", "provenance": "Integrative psychological synthesis of empathetic receptivity under stress"},
-    {"mulank": 2, "type": "Watch-out", "trait": "Hesitating to state boundaries early", "status": "partly supported", "provenance": "Webster Life Path (p. 9 yields too easily to avoid confrontation); Cooper p. 18"},
+    # Mulank 2 (6 traits)
+    {"mulank": 2, "type": "Strength", "trait": "Diplomatic tact", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 2, "type": "Strength", "trait": "Loyal partnership", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 2, "type": "Strength", "trait": "Emotional attunement", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 2, "type": "Watch-out", "trait": "Over-relying on others' approval", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 2, "type": "Watch-out", "trait": "Absorbing ambient tension", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 2, "type": "Watch-out", "trait": "Hesitating to state boundaries early", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
 
-    # Mulank 3
-    {"mulank": 3, "type": "Strength", "trait": "Warm communication", "status": "supported", "provenance": "Aleka Ghose p. 14 (eloquent expression, warm friendly speech); Webster Life Path (p. 9)"},
-    {"mulank": 3, "type": "Strength", "trait": "Creative concept generation", "status": "supported", "provenance": "Webster Life Path (pp. 9-10 artistic imagination, conceptual flair); Cooper pp. 19-20"},
-    {"mulank": 3, "type": "Strength", "trait": "Intellectual enthusiasm", "status": "supported", "provenance": "Cooper pp. 19-20 (enthusiastic exploration of ideas); Aleka Ghose p. 14"},
-    {"mulank": 3, "type": "Watch-out", "trait": "Scattered focus across multiple initiatives", "status": "supported", "provenance": "Webster Life Path (p. 10 scattering energy across too many interests); Cooper p. 20"},
-    {"mulank": 3, "type": "Watch-out", "trait": "Speaking before full reflection", "status": "supported", "provenance": "Aleka Ghose p. 14 (outspoken, quick to speak); Webster Life Path (p. 10)"},
-    {"mulank": 3, "type": "Watch-out", "trait": "Underestimating delivery effort", "status": "partly supported", "provenance": "Cooper pp. 19-20 (optimism leads to committing to more than can be finished)"},
+    # Mulank 3 (6 traits)
+    {"mulank": 3, "type": "Strength", "trait": "Warm communication", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 3, "type": "Strength", "trait": "Creative concept generation", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 3, "type": "Strength", "trait": "Intellectual enthusiasm", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 3, "type": "Watch-out", "trait": "Scattered focus across multiple initiatives", "status": "supported", "provenance": "Aleka lists scattered energies and unfinished projects; Cooper p. 20 says threes flit between forms"},
+    {"mulank": 3, "type": "Watch-out", "trait": "Speaking before full reflection", "status": "supported", "provenance": "Cooper p. 19 (foot-in-mouth)"},
+    {"mulank": 3, "type": "Watch-out", "trait": "Underestimating delivery effort", "status": "partly supported", "provenance": "Cooper pp. 19-20: threes struggle to put ideas into practice"},
 
-    # Mulank 4
-    {"mulank": 4, "type": "Strength", "trait": "Reliable discipline", "status": "supported", "provenance": "Aleka Ghose p. 15 (methodical effort, dependable building); Webster Life Path (p. 10)"},
-    {"mulank": 4, "type": "Strength", "trait": "Operational thoroughness", "status": "supported", "provenance": "Webster Life Path (pp. 10-11 systematic construction); Cooper pp. 20-22"},
-    {"mulank": 4, "type": "Strength", "trait": "Loyalty to commitments", "status": "supported", "provenance": "Cooper pp. 20-22 (steadfast adherence to duty); Webster Day of Birth (p. 20)"},
-    {"mulank": 4, "type": "Watch-out", "trait": "Rigid adherence to existing routines", "status": "supported", "provenance": "Webster Life Path (p. 11 resists alterations to established methods); Cooper p. 21"},
-    {"mulank": 4, "type": "Watch-out", "trait": "Reluctance to pivot when plans change", "status": "supported", "provenance": "Aleka Ghose p. 15 (stubborn, slow to adapt); Cooper pp. 21-22"},
-    {"mulank": 4, "type": "Watch-out", "trait": "Uneasiness with unmapped territory", "status": "partly supported", "provenance": "Cooper pp. 20-22 (prefers proven procedures over sudden ambiguity)"},
+    # Mulank 4 (6 traits)
+    {"mulank": 4, "type": "Strength", "trait": "Reliable discipline", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 4, "type": "Strength", "trait": "Operational thoroughness", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 4, "type": "Strength", "trait": "Loyalty to commitments", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 4, "type": "Watch-out", "trait": "Rigid adherence to existing routines", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 4, "type": "Watch-out", "trait": "Reluctance to pivot when plans change", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 4, "type": "Watch-out", "trait": "Uneasiness with unmapped territory", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
 
-    # Mulank 5
-    {"mulank": 5, "type": "Strength", "trait": "Quick intellectual agility", "status": "supported", "provenance": "Aleka Ghose pp. 16-17 (fast perception, versatile intellect); Webster Life Path (p. 11)"},
-    {"mulank": 5, "type": "Strength", "trait": "Resourceful adaptability", "status": "supported", "provenance": "Webster Life Path (p. 11 adapts readily to new environments); Cooper pp. 23-25"},
-    {"mulank": 5, "type": "Strength", "trait": "Natural commercial communication", "status": "supported", "provenance": "Aleka Ghose p. 16 (commercial acumen, persuasive trade discourse); Cooper pp. 23-25"},
-    {"mulank": 5, "type": "Watch-out", "trait": "Restless switching between roles or projects", "status": "supported", "provenance": "Webster Life Path (p. 11 restlessness, disliking routine); Cooper p. 24 (easily bored)"},
-    {"mulank": 5, "type": "Watch-out", "trait": "Over-committing across too many fronts", "status": "partly supported", "provenance": "Cooper pp. 23-25 (spreading attention across diverse simultaneous pursuits)"},
-    {"mulank": 5, "type": "Watch-out", "trait": "Neglecting foundational follow-through", "status": "supported", "provenance": "Aleka Ghose p. 17 (impatience with routine maintenance); Webster Life Path (p. 11)"},
+    # Mulank 5 (6 traits)
+    {"mulank": 5, "type": "Strength", "trait": "Quick intellectual agility", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 5, "type": "Strength", "trait": "Resourceful adaptability", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 5, "type": "Strength", "trait": "Natural commercial communication", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 5, "type": "Watch-out", "trait": "Restless switching between roles or projects", "status": "supported", "provenance": "Cooper p. 24 = flighty and fidgety; Aleka lists restlessness and boredom"},
+    {"mulank": 5, "type": "Watch-out", "trait": "Over-committing across too many fronts", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 5, "type": "Watch-out", "trait": "Neglecting foundational follow-through", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
 
-    # Mulank 6
-    {"mulank": 6, "type": "Strength", "trait": "Empathetic stewardship", "status": "supported", "provenance": "Aleka Ghose p. 18 (protective care of dependents); Webster Life Path (pp. 11-12)"},
-    {"mulank": 6, "type": "Strength", "trait": "Aesthetic discernment", "status": "supported", "provenance": "Webster Life Path (p. 11 love of beauty, harmony); Cooper pp. 25-27"},
-    {"mulank": 6, "type": "Strength", "trait": "Protective loyalty to close circles", "status": "supported", "provenance": "Cooper pp. 25-27 (domestic dedication, family guardian); Aleka Ghose p. 18"},
-    {"mulank": 6, "type": "Watch-out", "trait": "Taking on others' duties to your own detriment", "status": "supported", "provenance": "Webster Life Path (p. 12 carrying others' burdens); Cooper p. 26"},
-    {"mulank": 6, "type": "Watch-out", "trait": "Sensitivity to perceived slights", "status": "supported", "provenance": "Cooper pp. 25-27 (feeling unappreciated when care is not acknowledged); Aleka Ghose p. 18"},
-    {"mulank": 6, "type": "Watch-out", "trait": "Difficulty stepping back from caretaking", "status": "partly supported", "provenance": "Webster Life Path (p. 12 reluctance to let others handle their own duties)"},
+    # Mulank 6 (6 traits)
+    {"mulank": 6, "type": "Strength", "trait": "Empathetic stewardship", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 6, "type": "Strength", "trait": "Aesthetic discernment", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 6, "type": "Strength", "trait": "Protective loyalty to close circles", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 6, "type": "Watch-out", "trait": "Taking on others' duties to your own detriment", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 6, "type": "Watch-out", "trait": "Sensitivity to perceived slights", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 6, "type": "Watch-out", "trait": "Difficulty stepping back from caretaking", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
 
-    # Mulank 7
-    {"mulank": 7, "type": "Strength", "trait": "Perceptive research acumen", "status": "supported", "provenance": "Aleka Ghose pp. 19-20 (deep investigator, contemplation); Webster Life Path (p. 12)"},
-    {"mulank": 7, "type": "Strength", "trait": "Independent analytical thinking", "status": "supported", "provenance": "Webster Life Path (pp. 12-13 solitary analysis, reliance on reason); Cooper pp. 27-29"},
-    {"mulank": 7, "type": "Strength", "trait": "Comfort with solitude and depth", "status": "supported", "provenance": "Cooper pp. 27-29 (values quiet solitude, deep study); Aleka Ghose p. 19"},
-    {"mulank": 7, "type": "Watch-out", "trait": "Withdrawing into solitary rumination", "status": "supported", "provenance": "Webster Life Path (p. 13 aloofness, social retreat); Cooper p. 28"},
-    {"mulank": 7, "type": "Watch-out", "trait": "Over-complicating straightforward actions", "status": "synthesised (no page)", "provenance": "Integrative behavioural observation; no direct page citation"},
-    {"mulank": 7, "type": "Watch-out", "trait": "Holding trusted allies at arm's length", "status": "supported", "provenance": "Aleka Ghose p. 20 (secretive, slow to share feelings); Webster Life Path (p. 13)"},
+    # Mulank 7 (6 traits)
+    {"mulank": 7, "type": "Strength", "trait": "Perceptive research acumen", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 7, "type": "Strength", "trait": "Independent analytical thinking", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 7, "type": "Strength", "trait": "Comfort with solitude and depth", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 7, "type": "Watch-out", "trait": "Withdrawing into solitary rumination", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 7, "type": "Watch-out", "trait": "Over-complicating straightforward actions", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 7, "type": "Watch-out", "trait": "Holding trusted allies at arm's length", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
 
-    # Mulank 8
-    {"mulank": 8, "type": "Strength", "trait": "Long-term strategic patience", "status": "supported", "provenance": "Aleka Ghose pp. 20-21 (persevering builder over time); Webster Life Path (p. 13)"},
-    {"mulank": 8, "type": "Strength", "trait": "Resource and financial discipline", "status": "supported", "provenance": "Webster Life Path (pp. 13-14 management of material resources); Cooper pp. 29-31"},
-    {"mulank": 8, "type": "Strength", "trait": "Fair and steady execution", "status": "supported", "provenance": "Aleka Ghose p. 20 (ethical administration under pressure)"},
-    {"mulank": 8, "type": "Watch-out", "trait": "Assuming full responsibility alone", "status": "supported", "provenance": "Aleka Ghose pp. 20-21 (carrying burdens in silence, reluctant to delegate)"},
-    {"mulank": 8, "type": "Watch-out", "trait": "Pushing past sustainable limits while setting a pace others struggle to match", "status": "supported", "provenance": "Overwork traces to Aleka Ghose pp. 20-21; demanding pace traces to Cooper pp. 29-31 (driving self and subordinates relentlessly)"},
+    # Mulank 8 (5 traits)
+    {"mulank": 8, "type": "Strength", "trait": "Long-term strategic patience", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 8, "type": "Strength", "trait": "Resource and financial discipline", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 8, "type": "Strength", "trait": "Fair and steady execution", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 8, "type": "Watch-out", "trait": "Assuming full responsibility alone", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 8, "type": "Watch-out", "trait": "Pushing past sustainable limits while setting a pace others struggle to match", "status": "supported", "provenance": "Overwork traces to Aleka pp. 20-21 (workaholic); Cooper pp. 29-31 means eights set a pace others can't keep up with"},
 
-    # Mulank 9
-    {"mulank": 9, "type": "Strength", "trait": "Courageous conviction", "status": "supported", "provenance": "Aleka Ghose pp. 21-22 (fighter for causes, moral courage); Webster Life Path (p. 14)"},
-    {"mulank": 9, "type": "Strength", "trait": "Broad humanitarian outlook", "status": "supported", "provenance": "Webster Life Path (pp. 14-15 universal brotherhood, broad welfare); Cooper pp. 31-33"},
-    {"mulank": 9, "type": "Strength", "trait": "Energetic generosity", "status": "supported", "provenance": "Cooper pp. 31-33 (generous guidance and energy); Aleka Ghose p. 22"},
-    {"mulank": 9, "type": "Watch-out", "trait": "Bluntness when frustrated by inefficiency", "status": "supported", "provenance": "Aleka Ghose p. 22 (quick temper, sharp speech); Webster Life Path (p. 15)"},
-    {"mulank": 9, "type": "Watch-out", "trait": "Scattering vital energy across too many causes", "status": "partly supported", "provenance": "Webster Life Path (p. 15 expending energy across too many external struggles)"},
-    {"mulank": 9, "type": "Watch-out", "trait": "Expecting others to share your exact intensity", "status": "supported", "provenance": "Cooper pp. 31-33 (disappointment when others do not match personal dedication)"}
+    # Mulank 9 (6 traits)
+    {"mulank": 9, "type": "Strength", "trait": "Courageous conviction", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 9, "type": "Strength", "trait": "Broad humanitarian outlook", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 9, "type": "Strength", "trait": "Energetic generosity", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 9, "type": "Watch-out", "trait": "Bluntness when frustrated by inefficiency", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 9, "type": "Watch-out", "trait": "Scattering vital energy across too many causes", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"},
+    {"mulank": 9, "type": "Watch-out", "trait": "Expecting others to share your exact intensity", "status": "synthesised (tradition-wide theme)", "provenance": "Tradition-wide theme"}
 ]
 
 def build_revised_cards():
@@ -425,15 +425,6 @@ def build_revised_cards():
                 },
                 "prediction": {
                     "status": "blocked"
-                },
-                "trace_audit": {
-                    "trait_mapping": (
-                        "Mulank 1 'cool quickly' -> Cooper pp. 15-16 (Understanding Numerology, Aquarian 1990)"
-                        if num == 1 else
-                        "Mulank 8 overwork -> Aleka pp. 20-21; pace -> Cooper pp. 29-31 (Understanding Numerology, Aquarian 1990)"
-                        if num == 8 else
-                        "All traits sourced from verified citations or synthesised"
-                    )
                 }
             }
         }
@@ -511,18 +502,13 @@ def write_files():
     out_json = {
         "metadata": {
             "title": "Numeros Vision Mulank Pilot Cards (Mulank 1 to 9)",
-            "version": "1.3.1",
+            "version": "1.3.2",
             "revised_date": "2026-11-08",
             "governing_rules": "AGENTS.md & .agents/rules/nv_think_framework.md",
             "internal_validation_status": "untested",
             "internal_prediction_status": "blocked",
             "internal_audit_notes": {
                 "cooper_reference": "Understanding Numerology (Aquarian, 1990)",
-                "trace_notes": {
-                    "mulank_8_overwork": "Aleka pp. 20-21",
-                    "mulank_8_pace": "Cooper pp. 29-31",
-                    "mulank_1_cool_quickly": "Cooper pp. 15-16"
-                },
                 "aleka_ghose_single_pages": "1: pp 11-12, 2: p 13, 3: p 14, 4: p 15, 5: pp 16-17, 6: p 18, 7: pp 19-20, 8: pp 20-21, 9: pp 21-22; compounds: pp 59-69",
                 "webster_life_path_pages": "1: pp 5-7, 2: pp 8-9, 3: pp 9-10, 4: pp 10-11, 5: p 11, 6: pp 11-12, 7: pp 12-13, 8: pp 13-14, 9: pp 14-15; masters: pp 16-18",
                 "webster_day_of_birth_pages": "1-4: p 20, 5: pp 20-21, 6-9: p 21",
@@ -530,7 +516,7 @@ def write_files():
                 "secondary_western_status": "unverified",
                 "public_layer_labels": ["Chaldean tradition", "Lo Shu grid", "Western tradition"]
             },
-            "trait_trace_table": TRAIT_TRACE_REGISTRY
+            "trait_trace_table_53": TRAIT_TRACE_REGISTRY
         },
         "cards": cards,
         "sample_compound_cards": {
@@ -545,7 +531,7 @@ def write_files():
     # Update docs/NV_THINK_MULANK_PILOT_RULE_CARDS.md
     doc_lines = []
     doc_lines.append("# NUMEROS VISION — MULANK PILOT CARDS (1 TO 9)")
-    doc_lines.append("**Registry Version:** 1.3.1 (Plain Words & Generic Institutional Edition)  ")
+    doc_lines.append("**Registry Version:** 1.3.2 (Plain Words & Generic Institutional Edition)  ")
     doc_lines.append("**Governance:** Server-Side Internal Architecture Only  ")
     doc_lines.append("**Validation Status:** `untested` (Internal)  ")
     doc_lines.append("**Prediction Status:** `blocked` (Internal)  ")
@@ -566,7 +552,7 @@ def write_files():
     doc_lines.append("")
     doc_lines.append("---")
     doc_lines.append("")
-    doc_lines.append("## 2. Rebuilt Trait Trace Register (Audit Trail)")
+    doc_lines.append("## 2. Rebuilt 53-Trait Trace Register (Audit Trail)")
     doc_lines.append("| Mulank | Type | Trait | Audit Status | Source Claim / Provenance |")
     doc_lines.append("|:---:|:---:|:---|:---:|:---|")
     for row in TRAIT_TRACE_REGISTRY:
@@ -598,8 +584,6 @@ def write_files():
         doc_lines.append(f"- **Psychology Provenance:** `{ir['psychology']['provenance']}`")
         doc_lines.append(f"- **Validation Status:** `{ir['validation']['status']}`")
         doc_lines.append(f"- **Prediction Status:** `{ir['prediction']['status']}`")
-        if "trace_audit" in ir and ir["trace_audit"].get("trait_mapping"):
-            doc_lines.append(f"- **Trace Audit:** `{ir['trace_audit']['trait_mapping']}`")
         doc_lines.append("")
         doc_lines.append("---")
         doc_lines.append("")

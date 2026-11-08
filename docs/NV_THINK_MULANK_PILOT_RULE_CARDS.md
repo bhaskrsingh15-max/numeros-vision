@@ -1,5 +1,5 @@
 # NUMEROS VISION — MULANK PILOT CARDS (1 TO 9)
-**Registry Version:** 1.3.1 (Plain Words & Generic Institutional Edition)  
+**Registry Version:** 1.3.2 (Plain Words & Generic Institutional Edition)  
 **Governance:** Server-Side Internal Architecture Only  
 **Validation Status:** `untested` (Internal)  
 **Prediction Status:** `blocked` (Internal)  
@@ -20,62 +20,62 @@
 
 ---
 
-## 2. Rebuilt Trait Trace Register (Audit Trail)
+## 2. Rebuilt 53-Trait Trace Register (Audit Trail)
 | Mulank | Type | Trait | Audit Status | Source Claim / Provenance |
 |:---:|:---:|:---|:---:|:---|
-| **1** | Strength | Self-starting initiative | `supported` | Aleka Ghose pp. 11-12 (pioneering impulse, leadership ambition); Webster Life Path (p. 5) |
-| **1** | Strength | Clear decision-making | `supported` | Webster Day of Birth (p. 20 strong determination, independent mind); Cooper pp. 15-16 |
-| **1** | Strength | Comfort leading from scratch | `supported` | Aleka Ghose p. 11 (originating enterprises independently); Webster Life Path (p. 5) |
-| **1** | Watch-out | Temptation to overrule others | `supported` | Aleka Ghose p. 12 (domineering tendency); Cooper p. 16 |
-| **1** | Watch-out | Impatience with slower paces | `supported` | Webster Life Path (p. 6 impatience with slower associates); Cooper p. 15 |
-| **1** | Watch-out | Can cool quickly on a new idea | `supported` | Cooper pp. 15-16 (initial enthusiasm can drop once project is launched) |
-| **2** | Strength | Diplomatic tact | `supported` | Aleka Ghose p. 13 (gentle peacemaker, diplomatic mediator); Webster Life Path (p. 8) |
-| **2** | Strength | Loyal partnership | `supported` | Webster Life Path (pp. 8-9 supportive alliance); Cooper pp. 17-18 |
-| **2** | Strength | Emotional attunement | `partly supported` | Cooper pp. 17-18 (intuitive sensitivity to feelings); Aleka Ghose p. 13 |
-| **2** | Watch-out | Over-relying on others' approval | `supported` | Webster Life Path (p. 8 sensitivity to criticism, seeking approval); Cooper p. 18 |
-| **2** | Watch-out | Absorbing ambient tension | `synthesised (no page)` | Integrative psychological synthesis of empathetic receptivity under stress |
-| **2** | Watch-out | Hesitating to state boundaries early | `partly supported` | Webster Life Path (p. 9 yields too easily to avoid confrontation); Cooper p. 18 |
-| **3** | Strength | Warm communication | `supported` | Aleka Ghose p. 14 (eloquent expression, warm friendly speech); Webster Life Path (p. 9) |
-| **3** | Strength | Creative concept generation | `supported` | Webster Life Path (pp. 9-10 artistic imagination, conceptual flair); Cooper pp. 19-20 |
-| **3** | Strength | Intellectual enthusiasm | `supported` | Cooper pp. 19-20 (enthusiastic exploration of ideas); Aleka Ghose p. 14 |
-| **3** | Watch-out | Scattered focus across multiple initiatives | `supported` | Webster Life Path (p. 10 scattering energy across too many interests); Cooper p. 20 |
-| **3** | Watch-out | Speaking before full reflection | `supported` | Aleka Ghose p. 14 (outspoken, quick to speak); Webster Life Path (p. 10) |
-| **3** | Watch-out | Underestimating delivery effort | `partly supported` | Cooper pp. 19-20 (optimism leads to committing to more than can be finished) |
-| **4** | Strength | Reliable discipline | `supported` | Aleka Ghose p. 15 (methodical effort, dependable building); Webster Life Path (p. 10) |
-| **4** | Strength | Operational thoroughness | `supported` | Webster Life Path (pp. 10-11 systematic construction); Cooper pp. 20-22 |
-| **4** | Strength | Loyalty to commitments | `supported` | Cooper pp. 20-22 (steadfast adherence to duty); Webster Day of Birth (p. 20) |
-| **4** | Watch-out | Rigid adherence to existing routines | `supported` | Webster Life Path (p. 11 resists alterations to established methods); Cooper p. 21 |
-| **4** | Watch-out | Reluctance to pivot when plans change | `supported` | Aleka Ghose p. 15 (stubborn, slow to adapt); Cooper pp. 21-22 |
-| **4** | Watch-out | Uneasiness with unmapped territory | `partly supported` | Cooper pp. 20-22 (prefers proven procedures over sudden ambiguity) |
-| **5** | Strength | Quick intellectual agility | `supported` | Aleka Ghose pp. 16-17 (fast perception, versatile intellect); Webster Life Path (p. 11) |
-| **5** | Strength | Resourceful adaptability | `supported` | Webster Life Path (p. 11 adapts readily to new environments); Cooper pp. 23-25 |
-| **5** | Strength | Natural commercial communication | `supported` | Aleka Ghose p. 16 (commercial acumen, persuasive trade discourse); Cooper pp. 23-25 |
-| **5** | Watch-out | Restless switching between roles or projects | `supported` | Webster Life Path (p. 11 restlessness, disliking routine); Cooper p. 24 (easily bored) |
-| **5** | Watch-out | Over-committing across too many fronts | `partly supported` | Cooper pp. 23-25 (spreading attention across diverse simultaneous pursuits) |
-| **5** | Watch-out | Neglecting foundational follow-through | `supported` | Aleka Ghose p. 17 (impatience with routine maintenance); Webster Life Path (p. 11) |
-| **6** | Strength | Empathetic stewardship | `supported` | Aleka Ghose p. 18 (protective care of dependents); Webster Life Path (pp. 11-12) |
-| **6** | Strength | Aesthetic discernment | `supported` | Webster Life Path (p. 11 love of beauty, harmony); Cooper pp. 25-27 |
-| **6** | Strength | Protective loyalty to close circles | `supported` | Cooper pp. 25-27 (domestic dedication, family guardian); Aleka Ghose p. 18 |
-| **6** | Watch-out | Taking on others' duties to your own detriment | `supported` | Webster Life Path (p. 12 carrying others' burdens); Cooper p. 26 |
-| **6** | Watch-out | Sensitivity to perceived slights | `supported` | Cooper pp. 25-27 (feeling unappreciated when care is not acknowledged); Aleka Ghose p. 18 |
-| **6** | Watch-out | Difficulty stepping back from caretaking | `partly supported` | Webster Life Path (p. 12 reluctance to let others handle their own duties) |
-| **7** | Strength | Perceptive research acumen | `supported` | Aleka Ghose pp. 19-20 (deep investigator, contemplation); Webster Life Path (p. 12) |
-| **7** | Strength | Independent analytical thinking | `supported` | Webster Life Path (pp. 12-13 solitary analysis, reliance on reason); Cooper pp. 27-29 |
-| **7** | Strength | Comfort with solitude and depth | `supported` | Cooper pp. 27-29 (values quiet solitude, deep study); Aleka Ghose p. 19 |
-| **7** | Watch-out | Withdrawing into solitary rumination | `supported` | Webster Life Path (p. 13 aloofness, social retreat); Cooper p. 28 |
-| **7** | Watch-out | Over-complicating straightforward actions | `synthesised (no page)` | Integrative behavioural observation; no direct page citation |
-| **7** | Watch-out | Holding trusted allies at arm's length | `supported` | Aleka Ghose p. 20 (secretive, slow to share feelings); Webster Life Path (p. 13) |
-| **8** | Strength | Long-term strategic patience | `supported` | Aleka Ghose pp. 20-21 (persevering builder over time); Webster Life Path (p. 13) |
-| **8** | Strength | Resource and financial discipline | `supported` | Webster Life Path (pp. 13-14 management of material resources); Cooper pp. 29-31 |
-| **8** | Strength | Fair and steady execution | `supported` | Aleka Ghose p. 20 (ethical administration under pressure) |
-| **8** | Watch-out | Assuming full responsibility alone | `supported` | Aleka Ghose pp. 20-21 (carrying burdens in silence, reluctant to delegate) |
-| **8** | Watch-out | Pushing past sustainable limits while setting a pace others struggle to match | `supported` | Overwork traces to Aleka Ghose pp. 20-21; demanding pace traces to Cooper pp. 29-31 (driving self and subordinates relentlessly) |
-| **9** | Strength | Courageous conviction | `supported` | Aleka Ghose pp. 21-22 (fighter for causes, moral courage); Webster Life Path (p. 14) |
-| **9** | Strength | Broad humanitarian outlook | `supported` | Webster Life Path (pp. 14-15 universal brotherhood, broad welfare); Cooper pp. 31-33 |
-| **9** | Strength | Energetic generosity | `supported` | Cooper pp. 31-33 (generous guidance and energy); Aleka Ghose p. 22 |
-| **9** | Watch-out | Bluntness when frustrated by inefficiency | `supported` | Aleka Ghose p. 22 (quick temper, sharp speech); Webster Life Path (p. 15) |
-| **9** | Watch-out | Scattering vital energy across too many causes | `partly supported` | Webster Life Path (p. 15 expending energy across too many external struggles) |
-| **9** | Watch-out | Expecting others to share your exact intensity | `supported` | Cooper pp. 31-33 (disappointment when others do not match personal dedication) |
+| **1** | Strength | Self-starting initiative | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **1** | Strength | Clear decision-making | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **1** | Strength | Comfort leading from scratch | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **1** | Watch-out | Temptation to overrule others | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **1** | Watch-out | Impatience with slower paces | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **1** | Watch-out | Can cool quickly on a new idea | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **2** | Strength | Diplomatic tact | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **2** | Strength | Loyal partnership | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **2** | Strength | Emotional attunement | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **2** | Watch-out | Over-relying on others' approval | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **2** | Watch-out | Absorbing ambient tension | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **2** | Watch-out | Hesitating to state boundaries early | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **3** | Strength | Warm communication | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **3** | Strength | Creative concept generation | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **3** | Strength | Intellectual enthusiasm | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **3** | Watch-out | Scattered focus across multiple initiatives | `supported` | Aleka lists scattered energies and unfinished projects; Cooper p. 20 says threes flit between forms |
+| **3** | Watch-out | Speaking before full reflection | `supported` | Cooper p. 19 (foot-in-mouth) |
+| **3** | Watch-out | Underestimating delivery effort | `partly supported` | Cooper pp. 19-20: threes struggle to put ideas into practice |
+| **4** | Strength | Reliable discipline | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **4** | Strength | Operational thoroughness | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **4** | Strength | Loyalty to commitments | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **4** | Watch-out | Rigid adherence to existing routines | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **4** | Watch-out | Reluctance to pivot when plans change | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **4** | Watch-out | Uneasiness with unmapped territory | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **5** | Strength | Quick intellectual agility | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **5** | Strength | Resourceful adaptability | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **5** | Strength | Natural commercial communication | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **5** | Watch-out | Restless switching between roles or projects | `supported` | Cooper p. 24 = flighty and fidgety; Aleka lists restlessness and boredom |
+| **5** | Watch-out | Over-committing across too many fronts | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **5** | Watch-out | Neglecting foundational follow-through | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **6** | Strength | Empathetic stewardship | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **6** | Strength | Aesthetic discernment | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **6** | Strength | Protective loyalty to close circles | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **6** | Watch-out | Taking on others' duties to your own detriment | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **6** | Watch-out | Sensitivity to perceived slights | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **6** | Watch-out | Difficulty stepping back from caretaking | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **7** | Strength | Perceptive research acumen | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **7** | Strength | Independent analytical thinking | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **7** | Strength | Comfort with solitude and depth | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **7** | Watch-out | Withdrawing into solitary rumination | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **7** | Watch-out | Over-complicating straightforward actions | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **7** | Watch-out | Holding trusted allies at arm's length | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **8** | Strength | Long-term strategic patience | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **8** | Strength | Resource and financial discipline | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **8** | Strength | Fair and steady execution | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **8** | Watch-out | Assuming full responsibility alone | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **8** | Watch-out | Pushing past sustainable limits while setting a pace others struggle to match | `supported` | Overwork traces to Aleka pp. 20-21 (workaholic); Cooper pp. 29-31 means eights set a pace others can't keep up with |
+| **9** | Strength | Courageous conviction | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **9** | Strength | Broad humanitarian outlook | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **9** | Strength | Energetic generosity | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **9** | Watch-out | Bluntness when frustrated by inefficiency | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **9** | Watch-out | Scattering vital energy across too many causes | `synthesised (tradition-wide theme)` | Tradition-wide theme |
+| **9** | Watch-out | Expecting others to share your exact intensity | `synthesised (tradition-wide theme)` | Tradition-wide theme |
 
 ---
 
@@ -98,7 +98,6 @@
 - **Psychology Provenance:** `synthesised, no direct source`
 - **Validation Status:** `untested`
 - **Prediction Status:** `blocked`
-- **Trace Audit:** `Mulank 1 'cool quickly' -> Cooper pp. 15-16 (Understanding Numerology, Aquarian 1990)`
 
 ---
 
@@ -121,7 +120,6 @@
 - **Psychology Provenance:** `synthesised, no direct source`
 - **Validation Status:** `untested`
 - **Prediction Status:** `blocked`
-- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
@@ -144,7 +142,6 @@
 - **Psychology Provenance:** `synthesised, no direct source`
 - **Validation Status:** `untested`
 - **Prediction Status:** `blocked`
-- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
@@ -167,7 +164,6 @@
 - **Psychology Provenance:** `synthesised, no direct source`
 - **Validation Status:** `untested`
 - **Prediction Status:** `blocked`
-- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
@@ -190,7 +186,6 @@
 - **Psychology Provenance:** `synthesised, no direct source`
 - **Validation Status:** `untested`
 - **Prediction Status:** `blocked`
-- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
@@ -213,7 +208,6 @@
 - **Psychology Provenance:** `synthesised, no direct source`
 - **Validation Status:** `untested`
 - **Prediction Status:** `blocked`
-- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
@@ -236,7 +230,6 @@
 - **Psychology Provenance:** `synthesised, no direct source`
 - **Validation Status:** `untested`
 - **Prediction Status:** `blocked`
-- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
@@ -259,7 +252,6 @@
 - **Psychology Provenance:** `synthesised, no direct source`
 - **Validation Status:** `untested`
 - **Prediction Status:** `blocked`
-- **Trace Audit:** `Mulank 8 overwork -> Aleka pp. 20-21; pace -> Cooper pp. 29-31 (Understanding Numerology, Aquarian 1990)`
 
 ---
 
@@ -282,7 +274,6 @@
 - **Psychology Provenance:** `synthesised, no direct source`
 - **Validation Status:** `untested`
 - **Prediction Status:** `blocked`
-- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
