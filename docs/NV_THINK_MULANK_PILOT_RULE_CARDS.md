@@ -1,406 +1,304 @@
-# NUMEROS VISION — NV THINK™ PILOT RULE CARDS (MULANK 1 TO 9)
-
-**Version:** 1.0.0  
-**Effective Date:** 2026-11-08  
-**Validation Status:** `untested`  
-**Prediction Eligibility:** `blocked`  
-
-### Governing Principles
-- **Zero Model Training / Fine-tuning**: Strictly deterministic and literature-backed.
-- **Zero Embeddings Generated**: Rule cards are symbolic logic-to-psychology schemas.
-- **Short Phrases Only**: All behaviour and psychology texts are original syntheses.
-- **Zero Silent Averaging**: All tradition conflicts are recorded verbatim.
+# NUMEROS VISION — MULANK PILOT CARDS (1 TO 9)
+**Registry Version:** 1.3.1 (Plain Words & Generic Institutional Edition)  
+**Governance:** Server-Side Internal Architecture Only  
+**Validation Status:** `untested` (Internal)  
+**Prediction Status:** `blocked` (Internal)  
 
 ---
 
-## Mulank 1 — The Sovereign Initiator
-
-### 1. LOGIC
-- **Cosmological Principle:** The Monad; the primal point from which all mathematical progression originates.
-- **Tradition & Astrological Attribution:** Chaldean: Sun (Surya). Lo Shu: North coordinate, Water element (Life Path & Vocational Journey). Pythagorean: The point, masculine active principle.
-- **Provenance:** Aleka Ghose pp. 13-14; Webster pp. 28-31; Craze pp. 18-19; Cooper matrix.
-
-### 2. OBSERVATION
-- **Natal Chart Criteria:** Born on the 1st, 10th, 19th, or 28th of any calendar month.
-- **Grid & Repetition Manifestation:** Single 1 in Lo Shu denotes standard communicative autonomy; repeated 1s (11, 111, 1111) indicate intensifying internal focus on self-directed execution.
-- **Compound Sub-Variants:**
-  - **Number 1:** Pure unitary impulse; uncompromising self-reliance.
-  - **Number 10:** The Wheel of Fortune; completion of past cycle and sovereign fresh origination.
-  - **Number 19:** The Prince of Heaven; high vitality with profound karmic tests of ego balance.
-  - **Number 28:** The Trusting Lamb; executive ambition navigating relational negotiations and partnership dependencies.
-
-### 3. BEHAVIOUR (Observable Operational Expression)
-- **Operational Summary:** Tends to initiate projects independently and prefers setting direction rather than following pre-established consensus. When facing ambiguous tasks, typically creates their own working framework. In collaborative settings, prefers direct, concise communication and takes ownership of critical outcomes, occasionally showing impatience when team pacing lags behind their conceptual roadmap.
-- **Workplace & Vocational Patterns:** Naturally gravitates toward individual contributor leadership, founder roles, or autonomous departmental ownership.
-- **Delegation & Execution Style:** Tends to retain architectural control; delegates operational steps while monitoring execution closely.
-- **Source Citations:** Aleka Ghose pp. 13-14 (leadership, creation impulse, high ambition); Cooper matrix (sovereign executive drive); Webster pp. 28-31 (vibrational career independence); Craze pp. 18-19 (independent initiative).
-
-### 4. PSYCHOLOGY (Cognitive & Emotional Drivers)
-- **Psychological Summary:** Core emotional security is anchored in autonomy and self-determination. The underlying cognitive driver is a need to author one's own trajectory without needing external validation or permission. Under chronic stress, tends to withdraw into solitary problem-solving rather than asking for assistance, as asking for help can internally register as an admission of personal inadequacy or loss of sovereignty.
-- **Core Emotional Need:** Autonomy and self-directed agency.
-- **Vulnerability / Threat Trigger:** Being placed in micromanaged or highly constrained administrative environments with zero decision-making authority.
-- **Stress & Defensive Response:** Unilateral decision-making, emotional armor, and accelerated independent exertion.
-- **Source Citations:** Aleka Ghose p. 14 (critical self-expectation, intolerance of subordination); Craze p. 19 (fear of dependency); Webster p. 29 (inner drive for individual recognition).
-
-### 5. INTERPRETATION & CONTEXT
-- **Contextual Expression:** In supportive environments with high trust, manifests as an inspiring, generous pioneer who shoulders responsibility effortlessly. In toxic or oppressive environments, can present as aloof, rigid, or defensive, protecting internal autonomy through sharp boundaries.
-- **NV THINK™ Duality:** Outward executive certainty coexisting with a quiet internal loneliness rooted in the belief that one must always carry the burden alone.
-
-### 6. CONTRADICTIONS & DISCREPANCIES (No Silent Averaging)
-- Elemental Discrepancy: Chaldean / Vedic traditions attribute Fire and the Sun to Number 1, whereas Lo Shu (Webster) assigns Number 1 to the North Water element governing career flow. These are kept distinct: Chaldean explains the fiery initiative, while Lo Shu explains career fluidity.
-- Compound 28 Tension: While Craze groups all 1s under pure leadership, Chaldean sources (Ghose p. 37, Cooper) emphasize that 28 brings heavy relational friction (2+8=10=1) where personal drive conflicts with partnership obligations.
-- **Resolution:** Zero averaging. The Chaldean planetary ruler (Sun) and Lo Shu elemental vector (Water) operate in parallel as separate diagnostic layers.
-
-### 7. VALIDATION & PREDICTION STATUS
-- **Validation Status:** `untested` (Hypothesis catalogued from reviewed literature. Requires correlation against verified case cohort.)
-- **Prediction Eligibility:** `blocked` (Deterministic predictions based on Mulank 1 are prohibited under NV THINK™ governance.)
+## 1. Public Presentation Standards
+- **Plain Public Layer Labels:** `Chaldean tradition`, `Lo Shu grid`, `Western tradition`.
+- **Customer Headings:** `Your numbers at a glance`, `How this shows up day to day`, `What tends to drive you`, `Strengths and watch-outs`, `Traditional note`.
+- **Zero Author Names or Titles in Customer Copy:** Full bibliography isolated to `app/static/how_we_work.html`.
+- **Cooper Reference Confirmed:** `Understanding Numerology (Aquarian, 1990)` recorded in internal audit metadata only.
+- **Verified Internal Citations:**
+  - Webster Life Path: 1: pp 5–7, 2: pp 8–9, 3: pp 9–10, 4: pp 10–11, 5: p 11, 6: pp 11–12, 7: pp 12–13, 8: pp 13–14, 9: pp 14–15; Masters: pp 16–18.
+  - Webster Day of Birth: 1–4: p 20, 5: pp 20–21, 6–9: p 21.
+  - Aleka Ghose Single Numbers: 1: pp 11–12, 2: p 13, 3: p 14, 4: p 15, 5: pp 16–17, 6: p 18, 7: pp 19–20, 8: pp 20–21, 9: pp 21–22; Compounds: pp 59–69.
+  - Western tradition: pp 15–33 (attributions: 8=Pluto, 6=Moon, 7=Venus, 4=Saturn, 2=Earth).
+  - Secondary Western view: Marked `unverified`.
 
 ---
 
-## Mulank 2 — The Diplomatic Harmonizer
-
-### 1. LOGIC
-- **Cosmological Principle:** The Dyad; the reflective polarity, reception, duality, and relational balance.
-- **Tradition & Astrological Attribution:** Chaldean: Moon (Chandra). Lo Shu: South-West coordinate, Earth element (Relationships & Domestic Alliances). Pythagorean: Line, feminine receptive principle.
-- **Provenance:** Aleka Ghose pp. 14-15; Webster pp. 32-35; Craze pp. 20-21; Cooper matrix.
-
-### 2. OBSERVATION
-- **Natal Chart Criteria:** Born on the 2nd, 11th, 20th, or 29th of any calendar month.
-- **Grid & Repetition Manifestation:** Single 2 in Lo Shu indicates intuitive relational awareness; multiple 2s (22, 222) suggest heightened sensitivity to interpersonal atmosphere.
-- **Compound Sub-Variants:**
-  - **Number 2:** Gentle reflective partnership; natural peacemaking.
-  - **Number 11:** Master Number / Lion Muzzled; intense visionary inspiration paired with internal emotional vulnerability.
-  - **Number 20:** The Awakening / Judgement; deep reflective incubation and calling toward collective service.
-  - **Number 29:** The Grace Under Pressure; heavy relational trials testing personal discernment and emotional boundaries.
-
-### 3. BEHAVIOUR (Observable Operational Expression)
-- **Operational Summary:** Tends to approach challenges through mediation, negotiation, and building consensus among stakeholders. Observes subtle group dynamics and tone of voice before offering opinions. Avoids abrupt confrontation, often preferring indirect or quiet diplomacy to resolve friction. In task execution, works well in collaborative tandems and supportive co-pilot roles.
-- **Workplace & Vocational Patterns:** Thrives in diplomatic roles, counseling, mediation, executive partnership, and cross-functional coordination.
-- **Delegation & Execution Style:** Shares responsibility comfortably; values reciprocal trust and open feedback over command-and-control oversight.
-- **Source Citations:** Aleka Ghose pp. 14-15 (gentle calm nature, emotional attunement, partnership focus); Cooper matrix (diplomatic sensitivity); Webster pp. 32-35 (relational Earth grounding); Craze pp. 20-21 (peacemaking instinct).
-
-### 4. PSYCHOLOGY (Cognitive & Emotional Drivers)
-- **Psychological Summary:** Core emotional stability is tethered to relational harmony and psychological safety. Deeply attuned to environmental mood, often absorbing ambient tension without conscious intent. When conflict erupts, the initial instinct is to de-escalate or accommodate, occasionally at the expense of asserting personal boundaries, because discord can feel like an existential threat to stability.
-- **Core Emotional Need:** Harmonious connection, emotional validation, and peaceful equilibrium.
-- **Vulnerability / Threat Trigger:** Aggressive, high-conflict environments with overt hostility or dismissive communication.
-- **Stress & Defensive Response:** Passive withdrawal, internal rumination, emotional hesitation, or over-accommodation.
-- **Source Citations:** Aleka Ghose p. 15 (cold calm Moon, high emotional receptivity); Craze p. 21 (fear of discord and rejection); Webster p. 33 (desire for relational security).
-
-### 5. INTERPRETATION & CONTEXT
-- **Contextual Expression:** In respectful, emotionally mature environments, acts as an indispensable cultural anchor and strategic diplomat. In chaotic or hostile environments, may become indecisive, overly defensive, or anxious.
-- **NV THINK™ Duality:** Exceptional empathic insight into others coexisting with difficulty clarifying and communicating one's own immediate needs.
-
-### 6. CONTRADICTIONS & DISCREPANCIES (No Silent Averaging)
-- Master Number Reduction: Western traditions (Craze) preserve 11 as a pure Master Number without single-digit reduction. Chaldean / Vedic systems (Ghose, Cooper) reduce 11 to root 2 for planetary rulership (Moon) while evaluating 11 as a potent compound indicator.
-- Elemental Discrepancy: Chaldean links 2 to Water (Moon), whereas Lo Shu places 2 in South-West Earth. Reconciled: Water represents emotional fluidity; Earth represents relational stability.
-- **Resolution:** Both compound status (11) and root planet (2/Moon) are stored. Zero blending of reduction methods.
-
-### 7. VALIDATION & PREDICTION STATUS
-- **Validation Status:** `untested` (Hypothesis catalogued from reviewed literature. Requires correlation against verified case cohort.)
-- **Prediction Eligibility:** `blocked` (Deterministic predictions based on Mulank 2 are prohibited under NV THINK™ governance.)
-
----
-
-## Mulank 3 — The Expressive Strategist
-
-### 1. LOGIC
-- **Cosmological Principle:** The Triad; synthesis of duality, creative expansion, conceptual expression, and wisdom.
-- **Tradition & Astrological Attribution:** Chaldean: Jupiter (Guru / Brihaspati). Lo Shu: East coordinate, Wood element (Family, Ancestral Heritage & Mental Growth). Pythagorean: The triangle, first complete geometric plane.
-- **Provenance:** Aleka Ghose pp. 16-17; Webster pp. 36-39; Craze pp. 22-23; Cooper matrix.
-
-### 2. OBSERVATION
-- **Natal Chart Criteria:** Born on the 3rd, 12th, 21st, or 30th of any calendar month.
-- **Grid & Repetition Manifestation:** Single 3 in Lo Shu marks natural conceptual fluency and teaching instinct; multiple 3s (33, 333) indicate intense communicative output with potential scattering.
-- **Compound Sub-Variants:**
-  - **Number 3:** Pure expressive and philosophical optimism; direct advisory impulse.
-  - **Number 12:** The Sacrifice / Reversal; high intellectual creativity tested through overcoming misunderstandings.
-  - **Number 21:** The Crown of the Magi; successful synthesis of artistic insight and long-term public accomplishment.
-  - **Number 30:** The Luminous Mind; profound intellectual and spiritual contemplation, capable of high detachment.
-
-### 3. BEHAVIOUR (Observable Operational Expression)
-- **Operational Summary:** Communicates ideas with enthusiasm, articulate structure, and educational intent. Readily synthesizes complex theoretical concepts into understandable principles. In group settings, often assumes the role of advisor, mentor, or creative catalyst. Paces work in energetic bursts driven by intellectual fascination, occasionally struggling with repetitive operational routine.
-- **Workplace & Vocational Patterns:** Excels in education, advisory consulting, marketing architecture, legal scholarship, publishing, and creative leadership.
-- **Delegation & Execution Style:** Prefers communicating the grand vision and theoretical outline, leaving tactical mechanics to operational specialists.
-- **Source Citations:** Aleka Ghose pp. 16-17 (Jupiter Guru, knowledge stewardship, optimism, creative speech); Cooper matrix (intellectual pride and executive articulation); Webster pp. 36-39 (Wood growth and conceptual clarity); Craze pp. 22-23 (creative communication).
-
-### 4. PSYCHOLOGY (Cognitive & Emotional Drivers)
-- **Psychological Summary:** Core cognitive satisfaction derives from intellectual contribution, teaching, and conceptual freedom. Fears mental confinement, intellectual dismissal, or being trapped in dogmatic routines. When bored or unsupported, can experience restlessness, spreading attention across multiple half-finished ventures rather than consolidating a single path.
-- **Core Emotional Need:** Self-expression, intellectual recognition, and freedom of conceptual expansion.
-- **Vulnerability / Threat Trigger:** Having ideas silenced, dismissed as trivial, or forced into rigid rote memorization.
-- **Stress & Defensive Response:** Intellectual rationalization, excessive speech, sarcasm, or scattered focus across too many interests.
-- **Source Citations:** Aleka Ghose p. 16 (expansive nature, pride in knowledge); Craze p. 23 (fear of monotony and self-doubt masked by optimism); Webster p. 37 (expressive energy needing grounding).
-
-### 5. INTERPRETATION & CONTEXT
-- **Contextual Expression:** In stimulated, open environments, shines as a visionary thought leader and inspiring mentor. Under restrictive bureaucracy, may become cynical, pedantic, or distracted.
-- **NV THINK™ Duality:** Public optimism and inspiring articulation coexisting with private periods of intellectual exhaustion and self-critical doubt.
-
-### 6. CONTRADICTIONS & DISCREPANCIES (No Silent Averaging)
-- Discipline vs. Free Expression: Classical Chaldean (Ghose p. 16, Cooper) views Jupiter 3 as an authoritative, disciplined advisor demanding respect. In contrast, modern Western numerology (Craze p. 22) often frames 3 primarily as an easy-going social entertainer or artist.
-- Master Number 33: Western tradition reserves 33 as the Master Teacher. Chaldean reduces 33 to 6 (Venus) while evaluating 33's specific karmic burden of self-sacrifice.
-- **Resolution:** Both traditions recorded side-by-side. Jupiterian mentorship is prioritized for professional analysis; artistic expression is noted for creative pursuits.
-
-### 7. VALIDATION & PREDICTION STATUS
-- **Validation Status:** `untested` (Hypothesis catalogued from reviewed literature. Requires correlation against verified case cohort.)
-- **Prediction Eligibility:** `blocked` (Deterministic predictions based on Mulank 3 are prohibited under NV THINK™ governance.)
+## 2. Rebuilt Trait Trace Register (Audit Trail)
+| Mulank | Type | Trait | Audit Status | Source Claim / Provenance |
+|:---:|:---:|:---|:---:|:---|
+| **1** | Strength | Self-starting initiative | `supported` | Aleka Ghose pp. 11-12 (pioneering impulse, leadership ambition); Webster Life Path (p. 5) |
+| **1** | Strength | Clear decision-making | `supported` | Webster Day of Birth (p. 20 strong determination, independent mind); Cooper pp. 15-16 |
+| **1** | Strength | Comfort leading from scratch | `supported` | Aleka Ghose p. 11 (originating enterprises independently); Webster Life Path (p. 5) |
+| **1** | Watch-out | Temptation to overrule others | `supported` | Aleka Ghose p. 12 (domineering tendency); Cooper p. 16 |
+| **1** | Watch-out | Impatience with slower paces | `supported` | Webster Life Path (p. 6 impatience with slower associates); Cooper p. 15 |
+| **1** | Watch-out | Can cool quickly on a new idea | `supported` | Cooper pp. 15-16 (initial enthusiasm can drop once project is launched) |
+| **2** | Strength | Diplomatic tact | `supported` | Aleka Ghose p. 13 (gentle peacemaker, diplomatic mediator); Webster Life Path (p. 8) |
+| **2** | Strength | Loyal partnership | `supported` | Webster Life Path (pp. 8-9 supportive alliance); Cooper pp. 17-18 |
+| **2** | Strength | Emotional attunement | `partly supported` | Cooper pp. 17-18 (intuitive sensitivity to feelings); Aleka Ghose p. 13 |
+| **2** | Watch-out | Over-relying on others' approval | `supported` | Webster Life Path (p. 8 sensitivity to criticism, seeking approval); Cooper p. 18 |
+| **2** | Watch-out | Absorbing ambient tension | `synthesised (no page)` | Integrative psychological synthesis of empathetic receptivity under stress |
+| **2** | Watch-out | Hesitating to state boundaries early | `partly supported` | Webster Life Path (p. 9 yields too easily to avoid confrontation); Cooper p. 18 |
+| **3** | Strength | Warm communication | `supported` | Aleka Ghose p. 14 (eloquent expression, warm friendly speech); Webster Life Path (p. 9) |
+| **3** | Strength | Creative concept generation | `supported` | Webster Life Path (pp. 9-10 artistic imagination, conceptual flair); Cooper pp. 19-20 |
+| **3** | Strength | Intellectual enthusiasm | `supported` | Cooper pp. 19-20 (enthusiastic exploration of ideas); Aleka Ghose p. 14 |
+| **3** | Watch-out | Scattered focus across multiple initiatives | `supported` | Webster Life Path (p. 10 scattering energy across too many interests); Cooper p. 20 |
+| **3** | Watch-out | Speaking before full reflection | `supported` | Aleka Ghose p. 14 (outspoken, quick to speak); Webster Life Path (p. 10) |
+| **3** | Watch-out | Underestimating delivery effort | `partly supported` | Cooper pp. 19-20 (optimism leads to committing to more than can be finished) |
+| **4** | Strength | Reliable discipline | `supported` | Aleka Ghose p. 15 (methodical effort, dependable building); Webster Life Path (p. 10) |
+| **4** | Strength | Operational thoroughness | `supported` | Webster Life Path (pp. 10-11 systematic construction); Cooper pp. 20-22 |
+| **4** | Strength | Loyalty to commitments | `supported` | Cooper pp. 20-22 (steadfast adherence to duty); Webster Day of Birth (p. 20) |
+| **4** | Watch-out | Rigid adherence to existing routines | `supported` | Webster Life Path (p. 11 resists alterations to established methods); Cooper p. 21 |
+| **4** | Watch-out | Reluctance to pivot when plans change | `supported` | Aleka Ghose p. 15 (stubborn, slow to adapt); Cooper pp. 21-22 |
+| **4** | Watch-out | Uneasiness with unmapped territory | `partly supported` | Cooper pp. 20-22 (prefers proven procedures over sudden ambiguity) |
+| **5** | Strength | Quick intellectual agility | `supported` | Aleka Ghose pp. 16-17 (fast perception, versatile intellect); Webster Life Path (p. 11) |
+| **5** | Strength | Resourceful adaptability | `supported` | Webster Life Path (p. 11 adapts readily to new environments); Cooper pp. 23-25 |
+| **5** | Strength | Natural commercial communication | `supported` | Aleka Ghose p. 16 (commercial acumen, persuasive trade discourse); Cooper pp. 23-25 |
+| **5** | Watch-out | Restless switching between roles or projects | `supported` | Webster Life Path (p. 11 restlessness, disliking routine); Cooper p. 24 (easily bored) |
+| **5** | Watch-out | Over-committing across too many fronts | `partly supported` | Cooper pp. 23-25 (spreading attention across diverse simultaneous pursuits) |
+| **5** | Watch-out | Neglecting foundational follow-through | `supported` | Aleka Ghose p. 17 (impatience with routine maintenance); Webster Life Path (p. 11) |
+| **6** | Strength | Empathetic stewardship | `supported` | Aleka Ghose p. 18 (protective care of dependents); Webster Life Path (pp. 11-12) |
+| **6** | Strength | Aesthetic discernment | `supported` | Webster Life Path (p. 11 love of beauty, harmony); Cooper pp. 25-27 |
+| **6** | Strength | Protective loyalty to close circles | `supported` | Cooper pp. 25-27 (domestic dedication, family guardian); Aleka Ghose p. 18 |
+| **6** | Watch-out | Taking on others' duties to your own detriment | `supported` | Webster Life Path (p. 12 carrying others' burdens); Cooper p. 26 |
+| **6** | Watch-out | Sensitivity to perceived slights | `supported` | Cooper pp. 25-27 (feeling unappreciated when care is not acknowledged); Aleka Ghose p. 18 |
+| **6** | Watch-out | Difficulty stepping back from caretaking | `partly supported` | Webster Life Path (p. 12 reluctance to let others handle their own duties) |
+| **7** | Strength | Perceptive research acumen | `supported` | Aleka Ghose pp. 19-20 (deep investigator, contemplation); Webster Life Path (p. 12) |
+| **7** | Strength | Independent analytical thinking | `supported` | Webster Life Path (pp. 12-13 solitary analysis, reliance on reason); Cooper pp. 27-29 |
+| **7** | Strength | Comfort with solitude and depth | `supported` | Cooper pp. 27-29 (values quiet solitude, deep study); Aleka Ghose p. 19 |
+| **7** | Watch-out | Withdrawing into solitary rumination | `supported` | Webster Life Path (p. 13 aloofness, social retreat); Cooper p. 28 |
+| **7** | Watch-out | Over-complicating straightforward actions | `synthesised (no page)` | Integrative behavioural observation; no direct page citation |
+| **7** | Watch-out | Holding trusted allies at arm's length | `supported` | Aleka Ghose p. 20 (secretive, slow to share feelings); Webster Life Path (p. 13) |
+| **8** | Strength | Long-term strategic patience | `supported` | Aleka Ghose pp. 20-21 (persevering builder over time); Webster Life Path (p. 13) |
+| **8** | Strength | Resource and financial discipline | `supported` | Webster Life Path (pp. 13-14 management of material resources); Cooper pp. 29-31 |
+| **8** | Strength | Fair and steady execution | `supported` | Aleka Ghose p. 20 (ethical administration under pressure) |
+| **8** | Watch-out | Assuming full responsibility alone | `supported` | Aleka Ghose pp. 20-21 (carrying burdens in silence, reluctant to delegate) |
+| **8** | Watch-out | Pushing past sustainable limits while setting a pace others struggle to match | `supported` | Overwork traces to Aleka Ghose pp. 20-21; demanding pace traces to Cooper pp. 29-31 (driving self and subordinates relentlessly) |
+| **9** | Strength | Courageous conviction | `supported` | Aleka Ghose pp. 21-22 (fighter for causes, moral courage); Webster Life Path (p. 14) |
+| **9** | Strength | Broad humanitarian outlook | `supported` | Webster Life Path (pp. 14-15 universal brotherhood, broad welfare); Cooper pp. 31-33 |
+| **9** | Strength | Energetic generosity | `supported` | Cooper pp. 31-33 (generous guidance and energy); Aleka Ghose p. 22 |
+| **9** | Watch-out | Bluntness when frustrated by inefficiency | `supported` | Aleka Ghose p. 22 (quick temper, sharp speech); Webster Life Path (p. 15) |
+| **9** | Watch-out | Scattering vital energy across too many causes | `partly supported` | Webster Life Path (p. 15 expending energy across too many external struggles) |
+| **9** | Watch-out | Expecting others to share your exact intensity | `supported` | Cooper pp. 31-33 (disappointment when others do not match personal dedication) |
 
 ---
 
-## Mulank 4 — The Methodical Architect
+## Mulank 1
 
-### 1. LOGIC
-- **Cosmological Principle:** The Tetrad; physical foundation, cubic stability, structural order, and boundary enforcement.
-- **Tradition & Astrological Attribution:** Chaldean: Uranus / Rahu (North Node). Lo Shu: South-East coordinate, Wood element (Wealth, Practical Organization & Order). Pythagorean: The square, terrestrial stability.
-- **Provenance:** Aleka Ghose pp. 17-18; Webster pp. 40-43; Craze pp. 24-25; Cooper matrix.
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Mulank 1 • Planetary association: Sun  
+**How this shows up day to day:** You tend to lead from the front, set projects in motion, and rely on your own discernment. You are often the person who steps forward when direction is missing.  
+**What tends to drive you:** A natural preference for autonomy and self-directed work. Stress often shows up as impatience, leaning too heavily on recognition, or choosing to carry duties alone.  
+**Strengths and watch-outs:**
+- *Strengths:* Self-starting initiative, Clear decision-making, Comfort leading from scratch
+- *Watch-outs:* Temptation to overrule others, Impatience with slower paces, Can cool quickly on a new idea
+**Traditional note:** Mulank 1 is traditionally linked with initiative and independence. You tend to start things and trust your own judgement. Your growth edge is listening early and sharing credit.  
 
-### 2. OBSERVATION
-- **Natal Chart Criteria:** Born on the 4th, 13th, 22nd, or 31st of any calendar month.
-- **Grid & Repetition Manifestation:** Single 4 in Lo Shu indicates methodical attention to detail and practical realism; multiple 4s (44, 444) suggest profound tenacity with potential risk of excessive rigidity.
-- **Compound Sub-Variants:**
-  - **Number 4:** Structural builder; unyielding loyalty to orderly process.
-  - **Number 13:** The Karmic Upheaval / Transformation; intense breaking of old conventions to build lasting structures.
-  - **Number 22:** Master Builder; translating ambitious humanitarian vision into physical, institutional reality.
-  - **Number 31:** The Methodical Thinker; intellectual precision grounded in practical, cautious execution.
-
-### 3. BEHAVIOUR (Observable Operational Expression)
-- **Operational Summary:** Tends to break down complex goals into systematic, repeatable procedures. Demonstrates exceptional patience for detailed documentation, technical quality, and risk management. Questions unproven shortcuts and sudden shifts in protocol until empirical evidence is presented. In relationships, values reliability, punctual commitments, and demonstrated consistency over charismatic promises.
-- **Workplace & Vocational Patterns:** Excels in systems architecture, engineering, risk management, financial accounting, logistics, and legal compliance.
-- **Delegation & Execution Style:** Delegates with explicit criteria and milestones; expects rigorous adherence to agreed-upon procedures.
-- **Source Citations:** Aleka Ghose pp. 17-18 (discipline, order, service, hard angles of the number 4); Cooper matrix (unconventional resilience and structural loyalty); Webster pp. 40-43 (practical order and financial accumulation); Craze pp. 24-25 (methodical craftsmanship).
-
-### 4. PSYCHOLOGY (Cognitive & Emotional Drivers)
-- **Psychological Summary:** Core emotional calm depends on order, predictability, and reliable boundaries. Chaos, broken agreements, or ambiguous guidelines trigger deep psychological discomfort. To manage uncertainty, constructs detailed plans and contingencies. When pushed to pivot rapidly without rationale, can manifest defensive resistance or stubborn entrenchment as a protective reflex.
-- **Core Emotional Need:** Structural predictability, stability, and tangible security.
-- **Vulnerability / Threat Trigger:** Sudden uncoordinated disruption of workflows, broken contracts, or being forced into reckless speculation.
-- **Stress & Defensive Response:** Rigidity, micro-management of minutiae, stubborn silence, or skepticism toward all new ideas.
-- **Source Citations:** Aleka Ghose p. 18 (limitation, service, enduring discipline); Craze p. 25 (fear of instability and chaos); Webster p. 41 (pragmatism grounded in caution).
-
-### 5. INTERPRETATION & CONTEXT
-- **Contextual Expression:** In well-structured environments, serves as the unshakeable bedrock that ensures operational viability. Under arbitrary or erratic leadership, can become perceived as obstinate, overly cautious, or unyielding.
-- **NV THINK™ Duality:** Extraordinary capacity to construct enduring security for others coexisting with an internal fear that the ground beneath one's own feet is fragile.
-
-### 6. CONTRADICTIONS & DISCREPANCIES (No Silent Averaging)
-- Planetary Rulership: Chaldean systems (Cheiro, Ghose p. 17, Cooper) assign Number 4 to Uranus (or Rahu in Vedic astrology), emphasizing sudden unconventional breakthroughs and unconventional perspectives. Modern Western numerology (Craze) emphasizes purely Saturnine/Earthly convention and traditional routine.
-- Elemental Discrepancy: Western treats 4 as physical Earth. Lo Shu (Webster) assigns 4 to South-East Wood (wealth accumulation and methodical progress).
-- **Resolution:** Recorded without synthesis: Rahu/Uranus explains the unconventional problem-solving mind; the cubic 4 geometry explains the methodical execution.
-
-### 7. VALIDATION & PREDICTION STATUS
-- **Validation Status:** `untested` (Hypothesis catalogued from reviewed literature. Requires correlation against verified case cohort.)
-- **Prediction Eligibility:** `blocked` (Deterministic predictions based on Mulank 4 are prohibited under NV THINK™ governance.)
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Chaldean tradition:** Sun (Surya) (Internal audit pages: pp. 11-12)
+- **Lo Shu grid:** Coordinate 1 (Internal audit pages: LP pp. 5-7, DOB p. 20)
+- **Western tradition:** Sun (Internal audit pages: pp. 15-16) — *Agrees with Chaldean Sun*
+- **Secondary Western view:** Audit status: `unverified`
+- **Psychology Provenance:** `synthesised, no direct source`
+- **Validation Status:** `untested`
+- **Prediction Status:** `blocked`
+- **Trace Audit:** `Mulank 1 'cool quickly' -> Cooper pp. 15-16 (Understanding Numerology, Aquarian 1990)`
 
 ---
 
-## Mulank 5 — The Adaptable Catalyst
+## Mulank 2
 
-### 1. LOGIC
-- **Cosmological Principle:** The Pentad; the central pivot, quintessence, sensory exploration, and dynamic versatility.
-- **Tradition & Astrological Attribution:** Chaldean: Mercury (Budh). Lo Shu: Center coordinate, Earth element (Core Balance, Central Nexus). Pythagorean: The pentagram, human versatility.
-- **Provenance:** Aleka Ghose pp. 18-19; Webster pp. 44-47; Craze pp. 26-27; Cooper matrix.
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Mulank 2 • Planetary association: Moon  
+**How this shows up day to day:** You tend to read the room intuitively, mediate differences, and build solid alliances. You often thrive in partnership rather than isolated competition.  
+**What tends to drive you:** A deep drive for harmony and emotional safety. Stress often shows up as withdrawing, over-accommodating others' views, or hesitating to express a direct preference.  
+**Strengths and watch-outs:**
+- *Strengths:* Diplomatic tact, Loyal partnership, Emotional attunement
+- *Watch-outs:* Over-relying on others' approval, Absorbing ambient tension, Hesitating to state boundaries early
+**Traditional note:** Mulank 2 is traditionally linked with cooperation and emotional intelligence. You read people well and build trust. Your growth edge is stating your own preference clearly and early.  
 
-### 2. OBSERVATION
-- **Natal Chart Criteria:** Born on the 5th, 14th, or 23rd of any calendar month.
-- **Grid & Repetition Manifestation:** Single 5 in Lo Shu represents core stability and emotional adaptability; multiple 5s (55, 555) indicate rapid sensory processing and high volatility in daily routines.
-- **Compound Sub-Variants:**
-  - **Number 5:** Pure mercurial fluidity; natural trade and networking acuity.
-  - **Number 14:** The Movement / Magnetic Catalyst; dynamic enterprise tested through maintaining focus amidst constant temptation.
-  - **Number 23:** The Royal Star of the Lion; high commercial success and persuasive social charm supported by superiors.
-
-### 3. BEHAVIOUR (Observable Operational Expression)
-- **Operational Summary:** Adapts rapidly to shifting environments, novel information, and diverse cultural contexts. Connects disparate ideas and people with ease. Communicates with persuasive agility, often utilizing humor, storytelling, and quick wit. Paces daily life dynamically, seeking varied projects and resisting prolonged confinement in repetitive desk routines.
-- **Workplace & Vocational Patterns:** Thrives in international business, public relations, investigative media, technology innovation, sales strategy, and travel.
-- **Delegation & Execution Style:** Delegates quickly to maintain personal velocity; focuses on new frontiers while leaving operational maintenance to others.
-- **Source Citations:** Aleka Ghose pp. 18-19 (Mercury, versatility, multiple career trials, quick intellect); Cooper matrix (commercial acumen and rapid thought); Webster pp. 44-47 (Center stability and freedom of movement); Craze pp. 26-27 (adventurous adaptability).
-
-### 4. PSYCHOLOGY (Cognitive & Emotional Drivers)
-- **Psychological Summary:** Core cognitive vitality is stimulated by novelty, exploration, and mental autonomy. Confinement, routine repetition, or heavy micro-management triggers severe claustrophobic anxiety. To preserve personal agency, maintains flexible escape options in commitments. When under prolonged stress, can become distractible, restless, or prone to impulsively abandoning projects at the first sign of monotony.
-- **Core Emotional Need:** Freedom of movement, cognitive variety, and experiential autonomy.
-- **Vulnerability / Threat Trigger:** Prolonged physical confinement, repetitive bureaucratic paperwork, or forced long-term lock-in.
-- **Stress & Defensive Response:** Restlessness, impulsive sensory escapism, procrastination on detail work, or sudden career pivoting.
-- **Source Citations:** Aleka Ghose p. 19 (restless search for vocational fit, susceptibility to temptation); Craze p. 27 (fear of confinement and monotony); Webster p. 45 (need for balanced center amidst motion).
-
-### 5. INTERPRETATION & CONTEXT
-- **Contextual Expression:** In agile, dynamic environments, operates as a brilliant catalyst, diplomat, and market innovator. In rigid, slow-moving hierarchies, can become erratic, impatient, or disengaged.
-- **NV THINK™ Duality:** Effortless public charisma and social ease coexisting with an internal difficulty maintaining deep roots or enduring boredom.
-
-### 6. CONTRADICTIONS & DISCREPANCIES (No Silent Averaging)
-- Elemental Discrepancy: Chaldean / Vedic associates Mercury 5 with Air and rapid cognitive trade. Lo Shu (Webster) positions 5 in the exact Earth Center representing grounded stability.
-- Lifestyle Stability vs. Restlessness: Aleka Ghose (p. 19) highlights that 5 often changes professions multiple times before finding a niche, whereas Lo Shu treats 5 as the essential balance point needed for all other numbers to function.
-- **Resolution:** Reconciled without averaging: 5's internal nature is Mercurial Air/motion; its architectural role in the chart is providing the necessary transitional balance between physical and spiritual planes.
-
-### 7. VALIDATION & PREDICTION STATUS
-- **Validation Status:** `untested` (Hypothesis catalogued from reviewed literature. Requires correlation against verified case cohort.)
-- **Prediction Eligibility:** `blocked` (Deterministic predictions based on Mulank 5 are prohibited under NV THINK™ governance.)
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Chaldean tradition:** Moon (Chandra) (Internal audit pages: p. 13)
+- **Lo Shu grid:** Coordinate 2 (Internal audit pages: LP pp. 8-9, DOB p. 20)
+- **Western tradition:** Earth (Internal audit pages: pp. 17-18) — *Conflict: Rejects Moon, attributes to Earth*
+- **Secondary Western view:** Audit status: `unverified`
+- **Psychology Provenance:** `synthesised, no direct source`
+- **Validation Status:** `untested`
+- **Prediction Status:** `blocked`
+- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
-## Mulank 6 — The Protective Guardian
+## Mulank 3
 
-### 1. LOGIC
-- **Cosmological Principle:** The Hexad; harmony, symmetry, domestic sanctuary, communal responsibility, and beauty.
-- **Tradition & Astrological Attribution:** Chaldean: Venus (Shukra). Lo Shu: North-West coordinate, Metal element (Helpful Mentors, Father Figure & Home Protection). Pythagorean: Two interlocking triangles, equilibrium.
-- **Provenance:** Aleka Ghose pp. 19-20; Webster pp. 48-51; Craze pp. 28-29; Cooper matrix.
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Mulank 3 • Planetary association: Jupiter  
+**How this shows up day to day:** You tend to connect people, explain complex ideas warmly, and bring an upbeat energy to group settings.  
+**What tends to drive you:** A natural drive to express, teach, and connect. Stress often shows up as restless multi-tasking, over-promising, or scattering attention across too many projects.  
+**Strengths and watch-outs:**
+- *Strengths:* Warm communication, Creative concept generation, Intellectual enthusiasm
+- *Watch-outs:* Scattered focus across multiple initiatives, Speaking before full reflection, Underestimating delivery effort
+**Traditional note:** Mulank 3 is traditionally linked with creativity, communication and optimism. You light up a room and generate ideas easily. Your growth edge is finishing what you start and choosing fewer priorities.  
 
-### 2. OBSERVATION
-- **Natal Chart Criteria:** Born on the 6th, 15th, or 24th of any calendar month.
-- **Grid & Repetition Manifestation:** Single 6 in Lo Shu marks protective family instinct and aesthetic care; multiple 6s (66, 666) indicate intense caregiving focus with potential for over-involvement in others' lives.
-- **Compound Sub-Variants:**
-  - **Number 6:** Pure Venusian harmony; devotion to family, beauty, and domestic sanctuary.
-  - **Number 15:** The Magician / Alchemical Magnetism; powerful personal charm and creative eloquence, with a warning against misuse of influence.
-  - **Number 24:** The Fortunate Alliance; success achieved through loyal partnerships, family harmony, and supportive patrons.
-
-### 3. BEHAVIOUR (Observable Operational Expression)
-- **Operational Summary:** Tends to focus attention on household comfort, team wellbeing, and aesthetic order in environments. Naturally assumes responsibility for protecting dependents, resolving interpersonal friction, and providing hospitality. Invests significant effort in creating appealing, harmonious surroundings. In professional settings, champions customer care, ethical standards, and cultural cohesion.
-- **Workplace & Vocational Patterns:** Excels in healthcare administration, interior design, culinary arts, hospitality, law, community counseling, and luxury brand stewardship.
-- **Delegation & Execution Style:** Delegates cautiously when personal standards of quality or care are at stake; tends to step in and fix details themselves.
-- **Source Citations:** Aleka Ghose pp. 19-20 (Venus, refined things, magnetic charm, protective domestic responsibility); Cooper matrix (artistic generosity and familial care); Webster pp. 48-51 (North-West helpful mentors and paternal duty); Craze pp. 28-29 (nurturing responsibility).
-
-### 4. PSYCHOLOGY (Cognitive & Emotional Drivers)
-- **Psychological Summary:** Core emotional worth is intimately linked to being needed, trusted, and appreciated by close circles. Vulnerable to boundary absorption, taking on emotional burdens belonging to others and experiencing guilt when stepping back. When relationships fracture or when assistance is unacknowledged, can feel profound grief or slip into martyr-like resentment.
-- **Core Emotional Need:** Harmonious belonging, aesthetic beauty, and feeling protective utility.
-- **Vulnerability / Threat Trigger:** Domestic acrimony, betrayal of family loyalty, or feeling unappreciated after heavy personal sacrifice.
-- **Stress & Defensive Response:** Perfectionism, boundary over-extension, intrusive caregiving, or passive-aggressive resentment.
-- **Source Citations:** Aleka Ghose p. 20 (high expectations of love and loyalty); Craze p. 29 (difficulty saying no and fear of domestic discord); Webster p. 49 (protective instinct extending to community).
-
-### 5. INTERPRETATION & CONTEXT
-- **Contextual Expression:** In appreciative, healthy family and work environments, operates as a pillar of grace, generosity, and community strength. In codependent or ungrateful settings, can become controlling, anxious, or exhausted.
-- **NV THINK™ Duality:** Deep capacity to create refuge and unconditional comfort for others coexisting with severe self-critical standards regarding one's own worth.
-
-### 6. CONTRADICTIONS & DISCREPANCIES (No Silent Averaging)
-- Sensory Indulgence vs. Austere Duty: Chaldean sources (Ghose p. 20, Cooper) emphasize Venus 6's love of luxury, fine dining, and romantic attraction. Lo Shu (Webster p. 48) emphasizes North-West Metal's stern, paternal authority and moral duty to family.
-- Compound 15: Chaldean highlights 15 as an occult magnetic power capable of extreme commercial or personal persuasion, whereas Western sources treat 15 as a standard familial caregiver.
-- **Resolution:** Recorded as dual facets: Venusian aesthetic refinement and Lo Shu paternal duty represent the external and internal faces of Number 6.
-
-### 7. VALIDATION & PREDICTION STATUS
-- **Validation Status:** `untested` (Hypothesis catalogued from reviewed literature. Requires correlation against verified case cohort.)
-- **Prediction Eligibility:** `blocked` (Deterministic predictions based on Mulank 6 are prohibited under NV THINK™ governance.)
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Chaldean tradition:** Jupiter (Guru) (Internal audit pages: p. 14)
+- **Lo Shu grid:** Coordinate 3 (Internal audit pages: LP pp. 9-10, DOB p. 20)
+- **Western tradition:** Jupiter (Internal audit pages: pp. 19-20) — *Agrees with Chaldean Jupiter*
+- **Secondary Western view:** Audit status: `unverified`
+- **Psychology Provenance:** `synthesised, no direct source`
+- **Validation Status:** `untested`
+- **Prediction Status:** `blocked`
+- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
-## Mulank 7 — The Contemplative Analyst
+## Mulank 4
 
-### 1. LOGIC
-- **Cosmological Principle:** The Heptad; spiritual completion, inner investigation, mystical inquiry, and analytical distillation.
-- **Tradition & Astrological Attribution:** Chaldean: Neptune / Ketu (South Node). Lo Shu: West coordinate, Metal element (Children, Creativity & Introspection). Pythagorean: The sacred number of spiritual perfection.
-- **Provenance:** Aleka Ghose pp. 21-22; Webster pp. 52-55; Craze pp. 30-31; Cooper matrix.
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Mulank 4 • Planetary association: Rahu  
+**How this shows up day to day:** You tend to build dependable systems, verify the details others overlook, and create predictable workflows that hold over time.  
+**What tends to drive you:** A strong drive for structural security and orderly execution. Stress often shows up as stubbornness, over-checking minor details, or feeling uneasy with sudden ambiguity.  
+**Strengths and watch-outs:**
+- *Strengths:* Reliable discipline, Operational thoroughness, Loyalty to commitments
+- *Watch-outs:* Rigid adherence to existing routines, Reluctance to pivot when plans change, Uneasiness with unmapped territory
+**Traditional note:** Mulank 4 is traditionally linked with discipline and solid foundations. You are dependable and detail-aware. Your growth edge is staying flexible when plans change.  
 
-### 2. OBSERVATION
-- **Natal Chart Criteria:** Born on the 7th, 16th, or 25th of any calendar month.
-- **Grid & Repetition Manifestation:** Single 7 in Lo Shu indicates analytical and introspective inclinations; multiple 7s (77, 777) indicate profound need for solitude with potential detachment from material affairs.
-- **Compound Sub-Variants:**
-  - **Number 7:** Philosophical discernment; quiet investigation and spiritual independence.
-  - **Number 16:** The Shattered Citadel / Tower; intense dismantling of false ego and illusions to reveal durable metaphysical truth.
-  - **Number 25:** The Discriminating Mind; wisdom cultivated through technical study, research, and quiet observation.
-
-### 3. BEHAVIOUR (Observable Operational Expression)
-- **Operational Summary:** Tends to observe situations thoroughly before speaking, preferring deep analysis over surface banter. Asks probing questions aimed at discovering underlying causal mechanisms. Values personal solitude, quiet workspaces, and unhurried intellectual inquiry. Skeptical of unexamined popular opinions; insists on independently testing facts and philosophical theories.
-- **Workplace & Vocational Patterns:** Excels in academic research, forensic data analysis, strategic intelligence, specialized philosophy, software architecture, and spiritual inquiry.
-- **Delegation & Execution Style:** Prefers independent research projects; when collaborating, requires collaborators to meet high standards of intellectual rigor.
-- **Source Citations:** Aleka Ghose pp. 21-22 (Neptune, analysis, understanding, independent original thought); Cooper matrix (philosophical mysticism and analytical depth); Webster pp. 52-55 (West Metal introspection and learning through life); Craze pp. 30-31 (investigative seeker).
-
-### 4. PSYCHOLOGY (Cognitive & Emotional Drivers)
-- **Psychological Summary:** Core mental peace requires uninterrupted solitude, intellectual integrity, and deep existential understanding. Small talk, noisy environments, and superficial social posturing drain cognitive stamina rapidly. Under high stress, tends to detach emotionally and retreat into silent isolation, using intellectual analysis as a protective shield against emotional vulnerability.
-- **Core Emotional Need:** Intellectual autonomy, truth, quiet reflection, and metaphysical depth.
-- **Vulnerability / Threat Trigger:** Being crowded, forced into loud superficial networking, or having personal privacy invaded.
-- **Stress & Defensive Response:** Emotional withdrawal, cynical detachment, hyper-critical skepticism, or complete silence.
-- **Source Citations:** Aleka Ghose p. 21 (need for quiet contemplation, distinct individuality); Craze p. 31 (fear of emotional exposure and mental shallowness); Webster p. 53 (introverted processing).
-
-### 5. INTERPRETATION & CONTEXT
-- **Contextual Expression:** In peaceful, academically stimulating environments, operates as a brilliant researcher, philosopher, and profound advisor. In intrusive, loud, or chaotic settings, can present as aloof, eccentric, or unapproachable.
-- **NV THINK™ Duality:** Profound intellectual and spiritual discernment coexisting with difficulty navigating mundane everyday logistics and emotional vulnerability.
-
-### 6. CONTRADICTIONS & DISCREPANCIES (No Silent Averaging)
-- Planetary Rulership: Chaldean systems (Cheiro, Ghose p. 21, Cooper) assign 7 to Neptune (or Ketu in Vedic astrology), highlighting spiritual detachment, psychic sensitivity, and research. Western Pythagorean (Craze) frequently assigns 7 to the Moon/Saturn harmonics of introspection.
-- Material Disinterest: Aleka Ghose (p. 22) notes that pure 7s often care little for material accumulation unless it aids research, whereas Lo Shu (Webster p. 52) notes 7's placement in the West Metal plane connects it to creative output that can bear physical fruit.
-- **Resolution:** Reconciled without averaging: Neptune/Ketu governs the introspective philosophical impulse; Lo Shu West coordinates explain the creative and analytical output.
-
-### 7. VALIDATION & PREDICTION STATUS
-- **Validation Status:** `untested` (Hypothesis catalogued from reviewed literature. Requires correlation against verified case cohort.)
-- **Prediction Eligibility:** `blocked` (Deterministic predictions based on Mulank 7 are prohibited under NV THINK™ governance.)
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Chaldean tradition:** Rahu / Uranus (Internal audit pages: p. 15)
+- **Lo Shu grid:** Coordinate 4 (Internal audit pages: LP pp. 10-11, DOB p. 20)
+- **Western tradition:** Saturn (Internal audit pages: pp. 20-22) — *Conflict: Attributes to Saturn; Chaldean assigns Rahu / Uranus*
+- **Secondary Western view:** Audit status: `unverified`
+- **Psychology Provenance:** `synthesised, no direct source`
+- **Validation Status:** `untested`
+- **Prediction Status:** `blocked`
+- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
-## Mulank 8 — The Strategic Realist
+## Mulank 5
 
-### 1. LOGIC
-- **Cosmological Principle:** The Ogdoad; equilibrium between material and spiritual forces, karmic accountability, and executive endurance.
-- **Tradition & Astrological Attribution:** Chaldean: Saturn (Shani). Lo Shu: North-East coordinate, Earth element (Knowledge, Wisdom, Quiet Discipline). Pythagorean: Double square, cosmic justice.
-- **Provenance:** Aleka Ghose p. 23; Webster pp. 56-59; Craze pp. 32-33; Cooper matrix.
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Mulank 5 • Planetary association: Mercury  
+**How this shows up day to day:** You tend to adapt effortlessly to new environments, connect disparate people and ideas, and spot commercial or social opportunities quickly.  
+**What tends to drive you:** A core drive for mental variety and experiential freedom. Stress often shows up as restlessness, spreading yourself thin, or telling people what they want to hear to avoid tension.  
+**Strengths and watch-outs:**
+- *Strengths:* Quick intellectual agility, Resourceful adaptability, Natural commercial communication
+- *Watch-outs:* Restless switching between roles or projects, Over-committing across too many fronts, Neglecting foundational follow-through
+**Traditional note:** Mulank 5 is traditionally linked with curiosity, versatility and movement. You learn fast and adapt well. Your growth edge is anchoring a few routines so your energy has somewhere to land.  
 
-### 2. OBSERVATION
-- **Natal Chart Criteria:** Born on the 8th, 17th, or 26th of any calendar month.
-- **Grid & Repetition Manifestation:** Single 8 in Lo Shu marks methodical financial discipline and structured ambition; multiple 8s (88, 888) indicate heavy administrative burdens and intense karmic responsibility.
-- **Compound Sub-Variants:**
-  - **Number 8:** Direct Saturnine responsibility; disciplined executive stewardship and perseverance.
-  - **Number 17:** The Star of the Magi; public recognition, moral elevation, and enduring spiritual legacy.
-  - **Number 26:** The Heavy Stewardship; commercial and partnership responsibility accompanied by acute lessons in financial prudence.
-
-### 3. BEHAVIOUR (Observable Operational Expression)
-- **Operational Summary:** Tends to view endeavors through the lens of long-term durability, structural feasibility, and return on investment. Exercises disciplined patience, preferring gradual, permanent consolidation over rapid, speculative windfalls. Possesses high endurance in demanding situations. In leadership, holds team members and themselves to rigorous standards of accountability and fair execution.
-- **Workplace & Vocational Patterns:** Excels in corporate governance, financial asset stewardship, large-scale enterprise leadership, judicial law, and industrial management.
-- **Delegation & Execution Style:** Delegates based on proven competence; expects transparent reporting and zero excuses regarding deadlines.
-- **Source Citations:** Aleka Ghose p. 23 (Saturn, career, finance, discipline, balance of material and spiritual); Cooper matrix (executive realism and karmic endurance); Webster pp. 56-59 (North-East Earth discipline and quiet wisdom); Craze pp. 32-33 (executive mastery).
-
-### 4. PSYCHOLOGY (Cognitive & Emotional Drivers)
-- **Psychological Summary:** Core emotional calm is anchored in self-mastery, material stability, and practical control over life conditions. Deeply respects structural law and karmic cause-and-effect. Intensely uncomfortable with dependency or vulnerability. When overwhelmed by responsibility, rarely complains openly; instead, doubles down on effort, potentially exhausting physical vitality while maintaining an impassive exterior.
-- **Core Emotional Need:** Self-mastery, durable accomplishment, financial autonomy, and structural order.
-- **Vulnerability / Threat Trigger:** Financial helplessness, institutional betrayal, or being perceived as incompetent or dependent.
-- **Stress & Defensive Response:** Emotional hardening, intense hyper-work, pessimistic realism, and strict control of resources.
-- **Source Citations:** Aleka Ghose p. 23 (often misunderstood as cold, yet deeply driven by fairness); Craze p. 33 (fear of vulnerability and economic loss); Webster p. 57 (endurance through quiet discipline).
-
-### 5. INTERPRETATION & CONTEXT
-- **Contextual Expression:** In ethical, meritocratic environments, serves as a fair-minded, formidable leader who constructs enduring institutions. In unfair or corrupt environments, may become cynical, authoritarian, or overly guarded.
-- **NV THINK™ Duality:** Outward aura of unyielding authority and stoic competence coexisting with an internal sensitivity to early struggles and an acute awareness of mortality.
-
-### 6. CONTRADICTIONS & DISCREPANCIES (No Silent Averaging)
-- Material Power vs. Heavy Karma: Commercial Western numerology (Craze p. 32) frequently brands 8 as purely 'the number of money and power'. In stark contrast, Chaldean sources (Ghose p. 23, Cooper) warn that 8 is fundamentally Saturnine—demanding rigorous moral integrity, where greed triggers severe karmic restitution.
-- Elemental Placement: Lo Shu (Webster p. 56) positions 8 in the North-East Earth plane governing contemplative knowledge and spiritual wisdom, not mere commercial trade.
-- **Resolution:** Zero averaging. Saturn's karmic balance (material responsibility paired with spiritual integrity) is maintained as the primary interpretive authority.
-
-### 7. VALIDATION & PREDICTION STATUS
-- **Validation Status:** `untested` (Hypothesis catalogued from reviewed literature. Requires correlation against verified case cohort.)
-- **Prediction Eligibility:** `blocked` (Deterministic predictions based on Mulank 8 are prohibited under NV THINK™ governance.)
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Chaldean tradition:** Mercury (Budh) (Internal audit pages: pp. 16-17)
+- **Lo Shu grid:** Coordinate 5 (Internal audit pages: LP p. 11, DOB pp. 20-21)
+- **Western tradition:** Mercury (Internal audit pages: pp. 23-25) — *Agrees with Chaldean Mercury*
+- **Secondary Western view:** Audit status: `unverified`
+- **Psychology Provenance:** `synthesised, no direct source`
+- **Validation Status:** `untested`
+- **Prediction Status:** `blocked`
+- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
-## Mulank 9 — The Universal Humanitarian
+## Mulank 6
 
-### 1. LOGIC
-- **Cosmological Principle:** The Ennead; the completion of the single-digit cycle, universal synthesis, humanitarian consciousness, and catalytic transformation.
-- **Tradition & Astrological Attribution:** Chaldean: Mars (Mangal). Lo Shu: South coordinate, Fire element (Illumination, Reputation, Fame). Pythagorean: The boundary limit containing all preceding vibrations.
-- **Provenance:** Aleka Ghose pp. 23-24; Webster pp. 60-63; Craze pp. 34-35; Cooper matrix.
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Mulank 6 • Planetary association: Venus  
+**How this shows up day to day:** You tend to create welcoming, orderly spaces, look out for the welfare of family and team members, and bring aesthetic consideration to your work.  
+**What tends to drive you:** A strong drive to care, support, and belong. Stress often shows up as carrying other people's responsibilities, perfectionist fussiness, or feeling quietly unappreciated.  
+**Strengths and watch-outs:**
+- *Strengths:* Empathetic stewardship, Aesthetic discernment, Protective loyalty to close circles
+- *Watch-outs:* Taking on others' duties to your own detriment, Sensitivity to perceived slights, Difficulty stepping back from caretaking
+**Traditional note:** Mulank 6 is traditionally linked with care, family and beauty. You create warmth and take responsibility for people. Your growth edge is protecting your own time and letting others carry their share.  
 
-### 2. OBSERVATION
-- **Natal Chart Criteria:** Born on the 9th, 18th, or 27th of any calendar month.
-- **Grid & Repetition Manifestation:** Single 9 in Lo Shu marks idealism, ambition, and social conscience; multiple 9s (99, 999) suggest passionate crusading energy with potential for emotional exhaustion.
-- **Compound Sub-Variants:**
-  - **Number 9:** Pure crusading energy; high moral courage and universal empathy.
-  - **Number 18:** The Spiritual Conflict / Internal Warfare; high worldly ambition tested through deceptive alliances and deep emotional trials.
-  - **Number 27:** The Scepter / Command; courageous intellectual leadership dedicated to higher communal principles.
-
-### 3. BEHAVIOUR (Observable Operational Expression)
-- **Operational Summary:** Tends to orient actions toward broad social impact, moral causes, or institutional reform. Demonstrates spontaneous courage when defending perceived underdogs. Expresses strong opinions directly and passionately. In operational tasks, moves with decisive energy and impatience for petty details. Often struggles to step away from situations that have naturally reached completion.
-- **Workplace & Vocational Patterns:** Excels in social enterprise, legal advocacy, military or emergency leadership, healthcare reform, international NGOs, and high-impact arts.
-- **Delegation & Execution Style:** Delegates freely when trusted comrades share the ideological mission; impatient with self-serving or transactional collaborators.
-- **Source Citations:** Aleka Ghose pp. 23-24 (Mars, global consciousness, humanitarian reach, non-judgmental empathy); Cooper matrix (fighter energy, moral courage); Webster pp. 60-63 (South Fire illumination and ambition); Craze pp. 34-35 (universal compassion).
-
-### 4. PSYCHOLOGY (Cognitive & Emotional Drivers)
-- **Psychological Summary:** Core emotional driver is a commitment to a cause larger than oneself. Deeply empathetic toward collective human suffering, yet can struggle with intimate one-on-one emotional maintenance. Intensely uncomfortable with pettiness, greed, or moral cowardice. When ideals are frustrated, can experience fiery righteous indignation or retreat into disillusioned fatigue.
-- **Core Emotional Need:** Universal purpose, moral alignment, and broad constructive impact.
-- **Vulnerability / Threat Trigger:** Witnessing systemic injustice, feeling petty personal greed around them, or having their integrity questioned.
-- **Stress & Defensive Response:** Righteous anger, emotional exhaustion from over-giving, impulsive confrontation, or sudden dramatic closures.
-- **Source Citations:** Aleka Ghose p. 24 (least judgmental number, universal empathy); Craze p. 35 (difficulty letting go and personal disillusionment); Webster p. 61 (fiery drive for recognition and purpose).
-
-### 5. INTERPRETATION & CONTEXT
-- **Contextual Expression:** In purposeful, mission-driven environments, acts as an inspiring, courageous reformer who mobilizes collective action. In petty or cynical environments, can become combative, frustrated, or alienated.
-- **NV THINK™ Duality:** Boundless compassion and crusading generosity for humanity at large coexisting with personal difficulty setting boundaries and managing private vulnerability.
-
-### 6. CONTRADICTIONS & DISCREPANCIES (No Silent Averaging)
-- Planetary Rulership (Mars vs. Universal Compassion): Chaldean and Vedic traditions (Ghose p. 24, Cooper) attribute 9 strictly to Mars (Mangal), highlighting the fierce warrior, fighter, and combative courage. Western traditions (Craze p. 34) describe 9 almost exclusively as a gentle, self-sacrificing humanitarian.
-- Elemental Discrepancy: Lo Shu (Webster p. 60) places 9 in the South Fire plane of fame and recognition, reflecting high public visibility rather than private martyrdom.
-- **Resolution:** Both traditions recorded explicitly: Mars explains the fiery courage and combativeness; the Ennead completion explains the broad humanitarian perspective.
-
-### 7. VALIDATION & PREDICTION STATUS
-- **Validation Status:** `untested` (Hypothesis catalogued from reviewed literature. Requires correlation against verified case cohort.)
-- **Prediction Eligibility:** `blocked` (Deterministic predictions based on Mulank 9 are prohibited under NV THINK™ governance.)
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Chaldean tradition:** Venus (Shukra) (Internal audit pages: p. 18)
+- **Lo Shu grid:** Coordinate 6 (Internal audit pages: LP pp. 11-12, DOB p. 21)
+- **Western tradition:** Moon (Internal audit pages: pp. 25-27) — *Conflict: Attributes to Moon; Chaldean assigns Venus*
+- **Secondary Western view:** Audit status: `unverified`
+- **Psychology Provenance:** `synthesised, no direct source`
+- **Validation Status:** `untested`
+- **Prediction Status:** `blocked`
+- **Trace Audit:** `All traits sourced from verified citations or synthesised`
 
 ---
 
+## Mulank 7
+
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Mulank 7 • Planetary association: Ketu  
+**How this shows up day to day:** You tend to study matters thoroughly before speaking, value periods of uninterrupted quiet, and prefer deep conversations with a few trusted associates.  
+**What tends to drive you:** A deep drive for truth, understanding, and personal privacy. Stress often shows up as emotional withdrawal, over-analyzing decisions, or approaching situations with dry skepticism.  
+**Strengths and watch-outs:**
+- *Strengths:* Perceptive research acumen, Independent analytical thinking, Comfort with solitude and depth
+- *Watch-outs:* Withdrawing into solitary rumination, Over-complicating straightforward actions, Holding trusted allies at arm's length
+**Traditional note:** Mulank 7 is traditionally linked with reflection, research and inner life. You prefer depth over noise. Your growth edge is letting a few trusted people in and acting on what you understand.  
+
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Chaldean tradition:** Ketu / Neptune (Internal audit pages: pp. 19-20)
+- **Lo Shu grid:** Coordinate 7 (Internal audit pages: LP pp. 12-13, DOB p. 21)
+- **Western tradition:** Venus (Internal audit pages: pp. 27-29) — *Conflict: Attributes to Venus; Chaldean assigns Ketu / Neptune*
+- **Secondary Western view:** Audit status: `unverified`
+- **Psychology Provenance:** `synthesised, no direct source`
+- **Validation Status:** `untested`
+- **Prediction Status:** `blocked`
+- **Trace Audit:** `All traits sourced from verified citations or synthesised`
+
+---
+
+## Mulank 8
+
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Mulank 8 • Planetary association: Saturn  
+**How this shows up day to day:** You tend to plan for the long term, manage resources prudently, and hold yourself to rigorous standards of accountability and fair dealing.  
+**What tends to drive you:** A core drive for durable achievement and rightful stewardship. Stress often shows up as overwork, holding total control over processes, or pushing associates past reasonable limits.  
+**Strengths and watch-outs:**
+- *Strengths:* Long-term strategic patience, Resource and financial discipline, Fair and steady execution
+- *Watch-outs:* Assuming full responsibility alone, Pushing past sustainable limits while setting a pace others struggle to match
+**Traditional note:** Mulank 8 is traditionally linked with structure, ambition and responsibility. You build patiently and take duty seriously. Your growth edge is pacing yourself and recognising others' limits.  
+
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Chaldean tradition:** Saturn (Shani) (Internal audit pages: pp. 20-21)
+- **Lo Shu grid:** Coordinate 8 (Internal audit pages: LP pp. 13-14, DOB p. 21)
+- **Western tradition:** Pluto (Internal audit pages: pp. 29-31) — *Conflict: Attributes to Pluto; Chaldean assigns Saturn*
+- **Secondary Western view:** Audit status: `unverified`
+- **Psychology Provenance:** `synthesised, no direct source`
+- **Validation Status:** `untested`
+- **Prediction Status:** `blocked`
+- **Trace Audit:** `Mulank 8 overwork -> Aleka pp. 20-21; pace -> Cooper pp. 29-31 (Understanding Numerology, Aquarian 1990)`
+
+---
+
+## Mulank 9
+
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Mulank 9 • Planetary association: Mars  
+**How this shows up day to day:** You tend to stand up for principles of fairness, rally energy around broad collective goals, and give generously of your knowledge and time.  
+**What tends to drive you:** A strong drive for purpose, equity, and constructive contribution. Stress often shows up as sharp frustration when ideals stall, emotional exhaustion from over-giving, or blunt speech.  
+**Strengths and watch-outs:**
+- *Strengths:* Courageous conviction, Broad humanitarian outlook, Energetic generosity
+- *Watch-outs:* Bluntness when frustrated by inefficiency, Scattering vital energy across too many causes, Expecting others to share your exact intensity
+**Traditional note:** Mulank 9 is traditionally linked with energy, compassion and a wider cause. You act on conviction and care about fairness. Your growth edge is pacing your energy and accepting that others move differently.  
+
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Chaldean tradition:** Mars (Mangal) (Internal audit pages: pp. 21-22)
+- **Lo Shu grid:** Coordinate 9 (Internal audit pages: LP pp. 14-15, DOB p. 21)
+- **Western tradition:** Mars and Neptune (Internal audit pages: pp. 31-33) — *Variation: Attributes to Mars and Neptune; Chaldean assigns Mars*
+- **Secondary Western view:** Audit status: `unverified`
+- **Psychology Provenance:** `synthesised, no direct source`
+- **Validation Status:** `untested`
+- **Prediction Status:** `blocked`
+- **Trace Audit:** `All traits sourced from verified citations or synthesised`
+
+---
+
+## Compound 28 (Special Sensitivity Case)
+
+### Customer-Facing Copy (Public Surface)
+**Your numbers at a glance:** Number 28 (reduces to 1)  
+**How this shows up day to day:** You value independent leadership and prefer to be your own guide. In work and alliances, you bring strong ambition paired with a need for dependable partners.  
+**What tends to drive you:** A strong drive for achievement and high potential, balanced by the practical lesson of exercising due diligence in associations and agreements.  
+**Strengths and watch-outs:**
+- *Strengths:* High executive capability, Resilience to start again and rebuild, Natural preference for self-directed enterprise
+- *Watch-outs:* Misplacing trust in unvetted partnerships, Underestimating competitors or procedural requirements, Taking unnecessary legal or speculative risks
+**Traditional note:** Number 28 holds great potential, but the tradition warns of reversals if trust is misplaced, rivals are underestimated or rules are bent. Gains can be lost and may need rebuilding. Careful choices, legal prudence and sound ethics protect it, especially if your chart has strong 1s or 4s.  
+
+### Internal Diagnostic Layer (Server-Side Metadata Only)
+- **Logic:** Compound = the sum before final reduction (calendar day 28 or full date sum).
+- **Observation:** Great potential traditionally flagged for reversals through misplaced trust or non-compliance.
+- **Sensitivity Flag:** `SENSITIVE-SOFTENED-WORDING-KEEPS-MEANING`
+- **Psychology Provenance:** `synthesised, no direct source`

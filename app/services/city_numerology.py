@@ -1307,7 +1307,7 @@ def render_city_html(city: Dict[str, Any]) -> str:
 
             <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
 
-            <li><a href="/calculators/personal-year/">Personal Year 2026</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year Calculator</a></li>
 
             <li><a href="/calculators/">View All Calculators →</a></li>
 

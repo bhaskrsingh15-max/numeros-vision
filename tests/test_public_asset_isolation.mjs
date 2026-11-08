@@ -48,7 +48,8 @@ const legitimatePaths = [
   '/',
   '/pricing.html',
   '/index.html',
-  '/static/css/theme.css'
+  '/static/css/theme.css',
+  '/how_we_work.html'
 ];
 
 for (const path of legitimatePaths) {
