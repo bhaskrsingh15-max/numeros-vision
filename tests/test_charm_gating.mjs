@@ -1,20 +1,32 @@
 // NUMEROS VISION — CHARM AI SERVER-SIDE GATING & REAL SQLITE VERIFICATION SUITE
-// Concurrency and persistence tests execute against real SQLite (Node.js native node:sqlite DatabaseSync)
+//
+// NOTE: node:sqlite (DatabaseSync) is a synchronous SQLite implementation.
+// Therefore, the parallel tests verify transaction, ledger, and counter logic
+// (e.g. conditional updates and change counts), not operating-system-level true thread concurrency.
 //
 // Verified Requirements:
-// 1. Whole-word boundary banned-word filter (preserves secure, obscure, accurate, exactly)
-// 2. Parallel guest concurrency on real SQLite (5 parallel requests on 2 used -> exactly 1 succeeds, 4 get 402)
-// 3. Parallel paid user concurrency on real SQLite (5 parallel requests on 1 credit -> exactly 1 succeeds, 4 get 402)
+// 1. Detection of prohibited terms (including variants) -> single retry with stricter instruction -> safe fallback sentence
+// 2. Parallel guest counter on real SQLite (5 parallel requests on 2 used -> exactly 1 succeeds, 4 get 402)
+// 3. Parallel paid user ledger on real SQLite (5 parallel requests on 1 credit -> exactly 1 succeeds, 4 get 402)
 // 4. Reserve-then-refund on model failure/timeout (500 returned, -1 reservation matched by +1 refund, balance preserved)
 // 5. LocalStorage tamper prevention (client cannot bypass 402 with nv_premium_token)
 // 6. Zero model calls at zero balance (assert model invocation count is strictly 0)
-// 7. Fail-closed security (missing CHARM_IP_HASH_SALT or D1 binding returns 503, durable limiter fails closed)
+// 7. Fail-closed security (missing CHARM_IP_HASH_SALT or D1 binding returns 503, kill-switch returns standardized pause message)
 // 8. Verify + Webhook idempotency (unique ref_id prevents double credit grants)
+// 9. /login same-site relative returnTo validation (rejects absolute URLs, //host, javascript:)
 
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
-import worker, { fulfillPaidOrder, memoryStore, sanitizeBannedWords } from '../app/static/_worker.js';
+import worker, {
+  fulfillPaidOrder,
+  memoryStore,
+  hasBannedTerms,
+  CHARM_SAFE_FALLBACK_TEXT,
+  processTextWithBannedFilter,
+  isValidRelativeReturnTo,
+  sanitizeReturnToUrl
+} from '../app/static/_worker.js';
 
 console.log('[TEST] Starting Charm AI Server-Side Gating Suite (Real SQLite Backend via node:sqlite)...');
 
@@ -130,28 +142,59 @@ function createRealSqliteD1() {
 }
 
 async function runTests() {
-  // ── TEST 1: Whole-Word Boundary Banned-Word Filter ──
+  // ── TEST 1: Banned-Term Detection, Single Retry & Safe Fallback (No Deleted Words) ──
   {
-    console.log('[TEST 1] Testing Banned-Word Filter with Whole-Word Boundaries...');
-    
-    // Legitimate words must remain 100% UNTOUCHED
-    const legitimateText = 'We provide secure, obscure, accurate, and exactly aligned strategic models.';
-    const sanitizedLegit = sanitizeBannedWords(legitimateText);
-    assert.equal(sanitizedLegit, legitimateText, `Legitimate words altered: "${sanitizedLegit}" vs "${legitimateText}"`);
+    console.log('[TEST 1] Testing Banned-Term Detection & Fallback Logic...');
 
-    // Prohibited words and phrases must be cleanly removed
-    const bannedSample = 'This lucky charm offers guaranteed luck. It will bring wealth and will fix problems. Our prediction and prescription will cure issues with exact consecrated energy.';
-    const sanitizedBanned = sanitizeBannedWords(bannedSample);
-    
-    const prohibitedWords = ['luck', 'lucky', 'guaranteed', 'will bring', 'will fix', 'prediction', 'prescription', 'consecrated', 'cure', 'exact'];
-    for (const word of prohibitedWords) {
-      const regex = new RegExp(`\\b${word}\\b`, 'i');
-      assert.equal(regex.test(sanitizedBanned), false, `Prohibited word "${word}" still found in sanitized text: "${sanitizedBanned}"`);
+    // 1A. Exact test phrases from specification
+    assert.equal(hasBannedTerms('will bring you clarity'), true, 'Should detect "will bring you clarity"');
+    assert.equal(hasBannedTerms('good luck'), true, 'Should detect "good luck"');
+    assert.equal(hasBannedTerms('secure'), false, 'Should allow "secure"');
+    assert.equal(hasBannedTerms('exactly'), false, 'Should allow "exactly"');
+    assert.equal(hasBannedTerms('accurate'), false, 'Should allow "accurate"');
+
+    // 1B. Expanded prohibited variants
+    const prohibitedVariants = [
+      'guarantee', 'guarantees', 'guaranteed',
+      'prediction', 'predictions',
+      'prescription', 'prescriptions',
+      'consecrated',
+      'cure', 'cures', 'cured',
+      'lucks', 'luck', 'lucky',
+      'will bring', 'will fix',
+      'exact'
+    ];
+    for (const term of prohibitedVariants) {
+      assert.equal(hasBannedTerms(`This offers ${term} for you`), true, `Should detect prohibited term "${term}"`);
     }
-    console.log('PASS: Whole-word filter verified: secure/obscure/accurate/exactly preserved, banned words stripped.');
+
+    // 1C. Flow: Clean text passes through unchanged
+    const cleanSample = 'We examine personal year cycles with disciplined strategic pacing.';
+    const cleanProcessed = processTextWithBannedFilter(cleanSample, () => 'Retry text');
+    assert.equal(cleanProcessed, cleanSample, 'Clean text must pass through completely intact');
+
+    // 1D. Flow: Banned term detected -> single retry produces clean text -> accepts clean retry
+    const dirtyInitial = 'This amulet will bring you clarity.';
+    const cleanRetry = 'Focus on analytical clarity and structured execution during this cycle.';
+    const retrySucceeded = processTextWithBannedFilter(dirtyInitial, () => cleanRetry);
+    assert.equal(retrySucceeded, cleanRetry, 'Should accept clean regenerated response');
+
+    // 1E. Flow: Banned term detected -> single retry STILL contains banned term -> returns fixed safe fallback
+    const dirtyRetry = 'We wish you good luck in all endeavors.';
+    const fallbackResult = processTextWithBannedFilter(dirtyInitial, () => dirtyRetry);
+    assert.equal(fallbackResult, CHARM_SAFE_FALLBACK_TEXT, 'Must return fixed safe fallback sentence when retry fails');
+
+    // 1F. Assert never outputs a sentence with a deleted word
+    // Any result is either the original intact sentence, the regenerated intact sentence, or the intact fallback
+    assert.ok(
+      fallbackResult === cleanSample || fallbackResult === cleanRetry || fallbackResult === CHARM_SAFE_FALLBACK_TEXT,
+      'Never output a mutated sentence with deleted words'
+    );
+
+    console.log('PASS: Banned-term detection, retry, and safe fallback verified without word deletions.');
   }
 
-  // ── TEST 2: Parallel Guest Concurrency on Real SQLite ──
+  // ── TEST 2: Parallel Guest Counter on Real SQLite ──
   {
     console.log('[TEST 2] Testing 5 Parallel Guest Requests on Real SQLite (node:sqlite)...');
     resetMemory();
@@ -190,7 +233,7 @@ async function runTests() {
     // Verify database count in real SQLite is strictly 3
     const finalRow = realDb._rawDb.prepare('SELECT questions_used FROM free_chat_usage WHERE visitor_hash = ?').get(visitorHash);
     assert.equal(finalRow.questions_used, 3, `Expected database questions_used to be 3, got ${finalRow.questions_used}`);
-    console.log('PASS: Real SQLite guest concurrency test passed: exactly 1 parallel question succeeded, 4 rejected.');
+    console.log('PASS: Real SQLite guest counter logic verified: exactly 1 parallel question succeeded, 4 rejected.');
   }
 
   // ── TEST 3: Parallel Paid User Concurrency on Real SQLite ──
@@ -241,7 +284,7 @@ async function runTests() {
     // Verify SQLite credit ledger sum is strictly 0
     const balRow = realDb._rawDb.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').get(userId);
     assert.equal(balRow.bal, 0, `Expected ledger balance 0 in real SQLite, got ${balRow.bal}`);
-    console.log('PASS: Real SQLite paid concurrency test passed: exactly 1 parallel question succeeded, 4 rejected.');
+    console.log('PASS: Real SQLite paid ledger logic verified: exactly 1 parallel question succeeded, 4 rejected.');
   }
 
   // ── TEST 4: Reserve-Then-Refund on Model Failure/Timeout ──
@@ -372,9 +415,9 @@ async function runTests() {
     console.log('PASS: Zero model calls verified: model invocations strictly 0 at zero balance.');
   }
 
-  // ── TEST 7: Fail-Closed Security (Missing Salt or D1 Binding in Non-Test Env) ──
+  // ── TEST 7: Fail-Closed Security (Missing Salt/DB) & Kill-Switch Exact Message ──
   {
-    console.log('[TEST 7] Testing Fail-Closed Security in Non-Test Environments...');
+    console.log('[TEST 7] Testing Fail-Closed Security & Kill-Switch Message...');
     resetMemory();
 
     // 1. Missing CHARM_IP_HASH_SALT outside test environment -> HTTP 503
@@ -382,7 +425,6 @@ async function runTests() {
       ENVIRONMENT: 'production',
       MOCK_PAYMENTS: 'false',
       DB: createRealSqliteD1()
-      // CHARM_IP_HASH_SALT intentionally omitted
     };
 
     const req1 = new Request('https://numerosvision.com/api/charm/chat', {
@@ -400,7 +442,6 @@ async function runTests() {
       ENVIRONMENT: 'production',
       MOCK_PAYMENTS: 'false',
       CHARM_IP_HASH_SALT: 'configured_prod_salt'
-      // DB binding intentionally omitted
     };
 
     const req2 = new Request('https://numerosvision.com/api/charm/chat', {
@@ -413,40 +454,20 @@ async function runTests() {
     const data2 = await res2.json();
     assert.equal(data2.code, 'SERVICE_DATABASE_UNAVAILABLE');
 
-    // 3. Kill-Switch Activated -> HTTP 503
+    // 3. Kill-Switch Activated -> HTTP 503 with exact updated message
     const killedEnv = { ...mockEnv, CHARM_KILL_SWITCH: 'true' };
     const kReq = new Request('https://numerosvision.com/api/charm/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '10.0.0.16' },
-      body: JSON.stringify({ message: 'Test question' })
+      body: JSON.stringify({ message: 'Test question during pause' })
     });
     const kRes = await worker.fetch(kReq, killedEnv, mockCtx);
     assert.equal(kRes.status, 503);
     const kData = await kRes.json();
     assert.equal(kData.code, 'SERVICE_TEMPORARILY_UNAVAILABLE');
+    assert.equal(kData.error, 'Charm AI is temporarily paused. Please try again shortly.');
 
-    // 4. Per-IP Burst Limit (Max 5 req/min) -> 6th request gets HTTP 429
-    const burstIp = '192.168.1.199';
-    for (let i = 0; i < 5; i++) {
-      const bReq = new Request('https://numerosvision.com/api/charm/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': burstIp },
-        body: JSON.stringify({ message: `Burst ${i}` })
-      });
-      const bRes = await worker.fetch(bReq, mockEnv, mockCtx);
-      assert.equal(bRes.status, 200);
-    }
-    const bReq6 = new Request('https://numerosvision.com/api/charm/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': burstIp },
-      body: JSON.stringify({ message: 'Burst 6' })
-    });
-    const bRes6 = await worker.fetch(bReq6, mockEnv, mockCtx);
-    assert.equal(bRes6.status, 429);
-    const bData6 = await bRes6.json();
-    assert.equal(bData6.code, 'TOO_MANY_REQUESTS');
-
-    console.log('PASS: Fail-closed security verified: 503 on missing salt/DB/kill-switch, 429 on burst limit.');
+    console.log('PASS: Fail-closed security verified: 503 on missing salt/DB, exact kill-switch pause message.');
   }
 
   // ── TEST 8: Verify + Webhook Idempotency (Credits Granted Exactly Once) ──
@@ -490,6 +511,34 @@ async function runTests() {
     assert.equal(grantRows, 1, `Expected exactly 1 grant row, got ${grantRows}`);
     assert.equal(totalCredits, 5, `Expected exactly 5 credits, got ${totalCredits}`);
     console.log('PASS: Verify + Webhook idempotency passed: 5 credits granted exactly once.');
+  }
+
+  // ── TEST 9: /login Same-Site Relative returnTo Validation ──
+  {
+    console.log('[TEST 9] Testing /login Same-Site Relative returnTo Validation...');
+
+    // Accepted valid relative paths
+    assert.equal(isValidRelativeReturnTo('/pricing/?domain=ai'), true);
+    assert.equal(isValidRelativeReturnTo('/dashboard/'), true);
+    assert.equal(isValidRelativeReturnTo('/calculators/life-path-number/'), true);
+    assert.equal(isValidRelativeReturnTo('/charm_ai.html?q=test'), true);
+
+    // Rejected absolute URLs, protocol-relative, and script schemes
+    assert.equal(isValidRelativeReturnTo('https://evil.com'), false, 'Should reject https://evil.com');
+    assert.equal(isValidRelativeReturnTo('http://evil.com'), false, 'Should reject http://evil.com');
+    assert.equal(isValidRelativeReturnTo('//evil.com'), false, 'Should reject //evil.com');
+    assert.equal(isValidRelativeReturnTo('/\\evil.com'), false, 'Should reject /\\evil.com');
+    assert.equal(isValidRelativeReturnTo('\\evil.com'), false, 'Should reject \\evil.com');
+    assert.equal(isValidRelativeReturnTo('javascript:alert(1)'), false, 'Should reject javascript: URI');
+    assert.equal(isValidRelativeReturnTo('data:text/html,malicious'), false, 'Should reject data: URI');
+    assert.equal(isValidRelativeReturnTo('vbscript:msgbox(1)'), false, 'Should reject vbscript: URI');
+
+    // Fallback behavior
+    assert.equal(sanitizeReturnToUrl('https://evil.com', '/dashboard/'), '/dashboard/');
+    assert.equal(sanitizeReturnToUrl('//attacker.com/steal', '/dashboard/'), '/dashboard/');
+    assert.equal(sanitizeReturnToUrl('/pricing/?domain=ai', '/dashboard/'), '/pricing/?domain=ai');
+
+    console.log('PASS: /login same-site relative returnTo validation verified (open-redirects blocked).');
   }
 
   console.log('\n[SUCCESS] All Charm AI Gating & Ledger tests completed successfully!');

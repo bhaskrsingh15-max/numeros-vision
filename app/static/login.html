@@ -1220,7 +1220,17 @@
 
         const returnTo = params.get('returnTo');
 
-        if (returnTo && returnTo.startsWith('/')) return returnTo;
+        if (returnTo) {
+          const clean = returnTo.trim();
+          if (
+            clean.startsWith('/') &&
+            !clean.startsWith('//') &&
+            !clean.startsWith('/\\') &&
+            !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(clean)
+          ) {
+            return clean;
+          }
+        }
 
       } catch (e) {}
 
