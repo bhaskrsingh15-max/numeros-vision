@@ -25,7 +25,7 @@ Configure these environment variables in the **Cloudflare Pages Dashboard** unde
 | `RAZORPAY_WEBHOOK_SECRET` | Preview | Secret for signature verification on `/api/planner-2027/webhook` |
 | `PDF_SERVICE_URL` | Preview | URL of the internal Cloud Run PDF service (or tunnel) |
 | `PDF_SERVICE_SECRET` | Preview | 32+ character HMAC secret matching `PDF_SERVICE_SECRET` on Cloud Run |
-| `ADMIN_BEARER_TOKEN` | Preview | High-entropy secret for querying `/api/planner-2027/admin/stuck-orders` |
+| `ADMIN_TOKEN` | Preview | High-entropy secret for querying `/api/planner-2027/admin/stuck-orders` |
 | `DB` (D1 Binding) | Preview | D1 Database binding to `planner_2027_orders` table |
 
 ### Razorpay Test Dashboard Webhook Configuration
@@ -109,7 +109,7 @@ Simulates a buyer who closed their browser tab immediately after payment:
 ### Flow 6: Admin Stuck-Orders Alert Route
 1. In terminal or Postman, run:
    ```bash
-   curl -H "Authorization: Bearer <ADMIN_BEARER_TOKEN>" \
+   curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
         https://<your-preview-domain>/api/planner-2027/admin/stuck-orders
    ```
 2. Confirm the JSON response:

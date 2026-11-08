@@ -438,16 +438,16 @@
 
       <div class="price-box">
         <div>
-          <span class="price-original">₹1,999</span>
-          <span class="price-current">₹1,499</span>
+          <span class="price-original" id="heroPriceOriginal">₹1,999</span>
+          <span class="price-current" id="heroPriceCurrent">₹1,499</span>
         </div>
-        <div class="price-offer-note">
+        <div class="price-offer-note" id="heroOfferNote">
           Offer ends 31 January 2027
         </div>
       </div>
 
       <div class="cta-row">
-        <a href="#checkout-section" class="btn-gold">Get Your 2027 Planner (₹1,499)</a>
+        <a href="#checkout-section" id="heroCtaBtn" class="btn-gold">Get Your 2027 Planner (₹1,499)</a>
         <a href="#sample-preview" class="btn-outline">Sample preview coming soon</a>
       </div>
     </div>
@@ -584,8 +584,8 @@
             <span style="font-size:0.85rem; color:var(--ink-muted);">24-Page Personalized Annual PDF Dossier</span>
           </div>
           <div style="text-align:right;">
-            <span style="text-decoration:line-through; font-size:0.9rem; color:var(--ink-muted);">₹1,999</span><br />
-            <strong style="color:var(--gold-dark); font-size:1.35rem; font-family:'Cinzel',serif;">₹1,499</strong>
+            <span id="checkoutPriceOriginal" style="text-decoration:line-through; font-size:0.9rem; color:var(--ink-muted);">₹1,999</span><br />
+            <strong id="checkoutPriceCurrent" style="color:var(--gold-dark); font-size:1.35rem; font-family:'Cinzel',serif;">₹1,499</strong>
           </div>
         </div>
 
@@ -707,6 +707,55 @@
   <!-- Client Checkout & Delivery Logic -->
   <script>
     (function() {
+      // Load Dynamic Pricing at Page Load
+      async function initPricing() {
+        try {
+          const res = await fetch('/api/planner-2027/price');
+          if (!res.ok) return;
+          const data = await res.json();
+          const isOffer = data.is_offer_active !== false;
+          const currentPrice = data.amount_paise ? (data.amount_paise / 100) : (isOffer ? 1499 : 1999);
+          const listPrice = data.list ? (data.list / 100) : 1999;
+          
+          const heroPriceCurrent = document.getElementById('heroPriceCurrent');
+          const heroPriceOriginal = document.getElementById('heroPriceOriginal');
+          const heroOfferNote = document.getElementById('heroOfferNote');
+          const checkoutPriceCurrent = document.getElementById('checkoutPriceCurrent');
+          const checkoutPriceOriginal = document.getElementById('checkoutPriceOriginal');
+          const heroCtaBtn = document.getElementById('heroCtaBtn');
+          const submitOrderBtn = document.getElementById('submitOrderBtn');
+
+          if (heroPriceCurrent) heroPriceCurrent.textContent = `₹${currentPrice.toLocaleString('en-IN')}`;
+          if (checkoutPriceCurrent) checkoutPriceCurrent.textContent = `₹${currentPrice.toLocaleString('en-IN')}`;
+
+          if (!isOffer) {
+            if (heroPriceOriginal) heroPriceOriginal.style.display = 'none';
+            if (heroOfferNote) heroOfferNote.style.display = 'none';
+            if (checkoutPriceOriginal) checkoutPriceOriginal.style.display = 'none';
+            if (heroCtaBtn) heroCtaBtn.textContent = `Get Your 2027 Planner (₹${currentPrice.toLocaleString('en-IN')})`;
+            if (submitOrderBtn) submitOrderBtn.textContent = `Proceed to Secure Checkout (₹${currentPrice.toLocaleString('en-IN')})`;
+          } else {
+            if (heroPriceOriginal) {
+              heroPriceOriginal.style.display = 'inline';
+              heroPriceOriginal.textContent = `₹${listPrice.toLocaleString('en-IN')}`;
+            }
+            if (heroOfferNote) {
+              heroOfferNote.style.display = 'block';
+              heroOfferNote.textContent = 'Offer ends 31 January 2027';
+            }
+            if (checkoutPriceOriginal) {
+              checkoutPriceOriginal.style.display = 'inline';
+              checkoutPriceOriginal.textContent = `₹${listPrice.toLocaleString('en-IN')}`;
+            }
+            if (heroCtaBtn) heroCtaBtn.textContent = `Get Your 2027 Planner (₹${currentPrice.toLocaleString('en-IN')})`;
+            if (submitOrderBtn) submitOrderBtn.textContent = `Proceed to Secure Checkout (₹${currentPrice.toLocaleString('en-IN')})`;
+          }
+        } catch (e) {
+          console.error('Failed to load dynamic pricing:', e);
+        }
+      }
+      initPricing();
+
       const orderForm = document.getElementById('plannerOrderForm');
       const submitBtn = document.getElementById('submitOrderBtn');
       const alertBox = document.getElementById('checkoutAlert');

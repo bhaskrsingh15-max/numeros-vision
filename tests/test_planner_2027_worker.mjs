@@ -55,31 +55,53 @@ async function runWorkerTestSuite() {
     console.log('  ✓ Live key correctly rejected with fatal error');
   }
 
-  // 1B. Preview Flag Refusal on Production Host / Environment
+  // 1B. Preview Flag Strict Guard: Allowed ONLY when ENVIRONMENT === 'preview'
   {
-    console.log('[TEST 1B] Testing PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW production refusal...');
-    const prodEnv = {
-      ...baseEnv,
-      PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW: 'true',
-      ENVIRONMENT: 'production'
-    };
+    console.log('[TEST 1B] Testing PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW strict guard...');
     const req = new Request('http://localhost/api/planner-2027/price', {
       method: 'GET',
       headers: { 'Origin': 'http://localhost' }
     });
 
-    let threw = false;
+    // Case A: Refused when ENVIRONMENT is unset/empty
+    const emptyEnv = { ...baseEnv, PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW: 'true', ENVIRONMENT: '' };
+    let threwEmpty = false;
+    try {
+      await worker._handleRequest(req, emptyEnv);
+    } catch (e) {
+      threwEmpty = true;
+      assert(e.message.includes("only permitted when ENVIRONMENT == 'preview'"));
+    }
+    assert(threwEmpty, 'Worker must throw when ENVIRONMENT is empty');
+
+    // Case B: Refused when ENVIRONMENT is 'staging'
+    const stagingEnv = { ...baseEnv, PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW: 'true', ENVIRONMENT: 'staging' };
+    let threwStaging = false;
+    try {
+      await worker._handleRequest(req, stagingEnv);
+    } catch (e) {
+      threwStaging = true;
+      assert(e.message.includes("only permitted when ENVIRONMENT == 'preview'"));
+    }
+    assert(threwStaging, 'Worker must throw when ENVIRONMENT is staging');
+
+    // Case C: Refused when ENVIRONMENT is 'production'
+    const prodEnv = { ...baseEnv, PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW: 'true', ENVIRONMENT: 'production' };
+    let threwProd = false;
     try {
       await worker._handleRequest(req, prodEnv);
     } catch (e) {
-      threw = true;
-      assert(e.message.includes('cannot be enabled on a production host/environment'));
+      threwProd = true;
+      assert(e.message.includes("only permitted when ENVIRONMENT == 'preview'"));
     }
-    assert(threw, 'Worker must throw when preview flag is set on production');
+    assert(threwProd, 'Worker must throw when ENVIRONMENT is production');
 
-    const res = await worker.fetch(req, prodEnv, {});
-    assert.strictEqual(res.status, 500);
-    console.log('  ✓ Preview flag on production correctly rejected with fatal error');
+    // Case D: Accepted when ENVIRONMENT is 'preview' explicitly
+    const previewEnv = { ...baseEnv, PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW: 'true', ENVIRONMENT: 'preview' };
+    const validRes = await worker._handleRequest(req, previewEnv);
+    assert.strictEqual(validRes.status, 200);
+
+    console.log('  ✓ Preview flag strictly guarded to ENVIRONMENT == "preview"');
   }
 
   // 2. Pricing endpoint

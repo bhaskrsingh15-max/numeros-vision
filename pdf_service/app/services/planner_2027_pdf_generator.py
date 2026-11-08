@@ -1241,7 +1241,7 @@ class Planner2027PdfBuilder:
             assert_no_preview_flag_on_production()
             if "{{DISCLAIMER_APPROVED_TEXT}}" in disc_text:
                 disc_text = (
-                    "<b><font color='#922B21'>[PREVIEW ONLY]</font></b> "
+                    "<b><font color='#A13030'>[PREVIEW ONLY]</font></b> "
                     "Statutory legal disclaimer text pending formal advocate approval. "
                     "This document has been compiled exclusively in the pre-launch preview environment for testing and verification purposes."
                 )

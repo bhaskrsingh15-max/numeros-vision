@@ -48,10 +48,8 @@ function assertNoPreviewFlagOnProduction(env, request) {
   const flag = (env.PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW || '').toString().trim().toLowerCase();
   if (flag === 'true' || flag === '1' || flag === 'yes') {
     const environment = (env.ENVIRONMENT || '').toString().trim().toLowerCase();
-    const host = request ? (request.headers.get('host') || '').toLowerCase() : '';
-    const isProd = environment === 'production' || environment === 'prod' || host === 'numerosvision.com' || host === 'www.numerosvision.com';
-    if (isProd) {
-      throw new Error('FATAL SECURITY VIOLATION: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW cannot be enabled on a production host/environment.');
+    if (environment !== 'preview') {
+      throw new Error(`FATAL SECURITY VIOLATION: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW is only permitted when ENVIRONMENT == 'preview' (current ENVIRONMENT: '${environment}'). Refusing execution.`);
     }
   }
 }
@@ -4623,7 +4621,7 @@ export default {
         providedToken = url.searchParams.get('admin_token').trim();
       }
 
-      const expectedToken = (env.ADMIN_TOKEN || env.PDF_SERVICE_SECRET || 'test_admin_token').trim();
+      const expectedToken = (env.ADMIN_TOKEN || env.ADMIN_BEARER_TOKEN || env.PDF_SERVICE_SECRET || 'test_admin_token').trim();
       if (!providedToken || !timingSafeEqual(providedToken, expectedToken)) {
         return new Response(JSON.stringify({ error: 'Unauthorized: Admin authentication required.' }), { status: 401, headers: corsHeaders });
       }

@@ -428,22 +428,17 @@ def render_planner_2027_from_payload(payload: Dict[str, Any]) -> Tuple[bytes, Di
 
 
 def assert_no_preview_flag_on_production():
-    """Refuse to run if PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW is enabled on a production host/env."""
+    """
+    Enforces strict preview guard:
+    PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW is permitted ONLY when ENVIRONMENT == 'preview' explicitly.
+    In every other case (unset, 'production', 'staging', anything else), refuse execution with RuntimeError.
+    """
     flag = os.environ.get("PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW", "").strip().lower()
     if flag in ("true", "1", "yes"):
         env = os.environ.get("ENVIRONMENT", "").strip().lower()
-        env_legacy = os.environ.get("ENV", "").strip().lower()
-        k_service = os.environ.get("K_SERVICE", "").strip().lower()
-        host = os.environ.get("HOST", "").strip().lower()
-        is_prod = (
-            env in ("production", "prod")
-            or env_legacy in ("production", "prod")
-            or "prod" in k_service
-            or "numerosvision.com" in host
-        )
-        if is_prod:
+        if env != "preview":
             raise RuntimeError(
-                "FATAL SECURITY VIOLATION: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW cannot be enabled on a production host/environment."
+                f"FATAL SECURITY VIOLATION: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW is only permitted when ENVIRONMENT == 'preview' (current ENVIRONMENT: '{env}'). Refusing execution."
             )
 
 def assert_no_live_razorpay_keys():

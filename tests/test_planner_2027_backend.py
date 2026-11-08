@@ -401,24 +401,26 @@ class TestPlanner2027Backend(unittest.TestCase):
         import pypdf
         import io
 
-        # 1. Refusal on production environment
         os.environ["PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW"] = "true"
-        os.environ["ENVIRONMENT"] = "production"
-        try:
-            with self.assertRaises(RuntimeError) as cm:
-                assert_no_preview_flag_on_production()
-            self.assertIn("cannot be enabled on a production host/environment", str(cm.exception))
-        finally:
-            os.environ.pop("ENVIRONMENT", None)
 
-        # 2. Refusal on production host
-        os.environ["HOST"] = "numerosvision.com"
-        try:
-            with self.assertRaises(RuntimeError) as cm2:
-                assert_no_preview_flag_on_production()
-            self.assertIn("cannot be enabled on a production host/environment", str(cm2.exception))
-        finally:
-            os.environ.pop("HOST", None)
+        # 1. Refusal when ENVIRONMENT is unset
+        os.environ.pop("ENVIRONMENT", None)
+        with self.assertRaises(RuntimeError) as cm0:
+            assert_no_preview_flag_on_production()
+        self.assertIn("only permitted when ENVIRONMENT == 'preview'", str(cm0.exception))
+
+        # 2. Refusal when ENVIRONMENT is staging or anything other than 'preview'
+        os.environ["ENVIRONMENT"] = "staging"
+        with self.assertRaises(RuntimeError) as cm1:
+            assert_no_preview_flag_on_production()
+        self.assertIn("only permitted when ENVIRONMENT == 'preview'", str(cm1.exception))
+
+        # 3. Refusal when ENVIRONMENT is production
+        os.environ["ENVIRONMENT"] = "production"
+        with self.assertRaises(RuntimeError) as cm2:
+            assert_no_preview_flag_on_production()
+        self.assertIn("only permitted when ENVIRONMENT == 'preview'", str(cm2.exception))
+        os.environ.pop("ENVIRONMENT", None)
 
         # 3. Successful generation on preview showing PREVIEW ONLY banner
         os.environ["ENVIRONMENT"] = "preview"
@@ -441,6 +443,21 @@ class TestPlanner2027Backend(unittest.TestCase):
         finally:
             os.environ.pop("PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW", None)
             os.environ.pop("ENVIRONMENT", None)
+
+
+    def test_dynamic_pricing_post_cutoff_client_state(self):
+        """Asserts year_2027.html JS contains logic to hide strike-through and offer note after cutoff."""
+        html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
+        with open(html_path, "r", encoding="utf-8") as hf:
+            html = hf.read()
+
+        self.assertIn("initPricing()", html)
+        self.assertIn("heroPriceOriginal.style.display = 'none'", html)
+        self.assertIn("heroOfferNote.style.display = 'none'", html)
+        self.assertIn("checkoutPriceOriginal.style.display = 'none'", html)
+        self.assertIn('id="heroPriceCurrent"', html)
+        self.assertIn('id="heroPriceOriginal"', html)
+        self.assertIn('id="heroOfferNote"', html)
 
 
 if __name__ == "__main__":
