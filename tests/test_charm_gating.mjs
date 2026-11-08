@@ -523,12 +523,18 @@ async function runTests() {
     assert.equal(isValidRelativeReturnTo('/calculators/life-path-number/'), true);
     assert.equal(isValidRelativeReturnTo('/charm_ai.html?q=test'), true);
 
-    // Rejected absolute URLs, protocol-relative, and script schemes
+    // Rejected absolute URLs, protocol-relative, backslashes anywhere, and control/whitespace
     assert.equal(isValidRelativeReturnTo('https://evil.com'), false, 'Should reject https://evil.com');
     assert.equal(isValidRelativeReturnTo('http://evil.com'), false, 'Should reject http://evil.com');
     assert.equal(isValidRelativeReturnTo('//evil.com'), false, 'Should reject //evil.com');
     assert.equal(isValidRelativeReturnTo('/\\evil.com'), false, 'Should reject /\\evil.com');
     assert.equal(isValidRelativeReturnTo('\\evil.com'), false, 'Should reject \\evil.com');
+    assert.equal(isValidRelativeReturnTo('/path\\evil'), false, 'Should reject /path\\evil');
+    assert.equal(isValidRelativeReturnTo('/\\t/evil.com'), false, 'Should reject /\\t/evil.com (tab)');
+    assert.equal(isValidRelativeReturnTo('/%0a/evil.com'), false, 'Should reject /%0a/evil.com (encoded LF)');
+    assert.equal(isValidRelativeReturnTo('/ /evil.com'), false, 'Should reject / /evil.com (space)');
+    assert.equal(isValidRelativeReturnTo('/\r/evil.com'), false, 'Should reject /\\r/evil.com');
+    assert.equal(isValidRelativeReturnTo('/\n/evil.com'), false, 'Should reject /\\n/evil.com');
     assert.equal(isValidRelativeReturnTo('javascript:alert(1)'), false, 'Should reject javascript: URI');
     assert.equal(isValidRelativeReturnTo('data:text/html,malicious'), false, 'Should reject data: URI');
     assert.equal(isValidRelativeReturnTo('vbscript:msgbox(1)'), false, 'Should reject vbscript: URI');
@@ -536,9 +542,70 @@ async function runTests() {
     // Fallback behavior
     assert.equal(sanitizeReturnToUrl('https://evil.com', '/dashboard/'), '/dashboard/');
     assert.equal(sanitizeReturnToUrl('//attacker.com/steal', '/dashboard/'), '/dashboard/');
+    assert.equal(sanitizeReturnToUrl('/ /evil.com', '/dashboard/'), '/dashboard/');
+    assert.equal(sanitizeReturnToUrl('/%0a/evil.com', '/dashboard/'), '/dashboard/');
     assert.equal(sanitizeReturnToUrl('/pricing/?domain=ai', '/dashboard/'), '/pricing/?domain=ai');
 
-    console.log('PASS: /login same-site relative returnTo validation verified (open-redirects blocked).');
+    console.log('PASS: /login same-site relative returnTo validation verified (open-redirects, tabs, whitespace, backslashes blocked).');
+  }
+
+  // ── TEST 10: Fallback Sentence Auto-Refund & Daily Cap Single-Count ──
+  {
+    console.log('[TEST 10] Testing Safe Fallback Auto-Refund & Daily Cap Idempotency...');
+    resetMemory();
+    const realDb = createRealSqliteD1();
+    const envWithDb = { ...mockEnv, DB: realDb };
+
+    const userId = 'usr_fallback_refund_test';
+    const sessionToken = 'tok_fallback_session_abc';
+    const tokenHash = computeTokenHash(sessionToken);
+
+    realDb._rawDb.prepare('INSERT INTO users (id, email, phone_hash, created_at) VALUES (?, ?, ?, ?)').run(userId, 'fallback@example.com', 'ph_111', Date.now());
+    realDb._rawDb.prepare('INSERT INTO sessions (id, user_id, token_hash, expires_at) VALUES (?, ?, ?, ?)').run('sess_fb_1', userId, tokenHash, Date.now() + 86400000);
+
+    // Seed exactly 1 credit in real SQLite
+    realDb._rawDb.prepare(`
+      INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at)
+      VALUES (?, ?, 1, 'free_allowance', ?, 1, ?)
+    `).run('crd_seed_fb', userId, 'free_' + userId, Date.now());
+
+    // Both initial and retry texts contain banned terms -> triggers safe fallback
+    const req = new Request('https://numerosvision.com/api/charm/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `nv_session=${sessionToken}`,
+        'CF-Connecting-IP': '10.0.0.88'
+      },
+      body: JSON.stringify({
+        message: 'Tell me my future',
+        __simulated_text__: 'This amulet will bring you clarity.',
+        __simulated_retry_text__: 'We wish you good luck in career.'
+      })
+    });
+
+    const res = await worker.fetch(req, envWithDb, mockCtx);
+    assert.equal(res.status, 200);
+    const data = await res.json();
+    assert.equal(data.assistant_message.text, CHARM_SAFE_FALLBACK_TEXT);
+    assert.equal(data.credits_remaining, 1, 'Credit must remain 1 after automatic fallback refund');
+
+    // Verify in real SQLite: reservation row (-1) AND refund row (+1)
+    const ledgerRows = realDb._rawDb.prepare('SELECT delta, reason, ref_id FROM credit_ledger WHERE user_id = ? ORDER BY created_at ASC').all(userId);
+    const reasons = ledgerRows.map(r => r.reason);
+    assert.ok(reasons.includes('question_asked'), 'Reservation missing');
+    assert.ok(reasons.includes('refund'), 'Refund missing');
+
+    const balRow = realDb._rawDb.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').get(userId);
+    assert.equal(balRow.bal, 1, 'Net balance must remain 1 after refund');
+
+    // Verify retry did NOT double-count against CHARM_GLOBAL_DAILY_CAP
+    const todayKey = new Date().toISOString().slice(0, 10);
+    const rateRow = realDb._rawDb.prepare('SELECT count FROM charm_rate_limits WHERE key = ?').get('charm_global_daily_' + todayKey);
+    assert.ok(rateRow, 'Daily rate limit record must exist');
+    assert.equal(rateRow.count, 1, `Global daily spend cap was incremented ${rateRow.count} times! Expected strictly 1.`);
+
+    console.log('PASS: Safe fallback auto-refund verified; retry did NOT double-count against daily spend cap.');
   }
 
   console.log('\n[SUCCESS] All Charm AI Gating & Ledger tests completed successfully!');
