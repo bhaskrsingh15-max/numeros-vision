@@ -85,6 +85,8 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
+  <script src="/api/turnstile-config.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
 
   <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
@@ -868,17 +870,75 @@
 
       <div class="auth-tab-row">
 
-        <button type="button" class="auth-tab-btn active" id="tabPasswordBtn" onclick="switchLoginMode('password')">🔑 Password Sign In</button>
+        <button type="button" class="auth-tab-btn active" id="tabEmailBtn" onclick="switchLoginMode('email')">✉️ Email Code Sign In</button>
 
-        <button type="button" class="auth-tab-btn" id="tabOtpBtn" onclick="switchLoginMode('otp')">📲 Fast OTP Sign In</button>
+        <button type="button" class="auth-tab-btn" id="tabPasswordBtn" onclick="switchLoginMode('password')">🔑 Password Sign In</button>
+
+        <button type="button" class="auth-tab-btn" id="tabOtpBtn" style="display:none;" onclick="switchLoginMode('otp')">📲 Fast OTP Sign In</button>
 
       </div>
 
 
 
+      <!-- Email Code Login Form (Primary for Returning Customers) -->
+
+      <form id="emailCodeLoginForm" onsubmit="handleEmailCodeLoginSubmit(event)">
+
+        <div class="form-group">
+
+          <label for="loginEmailInput">Your Registered Email Address</label>
+
+          <input type="email" id="loginEmailInput" class="form-input" placeholder="e.g. member@numerosvision.com" required />
+
+        </div>
+
+
+
+        <div style="margin: 12px 0;">
+
+          <div id="login-turnstile-container"></div>
+
+          <div id="loginTurnstileStatus" style="font-size:0.75rem; color:#B91C1C; margin-top:4px;"></div>
+
+        </div>
+
+
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+
+          <button type="button" id="btnSendEmailLoginCode" onclick="sendLoginEmailCode()" style="padding:7px 14px; font-size:0.78rem; font-weight:700; border-radius:6px; background:#FAF6EE; border:1.5px solid #C9A227; color:#8B6914; cursor:pointer;">
+
+            ✉️ Send 6-Digit Code
+
+          </button>
+
+          <span id="loginEmailTimerSpan" style="font-size:0.72rem; color:#8B6914; font-weight:600;"></span>
+
+        </div>
+
+
+
+        <div id="loginEmailCodeInputContainer" style="display:none;" class="form-group">
+
+          <label for="loginEmailOtpCode">Enter 6-Digit Verification Code</label>
+
+          <input type="text" id="loginEmailOtpCode" maxlength="6" class="form-input" placeholder="6-digit code" style="letter-spacing:0.18em; font-weight:700; text-align:center; font-size:1rem;" />
+
+          <div id="loginEmailFeedback" style="font-size:0.72rem; margin-top:4px; color:#16835B;"></div>
+
+        </div>
+
+
+
+        <button type="submit" id="btnEmailLoginSubmit" class="btn-auth-submit" style="display:none;">Verify Code &amp; Sign In ✦</button>
+
+      </form>
+
+
+
       <!-- Password Login Form -->
 
-      <form id="passwordLoginForm" onsubmit="handlePasswordLogin(event)">
+      <form id="passwordLoginForm" onsubmit="handlePasswordLogin(event)" style="display:none;">
 
         <div class="form-group">
 
@@ -1129,43 +1189,188 @@
   <script>
 
     function switchLoginMode(mode) {
-
+      const tabEmail = document.getElementById('tabEmailBtn');
       const tabPw = document.getElementById('tabPasswordBtn');
-
       const tabOtp = document.getElementById('tabOtpBtn');
-
+      const formEmail = document.getElementById('emailCodeLoginForm');
       const formPw = document.getElementById('passwordLoginForm');
-
       const formOtp = document.getElementById('otpLoginForm');
-
       const alertBox = document.getElementById('loginAlert');
-
       if (alertBox) alertBox.style.display = 'none';
 
+      if (tabEmail) tabEmail.classList.toggle('active', mode === 'email');
+      if (tabPw) tabPw.classList.toggle('active', mode === 'password');
+      if (tabOtp) tabOtp.classList.toggle('active', mode === 'otp');
 
+      if (formEmail) formEmail.style.display = mode === 'email' ? 'block' : 'none';
+      if (formPw) formPw.style.display = mode === 'password' ? 'block' : 'none';
+      if (formOtp) formOtp.style.display = mode === 'otp' ? 'block' : 'none';
 
-      if (mode === 'otp') {
+      if (mode === 'email') {
+        renderLoginTurnstile();
+      }
+    }
 
-        tabPw.classList.remove('active');
+    // ── Email Code Sign-In for Returning Customers ──
+    let _loginTurnstileWidgetId = null;
+    let _loginEmailCountdown = null;
 
-        tabOtp.classList.add('active');
+    async function renderLoginTurnstile() {
+      if (!window.turnstile) return;
+      const container = document.getElementById('login-turnstile-container');
+      if (!container || _loginTurnstileWidgetId !== null) return;
+      try {
+        const siteKey = window.NV_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
 
-        formPw.style.display = 'none';
+        _loginTurnstileWidgetId = window.turnstile.render('#login-turnstile-container', {
+          sitekey: siteKey,
+          theme: 'light',
+          callback: function() {
+            const st = document.getElementById('loginTurnstileStatus');
+            if (st) st.textContent = '';
+          },
+          'expired-callback': function() {
+            const st = document.getElementById('loginTurnstileStatus');
+            if (st) st.textContent = 'Security check expired. Please complete the verification again.';
+            if (window.turnstile && _loginTurnstileWidgetId !== null) {
+              window.turnstile.reset(_loginTurnstileWidgetId);
+            }
+          }
+        });
+      } catch (e) {}
+    }
 
-        formOtp.style.display = 'block';
+    async function sendLoginEmailCode() {
+      const emailInput = document.getElementById('loginEmailInput');
+      const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
+      const alertBox = document.getElementById('loginAlert');
+      const statusEl = document.getElementById('loginTurnstileStatus');
+      const btn = document.getElementById('btnSendEmailLoginCode');
 
-      } else {
+      if (alertBox) alertBox.style.display = 'none';
+      if (statusEl) statusEl.textContent = '';
 
-        tabOtp.classList.remove('active');
-
-        tabPw.classList.add('active');
-
-        formOtp.style.display = 'none';
-
-        formPw.style.display = 'block';
-
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        if (alertBox) {
+          alertBox.className = 'auth-alert';
+          alertBox.style.display = 'block';
+          alertBox.style.color = '#B91C1C';
+          alertBox.textContent = 'Please enter a valid email address.';
+        }
+        return;
       }
 
+      let turnstileToken = '';
+      if (window.turnstile && _loginTurnstileWidgetId !== null) {
+        try { turnstileToken = window.turnstile.getResponse(_loginTurnstileWidgetId); } catch (e) {}
+      }
+
+      const isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      if (!turnstileToken && isLocalDev) {
+        turnstileToken = window.NV_TURNSTILE_TOKEN || 'test_turnstile_pass';
+      }
+
+      if (!turnstileToken) {
+        if (statusEl) {
+          statusEl.textContent = 'Please complete the Cloudflare security verification above.';
+          statusEl.style.color = '#B91C1C';
+        }
+        return;
+      }
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending Code... ⏳'; }
+
+      // Reset turnstile widget immediately on send
+      try {
+        if (window.turnstile && _loginTurnstileWidgetId !== null) {
+          window.turnstile.reset(_loginTurnstileWidgetId);
+        }
+      } catch (e) {}
+
+      try {
+        const res = await fetch('/api/v1/auth/email/send-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, turnstile_token: turnstileToken })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.success) {
+          document.getElementById('loginEmailCodeInputContainer').style.display = 'block';
+          document.getElementById('btnEmailLoginSubmit').style.display = 'flex';
+          const feedback = document.getElementById('loginEmailFeedback');
+          if (feedback) feedback.textContent = '✓ 6-digit verification code sent to your email.';
+          btn.textContent = 'Resend Code';
+
+          let rem = 60;
+          if (_loginEmailCountdown) clearInterval(_loginEmailCountdown);
+          const timerSpan = document.getElementById('loginEmailTimerSpan');
+          if (timerSpan) timerSpan.textContent = `(${rem}s)`;
+          _loginEmailCountdown = setInterval(() => {
+            rem--;
+            if (rem <= 0) {
+              clearInterval(_loginEmailCountdown);
+              if (timerSpan) timerSpan.textContent = '';
+              if (btn) btn.disabled = false;
+            } else {
+              if (timerSpan) timerSpan.textContent = `(${rem}s)`;
+            }
+          }, 1000);
+        } else {
+          let msg = (data && data.error) || 'Failed to dispatch code. Please try again.';
+          if (alertBox) {
+            alertBox.style.display = 'block';
+            alertBox.style.color = '#B91C1C';
+            alertBox.textContent = msg;
+          }
+          if (btn) { btn.disabled = false; btn.textContent = '✉️ Send 6-Digit Code'; }
+        }
+      } catch (err) {
+        if (alertBox) {
+          alertBox.style.display = 'block';
+          alertBox.style.color = '#B91C1C';
+          alertBox.textContent = 'Network error while dispatching code.';
+        }
+        if (btn) { btn.disabled = false; btn.textContent = '✉️ Send 6-Digit Code'; }
+      }
+    }
+
+    async function handleEmailCodeLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmailInput').value.trim().toLowerCase();
+      const code = document.getElementById('loginEmailOtpCode').value.trim();
+      const alertBox = document.getElementById('loginAlert');
+      const btn = document.getElementById('btnEmailLoginSubmit');
+
+      if (!email || code.length !== 6) return;
+      if (btn) { btn.disabled = true; btn.textContent = 'Signing In... ✦'; }
+
+      try {
+        const res = await fetch('/api/v1/auth/email/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, code, checkout_flow: false })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.verified && data.authenticated) {
+          window.location.href = getLoginRedirectUrl(data.redirect_url);
+        } else {
+          if (alertBox) {
+            alertBox.style.display = 'block';
+            alertBox.style.color = '#B91C1C';
+            alertBox.textContent = data.error || 'Invalid or expired verification code.';
+          }
+          if (btn) { btn.disabled = false; btn.textContent = 'Verify Code & Sign In ✦'; }
+        }
+      } catch (err) {
+        if (alertBox) {
+          alertBox.style.display = 'block';
+          alertBox.style.color = '#B91C1C';
+          alertBox.textContent = 'Network error during sign in.';
+        }
+        if (btn) { btn.disabled = false; btn.textContent = 'Verify Code & Sign In ✦'; }
+      }
     }
 
 

@@ -458,6 +458,19 @@
   </header>
 
   <main class="dash-wrap">
+    <!-- ── SIGNED-OUT CLEAR PROMPT ── -->
+    <div id="dashSignedOutPrompt" style="display:none; max-width:540px; margin:40px auto; background:#FFFFFF; border:1.5px solid var(--border-gold); border-radius:18px; padding:36px 24px; text-align:center; box-shadow:0 8px 24px rgba(180, 155, 110, 0.12);">
+      <div style="font-size:2.2rem; margin-bottom:12px; color:var(--gold);">✦</div>
+      <h2 style="font-family:'Cinzel', Georgia, serif; font-size:1.45rem; color:var(--gold-dark); margin-bottom:10px;">Sign In to View Your Order</h2>
+      <p style="font-size:0.88rem; color:var(--ink-muted); line-height:1.6; margin-bottom:24px;">
+        Please sign in with your email to access your purchased reports, dossiers, and personalized numerological blueprint.
+      </p>
+      <a id="btnDashSignInPrompt" href="/login.html" class="nv-btn-cta" style="display:inline-block; padding:12px 28px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF; border-radius:10px; font-weight:700; text-decoration:none; font-size:0.9rem; letter-spacing:0.02em;">
+        Sign In with Email Code →
+      </a>
+    </div>
+
+    <div id="dashAuthenticatedContent">
     <!-- ── 1. WELCOME & COMPACT PROFILE SWITCHER ── -->
     <div class="welcome-header">
       <div>
@@ -645,6 +658,7 @@
         </div>
       </div>
     </details>
+    </div>
   </main>
 
   <!-- Add Family Member Modal -->
@@ -760,15 +774,21 @@
 
       try {
         const meRes = await fetch('/api/me');
-        if (meRes.status === 401) {
-          window.location.href = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname);
+        const meData = meRes.ok ? await meRes.json().catch(() => ({})) : null;
+        if (meRes.status === 401 || !meData || !meData.authenticated) {
+          const loginUrl = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname + window.location.search);
+          const promptEl = document.getElementById('dashSignedOutPrompt');
+          const authContent = document.getElementById('dashAuthenticatedContent');
+          const signInBtn = document.getElementById('btnDashSignInPrompt');
+          if (signInBtn) signInBtn.href = loginUrl;
+          if (authContent) authContent.style.display = 'none';
+          if (promptEl) promptEl.style.display = 'block';
           return;
         }
-        const meData = await meRes.json().catch(() => ({}));
-        if (!meData || !meData.authenticated) {
-          window.location.href = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname);
-          return;
-        }
+        const promptEl = document.getElementById('dashSignedOutPrompt');
+        const authContent = document.getElementById('dashAuthenticatedContent');
+        if (promptEl) promptEl.style.display = 'none';
+        if (authContent) authContent.style.display = 'block';
 
         const urlParams = new URLSearchParams(window.location.search);
         _activeSubjectId = urlParams.get('subjectId') || '';
@@ -840,9 +860,47 @@
       if (uPhoneEl) uPhoneEl.textContent = user.phone || 'Verified via OTP';
     }
 
+    let _dashboardPollTimer = null;
+    let _dashboardPollCount = 0;
+    const MAX_DASHBOARD_POLLS = 60; // 10s * 60 = 600s = 10 minutes
+
+    function checkAndStartPreparingPoll(reports) {
+      const hasPreparing = (reports || []).some(r => r.status === 'preparing');
+      if (hasPreparing && !_dashboardPollTimer) {
+        _dashboardPollCount = 0;
+        _dashboardPollTimer = setInterval(async () => {
+          _dashboardPollCount++;
+          if (_dashboardPollCount >= MAX_DASHBOARD_POLLS) {
+            clearInterval(_dashboardPollTimer);
+            _dashboardPollTimer = null;
+            return;
+          }
+          try {
+            const viewUrl = '/api/v1/dashboard/view' + (_activeSubjectId ? `?subjectId=${encodeURIComponent(_activeSubjectId)}` : '');
+            const res = await fetch(viewUrl);
+            if (res.ok) {
+              _dashboardState = await res.json();
+              renderDashboard(_dashboardState);
+              const curReports = (_dashboardState && _dashboardState.reports) || [];
+              const stillPreparing = curReports.some(r => r.status === 'preparing');
+              if (!stillPreparing) {
+                clearInterval(_dashboardPollTimer);
+                _dashboardPollTimer = null;
+              }
+            }
+          } catch (e) {}
+        }, 10000);
+      } else if (!hasPreparing && _dashboardPollTimer) {
+        clearInterval(_dashboardPollTimer);
+        _dashboardPollTimer = null;
+      }
+    }
+
     function renderMyReports(reports) {
       const container = document.getElementById('dashReportsContainer');
       if (!container) return;
+
+      checkAndStartPreparingPoll(reports);
 
       if (!reports || reports.length === 0) {
         container.innerHTML = `
@@ -861,11 +919,11 @@
 
       container.innerHTML = reports.map(r => {
         const isReady = r.status === 'ready';
-        const isFailed = r.status === 'failed';
+        const isNeedsAttention = r.status === 'needs_attention' || r.status === 'failed';
         const isPreparing = r.status === 'preparing';
 
-        let badgeClass = isReady ? 'ready' : (isFailed ? 'failed' : 'preparing');
-        let badgeText = r.statusBadge || (isReady ? 'READY ✓' : (isFailed ? 'WE ARE ON IT' : 'PREPARING'));
+        let badgeClass = isReady ? 'ready' : (isNeedsAttention ? 'failed' : 'preparing');
+        let badgeText = r.statusBadge || (isReady ? 'READY ✓' : (isNeedsAttention ? 'NEEDS ATTENTION' : 'PREPARING'));
 
         return `
           <div class="report-item ${badgeClass}">
@@ -891,7 +949,7 @@
                 </a>
               ` : `
                 <span style="font-size:0.78rem; font-weight:600; color:var(--gold-dark);">
-                  ${isReady ? 'Preparing download link... or <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">contact support</a>' : (isFailed ? 'Retrying automatically' : 'Ready within a few minutes')}
+                  ${isReady ? 'Preparing download link... or <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">contact support</a>' : (isNeedsAttention ? 'We’re checking this order. If it isn’t ready within 30 minutes, write to <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">support@numerosvision.com</a>' : 'Ready within a few minutes')}
                 </span>
               `}
             </div>

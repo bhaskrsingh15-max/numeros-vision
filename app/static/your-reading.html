@@ -13,7 +13,8 @@
   <link rel="stylesheet" href="/static/css/theme.css?v=5.5.0" />
   <link rel="stylesheet" href="/static/css/nav.css?v=5.5.0" />
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer onload="renderStageBTurnstile()"></script>
+  <script src="/api/turnstile-config.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <style>
     :root {
@@ -1129,36 +1130,57 @@
       if (statusEl) { statusEl.textContent = ''; statusEl.style.color = 'inherit'; }
 
       validateCheckoutReadiness();
-      setTimeout(renderStageBTurnstile, 50);
       checkUserAuthStatus();
 
       // Show modal
       const modal = document.getElementById('stage-b-checkout-modal');
       if (modal) modal.classList.add('active');
+      setTimeout(renderStageBTurnstile, 50);
     }
 
     let _stageBTurnstileWidgetId = undefined;
     function renderStageBTurnstile() {
-      if (window.turnstile && document.getElementById('checkout-turnstile-container') && _stageBTurnstileWidgetId === undefined) {
+      if (!window.turnstile) {
+        setTimeout(renderStageBTurnstile, 150);
+        return;
+      }
+      const container = document.getElementById('checkout-turnstile-container');
+      if (!container) return;
+
+      if (_stageBTurnstileWidgetId !== undefined) {
         try {
-          const siteKey = window.NV_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
-          _stageBTurnstileWidgetId = window.turnstile.render('#checkout-turnstile-container', {
-            sitekey: siteKey,
-            theme: 'light',
-            'expired-callback': function() {
-              if (window.turnstile && _stageBTurnstileWidgetId !== undefined) {
-                try { window.turnstile.reset(_stageBTurnstileWidgetId); } catch(e) {}
-              }
-              const statusEl = document.getElementById('checkout-otp-status');
-              if (statusEl) {
-                statusEl.textContent = 'Security check expired. Please complete the verification again.';
-                statusEl.style.color = '#B91C1C';
-              }
+          if (container.children.length > 0) {
+            window.turnstile.reset(_stageBTurnstileWidgetId);
+            return;
+          }
+        } catch (e) {}
+        _stageBTurnstileWidgetId = undefined;
+      }
+
+      try {
+        const siteKey = window.NV_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
+        _stageBTurnstileWidgetId = window.turnstile.render('#checkout-turnstile-container', {
+          sitekey: siteKey,
+          theme: 'light',
+          callback: function(token) {
+            const statusEl = document.getElementById('checkout-otp-status');
+            if (statusEl && statusEl.textContent.includes('security verification')) {
+              statusEl.textContent = '';
             }
-          });
-        } catch (e) {
-          console.warn('Turnstile render warning:', e);
-        }
+          },
+          'expired-callback': function() {
+            if (window.turnstile && _stageBTurnstileWidgetId !== undefined) {
+              try { window.turnstile.reset(_stageBTurnstileWidgetId); } catch(e) {}
+            }
+            const statusEl = document.getElementById('checkout-otp-status');
+            if (statusEl) {
+              statusEl.textContent = 'Security check expired. Please complete the verification again.';
+              statusEl.style.color = '#B91C1C';
+            }
+          }
+        });
+      } catch (e) {
+        console.warn('Turnstile render warning:', e);
       }
     }
 
@@ -1443,7 +1465,9 @@
                   orderId: internalOrderId,
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature
+                  razorpay_signature: response.razorpay_signature,
+                  checkout_token: _checkoutToken,
+                  email: email
                 })
               });
               const verifyData = await verifyRes.json().catch(() => ({}));

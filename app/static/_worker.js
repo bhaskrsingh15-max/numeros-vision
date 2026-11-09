@@ -466,20 +466,26 @@ async function verifyCheckoutToken(secret, email, token) {
 }
 
 async function verifyTurnstileToken(env, token, clientIp) {
-  if (env && (env.ENVIRONMENT === 'test' || env.ENVIRONMENT === 'local')) {
-    if (!token && env.ENVIRONMENT === 'test' && !env.TURNSTILE_SECRET_KEY) return true;
+  const isLocalOrTest = (env && (env.ENVIRONMENT === 'test' || env.ENVIRONMENT === 'local')) ||
+                        clientIp === '127.0.0.1' || clientIp === '::1' || clientIp === 'localhost';
+  if (isLocalOrTest) {
+    if (!token && env && env.ENVIRONMENT === 'test' && (!env.TURNSTILE_SECRET_KEY || isCloudflareTestKey(env.TURNSTILE_SECRET_KEY))) return true;
     if (token === 'test_turnstile_pass' || (typeof token === 'string' && token.startsWith('1x0000000000000000000000000000000AA'))) {
       return true;
     }
   }
   if (!token || typeof token !== 'string') return false;
   let secretKey = env && env.TURNSTILE_SECRET_KEY ? env.TURNSTILE_SECRET_KEY.trim() : '';
-  if (!secretKey) {
-    if (env && (env.ENVIRONMENT === 'test' || env.ENVIRONMENT === 'local')) return true;
-    return false;
-  }
   const currentEnv = ((env && env.ENVIRONMENT) || 'production').toLowerCase().trim();
-  if (currentEnv !== 'preview' && currentEnv !== 'test' && currentEnv !== 'local') {
+  const isPreviewOrDev = currentEnv === 'preview' || currentEnv === 'test' || currentEnv === 'local' || isLocalOrTest;
+  if (!secretKey) {
+    if (isPreviewOrDev) {
+      secretKey = '1x0000000000000000000000000000000AA';
+    } else {
+      return false;
+    }
+  }
+  if (!isPreviewOrDev) {
     if (isCloudflareTestKey(secretKey)) return false;
   } else if (isCloudflareTestKey(secretKey)) {
     // In preview/test/local, canonicalize test secret key to ensure exact 31-zero matching
@@ -967,6 +973,57 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
       completed_at: null,
       downloaded_at: null
     });
+  }
+
+  // 8. Order Confirmation Email Dispatch via Brevo adapter (Works without a session)
+  let customerEmail = (order.email || '').trim().toLowerCase();
+  if (!customerEmail && order.subject_id) {
+    if (env.DB) {
+      try {
+        const sRow = await env.DB.prepare('SELECT email FROM subjects WHERE id = ?').bind(order.subject_id).first();
+        if (sRow && sRow.email) customerEmail = String(sRow.email).trim().toLowerCase();
+      } catch (e) {}
+    } else {
+      const sObj = memoryStore.subjects.get(order.subject_id);
+      if (sObj && sObj.email) customerEmail = String(sObj.email).trim().toLowerCase();
+    }
+  }
+
+  if (customerEmail && customerEmail.includes('@')) {
+    const packName = pack ? pack.name : 'Numerology Report';
+    const orderLink = `https://numerosvision.com/dashboard/?order_id=${encodeURIComponent(order.id)}`;
+    const emailSubject = `Order Confirmation: Your ${packName} · Numeros Vision`;
+    const emailText = `Thank you for your order with Numeros Vision.\n\nOrder ID: ${order.id}\nProduct: ${packName}\n\nYour personalized dossier is being prepared deterministically. You can view your order status and access your report directly on your private dashboard:\n${orderLink}\n\nIf you have any questions, write to support@numerosvision.com.`;
+    const emailHtml = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:540px;margin:0 auto;padding:32px 24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:14px;color:#523E28;">
+  <div style="font-size:16px;font-weight:700;color:#8B6914;margin-bottom:14px;letter-spacing:0.04em;">NUMEROS VISION</div>
+  <h2 style="font-size:20px;color:#8B6914;margin:0 0 12px;font-family:Georgia,serif;">Order Confirmed</h2>
+  <p style="font-size:14px;line-height:1.6;margin:0 0 16px;">
+    Thank you for your order. Your personalized dossier (<strong>${packName}</strong>) is being prepared deterministically.
+  </p>
+  <div style="background:#FAF6EE;border:1px solid rgba(201,162,39,0.25);border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.6;">
+    <div><strong>Order ID:</strong> <span style="font-family:monospace;color:#8B6914;">${order.id}</span></div>
+    <div><strong>Item:</strong> ${packName}</div>
+  </div>
+  <div style="margin:24px 0;">
+    <a href="${orderLink}" style="background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%);color:#FFFFFF;padding:12px 24px;text-decoration:none;border-radius:8px;font-weight:700;display:inline-block;font-size:14px;">
+      View Your Order on Dashboard →
+    </a>
+  </div>
+  <p style="font-size:12px;color:#7A654D;line-height:1.5;margin:24px 0 0;border-top:1px solid rgba(201,162,39,0.2);padding-top:14px;">
+    If you need any assistance, please write to <a href="mailto:support@numerosvision.com" style="color:#8B6914;">support@numerosvision.com</a>.
+  </p>
+</div>`;
+
+    try {
+      await sendTransactionalEmail(env, {
+        to: customerEmail,
+        subject: emailSubject,
+        text: emailText,
+        html: emailHtml
+      });
+    } catch (e) {
+      console.error('[Order_Confirmation_Email_Error]', e);
+    }
   }
 
   return { alreadyFulfilled: false, orderId: order.id, packId: order.pack_id, subjectId: order.subject_id, jobId: createdJobId };
@@ -1882,6 +1939,7 @@ export {
   REPORT_EXISTS_OR_SERVED_STATUSES,
   doesReportExistOrWasServed,
   fulfillPaidOrder,
+  mintUserSession,
   memoryStore
 };
 export default {
@@ -4120,8 +4178,8 @@ export default {
       const checkoutToken = (body.checkout_token || request.headers.get('X-Checkout-Token') || '').trim();
       const sessionSecret = env.SESSION_SECRET ? env.SESSION_SECRET.trim() : '';
 
-      // Extract customer email from order, body, or subject
-      let orderEmail = (order.email || body.email || '').toString().trim().toLowerCase();
+      // Extract customer email from order or subject
+      let orderEmail = (order.email || '').toString().trim().toLowerCase();
       if (!orderEmail && order.subject_id) {
         let subj = null;
         if (env.DB) {
@@ -4131,8 +4189,18 @@ export default {
         }
         if (subj && subj.email) orderEmail = String(subj.email).trim().toLowerCase();
       }
+      if (!orderEmail && body.email) {
+        orderEmail = body.email.toString().trim().toLowerCase();
+      }
 
-      if (checkoutToken && orderEmail && sessionSecret) {
+      // STRICT SESSION MINTING GUARD:
+      // Payment alone must NEVER mint a session.
+      // Mint nv_session ONLY when a valid checkout token for the EXACT same email exists.
+      // A different email must never get one.
+      const bodyEmail = (body.email || '').toString().trim().toLowerCase();
+      const isEmailMismatch = Boolean(bodyEmail && orderEmail && bodyEmail !== orderEmail);
+
+      if (!isEmailMismatch && checkoutToken && orderEmail && sessionSecret) {
         const isVerified = await verifyCheckoutToken(sessionSecret, orderEmail, checkoutToken);
         if (isVerified) {
           let userId = null;
@@ -4667,9 +4735,9 @@ export default {
           message = 'Your bespoke dossier has been rendered and verified.';
           isDownloadable = true;
         } else if (st === 'FAILED' || attempts >= 3) {
-          displayStatus = 'failed';
-          statusBadge = 'We are on it';
-          message = 'We hit a problem preparing your report and are retrying automatically. If it isn\'t ready within 30 minutes, write to support@numerosvision.com.';
+          displayStatus = 'needs_attention';
+          statusBadge = 'Needs Attention';
+          message = "We’re checking this order. If it isn’t ready within 30 minutes, write to support@numerosvision.com.";
         }
 
         return {
@@ -6180,13 +6248,46 @@ export default {
         });
       }
 
+      // Query needs-attention orders (attempts >= 3 or status == 'FAILED')
+      let needsAttentionOrders = [];
+      if (env.DB) {
+        try {
+          const naRows = await env.DB.prepare(`
+            SELECT j.id as job_id, j.order_id, j.user_id, j.pack_id, j.status, j.attempts, j.created_at, o.amount_paise, o.email
+            FROM report_jobs j
+            LEFT JOIN orders o ON j.order_id = o.id
+            WHERE j.status = 'FAILED' OR COALESCE(j.attempts, 0) >= 3
+            ORDER BY j.created_at DESC LIMIT 50
+          `).all();
+          needsAttentionOrders = (naRows && naRows.results) || [];
+        } catch (e) {}
+      } else if (memoryStore && memoryStore.reportJobs) {
+        for (const j of memoryStore.reportJobs.values()) {
+          if (j.status === 'FAILED' || (j.attempts || 0) >= 3) {
+            const ord = memoryStore.orders.get(j.order_id);
+            needsAttentionOrders.push({
+              job_id: j.id,
+              order_id: j.order_id,
+              user_id: j.user_id,
+              pack_id: j.pack_id,
+              status: j.status,
+              attempts: j.attempts,
+              created_at: j.created_at,
+              amount_paise: ord ? ord.amount_paise : null,
+              email: ord ? ord.email : null
+            });
+          }
+        }
+      }
+
       if (wantsJson) {
         return new Response(JSON.stringify({
           status: 'ok',
           environment: env.ENVIRONMENT,
           timestamp: new Date().toISOString(),
           overall_status: 'PASS',
-          skus: skuRows
+          skus: skuRows,
+          needs_attention_orders: needsAttentionOrders
         }, null, 2), {
           status: 200,
           headers: {

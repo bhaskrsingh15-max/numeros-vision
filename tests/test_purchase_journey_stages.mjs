@@ -498,6 +498,216 @@ async function runTests() {
     assert(false, `Dashboard sample purge & verified query parameter test threw error: ${err.message}`);
   }
 
+  // ── TEST 12: End-to-End Worker Lifecycle: Send-Code -> Verify-Code -> Create-Order -> Verify-Payment (Session Minting) -> Dashboard View ──
+  try {
+    const crypto = await import('crypto');
+    const workerModule = await import('../app/static/_worker.js');
+    const worker = workerModule.default;
+    const testSecret = 'test_session_secret_32b_journey_';
+    const razorpaySecret = 'test_rzp_secret_key_1234567890';
+    const testEmail = 'verified_seeker@numerosvision.com';
+
+    const lifecycleEnv = {
+      ENVIRONMENT: 'test',
+      SESSION_SECRET: testSecret,
+      OTP_HMAC_SECRET: 'test_otp_hmac_secret_32b_hex_000',
+      IP_HASH_SALT: 'test_ip_hash_salt_32b_journey_00',
+      DATA_ENCRYPTION_KEY: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      PDF_SERVICE_SECRET: 'test_pdf_service_secret_32b_long_',
+      RAZORPAY_KEY_ID: 'rzp_test_1234567890',
+      RAZORPAY_KEY_SECRET: razorpaySecret,
+      NV_EMAIL_LOG_ADAPTER: 'true',
+      ASSETS: { fetch: async () => new Response('Asset stub', { status: 200 }) }
+    };
+
+    // Mock fetch for Razorpay order creation
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async (url, options = {}) => {
+      const urlStr = String(url);
+      if (urlStr.includes('api.razorpay.com/v1/orders')) {
+        const body = JSON.parse(options.body || '{}');
+        return new Response(JSON.stringify({
+          id: 'order_rzp_lifecycle_' + Date.now(),
+          entity: 'order',
+          amount: body.amount,
+          currency: body.currency || 'INR',
+          receipt: body.receipt,
+          status: 'created'
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      return originalFetch(url, options);
+    };
+
+    // 1. Simulate send-code
+    const sendReq = new Request('https://numerosvision.com/api/v1/auth/email/send-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'https://numerosvision.com' },
+      body: JSON.stringify({ email: testEmail, turnstile_token: 'test_turnstile_pass' })
+    });
+    const sendRes = await worker.fetch(sendReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(sendRes.status === 200, `send-code must return 200 (got ${sendRes.status})`);
+
+    // 2. Extract generated OTP from memory store
+    const otpSecret = lifecycleEnv.OTP_HMAC_SECRET;
+    const emailHash = crypto.createHmac('sha256', otpSecret).update(testEmail).digest('hex');
+    const mStore = workerModule.memoryStore || {};
+    const challenge = mStore.emailOtpChallenges ? mStore.emailOtpChallenges.get(emailHash) : null;
+    let foundCode = null;
+    if (challenge && challenge.code_hash) {
+      for (let c = 100000; c <= 999999; c++) {
+        const testHash = crypto.createHmac('sha256', otpSecret).update(`${testEmail}:${c}`).digest('hex');
+        if (testHash === challenge.code_hash) {
+          foundCode = String(c);
+          break;
+        }
+      }
+    }
+    assert(foundCode !== null, 'Found generated OTP challenge in memoryStore');
+
+    // 3. Verify-code in checkout flow (mints checkout_token, NO session)
+    const verifyCodeReq = new Request('https://numerosvision.com/api/v1/auth/email/verify-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'https://numerosvision.com' },
+      body: JSON.stringify({ email: testEmail, code: foundCode, checkout_flow: true })
+    });
+    const verifyCodeRes = await worker.fetch(verifyCodeReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(verifyCodeRes.status === 200, `verify-code must return 200 (got ${verifyCodeRes.status})`);
+    const verifyCodeData = await verifyCodeRes.json();
+    assert(verifyCodeData.verified === true, 'verify-code reports verified=true');
+    assert(Boolean(verifyCodeData.checkout_token), 'verify-code returns checkout_token');
+    assert(!verifyCodeRes.headers.get('set-cookie'), 'checkout verification MUST NOT issue a persistent session cookie');
+    const chkToken = verifyCodeData.checkout_token;
+
+    // 4. Create order with checkout_token
+    const createOrderReq = new Request('https://numerosvision.com/api/v1/payments/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'https://numerosvision.com' },
+      body: JSON.stringify({
+        pack_id: 'report_basic',
+        name: 'Lifecycle Seeker',
+        dob: '1981-11-28',
+        day: 28,
+        month: 11,
+        year: 1981,
+        email: testEmail,
+        checkout_token: chkToken,
+        consent_service: true
+      })
+    });
+    const createOrderRes = await worker.fetch(createOrderReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(createOrderRes.status === 200, `create-order returns 200 (got ${createOrderRes.status})`);
+    const orderData = await createOrderRes.json();
+    const internalOrderId = orderData.order_id;
+    const rzpOrderId = orderData.rzp_order_id;
+    assert(Boolean(internalOrderId), 'create-order returned order_id');
+
+    // 5. Payment verification with checkout_token: MINTS SESSION
+    const rzpPaymentId = 'pay_lifecycle_' + Date.now();
+    const sigPayload = `${rzpOrderId}|${rzpPaymentId}`;
+    const validSignature = crypto.createHmac('sha256', razorpaySecret).update(sigPayload).digest('hex');
+
+    const paymentVerifyReq = new Request('https://numerosvision.com/api/v1/payments/verify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'https://numerosvision.com' },
+      body: JSON.stringify({
+        order_id: internalOrderId,
+        orderId: internalOrderId,
+        razorpay_order_id: rzpOrderId,
+        razorpay_payment_id: rzpPaymentId,
+        razorpay_signature: validSignature,
+        checkout_token: chkToken,
+        email: testEmail
+      })
+    });
+    const paymentVerifyRes = await worker.fetch(paymentVerifyReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(paymentVerifyRes.status === 200, `verify-payment returns 200 (got ${paymentVerifyRes.status})`);
+    const pmtData = await paymentVerifyRes.json();
+    assert(pmtData.verified === true, 'payment is verified');
+    assert(pmtData.session_issued === true, 'session_issued must be true');
+    const setCookieHeader = paymentVerifyRes.headers.get('set-cookie');
+    assert(Boolean(setCookieHeader), 'Set-Cookie header must be present on valid payment with checkout_token');
+    assert(setCookieHeader.includes('__Host-nv_session='), 'Cookie is __Host-nv_session');
+
+    // Extract cookie value for subsequent requests
+    const cookieVal = setCookieHeader.split(';')[0];
+
+    // 6. Dashboard view with the returned session cookie: ASSERT ORDER APPEARS
+    const dashReq = new Request(`https://numerosvision.com/api/v1/dashboard/view?order_id=${encodeURIComponent(internalOrderId)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'Cookie': cookieVal, 'Origin': 'https://numerosvision.com' }
+    });
+    const dashRes = await worker.fetch(dashReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(dashRes.status === 200, `Authenticated dashboard view returns 200 (got ${dashRes.status})`);
+    const dashData = await dashRes.json();
+    assert(dashData.reports && dashData.reports.some(r => r.orderId === internalOrderId), 'Order appears in authenticated customer dashboard');
+
+    // 7. ASSERT: No cookie gives 401
+    const noCookieReq = new Request(`https://numerosvision.com/api/v1/dashboard/view?order_id=${encodeURIComponent(internalOrderId)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'Origin': 'https://numerosvision.com' }
+    });
+    const noCookieRes = await worker.fetch(noCookieReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(noCookieRes.status === 401, `No cookie gives 401 on dashboard (got ${noCookieRes.status})`);
+
+    // 8. ASSERT: Wrong email's cookie sees nothing
+    const wrongUserToken = await workerModule.mintUserSession(lifecycleEnv, 'usr_intruder_999', '127.0.0.1', Date.now());
+    const wrongUserCookie = `__Host-nv_session=${wrongUserToken}`;
+    const wrongUserReq = new Request(`https://numerosvision.com/api/v1/dashboard/view?order_id=${encodeURIComponent(internalOrderId)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'Cookie': wrongUserCookie, 'Origin': 'https://numerosvision.com' }
+    });
+    const wrongUserRes = await worker.fetch(wrongUserReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(wrongUserRes.status === 200, 'Wrong user request returns 200 for their own empty dashboard');
+    const wrongUserData = await wrongUserRes.json();
+    assert(!wrongUserData.reports || !wrongUserData.reports.some(r => r.orderId === internalOrderId), 'Wrong email sees 0 reports for this order (tenant isolation)');
+
+    // 9. ASSERT: Payment without a verified email (no checkout token) gets NO session
+    const unauthPaymentId = 'pay_unauth_' + Date.now();
+    const unauthSignature = crypto.createHmac('sha256', razorpaySecret).update(`${rzpOrderId}|${unauthPaymentId}`).digest('hex');
+    const unverifiedPayReq = new Request('https://numerosvision.com/api/v1/payments/verify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'https://numerosvision.com' },
+      body: JSON.stringify({
+        order_id: internalOrderId,
+        orderId: internalOrderId,
+        razorpay_order_id: rzpOrderId,
+        razorpay_payment_id: unauthPaymentId,
+        razorpay_signature: unauthSignature
+        // checkout_token omitted!
+      })
+    });
+    const unverifiedPayRes = await worker.fetch(unverifiedPayReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(unverifiedPayRes.status === 200, 'Payment verify returns 200');
+    const unverifiedPayData = await unverifiedPayRes.json();
+    assert(unverifiedPayData.session_issued === false, 'Payment without checkout_token must have session_issued=false');
+    assert(!unverifiedPayRes.headers.get('set-cookie'), 'Payment without checkout_token MUST NOT receive a session cookie');
+
+    // 10. ASSERT: Payment with wrong email gets NO session
+    const wrongPaymentId = 'pay_wrong_' + Date.now();
+    const wrongSignature = crypto.createHmac('sha256', razorpaySecret).update(`${rzpOrderId}|${wrongPaymentId}`).digest('hex');
+    const wrongEmailPayReq = new Request('https://numerosvision.com/api/v1/payments/verify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'https://numerosvision.com' },
+      body: JSON.stringify({
+        order_id: internalOrderId,
+        orderId: internalOrderId,
+        razorpay_order_id: rzpOrderId,
+        razorpay_payment_id: wrongPaymentId,
+        razorpay_signature: wrongSignature,
+        checkout_token: chkToken,
+        email: 'attacker@evil.com'
+      })
+    });
+    const wrongEmailPayRes = await worker.fetch(wrongEmailPayReq, lifecycleEnv, { waitUntil: () => {} });
+    const wrongEmailPayData = await wrongEmailPayRes.json();
+    assert(wrongEmailPayData.session_issued === false, 'Payment with mismatched email must have session_issued=false');
+    assert(!wrongEmailPayRes.headers.get('set-cookie'), 'Payment with mismatched email MUST NOT receive a session cookie');
+    globalThis.fetch = originalFetch;
+  } catch (err) {
+    globalThis.fetch = originalFetch;
+    assert(false, `Worker lifecycle and session minting test threw error: ${err.message}`);
+  }
+
   console.log(`\nTests Completed: ${passCount} Passed, ${failCount} Failed\n`);
   if (failCount > 0) {
     process.exit(1);

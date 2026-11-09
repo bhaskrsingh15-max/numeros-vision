@@ -1785,8 +1785,19 @@
       if (window.turnstile && window._charmTurnstileWidgetId !== undefined) {
         try { turnstileToken = window.turnstile.getResponse(window._charmTurnstileWidgetId); } catch(e) {}
       }
+      // Fallback is strictly restricted to localhost/127.0.0.1; NEVER active on preview or production
+      const isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      if (!turnstileToken && isLocalDev) {
+        turnstileToken = window.NV_TURNSTILE_TOKEN || 'test_turnstile_pass';
+      }
+
       if (!turnstileToken) {
-        turnstileToken = window.NV_TURNSTILE_TOKEN || (location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? 'test_turnstile_pass' : '');
+        if (errEl) {
+          errEl.textContent = 'Please complete the Cloudflare security verification above.';
+          errEl.style.display = 'block';
+        }
+        if (btn) { btn.disabled = false; btn.textContent = 'Send Code'; }
+        return;
       }
 
       const btn = document.getElementById('btn-charm-send-code');
