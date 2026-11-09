@@ -1497,16 +1497,15 @@ function isValidRelativeReturnTo(returnTo) {
 }
 
 async function callCharmBackendService(payload, env) {
-  let backendUrl = (env && (env.CHARM_SERVICE_URL || env.BACKEND_API_URL)) || '';
+  const charmSecret = (env && env.CHARM_SERVICE_SECRET || '').trim();
+  if (!charmSecret) {
+    throw new Error('CHARM_SERVICE_SECRET_UNSET');
+  }
+  let backendUrl = (env && (env.CHARM_SERVICE_URL || env.BACKEND_API_URL || '')).trim();
   if (!backendUrl) {
-    if (env && env.ENVIRONMENT === 'local') {
-      backendUrl = 'http://127.0.0.1:8000';
-    } else {
-      return null;
-    }
+    throw new Error('CHARM_BACKEND_URL_UNSET');
   }
   backendUrl = backendUrl.replace(/\/+$/, '');
-  const charmSecret = (env && env.CHARM_SERVICE_SECRET) || '';
 
   return await fetch(`${backendUrl}/api/charm/chat`, {
     method: 'POST',
@@ -2410,6 +2409,38 @@ export default {
       const entry = memoryStore.freeChatUsage.get(visitorHash);
       if (entry && entry.questions_used > 0) entry.questions_used -= 1;
     }
+  }
+
+  async function refundCharmReservation(user, userReservationId, visitorHash, env, now) {
+    if (user && userReservationId) {
+      const refRefundId = 'crd_ref_' + now + '_' + getRandomHex(6);
+      if (env && env.DB) {
+        await env.DB.prepare(`
+          INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at)
+          SELECT ?, ?, 1, 'refund', ?, (SELECT COALESCE(SUM(delta), 0) + 1 FROM credit_ledger WHERE user_id = ?), ?
+        `).bind(refRefundId, user.user_id, 'refund_' + userReservationId, user.user_id, now).run();
+      } else {
+        let curBal = 0;
+        for (const c of memoryStore.creditLedger.values()) {
+          if (c.user_id === user.user_id) curBal += c.delta;
+        }
+        memoryStore.creditLedger.set(refRefundId, {
+          id: refRefundId,
+          user_id: user.user_id,
+          delta: 1,
+          reason: 'refund',
+          ref_id: 'refund_' + userReservationId,
+          balance_after: curBal + 1,
+          created_at: now
+        });
+      }
+      return await getUserCreditBalance(user.user_id, env);
+    } else if (!user && visitorHash) {
+      await decrementGuestUsage(visitorHash, env);
+      const curGuestUsed = await getGuestUsage(visitorHash, env);
+      return Math.max(0, 3 - curGuestUsed);
+    }
+    return 0;
   }
 
   async function ensureUserFreeAllowance(userId, visitorHash, env) {
@@ -5385,6 +5416,28 @@ export default {
         newRemainingCredits = Math.max(0, 3 - guestInc.questions_used);
       }
 
+      // 5. Backend Configuration Validation & Fail-Closed Gate
+      const backendUrl = (env && (env.CHARM_SERVICE_URL || env.BACKEND_API_URL || '')).trim();
+      const charmSecret = (env && env.CHARM_SERVICE_SECRET || '').trim();
+
+      if (!backendUrl) {
+        await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'SERVICE_BACKEND_UNAVAILABLE',
+          error: 'Charm AI consultation backend URL is not configured.'
+        }), { status: 503, headers: corsHeaders });
+      }
+
+      if (!charmSecret) {
+        await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'SERVICE_AUTH_UNAVAILABLE',
+          error: 'Charm AI consultation service authorization is not configured.'
+        }), { status: 503, headers: corsHeaders });
+      }
+
       // 5. Model Execution with Automatic Refund on Failure
       let assistantText = '';
       const traceId = 'NV-TRC-' + getRandomHex(6).toUpperCase();
@@ -5466,62 +5519,11 @@ export default {
         // If the regenerated reply still hits a banned term and CHARM_SAFE_FALLBACK_TEXT is returned,
         // automatically refund the reserved credit so the seeker is never charged for an unfulfilled fallback.
         if (assistantText === CHARM_SAFE_FALLBACK_TEXT) {
-          if (user && userReservationId) {
-            const refRefundId = 'crd_ref_' + now + '_' + getRandomHex(6);
-            if (env && env.DB) {
-              await env.DB.prepare(`
-                INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at)
-                SELECT ?, ?, 1, 'refund', ?, (SELECT COALESCE(SUM(delta), 0) + 1 FROM credit_ledger WHERE user_id = ?), ?
-              `).bind(refRefundId, user.user_id, 'refund_' + userReservationId, user.user_id, now).run();
-            } else {
-              let curBal = 0;
-              for (const c of memoryStore.creditLedger.values()) {
-                if (c.user_id === user.user_id) curBal += c.delta;
-              }
-              memoryStore.creditLedger.set(refRefundId, {
-                id: refRefundId,
-                user_id: user.user_id,
-                delta: 1,
-                reason: 'refund',
-                ref_id: 'refund_' + userReservationId,
-                balance_after: curBal + 1,
-                created_at: now
-              });
-            }
-            newRemainingCredits = await getUserCreditBalance(user.user_id, env);
-          } else if (!user) {
-            await decrementGuestUsage(visitorInfo.visitorHash, env);
-            const curGuestUsed = await getGuestUsage(visitorInfo.visitorHash, env);
-            newRemainingCredits = Math.max(0, 3 - curGuestUsed);
-          }
+          newRemainingCredits = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
         }
       } catch (genErr) {
         // Automatic refund if execution failed
-        if (user && userReservationId) {
-          const refRefundId = 'crd_ref_' + now + '_' + getRandomHex(6);
-          if (env && env.DB) {
-            await env.DB.prepare(`
-              INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at)
-              SELECT ?, ?, 1, 'refund', ?, (SELECT COALESCE(SUM(delta), 0) + 1 FROM credit_ledger WHERE user_id = ?), ?
-            `).bind(refRefundId, user.user_id, 'refund_' + userReservationId, user.user_id, now).run();
-          } else {
-            let curBal = 0;
-            for (const c of memoryStore.creditLedger.values()) {
-              if (c.user_id === user.user_id) curBal += c.delta;
-            }
-            memoryStore.creditLedger.set(refRefundId, {
-              id: refRefundId,
-              user_id: user.user_id,
-              delta: 1,
-              reason: 'refund',
-              ref_id: 'refund_' + userReservationId,
-              balance_after: curBal + 1,
-              created_at: now
-            });
-          }
-        } else if (!user) {
-          await decrementGuestUsage(visitorInfo.visitorHash, env);
-        }
+        await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
         return new Response(JSON.stringify({
           success: false,
           code: 'MODEL_GENERATION_FAILED',

@@ -25,7 +25,8 @@ import worker, {
   CHARM_SAFE_FALLBACK_TEXT,
   processTextWithBannedFilter,
   isValidRelativeReturnTo,
-  sanitizeReturnToUrl
+  sanitizeReturnToUrl,
+  callCharmBackendService
 } from '../app/static/_worker.js';
 
 console.log('[TEST] Starting Charm AI Server-Side Gating Suite (Real SQLite Backend via node:sqlite)...');
@@ -37,7 +38,9 @@ const mockEnv = {
   RAZORPAY_KEY_SECRET: 'test_rzp_secret',
   SESSION_SECRET: 'mock_test_session_secret_key_123',
   CHARM_IP_HASH_SALT: 'test_charm_salt_secret_123',
-  CHARM_GLOBAL_DAILY_CAP: '100'
+  CHARM_GLOBAL_DAILY_CAP: '100',
+  CHARM_SERVICE_URL: 'https://preview-service.internal',
+  CHARM_SERVICE_SECRET: 'test_mock_charm_service_secret'
 };
 
 const mockCtx = { waitUntil() {} };
@@ -608,7 +611,149 @@ async function runTests() {
     console.log('PASS: Safe fallback auto-refund verified; retry did NOT double-count against daily spend cap.');
   }
 
-  console.log('\n[SUCCESS] All Charm AI Gating & Ledger tests completed successfully!');
+
+  // ── TEST 11: Fail-Closed Gate on Unset Backend URL / Unset CHARM_SERVICE_SECRET (Step A) ──
+  {
+    console.log('[TEST 11] Testing Fail-Closed Gate on Unset Backend URL & Unset CHARM_SERVICE_SECRET...');
+    resetMemory();
+    const realDb = createRealSqliteD1();
+    const envWithDb = { ...mockEnv, DB: realDb };
+
+    const userId = 'usr_step_a_test';
+    const sessionToken = 'tok_step_a_session_xyz';
+    const tokenHash = computeTokenHash(sessionToken);
+
+    realDb._rawDb.prepare('INSERT INTO users (id, email, phone_hash, created_at) VALUES (?, ?, ?, ?)').run(userId, 'step_a@example.com', 'ph_step_a', Date.now());
+    realDb._rawDb.prepare('INSERT INTO sessions (id, user_id, token_hash, expires_at) VALUES (?, ?, ?, ?)').run('sess_step_a_1', userId, tokenHash, Date.now() + 86400000);
+
+    // Seed 1 credit in real SQLite
+    realDb._rawDb.prepare(`
+      INSERT INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at)
+      VALUES (?, ?, 1, 'free_allowance', ?, 1, ?)
+    `).run('crd_seed_step_a', userId, 'order_step_a', Date.now());
+
+    // ── 1. Backend URL Unset (Signed-in User) ──
+    const envNoBackendUrl = { ...envWithDb, CHARM_SERVICE_URL: '', BACKEND_API_URL: '' };
+    const reqNoBackend = new Request('https://numerosvision.com/api/charm/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `nv_session=${sessionToken}`,
+        'CF-Connecting-IP': '10.0.0.91'
+      },
+      body: JSON.stringify({ message: 'Career projection when backend URL is missing' })
+    });
+
+    const resNoBackend = await worker.fetch(reqNoBackend, envNoBackendUrl, mockCtx);
+    assert.equal(resNoBackend.status, 503, 'Expected clean 503 when backend URL is unset');
+    const dataNoBackend = await resNoBackend.json();
+    assert.equal(dataNoBackend.code, 'SERVICE_BACKEND_UNAVAILABLE');
+
+    // Assert credit was reserved AND refunded, net balance intact at 1
+    const balNoBackend = realDb._rawDb.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').get(userId);
+    assert.equal(balNoBackend.bal, 1, 'Credit must remain 1 after automatic refund on missing backend URL');
+    const ledgerRows1 = realDb._rawDb.prepare('SELECT delta, reason FROM credit_ledger WHERE user_id = ? ORDER BY created_at ASC').all(userId);
+    const reasons1 = ledgerRows1.map(r => r.reason);
+    assert.ok(reasons1.includes('question_asked'), 'Reservation row must exist');
+    assert.ok(reasons1.includes('refund'), 'Refund row must exist');
+
+    // ── 2. Backend URL Unset (Guest) ──
+    const guestVisitorId = 'vis_step_a_guest_no_backend';
+    const guestVisitorHash = crypto.createHash('sha256').update(guestVisitorId + mockEnv.CHARM_IP_HASH_SALT).digest('hex');
+    const reqGuestNoBackend = new Request('https://numerosvision.com/api/charm/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `nv_visitor_id=${guestVisitorId}`,
+        'CF-Connecting-IP': '10.0.0.92'
+      },
+      body: JSON.stringify({ message: 'Guest career question when backend URL is missing' })
+    });
+    const resGuestNoBackend = await worker.fetch(reqGuestNoBackend, envNoBackendUrl, mockCtx);
+    assert.equal(resGuestNoBackend.status, 503, 'Guest must receive 503 when backend URL is unset');
+    const guestRow1 = realDb._rawDb.prepare('SELECT questions_used FROM free_chat_usage WHERE visitor_hash = ?').get(guestVisitorHash);
+    assert.equal(guestRow1 ? guestRow1.questions_used : 0, 0, 'Guest questions_used must be 0 after refund');
+
+    // ── 3. CHARM_SERVICE_SECRET Unset (Signed-in User) ──
+    const envNoSecret = { ...envWithDb, CHARM_SERVICE_SECRET: '' };
+    const reqNoSecret = new Request('https://numerosvision.com/api/charm/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `nv_session=${sessionToken}`,
+        'CF-Connecting-IP': '10.0.0.93'
+      },
+      body: JSON.stringify({ message: 'Career projection when service secret is missing' })
+    });
+
+    const resNoSecret = await worker.fetch(reqNoSecret, envNoSecret, mockCtx);
+    assert.equal(resNoSecret.status, 503, 'Expected clean 503 when CHARM_SERVICE_SECRET is unset');
+    const dataNoSecret = await resNoSecret.json();
+    assert.equal(dataNoSecret.code, 'SERVICE_AUTH_UNAVAILABLE');
+
+    // Assert credit was reserved AND refunded, net balance intact at 1
+    const balNoSecret = realDb._rawDb.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').get(userId);
+    assert.equal(balNoSecret.bal, 1, 'Credit must remain 1 after automatic refund on missing service secret');
+    const ledgerRows2 = realDb._rawDb.prepare('SELECT delta, reason FROM credit_ledger WHERE user_id = ? ORDER BY created_at ASC').all(userId);
+    const refundCount = ledgerRows2.filter(r => r.reason === 'refund').length;
+    assert.equal(refundCount, 2, 'Expected two refund rows recorded in ledger');
+
+    // ── 4. CHARM_SERVICE_SECRET Unset (Guest) ──
+    const guestVisitorId2 = 'vis_step_a_guest_no_secret';
+    const guestVisitorHash2 = crypto.createHash('sha256').update(guestVisitorId2 + mockEnv.CHARM_IP_HASH_SALT).digest('hex');
+    const reqGuestNoSecret = new Request('https://numerosvision.com/api/charm/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': `nv_visitor_id=${guestVisitorId2}`,
+        'CF-Connecting-IP': '10.0.0.94'
+      },
+      body: JSON.stringify({ message: 'Guest career question when service secret is missing' })
+    });
+    const resGuestNoSecret = await worker.fetch(reqGuestNoSecret, envNoSecret, mockCtx);
+    assert.equal(resGuestNoSecret.status, 503, 'Guest must receive 503 when CHARM_SERVICE_SECRET is unset');
+    const guestRow2 = realDb._rawDb.prepare('SELECT questions_used FROM free_chat_usage WHERE visitor_hash = ?').get(guestVisitorHash2);
+    assert.equal(guestRow2 ? guestRow2.questions_used : 0, 0, 'Guest questions_used must be 0 after refund');
+
+    // ── 5. Never Send Blank X-NV-Charm-Secret ──
+    let fetchCalledWithBlankHeader = false;
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async (url, options) => {
+      const headerVal = (options && options.headers && options.headers['X-NV-Charm-Secret']) || '';
+      if (!headerVal.trim()) {
+        fetchCalledWithBlankHeader = true;
+      }
+      return originalFetch(url, options);
+    };
+
+    try {
+      await assert.rejects(
+        async () => {
+          await callCharmBackendService({ message: 'test' }, { CHARM_SERVICE_URL: 'https://backend.example.com', CHARM_SERVICE_SECRET: '' });
+        },
+        /CHARM_SERVICE_SECRET_UNSET/
+      );
+      await assert.rejects(
+        async () => {
+          await callCharmBackendService({ message: 'test' }, { CHARM_SERVICE_URL: 'https://backend.example.com', CHARM_SERVICE_SECRET: '   ' });
+        },
+        /CHARM_SERVICE_SECRET_UNSET/
+      );
+      await assert.rejects(
+        async () => {
+          await callCharmBackendService({ message: 'test' }, { CHARM_SERVICE_URL: '', CHARM_SERVICE_SECRET: 'some_secret' });
+        },
+        /CHARM_BACKEND_URL_UNSET/
+      );
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+
+    assert.equal(fetchCalledWithBlankHeader, false, 'Fetch was dispatched with a blank X-NV-Charm-Secret header! Must NEVER happen.');
+    console.log('PASS: Step A verified: unset backend URL & unset CHARM_SERVICE_SECRET (1) refund reserved credit, (2) return clean 503, (3) never send blank header.');
+  }
+
+    console.log('\n[SUCCESS] All Charm AI Gating & Ledger tests completed successfully!');
 }
 
 runTests().catch(err => {
