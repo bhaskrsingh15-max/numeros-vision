@@ -16,7 +16,7 @@ async function runIdentityReworkTests() {
     RAZORPAY_KEY_SECRET: 'mock_razorpay_secret_key_123',
     TURNSTILE_SECRET_KEY: 'test_turnstile_secret_key',
     EMAIL_PROVIDER: 'test',
-    EMAIL_FROM: 'Numeros Vision <support@numerosvision.com>',
+    EMAIL_FROM: 'Numeros Vision <notifications@numerosvision.com>',
     EMAIL_DAILY_CAP: '50',
     OTP_ENABLED: 'false' // SMS OTP disabled
   };
@@ -359,11 +359,11 @@ async function runIdentityReworkTests() {
   const testCases = [
     {
       name: 'EMAIL_PROVIDER missing',
-      env: { ...baseLiveEnv, EMAIL_PROVIDER: '', EMAIL_API_KEY: 'test_key', EMAIL_FROM: 'support@numerosvision.com' }
+      env: { ...baseLiveEnv, EMAIL_PROVIDER: '', EMAIL_API_KEY: 'test_key', EMAIL_FROM: 'notifications@numerosvision.com' }
     },
     {
       name: 'EMAIL_API_KEY missing',
-      env: { ...baseLiveEnv, EMAIL_PROVIDER: 'resend', EMAIL_API_KEY: '', EMAIL_FROM: 'support@numerosvision.com' }
+      env: { ...baseLiveEnv, EMAIL_PROVIDER: 'resend', EMAIL_API_KEY: '', EMAIL_FROM: 'notifications@numerosvision.com' }
     },
     {
       name: 'EMAIL_FROM missing',
@@ -409,7 +409,7 @@ async function runIdentityReworkTests() {
     ENVIRONMENT: 'production',
     EMAIL_PROVIDER: 'resend',
     EMAIL_API_KEY: 're_mock_valid_api_key_123',
-    EMAIL_FROM: 'support@numerosvision.com'
+    EMAIL_FROM: 'notifications@numerosvision.com'
   };
   delete baseProdTurnstileEnv.NV_EMAIL_LOG_ADAPTER;
 
