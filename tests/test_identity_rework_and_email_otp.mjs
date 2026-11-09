@@ -483,27 +483,29 @@ async function runIdentityReworkTests() {
   // TEST 13: Dangerous-flag guard and /api/health endpoint
   // ---------------------------------------------------------------------------
   console.log('[TEST 13] Testing dangerous-flag guard and /api/health audit...');
-  // A. Health check on preview/test -> 200 OK
+  // A. Health check on preview/test -> 200 OK (public: only status)
   const resHealthPreview = await worker.fetch(new Request('http://localhost/api/health'), {
     ENVIRONMENT: 'preview'
   }, {});
   assert.strictEqual(resHealthPreview.status, 200);
   const dataHealthPreview = await resHealthPreview.json();
   assert.strictEqual(dataHealthPreview.status, 'ok');
-  assert.strictEqual(dataHealthPreview.environment, 'preview');
+  assert.strictEqual(dataHealthPreview.dangerous_flags, undefined, 'Public health check must not expose dangerous_flags');
+  assert.strictEqual(dataHealthPreview.environment, undefined, 'Public health check must not expose environment');
 
-  // B. Health check on production clean -> 200 OK
+  // B. Health check on production clean -> 200 OK (public: only status)
   const resHealthProdClean = await worker.fetch(new Request('http://localhost/api/health'), {
     ENVIRONMENT: 'production'
   }, {});
   assert.strictEqual(resHealthProdClean.status, 200);
   const dataHealthProdClean = await resHealthProdClean.json();
   assert.strictEqual(dataHealthProdClean.status, 'ok');
-  assert.deepStrictEqual(dataHealthProdClean.dangerous_flags, []);
+  assert.strictEqual(dataHealthProdClean.dangerous_flags, undefined);
 
-  // C. Health check on production with dangerous flags -> 503 error listing names
+  // C. Public health check on production with dangerous flags -> 503 degraded (no flag list)
   const dangerousProdEnv = {
     ENVIRONMENT: 'production',
+    ADMIN_TOKEN: 'admin_secret_test_token',
     MOCK_PAYMENTS: 'true',
     NV_EMAIL_LOG_ADAPTER: 'true',
     ALLOW_TEST_TOKENS: 'true'
@@ -511,10 +513,19 @@ async function runIdentityReworkTests() {
   const resHealthProdDanger = await worker.fetch(new Request('http://localhost/api/health'), dangerousProdEnv, {});
   assert.strictEqual(resHealthProdDanger.status, 503, 'Health check must return 503 when dangerous flags present in production');
   const dataHealthProdDanger = await resHealthProdDanger.json();
-  assert.strictEqual(dataHealthProdDanger.status, 'error');
-  assert(dataHealthProdDanger.dangerous_flags.includes('MOCK_PAYMENTS'));
-  assert(dataHealthProdDanger.dangerous_flags.includes('NV_EMAIL_LOG_ADAPTER'));
-  assert(dataHealthProdDanger.dangerous_flags.includes('ALLOW_TEST_TOKENS'));
+  assert.strictEqual(dataHealthProdDanger.status, 'degraded');
+  assert.strictEqual(dataHealthProdDanger.dangerous_flags, undefined, 'Public degraded check must not expose dangerous_flags');
+
+  // C2. Authenticated health check with ADMIN_TOKEN header reveals dangerous_flags
+  const resHealthAdmin = await worker.fetch(new Request('http://localhost/api/health', {
+    headers: { 'X-Admin-Token': 'admin_secret_test_token' }
+  }), dangerousProdEnv, {});
+  assert.strictEqual(resHealthAdmin.status, 503);
+  const dataHealthAdmin = await resHealthAdmin.json();
+  assert.strictEqual(dataHealthAdmin.status, 'degraded');
+  assert(dataHealthAdmin.dangerous_flags.includes('MOCK_PAYMENTS'));
+  assert(dataHealthAdmin.dangerous_flags.includes('NV_EMAIL_LOG_ADAPTER'));
+  assert(dataHealthAdmin.dangerous_flags.includes('ALLOW_TEST_TOKENS'));
 
   // D. Verify dangerous flags refused on protected order endpoints in production
   const orderRes = await worker.fetch(new Request('http://localhost/api/planner-2027/order', {

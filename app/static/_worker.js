@@ -2006,12 +2006,21 @@ export default {
       const isProd = currentEnv === 'production';
       const hasDangerousInProd = isProd && detectedDangerous.length > 0;
 
+      const adminHeader = (request.headers.get('X-Admin-Token') || '').trim() ||
+                          (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '').trim();
+      const configuredAdminToken = (env && env.ADMIN_TOKEN ? env.ADMIN_TOKEN.trim() : '');
+      const isAdmin = Boolean(configuredAdminToken && adminHeader && timingSafeEqual(adminHeader, configuredAdminToken));
+
+      const payload = {
+        status: hasDangerousInProd ? 'degraded' : 'ok'
+      };
+      if (isAdmin) {
+        payload.environment = currentEnv;
+        payload.dangerous_flags = detectedDangerous;
+      }
+
       const statusCode = hasDangerousInProd ? 503 : 200;
-      return new Response(JSON.stringify({
-        status: hasDangerousInProd ? 'error' : 'ok',
-        environment: currentEnv,
-        dangerous_flags: detectedDangerous
-      }), {
+      return new Response(JSON.stringify(payload), {
         status: statusCode,
         headers: {
           'Content-Type': 'application/json',
