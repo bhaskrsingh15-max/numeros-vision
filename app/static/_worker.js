@@ -855,34 +855,122 @@ function getPackById(packId) {
   return null;
 }
 
+
+// Server-side operational telemetry logger (events table - strictly ZERO PII)
+async function logWorkerEvent(env, eventData) {
+  if (!env || !env.DB) return null;
+  try {
+    const id = 'evt_' + crypto.randomUUID().replace(/-/g, '').slice(0, 16);
+    const eventName = String(eventData.event_name || eventData.event || 'unnamed_event').slice(0, 64);
+    const deviceId = eventData.device_id ? String(eventData.device_id).slice(0, 64) : null;
+    const anonSession = eventData.anonymous_session_id ? String(eventData.anonymous_session_id).slice(0, 64) : null;
+    const pagePath = eventData.page_path ? String(eventData.page_path).slice(0, 255) : null;
+    const productId = eventData.product_id ? String(eventData.product_id).slice(0, 64) : null;
+    const valInr = parseFloat(eventData.value_inr || eventData.value) || 0.0;
+    const currency = String(eventData.currency || 'INR').slice(0, 4);
+    const utmSource = eventData.utm_source ? String(eventData.utm_source).slice(0, 64) : null;
+    const utmMedium = eventData.utm_medium ? String(eventData.utm_medium).slice(0, 64) : null;
+    const utmCampaign = eventData.utm_campaign ? String(eventData.utm_campaign).slice(0, 64) : null;
+    const metaJson = eventData.meta_json ? (typeof eventData.meta_json === 'string' ? eventData.meta_json : JSON.stringify(eventData.meta_json)) : null;
+    const ipHash = eventData.ip_hash || null;
+    const userAgent = eventData.user_agent ? String(eventData.user_agent).slice(0, 255) : null;
+    const createdAt = eventData.created_at || Date.now();
+
+    await env.DB.prepare(`
+      INSERT INTO events (
+        id, event_name, device_id, anonymous_session_id, page_path, product_id,
+        value_inr, currency, utm_source, utm_medium, utm_campaign, meta_json,
+        ip_hash, user_agent, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      id, eventName, deviceId, anonSession, pagePath, productId,
+      valInr, currency, utmSource, utmMedium, utmCampaign, metaJson,
+      ipHash, userAgent, createdAt
+    ).run();
+
+    if (Math.random() < 0.10) {
+      const cutoff = Date.now() - (90 * 86400 * 1000);
+      try {
+        await env.DB.prepare("DELETE FROM events WHERE created_at < ?").bind(cutoff).run();
+      } catch (purgeErr) {}
+    }
+
+    return id;
+  } catch (err) {
+    console.debug('[Worker_Event_Log_Notice]', err);
+    return null;
+  }
+}
+
+
 /**
  * SHARED IDEMPOTENT ORDER FULFILLMENT
- * Used by both /api/v1/payments/verify and /api/v1/payments/webhook.
+ * Used by /api/v1/payments/verify, /api/v1/payments/webhook, and safety net recovery.
  * Reads pack and subject strictly from D1 order. Fulfills even if status is EXPIRED (late UPI).
+ * Idempotency guarantee: exactly one report job and exactly one confirmation email per order.
  */
 async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now, source, request) {
-  if (order.status === 'PAID') {
-    return { alreadyFulfilled: true, orderId: order.id, packId: order.pack_id, subjectId: order.subject_id };
+  if (!order || !order.id) return { error: 'Invalid order' };
+
+  // 0. Check for existing report job
+  let existingJob = null;
+  if (env && env.DB) {
+    existingJob = await env.DB.prepare('SELECT id, status FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(order.id).first();
+  } else if (typeof memoryStore !== 'undefined' && memoryStore.reportJobs) {
+    for (const j of memoryStore.reportJobs.values()) {
+      if (j.order_id === order.id) { existingJob = j; break; }
+    }
+  }
+
+  // Check if confirmation email was already sent
+  let emailAlreadySent = false;
+  if (env && env.DB) {
+    const emailAudit = await env.DB.prepare("SELECT id FROM audit_log WHERE resource_id = ? AND action = 'order_confirmation_email_sent'").bind(order.id).first();
+    if (emailAudit) emailAlreadySent = true;
+  } else if (typeof memoryStore !== 'undefined' && memoryStore.auditLogs) {
+    for (const a of memoryStore.auditLogs) {
+      if (a.resource_id === order.id && a.action === 'order_confirmation_email_sent') { emailAlreadySent = true; break; }
+    }
+  }
+
+  // Purely idempotent short-circuit: already fulfilled end-to-end
+  if (order.status === 'PAID' && existingJob && emailAlreadySent) {
+    return {
+      alreadyFulfilled: true,
+      orderId: order.id,
+      packId: order.pack_id,
+      subjectId: order.subject_id,
+      jobId: existingJob.id
+    };
   }
 
   const pack = getPackById(order.pack_id);
-  let createdJobId = null;
+  let createdJobId = existingJob ? existingJob.id : null;
 
-  if (env.DB) {
+  if (env && env.DB) {
     // 1. Update order status to PAID
-    await env.DB.prepare("UPDATE orders SET status = 'PAID', updated_at = ? WHERE id = ?").bind(now, order.id).run();
-    await logWorkerEvent(env, {
-      event_name: 'payment_verified',
-      product_id: order.pack_id,
-      value_inr: (amountPaise || order.amount_paise) / 100,
-      currency: order.currency || 'INR'
-    });
+    if (order.status !== 'PAID') {
+      await env.DB.prepare("UPDATE orders SET status = 'PAID', updated_at = ? WHERE id = ?").bind(now, order.id).run();
+      order.status = 'PAID';
+      order.updated_at = now;
+      try {
+        await logWorkerEvent(env, {
+          event_name: 'payment_verified',
+          product_id: order.pack_id,
+          value_inr: (amountPaise || order.amount_paise) / 100,
+          currency: order.currency || 'INR'
+        });
+      } catch (_) {}
+    }
 
-    // 2. Record payment in payments table
-    const pmtId = 'pmt_' + now + '_' + getRandomHex(4);
-    await env.DB.prepare(
-      "INSERT INTO payments (id, order_id, rzp_payment_id, amount_paise, status, method, captured_at) VALUES (?, ?, ?, ?, 'CAPTURED', ?, ?)"
-    ).bind(pmtId, order.id, paymentId, amountPaise || order.amount_paise, method || 'online', now).run();
+    // 2. Record payment in payments table if not already present
+    const existingPmt = await env.DB.prepare('SELECT id FROM payments WHERE order_id = ?').bind(order.id).first();
+    if (!existingPmt) {
+      const pmtId = 'pmt_' + now + '_' + getRandomHex(4);
+      await env.DB.prepare(
+        "INSERT INTO payments (id, order_id, rzp_payment_id, amount_paise, status, method, captured_at) VALUES (?, ?, ?, ?, 'CAPTURED', ?, ?)"
+      ).bind(pmtId, order.id, paymentId || order.rzp_order_id || 'manual', amountPaise || order.amount_paise, method || 'online', now).run();
+    }
 
     // 3. Grant entitlement strictly using pack and subject from D1 order
     const entId = 'ent_' + now + '_' + getRandomHex(4);
@@ -893,28 +981,75 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
     // 4. Credit ledger accounting for Charm AI packs (Idempotent unique ref per order)
     if (pack && pack.questions_count) {
       const orderRefId = 'order_' + order.id;
-      let alreadyCredited = false;
-      if (env.DB) {
-        const row = await env.DB.prepare('SELECT id FROM credit_ledger WHERE ref_id = ?').bind(orderRefId).first();
-        if (row) alreadyCredited = true;
-      } else {
+      const row = await env.DB.prepare('SELECT id FROM credit_ledger WHERE ref_id = ?').bind(orderRefId).first();
+      if (!row) {
+        const crdId = 'crd_' + now + '_' + getRandomHex(4);
+        const prevBalRow = await env.DB.prepare('SELECT COALESCE(SUM(delta), 0) as bal FROM credit_ledger WHERE user_id = ?').bind(order.user_id).first();
+        const newBal = (prevBalRow ? prevBalRow.bal : 0) + pack.questions_count;
+        await env.DB.prepare(
+          'INSERT OR IGNORE INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+        ).bind(crdId, order.user_id, pack.questions_count, 'pack_purchase', orderRefId, newBal, now).run();
+      }
+    }
+
+    // 5. Voucher ledger allocation for bundles
+    if (pack && pack.voucher_allocation) {
+      const existingVch = await env.DB.prepare('SELECT id FROM voucher_ledger WHERE order_id = ? LIMIT 1').bind(order.id).first();
+      if (!existingVch) {
+        for (let i = 0; i < (pack.voucher_allocation.basic_vouchers || 0); i++) {
+          await env.DB.prepare(
+            "INSERT INTO voucher_ledger (id, user_id, order_id, voucher_type, status, created_at) VALUES (?, ?, ?, 'basic_voucher', 'ACTIVE', ?)"
+          ).bind('vch_' + now + '_' + getRandomHex(4), order.user_id, order.id, now).run();
+        }
+        for (let i = 0; i < (pack.voucher_allocation.advanced_vouchers || 0); i++) {
+          await env.DB.prepare(
+            "INSERT INTO voucher_ledger (id, user_id, order_id, voucher_type, status, created_at) VALUES (?, ?, ?, 'advanced_voucher', 'ACTIVE', ?)"
+          ).bind('vch_' + now + '_' + getRandomHex(4), order.user_id, order.id, now).run();
+        }
+      }
+    }
+
+    // 6. Queue report generation job (Idempotent: exactly once)
+    if (!createdJobId) {
+      const jobId = 'job_' + now + '_' + getRandomHex(4);
+      createdJobId = jobId;
+      await env.DB.prepare(
+        "INSERT INTO report_jobs (id, user_id, subject_id, pack_id, order_id, status, created_at) VALUES (?, ?, ?, ?, ?, 'QUEUED', ?)"
+      ).bind(jobId, order.user_id, order.subject_id, order.pack_id, order.id, now).run();
+    }
+
+    // 7. Audit log recording
+    await env.DB.prepare(
+      "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'order_paid_fulfilled', 'orders', ?, ?, ?)"
+    ).bind('aud_' + now + '_' + getRandomHex(4), source || 'system', order.id, JSON.stringify({ paymentId, amountPaise: amountPaise || order.amount_paise, source, jobId: createdJobId }), now).run();
+  } else {
+    order.status = 'PAID';
+    order.updated_at = now;
+    if (typeof memoryStore !== 'undefined') {
+      if (memoryStore.payments && !memoryStore.payments.has(paymentId)) {
+        memoryStore.payments.set(paymentId, { id: 'pmt_' + now, order_id: order.id, rzp_payment_id: paymentId, amount_paise: amountPaise || order.amount_paise, status: 'CAPTURED', captured_at: now });
+      }
+      if (memoryStore.entitlements) {
+        memoryStore.entitlements.set(`${order.user_id}_${order.subject_id}_${order.pack_id}`, {
+          user_id: order.user_id,
+          subject_id: order.subject_id,
+          pack_id: order.pack_id,
+          order_id: order.id,
+          granted_at: now
+        });
+      }
+      if (pack && pack.questions_count && memoryStore.creditLedger) {
+        const orderRefId = 'order_' + order.id;
+        let alreadyCredited = false;
         for (const c of memoryStore.creditLedger.values()) {
           if (c.ref_id === orderRefId) { alreadyCredited = true; break; }
         }
-      }
-      if (!alreadyCredited) {
-        const crdId = 'crd_' + now + '_' + getRandomHex(4);
-        if (env.DB) {
-          const prevBalRow = await env.DB.prepare('SELECT COALESCE(SUM(delta), 0) as bal FROM credit_ledger WHERE user_id = ?').bind(order.user_id).first();
-          const newBal = (prevBalRow ? prevBalRow.bal : 0) + pack.questions_count;
-          await env.DB.prepare(
-            'INSERT OR IGNORE INTO credit_ledger (id, user_id, delta, reason, ref_id, balance_after, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
-          ).bind(crdId, order.user_id, pack.questions_count, 'pack_purchase', orderRefId, newBal, now).run();
-        } else {
+        if (!alreadyCredited) {
           let prevBal = 0;
           for (const c of memoryStore.creditLedger.values()) {
             if (c.user_id === order.user_id) prevBal += c.delta;
           }
+          const crdId = 'crd_' + now + '_' + getRandomHex(4);
           memoryStore.creditLedger.set(crdId, {
             id: crdId,
             user_id: order.user_id,
@@ -926,137 +1061,85 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
           });
         }
       }
-    }
-
-    // 5. Voucher ledger allocation for bundles
-    if (pack && pack.voucher_allocation) {
-      for (let i = 0; i < (pack.voucher_allocation.basic_vouchers || 0); i++) {
-        await env.DB.prepare(
-          "INSERT INTO voucher_ledger (id, user_id, order_id, voucher_type, status, created_at) VALUES (?, ?, ?, 'basic_voucher', 'ACTIVE', ?)"
-        ).bind('vch_' + now + '_' + getRandomHex(4), order.user_id, order.id, now).run();
-      }
-      for (let i = 0; i < (pack.voucher_allocation.advanced_vouchers || 0); i++) {
-        await env.DB.prepare(
-          "INSERT INTO voucher_ledger (id, user_id, order_id, voucher_type, status, created_at) VALUES (?, ?, ?, 'advanced_voucher', 'ACTIVE', ?)"
-        ).bind('vch_' + now + '_' + getRandomHex(4), order.user_id, order.id, now).run();
-      }
-    }
-
-    // 6. Queue report generation job
-    const jobId = 'job_' + now + '_' + getRandomHex(4);
-    createdJobId = jobId;
-    await env.DB.prepare(
-      "INSERT INTO report_jobs (id, user_id, subject_id, pack_id, order_id, status, created_at) VALUES (?, ?, ?, ?, ?, 'QUEUED', ?)"
-    ).bind(jobId, order.user_id, order.subject_id, order.pack_id, order.id, now).run();
-
-    // 7. Audit log recording
-    await env.DB.prepare(
-      "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'order_paid_fulfilled', 'orders', ?, ?, ?)"
-    ).bind('aud_' + now + '_' + getRandomHex(4), source || 'system', order.id, JSON.stringify({ paymentId, amountPaise: amountPaise || order.amount_paise, source }), now).run();
-  } else {
-    order.status = 'PAID';
-    order.updated_at = now;
-    memoryStore.payments.set(paymentId, { id: 'pmt_' + now, order_id: order.id, rzp_payment_id: paymentId, amount_paise: amountPaise || order.amount_paise, status: 'CAPTURED', captured_at: now });
-    memoryStore.entitlements.set(`${order.user_id}_${order.subject_id}_${order.pack_id}`, {
-      user_id: order.user_id,
-      subject_id: order.subject_id,
-      pack_id: order.pack_id,
-      order_id: order.id,
-      granted_at: now
-    });
-    if (pack && pack.questions_count) {
-      const orderRefId = 'order_' + order.id;
-      let alreadyCredited = false;
-      for (const c of memoryStore.creditLedger.values()) {
-        if (c.ref_id === orderRefId) { alreadyCredited = true; break; }
-      }
-      if (!alreadyCredited) {
-        let prevBal = 0;
-        for (const c of memoryStore.creditLedger.values()) {
-          if (c.user_id === order.user_id) prevBal += c.delta;
-        }
-        const crdId = 'crd_' + now + '_' + getRandomHex(4);
-        memoryStore.creditLedger.set(crdId, {
-          id: crdId,
+      if (!createdJobId && memoryStore.reportJobs) {
+        const jobId = 'job_' + now + '_' + getRandomHex(4);
+        createdJobId = jobId;
+        memoryStore.reportJobs.set(jobId, {
+          id: jobId,
           user_id: order.user_id,
-          delta: pack.questions_count,
-          reason: 'pack_purchase',
-          ref_id: orderRefId,
-          balance_after: prevBal + pack.questions_count,
-          created_at: now
+          subject_id: order.subject_id,
+          pack_id: order.pack_id,
+          order_id: order.id,
+          status: 'QUEUED',
+          attempts: 0,
+          max_attempts: 3,
+          r2_key: null,
+          last_error: null,
+          created_at: now,
+          updated_at: now,
+          completed_at: null,
+          downloaded_at: null
         });
       }
     }
-    const jobId = 'job_' + now + '_' + getRandomHex(4);
-    createdJobId = jobId;
-    memoryStore.reportJobs.set(jobId, {
-      id: jobId,
-      user_id: order.user_id,
-      subject_id: order.subject_id,
-      pack_id: order.pack_id,
-      order_id: order.id,
-      status: 'QUEUED',
-      attempts: 0,
-      max_attempts: 3,
-      r2_key: null,
-      last_error: null,
-      created_at: now,
-      updated_at: now,
-      completed_at: null,
-      downloaded_at: null
-    });
   }
 
-  // 8. Order Confirmation Email Dispatch via Brevo adapter (Works without a session)
-  let customerEmail = (order.email || '').trim().toLowerCase();
-  if (!customerEmail && order.subject_id) {
-    if (env.DB) {
-      try {
-        const sRow = await env.DB.prepare('SELECT email FROM subjects WHERE id = ?').bind(order.subject_id).first();
-        if (sRow && sRow.email) customerEmail = String(sRow.email).trim().toLowerCase();
-      } catch (e) {}
-    } else {
-      const sObj = memoryStore.subjects.get(order.subject_id);
-      if (sObj && sObj.email) customerEmail = String(sObj.email).trim().toLowerCase();
-    }
-  }
-
-  if (customerEmail && customerEmail.includes('@')) {
-    const packName = pack ? pack.name : 'Numerology Report';
-    const orderTokenSecret = await getOrderTokenSecret(env);
-    const tokenExpiresAt = now + (30 * 24 * 60 * 60 * 1000); // 30-day time-bound token
-    let orderToken = '';
-    if (orderTokenSecret) {
-      orderToken = await signOrderAccessToken(orderTokenSecret, order.id, tokenExpiresAt);
-    }
-    
-    // Dynamic Base URL: PUBLIC_BASE_URL -> request origin -> Origin header -> fallback
-    let baseUrl = '';
-    if (env && typeof env.PUBLIC_BASE_URL === 'string' && env.PUBLIC_BASE_URL.trim()) {
-      baseUrl = env.PUBLIC_BASE_URL.trim().replace(/\/+$/, '');
-    } else if (request && request.url) {
-      try {
-        baseUrl = new URL(request.url).origin;
-      } catch (e) {
-        baseUrl = '';
+  // 8. Order Confirmation Email Dispatch (Idempotent: exactly once)
+  if (!emailAlreadySent) {
+    let customerEmail = (order.email || '').trim().toLowerCase();
+    if (!customerEmail && order.subject_id) {
+      if (env && env.DB) {
+        try {
+          const sRow = await env.DB.prepare('SELECT email FROM subjects WHERE id = ?').bind(order.subject_id).first();
+          if (sRow && sRow.email) customerEmail = String(sRow.email).trim().toLowerCase();
+        } catch (e) {}
+      } else if (typeof memoryStore !== 'undefined' && memoryStore.subjects) {
+        const sObj = memoryStore.subjects.get(order.subject_id);
+        if (sObj && sObj.email) customerEmail = String(sObj.email).trim().toLowerCase();
       }
     }
-    if (!baseUrl && request && request.headers) {
-      const originHeader = request.headers.get('Origin');
-      if (originHeader) {
-        try { baseUrl = new URL(originHeader).origin; } catch (e) {}
+    if (!customerEmail && order.user_id) {
+      if (env && env.DB) {
+        try {
+          const uRow = await env.DB.prepare('SELECT email FROM users WHERE id = ?').bind(order.user_id).first();
+          if (uRow && uRow.email) customerEmail = String(uRow.email).trim().toLowerCase();
+        } catch (e) {}
+      } else if (typeof memoryStore !== 'undefined' && memoryStore.users) {
+        for (const u of memoryStore.users.values()) {
+          if (u.id === order.user_id && u.email) { customerEmail = String(u.email).trim().toLowerCase(); break; }
+        }
       }
     }
-    if (!baseUrl) {
-      baseUrl = 'https://numerosvision.com';
-    }
 
-    const orderLink = orderToken
-      ? `${baseUrl}/dashboard/?order_id=${encodeURIComponent(order.id)}&token=${encodeURIComponent(orderToken)}`
-      : `${baseUrl}/dashboard/?order_id=${encodeURIComponent(order.id)}`;
-    const emailSubject = `Order Confirmation: Your ${packName} · Numeros Vision`;
-    const emailText = `Thank you for your order with Numeros Vision.\n\nOrder ID: ${order.id}\nProduct: ${packName}\n\nYour personalized dossier is being prepared deterministically. You can view your order status and access your report directly on your private dashboard:\n${orderLink}\n\nIf you have any questions, write to support@numerosvision.com.`;
-    const emailHtml = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:540px;margin:0 auto;padding:32px 24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:14px;color:#523E28;">
+    if (customerEmail && customerEmail.includes('@')) {
+      const packName = pack ? pack.name : 'Numerology Report';
+      const orderTokenSecret = await getOrderTokenSecret(env);
+      const tokenExpiresAt = now + (30 * 24 * 60 * 60 * 1000);
+      let orderToken = '';
+      if (orderTokenSecret) {
+        orderToken = await signOrderAccessToken(orderTokenSecret, order.id, tokenExpiresAt);
+      }
+      let baseUrl = '';
+      if (env && typeof env.PUBLIC_BASE_URL === 'string' && env.PUBLIC_BASE_URL.trim()) {
+        baseUrl = env.PUBLIC_BASE_URL.trim().replace(/\/+$/, '');
+      } else if (request && request.url) {
+        try { baseUrl = new URL(request.url).origin; } catch (e) {}
+      }
+      if (!baseUrl && request && request.headers) {
+        const originHeader = request.headers.get('Origin');
+        if (originHeader) {
+          try { baseUrl = new URL(originHeader).origin; } catch (e) {}
+        }
+      }
+      if (!baseUrl) {
+        baseUrl = 'https://numerosvision.com';
+      }
+      const orderLink = orderToken
+        ? `${baseUrl}/dashboard/?order_id=${encodeURIComponent(order.id)}&token=${encodeURIComponent(orderToken)}`
+        : `${baseUrl}/dashboard/?order_id=${encodeURIComponent(order.id)}`;
+      const emailSubject = `Order Confirmation: Your ${packName} · Numeros Vision`;
+      const emailText = `Thank you for your order with Numeros Vision.\n\nOrder ID: ${order.id}\nProduct: ${packName}\n\nYour personalized dossier is being prepared deterministically. You can view your order status and access your report directly on your private dashboard:\n${orderLink}\n\nIf you have any questions, write to support@numerosvision.com.`;
+      const emailHtml = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:540px;margin:0 auto;padding:32px 24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:14px;color:#523E28;">
   <div style="font-size:16px;font-weight:700;color:#8B6914;margin-bottom:14px;letter-spacing:0.04em;">NUMEROS VISION</div>
   <h2 style="font-size:20px;color:#8B6914;margin:0 0 12px;font-family:Georgia,serif;">Order Confirmed</h2>
   <p style="font-size:14px;line-height:1.6;margin:0 0 16px;">
@@ -1076,20 +1159,36 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
   </p>
 </div>`;
 
-    try {
-      await sendTransactionalEmail(env, {
-        to: customerEmail,
-        subject: emailSubject,
-        text: emailText,
-        html: emailHtml
-      });
-    } catch (e) {
-      console.error('[Order_Confirmation_Email_Error]', e);
+      try {
+        await sendTransactionalEmail(env, {
+          to: customerEmail,
+          subject: emailSubject,
+          text: emailText,
+          html: emailHtml
+        });
+        if (env && env.DB) {
+          await env.DB.prepare(
+            "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'system', 'order_confirmation_email_sent', 'orders', ?, ?, ?)"
+          ).bind('aud_' + now + '_' + getRandomHex(4), order.id, JSON.stringify({ to: customerEmail }), now).run();
+        } else if (typeof memoryStore !== 'undefined') {
+          if (!memoryStore.auditLogs) memoryStore.auditLogs = [];
+          memoryStore.auditLogs.push({ resource_id: order.id, action: 'order_confirmation_email_sent' });
+        }
+      } catch (e) {
+        console.error('[Order_Confirmation_Email_Error]', e);
+      }
     }
   }
 
-  return { alreadyFulfilled: false, orderId: order.id, packId: order.pack_id, subjectId: order.subject_id, jobId: createdJobId };
+  return {
+    alreadyFulfilled: false,
+    orderId: order.id,
+    packId: order.pack_id,
+    subjectId: order.subject_id,
+    jobId: createdJobId
+  };
 }
+
 
 /**
  * NUMEROS VISION — CLOUDFLARE PAGES EDGE WORKER
@@ -2118,6 +2217,18 @@ export default {
     if (url.pathname === '/api/turnstile-config.js') {
       const siteKey = (env && env.TURNSTILE_SITE_KEY ? env.TURNSTILE_SITE_KEY.trim() : '') || '1x00000000000000000000AA';
       return new Response(`window.NV_TURNSTILE_SITE_KEY = ${JSON.stringify(siteKey)};`, {
+        headers: {
+          'Content-Type': 'application/javascript; charset=UTF-8',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
+    }
+
+    // Dynamic Client Google Authentication Configuration Script
+    if (url.pathname === '/api/google-auth-config.js') {
+      const clientId = (env && env.GOOGLE_CLIENT_ID ? env.GOOGLE_CLIENT_ID.trim() : '');
+      return new Response(`window.NV_GOOGLE_CLIENT_ID = ${JSON.stringify(clientId)};`, {
         headers: {
           'Content-Type': 'application/javascript; charset=UTF-8',
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -3413,55 +3524,6 @@ export default {
     }
   }
 
-  // Server-side operational telemetry logger (events table - strictly ZERO PII)
-  async function logWorkerEvent(env, eventData) {
-    if (!env || !env.DB) return null;
-    try {
-      const id = 'evt_' + crypto.randomUUID().replace(/-/g, '').slice(0, 16);
-      const eventName = String(eventData.event_name || eventData.event || 'unnamed_event').slice(0, 64);
-      const deviceId = eventData.device_id ? String(eventData.device_id).slice(0, 64) : null;
-      const anonSession = eventData.anonymous_session_id ? String(eventData.anonymous_session_id).slice(0, 64) : null;
-      const pagePath = eventData.page_path ? String(eventData.page_path).slice(0, 255) : null;
-      const productId = eventData.product_id ? String(eventData.product_id).slice(0, 64) : null;
-      const valInr = parseFloat(eventData.value_inr || eventData.value) || 0.0;
-      const currency = String(eventData.currency || 'INR').slice(0, 4);
-      const utmSource = eventData.utm_source ? String(eventData.utm_source).slice(0, 64) : null;
-      const utmMedium = eventData.utm_medium ? String(eventData.utm_medium).slice(0, 64) : null;
-      const utmCampaign = eventData.utm_campaign ? String(eventData.utm_campaign).slice(0, 64) : null;
-      const metaJson = eventData.meta_json ? (typeof eventData.meta_json === 'string' ? eventData.meta_json : JSON.stringify(eventData.meta_json)) : null;
-      const ipHash = eventData.ip_hash || null;
-      const userAgent = eventData.user_agent ? String(eventData.user_agent).slice(0, 255) : null;
-      const createdAt = eventData.created_at || Date.now();
-
-      await env.DB.prepare(`
-        INSERT INTO events (
-          id, event_name, device_id, anonymous_session_id, page_path, product_id,
-          value_inr, currency, utm_source, utm_medium, utm_campaign, meta_json,
-          ip_hash, user_agent, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).bind(
-        id, eventName, deviceId, anonSession, pagePath, productId,
-        valInr, currency, utmSource, utmMedium, utmCampaign, metaJson,
-        ipHash, userAgent, createdAt
-      ).run();
-
-      // Opportunistic data retention purge: delete events older than 90 days (10% sampling on write)
-      if (Math.random() < 0.10) {
-        const cutoff = Date.now() - (90 * 86400 * 1000);
-        try {
-          await env.DB.prepare("DELETE FROM events WHERE created_at < ?").bind(cutoff).run();
-        } catch (purgeErr) {
-          console.debug('[Event_Purge_Notice]', purgeErr);
-        }
-      }
-
-      return id;
-    } catch (err) {
-      console.debug('[Worker_Event_Log_Notice]', err);
-      return null;
-    }
-  }
-
     // 4. ROUTE: 1-ON-1 CONSULTATION ENQUIRY (/api/v1/consultation/enquiry) - DURABLE D1 STORAGE
     if (url.pathname === '/api/v1/consultation/enquiry' && request.method === 'POST') {
       const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
@@ -4101,7 +4163,7 @@ export default {
                 success: false,
                 code: code,
                 error: errMsg
-              }), { status: 401, headers: corsHeaders });
+              }), { status: 502, headers: corsHeaders });
             } else if (errData?.error?.code) {
               code = `GATEWAY_${String(errData.error.code).toUpperCase()}`;
               errMsg = errData?.error?.description || errMsg;
@@ -4403,19 +4465,28 @@ export default {
       const THIRTY_MINUTES_MS = 30 * 60 * 1000;
 
       if (order.status === 'PAID') {
-        // Trigger lazy retry for any pending/queued report job for this order
-        if (order.user_id && (env.PDF_SERVICE_SECRET || env.ENVIRONMENT === 'local') && (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL)) {
-          await retryPendingReportJobsForUser(order.user_id, env, ctx, order.id);
-        }
         let jobStatus = REPORT_JOB_STATUS.QUEUED;
         let jobId = null;
         if (env.DB) {
           const jRow = await env.DB.prepare('SELECT id, status FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(order.id).first();
           if (jRow) { jobId = jRow.id; jobStatus = String(jRow.status || REPORT_JOB_STATUS.QUEUED).toUpperCase(); }
-        } else {
+        } else if (typeof memoryStore !== 'undefined' && memoryStore.reportJobs) {
           for (const j of memoryStore.reportJobs.values()) {
             if (j.order_id === order.id) { jobId = j.id; jobStatus = String(j.status || REPORT_JOB_STATUS.QUEUED).toUpperCase(); }
           }
+        }
+        // SAFETY NET: If PAID order has no report job, fulfill idempotently now
+        if (!jobId) {
+          console.log(`[STATUS_POLL_SAFETY_NET] Order ${order.id} is PAID but has no report job. Fulfilling idempotently now...`);
+          const recRes = await fulfillPaidOrder(order, order.rzp_payment_id || 'recovery_payment', order.amount_paise, 'recovery', env, Date.now(), 'status_poll_safety_net', request);
+          if (recRes && recRes.jobId) {
+            jobId = recRes.jobId;
+            jobStatus = REPORT_JOB_STATUS.QUEUED;
+          }
+        }
+        // Trigger lazy retry for any pending/queued report job for this order
+        if (order.user_id && (env.PDF_SERVICE_SECRET || env.ENVIRONMENT === 'local') && (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL)) {
+          await retryPendingReportJobsForUser(order.user_id, env, ctx, order.id);
         }
         const normalizedReportStatus = (jobStatus === REPORT_JOB_STATUS.QUEUED || jobStatus === REPORT_JOB_STATUS.PROCESSING)
           ? 'preparing'
@@ -4779,6 +4850,18 @@ export default {
             if (j.order_id === tokenOrder.id) { job = j; break; }
           }
         }
+        // SAFETY NET: If token order is PAID and has no report job, fulfill idempotently now
+        if (tokenOrder.status === 'PAID' && !job) {
+          console.log(`[DASHBOARD_SAFETY_NET] Token order ${tokenOrder.id} is PAID but has no report job. Fulfilling idempotently now...`);
+          await fulfillPaidOrder(tokenOrder, tokenOrder.rzp_payment_id || 'recovery_payment', tokenOrder.amount_paise, 'recovery', env, Date.now(), 'dashboard_safety_net', request);
+          if (env.DB) {
+            job = await env.DB.prepare('SELECT id, status, r2_key, download_url, attempts, created_at, updated_at FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(tokenOrder.id).first();
+          } else if (memoryStore && memoryStore.reportJobs) {
+            for (const j of memoryStore.reportJobs.values()) {
+              if (j.order_id === tokenOrder.id) { job = j; break; }
+            }
+          }
+        }
         const pack = getPackById(tokenOrder.pack_id);
         const st = job ? String(job.status || 'QUEUED').toUpperCase() : 'QUEUED';
         const attempts = job ? (job.attempts || 0) : 0;
@@ -4875,6 +4958,32 @@ export default {
         if (found) charmCredits = sum;
       }
       if (charmCredits === null) charmCredits = 3;
+
+      // SAFETY NET: If user has any PAID orders with missing report jobs, fulfill them now idempotently
+      try {
+        let unfulfilledOrders = [];
+        if (env.DB) {
+          const missingRows = await env.DB.prepare(`
+            SELECT o.* FROM orders o
+            WHERE o.user_id = ? AND o.status = 'PAID'
+              AND NOT EXISTS (SELECT 1 FROM report_jobs rj WHERE rj.order_id = o.id)
+          `).bind(user.user_id).all();
+          unfulfilledOrders = (missingRows && missingRows.results) || [];
+        } else if (typeof memoryStore !== 'undefined' && memoryStore.orders) {
+          for (const ord of memoryStore.orders.values()) {
+            if (ord.user_id === user.user_id && ord.status === 'PAID') {
+              const hasJob = Array.from(memoryStore.reportJobs.values()).some(j => j.order_id === ord.id);
+              if (!hasJob) unfulfilledOrders.push(ord);
+            }
+          }
+        }
+        for (const uOrd of unfulfilledOrders) {
+          console.log(`[DASHBOARD_SAFETY_NET] User order ${uOrd.id} is PAID but has no report job. Fulfilling idempotently now...`);
+          await fulfillPaidOrder(uOrd, uOrd.rzp_payment_id || 'recovery_payment', uOrd.amount_paise, 'recovery', env, Date.now(), 'dashboard_safety_net', request);
+        }
+      } catch (safetyErr) {
+        console.warn('[DASHBOARD_SAFETY_NET_ERROR]', safetyErr);
+      }
 
       // 1. User Reports (Report Jobs)
       let rawReportJobs = [];

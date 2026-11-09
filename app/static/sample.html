@@ -1156,13 +1156,6 @@
     let currentFormat = 'brief';
     let currentPages = [];
     let currentPageIndex = 0;
-    function isUserPaid() {
-      try {
-        return localStorage.getItem('nv_user_tier') === 'paid' || localStorage.getItem('nv_paid_verified') === 'true';
-      } catch (_) {
-        return false;
-      }
-    }
 
     // ── Watermark: Master NV Monogram Seal (Direct Vector Asset - Perfectly Centered) ──
     const WATERMARK_SVG = `
@@ -3243,10 +3236,6 @@
     }
 
     function switchFormat(fmt) {
-      if ((fmt === 'master' || fmt === 'roadmap') && !isUserPaid()) {
-        showPaywallUnlockModal(fmt);
-        return;
-      }
       currentFormat = fmt;
       document.getElementById('cardFmt1')?.classList.toggle('active', fmt === 'brief');
       document.getElementById('cardFmt2')?.classList.toggle('active', fmt === 'master');
@@ -3441,29 +3430,19 @@
         if (!params) return;
         const fmt = params.get('format') || params.get('fmt');
         const tier = params.get('tier');
-        const paid = isUserPaid();
         if (tier) {
           const tLower = tier.toLowerCase();
           if (tLower === 'free' || tLower === 'discovery') currentFormat = 'brief';
-          else if ((tLower === 'report_master' || tLower === 'master') && paid) currentFormat = 'master';
-          else if ((tLower === 'report_divine' || tLower === 'roadmap' || tLower === 'divine' || tLower === 'sovereign') && paid) currentFormat = 'roadmap';
+          else if (tLower === 'report_master' || tLower === 'master') currentFormat = 'master';
+          else if (tLower === 'report_divine' || tLower === 'roadmap' || tLower === 'divine' || tLower === 'sovereign') currentFormat = 'roadmap';
           else currentFormat = 'brief';
         } else if (fmt) {
           const fLower = fmt.toLowerCase();
           if (fLower === 'brief' || fLower === '1' || fLower === 'short' || fLower === 'free') currentFormat = 'brief';
-          else if ((fLower === 'roadmap' || fLower === '3' || fLower === 'full' || fLower === 'divine') && paid) currentFormat = 'roadmap';
-          else if (paid) currentFormat = 'master';
-          else currentFormat = 'brief';
+          else if (fLower === 'roadmap' || fLower === '3' || fLower === 'full' || fLower === 'divine') currentFormat = 'roadmap';
+          else currentFormat = 'master';
         } else {
-          currentFormat = 'brief'; // Only free brief is allowed pre-payment
-        }
-
-        // Update format cards locked indicator
-        if (!paid) {
-          const b2 = document.getElementById('badgeFmt2');
-          const b3 = document.getElementById('badgeFmt3');
-          if (b2) b2.innerHTML = 'Format 2 · 12 Pages <strong style="color:#A13030;">(LOCKED 🔒 ₹510)</strong>';
-          if (b3) b3.innerHTML = 'Format 3 · 32 Pages <strong style="color:#A13030;">(LOCKED 🔒 ₹1,050)</strong>';
+          currentFormat = 'brief';
         }
         let prof = null;
         try {
