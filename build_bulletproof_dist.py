@@ -224,6 +224,10 @@ for route_name, src_file in ROUTING_MAP.items():
         if os.path.normpath(target_file) != os.path.normpath(source_path):
             os.makedirs(os.path.dirname(target_file), exist_ok=True)
             shutil.copy2(source_path, target_file)
+        target_index = os.path.join(DIST_DIR, route_name, "index.html")
+        if os.path.normpath(target_index) != os.path.normpath(source_path):
+            os.makedirs(os.path.dirname(target_index), exist_ok=True)
+            shutil.copy2(source_path, target_index)
 
 # 4. Standard Cloudflare _headers file
 headers_content = """/*
