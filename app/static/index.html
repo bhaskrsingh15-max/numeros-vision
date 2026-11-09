@@ -5177,16 +5177,25 @@
           credentials: 'include',
           body: JSON.stringify({
             pack_id: conf.sku,
+            packId: conf.sku,
             customer_name: name,
+            name: name,
             customer_dob: dob,
+            dob: dob,
             customer_email: email,
+            email: email,
             customer_phone: phone,
+            phone: phone,
             checkout_token: _reportsCheckoutToken
           })
         });
 
         const orderData = await orderRes.json();
-        if (!orderRes.ok || !orderData.order_id || !orderData.rzp_order_id) {
+        const rzpOrderId = orderData.rzp_order_id || orderData.rzpOrderId;
+        const internalOrderId = orderData.order_id || orderData.orderId;
+        const keyId = orderData.key_id || orderData.keyId;
+        const amountPaise = orderData.amount_paise || orderData.amount;
+        if (!orderRes.ok || !internalOrderId || !rzpOrderId) {
           alert(orderData.error || 'Failed to initialize payment order. Please retry.');
           if (payBtn) { payBtn.disabled = false; payBtn.innerHTML = `<span>Proceed to Pay ₹<span id="reports-pay-btn-amount">${conf.price}</span></span> <span>✦</span>`; }
           return;
@@ -5194,12 +5203,12 @@
 
         // Open Razorpay Standard Modal Popup on the Same Page
         const options = {
-          key: orderData.key_id,
-          amount: orderData.amount_paise,
+          key: keyId,
+          amount: amountPaise,
           currency: 'INR',
           name: 'NUMEROS VISION',
           description: conf.name,
-          order_id: orderData.rzp_order_id,
+          order_id: rzpOrderId,
           prefill: {
             name: name,
             email: email,
@@ -5209,7 +5218,7 @@
             color: '#8B6914'
           },
           handler: async function (response) {
-            await handleReportPaymentSuccess(orderData.order_id, response, name, dob, email);
+            await handleReportPaymentSuccess(internalOrderId, response, name, dob, email);
           },
           modal: {
             ondismiss: function () {
@@ -5256,6 +5265,9 @@
           credentials: 'include',
           body: JSON.stringify({
             order_id: orderId,
+            razorpay_order_id: rzpResponse.razorpay_order_id,
+            razorpay_payment_id: rzpResponse.razorpay_payment_id,
+            razorpay_signature: rzpResponse.razorpay_signature,
             rzp_order_id: rzpResponse.razorpay_order_id,
             rzp_payment_id: rzpResponse.razorpay_payment_id,
             rzp_signature: rzpResponse.razorpay_signature,

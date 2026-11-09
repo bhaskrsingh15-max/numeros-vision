@@ -3790,7 +3790,7 @@ export default {
       const packId = (body.packId || body.pack_id || body.plan || body.plan_id || '').trim();
       let subjectId = (body.subjectId || body.subject_id || '').trim();
       const customerName = (body.name || body.customer_name || 'Valued Seeker').trim();
-      const customerDob = (body.dob || body.locked_dob || '').trim();
+      const customerDob = (body.dob || body.locked_dob || body.customer_dob || body.customerDob || '').trim();
 
       // 2. Deterministic pack lookup
       const pack = getPackById(packId);
@@ -3995,10 +3995,14 @@ export default {
       return new Response(JSON.stringify({
         success: true,
         orderId: internalOrderId,
+        order_id: internalOrderId,
         rzpOrderId: rzpOrderId,
+        rzp_order_id: rzpOrderId,
         amount: amountPaise,
+        amount_paise: amountPaise,
         currency: 'INR',
         keyId: rzpKeyId,
+        key_id: rzpKeyId,
         pack: {
           pack_id: pack.pack_id,
           name: pack.name,
@@ -4023,9 +4027,9 @@ export default {
       }
 
       const body = await request.json().catch(() => ({}));
-      const rzpOrderId = (body.razorpay_order_id || body.order_id || '').trim();
-      const rzpPaymentId = (body.razorpay_payment_id || body.payment_id || '').trim();
-      const signature = (body.razorpay_signature || body.signature || '').trim().toLowerCase();
+      const rzpOrderId = (body.razorpay_order_id || body.rzp_order_id || (body.order_id && String(body.order_id).startsWith('order_') ? body.order_id : '') || '').trim();
+      const rzpPaymentId = (body.razorpay_payment_id || body.rzp_payment_id || body.payment_id || '').trim();
+      const signature = (body.razorpay_signature || body.rzp_signature || body.signature || '').trim().toLowerCase();
 
       const rzpSecret = env.RAZORPAY_KEY_SECRET;
       if (!rzpSecret) {
