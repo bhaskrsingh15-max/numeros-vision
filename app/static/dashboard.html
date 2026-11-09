@@ -794,6 +794,12 @@
           if (signInBtn) signInBtn.href = loginUrl;
           if (authContent) authContent.style.display = 'none';
           if (promptEl) promptEl.style.display = 'block';
+
+          // Restore styled header nav actions for signed-out state: show 'Sign In' CTA
+          const navActions = document.querySelector('.nv-nav-actions');
+          if (navActions) {
+            navActions.innerHTML = `<a href="${loginUrl}" class="nv-btn-cta" style="background:#FFFFFF; border:1px solid #C9A227; color:#8B6914; padding:6px 14px; font-size:0.78rem; font-weight:700; border-radius:6px; text-decoration:none; display:inline-block;">Sign In</a>`;
+          }
           return;
         }
 
@@ -801,6 +807,11 @@
         const authContent = document.getElementById('dashAuthenticatedContent');
         if (promptEl) promptEl.style.display = 'none';
         if (authContent) authContent.style.display = 'block';
+
+        const navActions = document.querySelector('.nv-nav-actions');
+        if (navActions) {
+          navActions.innerHTML = `<button type="button" onclick="handleLogout()" class="nv-btn-cta" style="background:#FFFFFF; border:1px solid #C9A227; color:#8B6914; padding:6px 14px; font-size:0.78rem; font-weight:700; border-radius:6px; cursor:pointer;">Sign Out</button>`;
+        }
 
         _dashboardState = await viewRes.json();
         renderDashboard(_dashboardState);
@@ -881,6 +892,7 @@
           try {
             const urlParams = new URLSearchParams(window.location.search);
             const tokenParam = (urlParams.get('token') || urlParams.get('order_token') || '').trim();
+            const activeOrderId = (urlParams.get('order_id') || urlParams.get('orderId') || '').trim();
             const qParts = [];
             if (_activeSubjectId) qParts.push(`subjectId=${encodeURIComponent(_activeSubjectId)}`);
             if (activeOrderId) qParts.push(`order_id=${encodeURIComponent(activeOrderId)}`);

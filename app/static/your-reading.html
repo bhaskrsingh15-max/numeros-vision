@@ -1070,13 +1070,29 @@
             data
           })
         }).catch(() => {});
-      } catch(e) {}
+      } catch (_) {}
     }
+    window.trackFunnelEvent = trackFunnelEvent;
+
+    // Safe Worker Telemetry Event Logger (Non-blocking)
+    function logWorkerEvent(eventName, data) {
+      try {
+        fetch('/api/v1/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ event_type: eventName, data: data || {} })
+        }).catch(() => {});
+      } catch (_) {}
+    }
+    window.logWorkerEvent = logWorkerEvent;
 
     // Stage B: Open Unified Checkout Screen
     function selectTierAndProceed(tierId) {
-      trackFunnelEvent('view_product', { tier: tierId });
-      trackFunnelEvent('begin_checkout', { tier: tierId });
+      try {
+        trackFunnelEvent('view_product', { tier: tierId });
+        trackFunnelEvent('begin_checkout', { tier: tierId });
+      } catch (_) {}
       if (!_activeReadingData) {
         const raw = sessionStorage.getItem('nv_reading_input');
         if (raw) {
@@ -1197,7 +1213,9 @@
               if (!emailInput.value) emailInput.value = _authenticatedSessionEmail;
               if (emailInput.value.trim().toLowerCase() === _authenticatedSessionEmail) {
                 _isEmailVerified = true;
-          trackFunnelEvent('otp_verified', { email });
+                try {
+                  trackFunnelEvent('otp_verified', { email: _authenticatedSessionEmail });
+                } catch (_) {}
                 const statusEl = document.getElementById('checkout-otp-status');
                 if (statusEl) {
                   statusEl.textContent = '✓ Verified session: ' + _authenticatedSessionEmail;
@@ -1456,6 +1474,16 @@
           handler: async function (response) {
             if (payBtn) payBtn.textContent = 'Verifying Payment...';
             try {
+              try {
+                if (typeof logWorkerEvent === 'function') {
+                  logWorkerEvent('payment_success_received', {
+                    order_id: internalOrderId,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id
+                  });
+                }
+              } catch (_) {}
+
               const verifyRes = await fetch('/api/v1/payments/verify-payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1473,16 +1501,18 @@
               const verifyData = await verifyRes.json().catch(() => ({}));
               if (verifyRes.ok && verifyData.success) {
                 // CLEAR SESSION STORAGE IMMEDIATELY ON SUCCESS
-                trackFunnelEvent('purchase_complete', { order_id: internalOrderId });
+                try {
+                  trackFunnelEvent('purchase_complete', { order_id: internalOrderId });
+                } catch (_) {}
                 sessionStorage.removeItem('nv_reading_input');
                 window.location.href = `/dashboard/?order_id=${encodeURIComponent(internalOrderId)}&verified=true`;
               } else {
-                alert(verifyData.error || 'Payment verification pending. Please check your dashboard.');
+                alert('Payment received, we’re confirming your order. Check your email or sign in');
                 sessionStorage.removeItem('nv_reading_input');
                 window.location.href = `/dashboard/?order_id=${encodeURIComponent(internalOrderId)}`;
               }
             } catch (err) {
-              alert('Payment confirmed! Redirecting to your dashboard.');
+              alert('Payment received, we’re confirming your order. Check your email or sign in');
               sessionStorage.removeItem('nv_reading_input');
               window.location.href = `/dashboard/?order_id=${encodeURIComponent(internalOrderId)}`;
             }

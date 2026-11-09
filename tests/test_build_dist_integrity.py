@@ -163,7 +163,43 @@ def test_wrangler_placeholder_deploy_guard():
     print("PASS: wrangler.toml placeholder deploy guard verified (blocks 00000000-... placeholders, allows real UUIDs).")
 
 
+def test_production_html_placeholder_guard():
+    """
+    Verifies that verify_production_html_no_placeholders:
+    1. Blocks production deployment if any {{...}} placeholder exists in HTML.
+    2. Allows preview/dev environments to retain unrendered {{...}} placeholders.
+    """
+    import tempfile
+    import shutil
+    from build_bulletproof_dist import verify_production_html_no_placeholders
+
+    temp_dir = tempfile.mkdtemp()
+    try:
+        # 1. Dirty directory with placeholder in HTML
+        dirty_html = os.path.join(temp_dir, "test.html")
+        with open(dirty_html, "w", encoding="utf-8") as f:
+            f.write("<html><body>Consent: {{CONSENT_TEXT_PENDING}}</body></html>")
+
+        blocked = False
+        try:
+            verify_production_html_no_placeholders(temp_dir)
+        except ValueError as exc:
+            blocked = "PRODUCTION DEPLOY BLOCKED" in str(exc)
+
+        assert blocked, "verify_production_html_no_placeholders must block when HTML contains {{...}} placeholders"
+
+        # 2. Clean directory without placeholder
+        with open(dirty_html, "w", encoding="utf-8") as f:
+            f.write("<html><body>Consent: Final Statutory Text</body></html>")
+
+        verify_production_html_no_placeholders(temp_dir)
+        print("PASS: Production HTML placeholder guard verified (blocks {{...}} placeholders on production).")
+    finally:
+        shutil.rmtree(temp_dir)
+
+
 if __name__ == "__main__":
     test_single_build_path_and_pdf_exclusion()
     test_built_site_prices_and_page_counts_match_packs_json()
     test_wrangler_placeholder_deploy_guard()
+    test_production_html_placeholder_guard()

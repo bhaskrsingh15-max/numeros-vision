@@ -3407,17 +3407,17 @@
           const isUserLoggedIn = !!userSession;
           const isPaidUser = localStorage.getItem('nv_user_tier') === 'paid' || localStorage.getItem('nv_paid_verified') === 'true';
 
-          if (isPaidUser && typeof renderPlanetaryCharacteristicsHtml === 'function') {
+          if (isPaidUser && typeof window.renderPlanetaryCharacteristicsHtml === 'function') {
             // 1. Full Paid Dossier: ONLY for verified paid accounts
-            planetCharsEl.innerHTML = renderPlanetaryCharacteristicsHtml(driver, conductor, d, missing, counts);
-          } else if (isUserLoggedIn && typeof renderFreeCelestialSummaryHtml === 'function') {
+            planetCharsEl.innerHTML = window.renderPlanetaryCharacteristicsHtml(driver, conductor, d, missing, counts);
+          } else if (isUserLoggedIn && typeof window.renderFreeCelestialSummaryHtml === 'function') {
             // 2. Logged-in Free Registered Profile: Render Free Celestial Snapshot + Golden Upgrade Gate
-            const freeSummaryHtml = renderFreeCelestialSummaryHtml(driver, conductor, d, missing, counts);
+            const freeSummaryHtml = window.renderFreeCelestialSummaryHtml(driver, conductor, d, missing, counts);
             planetCharsEl.innerHTML = freeSummaryHtml;
           } else {
             // 3. Anonymous Free Visitor: Render Free Initial Snapshot + Golden Signup Gate
-            const freeSummaryHtml = (typeof renderFreeCelestialSummaryHtml === 'function')
-              ? renderFreeCelestialSummaryHtml(driver, conductor, d, missing, counts)
+            const freeSummaryHtml = (typeof window.renderFreeCelestialSummaryHtml === 'function')
+              ? window.renderFreeCelestialSummaryHtml(driver, conductor, d, missing, counts)
               : '';
             // Anonymous Free Visitor: Render Free Initial Snapshot + Golden Signup Gate
             const dPlanet = PLANET_NAMES[driver] || 'Planetary Ruler';
@@ -3434,8 +3434,8 @@
       resEl.style.display = 'block';
       resEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       try {
-        if (typeof prefillReportsSeekerInputs === 'function') {
-          prefillReportsSeekerInputs();
+        if (typeof window.prefillReportsSeekerInputs === 'function') {
+          window.prefillReportsSeekerInputs();
         }
       } catch(e) {}
 
@@ -3766,8 +3766,17 @@
       clientState.selectedPlanKey = planId;
       clientState.selectedPlanPrice = amountInr;
 
-      // Open in-page modal directly (zero confusing redirects before payment)
-      openCheckout(planId, planName, amountInr);
+      // Navigate directly to Stage B unified reading and checkout
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
+        name: nameVal,
+        dob: dobStr,
+        day: parseInt(dayVal, 10),
+        month: parseInt(monthVal, 10),
+        year: parseInt(yearVal, 10),
+        tier: planId,
+        from: 'home'
+      }));
+      window.location.href = '/your-reading/?from=home';
     }
 
     function renderCharmAiBubbleHeader(statusText = 'Ready ✦', traceId = '') {

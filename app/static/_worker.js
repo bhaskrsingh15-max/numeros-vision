@@ -3882,9 +3882,11 @@ export default {
       const now = Date.now();
 
       // 1. Session or Checkout Token verification
-      let user = await authenticateUser(request, env);
-      if (!user && (body.checkout_token || request.headers.get('X-Checkout-Token'))) {
-        const chkToken = body.checkout_token || request.headers.get('X-Checkout-Token');
+      // If customer verified email B with a valid checkout token, that verified checkout email WINS over any preexisting session cookie for email A.
+      let user = null;
+      const chkToken = (body.checkout_token || request.headers.get('X-Checkout-Token') || '').trim();
+
+      if (chkToken && email) {
         const sessionSecret = requireSecret(env, 'SESSION_SECRET');
         const isValid = await verifyCheckoutToken(sessionSecret, email, chkToken);
         if (isValid) {
@@ -3904,12 +3906,24 @@ export default {
           if (!user) {
             user = { user_id: 'usr_' + now + '_' + getRandomHex(4), email, created_at: now };
           }
+        } else {
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'INVALID_CHECKOUT_TOKEN',
+            error: 'Checkout verification token has expired or is invalid. Please verify your email again.'
+          }), { status: 401, headers: corsHeaders });
         }
+      }
+
+      if (!user) {
+        // Fall back to active session cookie if no checkout token was provided
+        user = await authenticateUser(request, env);
       }
 
       if (!user) {
         return new Response(JSON.stringify({
           success: false,
+          code: 'AUTH_REQUIRED',
           error: 'Authentication required. Please verify your email or sign in to initiate checkout.'
         }), { status: 401, headers: corsHeaders });
       }
@@ -4076,15 +4090,30 @@ export default {
             rzpOrderId = rzpData.id;
           } else {
             const errData = await rzpReq.json().catch(() => ({}));
+            const rzpStatus = rzpReq.status;
+            let code = 'GATEWAY_ERROR';
+            let errMsg = 'Failed to create order with payment gateway.';
+            if (rzpStatus === 401) {
+              code = 'GATEWAY_AUTHENTICATION_FAILED';
+              errMsg = 'Payment gateway authentication failed. Please verify provider credentials.';
+            } else if (errData?.error?.code) {
+              code = `GATEWAY_${String(errData.error.code).toUpperCase()}`;
+              errMsg = errData?.error?.description || errMsg;
+            } else if (errData?.error?.description) {
+              errMsg = errData.error.description;
+            }
             return new Response(JSON.stringify({
               success: false,
-              error: errData?.error?.description || 'Failed to create order with Razorpay.',
+              code: code,
+              error: errMsg,
+              provider_code: errData?.error?.code,
               details: errData
-            }), { status: rzpReq.status || 400, headers: corsHeaders });
+            }), { status: rzpStatus || 400, headers: corsHeaders });
           }
         } catch (apiErr) {
           return new Response(JSON.stringify({
             success: false,
+            code: 'GATEWAY_NETWORK_ERROR',
             error: 'Unable to reach payment gateway to create order.'
           }), { status: 502, headers: corsHeaders });
         }

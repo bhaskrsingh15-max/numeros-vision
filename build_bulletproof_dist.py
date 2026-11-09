@@ -287,6 +287,38 @@ print(f"Successfully generated canonical Cloudflare Pages build in {DIST_DIR}")
 print(f"Total physical files generated: {total_files}")
 
 
+def verify_production_html_no_placeholders(dist_dir: str) -> None:
+    """
+    Production-deploy guard:
+    Scans every built HTML file in dist_dir and fails if any {{...}} placeholder remains.
+    On preview or development environments, placeholders (e.g. {{CONSENT_TEXT_PENDING}}) are permitted.
+    """
+    import re
+    placeholder_pattern = re.compile(r"\{\{[A-Za-z0-9_]+\}\}")
+    violations = []
+    for dirpath, _, filenames in os.walk(dist_dir):
+        for fn in filenames:
+            if fn.lower().endswith(".html"):
+                full_path = os.path.join(dirpath, fn)
+                rel_path = os.path.relpath(full_path, dist_dir).replace("\\", "/")
+                with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
+                    content = f.read()
+                    matches = placeholder_pattern.findall(content)
+                    if matches:
+                        unique_matches = sorted(set(matches))
+                        violations.append(f"{rel_path}: {unique_matches}")
+    if violations:
+        raise ValueError(
+            "PRODUCTION DEPLOY BLOCKED: Built HTML contains unrendered template placeholders:\n"
+            + "\n".join(violations[:20])
+        )
+
+
+if os.environ.get("ENVIRONMENT") == "production" or os.environ.get("BUILD_ENV") == "production":
+    verify_production_html_no_placeholders(DIST_DIR)
+    print("PASS: Production HTML verified with 0 unrendered {{...}} placeholders.")
+
+
 def verify_wrangler_no_placeholders(toml_content: str) -> None:
     """Refuses to deploy while any placeholder database_id (e.g. 00000000-...) remains in wrangler.toml."""
     import re
@@ -315,3 +347,6 @@ if __name__ == "__main__":
         with open(wrangler_path, "r", encoding="utf-8") as wf:
             verify_wrangler_no_placeholders(wf.read())
         print("PASS: wrangler.toml verified with real non-placeholder D1 database_ids.")
+    if "--verify-production" in sys.argv:
+        verify_production_html_no_placeholders(DIST_DIR)
+        print("PASS: Production HTML verified with 0 unrendered {{...}} placeholders.")

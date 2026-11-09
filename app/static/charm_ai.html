@@ -526,6 +526,7 @@
 
     // Auto-hydrate profile from localStorage or URL query parameters on load
     function initCharmAiProfile() {
+    window.initCharmAiSession = initCharmAiProfile;
       syncCharmAiCreditsFromServer();
       syncCharmAiGatingUi();
       try {
@@ -1753,6 +1754,11 @@
   </div>
 
   <script>
+    function initCharmAiSession() {
+      if (typeof initCharmAiProfile === 'function') initCharmAiProfile();
+    }
+    window.initCharmAiSession = initCharmAiSession;
+
     let _charmCheckoutToken = null;
     let _charmOtpTimer = null;
     let _isCharmEmailVerified = false;

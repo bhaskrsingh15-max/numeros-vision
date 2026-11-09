@@ -86,7 +86,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <script src="/api/turnstile-config.js"></script>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer onload="renderLoginTurnstile()"></script>
   <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
 
   <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
@@ -894,9 +894,9 @@
 
 
 
-        <div style="margin: 12px 0;">
+        <div style="margin: 14px 0; min-height:65px;">
 
-          <div id="login-turnstile-container"></div>
+          <div id="login-turnstile-container" style="min-height:65px;"></div>
 
           <div id="loginTurnstileStatus" style="font-size:0.75rem; color:#B91C1C; margin-top:4px;"></div>
 
@@ -1215,13 +1215,24 @@
     let _loginTurnstileWidgetId = null;
     let _loginEmailCountdown = null;
 
-    async function renderLoginTurnstile() {
-      if (!window.turnstile) return;
+    function renderLoginTurnstile() {
+      if (!window.turnstile) {
+        setTimeout(renderLoginTurnstile, 150);
+        return;
+      }
       const container = document.getElementById('login-turnstile-container');
-      if (!container || _loginTurnstileWidgetId !== null) return;
+      if (!container) return;
+      if (_loginTurnstileWidgetId !== null && _loginTurnstileWidgetId !== undefined) {
+        try {
+          if (container.children.length > 0) {
+            window.turnstile.reset(_loginTurnstileWidgetId);
+            return;
+          }
+        } catch (e) {}
+        _loginTurnstileWidgetId = null;
+      }
       try {
         const siteKey = window.NV_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
-
         _loginTurnstileWidgetId = window.turnstile.render('#login-turnstile-container', {
           sitekey: siteKey,
           theme: 'light',
@@ -1239,6 +1250,8 @@
         });
       } catch (e) {}
     }
+    window.renderLoginTurnstile = renderLoginTurnstile;
+    window.addEventListener('DOMContentLoaded', renderLoginTurnstile);
 
     async function sendLoginEmailCode() {
       const emailInput = document.getElementById('loginEmailInput');
@@ -1299,7 +1312,7 @@
           document.getElementById('loginEmailCodeInputContainer').style.display = 'block';
           document.getElementById('btnEmailLoginSubmit').style.display = 'flex';
           const feedback = document.getElementById('loginEmailFeedback');
-          if (feedback) feedback.textContent = '✓ 6-digit verification code sent to your email.';
+          if (feedback) feedback.textContent = (data && data.message) || 'If this email address is valid, a 6-digit verification code has been dispatched.';
           btn.textContent = 'Resend Code';
 
           let rem = 60;
@@ -1497,9 +1510,7 @@
 
           // Removed legacy localStorage write (DPDP privacy));
 
-          if (synced.name) // Removed legacy localStorage write (DPDP privacy)
-
-          if (synced.dob) // Removed legacy localStorage write (DPDP privacy)
+// Removed legacy localStorage write (DPDP privacy)
 
         }
 
@@ -1605,9 +1616,7 @@
 
           // Removed legacy localStorage write (DPDP privacy));
 
-          if (synced.name) // Removed legacy localStorage write (DPDP privacy)
-
-          if (synced.dob) // Removed legacy localStorage write (DPDP privacy)
+// Removed legacy localStorage write (DPDP privacy)
 
         }
 
@@ -1823,9 +1832,7 @@
 
           // Removed legacy localStorage write (DPDP privacy));
 
-          if (synced.name) // Removed legacy localStorage write (DPDP privacy)
-
-          if (synced.dob) // Removed legacy localStorage write (DPDP privacy)
+// Removed legacy localStorage write (DPDP privacy)
 
         }
 
