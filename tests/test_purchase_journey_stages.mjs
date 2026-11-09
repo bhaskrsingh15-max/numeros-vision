@@ -114,6 +114,58 @@ async function runTests() {
     assert(false, `URL privacy guard check threw error: ${err.message}`);
   }
 
+  // ── TEST 2B: Clutter Elimination & Single Path on index.html ──
+  try {
+    const indexHtml = readFileSync(join(rootDir, 'app/static/index.html'), 'utf-8');
+
+    assert(!indexHtml.includes('Proceed to Pay'), 'index.html contains zero "Proceed to Pay" elements');
+    assert(!indexHtml.includes('reports-checkout-console'), 'index.html contains zero #reports-checkout-console');
+    assert(!indexHtml.includes('heroSaveProfileContainer'), 'index.html contains zero heroSaveProfileContainer');
+
+    const forbiddenFns = [
+      'sendReportsOtp',
+      'verifyReportsOtp',
+      'launchInPageReportsCheckout',
+      'triggerEmailQuickSignIn',
+      'triggerGoogleSignIn'
+    ];
+    for (const fn of forbiddenFns) {
+      assert(!indexHtml.includes(`function ${fn}`), `index.html contains no legacy console function ${fn}`);
+    }
+
+    assert(indexHtml.includes("navigateToReportOptions('home')"), 'index.html retains lower "See my report options" button');
+    assert(indexHtml.includes('/pricing/#charm-ai'), 'index.html retains Charm AI pass link');
+  } catch (err) {
+    assert(false, `index.html clutter elimination test failed: ${err.message}`);
+  }
+
+  // ── TEST 2C: All 8 Wired Calculators Navigate to /your-reading/?from=<slug> ──
+  try {
+    const calcs = [
+      { file: 'index.html', slug: 'home' },
+      { file: 'birth_number_calculator.html', slug: 'birth-number' },
+      { file: 'pythagorean_calculator.html', slug: 'pythagorean' },
+      { file: 'tools/life-path-calculator.html', slug: 'life-path-calculator' },
+      { file: 'tools/lo-shu-grid.html', slug: 'lo-shu-grid' },
+      { file: 'tools/name-numerology.html', slug: 'name-numerology' },
+      { file: 'tools/name-balancing.html', slug: 'name-balancing' },
+      { file: 'tools/compatibility-calculator.html', slug: 'compatibility-calculator' }
+    ];
+
+    for (const { file, slug } of calcs) {
+      const html = readFileSync(join(rootDir, 'app/static', file), 'utf-8');
+      const hasDirectNav = html.includes(`/your-reading/?from=${slug}`);
+      const savesStorage = html.includes("sessionStorage.setItem('nv_reading_input'");
+      const restoresStorage = html.includes("sessionStorage.getItem('nv_reading_input')");
+
+      assert(hasDirectNav, `${file} navigates directly to /your-reading/?from=${slug} on Calculate`);
+      assert(savesStorage, `${file} saves inputs to nv_reading_input on Calculate`);
+      assert(restoresStorage, `${file} restores inputs from nv_reading_input on Back navigation`);
+    }
+  } catch (err) {
+    assert(false, `All 8 calculators navigation test failed: ${err.message}`);
+  }
+
   // ── TEST 3: Statutory Consents Default Unticked ──
   try {
     const htmlFiles = ['index.html', 'your-reading.html', 'signup.html', 'charm_ai.html'];
@@ -236,6 +288,49 @@ async function runTests() {
     assert(false, `Price tampering override test threw error: ${err.message}`);
   }
 
+  // ── TEST 5B: Server Check — create-order Rejects Unauthenticated / Unverified Requests ──
+  try {
+    const workerModule = await import('../app/static/_worker.js');
+    const worker = workerModule.default;
+
+    const mockEnv = {
+      ENVIRONMENT: 'test',
+      RAZORPAY_KEY_ID: 'rzp_test_MOCK_JOURNEY_KEY',
+      RAZORPAY_KEY_SECRET: 'test_secret_for_journey_payments',
+      OTP_HMAC_SECRET: 'test_otp_hmac_secret_32b_journey',
+      SESSION_SECRET: 'test_session_secret_32b_journey_',
+      IP_HASH_SALT: 'test_ip_hash_salt_32b_journey_00',
+      DATA_ENCRYPTION_KEY: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
+    };
+
+    // Post to create-order with an email that has NO verified session and NO checkout_token
+    const unverifiedReq = new Request('https://numerosvision.com/api/v1/payments/create-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Origin': 'https://numerosvision.com'
+      },
+      body: JSON.stringify({
+        pack_id: 'report_basic',
+        name: 'Unverified Seeker',
+        dob: '1990-05-15',
+        email: 'unverified_stranger@example.com'
+        // Notice checkout_token is intentionally omitted
+      })
+    });
+
+    const unverifiedRes = await worker.fetch(unverifiedReq, mockEnv);
+    const unverifiedData = await unverifiedRes.json();
+
+    assert(unverifiedRes.status === 401, `create-order rejects unauthenticated request with HTTP 401 (got ${unverifiedRes.status})`);
+    assert(
+      unverifiedData.error && unverifiedData.error.includes('Authentication required'),
+      'create-order returns honest "Authentication required" error message when unverified'
+    );
+  } catch (err) {
+    assert(false, `create-order unverified rejection test threw error: ${err.message}`);
+  }
+
   // ── TEST 6: Dashboard Refuses Unauthenticated / Unverified Access ──
   try {
     const workerModule = await import('../app/static/_worker.js');
@@ -325,8 +420,35 @@ async function runTests() {
 
     // ISO DOB submission in create-order
     assert(yourReadingHtml.includes('dob: isoDob') || yourReadingHtml.includes('customer_dob: isoDob'), 'Date of birth is stored and sent as ISO YYYY-MM-DD');
+
+    // Turnstile & OTP Registration Guard
+    const hasTurnstileScript = yourReadingHtml.includes('challenges.cloudflare.com/turnstile/v0/api.js');
+    const hasTurnstileContainer = yourReadingHtml.includes('checkout-turnstile-container');
+    const sendsTurnstileToken = yourReadingHtml.includes('turnstile_token: turnstileToken');
+    assert(hasTurnstileScript && hasTurnstileContainer && sendsTurnstileToken, 'Stage B checkout integrates Cloudflare Turnstile verification and passes turnstile_token on OTP dispatch');
+    assert(yourReadingHtml.includes('onCheckoutEmailInput()'), 'Checkout email changes dynamically revoke session verification');
+    assert(yourReadingHtml.includes('window.turnstile.reset'), 'Checkout resets turnstile widget on send/resend and handles expiry');
   } catch (err) {
     assert(false, `Stage B checkout architecture test threw error: ${err.message}`);
+  }
+
+  // ── TEST 10: Strict Turnstile Enforcement Across ALL Callers of send-code ──
+  try {
+    const fs = await import('fs');
+    const path = await import('path');
+    const staticDir = join(rootDir, 'app/static');
+    const files = fs.readdirSync(staticDir);
+
+    const indexHtml = fs.readFileSync(join(staticDir, 'index.html'), 'utf-8');
+    assert(!indexHtml.includes('/api/v1/auth/email/send-code'), 'index.html has zero calls to send-code (console fully removed)');
+
+    const yourReadingHtml = fs.readFileSync(join(staticDir, 'your-reading.html'), 'utf-8');
+    assert(yourReadingHtml.includes('/api/v1/auth/email/send-code'), 'your-reading.html is the single purchase report send-code caller');
+    assert(yourReadingHtml.includes('challenges.cloudflare.com/turnstile'), 'your-reading.html loads Cloudflare Turnstile script');
+    assert(/id=["'][^"']*turnstile[^"']*["']/i.test(yourReadingHtml), 'your-reading.html contains a Turnstile widget container');
+    assert(yourReadingHtml.includes('turnstile_token: turnstileToken'), 'your-reading.html includes turnstile_token in payload');
+  } catch (err) {
+    assert(false, `Global Turnstile caller enforcement test threw error: ${err.message}`);
   }
 
   console.log(`\nTests Completed: ${passCount} Passed, ${failCount} Failed\n`);

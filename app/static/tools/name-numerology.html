@@ -740,23 +740,20 @@ function calcName(){
   const y = parseInt(document.getElementById('nn-year').value)||0;
   if(!rawName){alert('Please enter your full name.');return;}
 
-  const calcData = {
-    name: rawName,
-    day: d || 15,
-    month: m || 8,
-    year: y || 1990,
-    category: 'name_numerology'
-  };
+  const existing = JSON.parse(sessionStorage.getItem('nv_reading_input') || '{}');
+  const isoDob = (d && m && y) ? `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}` : existing.dob || '';
 
-  if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
-    window.nvProfileSync.requireConsentToReveal(calcData, function() {
-      doRenderName(rawName, d, m, y);
-    }, 'result');
-  } else {
-        const qp = new URLSearchParams(calcData).toString();
-        window.location.href = '/signup/?source=calculator_gate&' + qp;
-      
-  }
+  sessionStorage.setItem('nv_reading_input', JSON.stringify({
+    name: rawName,
+    day: d || existing.day || null,
+    month: m || existing.month || null,
+    year: y || existing.year || null,
+    dob: isoDob,
+    driver: d ? (((d - 1) % 9) + 1) : existing.driver || null,
+    conductor: existing.conductor || null
+  }));
+
+  window.location.href = '/your-reading/?from=name-numerology';
 }
 
 function doRenderName(rawName, d, m, y) {
@@ -912,7 +909,20 @@ function toggleFaq(el) {
   <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
-  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer>
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const saved = sessionStorage.getItem('nv_reading_input');
+    if (saved) {
+      const data = JSON.parse(saved);
+      if (data.name && document.getElementById('nn-name')) document.getElementById('nn-name').value = data.name;
+      if (data.day && document.getElementById('nn-day')) document.getElementById('nn-day').value = data.day;
+      if (data.month && document.getElementById('nn-month')) document.getElementById('nn-month').value = data.month;
+      if (data.year && document.getElementById('nn-year')) document.getElementById('nn-year').value = data.year;
+    }
+  } catch (e) {}
+});
+</script>
 </body>
 </html>
 

@@ -42,35 +42,38 @@ async function runSuite() {
   passedCount++;
 
   // ---------------------------------------------------------------------------
-  // TEST 2: In-Page Checkout Form & Seeker Prefill Elements
+  // TEST 2: Stage B Single Checkout Screen on /your-reading/ & Clutter-Free index.html
   // ---------------------------------------------------------------------------
-  console.log('[TEST 2] Testing in-page checkout form & seeker prefill inputs...');
-  assert.ok(indexHtml.includes('id="reports-checkout-console"'), 'In-page checkout console must exist');
-  assert.ok(indexHtml.includes('id="reports-name"'), 'Seeker name input must exist');
-  assert.ok(indexHtml.includes('id="reports-dob"'), 'Seeker DOB input must exist');
-  assert.ok(indexHtml.includes('id="reports-email"'), 'Seeker email input must exist');
-  assert.ok(indexHtml.includes('id="reports-phone"'), 'Seeker phone input must exist');
-  assert.ok(indexHtml.includes('id="btn-reports-send-otp"'), 'Send OTP button must exist');
-  assert.ok(indexHtml.includes('id="reports-otp-input"'), 'OTP input field must exist');
-  assert.ok(indexHtml.includes('id="btn-reports-verify-otp"'), 'Verify OTP button must exist');
-  assert.ok(indexHtml.includes('prefillReportsSeekerInputs'), 'prefillReportsSeekerInputs function must be present');
-  console.log('  ✓ In-page checkout inputs, prefill handler, and OTP elements verified');
+  console.log('[TEST 2] Testing Stage B checkout screen & clutter-free index.html...');
+  // Assert index.html is 100% free of checkout console clutter
+  assert.ok(!indexHtml.includes('id="reports-checkout-console"'), 'In-page checkout console must NOT exist on index.html');
+  assert.ok(!indexHtml.includes('Proceed to Pay'), 'Proceed to Pay must NOT exist on index.html');
+  assert.ok(!indexHtml.includes('sendReportsOtp'), 'sendReportsOtp must NOT exist on index.html');
+  assert.ok(!indexHtml.includes('launchInPageReportsCheckout'), 'launchInPageReportsCheckout must NOT exist on index.html');
+
+  // Assert /your-reading/ contains the locked Stage B checkout modal
+  assert.ok(yourReadingHtml.includes('id="stage-b-checkout-modal"'), 'Stage B checkout modal must exist on /your-reading/');
+  assert.ok(yourReadingHtml.includes('id="checkout-seeker-name"'), 'Seeker name input must exist on /your-reading/');
+  assert.ok(yourReadingHtml.includes('id="checkout-seeker-dob"'), 'Seeker DOB input must exist on /your-reading/');
+  assert.ok(yourReadingHtml.includes('id="checkout-email"'), 'Seeker email input must exist on /your-reading/');
+  assert.ok(yourReadingHtml.includes('id="btn-checkout-send-code"'), 'Send Code button must exist on /your-reading/');
+  assert.ok(yourReadingHtml.includes('id="checkout-otp-code"'), 'OTP input field must exist on /your-reading/');
+  assert.ok(yourReadingHtml.includes('id="btn-checkout-proceed-pay"'), 'Proceed to Pay button must exist on /your-reading/');
+  console.log('  ✓ Verified: index.html has zero checkout clutter and /your-reading/ hosts the single Stage B checkout modal');
   passedCount++;
 
   // ---------------------------------------------------------------------------
-  // TEST 3: "Your purchase" screen with 4 states
+  // TEST 3: Order Lifecycle & Dashboard State Architecture
   // ---------------------------------------------------------------------------
-  console.log('[TEST 3] Testing "Your purchase" screen 4-state lifecycle...');
-  assert.ok(indexHtml.includes('id="reports-purchase-screen"'), 'reports-purchase-screen container must exist');
-  assert.ok(indexHtml.includes('id="purchase-state-generating"'), 'generating state container must exist');
-  assert.ok(indexHtml.includes('id="purchase-state-ready"'), 'ready state container must exist');
-  assert.ok(indexHtml.includes('id="purchase-state-failed"'), 'failed state container must exist');
-  assert.ok(indexHtml.includes('id="purchase-resume-container"'), 'resume lookup container must exist');
-  assert.ok(indexHtml.includes('id="reports-ready-download-link"'), 'download link must exist in ready state');
-  assert.ok(indexHtml.includes('resendPurchaseEmail'), 'resend email action must exist');
-  assert.ok(indexHtml.includes('retryPurchasePolling'), 'retry generation action must exist');
-  assert.ok(indexHtml.includes('lookupResumeOrder'), 'resume lookup action must exist');
-  console.log('  ✓ All 4 purchase states (generating, ready, failed, resume) + download and email actions verified');
+  console.log('[TEST 3] Testing order lifecycle & dashboard architecture...');
+  // Assert index.html does NOT contain purchase screen clutter
+  assert.ok(!indexHtml.includes('id="reports-purchase-screen"'), 'reports-purchase-screen must NOT exist on index.html');
+
+  // Assert dashboard hosts the verified order delivery architecture
+  const dashboardHtml = fs.readFileSync(path.resolve('app/static/dashboard.html'), 'utf8');
+  assert.ok(dashboardHtml.includes('order_id') || dashboardHtml.includes('orderId'), 'Dashboard handles order_id parameters');
+  assert.ok(yourReadingHtml.includes('/dashboard/?order_id='), 'your-reading redirects to dashboard upon payment completion');
+  console.log('  ✓ Verified: order polling & report delivery consolidated to /dashboard/ with zero index.html clutter');
   passedCount++;
 
   // ---------------------------------------------------------------------------
@@ -223,17 +226,16 @@ async function runSuite() {
   // ---------------------------------------------------------------------------
   // TEST 8: Funnel Telemetry Events & Mandatory Trust Line (Requirement 5)
   // ---------------------------------------------------------------------------
-  console.log('[TEST 8] Testing funnel telemetry events & payment trust line...');
-  assert.ok(indexHtml.includes('trackFunnelEvent'), 'trackFunnelEvent helper must exist');
-  assert.ok(indexHtml.includes("'view_product'"), 'view_product funnel event must be wired');
-  assert.ok(indexHtml.includes("'begin_checkout'"), 'begin_checkout funnel event must be wired');
-  assert.ok(indexHtml.includes("'otp_verified'"), 'otp_verified funnel event must be wired');
-  assert.ok(indexHtml.includes("'purchase_complete'"), 'purchase_complete funnel event must be wired');
+  console.log('[TEST 8] Testing funnel telemetry events & payment trust line on /your-reading/...');
+  assert.ok(yourReadingHtml.includes('trackFunnelEvent'), 'trackFunnelEvent helper must exist in your-reading.html');
+  assert.ok(yourReadingHtml.includes("'view_product'"), 'view_product funnel event must be wired in your-reading.html');
+  assert.ok(yourReadingHtml.includes("'begin_checkout'"), 'begin_checkout funnel event must be wired in your-reading.html');
+  assert.ok(yourReadingHtml.includes("'otp_verified'"), 'otp_verified funnel event must be wired in your-reading.html');
+  assert.ok(yourReadingHtml.includes("'purchase_complete'"), 'purchase_complete funnel event must be wired in your-reading.html');
 
-  // Verify the exact trust line
-  const expectedTrustLine = '🔒 100% Secure 256-bit Encrypted Payment via Razorpay · <a href="/refund.html" target="_blank" style="color:#8B6914; text-decoration:underline;">Refund Policy</a>';
-  assert.ok(indexHtml.includes('🔒 100% Secure 256-bit Encrypted Payment via Razorpay · <a href="/refund.html"'), 'Mandatory trust line must exist beside pay button');
-  console.log('  ✓ Funnel events (view_product, begin_checkout, otp_verified, purchase_complete) & trust line verified');
+  // Verify the exact trust line on the single checkout surface
+  assert.ok(yourReadingHtml.includes('🔒 100% Secure 256-bit Encrypted Payment via Razorpay · <a href="/refund.html"'), 'Mandatory trust line must exist in your-reading.html');
+  console.log('  ✓ Funnel events (view_product, begin_checkout, otp_verified, purchase_complete) & trust line verified on /your-reading/');
   passedCount++;
 
   console.log(`\n[SUCCESS] All ${passedCount} Reports Buy Flow & Test Console test cases passed successfully!`);

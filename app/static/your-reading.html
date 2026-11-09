@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/static/css/theme.css?v=5.5.0" />
   <link rel="stylesheet" href="/static/css/nav.css?v=5.5.0" />
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer onload="renderStageBTurnstile()"></script>
 
   <style>
     :root {
@@ -769,12 +770,17 @@
         <div class="checkout-form-grid">
           <div>
             <label class="checkout-field-label" for="checkout-email">Email Address (Required)</label>
-            <input type="email" id="checkout-email" class="checkout-input" placeholder="name@example.com" required oninput="validateCheckoutReadiness()" />
+            <input type="email" id="checkout-email" class="checkout-input" placeholder="name@example.com" required oninput="onCheckoutEmailInput()" />
           </div>
           <div>
             <label class="checkout-field-label" for="checkout-mobile">Mobile Number (+91, Optional)</label>
             <input type="tel" id="checkout-mobile" class="checkout-input" placeholder="9818418039" />
           </div>
+        </div>
+
+        <!-- Cloudflare Turnstile Security Verification -->
+        <div style="display:flex; justify-content:flex-start; align-items:center; margin:4px 0 14px; min-height:65px;">
+          <div id="checkout-turnstile-container"></div>
         </div>
 
         <!-- Row 3: Baseline-aligned 6-digit Code & Send Code Button (Zero Overlap, Collapsed Dead Space) -->
@@ -808,7 +814,7 @@
         </button>
 
         <div class="checkout-security-notes">
-          🔒 Server-side price authority strictly enforced · 256-bit SSL encrypted · Razorpay Standard Checkout
+          🔒 100% Secure 256-bit Encrypted Payment via Razorpay · <a href="/refund.html" target="_blank" style="color:#8B6914; text-decoration:underline;">Refund Policy</a>
         </div>
       </form>
     </div>
@@ -1042,8 +1048,34 @@
       }
     }
 
+    // Funnel Telemetry
+    function trackFunnelEvent(eventName, data) {
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: eventName,
+          ...data,
+          timestamp: new Date().toISOString()
+        });
+        window.dispatchEvent(new CustomEvent('nv_funnel_event', {
+          detail: { event: eventName, ...data }
+        }));
+        fetch('/api/v1/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            event_type: eventName,
+            data
+          })
+        }).catch(() => {});
+      } catch(e) {}
+    }
+
     // Stage B: Open Unified Checkout Screen
     function selectTierAndProceed(tierId) {
+      trackFunnelEvent('view_product', { tier: tierId });
+      trackFunnelEvent('begin_checkout', { tier: tierId });
       if (!_activeReadingData) {
         const raw = sessionStorage.getItem('nv_reading_input');
         if (raw) {
@@ -1097,10 +1129,85 @@
       if (statusEl) { statusEl.textContent = ''; statusEl.style.color = 'inherit'; }
 
       validateCheckoutReadiness();
+      setTimeout(renderStageBTurnstile, 50);
+      checkUserAuthStatus();
 
       // Show modal
       const modal = document.getElementById('stage-b-checkout-modal');
       if (modal) modal.classList.add('active');
+    }
+
+    let _stageBTurnstileWidgetId = undefined;
+    function renderStageBTurnstile() {
+      if (window.turnstile && document.getElementById('checkout-turnstile-container') && _stageBTurnstileWidgetId === undefined) {
+        try {
+          const siteKey = window.NV_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
+          _stageBTurnstileWidgetId = window.turnstile.render('#checkout-turnstile-container', {
+            sitekey: siteKey,
+            theme: 'light',
+            'expired-callback': function() {
+              if (window.turnstile && _stageBTurnstileWidgetId !== undefined) {
+                try { window.turnstile.reset(_stageBTurnstileWidgetId); } catch(e) {}
+              }
+              const statusEl = document.getElementById('checkout-otp-status');
+              if (statusEl) {
+                statusEl.textContent = 'Security check expired. Please complete the verification again.';
+                statusEl.style.color = '#B91C1C';
+              }
+            }
+          });
+        } catch (e) {
+          console.warn('Turnstile render warning:', e);
+        }
+      }
+    }
+
+    let _authenticatedSessionEmail = null;
+    async function checkUserAuthStatus() {
+      try {
+        const res = await fetch('/api/v1/auth/status', { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.authenticated && data.user) {
+            _authenticatedSessionEmail = (data.user.email || '').trim().toLowerCase();
+            const emailInput = document.getElementById('checkout-email');
+            if (emailInput && _authenticatedSessionEmail) {
+              if (!emailInput.value) emailInput.value = _authenticatedSessionEmail;
+              if (emailInput.value.trim().toLowerCase() === _authenticatedSessionEmail) {
+                _isEmailVerified = true;
+          trackFunnelEvent('otp_verified', { email });
+                const statusEl = document.getElementById('checkout-otp-status');
+                if (statusEl) {
+                  statusEl.textContent = '✓ Verified session: ' + _authenticatedSessionEmail;
+                  statusEl.style.color = 'var(--emerald)';
+                }
+              }
+            }
+            validateCheckoutReadiness();
+          }
+        }
+      } catch (e) {}
+    }
+
+    function onCheckoutEmailInput() {
+      const email = document.getElementById('checkout-email')?.value?.trim().toLowerCase() || '';
+      if (_authenticatedSessionEmail && email === _authenticatedSessionEmail) {
+        _isEmailVerified = true;
+        const statusEl = document.getElementById('checkout-otp-status');
+        if (statusEl) {
+          statusEl.textContent = '✓ Verified session: ' + _authenticatedSessionEmail;
+          statusEl.style.color = 'var(--emerald)';
+        }
+      } else {
+        // Any different email revokes session verification and requires code step
+        _isEmailVerified = false;
+        _checkoutToken = null;
+        const statusEl = document.getElementById('checkout-otp-status');
+        if (statusEl && statusEl.textContent.includes('Verified session')) {
+          statusEl.textContent = '';
+        }
+      }
+      validateCheckoutReadiness();
     }
 
     function closeStageBCheckout() {
@@ -1124,6 +1231,24 @@
         return;
       }
 
+      let turnstileToken = '';
+      if (window.turnstile && _stageBTurnstileWidgetId !== undefined) {
+        try { turnstileToken = window.turnstile.getResponse(_stageBTurnstileWidgetId); } catch (e) {}
+      }
+      // Fallback is strictly restricted to localhost/127.0.0.1; NEVER active on preview or production
+      const isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      if (!turnstileToken && isLocalDev) {
+        turnstileToken = window.NV_TURNSTILE_TOKEN || 'test_turnstile_pass';
+      }
+
+      if (!turnstileToken) {
+        if (statusEl) {
+          statusEl.textContent = 'Please complete the Cloudflare security verification above.';
+          statusEl.style.color = '#B91C1C';
+        }
+        return;
+      }
+
       if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
       if (statusEl) { statusEl.textContent = 'Sending code to ' + email + '...'; statusEl.style.color = 'var(--ink-muted)'; }
 
@@ -1132,9 +1257,16 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({ email: email })
+          body: JSON.stringify({
+            email: email,
+            turnstile_token: turnstileToken
+          })
         });
         const data = await res.json().catch(() => ({}));
+        // Reset turnstile widget after every send/resend attempt so a fresh token is required
+        if (window.turnstile && _stageBTurnstileWidgetId !== undefined) {
+          try { window.turnstile.reset(_stageBTurnstileWidgetId); } catch(e) {}
+        }
 
         if (res.ok && data.success) {
           if (statusEl) {
@@ -1317,6 +1449,7 @@
               const verifyData = await verifyRes.json().catch(() => ({}));
               if (verifyRes.ok && verifyData.success) {
                 // CLEAR SESSION STORAGE IMMEDIATELY ON SUCCESS
+                trackFunnelEvent('purchase_complete', { order_id: internalOrderId });
                 sessionStorage.removeItem('nv_reading_input');
                 window.location.href = `/dashboard/?order_id=${encodeURIComponent(internalOrderId)}&verified=true`;
               } else {

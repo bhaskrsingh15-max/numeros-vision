@@ -358,29 +358,27 @@
       const p2Name = document.getElementById('p2-name').value.trim();
       const p2Dob = document.getElementById('p2-dob').value;
 
+      if (!p1Dob || !p2Dob) {
+        alert('Please fill in dates of birth for both partners.');
+        return;
+      }
+
       const p1Parts = p1Dob.split('-');
-      const p2Parts = p2Dob.split('-');
       const p1Day = parseInt(p1Parts[2], 10);
       const p1Month = parseInt(p1Parts[1], 10);
       const p1Year = parseInt(p1Parts[0], 10);
 
-      const calcData = {
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
         name: p1Name || 'Seeker',
-        day: p1Day || 15,
-        month: p1Month || 8,
-        year: p1Year || 1990,
-        category: 'synastry'
-      };
+        day: p1Day,
+        month: p1Month,
+        year: p1Year,
+        dob: p1Dob,
+        partner_name: p2Name,
+        partner_dob: p2Dob
+      }));
 
-      if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
-        window.nvProfileSync.requireConsentToReveal(calcData, function() {
-          doCalculateSynastry(p1Name, p1Dob, p2Name, p2Dob);
-        }, 'results');
-      } else {
-        const qp = new URLSearchParams(calcData).toString();
-        window.location.href = '/signup/?source=calculator_gate&' + qp;
-      
-      }
+      window.location.href = '/your-reading/?from=compatibility-calculator';
     }
 
     async function doCalculateSynastry(p1Name, p1Dob, p2Name, p2Dob) {
@@ -483,6 +481,19 @@ function renderSynastry(rep) {
   <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
-  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer>
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = sessionStorage.getItem('nv_reading_input');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (data.name && document.getElementById('p1-name')) document.getElementById('p1-name').value = data.name;
+          if (data.dob && document.getElementById('p1-dob')) document.getElementById('p1-dob').value = data.dob;
+          if (data.partner_name && document.getElementById('p2-name')) document.getElementById('p2-name').value = data.partner_name;
+          if (data.partner_dob && document.getElementById('p2-dob')) document.getElementById('p2-dob').value = data.partner_dob;
+        }
+      } catch (e) {}
+    });
+</script>
 </body>
 </html>

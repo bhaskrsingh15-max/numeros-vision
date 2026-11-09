@@ -437,18 +437,13 @@
         return;
       }
 
-      const calcData = {
-        tool: 'pythagorean',
-        name: raw,
-        dob: '',
-        summary: `Pythagorean Tri-Vector Analysis for ${raw}`
-      };
+      const existing = JSON.parse(sessionStorage.getItem('nv_reading_input') || '{}');
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
+        ...existing,
+        name: raw
+      }));
 
-      if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
-        window.nvProfileSync.requireConsentToReveal(calcData, computePythagorean, 'resultDisplay');
-      } else {
-        computePythagorean();
-      }
+      window.location.href = '/your-reading/?from=pythagorean';
     }
 
     function computePythagorean() {
@@ -545,6 +540,18 @@
   <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
-  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer>
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = sessionStorage.getItem('nv_reading_input');
+        if (saved) {
+          const d = JSON.parse(saved);
+          if (d.name && document.getElementById('pythName')) {
+            document.getElementById('pythName').value = d.name;
+          }
+        }
+      } catch (e) {}
+    });
+</script>
 </body>
 </html>

@@ -877,6 +877,25 @@
         return;
       }
 
+      const { driver, conductor } = deriveDriverAndConductor(dobVal);
+      const parts = dobVal.split('-');
+
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
+        name: name,
+        day: parseInt(parts[2], 10),
+        month: parseInt(parts[1], 10),
+        year: parseInt(parts[0], 10),
+        dob: dobVal,
+        driver: driver,
+        conductor: conductor
+      }));
+
+      window.location.href = '/your-reading/?from=name-balancing';
+      return;
+    }
+
+    async function _legacyCalculateNameBalance(e) {
+
       const { driver, conductor, driverPlanet, conductorPlanet } = deriveDriverAndConductor(dobVal);
 
       const calcData = {
@@ -1098,6 +1117,20 @@ function renderResults(data, driver, conductor, driverPlanet, conductorPlanet) {
   <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
-  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer>
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = sessionStorage.getItem('nv_reading_input');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (data.name && document.getElementById('fullName')) document.getElementById('fullName').value = data.name;
+          if (data.dob && document.getElementById('dobStr')) {
+            document.getElementById('dobStr').value = data.dob;
+            if (typeof onDobChange === 'function') onDobChange();
+          }
+        }
+      } catch (e) {}
+    });
+</script>
 </body>
 </html>

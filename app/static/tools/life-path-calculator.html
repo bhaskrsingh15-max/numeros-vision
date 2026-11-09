@@ -835,21 +835,25 @@
       }
 
       const personName = document.getElementById('lp-name')?.value?.trim() || 'Seeker';
-      const calcData = {
+      const driver = ((d - 1) % 9) + 1;
+      const fullDobDigits = `${String(d).padStart(2, '0')}${String(m).padStart(2, '0')}${String(y).padStart(4, '0')}`;
+      let conductorRaw = fullDobDigits.split('').reduce((sum, ch) => sum + parseInt(ch, 10), 0);
+      while (conductorRaw > 9 && conductorRaw !== 11 && conductorRaw !== 22 && conductorRaw !== 33) {
+        conductorRaw = String(conductorRaw).split('').reduce((sum, ch) => sum + parseInt(ch, 10), 0);
+      }
+      const isoDob = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
         name: personName,
         day: d,
         month: m,
         year: y,
-        category: 'life_path'
-      };
+        dob: isoDob,
+        driver: driver,
+        conductor: conductorRaw
+      }));
 
-      if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
-        window.nvProfileSync.requireConsentToReveal(calcData, function() {
-          doRenderLifePath(d, m, y);
-        }, 'result');
-      } else {
-        doRenderLifePath(d, m, y);
-      }
+      window.location.href = '/your-reading/?from=life-path-calculator';
     }
 
         function seeLifePathReportOptions() {
@@ -1025,6 +1029,19 @@
   <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
-  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer>
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = sessionStorage.getItem('nv_reading_input');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (data.name && document.getElementById('lp-name')) document.getElementById('lp-name').value = data.name;
+          if (data.day && document.getElementById('lp-day')) document.getElementById('lp-day').value = data.day;
+          if (data.month && document.getElementById('lp-month')) document.getElementById('lp-month').value = data.month;
+          if (data.year && document.getElementById('lp-year')) document.getElementById('lp-year').value = data.year;
+        }
+      } catch (e) {}
+    });
+</script>
 </body>
 </html>

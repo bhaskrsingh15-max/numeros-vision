@@ -814,6 +814,31 @@
         return;
       }
 
+      const driver = ((dayVal - 1) % 9) + 1;
+      const dobStr = `${String(dayVal).padStart(2, '0')}${String(monthVal).padStart(2, '0')}${String(yearVal).padStart(4, '0')}`;
+      let conductorRaw = dobStr.split('').reduce((sum, ch) => sum + parseInt(ch, 10), 0);
+      while (conductorRaw > 9 && conductorRaw !== 11 && conductorRaw !== 22 && conductorRaw !== 33) {
+        conductorRaw = String(conductorRaw).split('').reduce((sum, ch) => sum + parseInt(ch, 10), 0);
+      }
+      const isoDob = `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`;
+
+      const existing = JSON.parse(sessionStorage.getItem('nv_reading_input') || '{}');
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
+        name: existing.name || 'Seeker',
+        day: dayVal,
+        month: monthVal,
+        year: yearVal,
+        dob: isoDob,
+        driver: driver,
+        conductor: conductorRaw
+      }));
+
+      window.location.href = '/your-reading/?from=lo-shu-grid';
+      return;
+    }
+
+    function _legacyGenerateGrid() {
+
       // Calculate Driver (Mulank) and Conductor (Bhagyank) via Core Matrix Engine rules
       const driver = reduceToSingle(dayVal, false);
       const dobStr = `${String(dayVal).padStart(2, '0')}${String(monthVal).padStart(2, '0')}${String(yearVal).padStart(4, '0')}`;
@@ -1389,7 +1414,19 @@ function selectConversionOffer(offerType, specificNum) {
     </a>
   </nav>
   <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
-  <script src="/static/js/nv_payment_gateway.js?v=20261106_v9" defer></script>
+  <script src="/static/js/nv_payment_gateway.js?v=20261106_v9" defer>
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = sessionStorage.getItem('nv_reading_input');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (data.day && document.getElementById('ls-day')) document.getElementById('ls-day').value = data.day;
+          if (data.month && document.getElementById('ls-month')) document.getElementById('ls-month').value = data.month;
+          if (data.year && document.getElementById('ls-year')) document.getElementById('ls-year').value = data.year;
+        }
+      } catch (e) {}
+    });
+</script>
 </body>
 </html>
 

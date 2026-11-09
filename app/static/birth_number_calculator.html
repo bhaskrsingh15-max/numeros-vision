@@ -428,18 +428,19 @@
         return;
       }
 
-      const calcData = {
-        tool: 'birth_number',
-        name: 'Seeker',
-        dob: '',
-        summary: `Birth Number (Mulank) calculation for Day ${dayInput}`
-      };
+      const driver = ((dayInput - 1) % 9) + 1;
+      const existing = JSON.parse(sessionStorage.getItem('nv_reading_input') || '{}');
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
+        name: existing.name || 'Seeker',
+        day: dayInput,
+        month: existing.month || null,
+        year: existing.year || null,
+        dob: existing.dob || '',
+        driver: driver,
+        conductor: existing.conductor || null
+      }));
 
-      if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
-        window.nvProfileSync.requireConsentToReveal(calcData, computeBirthNumber, 'resultDisplay');
-      } else {
-        computeBirthNumber();
-      }
+      window.location.href = '/your-reading/?from=birth-number';
     }
 
     function computeBirthNumber() {
@@ -555,6 +556,18 @@
   <script src="/static/js/nv_tracking_config.js?v=5.4.0" defer></script>
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
-  <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=5.4.0" defer>
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = sessionStorage.getItem('nv_reading_input');
+        if (saved) {
+          const d = JSON.parse(saved);
+          if (d.day && document.getElementById('birthDay')) {
+            document.getElementById('birthDay').value = d.day;
+          }
+        }
+      } catch (e) {}
+    });
+</script>
 </body>
 </html>
