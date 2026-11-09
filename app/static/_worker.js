@@ -43,15 +43,54 @@ function getRandomHex(bytesCount = 16) {
 
 
 
-function assertNoPreviewFlagOnProduction(env, request) {
+const DANGEROUS_FLAGS = [
+  'MOCK_PAYMENTS',
+  'NV_EMAIL_LOG_ADAPTER',
+  'ALLOW_TEST_TOKENS',
+  'ALLOW_STAGING_TEST_BYPASS',
+  'NV_ALLOW_UNAUTHENTICATED_LOCAL',
+  'PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW'
+];
+
+function getDetectedDangerousFlags(env) {
+  if (!env) return [];
+  const detected = [];
+  for (const flag of DANGEROUS_FLAGS) {
+    const val = env[flag];
+    if (val === true || val === 'true' || val === '1' || val === 'yes') {
+      detected.push(flag);
+    }
+  }
+  return detected;
+}
+
+function assertNoDangerousFlagsInProduction(env, request) {
   if (!env) return;
-  const flag = (env.PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW || '').toString().trim().toLowerCase();
-  if (flag === 'true' || flag === '1' || flag === 'yes') {
-    const environment = (env.ENVIRONMENT || '').toString().trim().toLowerCase();
-    if (environment !== 'preview') {
+  const environment = (env.ENVIRONMENT || '').toString().trim().toLowerCase();
+  if (environment === 'production') {
+    const detected = getDetectedDangerousFlags(env);
+    if (detected.length > 0) {
+      if (detected.includes('PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW')) {
+        throw new Error(`FATAL SECURITY VIOLATION: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW is only permitted when ENVIRONMENT == 'preview' (Dangerous test flags strictly refused in production: ${detected.join(', ')}). Refusing execution.`);
+      }
+      throw new Error(`FATAL SECURITY VIOLATION: Dangerous test flags strictly refused in production: ${detected.join(', ')}`);
+    }
+  } else {
+    const flag = (env.PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW || '').toString().trim().toLowerCase();
+    if ((flag === 'true' || flag === '1' || flag === 'yes') && environment !== 'preview') {
       throw new Error(`FATAL SECURITY VIOLATION: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW is only permitted when ENVIRONMENT == 'preview' (current ENVIRONMENT: '${environment}'). Refusing execution.`);
     }
   }
+}
+
+function isMockPaymentsAllowed(env) {
+  const currentEnv = ((env && env.ENVIRONMENT) || 'production').toLowerCase().trim();
+  if (currentEnv === 'production') return false;
+  return Boolean(env && (env.MOCK_PAYMENTS === 'true' || env.MOCK_PAYMENTS === true || env.MOCK_PAYMENTS === '1'));
+}
+
+function assertNoPreviewFlagOnProduction(env, request) {
+  assertNoDangerousFlagsInProduction(env, request);
 }
 
 function assertRazorpayTestKey(env) {
@@ -1956,6 +1995,28 @@ export default {
           'Content-Type': 'application/javascript; charset=UTF-8',
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Access-Control-Allow-Origin': '*'
+        }
+      });
+    }
+
+    // Health & Dangerous Flags Audit Route (/api/health)
+    if (url.pathname === '/api/health' || url.pathname === '/api/v1/health') {
+      const currentEnv = ((env && env.ENVIRONMENT) || 'production').toLowerCase().trim();
+      const detectedDangerous = getDetectedDangerousFlags(env);
+      const isProd = currentEnv === 'production';
+      const hasDangerousInProd = isProd && detectedDangerous.length > 0;
+
+      const statusCode = hasDangerousInProd ? 503 : 200;
+      return new Response(JSON.stringify({
+        status: hasDangerousInProd ? 'error' : 'ok',
+        environment: currentEnv,
+        dangerous_flags: detectedDangerous
+      }), {
+        status: statusCode,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'no-cache, no-store, must-revalidate'
         }
       });
     }
@@ -5054,7 +5115,7 @@ export default {
       const orderId = 'ord_p27_' + getRandomHex(8);
       let rzpOrderId = null;
 
-      if (rzpKeyId.startsWith('rzp_test_mock') || env.MOCK_PAYMENTS === 'true' || (!rzpKeyId && env.ENVIRONMENT === 'local')) {
+      if (rzpKeyId.startsWith('rzp_test_mock') || isMockPaymentsAllowed(env) || (!rzpKeyId && env.ENVIRONMENT === 'local')) {
         rzpOrderId = 'order_mock_' + getRandomHex(8);
       } else {
         if (!rzpKeyId || !rzpSecret) {
@@ -5167,7 +5228,7 @@ export default {
       }
 
       const rzpSecret = (env.RAZORPAY_KEY_SECRET || '').trim();
-      if (!rzpSecret && env.ENVIRONMENT !== 'local' && !env.MOCK_PAYMENTS) {
+      if (!rzpSecret && env.ENVIRONMENT !== 'local' && !isMockPaymentsAllowed(env)) {
         return new Response(JSON.stringify({ error: 'Payment gateway secret not configured.' }), { status: 500, headers: corsHeaders });
       }
 
@@ -5179,7 +5240,7 @@ export default {
         } catch (e) {
           isSigValid = false;
         }
-      } else if (env.MOCK_PAYMENTS === 'true' || env.ENVIRONMENT === 'local') {
+      } else if (isMockPaymentsAllowed(env) || env.ENVIRONMENT === 'local') {
         isSigValid = true;
       }
 

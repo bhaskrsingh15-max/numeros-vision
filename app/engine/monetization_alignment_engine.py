@@ -312,6 +312,8 @@ def is_staging_bypass_authorized(request_headers: Dict[str, str], query_params: 
     Strictly disallowed in production unless authorized staging header or token is present.
     """
     env = os.getenv("ENVIRONMENT", "development").lower()
+    if env == "production":
+        return False
     
     # 1. Master test tokens allow bypass in non-production
     if token in ("test_master_pass", "test_token", "staging_preview_token", "admin_test") or (token and token.startswith("test_")):

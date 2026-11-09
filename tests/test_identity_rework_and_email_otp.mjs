@@ -409,9 +409,9 @@ async function runIdentityReworkTests() {
     ENVIRONMENT: 'production',
     EMAIL_PROVIDER: 'resend',
     EMAIL_API_KEY: 're_mock_valid_api_key_123',
-    EMAIL_FROM: 'support@numerosvision.com',
-    NV_EMAIL_LOG_ADAPTER: 'true'
+    EMAIL_FROM: 'support@numerosvision.com'
   };
+  delete baseProdTurnstileEnv.NV_EMAIL_LOG_ADAPTER;
 
   const prodTurnstileCases = [
     {
@@ -477,6 +477,55 @@ async function runIdentityReworkTests() {
   const textConfigured = await resConfigured.text();
   assert(textConfigured.includes('configured_site_key_123'), 'Must return configured TURNSTILE_SITE_KEY');
   console.log('  ✓ /api/turnstile-config.js verified: falls back to test key and returns configured key');
+  passCount++;
+
+  // ---------------------------------------------------------------------------
+  // TEST 13: Dangerous-flag guard and /api/health endpoint
+  // ---------------------------------------------------------------------------
+  console.log('[TEST 13] Testing dangerous-flag guard and /api/health audit...');
+  // A. Health check on preview/test -> 200 OK
+  const resHealthPreview = await worker.fetch(new Request('http://localhost/api/health'), {
+    ENVIRONMENT: 'preview'
+  }, {});
+  assert.strictEqual(resHealthPreview.status, 200);
+  const dataHealthPreview = await resHealthPreview.json();
+  assert.strictEqual(dataHealthPreview.status, 'ok');
+  assert.strictEqual(dataHealthPreview.environment, 'preview');
+
+  // B. Health check on production clean -> 200 OK
+  const resHealthProdClean = await worker.fetch(new Request('http://localhost/api/health'), {
+    ENVIRONMENT: 'production'
+  }, {});
+  assert.strictEqual(resHealthProdClean.status, 200);
+  const dataHealthProdClean = await resHealthProdClean.json();
+  assert.strictEqual(dataHealthProdClean.status, 'ok');
+  assert.deepStrictEqual(dataHealthProdClean.dangerous_flags, []);
+
+  // C. Health check on production with dangerous flags -> 503 error listing names
+  const dangerousProdEnv = {
+    ENVIRONMENT: 'production',
+    MOCK_PAYMENTS: 'true',
+    NV_EMAIL_LOG_ADAPTER: 'true',
+    ALLOW_TEST_TOKENS: 'true'
+  };
+  const resHealthProdDanger = await worker.fetch(new Request('http://localhost/api/health'), dangerousProdEnv, {});
+  assert.strictEqual(resHealthProdDanger.status, 503, 'Health check must return 503 when dangerous flags present in production');
+  const dataHealthProdDanger = await resHealthProdDanger.json();
+  assert.strictEqual(dataHealthProdDanger.status, 'error');
+  assert(dataHealthProdDanger.dangerous_flags.includes('MOCK_PAYMENTS'));
+  assert(dataHealthProdDanger.dangerous_flags.includes('NV_EMAIL_LOG_ADAPTER'));
+  assert(dataHealthProdDanger.dangerous_flags.includes('ALLOW_TEST_TOKENS'));
+
+  // D. Verify dangerous flags refused on protected order endpoints in production
+  const orderRes = await worker.fetch(new Request('http://localhost/api/planner-2027/order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'Test', dob: '1990-01-01', email: 'test@example.com', consent: true })
+  }), dangerousProdEnv, {});
+  assert.strictEqual(orderRes.status, 500);
+  const orderData = await orderRes.json();
+  assert(orderData.error.includes('Dangerous test flags strictly refused in production'));
+  console.log('  ✓ /api/health accurately audits flags; production strictly refuses dangerous flags with 503');
   passCount++;
 
   console.log(`\n[SUCCESS] All ${passCount} Identity Rework & Email OTP test cases passed cleanly!`);
