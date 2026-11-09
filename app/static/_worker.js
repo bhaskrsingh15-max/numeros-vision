@@ -439,6 +439,10 @@ async function verifyTurnstileToken(env, token, clientIp) {
     if (env && (env.ENVIRONMENT === 'test' || env.ENVIRONMENT === 'local')) return true;
     return false;
   }
+  const currentEnv = ((env && env.ENVIRONMENT) || 'production').toLowerCase().trim();
+  if (currentEnv !== 'preview' && currentEnv !== 'test' && currentEnv !== 'local') {
+    if (isCloudflareTestKey(secretKey)) return false;
+  }
   try {
     const formData = new URLSearchParams();
     formData.append('secret', secretKey);
@@ -489,6 +493,38 @@ async function checkAndIncrementEmailDailyCap(env) {
   }
   memoryStore.emailDailyCounts.set(todayKey, current + 1);
   return { allowed: true, count: current + 1, cap };
+}
+
+function isCloudflareTestKey(key) {
+  if (!key || typeof key !== 'string') return false;
+  const k = key.trim();
+  return k.startsWith('1x00000000000000000000') ||
+         k.startsWith('2x00000000000000000000') ||
+         k.startsWith('3x00000000000000000000') ||
+         k.toLowerCase().includes('test_turnstile');
+}
+
+function getTurnstileConfigError(env) {
+  const currentEnv = ((env && env.ENVIRONMENT) || 'production').toLowerCase().trim();
+  const isPreviewOrTest = currentEnv === 'preview' || currentEnv === 'test' || currentEnv === 'local';
+  if (!isPreviewOrTest) {
+    const siteKey = (env && env.TURNSTILE_SITE_KEY ? env.TURNSTILE_SITE_KEY.trim() : '');
+    const secretKey = (env && env.TURNSTILE_SECRET_KEY ? env.TURNSTILE_SECRET_KEY.trim() : '');
+
+    if (!siteKey) {
+      return 'Cloudflare Turnstile site key is missing for production (TURNSTILE_SITE_KEY missing).';
+    }
+    if (isCloudflareTestKey(siteKey)) {
+      return 'Cloudflare Turnstile test site key is not permitted in production.';
+    }
+    if (!secretKey) {
+      return 'Cloudflare Turnstile secret key is missing for production (TURNSTILE_SECRET_KEY missing).';
+    }
+    if (isCloudflareTestKey(secretKey)) {
+      return 'Cloudflare Turnstile test secret key is not permitted in production.';
+    }
+  }
+  return null;
 }
 
 function getEmailConfigError(env) {
@@ -1761,7 +1797,7 @@ async function callCharmBackendService(payload, env) {
   if (!charmSecret) {
     throw new Error('CHARM_SERVICE_SECRET_UNSET');
   }
-  let backendUrl = (env && (env.CHARM_SERVICE_URL || env.BACKEND_API_URL || '')).trim();
+  let backendUrl = (env && env.CHARM_SERVICE_URL ? env.CHARM_SERVICE_URL : '').trim();
   if (!backendUrl) {
     throw new Error('CHARM_BACKEND_URL_UNSET');
   }
@@ -1947,6 +1983,15 @@ export default {
       try {
         const body = await request.json().catch(() => ({}));
         const clientIp = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || '127.0.0.1';
+
+        // 0. Production Turnstile Configuration Guard
+        const turnstileConfigErr = getTurnstileConfigError(env);
+        if (turnstileConfigErr) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: turnstileConfigErr
+          }), { status: 503, headers: corsHeaders });
+        }
 
         // 1. Turnstile Check
         const turnstileToken = (body.turnstile_token || request.headers.get('cf-turnstile-response') || '').trim();
@@ -2987,7 +3032,7 @@ export default {
       visitorId = 'vis_' + Date.now() + '_' + getRandomHex(8);
       isNew = true;
     }
-    const ipSalt = (env && (env.CHARM_IP_HASH_SALT || env.IP_HASH_SALT)) || 'default_salt_charm_secure';
+    const ipSalt = (env && env.IP_HASH_SALT ? env.IP_HASH_SALT : '') || 'default_salt_charm_secure';
     const visitorHash = await sha256Hex(visitorId + ipSalt);
     return { visitorId, visitorHash, isNew };
   }
@@ -5622,6 +5667,15 @@ export default {
         return new Response(JSON.stringify({ error: 'Invalid JSON request body.' }), { status: 400, headers: corsHeaders });
       }
 
+      // 0. Production Turnstile Configuration Guard
+      const turnstileConfigErr = getTurnstileConfigError(env);
+      if (turnstileConfigErr) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: turnstileConfigErr
+        }), { status: 503, headers: corsHeaders });
+      }
+
       // 1. Turnstile Gate
       const turnstileToken = (body.turnstile_token || request.headers.get('cf-turnstile-response') || '').trim();
       const turnstileOk = await verifyTurnstileToken(env, turnstileToken, clientIp);
@@ -6471,7 +6525,7 @@ export default {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
 
-      // Fail-Closed Validation: Outside test environments, strictly require CHARM_IP_HASH_SALT and D1 DB binding
+      // Fail-Closed Validation: Outside test environments, strictly require IP_HASH_SALT and D1 DB binding
       const isTestEnv = Boolean(
         env && (
           env.ENVIRONMENT === 'local' ||
@@ -6481,7 +6535,7 @@ export default {
         )
       );
       if (!isTestEnv) {
-        if (!env || !env.CHARM_IP_HASH_SALT) {
+        if (!env || !env.IP_HASH_SALT) {
           return new Response(JSON.stringify({
             success: false,
             code: 'SERVICE_MISCONFIGURED',
@@ -6520,7 +6574,7 @@ export default {
       }
 
       // 3. Per-IP Daily Cap & Per-IP Burst Limit Check (Durable across isolates)
-      const ipSalt = (env && (env.CHARM_IP_HASH_SALT || env.IP_HASH_SALT)) || 'default_salt_charm_secure';
+      const ipSalt = (env && env.IP_HASH_SALT ? env.IP_HASH_SALT : '') || 'default_salt_charm_secure';
       const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
       const ipHash = await sha256Hex(clientIp + ipSalt);
 
@@ -6629,7 +6683,7 @@ export default {
       }
 
       // 5. Backend Configuration Validation & Fail-Closed Gate
-      const backendUrl = (env && (env.CHARM_SERVICE_URL || env.BACKEND_API_URL || '')).trim();
+      const backendUrl = (env && env.CHARM_SERVICE_URL ? env.CHARM_SERVICE_URL : '').trim();
       const charmSecret = (env && env.CHARM_SERVICE_SECRET || '').trim();
 
       if (!backendUrl) {

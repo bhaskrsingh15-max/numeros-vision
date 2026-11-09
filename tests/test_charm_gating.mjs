@@ -11,7 +11,7 @@
 // 4. Reserve-then-refund on model failure/timeout (500 returned, -1 reservation matched by +1 refund, balance preserved)
 // 5. LocalStorage tamper prevention (client cannot bypass 402 with nv_premium_token)
 // 6. Zero model calls at zero balance (assert model invocation count is strictly 0)
-// 7. Fail-closed security (missing CHARM_IP_HASH_SALT or D1 binding returns 503, kill-switch returns standardized pause message)
+// 7. Fail-closed security (missing IP_HASH_SALT or D1 binding returns 503, kill-switch returns standardized pause message)
 // 8. Verify + Webhook idempotency (unique ref_id prevents double credit grants)
 // 9. /login same-site relative returnTo validation (rejects absolute URLs, //host, javascript:)
 
@@ -37,7 +37,7 @@ const mockEnv = {
   RAZORPAY_KEY_ID: 'rzp_test_charm_123',
   RAZORPAY_KEY_SECRET: 'test_rzp_secret',
   SESSION_SECRET: 'mock_test_session_secret_key_123',
-  CHARM_IP_HASH_SALT: 'test_charm_salt_secret_123',
+  IP_HASH_SALT: 'test_charm_salt_secret_123',
   CHARM_GLOBAL_DAILY_CAP: '100',
   CHARM_SERVICE_URL: 'https://preview-service.internal',
   CHARM_SERVICE_SECRET: 'test_mock_charm_service_secret'
@@ -205,7 +205,7 @@ async function runTests() {
     const envWithDb = { ...mockEnv, DB: realDb };
 
     const visitorId = 'vis_parallel_guest_real_sqlite_001';
-    const ipSalt = envWithDb.CHARM_IP_HASH_SALT;
+    const ipSalt = envWithDb.IP_HASH_SALT;
     const visitorHash = crypto.createHash('sha256').update(visitorId + ipSalt).digest('hex');
 
     // Seed guest usage in real SQLite with exactly 2 questions used
@@ -423,7 +423,7 @@ async function runTests() {
     console.log('[TEST 7] Testing Fail-Closed Security & Kill-Switch Message...');
     resetMemory();
 
-    // 1. Missing CHARM_IP_HASH_SALT outside test environment -> HTTP 503
+    // 1. Missing IP_HASH_SALT outside test environment -> HTTP 503
     const prodEnvMissingSalt = {
       ENVIRONMENT: 'production',
       MOCK_PAYMENTS: 'false',
@@ -444,7 +444,7 @@ async function runTests() {
     const prodEnvMissingDb = {
       ENVIRONMENT: 'production',
       MOCK_PAYMENTS: 'false',
-      CHARM_IP_HASH_SALT: 'configured_prod_salt'
+      IP_HASH_SALT: 'configured_prod_salt'
     };
 
     const req2 = new Request('https://numerosvision.com/api/charm/chat', {
@@ -633,7 +633,7 @@ async function runTests() {
     `).run('crd_seed_step_a', userId, 'order_step_a', Date.now());
 
     // ── 1. Backend URL Unset (Signed-in User) ──
-    const envNoBackendUrl = { ...envWithDb, CHARM_SERVICE_URL: '', BACKEND_API_URL: '' };
+    const envNoBackendUrl = { ...envWithDb, CHARM_SERVICE_URL: '' };
     const reqNoBackend = new Request('https://numerosvision.com/api/charm/chat', {
       method: 'POST',
       headers: {
@@ -659,7 +659,7 @@ async function runTests() {
 
     // ── 2. Backend URL Unset (Guest) ──
     const guestVisitorId = 'vis_step_a_guest_no_backend';
-    const guestVisitorHash = crypto.createHash('sha256').update(guestVisitorId + mockEnv.CHARM_IP_HASH_SALT).digest('hex');
+    const guestVisitorHash = crypto.createHash('sha256').update(guestVisitorId + mockEnv.IP_HASH_SALT).digest('hex');
     const reqGuestNoBackend = new Request('https://numerosvision.com/api/charm/chat', {
       method: 'POST',
       headers: {
@@ -700,7 +700,7 @@ async function runTests() {
 
     // ── 4. CHARM_SERVICE_SECRET Unset (Guest) ──
     const guestVisitorId2 = 'vis_step_a_guest_no_secret';
-    const guestVisitorHash2 = crypto.createHash('sha256').update(guestVisitorId2 + mockEnv.CHARM_IP_HASH_SALT).digest('hex');
+    const guestVisitorHash2 = crypto.createHash('sha256').update(guestVisitorId2 + mockEnv.IP_HASH_SALT).digest('hex');
     const reqGuestNoSecret = new Request('https://numerosvision.com/api/charm/chat', {
       method: 'POST',
       headers: {

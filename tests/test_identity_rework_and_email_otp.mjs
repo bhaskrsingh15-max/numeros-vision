@@ -251,8 +251,7 @@ async function runIdentityReworkTests() {
   await worker.fetch(charmReq, {
     ...baseEnv,
     CHARM_SERVICE_SECRET: 'preview_charm_secret_mock',
-    CHARM_IP_HASH_SALT: 'test_charm_salt_1234567890'
-  }, {});
+      }, {});
   console.log('  ✓ Unverified email strictly restricted from accessing account credits');
   passCount++;
 
@@ -399,6 +398,67 @@ async function runIdentityReworkTests() {
     console.log(`    ✓ Verified 503 fail-closed on send-code & resend-link when ${tc.name}`);
   }
   console.log('  ✓ Email adapter strictly fails closed on missing environment configuration outside tests');
+  passCount++;
+
+  // ---------------------------------------------------------------------------
+  // TEST 11: Production Turnstile Guard (test keys or missing site key return 503)
+  // ---------------------------------------------------------------------------
+  console.log('[TEST 11] Testing Production Turnstile guard on send-code and resend-link...');
+  const baseProdTurnstileEnv = {
+    ...baseEnv,
+    ENVIRONMENT: 'production',
+    EMAIL_PROVIDER: 'resend',
+    EMAIL_API_KEY: 're_mock_valid_api_key_123',
+    EMAIL_FROM: 'support@numerosvision.com',
+    NV_EMAIL_LOG_ADAPTER: 'true'
+  };
+
+  const prodTurnstileCases = [
+    {
+      name: 'TURNSTILE_SITE_KEY is missing',
+      env: { ...baseProdTurnstileEnv, TURNSTILE_SITE_KEY: '', TURNSTILE_SECRET_KEY: 'live_secret_turnstile_prod' }
+    },
+    {
+      name: 'TURNSTILE_SITE_KEY is Cloudflare test key',
+      env: { ...baseProdTurnstileEnv, TURNSTILE_SITE_KEY: '1x00000000000000000000AA', TURNSTILE_SECRET_KEY: 'live_secret_turnstile_prod' }
+    },
+    {
+      name: 'TURNSTILE_SECRET_KEY is missing',
+      env: { ...baseProdTurnstileEnv, TURNSTILE_SITE_KEY: 'live_site_turnstile_prod', TURNSTILE_SECRET_KEY: '' }
+    },
+    {
+      name: 'TURNSTILE_SECRET_KEY is Cloudflare test key',
+      env: { ...baseProdTurnstileEnv, TURNSTILE_SITE_KEY: 'live_site_turnstile_prod', TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA' }
+    }
+  ];
+
+  for (const tc of prodTurnstileCases) {
+    // 1. send-code must return 503
+    const reqSend = new Request('http://localhost/api/v1/auth/email/send-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.77.1' },
+      body: JSON.stringify({ email: 'prodtest@example.com', turnstile_token: 'valid_token' })
+    });
+    const resSend = await worker.fetch(reqSend, tc.env, {});
+    assert.strictEqual(resSend.status, 503, `send-code must return 503 in production when ${tc.name}`);
+    const dataSend = await resSend.json();
+    assert.strictEqual(dataSend.success, false);
+    assert(dataSend.error.toLowerCase().includes('turnstile'));
+
+    // 2. resend-link must return 503
+    const reqResend = new Request('http://localhost/api/planner-2027/resend-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.77.2' },
+      body: JSON.stringify({ order_id: 'ord_p27_mock_delivered', email: 'user@example.com', turnstile_token: 'valid_token' })
+    });
+    const resResend = await worker.fetch(reqResend, tc.env, {});
+    assert.strictEqual(resResend.status, 503, `resend-link must return 503 in production when ${tc.name}`);
+    const dataResend = await resResend.json();
+    assert.strictEqual(dataResend.success, false);
+    assert(dataResend.error.toLowerCase().includes('turnstile'));
+    console.log(`    ✓ Verified 503 on send-code & resend-link when ${tc.name}`);
+  }
+  console.log('  ✓ Production Turnstile security guard verified across all invalid/test key variants');
   passCount++;
 
   console.log(`\n[SUCCESS] All ${passCount} Identity Rework & Email OTP test cases passed cleanly!`);
