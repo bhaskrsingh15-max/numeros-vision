@@ -465,6 +465,14 @@ async function verifyCheckoutToken(secret, email, token) {
   return timingSafeEqual(expectedSig, sig);
 }
 
+async function getOrderTokenSecret(env) {
+  if (env && typeof env.DOWNLOAD_TOKEN_SECRET === 'string' && env.DOWNLOAD_TOKEN_SECRET.trim()) {
+    return env.DOWNLOAD_TOKEN_SECRET.trim();
+  }
+  const baseSecret = (env && (env.SESSION_SECRET || env.JWT_SECRET)) ? (env.SESSION_SECRET || env.JWT_SECRET).trim() : 'nv_order_token_salt_domain_sep';
+  return await hmacSha256Hex(baseSecret, 'numeros-vision:order-access-token:v1');
+}
+
 async function signOrderAccessToken(secret, orderId, expiresAt) {
   const payload = `${orderId}:${expiresAt}`;
   const sig = await hmacSha256Hex(secret, payload);
@@ -484,9 +492,12 @@ async function verifyOrderAccessToken(secret, orderId, token) {
 
 async function verifyTurnstileToken(env, token, clientIp) {
   const currentEnv = ((env && env.ENVIRONMENT) || 'production').toLowerCase().trim();
-  const isPreviewOrDev = currentEnv === 'preview' || currentEnv === 'test' || currentEnv === 'local';
+  const isTestOrLocal = currentEnv === 'test' || currentEnv === 'local';
+  const isPreviewOrDev = currentEnv === 'preview' || isTestOrLocal;
 
-  if (isPreviewOrDev) {
+  // test_turnstile_pass and test token prefix are strictly restricted to test and local.
+  // On preview, verification must rely on siteverify with Cloudflare test secret.
+  if (isTestOrLocal) {
     if (!token && currentEnv === 'test' && (!env.TURNSTILE_SECRET_KEY || isCloudflareTestKey(env.TURNSTILE_SECRET_KEY))) return true;
     if (token === 'test_turnstile_pass' || (typeof token === 'string' && token.startsWith('1x0000000000000000000000000000000AA'))) {
       return true;
@@ -849,7 +860,7 @@ function getPackById(packId) {
  * Used by both /api/v1/payments/verify and /api/v1/payments/webhook.
  * Reads pack and subject strictly from D1 order. Fulfills even if status is EXPIRED (late UPI).
  */
-async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now, source) {
+async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now, source, request) {
   if (order.status === 'PAID') {
     return { alreadyFulfilled: true, orderId: order.id, packId: order.pack_id, subjectId: order.subject_id };
   }
@@ -1012,15 +1023,37 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
 
   if (customerEmail && customerEmail.includes('@')) {
     const packName = pack ? pack.name : 'Numerology Report';
-    const sessionSecret = env.SESSION_SECRET ? env.SESSION_SECRET.trim() : '';
+    const orderTokenSecret = await getOrderTokenSecret(env);
     const tokenExpiresAt = now + (30 * 24 * 60 * 60 * 1000); // 30-day time-bound token
     let orderToken = '';
-    if (sessionSecret) {
-      orderToken = await signOrderAccessToken(sessionSecret, order.id, tokenExpiresAt);
+    if (orderTokenSecret) {
+      orderToken = await signOrderAccessToken(orderTokenSecret, order.id, tokenExpiresAt);
     }
+    
+    // Dynamic Base URL: PUBLIC_BASE_URL -> request origin -> Origin header -> fallback
+    let baseUrl = '';
+    if (env && typeof env.PUBLIC_BASE_URL === 'string' && env.PUBLIC_BASE_URL.trim()) {
+      baseUrl = env.PUBLIC_BASE_URL.trim().replace(/\/+$/, '');
+    } else if (request && request.url) {
+      try {
+        baseUrl = new URL(request.url).origin;
+      } catch (e) {
+        baseUrl = '';
+      }
+    }
+    if (!baseUrl && request && request.headers) {
+      const originHeader = request.headers.get('Origin');
+      if (originHeader) {
+        try { baseUrl = new URL(originHeader).origin; } catch (e) {}
+      }
+    }
+    if (!baseUrl) {
+      baseUrl = 'https://numerosvision.com';
+    }
+
     const orderLink = orderToken
-      ? `https://numerosvision.com/dashboard/?order_id=${encodeURIComponent(order.id)}&token=${encodeURIComponent(orderToken)}`
-      : `https://numerosvision.com/dashboard/?order_id=${encodeURIComponent(order.id)}`;
+      ? `${baseUrl}/dashboard/?order_id=${encodeURIComponent(order.id)}&token=${encodeURIComponent(orderToken)}`
+      : `${baseUrl}/dashboard/?order_id=${encodeURIComponent(order.id)}`;
     const emailSubject = `Order Confirmation: Your ${packName} · Numeros Vision`;
     const emailText = `Thank you for your order with Numeros Vision.\n\nOrder ID: ${order.id}\nProduct: ${packName}\n\nYour personalized dossier is being prepared deterministically. You can view your order status and access your report directly on your private dashboard:\n${orderLink}\n\nIf you have any questions, write to support@numerosvision.com.`;
     const emailHtml = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:540px;margin:0 auto;padding:32px 24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:14px;color:#523E28;">
@@ -1969,6 +2002,7 @@ export {
   doesReportExistOrWasServed,
   fulfillPaidOrder,
   mintUserSession,
+  getOrderTokenSecret,
   signOrderAccessToken,
   verifyOrderAccessToken,
   verifyTurnstileToken,
@@ -4201,7 +4235,7 @@ export default {
         }), { status: 400, headers: corsHeaders });
       }
 
-      let fulfillRes = await fulfillPaidOrder(order, rzpPaymentId, order.amount_paise, 'online', env, now, 'checkout_verify');
+      let fulfillRes = await fulfillPaidOrder(order, rzpPaymentId, order.amount_paise, 'online', env, now, 'checkout_verify', request);
       if (fulfillRes && fulfillRes.jobId && ctx && typeof ctx.waitUntil === 'function') {
         ctx.waitUntil(
           dispatchReportJob(fulfillRes.jobId, env).catch(err => console.error('[Verify_WaitUntil_Dispatch_Error]', err))
@@ -4675,18 +4709,19 @@ export default {
         'Access-Control-Allow-Origin': getCorsOrigin(request, env),
         'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Cookie'
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Cookie',
+        'Referrer-Policy': 'no-referrer'
       };
 
       const user = await authenticateUser(request, env);
       const queryOrderId = (url.searchParams.get('order_id') || '').trim();
       const queryToken = (url.searchParams.get('token') || url.searchParams.get('order_token') || '').trim();
-      const sessionSecret = env.SESSION_SECRET ? env.SESSION_SECRET.trim() : '';
+      const orderTokenSecret = await getOrderTokenSecret(env);
 
       let tokenOrder = null;
       if (!user) {
-        if (queryOrderId && queryToken && sessionSecret) {
-          const isValid = await verifyOrderAccessToken(sessionSecret, queryOrderId, queryToken);
+        if (queryOrderId && queryToken && orderTokenSecret) {
+          const isValid = await verifyOrderAccessToken(orderTokenSecret, queryOrderId, queryToken);
           if (isValid) {
             if (env.DB) {
               tokenOrder = await env.DB.prepare('SELECT * FROM orders WHERE id = ?').bind(queryOrderId).first();
@@ -5058,7 +5093,7 @@ export default {
         }
 
         // Fulfill payment (handles CREATED, pending, or EXPIRED late UPI payments)
-        const fulfillRes = await fulfillPaidOrder(order, paymentId, amountPaise, paymentEntity.method || 'card', env, now, 'webhook');
+        const fulfillRes = await fulfillPaidOrder(order, paymentId, amountPaise, paymentEntity.method || 'card', env, now, 'webhook', request);
         // Acknowledge Razorpay webhook immediately and run PDF report dispatch in background via ctx.waitUntil
         if (fulfillRes && fulfillRes.jobId && ctx && typeof ctx.waitUntil === 'function') {
           ctx.waitUntil(
@@ -7345,6 +7380,16 @@ export default {
       }), { status: 200, headers: corsHeaders });
     }
 
+      if (url.pathname === '/dashboard' || url.pathname === '/dashboard/' || url.pathname.startsWith('/dashboard/')) {
+        const assetResp = await env.ASSETS.fetch(request);
+        const headers = new Headers(assetResp.headers);
+        headers.set('Referrer-Policy', 'no-referrer');
+        return new Response(assetResp.body, {
+          status: assetResp.status,
+          statusText: assetResp.statusText,
+          headers
+        });
+      }
       return env.ASSETS.fetch(request);
   }
 };

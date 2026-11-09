@@ -733,7 +733,8 @@ async function runTests() {
 
     // D. Valid signed token shows ONLY that order
     const validExpiry = Date.now() + (30 * 24 * 60 * 60 * 1000);
-    const validOrderToken = await workerModule.signOrderAccessToken(testSecret, internalOrderId, validExpiry);
+    const orderTokenSecret = await workerModule.getOrderTokenSecret(lifecycleEnv);
+    const validOrderToken = await workerModule.signOrderAccessToken(orderTokenSecret, internalOrderId, validExpiry);
     
     // Plant a second order in memoryStore to ensure strict single-order scoping
     const secondOrderId = 'ord_other_seeker_999';
@@ -768,6 +769,70 @@ async function runTests() {
     const healthProdRes = await worker.fetch(healthProdReq, { ENVIRONMENT: 'production', TURNSTILE_SECRET_KEY: 'live_prod_key' }, {});
     const healthProdData = await healthProdRes.json();
     assert(healthProdData.turnstile_fallback_active === false, 'Health probe reports turnstile_fallback_active=false on production with live secret');
+
+    // F. Preview email links to preview origin (never hardcoded)
+    const emailCaptureEnv = {
+      ...lifecycleEnv,
+      ENVIRONMENT: 'preview',
+      NV_EMAIL_LOG_ADAPTER: 'true',
+      DB: null
+    };
+    const previewOrder = {
+      id: 'ord_preview_origin_test',
+      pack_id: 'report_basic',
+      user_id: 'usr_preview_123',
+      subject_id: 'sbj_preview_123',
+      email: 'preview_user@numerosvision.com',
+      amount_paise: 19900
+    };
+    const previewReq = new Request('https://preview-stage-b.numerosvision.pages.dev/api/v1/payments/verify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'https://preview-stage-b.numerosvision.pages.dev' }
+    });
+    
+    await workerModule.fulfillPaidOrder(previewOrder, 'pay_prev_1', 19900, 'online', emailCaptureEnv, Date.now(), 'verify', previewReq);
+    const sentEmails = mStore.sentEmails || [];
+    const previewSentEmail = sentEmails.find(e => e.to === 'preview_user@numerosvision.com');
+    assert(previewSentEmail && previewSentEmail.text.includes('https://preview-stage-b.numerosvision.pages.dev/dashboard/'), 'Order email links to preview origin when request originates from preview');
+
+    // G. Turnstile preview restriction: rejects test_turnstile_pass without siteverify
+    const previewTurnstilePass = await workerModule.verifyTurnstileToken(
+      { ENVIRONMENT: 'preview', TURNSTILE_SECRET_KEY: '1x0000000000000000000000000000000AA' },
+      'test_turnstile_pass',
+      '127.0.0.1'
+    );
+    assert(previewTurnstilePass === false, 'Preview environment does NOT short-circuit test_turnstile_pass without Cloudflare siteverify');
+
+    // H. Turnstile test/local acceptance: accepts test_turnstile_pass in test environment
+    const testTurnstilePass = await workerModule.verifyTurnstileToken(
+      { ENVIRONMENT: 'test' },
+      'test_turnstile_pass',
+      '127.0.0.1'
+    );
+    assert(testTurnstilePass === true, 'Test environment permits test_turnstile_pass');
+
+    // I. Dashboard Referrer-Policy and HTML verification
+    const dashAssetReq = new Request('https://numerosvision.com/dashboard/', {
+      method: 'GET',
+      headers: { 'Accept': 'text/html' }
+    });
+    const dashAssetRes = await worker.fetch(dashAssetReq, lifecycleEnv, {});
+    assert(dashAssetRes.headers.get('referrer-policy') === 'no-referrer', 'Dashboard page route returns Referrer-Policy: no-referrer');
+    assert(linkValidRes.headers.get('referrer-policy') === 'no-referrer', 'Dashboard view API returns Referrer-Policy: no-referrer');
+
+    const fsModule = await import('fs');
+    const dashHtmlContent = fsModule.readFileSync('app/static/dashboard.html', 'utf8');
+    assert(dashHtmlContent.includes('<meta name="referrer" content="no-referrer" />'), 'dashboard.html contains <meta name="referrer" content="no-referrer" />');
+
+    // J. Login HTML hides Password tab
+    const loginHtmlContent = fsModule.readFileSync('app/static/login.html', 'utf8');
+    assert(loginHtmlContent.includes('id="tabPasswordBtn" style="display:none;"'), 'login.html has Password tab hidden');
+
+    // K. Verify analytics telemetry strictly strips token queries
+    const marketingAnalyticsJs = fsModule.readFileSync('app/static/js/marketing-analytics.js', 'utf8');
+    assert(!marketingAnalyticsJs.includes("'token'"), 'marketing-analytics does not allowlist token parameter');
+    assert(!marketingAnalyticsJs.includes("'order_token'"), 'marketing-analytics does not allowlist order_token parameter');
+    assert(!marketingAnalyticsJs.includes("'checkout_token'"), 'marketing-analytics does not allowlist checkout_token parameter');
 
     globalThis.fetch = lifecycleOriginalFetch;
   } catch (err) {
