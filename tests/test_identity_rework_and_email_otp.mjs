@@ -7,6 +7,7 @@ async function runIdentityReworkTests() {
 
   const baseEnv = {
     ENVIRONMENT: 'test',
+    NV_EMAIL_LOG_ADAPTER: 'true',
     OTP_HMAC_SECRET: 'test_otp_hmac_secret_32bytes_hex00000000000000000000000000000000',
     SESSION_SECRET: 'test_session_secret_32bytes_hex00000000000000000000000000000000',
     IP_HASH_SALT: 'test_ip_hash_salt_hex00000000000000000000000000000000',
@@ -345,6 +346,59 @@ async function runIdentityReworkTests() {
   assert(consentData.version.includes('{{CONSENT_TEXT_PENDING}}'));
 
   console.log('  ✓ Daily cap kill-switch, per-email & per-IP limits and statutory consents verified');
+  passCount++;
+
+  // ---------------------------------------------------------------------------
+  // TEST 10: Fail-closed email adapter outside test flag (Missing EMAIL_PROVIDER, EMAIL_API_KEY, EMAIL_FROM)
+  // ---------------------------------------------------------------------------
+  console.log('[TEST 10] Testing fail-closed email adapter outside tests (send-code and resend-link)...');
+  const baseLiveEnv = {
+    ...baseEnv
+  };
+  delete baseLiveEnv.NV_EMAIL_LOG_ADAPTER;
+
+  const testCases = [
+    {
+      name: 'EMAIL_PROVIDER missing',
+      env: { ...baseLiveEnv, EMAIL_PROVIDER: '', EMAIL_API_KEY: 'test_key', EMAIL_FROM: 'support@numerosvision.com' }
+    },
+    {
+      name: 'EMAIL_API_KEY missing',
+      env: { ...baseLiveEnv, EMAIL_PROVIDER: 'resend', EMAIL_API_KEY: '', EMAIL_FROM: 'support@numerosvision.com' }
+    },
+    {
+      name: 'EMAIL_FROM missing',
+      env: { ...baseLiveEnv, EMAIL_PROVIDER: 'resend', EMAIL_API_KEY: 'test_key', EMAIL_FROM: '' }
+    }
+  ];
+
+  for (const tc of testCases) {
+    // 1. send-code must fail closed with 503 and dispatch nothing
+    const sendCodeReq = new Request('http://localhost/api/v1/auth/email/send-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.99.1' },
+      body: JSON.stringify({ email: 'failclosed@example.com', turnstile_token: 'test_turnstile_pass' })
+    });
+    const sendCodeRes = await worker.fetch(sendCodeReq, tc.env, {});
+    assert.strictEqual(sendCodeRes.status, 503, `send-code must return 503 when ${tc.name}`);
+    const sendCodeData = await sendCodeRes.json();
+    assert.strictEqual(sendCodeData.success, false);
+    assert(sendCodeData.error.includes('configured') || sendCodeData.error.includes('missing'));
+
+    // 2. resend-link must fail closed with 503 and dispatch nothing
+    const resendReq = new Request('http://localhost/api/planner-2027/resend-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.99.2' },
+      body: JSON.stringify({ order_id: 'ord_p27_mock_delivered', email: 'user@example.com', turnstile_token: 'test_turnstile_pass' })
+    });
+    const resendRes = await worker.fetch(resendReq, tc.env, {});
+    assert.strictEqual(resendRes.status, 503, `resend-link must return 503 when ${tc.name}`);
+    const resendData = await resendRes.json();
+    assert.strictEqual(resendData.success, false);
+    assert(resendData.error.includes('configured') || resendData.error.includes('missing'));
+    console.log(`    ✓ Verified 503 fail-closed on send-code & resend-link when ${tc.name}`);
+  }
+  console.log('  ✓ Email adapter strictly fails closed on missing environment configuration outside tests');
   passCount++;
 
   console.log(`\n[SUCCESS] All ${passCount} Identity Rework & Email OTP test cases passed cleanly!`);

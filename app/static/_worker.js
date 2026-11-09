@@ -491,38 +491,57 @@ async function checkAndIncrementEmailDailyCap(env) {
   return { allowed: true, count: current + 1, cap };
 }
 
+function getEmailConfigError(env) {
+  const isTestLogAdapter = env && (env.NV_EMAIL_LOG_ADAPTER === 'true' || env.NV_EMAIL_LOG_ADAPTER === true);
+  if (isTestLogAdapter) {
+    return null;
+  }
+  if (!env || !env.EMAIL_PROVIDER || !env.EMAIL_PROVIDER.trim()) {
+    return 'Transactional email provider is not configured (EMAIL_PROVIDER missing).';
+  }
+  if (!env || !env.EMAIL_API_KEY || !env.EMAIL_API_KEY.trim()) {
+    return 'Transactional email API key is not configured (EMAIL_API_KEY missing).';
+  }
+  if (!env || !env.EMAIL_FROM || !env.EMAIL_FROM.trim()) {
+    return 'Transactional email sender address is not configured (EMAIL_FROM missing).';
+  }
+  return null;
+}
+
 async function sendTransactionalEmail(env, { to, subject, text, html }) {
   const capCheck = await checkAndIncrementEmailDailyCap(env);
   if (!capCheck.allowed) {
     return {
       success: false,
+      status: capCheck.reason === 'kill_switch' ? 503 : 429,
       error: capCheck.reason === 'kill_switch' 
         ? 'Email service is temporarily paused via administrative controls.' 
         : 'Daily email delivery quota reached.'
     };
   }
 
-  const provider = ((env && env.EMAIL_PROVIDER) || 'logging').toLowerCase().trim();
-  const apiKey = (env && env.EMAIL_API_KEY) ? env.EMAIL_API_KEY.trim() : '';
-  const from = ((env && env.EMAIL_FROM) || 'Numeros Vision <support@numerosvision.com>').trim();
-
-  // Test / Local / Mock logging adapter
-  if (provider === 'logging' || provider === 'test' || provider === 'mock' || (env && env.ENVIRONMENT === 'test')) {
+  const isTestLogAdapter = env && (env.NV_EMAIL_LOG_ADAPTER === 'true' || env.NV_EMAIL_LOG_ADAPTER === true);
+  if (isTestLogAdapter) {
     memoryStore.sentEmails = memoryStore.sentEmails || [];
     memoryStore.sentEmails.push({
       to,
       subject,
       text,
       html,
-      from,
+      from: (env && env.EMAIL_FROM) ? env.EMAIL_FROM.trim() : 'logging@numerosvision.internal',
       sent_at: Date.now()
     });
     return { success: true, provider: 'logging', id: 'log_' + Date.now() };
   }
 
-  if (!apiKey) {
-    return { success: false, error: `EMAIL_API_KEY is not configured for provider ${provider}.` };
+  const configError = getEmailConfigError(env);
+  if (configError) {
+    return { success: false, status: 503, error: configError };
   }
+
+  const provider = env.EMAIL_PROVIDER.toLowerCase().trim();
+  const apiKey = env.EMAIL_API_KEY.trim();
+  const from = env.EMAIL_FROM.trim();
 
   if (provider === 'resend') {
     const res = await fetch('https://api.resend.com/emails', {
@@ -2000,7 +2019,16 @@ export default {
           memoryStore.emailHistory.push({ email_hash: emailHash, ip_hash: ipHash, created_at: now });
         }
 
-        // 4. Generate 6-digit code, 10-minute expiry, keyed HMAC hash
+        // 4. Check email adapter configuration (fail closed if missing outside test adapter)
+        const emailConfigErr = getEmailConfigError(env);
+        if (emailConfigErr) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: emailConfigErr
+          }), { status: 503, headers: corsHeaders });
+        }
+
+        // 5. Generate 6-digit code, 10-minute expiry, keyed HMAC hash
         const randomArr = new Uint32Array(1);
         crypto.getRandomValues(randomArr);
         const otpCode = (100000 + (randomArr[0] % 900000)).toString();
@@ -2008,7 +2036,7 @@ export default {
         const expiresAt = now + 10 * 60 * 1000; // 10 minutes
         const challengeId = 'eotp_' + now + '_' + getRandomHex(4);
 
-        // 5. Send Email via Transactional Adapter (Plain text + minimal HTML, no promotional text)
+        // 6. Send Email via Transactional Adapter (Plain text + minimal HTML, no promotional text)
         const emailSubject = `Your Numeros Vision Verification Code: ${otpCode}`;
         const emailText = `Your Numeros Vision verification code is: ${otpCode}\n\nThis single-use code expires in 10 minutes. If you did not request this, you can safely ignore this message.`;
         const emailHtml = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:12px;color:#523E28;">
@@ -5607,6 +5635,12 @@ export default {
       // 2. Rate-Limiting per IP and per Email
       if (!checkFormRateLimit('resend_link_ip_' + clientIp, 5, 900000) || (email && !checkFormRateLimit('resend_link_em_' + email, 5, 900000))) {
         return new Response(JSON.stringify({ error: 'Too many resend attempts. Please wait 15 minutes.' }), { status: 429, headers: corsHeaders });
+      }
+
+      // 3. Email Adapter Fail-Closed Verification
+      const emailConfigErr = getEmailConfigError(env);
+      if (emailConfigErr) {
+        return new Response(JSON.stringify({ success: false, error: emailConfigErr }), { status: 503, headers: corsHeaders });
       }
 
       const neutralResponse = {

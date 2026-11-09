@@ -24,6 +24,7 @@ async function runWorkerTestSuite() {
 
   const baseEnv = {
     ENVIRONMENT: 'local',
+    NV_EMAIL_LOG_ADAPTER: 'true',
     MOCK_PAYMENTS: 'true',
     RAZORPAY_KEY_ID: 'rzp_test_12345678',
     RAZORPAY_KEY_SECRET: 'test_rzp_secret_key',
