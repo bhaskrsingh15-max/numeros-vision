@@ -5182,8 +5182,6 @@
             checkout_token: _reportsCheckoutToken
           })
         });
-          })
-        });
 
         const orderData = await orderRes.json();
         if (!orderRes.ok || !orderData.order_id || !orderData.rzp_order_id) {
