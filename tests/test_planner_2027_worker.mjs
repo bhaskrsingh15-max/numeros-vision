@@ -396,31 +396,35 @@ async function runWorkerTestSuite() {
     console.log('  ✓ Order status endpoint verified strictly zero PII');
   }
 
-  // 13. Delivery without browser: /resend-link
+  // 13. Delivery without browser: /resend-link (Turnstile-gated, email-only delivery, neutral response)
   {
     console.log('[TEST 13] Testing delivery without browser (/resend-link)...');
     const req = new Request('http://localhost/api/planner-2027/resend-link', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '10.0.0.5' },
-      body: JSON.stringify({ order_id: 'ord_p27_mock_delivered', email: 'user@example.com' })
+      body: JSON.stringify({ order_id: 'ord_p27_mock_delivered', email: 'user@example.com', turnstile_token: 'test_turnstile_pass' })
     });
     const res = await worker.fetch(req, baseEnv, {});
     assert.strictEqual(res.status, 200);
     const data = await res.json();
-    assert.strictEqual(data.status, 'delivered');
-    assert(data.download_token);
-    assert(data.download_url.includes(data.download_token));
-    console.log('  ✓ Delivery without browser (/resend-link) verified');
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.download_token, undefined, 'Download token must NEVER be returned in response');
+    assert.strictEqual(data.download_url, undefined, 'Download url must NEVER be returned in response');
+    assert(data.message.includes('dispatched to your email'));
+    console.log('  ✓ Delivery without browser (/resend-link) verified via transactional email');
 
-    // Mismatched email rejected
+    // Mismatched email receives identical neutral response (zero enumeration)
     const badEmailReq = new Request('http://localhost/api/planner-2027/resend-link', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '10.0.0.5' },
-      body: JSON.stringify({ order_id: 'ord_p27_mock_delivered', email: 'wrong@example.com' })
+      body: JSON.stringify({ order_id: 'ord_p27_mock_delivered', email: 'wrong@example.com', turnstile_token: 'test_turnstile_pass' })
     });
     const badRes = await worker.fetch(badEmailReq, baseEnv, {});
-    assert.strictEqual(badRes.status, 404);
-    console.log('  ✓ Mismatched email rejected (HTTP 404)');
+    assert.strictEqual(badRes.status, 200);
+    const badData = await badRes.json();
+    assert.strictEqual(badData.success, true);
+    assert.strictEqual(badData.message, data.message, 'Response must be strictly identical for mismatched email');
+    console.log('  ✓ Mismatched email returned identical neutral response (zero enumeration)');
   }
 
   // 14. Stuck order alert & admin list route

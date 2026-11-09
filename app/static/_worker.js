@@ -224,7 +224,11 @@ const memoryStore = {
   r2Objects: new Map(),
   planner2027Orders: new Map(),
   freeChatUsage: new Map(),
-  charmRateLimits: new Map()
+  charmRateLimits: new Map(),
+  emailOtpChallenges: new Map(),
+  emailRateLimits: new Map(),
+  userConsents: new Map(),
+  sentEmails: []
 };
 
 // In-memory sliding window rate limiter for public forms & telemetry (module-scoped)
@@ -261,7 +265,13 @@ async function getGoogleJwks() {
 function getSessionToken(request, env) {
   const hostCookie = getCookie(request, '__Host-nv_session');
   if (hostCookie) return hostCookie;
-  if (env && env.ENVIRONMENT === 'local') {
+  const userCookie = getCookie(request, 'nv_user_session');
+  if (userCookie) return userCookie;
+  const authHeader = request.headers.get('Authorization');
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.slice(7).trim();
+  }
+  if (env && (env.ENVIRONMENT === 'local' || env.ENVIRONMENT === 'test')) {
     return getCookie(request, 'nv_session');
   }
   return null;
@@ -366,6 +376,237 @@ async function authenticateUser(request, env) {
       return { user_id: sess.user_id, expires_at: sess.expires_at, email: sess.email || null };
     }
     return null;
+  }
+}
+
+async function mintUserSession(env, userId, clientIp, now) {
+  const sessionSecret = requireSecret(env, 'SESSION_SECRET');
+  const ipSalt = requireSecret(env, 'IP_HASH_SALT');
+  const rawToken = getRandomHex(32);
+  const tokenHash = await hmacSha256Hex(sessionSecret, rawToken);
+  const sessionExpiresAt = now + 30 * 24 * 3600 * 1000;
+  const ipHash = await hmacSha256Hex(ipSalt, clientIp || '127.0.0.1');
+
+  if (env && env.DB) {
+    await env.DB.prepare(
+      'INSERT INTO sessions (id, user_id, token_hash, expires_at, created_at, ip_hash, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    ).bind('sess_' + now + '_' + getRandomHex(4), userId, tokenHash, sessionExpiresAt, now, ipHash, 'EdgeWorker').run();
+  } else {
+    memoryStore.sessions.set(tokenHash, {
+      id: 'sess_' + now,
+      user_id: userId,
+      token_hash: tokenHash,
+      expires_at: sessionExpiresAt,
+      created_at: now
+    });
+  }
+  return rawToken;
+}
+
+function createSessionCookieHeader(rawToken, isLocal) {
+  const isSecure = !isLocal;
+  return `__Host-nv_session=${rawToken}; Path=/; HttpOnly; ${isSecure ? 'Secure; ' : ''}SameSite=Lax; Max-Age=2592000`;
+}
+
+async function mintCheckoutToken(secret, email, timestamp) {
+  const payload = `${email.toLowerCase().trim()}:${timestamp}`;
+  const sig = await hmacSha256Hex(secret, payload);
+  return `${timestamp}.${sig}`;
+}
+
+async function verifyCheckoutToken(secret, email, token) {
+  if (!token || typeof token !== 'string' || !token.includes('.')) return false;
+  const [tsStr, sig] = token.split('.');
+  const ts = parseInt(tsStr, 10);
+  if (!ts || isNaN(ts)) return false;
+  const now = Date.now();
+  // Valid for 30 minutes in checkout flow
+  if (now - ts > 1800000 || ts > now + 60000) return false;
+  const expectedSig = await hmacSha256Hex(secret, `${email.toLowerCase().trim()}:${ts}`);
+  return timingSafeEqual(expectedSig, sig);
+}
+
+async function verifyTurnstileToken(env, token, clientIp) {
+  if (env && (env.ENVIRONMENT === 'test' || env.ENVIRONMENT === 'local')) {
+    if (!token && env.ENVIRONMENT === 'test' && !env.TURNSTILE_SECRET_KEY) return true;
+    if (token === 'test_turnstile_pass' || (typeof token === 'string' && token.startsWith('1x0000000000000000000000000000000AA'))) {
+      return true;
+    }
+  }
+  if (!token || typeof token !== 'string') return false;
+  const secretKey = env && env.TURNSTILE_SECRET_KEY ? env.TURNSTILE_SECRET_KEY.trim() : '';
+  if (!secretKey) {
+    if (env && (env.ENVIRONMENT === 'test' || env.ENVIRONMENT === 'local')) return true;
+    return false;
+  }
+  try {
+    const formData = new URLSearchParams();
+    formData.append('secret', secretKey);
+    formData.append('response', token.trim());
+    if (clientIp) formData.append('remoteip', clientIp);
+    const resp = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    });
+    const outcome = await resp.json().catch(() => ({}));
+    return Boolean(outcome && outcome.success);
+  } catch (err) {
+    console.error('[Turnstile_Error]', err);
+    return false;
+  }
+}
+
+async function checkAndIncrementEmailDailyCap(env) {
+  if (env && (env.EMAIL_KILL_SWITCH === 'true' || env.EMAIL_KILL_SWITCH === true)) {
+    return { allowed: false, reason: 'kill_switch' };
+  }
+  const cap = parseInt((env && env.EMAIL_DAILY_CAP) || '500', 10);
+  const todayKey = 'email_daily_' + new Date().toISOString().slice(0, 10);
+  if (env && env.DB) {
+    try {
+      const now = Date.now();
+      const expiresAt = now + 86400000;
+      const row = await env.DB.prepare('SELECT count FROM email_rate_limits WHERE key = ?').bind(todayKey).first();
+      const current = row ? row.count : 0;
+      if (current >= cap) {
+        return { allowed: false, reason: 'daily_cap_exceeded', count: current, cap };
+      }
+      await env.DB.prepare(`
+        INSERT INTO email_rate_limits (key, count, window_start, expires_at)
+        VALUES (?, 1, ?, ?)
+        ON CONFLICT(key) DO UPDATE SET count = count + 1
+      `).bind(todayKey, now, expiresAt).run();
+      return { allowed: true, count: current + 1, cap };
+    } catch (e) {
+      console.warn('[EmailCap_D1_Fallback]', e.message);
+    }
+  }
+  memoryStore.emailDailyCounts = memoryStore.emailDailyCounts || new Map();
+  const current = memoryStore.emailDailyCounts.get(todayKey) || 0;
+  if (current >= cap) {
+    return { allowed: false, reason: 'daily_cap_exceeded', count: current, cap };
+  }
+  memoryStore.emailDailyCounts.set(todayKey, current + 1);
+  return { allowed: true, count: current + 1, cap };
+}
+
+async function sendTransactionalEmail(env, { to, subject, text, html }) {
+  const capCheck = await checkAndIncrementEmailDailyCap(env);
+  if (!capCheck.allowed) {
+    return {
+      success: false,
+      error: capCheck.reason === 'kill_switch' 
+        ? 'Email service is temporarily paused via administrative controls.' 
+        : 'Daily email delivery quota reached.'
+    };
+  }
+
+  const provider = ((env && env.EMAIL_PROVIDER) || 'logging').toLowerCase().trim();
+  const apiKey = (env && env.EMAIL_API_KEY) ? env.EMAIL_API_KEY.trim() : '';
+  const from = ((env && env.EMAIL_FROM) || 'Numeros Vision <support@numerosvision.com>').trim();
+
+  // Test / Local / Mock logging adapter
+  if (provider === 'logging' || provider === 'test' || provider === 'mock' || (env && env.ENVIRONMENT === 'test')) {
+    memoryStore.sentEmails = memoryStore.sentEmails || [];
+    memoryStore.sentEmails.push({
+      to,
+      subject,
+      text,
+      html,
+      from,
+      sent_at: Date.now()
+    });
+    return { success: true, provider: 'logging', id: 'log_' + Date.now() };
+  }
+
+  if (!apiKey) {
+    return { success: false, error: `EMAIL_API_KEY is not configured for provider ${provider}.` };
+  }
+
+  if (provider === 'resend') {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject,
+        text,
+        html
+      })
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      return { success: false, error: `Resend dispatch failed: ${errText}` };
+    }
+    const data = await res.json().catch(() => ({}));
+    return { success: true, id: data.id };
+  }
+
+  if (provider === 'brevo') {
+    const senderEmail = from.includes('<') ? from.split('<')[1].replace('>', '').trim() : from;
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'api-key': apiKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        sender: { email: senderEmail, name: 'Numeros Vision' },
+        to: [{ email: to }],
+        subject,
+        textContent: text,
+        htmlContent: html
+      })
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      return { success: false, error: `Brevo dispatch failed: ${errText}` };
+    }
+    const data = await res.json().catch(() => ({}));
+    return { success: true, id: data.messageId };
+  }
+
+  return { success: false, error: `Unsupported email provider: ${provider}` };
+}
+
+async function recordUserConsent(env, userId, purpose, consentGiven, ipHash, now) {
+  const version = 'v1.0_placeholder_advocate_review';
+  if (env && env.DB) {
+    try {
+      await env.DB.prepare(
+        'INSERT INTO user_consents (id, user_id, purpose, consent_given, text_version, created_at, ip_hash) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      ).bind('cns_' + now + '_' + getRandomHex(4), userId, purpose, consentGiven ? 1 : 0, version, now, ipHash).run();
+    } catch (e) {
+      console.warn('[UserConsent_DB_Error]', e.message);
+    }
+  } else {
+    memoryStore.userConsents = memoryStore.userConsents || new Map();
+    const list = memoryStore.userConsents.get(userId) || [];
+    list.push({ purpose, consent_given: consentGiven ? 1 : 0, text_version: version, created_at: now, ip_hash: ipHash });
+    memoryStore.userConsents.set(userId, list);
+  }
+}
+
+async function canExportToCdp(env, userId) {
+  if (env && env.DB) {
+    try {
+      const row = await env.DB.prepare(
+        "SELECT consent_given FROM user_consents WHERE user_id = ? AND purpose = 'marketing_communications' ORDER BY created_at DESC LIMIT 1"
+      ).bind(userId).first();
+      return Boolean(row && row.consent_given === 1);
+    } catch (e) {
+      return false;
+    }
+  } else {
+    memoryStore.userConsents = memoryStore.userConsents || new Map();
+    const list = memoryStore.userConsents.get(userId) || [];
+    const latest = list.filter(c => c.purpose === 'marketing_communications').slice(-1)[0];
+    return Boolean(latest && latest.consent_given === 1);
   }
 }
 
@@ -1547,6 +1788,7 @@ export {
   memoryStore
 };
 export default {
+  memoryStore,
   async fetch(request, env, ctx) {
     try {
       const response = await this._handleRequest(request, env, ctx);
@@ -1671,7 +1913,338 @@ export default {
     }
 
 
-    // 1. ROUTE: SEND OTP (/api/v1/auth/otp/send)
+    // =========================================================================
+    // ROUTE: EMAIL OTP - SEND CODE (/api/v1/auth/email/send-code)
+    // Turnstile gated, durable rate limits, 6 digits, 10-min expiry, enumeration neutral
+    // =========================================================================
+    if (url.pathname === '/api/v1/auth/email/send-code' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, cf-turnstile-response'
+      };
+      try {
+        const body = await request.json().catch(() => ({}));
+        const clientIp = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || '127.0.0.1';
+
+        // 1. Turnstile Check
+        const turnstileToken = (body.turnstile_token || request.headers.get('cf-turnstile-response') || '').trim();
+        const turnstileOk = await verifyTurnstileToken(env, turnstileToken, clientIp);
+        if (!turnstileOk) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Cloudflare Turnstile verification failed. Please complete the security check.'
+          }), { status: 403, headers: corsHeaders });
+        }
+
+        // 2. Email Validation
+        const rawEmail = (body.email || body.identifier || '').toString().trim().toLowerCase();
+        if (!rawEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawEmail) || rawEmail.length > 120) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Please enter a valid email address.'
+          }), { status: 400, headers: corsHeaders });
+        }
+
+        const otpSecret = requireSecret(env, 'OTP_HMAC_SECRET');
+        const ipSalt = requireSecret(env, 'IP_HASH_SALT');
+        const emailHash = await hmacSha256Hex(otpSecret, rawEmail);
+        const ipHash = await hmacSha256Hex(ipSalt, clientIp);
+        const now = Date.now();
+
+        // 3. Durable Rate Limiting (5 requests per 15 min per email; 10 per 15 min per IP)
+        const window15m = 15 * 60 * 1000;
+        if (env.DB) {
+          try {
+            const recentEmail = await env.DB.prepare(
+              'SELECT COUNT(*) as cnt FROM email_otp_challenges WHERE email_hash = ? AND created_at > ?'
+            ).bind(emailHash, now - window15m).first();
+            if (recentEmail && recentEmail.cnt >= 5) {
+              return new Response(JSON.stringify({
+                success: false,
+                error: 'Maximum verification code requests exceeded for this email. Please try again in 15 minutes.'
+              }), { status: 429, headers: corsHeaders });
+            }
+
+            const recentIp = await env.DB.prepare(
+              'SELECT COUNT(*) as cnt FROM email_otp_challenges WHERE ip_hash = ? AND created_at > ?'
+            ).bind(ipHash, now - window15m).first();
+            if (recentIp && recentIp.cnt >= 10) {
+              return new Response(JSON.stringify({
+                success: false,
+                error: 'Rate limit exceeded for this IP. Please try again in 15 minutes.'
+              }), { status: 429, headers: corsHeaders });
+            }
+          } catch (e) {
+            console.warn('[D1_EmailRateLimit_Fallback]', e.message);
+          }
+        } else {
+          memoryStore.emailHistory = memoryStore.emailHistory || [];
+          memoryStore.emailHistory = memoryStore.emailHistory.filter(h => (now - h.created_at) < window15m);
+          const emailHist = memoryStore.emailHistory.filter(h => h.email_hash === emailHash);
+          if (emailHist.length >= 5) {
+            return new Response(JSON.stringify({
+              success: false,
+              error: 'Maximum verification code requests exceeded for this email. Please try again in 15 minutes.'
+            }), { status: 429, headers: corsHeaders });
+          }
+          const ipHist = memoryStore.emailHistory.filter(h => h.ip_hash === ipHash);
+          if (ipHist.length >= 10) {
+            return new Response(JSON.stringify({
+              success: false,
+              error: 'Rate limit exceeded for this IP. Please try again in 15 minutes.'
+            }), { status: 429, headers: corsHeaders });
+          }
+          memoryStore.emailHistory.push({ email_hash: emailHash, ip_hash: ipHash, created_at: now });
+        }
+
+        // 4. Generate 6-digit code, 10-minute expiry, keyed HMAC hash
+        const randomArr = new Uint32Array(1);
+        crypto.getRandomValues(randomArr);
+        const otpCode = (100000 + (randomArr[0] % 900000)).toString();
+        const codeHash = await hmacSha256Hex(otpSecret, `${rawEmail}:${otpCode}`);
+        const expiresAt = now + 10 * 60 * 1000; // 10 minutes
+        const challengeId = 'eotp_' + now + '_' + getRandomHex(4);
+
+        // 5. Send Email via Transactional Adapter (Plain text + minimal HTML, no promotional text)
+        const emailSubject = `Your Numeros Vision Verification Code: ${otpCode}`;
+        const emailText = `Your Numeros Vision verification code is: ${otpCode}\n\nThis single-use code expires in 10 minutes. If you did not request this, you can safely ignore this message.`;
+        const emailHtml = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:12px;color:#523E28;">
+  <div style="font-size:16px;font-weight:700;color:#8B6914;margin-bottom:12px;letter-spacing:0.04em;">NUMEROS VISION</div>
+  <p style="font-size:14px;line-height:1.5;margin:0 0 16px;">Here is your 6-digit verification code:</p>
+  <div style="font-size:28px;font-weight:700;letter-spacing:6px;color:#8B6914;background:#FAF6EE;border:1px solid rgba(201,162,39,0.25);border-radius:8px;padding:12px 18px;text-align:center;margin-bottom:16px;font-family:monospace;">${otpCode}</div>
+  <p style="font-size:12px;color:#7A654D;line-height:1.5;margin:0;">Valid for 10 minutes. Single-use only. Please never share this code.</p>
+</div>`;
+
+        const sendResult = await sendTransactionalEmail(env, {
+          to: rawEmail,
+          subject: emailSubject,
+          text: emailText,
+          html: emailHtml
+        });
+
+        if (!sendResult.success) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: sendResult.error || 'Email delivery failed. Please try again.'
+          }), { status: 503, headers: corsHeaders });
+        }
+
+        // 6. Record challenge in DB / Memory
+        if (env.DB) {
+          try {
+            await env.DB.prepare(
+              'INSERT INTO email_otp_challenges (id, email_hash, code_hash, attempts, max_attempts, expires_at, created_at, ip_hash) VALUES (?, ?, ?, 0, 5, ?, ?, ?)'
+            ).bind(challengeId, emailHash, codeHash, expiresAt, now, ipHash).run();
+          } catch (e) {
+            console.warn('[D1_EmailChallenge_Insert_Error]', e.message);
+          }
+        }
+        memoryStore.emailOtpChallenges = memoryStore.emailOtpChallenges || new Map();
+        memoryStore.emailOtpChallenges.set(emailHash, {
+          id: challengeId,
+          email_hash: emailHash,
+          code_hash: codeHash,
+          attempts: 0,
+          max_attempts: 5,
+          expires_at: expiresAt,
+          created_at: now,
+          ip_hash: ipHash
+        });
+
+        // 7. Enumeration Neutrality: Identical reply whether or not the account exists
+        return new Response(JSON.stringify({
+          success: true,
+          message: 'If this email address is valid, a 6-digit verification code has been dispatched.'
+        }), { status: 200, headers: corsHeaders });
+
+      } catch (err) {
+        return new Response(JSON.stringify({ success: false, error: err.message || 'Server error' }), {
+          status: 500,
+          headers: corsHeaders
+        });
+      }
+    }
+
+    // =========================================================================
+    // ROUTE: EMAIL OTP - VERIFY CODE (/api/v1/auth/email/verify-code)
+    // 5 attempts limit, 10m expiry, single use, mints checkout_token or session
+    // =========================================================================
+    if (url.pathname === '/api/v1/auth/email/verify-code' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      };
+      try {
+        const body = await request.json().catch(() => ({}));
+        const rawEmail = (body.email || body.identifier || '').toString().trim().toLowerCase();
+        const code = (body.code || body.otp || '').toString().trim();
+        const checkoutFlow = Boolean(body.checkout_flow);
+
+        if (!rawEmail || !code || code.length !== 6) {
+          return new Response(JSON.stringify({
+            verified: false,
+            success: false,
+            error: 'Valid email and 6-digit verification code are required.'
+          }), { status: 400, headers: corsHeaders });
+        }
+
+        const otpSecret = requireSecret(env, 'OTP_HMAC_SECRET');
+        const sessionSecret = requireSecret(env, 'SESSION_SECRET');
+        const ipSalt = requireSecret(env, 'IP_HASH_SALT');
+        const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+        const emailHash = await hmacSha256Hex(otpSecret, rawEmail);
+        const ipHash = await hmacSha256Hex(ipSalt, clientIp);
+        const now = Date.now();
+
+        // 1. Retrieve active challenge
+        let challenge = null;
+        if (env.DB) {
+          try {
+            challenge = await env.DB.prepare(
+              'SELECT id, code_hash, attempts, max_attempts, expires_at, verified_at FROM email_otp_challenges WHERE email_hash = ? AND verified_at IS NULL AND expires_at > ? ORDER BY created_at DESC LIMIT 1'
+            ).bind(emailHash, now).first();
+          } catch (e) {
+            console.warn('[D1_EmailChallenge_Query_Fallback]', e.message);
+          }
+        }
+        if (!challenge && memoryStore.emailOtpChallenges) {
+          const mChal = memoryStore.emailOtpChallenges.get(emailHash);
+          if (mChal && mChal.expires_at > now && !mChal.verified_at) {
+            challenge = mChal;
+          }
+        }
+
+        if (!challenge) {
+          return new Response(JSON.stringify({
+            verified: false,
+            success: false,
+            error: 'Verification code is invalid or has expired. Please request a new code.'
+          }), { status: 400, headers: corsHeaders });
+        }
+
+        // 2. Enforce 5-attempt lockout
+        if (challenge.attempts >= challenge.max_attempts) {
+          return new Response(JSON.stringify({
+            verified: false,
+            success: false,
+            error: 'Maximum verification attempts exceeded. Please request a new code.'
+          }), { status: 429, headers: corsHeaders });
+        }
+
+        const newAttempts = challenge.attempts + 1;
+        if (env.DB) {
+          try {
+            await env.DB.prepare('UPDATE email_otp_challenges SET attempts = ? WHERE id = ?').bind(newAttempts, challenge.id).run();
+          } catch (e) {}
+        }
+        challenge.attempts = newAttempts;
+
+        // 3. Timing-safe code verification
+        const expectedCodeHash = await hmacSha256Hex(otpSecret, `${rawEmail}:${code}`);
+        const isValid = timingSafeEqual(expectedCodeHash, challenge.code_hash);
+
+        if (!isValid) {
+          const remaining = challenge.max_attempts - newAttempts;
+          return new Response(JSON.stringify({
+            verified: false,
+            success: false,
+            error: remaining > 0 ? `Incorrect code. ${remaining} attempts remaining.` : 'Maximum verification attempts exceeded. Please request a new code.'
+          }), { status: 400, headers: corsHeaders });
+        }
+
+        // 4. Mark challenge verified (SINGLE USE)
+        challenge.verified_at = now;
+        if (env.DB) {
+          try {
+            await env.DB.prepare('UPDATE email_otp_challenges SET verified_at = ? WHERE id = ?').bind(now, challenge.id).run();
+          } catch (e) {}
+        }
+
+        // 5. Find or create user
+        let userId = null;
+        let isNewUser = false;
+        if (env.DB) {
+          try {
+            const user = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(rawEmail).first();
+            if (user) {
+              userId = user.id;
+            } else {
+              userId = 'usr_' + now + '_' + getRandomHex(4);
+              isNewUser = true;
+              await env.DB.prepare('INSERT INTO users (id, email, created_at) VALUES (?, ?, ?)').bind(userId, rawEmail, now).run();
+              // Record statutory consents (marketing OFF by default)
+              await recordUserConsent(env, userId, 'service_delivery', 1, ipHash, now);
+              await recordUserConsent(env, userId, 'marketing_communications', body.consent_marketing ? 1 : 0, ipHash, now);
+            }
+          } catch (e) {
+            console.warn('[D1_User_EmailVerify_Error]', e.message);
+          }
+        } else {
+          let user = memoryStore.users.get(rawEmail);
+          if (user) {
+            userId = user.id;
+          } else {
+            userId = 'usr_' + now + '_' + getRandomHex(4);
+            isNewUser = true;
+            user = { id: userId, email: rawEmail, createdAt: now };
+            memoryStore.users.set(rawEmail, user);
+            await recordUserConsent(env, userId, 'service_delivery', 1, ipHash, now);
+            await recordUserConsent(env, userId, 'marketing_communications', body.consent_marketing ? 1 : 0, ipHash, now);
+          }
+        }
+
+        // 6. Branch: Checkout Flow vs. Standard Login
+        if (checkoutFlow) {
+          // Condition 1: Mint single-checkout verification token (valid 30 min)
+          const checkoutToken = await mintCheckoutToken(sessionSecret, rawEmail, now);
+          return new Response(JSON.stringify({
+            verified: true,
+            success: true,
+            email_verified: true,
+            checkout_token: checkoutToken,
+            email: rawEmail,
+            user_id: userId,
+            is_new_user: isNewUser,
+            message: 'Email successfully verified for checkout.'
+          }), { status: 200, headers: corsHeaders });
+        }
+
+        // Direct Login: Mint session & set cookie
+        const rawToken = await mintUserSession(env, userId, clientIp, now);
+        const isLocal = env.ENVIRONMENT === 'local' || env.ENVIRONMENT === 'test';
+        return new Response(JSON.stringify({
+          verified: true,
+          authenticated: true,
+          success: true,
+          user: {
+            id: userId,
+            email: rawEmail,
+            is_new_user: isNewUser
+          },
+          message: 'Authentication successful.'
+        }), {
+          status: 200,
+          headers: {
+            ...corsHeaders,
+            'Set-Cookie': createSessionCookieHeader(rawToken, isLocal)
+          }
+        });
+
+      } catch (err) {
+        return new Response(JSON.stringify({ verified: false, success: false, error: err.message }), {
+          status: 500,
+          headers: corsHeaders
+        });
+      }
+    }
+
+    // 1. ROUTE: SEND OTP (/api/v1/auth/otp/send) - GATED BEHIND OTP_ENABLED=false
     if (url.pathname === '/api/v1/auth/otp/send' && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
@@ -1680,6 +2253,13 @@ export default {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
+      const smsOtpEnabled = env && (env.OTP_ENABLED === 'true' || env.OTP_ENABLED === true);
+      if (!smsOtpEnabled) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: 'SMS OTP is disabled in this environment. Please use email verification.'
+        }), { status: 403, headers: corsHeaders });
+      }
       try {
         const body = await request.json().catch(() => ({}));
         const rawPhone = (body.phone || body.identifier || '').toString();
@@ -1838,7 +2418,7 @@ export default {
       }
     }
 
-    // 2. ROUTE: VERIFY OTP (/api/v1/auth/otp/verify & /api/v1/auth/login)
+    // 2. ROUTE: VERIFY OTP (/api/v1/auth/otp/verify & /api/v1/auth/login) - GATED BEHIND OTP_ENABLED=false
     if ((url.pathname === '/api/v1/auth/otp/verify' || url.pathname === '/api/v1/auth/login' || url.pathname === '/api/v1/auth/otp/login') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
@@ -1847,6 +2427,14 @@ export default {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
+      const smsOtpEnabled = env && (env.OTP_ENABLED === 'true' || env.OTP_ENABLED === true);
+      if (!smsOtpEnabled) {
+        return new Response(JSON.stringify({
+          verified: false,
+          success: false,
+          error: 'SMS OTP is disabled in this environment. Please use email verification.'
+        }), { status: 403, headers: corsHeaders });
+      }
       try {
         const body = await request.json().catch(() => ({}));
         const rawPhone = (body.phone || body.identifier || body.login_id || '').toString();
@@ -2926,8 +3514,8 @@ export default {
         corsHeaders['X-API-Deprecated'] = '/api/create-order is retired. Use /api/v1/payments/create-order';
       }
 
-      // Production hotfix guard: require D1, R2, and all required secrets before accepting checkout outside ENVIRONMENT=local
-      if (env.ENVIRONMENT !== 'local') {
+      // Production hotfix guard: require D1, R2, and all required secrets before accepting checkout outside ENVIRONMENT=local/test
+      if (env.ENVIRONMENT !== 'local' && env.ENVIRONMENT !== 'test') {
         const rzpKeyIdCheck = (env.RAZORPAY_KEY_ID || '').trim();
         const rzpSecretCheck = (env.RAZORPAY_KEY_SECRET || '').trim();
         const pdfServiceUrlCheck = (env.PDF_SERVICE_URL || env.PDF_GENERATOR_URL || '').trim();
@@ -3290,6 +3878,63 @@ export default {
         );
       }
 
+      // Condition 1: Session issuance ONLY if email was verified in the SAME checkout flow via checkout_token
+      let sessionCookieHeader = null;
+      const checkoutToken = (body.checkout_token || request.headers.get('X-Checkout-Token') || '').trim();
+      const sessionSecret = env.SESSION_SECRET ? env.SESSION_SECRET.trim() : '';
+
+      // Extract customer email from order, body, or subject
+      let orderEmail = (order.email || body.email || '').toString().trim().toLowerCase();
+      if (!orderEmail && order.subject_id) {
+        let subj = null;
+        if (env.DB) {
+          subj = await env.DB.prepare('SELECT email FROM subjects WHERE id = ?').bind(order.subject_id).first();
+        } else {
+          subj = memoryStore.subjects.get(order.subject_id);
+        }
+        if (subj && subj.email) orderEmail = String(subj.email).trim().toLowerCase();
+      }
+
+      if (checkoutToken && orderEmail && sessionSecret) {
+        const isVerified = await verifyCheckoutToken(sessionSecret, orderEmail, checkoutToken);
+        if (isVerified) {
+          let userId = null;
+          const ipSalt = requireSecret(env, 'IP_HASH_SALT');
+          const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+          const ipHash = await hmacSha256Hex(ipSalt, clientIp);
+          if (env.DB) {
+            const u = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(orderEmail).first();
+            if (u) {
+              userId = u.id;
+            } else {
+              userId = 'usr_' + now + '_' + getRandomHex(4);
+              await env.DB.prepare('INSERT INTO users (id, email, created_at) VALUES (?, ?, ?)').bind(userId, orderEmail, now).run();
+              await recordUserConsent(env, userId, 'service_delivery', 1, ipHash, now);
+              await recordUserConsent(env, userId, 'marketing_communications', 0, ipHash, now);
+            }
+          } else {
+            let u = memoryStore.users.get(orderEmail);
+            if (!u) {
+              userId = 'usr_' + now + '_' + getRandomHex(4);
+              u = { id: userId, email: orderEmail, createdAt: now };
+              memoryStore.users.set(orderEmail, u);
+              await recordUserConsent(env, userId, 'service_delivery', 1, ipHash, now);
+              await recordUserConsent(env, userId, 'marketing_communications', 0, ipHash, now);
+            } else {
+              userId = u.id;
+            }
+          }
+          const rawSessionToken = await mintUserSession(env, userId, clientIp, now);
+          const isLocal = env.ENVIRONMENT === 'local' || env.ENVIRONMENT === 'test';
+          sessionCookieHeader = createSessionCookieHeader(rawSessionToken, isLocal);
+        }
+      }
+
+      const verifyResponseHeaders = { ...corsHeaders };
+      if (sessionCookieHeader) {
+        verifyResponseHeaders['Set-Cookie'] = sessionCookieHeader;
+      }
+
       return new Response(JSON.stringify({
         status: 'verified',
         verified: true,
@@ -3299,8 +3944,9 @@ export default {
         subjectId: order ? order.subject_id : null,
         jobId: fulfillRes ? fulfillRes.jobId : null,
         reportStatus: 'preparing',
+        session_issued: Boolean(sessionCookieHeader),
         message: 'Your payment has been verified. Your personalized report is being prepared. It will be ready within a few minutes.'
-      }), { status: 200, headers: corsHeaders });
+      }), { status: 200, headers: verifyResponseHeaders });
     }
 
     // 7c. ROUTE: PAYMENT STATUS POLLING (/api/v1/payments/status)
@@ -4856,7 +5502,7 @@ export default {
       }), { status: 200, headers: corsHeaders });
     }
 
-    // 8g. POST /api/planner-2027/resend-link (DELIVERY WITHOUT BROWSER)
+    // 8g. POST /api/planner-2027/resend-link (TURNSTILE-GATED, RATE-LIMITED, DISPATCH VIA EMAIL ONLY)
     if (url.pathname === '/api/planner-2027/resend-link' && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
@@ -4865,9 +5511,6 @@ export default {
       };
 
       const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
-      if (!checkFormRateLimit('resend_link_' + clientIp, 5, 900000)) {
-        return new Response(JSON.stringify({ error: 'Too many resend attempts. Please wait 15 minutes.' }), { status: 429, headers: corsHeaders });
-      }
 
       let body = {};
       try {
@@ -4876,11 +5519,28 @@ export default {
         return new Response(JSON.stringify({ error: 'Invalid JSON request body.' }), { status: 400, headers: corsHeaders });
       }
 
+      // 1. Turnstile Gate
+      const turnstileToken = (body.turnstile_token || request.headers.get('cf-turnstile-response') || '').trim();
+      const turnstileOk = await verifyTurnstileToken(env, turnstileToken, clientIp);
+      if (!turnstileOk) {
+        return new Response(JSON.stringify({ error: 'Cloudflare Turnstile verification failed. Please refresh and try again.' }), { status: 403, headers: corsHeaders });
+      }
+
       const orderId = String(body.order_id || '').trim();
       const email = String(body.email || '').trim().toLowerCase();
 
+      // 2. Rate-Limiting per IP and per Email
+      if (!checkFormRateLimit('resend_link_ip_' + clientIp, 5, 900000) || (email && !checkFormRateLimit('resend_link_em_' + email, 5, 900000))) {
+        return new Response(JSON.stringify({ error: 'Too many resend attempts. Please wait 15 minutes.' }), { status: 429, headers: corsHeaders });
+      }
+
+      const neutralResponse = {
+        success: true,
+        message: 'If an order matching the provided details exists, the secure download link has been dispatched to your email address.'
+      };
+
       if (!orderId || !email) {
-        return new Response(JSON.stringify({ error: 'Both order_id and email are required to retrieve your download link.' }), { status: 400, headers: corsHeaders });
+        return new Response(JSON.stringify(neutralResponse), { status: 200, headers: corsHeaders });
       }
 
       let order = null;
@@ -4898,65 +5558,52 @@ export default {
         }
       }
 
-      if (!order || String(order.email).trim().toLowerCase() !== email) {
-        return new Response(JSON.stringify({ error: 'No matching order found for the provided order ID and email address.' }), { status: 404, headers: corsHeaders });
-      }
-
-      if (order.status === 'created') {
-        return new Response(JSON.stringify({ status: 'created', message: 'Payment has not yet been confirmed for this order.' }), { status: 400, headers: corsHeaders });
-      }
-
-      if (order.status === 'needs_attention') {
-        return new Response(JSON.stringify({
-          status: 'needs_attention',
-          message: 'Your personal planner is undergoing editorial quality checks. Your download link will be active as soon as review completes.'
-        }), { status: 202, headers: corsHeaders });
-      }
-
-      if (order.status === 'delivered' && order.pdf_r2_key) {
+      if (order && String(order.email).trim().toLowerCase() === email && order.status === 'delivered' && order.pdf_r2_key) {
         // Enforce 3-regeneration cap
-        if ((order.generation_count || 0) > 3) {
-          return new Response(JSON.stringify({ error: 'Maximum link regeneration limit reached. Please contact support.' }), { status: 429, headers: corsHeaders });
+        if ((order.generation_count || 0) <= 3) {
+          const rawToken = getRandomHex(32);
+          const downloadTokenHash = await sha256Hex(rawToken);
+          const tokenExpiresAt = Date.now() + 30 * 24 * 3600 * 1000;
+          const now = Date.now();
+
+          if (env.DB) {
+            await env.DB.prepare(`
+              UPDATE planner_2027_orders
+              SET download_token_hash = ?, token_expires_at = ?, updated_at = ?
+              WHERE id = ?
+            `).bind(downloadTokenHash, tokenExpiresAt, now, order.id).run();
+          }
+          const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
+          memOrder.download_token_hash = downloadTokenHash;
+          memOrder.token_expires_at = tokenExpiresAt;
+          memOrder.updated_at = now;
+          memoryStore.planner2027Orders.set(order.id, memOrder);
+
+          await logWorkerEvent(env, {
+            event: 'resend_link_served',
+            product_id: 'planner_2027',
+            meta_json: { order_id: order.id }
+          });
+
+          // Dispatch email with download URL to the address on the order (never return in JSON)
+          const origin = getCorsOrigin(request, env) || 'https://numerosvision.com';
+          const downloadUrl = `${origin}/api/planner-2027/download?order=${encodeURIComponent(order.id)}&token=${encodeURIComponent(rawToken)}`;
+          await sendTransactionalEmail(env, {
+            to: order.email,
+            subject: 'Your Numeros Vision 2027 Year Ahead Planner Download Link',
+            text: `Here is your secure personal download link for order ${order.id}:\n\n${downloadUrl}\n\nThis link is valid for 30 days. Do not share or forward this link.`,
+            html: `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:12px;color:#523E28;">
+  <div style="font-size:16px;font-weight:700;color:#8B6914;margin-bottom:12px;letter-spacing:0.04em;">NUMEROS VISION</div>
+  <p style="font-size:14px;line-height:1.5;margin:0 0 16px;">Your 2027 Year Ahead Planner is ready for download.</p>
+  <div style="margin:20px 0;"><a href="${downloadUrl}" style="background:#8B6914;color:#FFFFFF;padding:12px 20px;text-decoration:none;border-radius:6px;font-weight:700;display:inline-block;">Download Personal Planner (PDF)</a></div>
+  <p style="font-size:12px;color:#7A654D;line-height:1.5;margin:0;">This secure link is valid for 30 days. Do not forward this link.</p>
+</div>`
+          });
         }
-
-        // Mint a fresh 30-day token
-        const rawToken = getRandomHex(32);
-        const downloadTokenHash = await sha256Hex(rawToken);
-        const tokenExpiresAt = Date.now() + 30 * 24 * 3600 * 1000;
-        const now = Date.now();
-
-        if (env.DB) {
-          await env.DB.prepare(`
-            UPDATE planner_2027_orders
-            SET download_token_hash = ?, token_expires_at = ?, updated_at = ?
-            WHERE id = ?
-          `).bind(downloadTokenHash, tokenExpiresAt, now, order.id).run();
-        }
-        const memOrder = memoryStore.planner2027Orders.get(order.id) || order;
-        memOrder.download_token_hash = downloadTokenHash;
-        memOrder.token_expires_at = tokenExpiresAt;
-        memOrder.updated_at = now;
-        memoryStore.planner2027Orders.set(order.id, memOrder);
-
-        await logWorkerEvent(env, {
-          event: 'resend_link_served',
-          product_id: 'planner_2027',
-          meta_json: { order_id: order.id }
-        });
-
-        return new Response(JSON.stringify({
-          status: 'delivered',
-          order_id: order.id,
-          download_token: rawToken,
-          download_url: `/api/planner-2027/download?order=${order.id}&token=${rawToken}`,
-          expires_at: tokenExpiresAt
-        }), { status: 200, headers: corsHeaders });
       }
 
-      return new Response(JSON.stringify({
-        status: order.status,
-        message: 'Order is currently being processed.'
-      }), { status: 202, headers: corsHeaders });
+      // Identical reply either way: never return download_token or download_url in the HTTP response
+      return new Response(JSON.stringify(neutralResponse), { status: 200, headers: corsHeaders });
     }
 
     // 8h. GET /api/planner-2027/admin/stuck-orders (STUCK ORDER ALERT & AUDIT ROUTE)
