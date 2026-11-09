@@ -1948,6 +1948,18 @@ export default {
       return Response.redirect(new URL(canonicalRedirects[url.pathname], url.origin), 301);
     }
 
+    // Dynamic Client Turnstile Configuration Script
+    if (url.pathname === '/api/turnstile-config.js') {
+      const siteKey = (env && env.TURNSTILE_SITE_KEY ? env.TURNSTILE_SITE_KEY.trim() : '') || '1x00000000000000000000AA';
+      return new Response(`window.NV_TURNSTILE_SITE_KEY = ${JSON.stringify(siteKey)};`, {
+        headers: {
+          'Content-Type': 'application/javascript; charset=UTF-8',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
+    }
+
     // Rewrite /static/reports/ to /reports/
     // Direct static reports rewrite removed for security lockdown
 

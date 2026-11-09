@@ -461,6 +461,24 @@ async function runIdentityReworkTests() {
   console.log('  ✓ Production Turnstile security guard verified across all invalid/test key variants');
   passCount++;
 
+  // ---------------------------------------------------------------------------
+  // TEST 12: Dynamic Client Turnstile Configuration Script (/api/turnstile-config.js)
+  // ---------------------------------------------------------------------------
+  console.log('[TEST 12] Testing dynamic client turnstile script endpoint...');
+  const resDefault = await worker.fetch(new Request('http://localhost/api/turnstile-config.js'), {}, {});
+  assert.strictEqual(resDefault.status, 200);
+  const textDefault = await resDefault.text();
+  assert(textDefault.includes('1x00000000000000000000AA'), 'Must fallback to Cloudflare test key when unset');
+
+  const resConfigured = await worker.fetch(new Request('http://localhost/api/turnstile-config.js'), {
+    TURNSTILE_SITE_KEY: 'configured_site_key_123'
+  }, {});
+  assert.strictEqual(resConfigured.status, 200);
+  const textConfigured = await resConfigured.text();
+  assert(textConfigured.includes('configured_site_key_123'), 'Must return configured TURNSTILE_SITE_KEY');
+  console.log('  ✓ /api/turnstile-config.js verified: falls back to test key and returns configured key');
+  passCount++;
+
   console.log(`\n[SUCCESS] All ${passCount} Identity Rework & Email OTP test cases passed cleanly!`);
 }
 
