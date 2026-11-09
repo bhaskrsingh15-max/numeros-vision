@@ -382,7 +382,7 @@
               <td style="padding:14px 16px; font-weight:800; color:#8B6914; font-size:1.15rem;">₹199</td>
               <td style="padding:14px 16px; color:#7A654D;">One-Time</td>
               <td style="padding:14px 16px; text-align:right;">
-                <a href="/reports_catalogue/?sku=basic#order" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px;">
+                <a href="/?plan=report_basic#reports" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px;">
                   Get Basic Report (₹199)
                 </a>
               </td>
@@ -399,7 +399,7 @@
               <td style="padding:14px 16px; font-weight:800; color:#8B6914; font-size:1.15rem;">₹510</td>
               <td style="padding:14px 16px; color:#7A654D;">One-Time</td>
               <td style="padding:14px 16px; text-align:right;">
-                <a href="/reports_catalogue/?sku=advanced#order" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px; font-weight:700;">
+                <a href="/?plan=report_advanced#reports" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px; font-weight:700;">
                   Get Advanced Master Dossier (₹510)
                 </a>
               </td>
@@ -416,7 +416,7 @@
               <td style="padding:14px 16px; font-weight:800; color:#8B6914; font-size:1.15rem;">₹1,050</td>
               <td style="padding:14px 16px; color:#7A654D;">One-Time</td>
               <td style="padding:14px 16px; text-align:right;">
-                <a href="/reports_catalogue/?sku=premium#order" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px;">
+                <a href="/?plan=report_premium#reports" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px;">
                   Get Premium Sovereign Blueprint (₹1,050)
                 </a>
               </td>
@@ -433,9 +433,9 @@
               <td style="padding:14px 16px; font-weight:800; color:#8B6914; font-size:1.15rem;">₹199</td>
               <td style="padding:14px 16px; color:#7A654D;">One-Time</td>
               <td style="padding:14px 16px; text-align:right;">
-                <button type="button" onclick="startCheckout('charm_single')" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; border:none; cursor:pointer; display:inline-block; border-radius:8px;">
+                <a href="/charm_ai.html#pass" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px;">
                   Get 5 Questions (₹199)
-                </button>
+                </a>
               </td>
             </tr>
             <tr>
@@ -938,7 +938,7 @@
           </ul>
           <div class="tier-actions">
             <a href="/sample?format=roadmap" target="_blank" class="btn-ghost-action">Preview Format (32 Pgs) →</a>
-            ${prices.sovereign.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/reports_catalogue/?sku=premium#order" class="btn-gold-action">View Premium Report (${prices.sovereign.price})</a>`}
+            ${prices.sovereign.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/?plan=report_premium#reports" class="btn-gold-action">View Premium Report (${prices.sovereign.price})</a>`}
           </div>
         </div>
 
@@ -960,7 +960,7 @@
           </ul>
           <div class="tier-actions">
             <a href="/sample?format=master" target="_blank" class="btn-ghost-action">Preview Format (12 Pgs) →</a>
-            ${prices.master.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/reports_catalogue/?sku=advanced#order" class="btn-gold-action" style="font-weight:700;">Explore Advanced Analysis (${prices.master.price}) →</a>`}
+            ${prices.master.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/?plan=report_advanced#reports" class="btn-gold-action" style="font-weight:700;">Explore Advanced Analysis (${prices.master.price}) →</a>`}
           </div>
         </div>
 
@@ -981,7 +981,7 @@
           </ul>
           <div class="tier-actions">
             <a href="/sample?format=brief" target="_blank" class="btn-ghost-action">Preview Format (3 Pgs) →</a>
-            ${prices.tripwire.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/reports_catalogue/?sku=basic#order" class="btn-gold-action">View Basic Report (${prices.tripwire.price})</a>`}
+            ${prices.tripwire.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/?plan=report_basic#reports" class="btn-gold-action">View Basic Report (${prices.tripwire.price})</a>`}
           </div>
         </div>
       `;
@@ -1043,28 +1043,14 @@
   <script src="/static/js/nv_payment_gateway.js?v=2.0.0" defer></script>
   <script>
     function startCheckout(sku) {
-      const catalog = window.NVCatalog;
-      const item = (catalog && catalog.getSku(sku)) || { id: sku, name: 'Numeros Vision', price_inr: 199 };
-      if (sku.startsWith('charm_') || sku === 'starter_5q' || sku === 'single') {
-        const email = prompt('Enter your delivery email for Charm AI question credits:', localStorage.getItem('nv_user_email') || '');
-        if (!email) return;
-        const name = localStorage.getItem('nv_user_name') || 'Valued Seeker';
-        if (window.NumerosPay && typeof window.NumerosPay.openCheckout === 'function') {
-          window.NumerosPay.openCheckout({
-            plan_id: item.sku || item.id || sku,
-            plan_name: item.name || 'Charm AI Credits Pack',
-            amount_inr: item.price_inr || 199,
-            customer_name: name,
-            customer_email: email,
-            onSuccess: function(inv) {
-              alert('✦ Payment confirmed! Your Charm AI inquiry credits have been unlocked.');
-              window.location.href = '/charm-ai/';
-            }
-          });
-          return;
-        }
+      if (sku === 'planner_2027') {
+        window.location.href = '/year_2027.html#order';
+      } else if (sku.startsWith('charm_') || sku === 'starter_5q' || sku === 'single') {
+        window.location.href = '/charm_ai.html#pass';
+      } else {
+        const targetPlan = sku === 'basic' ? 'report_basic' : (sku === 'advanced' ? 'report_advanced' : (sku === 'premium' ? 'report_premium' : sku));
+        window.location.href = '/?plan=' + encodeURIComponent(targetPlan) + '#reports';
       }
-      window.location.href = '/reports_catalogue/?sku=' + encodeURIComponent(sku) + '#order';
     }
   </script>
 </body>

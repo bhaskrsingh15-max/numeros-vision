@@ -1715,7 +1715,7 @@
           </li>
 
           <!-- 7. Pricing -->
-          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+          <li class="nv-nav-item"><a href="/#reports" class="nv-nav-link">Reports</a></li>
 
           <!-- 8. Contact Us -->
           <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
@@ -1952,24 +1952,11 @@
               <!-- Component Header -->
               <div style="border-bottom:1px solid rgba(201,162,39,0.25); padding-bottom:14px; margin-bottom:18px;">
                 <h3 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.55rem; color:#523E28; font-weight:700; margin:0 0 6px;">
-                  Lo Shu Grid: Full Anveil Charms, Present Powers &amp; Element Yogas
+                  Lo Shu Grid: Natal Matrix &amp; Element Yogas
                 </h3>
-                <p style="font-size:0.86rem; color:#7A654D; margin:0 0 12px; line-height:1.5;">
-                  Unlock your personalized natal matrix across 3 comprehensive consultation tiers: Full Missing Void Activation (@ ₹1,050), Present Number Harmonization (@ ₹510), and Element Yogas Active % (@ ₹199).
+                <p style="font-size:0.86rem; color:#7A654D; margin:0; line-height:1.5;">
+                  Your personalized 3×3 Chinese natal grid calculated deterministically from your date of birth. Shows active elemental planes, present vibrational powers, and void channels.
                 </p>
-                
-                <!-- 3 Top Ranked Pills -->
-                <div style="display:flex; flex-wrap:wrap; gap:10px;">
-                  <button type="button" class="ls-pitch-pill active" onclick="selectIndexConversionOffer('missing')" id="idxPillMissing" style="background:#FFF9E6; border:1px solid #C9A227; color:#8B6914; padding:6px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-                    <span>🔒 1st: Missing Numbers: Full Anveil @ ₹1,050</span>
-                  </button>
-                  <button type="button" class="ls-pitch-pill" onclick="selectIndexConversionOffer('present')" id="idxPillPresent" style="background:#EBF7F2; border:1px solid #16835B; color:#16835B; padding:6px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-                    <span>🌿 2nd: Present Numbers: Harmonize @ ₹510</span>
-                  </button>
-                  <button type="button" class="ls-pitch-pill" onclick="selectIndexConversionOffer('yogas')" id="idxPillYogas" style="background:#FFF2EB; border:1px solid #D97706; color:#B45309; padding:6px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-                    <span>⚡ 3rd: Element Yogas: Active % @ ₹199</span>
-                  </button>
-                </div>
               </div>
 
               <!-- Two-Column Interactive Layout -->
@@ -1981,7 +1968,7 @@
                       <div style="font-family:'Cinzel',serif; font-size:0.88rem; font-weight:800; color:#523E28; letter-spacing:0.04em;">NATAL LO SHU 3×3 MATRIX</div>
                       <div style="font-size:0.76rem; color:#7A654D;">Seeker: <span id="idxLsGridSeekerName" style="font-weight:700;">Seeker</span> (DOB: <span id="idxLsGridSeekerDob" style="font-weight:700;">28-11-1981</span>)</div>
                     </div>
-                    <span style="font-size:0.70rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 9px; border-radius:6px;">Click Any Cell</span>
+                    <span style="font-size:0.70rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 9px; border-radius:6px;">Natal Overview</span>
                   </div>
 
                   <!-- 3x3 Grid Container -->
@@ -1990,78 +1977,33 @@
                   </div>
 
                   <!-- Element Yogas Alignment Strip -->
-                  <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:10px 14px; margin-bottom:14px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:10px 14px;">
                     <div style="font-size:0.82rem; font-weight:700; color:#523E28; display:flex; align-items:center; gap:6px;">
                       <span style="color:#D97706;">⚡</span>
                       <span>Element Yogas Alignment: <span id="idxLsYogaPctText" style="color:#16835B; font-weight:800;">25% ACTIVE</span></span>
                     </div>
-                    <button type="button" onclick="selectIndexConversionOffer('yogas')" style="background:#8B6914; color:#FFFFFF; border:none; border-radius:6px; padding:5px 11px; font-size:0.74rem; font-weight:700; cursor:pointer;">
-                      Anveil Yogas Charm @ ₹199 &rarr;
-                    </button>
-                  </div>
-
-                  <!-- Quick Pitch Previews -->
-                  <div style="font-size:0.74rem; color:#7A654D; font-weight:700; margin-bottom:6px;">Quick Pitch Previews:</div>
-                  <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                    <button type="button" onclick="selectIndexConversionOffer('missing')" style="background:#FFF9E6; border:1px solid rgba(201,162,39,0.4); color:#8B6914; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
-                      🔒 1. Missing @ ₹1,050
-                    </button>
-                    <button type="button" onclick="selectIndexConversionOffer('present')" style="background:#EBF7F2; border:1px solid rgba(22,131,91,0.4); color:#16835B; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
-                      🌿 2. Present @ ₹510
-                    </button>
-                    <button type="button" onclick="selectIndexConversionOffer('yogas')" style="background:#FFF2EB; border:1px solid rgba(217,119,6,0.4); color:#B45309; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
-                      ⚡ 3. Anveil Yogas (<span id="idxLsQuickYogaPct">25%</span>) @ ₹199
-                    </button>
+                    <span style="font-size:0.74rem; color:#8B6914; font-weight:700;">Vedic &amp; Lo Shu Harmony</span>
                   </div>
                 </div>
 
-                <!-- RIGHT COLUMN: DYNAMIC PITCH CARD -->
-                <div id="idxLsDynamicPitchCard" style="background:#FFFFFF; border:1.5px solid #C9A227; border-radius:14px; padding:20px; box-shadow:0 4px 16px rgba(201,162,39,0.1);">
-                  <!-- Dynamic via selectIndexConversionOffer -->
+                <!-- RIGHT COLUMN: ELEMENTAL BREAKDOWN -->
+                <div style="background:#FFFFFF; border:1.5px solid rgba(201,162,39,0.3); border-radius:14px; padding:20px; box-shadow:0 4px 16px rgba(201,162,39,0.06);">
+                  <div style="font-family:'Cinzel',serif; font-size:0.88rem; font-weight:800; color:#523E28; letter-spacing:0.04em; margin-bottom:12px;">
+                    ✦ PRESENT POWERS &amp; VOID CHANNELS
+                  </div>
+                  <div id="idxLoShuSummaryPanel" style="font-size:0.84rem; color:#523E28; line-height:1.6;">
+                    <div style="margin-bottom:10px;">
+                      <strong style="color:#16835B;">Present Numbers:</strong> <span id="idxLsPresentNumbersText">1, 2, 8, 9</span> — Active planetary energies and cognitive strengths you naturally express.
+                    </div>
+                    <div style="margin-bottom:10px;">
+                      <strong style="color:#8B6914;">Missing Numbers (Void Channels):</strong> <span id="idxLsMissingNumbersText">3, 4, 5, 6, 7</span> — Inactive elemental planes in your natal matrix indicating areas for conscious cultivation.
+                    </div>
+                    <div style="font-size:0.78rem; color:#7A654D; border-top:1px solid rgba(201,162,39,0.2); padding-top:10px; margin-top:12px;">
+                      Every number in your Lo Shu grid corresponds to specific planetary elements (Water, Wood, Fire, Earth, Metal) governing vitality, discernment, and execution.
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              <!-- Bottom Permutation & Combination Conversion Matrix -->
-              <div style="margin-top:22px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.35); border-radius:12px; padding:16px 18px;">
-                <div style="font-family:'Cinzel',serif; font-size:0.84rem; font-weight:800; color:#8B6914; letter-spacing:0.04em; margin-bottom:10px;">
-                  ✦ PERMUTATION &amp; COMBINATION CONVERSION MATRIX
-                </div>
-                <div style="overflow-x:auto;">
-                  <table style="width:100%; border-collapse:collapse; font-size:0.80rem; color:#523E28;">
-                    <thead>
-                      <tr style="border-bottom:1.5px solid rgba(201,162,39,0.4); text-align:left;">
-                        <th style="padding:6px 8px; font-weight:700; color:#8B6914;">User Intent</th>
-                        <th style="padding:6px 8px; font-weight:700; color:#8B6914;">Core Value Proposition</th>
-                        <th style="padding:6px 8px; font-weight:700; color:#8B6914; text-align:right;">Offer &amp; Price</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr style="border-bottom:1px solid rgba(201,162,39,0.2); cursor:pointer;" onclick="selectIndexConversionOffer('missing')">
-                        <td style="padding:8px 8px; font-weight:700; color:#8B6914;">1. 🔒 Missing Voids</td>
-                        <td style="padding:8px 8px;">Full Anveil: Name Balancing &amp; Vastu</td>
-                        <td style="padding:8px 8px; text-align:right; font-weight:700; color:#8B6914;">
-                          ₹1,050
-                        </td>
-                      </tr>
-                      <tr style="border-bottom:1px solid rgba(201,162,39,0.2); cursor:pointer;" onclick="selectIndexConversionOffer('present')">
-                        <td style="padding:8px 8px; font-weight:700; color:#16835B;">2. 🌿 Present Digits</td>
-                        <td style="padding:8px 8px;">Inborn gifts, digit overdrive &amp; Dasha</td>
-                        <td style="padding:8px 8px; text-align:right; font-weight:700; color:#16835B;">
-                          ₹510
-                        </td>
-                      </tr>
-                      <tr style="cursor:pointer;" onclick="selectIndexConversionOffer('yogas')">
-                        <td style="padding:8px 8px; font-weight:700; color:#B45309;">3. ⚡ Element Yogas</td>
-                        <td style="padding:8px 8px;">Active Plane % &amp; foundational habits</td>
-                        <td style="padding:8px 8px; text-align:right; font-weight:700; color:#B45309;">
-                          ₹199
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+              </div></div>
 
             <div class="matrix-output-grid" style="margin:0; display:flex; flex-direction:column; gap:16px;">
               <div class="matrix-box" style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:14px; padding:18px 20px;">
@@ -2082,10 +2024,14 @@
           <!-- Planetary Characteristics & Archetype Blueprint -->
           <div id="planet-characteristics-results"></div>
 
-          <div style="text-align:center; margin-top:20px;">
-            <a href="#charm-ai" class="btn-primary-gold" onclick="seedCharmAiProfile()">
-              Ask Charm AI About This Profile ↓
-            </a>
+          <!-- SINGLE PRIMARY CTA BY CONTEXT & ONE QUIET SECONDARY LINK (Zero Other Paid Entry Points) -->
+          <div id="calc-after-cta-block" style="text-align:center; margin-top:28px; margin-bottom:8px;">
+            <button type="button" class="btn-primary-gold" onclick="selectReportTier('report_basic')" style="padding:14px 34px; font-size:1.02rem; font-weight:700; border-radius:999px; box-shadow:0 6px 22px rgba(201,162,39,0.28); cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+              <span>Get Your Full Numerology Report (from ₹199)</span> <span>✦</span>
+            </button>
+            <div style="margin-top:10px;">
+              <a href="#reports" class="nv-quiet-link" onclick="selectReportTier('report_advanced')" style="font-size:0.86rem; color:#7A654D; text-decoration:underline;">Compare all 3 report tiers &amp; inclusions ↓</a>
+            </div>
           </div>
           <div id="heroSaveProfileContainer"></div>
         </div>
@@ -2419,9 +2365,10 @@
         </p>
       </div>
 
+      <div id="reports"></div>
       <div class="pricing-grid">
         <!-- 1. Basic Report (3 Pages) -->
-        <div class="price-card" style="box-shadow:0 6px 20px rgba(180,155,110,0.06);">
+        <div class="price-card" id="card-report-basic" onclick="selectReportTier('report_basic')" style="cursor:pointer; box-shadow:0 6px 20px rgba(180,155,110,0.06); transition:all 0.25s ease;">
           <div>
             <span class="calc-tool-badge">Entry Tier · 3 Pages</span>
             <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.65rem; color:var(--gold-dark); margin:8px 0 0;">
@@ -2437,13 +2384,13 @@
               <li>Authentic Classical Insights &amp; Guidance</li>
             </ul>
           </div>
-          <button class="btn-secondary-pearl" onclick="openCheckout('report_basic', 'Basic Report', 199)" style="width:100%; justify-content:center;">
-            Order Basic Report (₹199) ✦
+          <button type="button" class="btn-secondary-pearl" onclick="event.stopPropagation(); selectReportTier('report_basic');" style="width:100%; justify-content:center;">
+            Select Basic Report (₹199) ✦
           </button>
         </div>
 
         <!-- 2. Advanced Report (12 Pages) · Most Popular -->
-        <div class="price-card popular" style="border: 2px solid var(--gold-primary); box-shadow: 0 10px 36px rgba(201,162,39,0.24); transform: translateY(-4px);">
+        <div class="price-card popular" id="card-report-advanced" onclick="selectReportTier('report_advanced')" style="cursor:pointer; border: 2.5px solid var(--gold-primary); box-shadow: 0 10px 36px rgba(201,162,39,0.24); transform: translateY(-4px); transition:all 0.25s ease;">
           <span class="popular-pill" style="letter-spacing:0.06em;">✦ Most Popular · Best Value ✦</span>
           <div>
             <span class="calc-tool-badge" style="background:rgba(201,162,39,0.18); color:var(--gold-dark);">Master Tier · 12 Pages</span>
@@ -2462,13 +2409,13 @@
               <li>Safe Non-Fear Remedies &amp; Alignment Protocols</li>
             </ul>
           </div>
-          <button class="btn-primary-gold" onclick="openCheckout('report_advanced', 'Advanced Master Dossier', 510)" style="width:100%; justify-content:center; font-weight:700;">
-            Order Advanced Master Dossier (₹510) ✦
+          <button type="button" class="btn-primary-gold" onclick="event.stopPropagation(); selectReportTier('report_advanced');" style="width:100%; justify-content:center; font-weight:700;">
+            Select Advanced Dossier (₹510) ✦
           </button>
         </div>
 
         <!-- 3. Premium Report (32 Pages) -->
-        <div class="price-card" style="box-shadow:0 6px 24px rgba(180,155,110,0.08);">
+        <div class="price-card" id="card-report-premium" onclick="selectReportTier('report_premium')" style="cursor:pointer; box-shadow:0 6px 24px rgba(180,155,110,0.08); transition:all 0.25s ease;">
           <div>
             <span class="calc-tool-badge" style="background:rgba(22,131,91,0.12); color:#16835B;">Sovereign Tier · 32 Pages</span>
             <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.65rem; color:#16835B; margin:8px 0 0;">
@@ -2486,19 +2433,137 @@
               <li>Complete Mathematical Proofs Appendix</li>
             </ul>
           </div>
-          <button class="btn-secondary-pearl" onclick="openCheckout('report_premium', 'Premium Sovereign Blueprint', 1050)" style="width:100%; justify-content:center;">
-            Order Premium Sovereign Blueprint (₹1,050) ✦
+          <button type="button" class="btn-secondary-pearl" onclick="event.stopPropagation(); selectReportTier('report_premium');" style="width:100%; justify-content:center;">
+            Select Premium Blueprint (₹1,050) ✦
           </button>
         </div>
       </div>
 
-      <div style="text-align:center; margin-top:28px; margin-bottom:8px;">
-        <a href="/reports_catalogue/" class="btn-secondary-pearl" style="display:inline-flex; align-items:center; gap:8px; padding:12px 28px; font-weight:600; text-decoration:none;">
-          <span>Explore All 10 Specialised Reports in Catalogue</span>
-          <span>→</span>
-        </a>
-      </div>
+      <!-- IN-PAGE REPORTS PURCHASE CONSOLE -->
+      <div id="reports-checkout-console" style="background:#FFFFFF; border:2px solid var(--gold-primary); border-radius:20px; padding:32px 28px; margin-top:32px; box-shadow:0 10px 36px rgba(201,162,39,0.14);">
+        <div style="border-bottom:1px solid rgba(201,162,39,0.25); padding-bottom:14px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; color:#8B6914; font-weight:700;">Selected Consultation Tier</span>
+            <h3 id="reports-selected-tier-name" style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:#523E28; margin:2px 0 0; font-weight:700;">
+              Advanced Master Dossier
+            </h3>
+            <div id="reports-selected-tier-meta" style="font-size:0.82rem; color:#7A654D;">12 Pages · Enabled Numbers in Depth &amp; Initiation Windows</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.75rem; color:#7A654D;">One-Time Payment</div>
+            <div id="reports-checkout-price-display" style="font-size:2.4rem; font-weight:800; color:var(--gold-dark, #8B6914); font-family:'Cinzel',serif;">₹510</div>
+          </div>
+        </div>
 
+        <!-- Seeker Input Form -->
+        <div id="reports-form-container">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:18px; margin-bottom:18px;">
+            <div>
+              <label style="display:block; font-size:0.82rem; font-weight:700; color:#523E28; margin-bottom:6px;">Seeker Full Name</label>
+              <input type="text" id="reports-name" placeholder="Full Name as on documents" required style="width:100%; padding:11px 14px; border:1px solid rgba(201,162,39,0.4); border-radius:8px; font-size:0.92rem; background:#FFFDF7; color:#523E28; box-sizing:border-box;" />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.82rem; font-weight:700; color:#523E28; margin-bottom:6px;">Date of Birth (Locked for Calculations)</label>
+              <input type="date" id="reports-dob" required style="width:100%; padding:11px 14px; border:1px solid rgba(201,162,39,0.4); border-radius:8px; font-size:0.92rem; background:#FFFDF7; color:#523E28; box-sizing:border-box;" />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.82rem; font-weight:700; color:#523E28; margin-bottom:6px;">Email Address (For PDF Delivery)</label>
+              <input type="email" id="reports-email" placeholder="name@example.com" required style="width:100%; padding:11px 14px; border:1px solid rgba(201,162,39,0.4); border-radius:8px; font-size:0.92rem; background:#FFFDF7; color:#523E28; box-sizing:border-box;" />
+            </div>
+            <div>
+              <label style="display:block; font-size:0.82rem; font-weight:700; color:#523E28; margin-bottom:6px;">Mobile Number (+91)</label>
+              <div style="display:flex; gap:8px;">
+                <input type="tel" id="reports-phone" placeholder="10-digit mobile" maxlength="10" style="flex:1; padding:11px 14px; border:1px solid rgba(201,162,39,0.4); border-radius:8px; font-size:0.92rem; background:#FFFDF7; color:#523E28; box-sizing:border-box;" />
+                <button type="button" id="btn-reports-send-otp" onclick="sendReportsOtp()" class="btn-secondary-pearl" style="padding:0 14px; font-size:0.8rem; font-weight:700; white-space:nowrap; border-radius:8px;">Send OTP</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- In-Page OTP Verification Box -->
+          <div id="reports-otp-verify-row" style="display:none; background:#FAF6EE; border:1px solid rgba(201,162,39,0.35); border-radius:10px; padding:14px 18px; margin-bottom:18px;">
+            <div style="font-size:0.84rem; color:#523E28; margin-bottom:8px; font-weight:600;">
+              Enter 6-digit OTP sent to <span id="reports-otp-phone-display" style="font-weight:700;">your mobile</span>:
+            </div>
+            <div style="display:flex; gap:10px; max-width:340px;">
+              <input type="text" id="reports-otp-input" placeholder="6-digit OTP" maxlength="6" style="flex:1; padding:10px 14px; border:1px solid rgba(201,162,39,0.5); border-radius:8px; font-size:1.1rem; letter-spacing:0.18em; text-align:center; background:#FFFFFF; color:#523E28;" />
+              <button type="button" id="btn-reports-verify-otp" onclick="verifyReportsOtp()" class="btn-primary-gold" style="padding:0 18px; font-size:0.84rem; font-weight:700; border-radius:8px;">Verify OTP</button>
+            </div>
+            <div id="reports-otp-error" style="display:none; color:#C53030; font-size:0.8rem; margin-top:6px; font-weight:600;"></div>
+          </div>
+
+          <!-- Mobile Verified Status Badge -->
+          <div id="reports-phone-verified-badge" style="display:none; background:#EBF7F2; border:1px solid rgba(22,131,91,0.3); border-radius:8px; padding:8px 14px; margin-bottom:18px; color:#16835B; font-size:0.84rem; font-weight:700; align-items:center; gap:8px;">
+            <span>✓ Mobile Verified via OTP: <span id="reports-verified-phone-text"></span></span>
+          </div>
+
+          <!-- Action Button & Trust Line -->
+          <div style="text-align:center; margin-top:20px;">
+            <button type="button" id="btn-reports-pay" class="btn-primary-gold" onclick="launchInPageReportsCheckout()" style="padding:15px 44px; font-size:1.08rem; font-weight:700; border-radius:999px; box-shadow:0 8px 26px rgba(201,162,39,0.28); cursor:pointer;">
+              <span>Proceed to Pay ₹<span id="reports-pay-btn-amount">510</span></span> <span>✦</span>
+            </button>
+            <div class="nv-trust-line" style="font-size:0.82rem; color:#7A654D; margin-top:12px; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span>🔒 100% Secure 256-bit Encrypted Payment via Razorpay · <a href="/refund.html" target="_blank" style="color:#8B6914; text-decoration:underline;">Refund Policy</a></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- "Your purchase" Screen -->
+        <div id="reports-purchase-screen" style="display:none; text-align:center; padding:20px 0;">
+          <!-- 1. Generating State -->
+          <div id="purchase-state-generating" style="display:none;">
+            <div class="nv-spinner" style="margin:16px auto; width:48px; height:48px; border:4px solid rgba(201,162,39,0.25); border-top-color:#8B6914; border-radius:50%; animation:spin 1s linear infinite;"></div>
+            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.85rem; color:#523E28; margin:12px 0 6px;">Your Purchase · Report Generating</h3>
+            <div style="font-size:0.86rem; color:#7A654D; margin-bottom:16px;">
+              Order ID: <span id="purchase-order-id-display" style="font-family:monospace; font-weight:700; color:#8B6914;"></span> · Seeker: <span id="purchase-seeker-name-display" style="font-weight:700;"></span> (<span id="purchase-seeker-dob-display"></span>)
+            </div>
+            <p style="font-size:0.92rem; color:#523E28; max-width:540px; margin:0 auto; line-height:1.6;">
+              Our deterministic Python calculation engine is actively synthesizing your complete natal architecture, Lo Shu 8-plane matrix, and auspicious initiation windows.
+            </p>
+          </div>
+
+          <!-- 2. Ready State -->
+          <div id="purchase-state-ready" style="display:none;">
+            <div style="font-size:2.8rem; color:#16835B; margin-bottom:8px;">✦</div>
+            <h3 style="font-family:'Cormorant Garamond',serif; font-size:2.0rem; color:#16835B; margin:0 0 6px; font-weight:700;">Your Report is Ready ✦</h3>
+            <div style="font-size:0.88rem; color:#7A654D; margin-bottom:20px;">
+              Order ID: <span id="purchase-ready-order-id" style="font-family:monospace; font-weight:700; color:#8B6914;"></span> · Seeker: <span id="purchase-ready-name" style="font-weight:700;"></span>
+            </div>
+            <div style="margin:24px 0;">
+              <a id="reports-ready-download-link" href="#" target="_blank" class="btn-primary-gold" style="padding:15px 38px; font-size:1.05rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:10px; border-radius:999px;">
+                <span>Download Personalised PDF Dossier</span> <span>↓</span>
+              </a>
+            </div>
+            <div style="font-size:0.86rem; color:#523E28; margin-top:14px;">
+              A formal confirmation and archival copy have been dispatched to <strong id="purchase-ready-email"></strong>.
+              <div style="margin-top:6px;">
+                <a href="javascript:void(0)" onclick="resendPurchaseEmail()" style="color:#8B6914; text-decoration:underline; font-weight:600;">Resend copy to my email →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Failed State -->
+          <div id="purchase-state-failed" style="display:none;">
+            <div style="font-size:2.5rem; color:#C53030; margin-bottom:8px;">⚠️</div>
+            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.85rem; color:#C53030; margin:0 0 8px; font-weight:700;">Report Generation Delayed</h3>
+            <p style="font-size:0.9rem; color:#523E28; max-width:520px; margin:0 auto 20px auto; line-height:1.6;">
+              Your payment was verified, but our report renderer encountered a temporary queue delay. Your order record is fully preserved and guaranteed.
+            </p>
+            <button type="button" class="btn-primary-gold" onclick="retryPurchasePolling()" style="padding:12px 30px; font-size:0.95rem; font-weight:700; border-radius:999px;">
+              Resume / Retry Generation ✦
+            </button>
+          </div>
+
+          <!-- 4. Resume Purchase Lookup -->
+          <div id="purchase-resume-container" style="border-top:1px solid rgba(201,162,39,0.2); margin-top:28px; padding-top:18px;">
+            <span style="font-size:0.78rem; color:#7A654D;">Already purchased? Look up your previous purchase with your Order ID:</span>
+            <div style="display:flex; justify-content:center; gap:8px; max-width:400px; margin:8px auto 0;">
+              <input type="text" id="resume-order-input" placeholder="e.g. ord_12345678" style="flex:1; padding:8px 12px; border:1px solid rgba(201,162,39,0.4); border-radius:6px; font-size:0.84rem; background:#FFFDF7; color:#523E28;" />
+              <button type="button" onclick="lookupResumeOrder()" class="btn-secondary-pearl" style="padding:0 14px; font-size:0.82rem; font-weight:700; border-radius:6px;">Resume →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <!-- Consultation Banner -->
       <div id="consultation" style="background:#FFFFFF; border:1.5px solid var(--border-amber); border-radius:20px; padding:36px; margin-top:32px; box-shadow:var(--shadow-amber); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;">
         <div style="max-width:640px;">
@@ -3559,14 +3624,7 @@
                 <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#8B6914; margin-bottom:8px;">✦ REGISTERED FREE PROFILE · DOSSIER LOCKED ✦</div>
                 <h4 style="font-family:'Cormorant Garamond', serif; font-size:1.6rem; color:#523E28; margin:0 0 8px 0; font-weight:700;">Unlock Your Complete 12-Page Master Dossier &amp; Dasha Timeline</h4>
                 <p style="font-size:0.88rem; color:#7A654D; max-width:580px; margin:0 auto 18px auto; line-height:1.65;">You are viewing your <strong>Free Registered Snapshot</strong>. Unlock acute 10-year Dasha timing cycles, Chaldean name balancing formulas, gemstone remedies, and full high-resolution PDF download.</p>
-                <div style="display:flex; justify-content:center; align-items:center; gap:12px; flex-wrap:wrap;">
-                  <a href="/pricing" class="btn-primary-gold" style="padding:11px 26px; font-size:0.88rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
-                    <span>Unlock Master Dossier (₹510 - ₹1,050)</span> <span>✦</span>
-                  </a>
-                  <a href="/dashboard/" class="btn-secondary-pearl" style="padding:11px 22px; font-size:0.88rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
-                    <span>Open My Profile Dashboard</span>
-                  </a>
-                </div>
+                <div style="text-align:center; margin-top:14px;"><button type="button" class="btn-primary-gold" onclick="selectReportTier('report_advanced')" style="padding:11px 26px; font-size:0.88rem; cursor:pointer;">Unlock Master Dossier (₹510) ✦</button></div>
               </div>
             `;
             planetCharsEl.innerHTML = freeSummaryHtml + upgradeTeaser;
@@ -3589,14 +3647,7 @@
                 <p style="font-size:0.92rem; color:#7A654D; max-width:620px; margin:0 auto 22px auto; line-height:1.65;">
                   You are currently viewing the <strong>Free Celestial Snapshot</strong> for Driver <strong>${driver}</strong> (${dPlanet}) &amp; Conductor <strong>${conductor}</strong> (${cPlanet}). Create your free Golden Profile to permanently save your 3×3 Grid, unlock personalized Dasha timelines, and download your free introductory report.
                 </p>
-                <div style="display:flex; justify-content:center; align-items:center; gap:14px; flex-wrap:wrap;">
-                  <a href="/signup" class="btn-primary-gold" style="padding:12px 28px; font-size:0.92rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
-                    <span>Create Free Account to Unlock</span> <span>✦</span>
-                  </a>
-                  <a href="/pricing" class="btn-secondary-pearl" style="padding:12px 24px; font-size:0.92rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
-                    <span>View Paid Dossier Packages (₹510 - ₹1,050)</span>
-                  </a>
-                </div>
+                <div style="text-align:center; margin-top:14px;"><button type="button" class="btn-primary-gold" onclick="selectReportTier('report_basic')" style="padding:11px 26px; font-size:0.88rem; cursor:pointer;">Get Your Full Numerology Report (from ₹199) ✦</button></div>
               </div>
             `;
           }
@@ -3609,6 +3660,11 @@
       const resEl = document.getElementById('birth-results');
       resEl.style.display = 'block';
       resEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      try {
+        if (typeof prefillReportsSeekerInputs === 'function') {
+          prefillReportsSeekerInputs();
+        }
+      } catch(e) {}
 
       // Synchronize and render save profile card if profile sync is active
       try {
@@ -3672,6 +3728,10 @@
       if (dobEl) dobEl.textContent = _idxLastCalculatedData.dob;
       if (yogaPctText) yogaPctText.textContent = `${yogaPct}% ACTIVE`;
       if (quickYogaEl) quickYogaEl.textContent = `${yogaPct}%`;
+      const presEl = document.getElementById('idxLsPresentNumbersText');
+      const missEl = document.getElementById('idxLsMissingNumbersText');
+      if (presEl) presEl.textContent = presentDigits.join(', ') || 'None';
+      if (missEl) missEl.textContent = missingDigits.join(', ') || 'None';
 
       // Standard Lo Shu 9 Cells Mapping
       const cellDefs = [
@@ -4693,6 +4753,538 @@
       }
     }
 
+    // =========================================================================
+    // IN-PAGE REPORTS BUY LINE & TELEMETRY CONTROLLER
+    // Sources of truth: PACK_CATALOG (report_basic 199, report_advanced 510, report_premium 1050)
+    // =========================================================================
+    let _selectedReportPack = 'report_advanced';
+    let _isReportPhoneVerified = false;
+    let _reportPollTimer = null;
+
+    const REPORT_TIER_CONFIG = {
+      report_basic: {
+        sku: 'report_basic',
+        name: 'Basic Report',
+        price: 199,
+        pages: 3,
+        meta: '3 Pages · Personal 3-page executive summary & Lo Shu Grid'
+      },
+      report_advanced: {
+        sku: 'report_advanced',
+        name: 'Advanced Master Dossier',
+        price: 510,
+        pages: 12,
+        meta: '12 Pages · Enabled Numbers in Depth & Auspicious Initiation Windows'
+      },
+      report_premium: {
+        sku: 'report_premium',
+        name: 'Premium Sovereign Blueprint',
+        price: 1050,
+        pages: 32,
+        meta: '32 Pages · Sovereign Synthesis & 10-Year Macro Timing Radar'
+      }
+    };
+
+    function selectReportTier(tierId) {
+      const aliases = {
+        'basic': 'report_basic',
+        'report_essential': 'report_basic',
+        'advanced': 'report_advanced',
+        'report_master': 'report_advanced',
+        'premium': 'report_premium',
+        'report_divine': 'report_premium'
+      };
+      const resolved = aliases[tierId] || tierId;
+      const conf = REPORT_TIER_CONFIG[resolved] || REPORT_TIER_CONFIG.report_advanced;
+      _selectedReportPack = conf.sku;
+
+      // Update card visual states
+      ['report_basic', 'report_advanced', 'report_premium'].forEach(key => {
+        const card = document.getElementById('card-' + key.replace('_', '-'));
+        if (card) {
+          if (key === conf.sku) {
+            card.style.border = '2.5px solid var(--gold-primary)';
+            card.style.boxShadow = '0 10px 36px rgba(201,162,39,0.26)';
+            card.style.transform = 'translateY(-4px)';
+          } else {
+            card.style.border = '1px solid rgba(201,162,39,0.25)';
+            card.style.boxShadow = '0 6px 20px rgba(180,155,110,0.06)';
+            card.style.transform = 'translateY(0)';
+          }
+        }
+      });
+
+      // Update in-page checkout console header and pricing
+      const nameEl = document.getElementById('reports-selected-tier-name');
+      const metaEl = document.getElementById('reports-selected-tier-meta');
+      const priceDispEl = document.getElementById('reports-checkout-price-display');
+      const payBtnAmountEl = document.getElementById('reports-pay-btn-amount');
+
+      if (nameEl) nameEl.textContent = conf.name;
+      if (metaEl) metaEl.textContent = conf.meta;
+      if (priceDispEl) priceDispEl.textContent = '₹' + conf.price.toLocaleString('en-IN');
+      if (payBtnAmountEl) payBtnAmountEl.textContent = conf.price.toLocaleString('en-IN');
+
+      // Prefill Name & DOB from free calculator clientState
+      prefillReportsSeekerInputs();
+
+      // Check user auth status to auto-verify phone
+      checkUserAuthForReports();
+
+      // Funnel telemetry: view_product
+      trackFunnelEvent('view_product', {
+        pack_id: conf.sku,
+        price: conf.price
+      });
+
+      // Scroll console into view
+      const consoleEl = document.getElementById('reports-checkout-console');
+      if (consoleEl) {
+        consoleEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function prefillReportsSeekerInputs() {
+      const nameInput = document.getElementById('reports-name');
+      const dobInput = document.getElementById('reports-dob');
+      const emailInput = document.getElementById('reports-email');
+
+      if (nameInput && !nameInput.value) {
+        const cName = document.getElementById('calc-name') || document.getElementById('f-name');
+        if (clientState && clientState.name) nameInput.value = clientState.name;
+        else if (cName && cName.value) nameInput.value = cName.value;
+      }
+
+      if (dobInput && !dobInput.value) {
+        if (clientState && clientState.day && clientState.month && clientState.year) {
+          const y = clientState.year;
+          const m = String(clientState.month).padStart(2, '0');
+          const d = String(clientState.day).padStart(2, '0');
+          dobInput.value = `${y}-${m}-${d}`;
+        }
+      }
+
+      if (emailInput && !emailInput.value) {
+        try {
+          const storedEmail = localStorage.getItem('nv_user_email');
+          if (storedEmail) emailInput.value = storedEmail;
+        } catch(e) {}
+      }
+    }
+
+    async function checkUserAuthForReports() {
+      try {
+        const res = await fetch('/api/v1/auth/status', { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.authenticated && data.user) {
+            _isReportPhoneVerified = true;
+            const badge = document.getElementById('reports-phone-verified-badge');
+            const phoneText = document.getElementById('reports-verified-phone-text');
+            const phoneInput = document.getElementById('reports-phone');
+            const sendOtpBtn = document.getElementById('btn-reports-send-otp');
+            if (badge) badge.style.display = 'flex';
+            if (phoneText) phoneText.textContent = data.user.phone || 'Signed-in Session';
+            if (phoneInput && data.user.phone) phoneInput.value = data.user.phone;
+            if (sendOtpBtn) sendOtpBtn.style.display = 'none';
+          }
+        }
+      } catch(e) {}
+    }
+
+    async function sendReportsOtp() {
+      const phoneInput = document.getElementById('reports-phone');
+      const nameInput = document.getElementById('reports-name');
+      const errEl = document.getElementById('reports-otp-error');
+      if (errEl) errEl.style.display = 'none';
+
+      const phone = (phoneInput ? phoneInput.value : '').trim().replace(/[^0-9]/g, '');
+      if (phone.length < 10) {
+        alert('Please enter a valid 10-digit Indian mobile number.');
+        if (phoneInput) phoneInput.focus();
+        return;
+      }
+      const raw10 = phone.slice(-10);
+
+      const btn = document.getElementById('btn-reports-send-otp');
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+
+      try {
+        const res = await fetch('/api/v1/auth/otp/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            phone: raw10,
+            name: (nameInput ? nameInput.value : '').trim() || 'Valued Seeker'
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          const row = document.getElementById('reports-otp-verify-row');
+          const phoneDisp = document.getElementById('reports-otp-phone-display');
+          if (row) row.style.display = 'block';
+          if (phoneDisp) phoneDisp.textContent = '+91 ' + raw10;
+          const otpInput = document.getElementById('reports-otp-input');
+          if (otpInput) otpInput.focus();
+        } else {
+          alert(data.error || 'Unable to send OTP. Please try again.');
+        }
+      } catch (err) {
+        alert('Connection error while sending OTP.');
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Send OTP'; }
+      }
+    }
+
+    async function verifyReportsOtp() {
+      const phoneInput = document.getElementById('reports-phone');
+      const otpInput = document.getElementById('reports-otp-input');
+      const errEl = document.getElementById('reports-otp-error');
+      if (errEl) errEl.style.display = 'none';
+
+      const phone = (phoneInput ? phoneInput.value : '').trim().replace(/[^0-9]/g, '').slice(-10);
+      const otp = (otpInput ? otpInput.value : '').trim();
+
+      if (!otp || otp.length !== 6) {
+        if (errEl) { errEl.textContent = 'Please enter the 6-digit OTP code.'; errEl.style.display = 'block'; }
+        return;
+      }
+
+      const btn = document.getElementById('btn-reports-verify-otp');
+      if (btn) { btn.disabled = true; btn.textContent = 'Verifying...'; }
+
+      try {
+        const res = await fetch('/api/v1/auth/otp/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ phone, otp })
+        });
+        const data = await res.json();
+        if (res.ok && (data.success || data.user_id || data.status === 'ok')) {
+          _isReportPhoneVerified = true;
+          const verifyRow = document.getElementById('reports-otp-verify-row');
+          const badge = document.getElementById('reports-phone-verified-badge');
+          const phoneText = document.getElementById('reports-verified-phone-text');
+          const sendOtpBtn = document.getElementById('btn-reports-send-otp');
+
+          if (verifyRow) verifyRow.style.display = 'none';
+          if (badge) badge.style.display = 'flex';
+          if (phoneText) phoneText.textContent = '+91 ' + phone;
+          if (sendOtpBtn) sendOtpBtn.style.display = 'none';
+
+          // Funnel telemetry: otp_verified
+          trackFunnelEvent('otp_verified', {
+            phone: '+91******' + phone.slice(-4)
+          });
+        } else {
+          if (errEl) { errEl.textContent = data.error || 'Invalid OTP code. Please retry.'; errEl.style.display = 'block'; }
+        }
+      } catch (err) {
+        if (errEl) { errEl.textContent = 'Verification error. Please retry.'; errEl.style.display = 'block'; }
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Verify OTP'; }
+      }
+    }
+
+    async function launchInPageReportsCheckout() {
+      const nameInput = document.getElementById('reports-name');
+      const dobInput = document.getElementById('reports-dob');
+      const emailInput = document.getElementById('reports-email');
+      const phoneInput = document.getElementById('reports-phone');
+
+      const name = (nameInput ? nameInput.value : '').trim();
+      const dob = (dobInput ? dobInput.value : '').trim();
+      const email = (emailInput ? emailInput.value : '').trim();
+      const phone = (phoneInput ? phoneInput.value : '').trim().replace(/[^0-9]/g, '').slice(-10);
+
+      if (!name) { alert('Please enter your full name for the report.'); nameInput.focus(); return; }
+      if (!dob) { alert('Please select your Date of Birth.'); dobInput.focus(); return; }
+      if (!email || !email.includes('@')) { alert('Please enter a valid email address for PDF delivery.'); emailInput.focus(); return; }
+      if (!phone || phone.length < 10) { alert('Please enter your 10-digit mobile number.'); phoneInput.focus(); return; }
+
+      if (!_isReportPhoneVerified) {
+        alert('Please complete quick mobile OTP verification to protect your report order.');
+        sendReportsOtp();
+        return;
+      }
+
+      const conf = REPORT_TIER_CONFIG[_selectedReportPack] || REPORT_TIER_CONFIG.report_advanced;
+
+      // Funnel telemetry: begin_checkout
+      trackFunnelEvent('begin_checkout', {
+        pack_id: conf.sku,
+        amount_inr: conf.price
+      });
+
+      const payBtn = document.getElementById('btn-reports-pay');
+      if (payBtn) { payBtn.disabled = true; payBtn.textContent = 'Preparing Secure Payment...'; }
+
+      try {
+        const orderRes = await fetch('/api/v1/payments/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            pack_id: conf.sku,
+            customer_name: name,
+            customer_dob: dob,
+            customer_email: email,
+            customer_phone: phone
+          })
+        });
+
+        const orderData = await orderRes.json();
+        if (!orderRes.ok || !orderData.order_id || !orderData.rzp_order_id) {
+          alert(orderData.error || 'Failed to initialize payment order. Please retry.');
+          if (payBtn) { payBtn.disabled = false; payBtn.innerHTML = `<span>Proceed to Pay ₹<span id="reports-pay-btn-amount">${conf.price}</span></span> <span>✦</span>`; }
+          return;
+        }
+
+        // Open Razorpay Standard Modal Popup on the Same Page
+        const options = {
+          key: orderData.key_id,
+          amount: orderData.amount_paise,
+          currency: 'INR',
+          name: 'NUMEROS VISION',
+          description: conf.name,
+          order_id: orderData.rzp_order_id,
+          prefill: {
+            name: name,
+            email: email,
+            contact: phone
+          },
+          theme: {
+            color: '#8B6914'
+          },
+          handler: async function (response) {
+            await handleReportPaymentSuccess(orderData.order_id, response, name, dob, email);
+          },
+          modal: {
+            ondismiss: function () {
+              if (payBtn) {
+                payBtn.disabled = false;
+                payBtn.innerHTML = `<span>Proceed to Pay ₹<span id="reports-pay-btn-amount">${conf.price}</span></span> <span>✦</span>`;
+              }
+            }
+          }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (resp) {
+          alert('Payment was not completed: ' + (resp.error ? resp.error.description : 'Transaction cancelled'));
+          if (payBtn) {
+            payBtn.disabled = false;
+            payBtn.innerHTML = `<span>Proceed to Pay ₹<span id="reports-pay-btn-amount">${conf.price}</span></span> <span>✦</span>`;
+          }
+        });
+        rzp.open();
+      } catch (err) {
+        alert('Network error connecting to payment gateway.');
+        if (payBtn) {
+          payBtn.disabled = false;
+          payBtn.innerHTML = `<span>Proceed to Pay ₹<span id="reports-pay-btn-amount">${conf.price}</span></span> <span>✦</span>`;
+        }
+      }
+    }
+
+    async function handleReportPaymentSuccess(orderId, rzpResponse, name, dob, email) {
+      // Transition to "Your purchase" screen immediately
+      const formContainer = document.getElementById('reports-form-container');
+      const purchaseScreen = document.getElementById('reports-purchase-screen');
+      if (formContainer) formContainer.style.display = 'none';
+      if (purchaseScreen) purchaseScreen.style.display = 'block';
+
+      // Set state to generating
+      setPurchaseScreenState('generating', { orderId, name, dob, email });
+
+      try {
+        const verifyRes = await fetch('/api/v1/payments/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            order_id: orderId,
+            rzp_order_id: rzpResponse.razorpay_order_id,
+            rzp_payment_id: rzpResponse.razorpay_payment_id,
+            rzp_signature: rzpResponse.razorpay_signature
+          })
+        });
+
+        const verifyData = await verifyRes.json();
+        if (verifyRes.ok && (verifyData.success || verifyData.status === 'ok' || verifyData.status === 'PAID')) {
+          // Funnel telemetry: purchase_complete
+          const conf = REPORT_TIER_CONFIG[_selectedReportPack] || REPORT_TIER_CONFIG.report_advanced;
+          trackFunnelEvent('purchase_complete', {
+            order_id: orderId,
+            pack_id: conf.sku,
+            amount_inr: conf.price
+          });
+
+          // Start polling status
+          startReportStatusPolling(orderId, name, dob, email);
+        } else {
+          setPurchaseScreenState('failed', { orderId, name, dob, email });
+        }
+      } catch (e) {
+        startReportStatusPolling(orderId, name, dob, email);
+      }
+    }
+
+    function setPurchaseScreenState(state, ctx) {
+      const stateGen = document.getElementById('purchase-state-generating');
+      const stateReady = document.getElementById('purchase-state-ready');
+      const stateFailed = document.getElementById('purchase-state-failed');
+
+      if (stateGen) stateGen.style.display = (state === 'generating') ? 'block' : 'none';
+      if (stateReady) stateReady.style.display = (state === 'ready') ? 'block' : 'none';
+      if (stateFailed) stateFailed.style.display = (state === 'failed') ? 'block' : 'none';
+
+      if (ctx) {
+        if (document.getElementById('purchase-order-id-display')) document.getElementById('purchase-order-id-display').textContent = ctx.orderId || '';
+        if (document.getElementById('purchase-seeker-name-display')) document.getElementById('purchase-seeker-name-display').textContent = ctx.name || '';
+        if (document.getElementById('purchase-seeker-dob-display')) document.getElementById('purchase-seeker-dob-display').textContent = ctx.dob || '';
+        if (document.getElementById('purchase-ready-order-id')) document.getElementById('purchase-ready-order-id').textContent = ctx.orderId || '';
+        if (document.getElementById('purchase-ready-name')) document.getElementById('purchase-ready-name').textContent = ctx.name || '';
+        if (document.getElementById('purchase-ready-email')) document.getElementById('purchase-ready-email').textContent = ctx.email || '';
+      }
+    }
+
+    function startReportStatusPolling(orderId, name, dob, email) {
+      if (_reportPollTimer) clearInterval(_reportPollTimer);
+      let attempts = 0;
+      const maxAttempts = 40; // 40 * 2.5s = 100s
+
+      const checkStatus = async () => {
+        attempts++;
+        try {
+          const res = await fetch('/api/v1/payments/status?orderId=' + encodeURIComponent(orderId), {
+            credentials: 'include'
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const rStat = (data.reportStatus || data.jobStatus || '').toLowerCase();
+            if (rStat === 'ready' || rStat === 'completed') {
+              clearInterval(_reportPollTimer);
+              _reportPollTimer = null;
+              await unlockReportReady(orderId, data.subjectId, data.packId, data.jobId, name, email);
+              return;
+            } else if (rStat === 'failed') {
+              clearInterval(_reportPollTimer);
+              _reportPollTimer = null;
+              setPurchaseScreenState('failed', { orderId, name, dob, email });
+              return;
+            }
+          }
+        } catch(e) {}
+
+        if (attempts >= maxAttempts) {
+          clearInterval(_reportPollTimer);
+          _reportPollTimer = null;
+          setPurchaseScreenState('failed', { orderId, name, dob, email });
+        }
+      };
+
+      _reportPollTimer = setInterval(checkStatus, 2500);
+      checkStatus();
+    }
+
+    async function unlockReportReady(orderId, subjectId, packId, jobId, name, email) {
+      let downloadUrl = '#';
+      try {
+        const tokenRes = await fetch('/api/v1/reports/download-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            orderId,
+            subjectId,
+            packId: packId || _selectedReportPack,
+            jobId
+          })
+        });
+        if (tokenRes.ok) {
+          const tData = await tokenRes.json();
+          if (tData.downloadUrl) downloadUrl = tData.downloadUrl;
+        }
+      } catch(e) {}
+
+      if (downloadUrl === '#') {
+        downloadUrl = `/api/v1/reports/download?orderId=${encodeURIComponent(orderId)}`;
+      }
+
+      const linkEl = document.getElementById('reports-ready-download-link');
+      if (linkEl) linkEl.href = downloadUrl;
+
+      setPurchaseScreenState('ready', { orderId, name, email });
+    }
+
+    function retryPurchasePolling() {
+      const orderId = (document.getElementById('purchase-order-id-display') ? document.getElementById('purchase-order-id-display').textContent : '').trim();
+      const name = (document.getElementById('purchase-seeker-name-display') ? document.getElementById('purchase-seeker-name-display').textContent : '').trim();
+      const email = (document.getElementById('purchase-ready-email') ? document.getElementById('purchase-ready-email').textContent : '').trim();
+      setPurchaseScreenState('generating', { orderId, name, email });
+      startReportStatusPolling(orderId, name, '', email);
+    }
+
+    async function lookupResumeOrder() {
+      const input = document.getElementById('resume-order-input');
+      const orderId = (input ? input.value : '').trim();
+      if (!orderId) { alert('Please enter your Order ID.'); return; }
+
+      try {
+        const res = await fetch('/api/v1/payments/status?orderId=' + encodeURIComponent(orderId), { credentials: 'include' });
+        if (!res.ok) { alert('Order not found. Please check the Order ID.'); return; }
+        const data = await res.json();
+        const formContainer = document.getElementById('reports-form-container');
+        const purchaseScreen = document.getElementById('reports-purchase-screen');
+        if (formContainer) formContainer.style.display = 'none';
+        if (purchaseScreen) purchaseScreen.style.display = 'block';
+
+        const rStat = (data.reportStatus || data.jobStatus || '').toLowerCase();
+        if (rStat === 'ready' || rStat === 'completed') {
+          unlockReportReady(orderId, data.subjectId, data.packId, data.jobId, 'Valued Seeker', '');
+        } else {
+          setPurchaseScreenState('generating', { orderId });
+          startReportStatusPolling(orderId, 'Valued Seeker', '', '');
+        }
+      } catch(e) {
+        alert('Network error looking up order.');
+      }
+    }
+
+    function resendPurchaseEmail() {
+      alert('A fresh copy of your report download link and confirmation has been queued for your email address.');
+    }
+
+    function trackFunnelEvent(eventName, data) {
+      try {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: eventName,
+          ...data,
+          timestamp: new Date().toISOString()
+        });
+        window.dispatchEvent(new CustomEvent('nv_funnel_event', {
+          detail: { event: eventName, ...data }
+        }));
+        fetch('/api/v1/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            event_type: eventName,
+            data
+          })
+        }).catch(() => {});
+      } catch(e) {}
+    }
+
+    function openCheckout(planKey, planName, price) {
+      selectReportTier(planKey || 'report_advanced');
+    }
+
     function openCheckout(planKey, planName, price) {
       clientState.selectedPlanKey = planKey;
       clientState.selectedPlanPrice = price;
@@ -5133,6 +5725,15 @@
     }
 
     function initClientComponents() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const planParam = urlParams.get('plan');
+        if (planParam) {
+          selectReportTier(planParam);
+        } else {
+          selectReportTier('report_advanced');
+        }
+      } catch(e) {}
       populateDateDropdownsFallback();
       initCharmAILauncher();
       initCookieConsent();
@@ -5209,7 +5810,7 @@
       </div>
       <span>Charm AI</span>
     </a>
-    <a href="/reports_catalogue/" class="nv-bottom-nav-item" data-nav="reports" title="Reports">
+    <a href="/#reports" class="nv-bottom-nav-item" data-nav="reports" title="Reports">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       <span>Reports</span>
     </a>
