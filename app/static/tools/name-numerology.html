@@ -500,14 +500,12 @@
   </div>
 
   <!-- Step 2 & 3: Unified Curiosity Bridge & Standard Upgrade Panel -->
-  <div id="res-funnel-offer" style="margin-top:20px;"></div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.nvFunnel && typeof window.nvFunnel.renderOfferBridge === 'function') {
-        window.nvFunnel.renderOfferBridge('res-funnel-offer', { productId: 'name_numerology' });
-      }
-    });
-  </script>
+    <!-- Single Report Options CTA -->
+  <div style="text-align:center; margin-top:32px;">
+    <button type="button" class="btn-primary-gold" onclick="seeNameReportOptions()" style="padding:15px 36px; font-size:1.05rem; font-weight:700; border-radius:999px; box-shadow:0 6px 22px rgba(201,162,39,0.28); cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+      <span>See my report options</span> <span>✦</span>
+    </button>
+  </div>
   <div id="nameSaveProfileContainer"></div>
 </div>
 
@@ -717,6 +715,23 @@ function calcForSystem(letters, sys) {
 }
 
 function calcLP(d,m,y){return reduce(reduce(d)+reduce(m)+reduce(y));}
+
+
+function seeNameReportOptions() {
+  const name = document.getElementById('nn-name')?.value?.trim() || 'Seeker';
+  const d = parseInt(document.getElementById('nn-day')?.value);
+  const m = parseInt(document.getElementById('nn-month')?.value);
+  const y = parseInt(document.getElementById('nn-year')?.value);
+  const formattedDob = (d && m && y) ? `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}` : '';
+  sessionStorage.setItem('nv_reading_input', JSON.stringify({
+    name: name,
+    day: d || null,
+    month: m || null,
+    year: y || null,
+    dob: formattedDob
+  }));
+  window.location.href = '/your-reading/?from=name-numerology';
+}
 
 function calcName(){
   const rawName = document.getElementById('nn-name').value.trim();

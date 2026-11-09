@@ -483,14 +483,12 @@
   </div>
 
   <!-- Step 2 & 3: Unified Curiosity Bridge & Standard Upgrade Panel -->
-  <div id="res-funnel-offer-lucky"></div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      if (window.nvFunnel && typeof window.nvFunnel.renderOfferBridge === "function") {
-        window.nvFunnel.renderOfferBridge("res-funnel-offer-lucky", { productId: "birth_number" });
-      }
-    });
-  </script>
+    <!-- Single Report Options CTA -->
+  <div style="text-align:center; margin-top:32px;">
+    <button type="button" class="btn-primary-gold" onclick="seeLuckyReportOptions()" style="padding:15px 36px; font-size:1.05rem; font-weight:700; border-radius:999px; box-shadow:0 6px 22px rgba(201,162,39,0.28); cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+      <span>See my report options</span> <span>✦</span>
+    </button>
+  </div>
 
   <div class="tool-links">
     <a href="/tools/life-path-calculator" class="tl">Life Path Calculator</a>
@@ -685,6 +683,32 @@ function reduce(n){return reduceToSingle(n, false);}
 function chaldean(s){
   const m={a:1,i:1,q:1,j:1,y:1,b:2,k:2,r:2,c:3,g:3,l:3,s:3,d:4,m:4,t:4,e:5,h:5,n:5,x:5,u:6,v:6,w:6,o:7,z:7,f:8,p:8};
   return s.toLowerCase().replace(/[^a-z]/g,'').split('').reduce((a,c)=>a+(m[c]||0),0);
+}
+
+
+function seeLuckyReportOptions() {
+  const d = parseInt(document.getElementById('ln-day').value);
+  const m = parseInt(document.getElementById('ln-month').value);
+  const y = parseInt(document.getElementById('ln-year').value);
+  const name = document.getElementById('ln-name')?.value?.trim() || 'Seeker';
+  if (!d || !m || !y || d < 1 || d > 31 || m < 1 || m > 12 || y < 1900) {
+    alert('Please enter a valid date of birth.');
+    return;
+  }
+  const formattedDob = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  const driver = reduceToSingle(d, false);
+  const fullDigits = `${String(d).padStart(2, '0')}${String(m).padStart(2, '0')}${String(y).padStart(4, '0')}`;
+  const destinyRaw = reduceToSingle(digitSum(fullDigits), true);
+  sessionStorage.setItem('nv_reading_input', JSON.stringify({
+    name: name,
+    day: d,
+    month: m,
+    year: y,
+    dob: formattedDob,
+    driver: driver,
+    conductor: destinyRaw
+  }));
+  window.location.href = '/your-reading/?from=lucky-number';
 }
 
 function calcLucky(){

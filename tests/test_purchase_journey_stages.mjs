@@ -264,6 +264,71 @@ async function runTests() {
     assert(false, `Dashboard unverified session test threw error: ${err.message}`);
   }
 
+
+  // ── TEST 7: Strict Gregorian Calendar Validation (31 Feb, 31 Apr, Leap Years) ──
+  try {
+    const yourReadingHtml = readFileSync(join(rootDir, 'app/static/your-reading.html'), 'utf-8');
+    assert(yourReadingHtml.includes('isValidGregorianDate'), 'your-reading.html implements isValidGregorianDate function');
+
+    // Extract function implementation from your-reading.html
+    const funcMatch = yourReadingHtml.match(/function isValidGregorianDate\(d, m, y\)[\s\S]*?\n    \}/);
+    if (!funcMatch) throw new Error('Could not extract isValidGregorianDate from your-reading.html');
+    
+    const isValidGregorianDate = new Function('d', 'm', 'y', funcMatch[0] + '; return isValidGregorianDate(d, m, y);');
+
+    // Rigorous test matrix
+    assert(!isValidGregorianDate(31, 2, 2024), 'Rejects impossible date 31 February');
+    assert(!isValidGregorianDate(31, 4, 2024), 'Rejects 31 April (30-day month)');
+    assert(!isValidGregorianDate(31, 6, 2024), 'Rejects 31 June (30-day month)');
+    assert(!isValidGregorianDate(31, 9, 2024), 'Rejects 31 September (30-day month)');
+    assert(!isValidGregorianDate(31, 11, 2024), 'Rejects 31 November (30-day month)');
+    assert(!isValidGregorianDate(29, 2, 2023), 'Rejects 29 February on non-leap year (2023)');
+    assert(!isValidGregorianDate(29, 2, 1900), 'Rejects 29 February on century year not divisible by 400 (1900)');
+    assert(isValidGregorianDate(29, 2, 2024), 'Accepts 29 February on valid leap year (2024)');
+    assert(isValidGregorianDate(29, 2, 2000), 'Accepts 29 February on valid 400-year leap year (2000)');
+    assert(isValidGregorianDate(30, 4, 2024), 'Accepts valid date 30 April');
+  } catch (err) {
+    assert(false, `Gregorian calendar validation test threw error: ${err.message}`);
+  }
+
+  // ── TEST 8: SessionStorage Hygiene — nv_reading_input cleared on payment and dashboard arrival ──
+  try {
+    const yourReadingHtml = readFileSync(join(rootDir, 'app/static/your-reading.html'), 'utf-8');
+    const dashboardHtml = readFileSync(join(rootDir, 'app/static/dashboard.html'), 'utf-8');
+
+    const readingClearsOnSuccess = yourReadingHtml.includes("sessionStorage.removeItem('nv_reading_input')");
+    const dashboardClearsOnArrival = dashboardHtml.includes("sessionStorage.removeItem('nv_reading_input')");
+
+    assert(readingClearsOnSuccess, 'your-reading.html explicitly clears nv_reading_input upon successful payment confirmation');
+    assert(dashboardClearsOnArrival, 'dashboard.html explicitly clears nv_reading_input upon arrival');
+  } catch (err) {
+    assert(false, `SessionStorage hygiene test threw error: ${err.message}`);
+  }
+
+  // ── TEST 9: Stage B Checkout Architecture (Locked Fields, Baseline Alignment, Unticked Consents, ISO DOB) ──
+  try {
+    const yourReadingHtml = readFileSync(join(rootDir, 'app/static/your-reading.html'), 'utf-8');
+
+    // Locked seeker name and locked DOB
+    const hasLockedName = /id=["']checkout-seeker-name["'][^>]*readonly/i.test(yourReadingHtml);
+    const hasLockedDob = /id=["']checkout-seeker-dob["'][^>]*readonly/i.test(yourReadingHtml);
+    assert(hasLockedName && hasLockedDob, 'Stage B checkout locks Seeker Name and Date of Birth as readonly');
+
+    // Baseline aligned verification row (no mobile field overlap, collapsed dead space)
+    assert(yourReadingHtml.includes('checkout-otp-row'), 'Stage B checkout uses dedicated baseline-aligned checkout-otp-row');
+    assert(yourReadingHtml.includes('btn-checkout-send-code'), 'Send Code button is independent with zero overlap on mobile field');
+
+    // Consents default to unticked
+    const serviceConsentUnticked = !/id=["']checkout-consent-service["'][^>]*\bchecked\b/i.test(yourReadingHtml);
+    const marketingConsentUnticked = !/id=["']checkout-consent-marketing["'][^>]*\bchecked\b/i.test(yourReadingHtml);
+    assert(serviceConsentUnticked && marketingConsentUnticked, 'Both Stage B checkout statutory consents default to unticked');
+
+    // ISO DOB submission in create-order
+    assert(yourReadingHtml.includes('dob: isoDob') || yourReadingHtml.includes('customer_dob: isoDob'), 'Date of birth is stored and sent as ISO YYYY-MM-DD');
+  } catch (err) {
+    assert(false, `Stage B checkout architecture test threw error: ${err.message}`);
+  }
+
   console.log(`\nTests Completed: ${passCount} Passed, ${failCount} Failed\n`);
   if (failCount > 0) {
     process.exit(1);

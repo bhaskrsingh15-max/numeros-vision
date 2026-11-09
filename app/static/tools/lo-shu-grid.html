@@ -523,21 +523,8 @@
         Lo Shu Grid: Full Anveil Charms, Present Powers &amp; Element Yogas
       </h3>
       <p style="font-size:0.86rem; color:#7A654D; margin:0 0 12px; line-height:1.5;">
-        Unlock your personalized natal matrix across 3 comprehensive consultation tiers: Full Missing Void Activation (@ ₹1,050), Present Number Harmonization (@ ₹510), and Element Yogas Active % (@ ₹199).
+        Explore your personalized natal matrix across missing numbers, present numbers, and elemental planes.
       </p>
-      
-      <!-- 3 Top Ranked Pills -->
-      <div style="display:flex; flex-wrap:wrap; gap:10px;">
-        <button type="button" class="ls-pitch-pill active" onclick="selectConversionOffer('missing')" id="pillMissing" style="background:#FFF9E6; border:1px solid #C9A227; color:#8B6914; padding:6px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-          <span>🔒 1st: Missing Numbers: Full Anveil @ ₹1,050</span>
-        </button>
-        <button type="button" class="ls-pitch-pill" onclick="selectConversionOffer('present')" id="pillPresent" style="background:#EBF7F2; border:1px solid #16835B; color:#16835B; padding:6px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-          <span>🌿 2nd: Present Numbers: Harmonize @ ₹510</span>
-        </button>
-        <button type="button" class="ls-pitch-pill" onclick="selectConversionOffer('yogas')" id="pillYogas" style="background:#FFF2EB; border:1px solid #D97706; color:#B45309; padding:6px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
-          <span>⚡ 3rd: Element Yogas: Active % @ ₹199</span>
-        </button>
-      </div>
     </div>
 
     <!-- Two-Column Interactive Layout -->
@@ -1122,168 +1109,36 @@
       }
     }
 
-    function selectConversionOffer(offerType, specificNum) {
+    
+function seeLoShuReportOptions() {
+  const name = document.getElementById('ls-name')?.value?.trim() || 'Seeker';
+  const d = parseInt(document.getElementById('ls-day')?.value);
+  const m = parseInt(document.getElementById('ls-month')?.value);
+  const y = parseInt(document.getElementById('ls-year')?.value);
+  const formattedDob = (d && m && y) ? `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}` : '';
+  sessionStorage.setItem('nv_reading_input', JSON.stringify({
+    name: name,
+    day: d || null,
+    month: m || null,
+    year: y || null,
+    dob: formattedDob
+  }));
+  window.location.href = '/your-reading/?from=lo-shu-grid';
+}
+
+function selectConversionOffer(offerType, specificNum) {
       const pitchCard = document.getElementById('lsDynamicPitchCard');
       if (!pitchCard) return;
-
-      const pills = [
-        { id: 'pillMissing', type: 'missing' },
-        { id: 'pillPresent', type: 'present' },
-        { id: 'pillYogas', type: 'yogas' }
-      ];
-      pills.forEach(p => {
-        const el = document.getElementById(p.id);
-        if (el) {
-          if (p.type === offerType) {
-            el.classList.add('active');
-            el.style.transform = 'translateY(-2px)';
-            el.style.boxShadow = '0 4px 12px rgba(201,162,39,0.3)';
-          } else {
-            el.classList.remove('active');
-            el.style.transform = 'none';
-            el.style.boxShadow = 'none';
-          }
-        }
-      });
-
-      const missingList = _lastCalculatedData.missing.length > 0 ? _lastCalculatedData.missing.join(', ') : 'None';
-      const presentList = _lastCalculatedData.present.join(', ');
-      const yogaPct = _lastCalculatedData.yogaPct || 25;
-
-      if (offerType === 'missing') {
-        const numText = specificNum ? `(Number ${specificNum} Karma Void)` : `[${missingList}]`;
-        pitchCard.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-            <div>
-              <div style="font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#8B6914;">
-                🔒 FULL ANVEIL CHARM · DIAMOND ROADMAP (32 PAGES)
-              </div>
-              <div style="font-size:0.78rem; color:#7A654D; margin-top:2px;">
-                Complete Name Balancing &amp; Element Yogas
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#8B6914;">₹1,050</span>
-              </div>
-          </div>
-
-          <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
-            FULL ANVEIL CHARM FOR MISSING NUMBERS (KARMIC VOID ACTIVATION)
-          </h4>
-
-          <p style="font-size:0.83rem; color:#523E28; line-height:1.55; margin-bottom:14px;">
-            Your birth grid carries missing numbers <strong>${numText}</strong>, creating specific energetic voids in wealth preservation, commercial balance, and mentor support. In the Diamond Sovereign Roadmap, we activate these unsealed vibrations through Chaldean Name Balancing, Element Raj Yoga completion, and directional Vastu remedies.
-          </p>
-
-          <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.35); border-radius:10px; padding:12px 14px; margin-bottom:16px;">
-            <div style="font-size:0.75rem; font-weight:700; color:#8B6914; margin-bottom:6px;">
-              ✦ Full Activation in Diamond Sovereign Roadmap (32 Pages):
-            </div>
-            <ul style="margin:0; padding-left:18px; font-size:0.78rem; color:#523E28; line-height:1.6;">
-              <li><strong>Chaldean Name Balancing:</strong> Adding the missing Number vibrations to your calling name</li>
-              <li><strong>Element Yogas Balancing:</strong> Completing the Golden Raj Yoga (4-5-6) &amp; Silver Earth Plane</li>
-              <li><strong>Vastu Directional Rectification:</strong> Exact room cures (SW 2, E 3, SE 4, Center 5, NW 6, W 7)</li>
-              <li><strong>4-Stage Pinnacle Cycles:</strong> Complete life roadmap covering Ages 0-32, 33-41, 42-50 &amp; 51+</li>
-            </ul>
-          </div>
-
-          <button type="button" onclick="launchOfferCheckout('report_premium', 1050, 'Full Anveil Charm: Missing Number Activation')" style="width:100%; padding:14px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(201,162,39,0.35); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-            ANVEIL FULL MISSING CHARMS (₹1,050) &rarr;
+      pitchCard.innerHTML = `
+        <div style="text-align:center; padding:28px 16px;">
+          <h4 style="font-family:'Cormorant Garamond',serif; font-size:1.45rem; color:#8B6914; margin-bottom:12px;">Explore Your Complete Natal Chart Analysis</h4>
+          <p style="font-size:0.88rem; color:#7A654D; max-width:440px; margin:0 auto 20px;">Review detailed missing number remediations, elemental plane balance, and personal dasha cycles across all available report options.</p>
+          <button type="button" class="btn-primary-gold" onclick="seeLoShuReportOptions()" style="padding:15px 36px; font-size:1.05rem; font-weight:700; border-radius:999px; box-shadow:0 6px 22px rgba(201,162,39,0.28); cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+            <span>See my report options</span> <span>✦</span>
           </button>
-          <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
-            🔒 Ready Within Minutes · Private &amp; Secure · Authentic Guidance
-          </div>
-        `;
-      } else if (offerType === 'present') {
-        const numText = specificNum ? `(Number ${specificNum})` : `[${presentList}]`;
-        pitchCard.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-            <div>
-              <div style="font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#16835B;">
-                🌿 PRESENT NUMBER HARMONIZATION (12 PAGES)
-              </div>
-              <div style="font-size:0.78rem; color:#7A654D; margin-top:2px;">
-                Amplification &amp; Multi-Digit Frequency Harmonization
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#16835B;">₹510</span>
-              </div>
-          </div>
-
-          <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
-            PRESENT NUMBER HARMONIZATION &amp; FREQUENCY MASTERY
-          </h4>
-
-          <p style="font-size:0.83rem; color:#523E28; line-height:1.55; margin-bottom:14px;">
-            Your natal chart carries active digits <strong>${numText}</strong>. Multiple repeating digits (such as 1111 or 88) create intense energetic spikes in leadership, drive, and perseverance. In our Advanced Dossier, we harmonize repeating frequencies and channel inborn gifts safely.
-          </p>
-
-          <div style="background:#EBF7F2; border:1px solid rgba(22,131,91,0.3); border-radius:10px; padding:12px 14px; margin-bottom:16px;">
-            <div style="font-size:0.75rem; font-weight:700; color:#16835B; margin-bottom:6px;">
-              ✦ Included in Advanced Numerology Dossier (12 Pages):
-            </div>
-            <ul style="margin:0; padding-left:18px; font-size:0.78rem; color:#523E28; line-height:1.6;">
-              <li><strong>Repeating Digit Calibration:</strong> Turning excessive intensity into productive focus</li>
-              <li><strong>Planet &amp; Archetype Synergy:</strong> Sun (1), Moon (2), Saturn (8), Mars (9) alignment</li>
-              <li><strong>Mahadasha &amp; Antardasha Timing:</strong> 10-year personal life cycle mapping</li>
-              <li><strong>Auspicious Timing &amp; Color Harmonization:</strong> Day, color, and gemstone compatibility</li>
-            </ul>
-          </div>
-
-          <button type="button" onclick="launchOfferCheckout('report_advanced', 510, 'Present Number Harmonization Dossier')" style="width:100%; padding:14px; background:linear-gradient(135deg, #16835B 0%, #0E5C3E 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(22,131,91,0.3); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-            HARMONIZE PRESENT CHARMS (₹510) &rarr;
-          </button>
-          <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
-            🌿 Ready Within Minutes · Private &amp; Secure · Authentic Guidance
-          </div>
-        `;
-      } else if (offerType === 'yogas') {
-        pitchCard.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-            <div>
-              <div style="font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#B45309;">
-                ⚡ ELEMENT YOGAS ALIGNMENT (3 PAGES)
-              </div>
-              <div style="font-size:0.78rem; color:#7A654D; margin-top:2px;">
-                Elemental Balance &amp; Plane Synergy
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#B45309;">₹199</span>
-              </div>
-          </div>
-
-          <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
-            ELEMENT YOGAS ALIGNMENT &amp; PLANE BALANCING
-          </h4>
-
-          <p style="font-size:0.83rem; color:#523E28; line-height:1.55; margin-bottom:14px;">
-            Your birth matrix currently has <strong>${yogaPct}% active elemental plane alignment</strong>. Completing your mental, emotional, and practical planes balances the natural flow of Wood, Fire, Earth, Metal, and Water energies.
-          </p>
-
-          <div style="background:#FFF2EB; border:1px solid rgba(217,119,6,0.3); border-radius:10px; padding:12px 14px; margin-bottom:16px;">
-            <div style="font-size:0.75rem; font-weight:700; color:#B45309; margin-bottom:6px;">
-              ✦ Included in Basic Report (3 Pages):
-            </div>
-            <ul style="margin:0; padding-left:18px; font-size:0.78rem; color:#523E28; line-height:1.6;">
-              <li><strong>8-Plane Elemental Strength Scan:</strong> Thought, Will, Action, Mental, Emotional &amp; Practical</li>
-              <li><strong>Five Elements Balancing:</strong> Spatial and directional room alignment</li>
-              <li><strong>Personalized Angel &amp; Master Numbers:</strong> Meaningful life synchronicities</li>
-              <li><strong>Directional Guidance:</strong> Auspicious orientation for work and focus</li>
-            </ul>
-          </div>
-
-          <button type="button" onclick="launchOfferCheckout('report_basic', 199, 'Element Yogas & Plane Alignment Report')" style="width:100%; padding:14px; background:linear-gradient(135deg, #D97706 0%, #B45309 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(217,119,6,0.3); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-            ACTIVATE ELEMENT YOGAS (₹199) &rarr;
-          </button>
-          <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
-            ⚡ Ready Within Minutes · Private &amp; Secure · Authentic Guidance
-          </div>
-        `;
-      }
+        </div>
+      `;
     }
-
     let _selectedPlanKey = 'report_premium';
     let _selectedPlanPrice = 1050;
 

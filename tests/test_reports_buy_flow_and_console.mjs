@@ -14,6 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import worker from '../app/static/_worker.js';
 const indexHtml = fs.readFileSync(path.resolve('app/static/index.html'), 'utf8');
+const yourReadingHtml = fs.readFileSync(path.resolve('app/static/your-reading.html'), 'utf8');
 const pricingHtml = fs.readFileSync(path.resolve('app/static/pricing.html'), 'utf8');
 const packsJson = JSON.parse(fs.readFileSync(path.resolve('app/config/packs.json'), 'utf8'));
 
@@ -30,13 +31,13 @@ async function runSuite() {
   assert.equal(packsJson.core_reports.report_advanced.price_inr, 510, 'Advanced report must be 510');
   assert.equal(packsJson.core_reports.report_premium.price_inr, 1050, 'Premium report must be 1050');
 
-  // Verify in index.html that all 3 tiers exist with exact catalog prices
-  assert.ok(indexHtml.includes('card-report-basic'), 'card-report-basic must exist in index.html');
-  assert.ok(indexHtml.includes('card-report-advanced'), 'card-report-advanced must exist in index.html');
-  assert.ok(indexHtml.includes('card-report-premium'), 'card-report-premium must exist in index.html');
-  assert.ok(indexHtml.includes('₹199'), 'Basic price ₹199 must be in HTML');
-  assert.ok(indexHtml.includes('₹510'), 'Advanced price ₹510 must be in HTML');
-  assert.ok(indexHtml.includes('₹1,050'), 'Premium price ₹1,050 must be in HTML');
+  // Under Stage A, the 3 tiers exist with exact catalog prices on /your-reading/
+  assert.ok(yourReadingHtml.includes('card-report-basic'), 'card-report-basic must exist in your-reading.html');
+  assert.ok(yourReadingHtml.includes('card-report-advanced'), 'card-report-advanced must exist in your-reading.html');
+  assert.ok(yourReadingHtml.includes('card-report-premium'), 'card-report-premium must exist in your-reading.html');
+  assert.ok(yourReadingHtml.includes('₹199'), 'Basic price ₹199 must be in your-reading.html');
+  assert.ok(yourReadingHtml.includes('₹510'), 'Advanced price ₹510 must be in your-reading.html');
+  assert.ok(yourReadingHtml.includes('₹1,050'), 'Premium price ₹1,050 must be in your-reading.html');
   console.log('  ✓ Tier picker prices match PACK_CATALOG exactly (199, 510, 1050)');
   passedCount++;
 
@@ -76,10 +77,9 @@ async function runSuite() {
   // TEST 4: Single Primary CTA & Quiet Secondary Link After Free Calculator
   // ---------------------------------------------------------------------------
   console.log('[TEST 4] Testing post-calculator CTA block cleanup (Requirement 2)...');
-  assert.ok(indexHtml.includes('id="calc-after-cta-block"'), 'calc-after-cta-block must exist');
-  assert.ok(indexHtml.includes('Get Your Full Numerology Report (from ₹199)'), 'Primary CTA text must match');
-  assert.ok(indexHtml.includes('Compare all 3 report tiers &amp; inclusions ↓'), 'Quiet secondary link text must match');
-  assert.ok(indexHtml.includes('nv-quiet-link'), 'Quiet link must carry nv-quiet-link styling class');
+  assert.ok(indexHtml.includes('id="btn-see-report-options"'), 'btn-see-report-options must exist');
+  assert.ok(indexHtml.includes('See my report options'), 'Primary CTA text must match "See my report options"');
+  assert.ok(indexHtml.includes('navigateToReportOptions'), 'navigateToReportOptions handler must exist');
 
   // Verify that cluttered paid pitch pills & conversion matrix table were removed from loShuReferenceCard
   assert.ok(!indexHtml.includes('id="idxPillMissing"'), 'cluttered idxPillMissing must be removed');

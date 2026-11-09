@@ -46,6 +46,16 @@ temp_*.js
 temp_*.py
 scripts/patch_*.py
 scripts/run_*.py
+scripts/view_*.py
+scripts/fast_*.py
+scripts/audit_*.py
+scripts/wire_*.py
+scripts/update_card_classes.py
+data/banned_words_audit.json
+data/python_real_results.json
+data/test_suites_full_report.json
+data/test_results_raw.txt
+wt-6c0c676/
 
 # System files
 .DS_Store

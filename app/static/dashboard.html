@@ -753,6 +753,11 @@
     ];
 
     async function initDashboard() {
+      // Clear transient reading input immediately upon arrival at dashboard
+      try {
+        sessionStorage.removeItem('nv_reading_input');
+      } catch (e) {}
+
       try {
         const meRes = await fetch('/api/me');
         if (meRes.status === 401) {

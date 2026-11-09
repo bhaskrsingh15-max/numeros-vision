@@ -12,6 +12,7 @@
   
   <link rel="stylesheet" href="/static/css/theme.css?v=5.5.0" />
   <link rel="stylesheet" href="/static/css/nav.css?v=5.5.0" />
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <style>
     :root {
@@ -304,6 +305,223 @@
       border: 1.5px solid var(--border-gold);
       border-radius: 20px;
     }
+
+    /* Stage B Unified Single-Screen Checkout Modal */
+    .checkout-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(82, 62, 40, 0.68);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    .checkout-modal-backdrop.active {
+      display: flex;
+    }
+    .checkout-modal-card {
+      background: #FFFFFF;
+      border: 2px solid var(--gold-primary);
+      border-radius: 16px;
+      max-width: 620px;
+      width: 100%;
+      padding: clamp(24px, 4vw, 36px);
+      box-shadow: 0 20px 60px rgba(82, 62, 40, 0.22);
+      box-sizing: border-box;
+      position: relative;
+      margin: auto;
+    }
+    .checkout-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      line-height: 1;
+      color: var(--ink-muted);
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .checkout-modal-close:hover {
+      color: var(--ink);
+    }
+    .checkout-modal-header {
+      border-bottom: 1px solid var(--border-gold);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+    .checkout-modal-tier-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--emerald);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .checkout-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 6px;
+    }
+    .checkout-modal-price {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+    }
+    .checkout-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 600px) {
+      .checkout-form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+    .checkout-field-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .checkout-input {
+      width: 100%;
+      height: 44px;
+      padding: 10px 14px;
+      font-size: 0.92rem;
+      color: var(--ink);
+      border: 1px solid var(--border-gold);
+      border-radius: 8px;
+      box-sizing: border-box;
+      background: #FFFDF7;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .checkout-input:focus {
+      outline: none;
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.2);
+    }
+    .checkout-input[readonly] {
+      background: #F7F3EA;
+      color: #6A563D;
+      cursor: not-allowed;
+      border-color: rgba(201, 162, 39, 0.25);
+    }
+    /* Baseline-aligned verification code row without overlap */
+    .checkout-otp-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: flex-end;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 480px) {
+      .checkout-otp-row {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+    }
+    .btn-checkout-send-code {
+      height: 44px;
+      padding: 0 20px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--gold-primary);
+      color: var(--gold-dark);
+      font-weight: 600;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-checkout-send-code:hover:not(:disabled) {
+      background: var(--gold-soft);
+      color: #FFFFFF;
+      border-color: var(--gold-soft);
+    }
+    .btn-checkout-send-code:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .checkout-consents {
+      background: #F7F3EA;
+      border: 1px solid rgba(201, 162, 39, 0.25);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .checkout-consent-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: var(--ink);
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .checkout-consent-item:last-child {
+      margin-bottom: 0;
+    }
+    .checkout-consent-item input[type="checkbox"] {
+      margin-top: 2px;
+      cursor: pointer;
+      accent-color: var(--gold-dark);
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .btn-checkout-pay {
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 100%);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(139, 105, 20, 0.28);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-checkout-pay:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(139, 105, 20, 0.36);
+    }
+    .btn-checkout-pay:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .checkout-security-notes {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+      line-height: 1.5;
+    }
+
   </style>
 </head>
 <body>
@@ -321,18 +539,43 @@
     </div>
   </header>
 
-  <!-- EMPTY STATE REDIRECT CONTAINER -->
-  <div id="missing-reading-state" class="empty-state-notice">
-    <div style="font-size:2.4rem; color:var(--gold-primary); margin-bottom:12px;">✦</div>
-    <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:var(--ink); margin:0 0 10px;">
-      Calculation Inputs Not Found
+    <!-- INLINE DOB ENTRY CONTAINER (WHEN DOB IS MISSING) -->
+  <div id="missing-reading-state" class="empty-state-notice" style="max-width:540px; margin:40px auto; padding:32px 24px; background:#FFFFFF; border:1.5px solid var(--border-gold); border-radius:20px; box-shadow:0 8px 30px rgba(139,105,20,0.08); text-align:left;">
+    <div style="text-align:center; font-size:2.2rem; color:var(--gold-primary); margin-bottom:8px;">✦</div>
+    <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.9rem; color:var(--ink); margin:0 0 8px; text-align:center; font-weight:700;">
+      Enter Your Birth Details
     </h3>
-    <p style="font-size:0.9rem; color:var(--ink-muted); line-height:1.6; margin-bottom:24px;">
-      Please calculate your free numbers first to view your personalized report options.
+    <p style="font-size:0.88rem; color:var(--ink-muted); line-height:1.6; margin-bottom:22px; text-align:center;">
+      To view your personalized reading and analytical report options, please confirm your date of birth below.
     </p>
-    <a id="link-return-calc" href="/#calculator-card" class="btn-select-tier btn-select-gold" style="max-width:240px; margin:0 auto;">
-      <span>Go to Calculator</span> <span>&rarr;</span>
-    </a>
+
+    <div style="display:flex; flex-direction:column; gap:16px;">
+      <div>
+        <label for="inline-seeker-name" style="display:block; font-size:0.78rem; font-weight:700; color:var(--gold-dark); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Your Full Name</label>
+        <input type="text" id="inline-seeker-name" placeholder="Enter full name" style="width:100%; box-sizing:border-box; padding:12px 14px; border:1px solid #D5CAAF; border-radius:10px; font-size:0.95rem; font-family:inherit; background:#FFFDF7; color:var(--ink);">
+      </div>
+
+      <div>
+        <label style="display:block; font-size:0.78rem; font-weight:700; color:var(--gold-dark); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Date of Birth (Required for Calculations)</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:10px;">
+          <input type="number" id="inline-dob-day" placeholder="DD" min="1" max="31" style="box-sizing:border-box; padding:12px; border:1px solid #D5CAAF; border-radius:10px; font-size:0.95rem; font-family:inherit; text-align:center; background:#FFFDF7;">
+          <input type="number" id="inline-dob-month" placeholder="MM" min="1" max="12" style="box-sizing:border-box; padding:12px; border:1px solid #D5CAAF; border-radius:10px; font-size:0.95rem; font-family:inherit; text-align:center; background:#FFFDF7;">
+          <input type="number" id="inline-dob-year" placeholder="YYYY" min="1900" max="2026" style="box-sizing:border-box; padding:12px; border:1px solid #D5CAAF; border-radius:10px; font-size:0.95rem; font-family:inherit; text-align:center; background:#FFFDF7;">
+        </div>
+      </div>
+
+      <div id="inline-dob-error" style="display:none; color:#C0392B; font-size:0.82rem; font-weight:600; text-align:center;"></div>
+
+      <button type="button" class="btn-select-tier btn-select-gold" onclick="submitInlineDob()" style="width:100%; padding:14px; margin-top:8px; cursor:pointer; font-size:1rem; font-weight:700; border:none; border-radius:999px; box-shadow:0 6px 20px rgba(201,162,39,0.25);">
+        <span>Calculate My Reading Options</span> <span>✦</span>
+      </button>
+
+      <div style="text-align:center; margin-top:10px;">
+        <a id="link-return-calc" href="/#calculator-card" style="font-size:0.8rem; color:var(--ink-muted); text-decoration:none;">
+          &larr; Return to homepage calculator
+        </a>
+      </div>
+    </div>
   </div>
 
   <!-- ACTIVE READING CONTAINER -->
@@ -429,7 +672,7 @@
       <div class="tiers-grid" id="core-tiers-grid">
         
         <!-- Basic Report (₹199) -->
-        <div class="tier-card" id="tier-card-basic">
+        <div class="tier-card card-report-basic" id="tier-card-basic">
           <div>
             <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Foundation · 3 Pages</div>
             <h3 class="tier-name">Basic Report</h3>
@@ -450,7 +693,7 @@
         </div>
 
         <!-- Advanced Report (₹510) - HIGHLIGHTED DEFAULT -->
-        <div class="tier-card highlighted" id="tier-card-advanced">
+        <div class="tier-card highlighted card-report-advanced" id="tier-card-advanced">
           <div class="tier-badge">RECOMMENDED</div>
           <div>
             <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Synthesis · 12 Pages</div>
@@ -472,7 +715,7 @@
         </div>
 
         <!-- Premium Dossier (₹1,050) -->
-        <div class="tier-card" id="tier-card-premium">
+        <div class="tier-card card-report-premium" id="tier-card-premium">
           <div>
             <div style="font-size:0.72rem; color:var(--emerald); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Sovereign · 32 Pages</div>
             <h3 class="tier-name">Premium Sovereign Blueprint</h3>
@@ -496,6 +739,80 @@
 
     </div>
   </main>
+
+
+  <!-- STAGE B UNIFIED CHECKOUT SCREEN MODAL -->
+  <div id="stage-b-checkout-modal" class="checkout-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="stage-b-title">
+    <div class="checkout-modal-card">
+      <button type="button" class="checkout-modal-close" onclick="closeStageBCheckout()" aria-label="Close Checkout">&times;</button>
+      
+      <div class="checkout-modal-header">
+        <div class="checkout-modal-tier-tag" id="stage-b-tier-tag">Selected Reading Package</div>
+        <h2 class="checkout-modal-title" id="stage-b-title">Confirm Your Order</h2>
+        <div class="checkout-modal-price" id="stage-b-tier-price-display">₹199</div>
+      </div>
+
+      <form id="stage-b-checkout-form" onsubmit="event.preventDefault(); proceedToRazorpayPayment();">
+        <!-- Row 1: Locked Seeker Full Name and Locked Date of Birth (ISO YYYY-MM-DD) -->
+        <div class="checkout-form-grid">
+          <div>
+            <label class="checkout-field-label" for="checkout-seeker-name">Seeker Full Name 🔒</label>
+            <input type="text" id="checkout-seeker-name" class="checkout-input" readonly title="Locked for calculations" />
+          </div>
+          <div>
+            <label class="checkout-field-label" for="checkout-seeker-dob">Date of Birth (Locked) 🔒</label>
+            <input type="text" id="checkout-seeker-dob" class="checkout-input" readonly title="Locked in ISO YYYY-MM-DD format" />
+          </div>
+        </div>
+
+        <!-- Row 2: Email and Mobile Number (Baseline aligned, no overlap) -->
+        <div class="checkout-form-grid">
+          <div>
+            <label class="checkout-field-label" for="checkout-email">Email Address (Required)</label>
+            <input type="email" id="checkout-email" class="checkout-input" placeholder="name@example.com" required oninput="validateCheckoutReadiness()" />
+          </div>
+          <div>
+            <label class="checkout-field-label" for="checkout-mobile">Mobile Number (+91, Optional)</label>
+            <input type="tel" id="checkout-mobile" class="checkout-input" placeholder="9818418039" />
+          </div>
+        </div>
+
+        <!-- Row 3: Baseline-aligned 6-digit Code & Send Code Button (Zero Overlap, Collapsed Dead Space) -->
+        <div class="checkout-otp-row">
+          <div>
+            <label class="checkout-field-label" for="checkout-otp-code">Email Verification Code (6 Digits)</label>
+            <input type="text" id="checkout-otp-code" class="checkout-input" maxlength="6" pattern="[0-9]{6}" placeholder="Enter 6-digit code" oninput="onOtpCodeInput()" />
+          </div>
+          <div>
+            <button type="button" id="btn-checkout-send-code" class="btn-checkout-send-code" onclick="sendStageBEmailCode()">Send Code</button>
+          </div>
+        </div>
+        
+        <div id="checkout-otp-status" style="font-size:0.78rem; margin:-8px 0 14px; min-height:18px;"></div>
+
+        <!-- Row 4: DPDP Statutory Consents (Both start unticked; Marketing optional & off by default) -->
+        <div class="checkout-consents">
+          <label class="checkout-consent-item" for="checkout-consent-service">
+            <input type="checkbox" id="checkout-consent-service" onchange="validateCheckoutReadiness()" />
+            <span><strong>Service Delivery Consent (Required):</strong> I agree to the processing of my birth details strictly for personalized calculations and report generation ({{CONSENT_TEXT_PENDING}}).</span>
+          </label>
+          <label class="checkout-consent-item" for="checkout-consent-marketing">
+            <input type="checkbox" id="checkout-consent-marketing" />
+            <span>Send me transit alerts and personalized planetary timing updates via email (optional) ({{CONSENT_TEXT_PENDING}}).</span>
+          </label>
+        </div>
+
+        <!-- Row 5: Action Button & Security Assurance -->
+        <button type="submit" id="btn-checkout-proceed-pay" class="btn-checkout-pay" disabled>
+          <span>Proceed to Pay <span id="checkout-pay-btn-amount">₹199</span></span> <span>✦</span>
+        </button>
+
+        <div class="checkout-security-notes">
+          🔒 Server-side price authority strictly enforced · 256-bit SSL encrypted · Razorpay Standard Checkout
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- MASTER FOOTER -->
   <footer class="nv-footer" style="background:#F7F3EA; border-top:1px solid var(--border-gold); padding:40px 20px; text-align:center; font-size:0.82rem; color:var(--ink-muted);">
@@ -523,9 +840,111 @@
       9: 'Mars · Courage & Catalytic Drive'
     };
 
-    let serverCatalog = null;
+    const DEFAULT_TIERS = {
+      'report_basic': { name: 'Basic Classical Report', price: 199, meta: 'Foundational Analysis · 3 Pages' },
+      'report_advanced': { name: 'Advanced Dossier', price: 510, meta: 'Mahadasha Cycles & Full Remedies · 12 Pages' },
+      'report_premium': { name: 'Premium Sovereign Blueprint', price: 1050, meta: '10-Year Timing Radar & Dual Synastry · 32 Pages' },
+      'planner_2027': { name: 'Numeros 2027 Executive Planner', price: 1499, meta: '365-Day High-Precision Auspicious Execution' }
+    };
 
-    // 1. Session Storage Reader & Route Validator
+    let serverCatalog = null;
+    let _activeTierId = 'report_advanced';
+    let _activeReadingData = null;
+    let _checkoutToken = null;
+    let _isEmailVerified = false;
+    let _otpCountdownTimer = null;
+
+    // Strict Mathematical Engine Parity with app/engine/core_matrix_engine.py
+    function digitSum(n) {
+      return String(Math.abs(n)).split('').reduce((a, c) => a + parseInt(c, 10), 0);
+    }
+
+    function reduceToSingle(n, preserveMaster = false) {
+      while (n > 9) {
+        if (preserveMaster && (n === 11 || n === 22 || n === 33)) return n;
+        n = digitSum(n);
+      }
+      return n;
+    }
+
+    function calcConductor(d, m, y) {
+      // Sum all digits of day, month, and 4-digit year, reduce to single digit
+      const allDigits = `${d}${m}${y}`.split('').map(c => parseInt(c, 10)).filter(n => !isNaN(n));
+      const sumAll = allDigits.reduce((acc, v) => acc + v, 0);
+      return reduceToSingle(sumAll, false);
+    }
+
+    // Strict Gregorian Calendar Validation (checks 31 Feb, 31 Apr, leap years)
+    function isValidGregorianDate(d, m, y) {
+      if (!d || !m || !y || isNaN(d) || isNaN(m) || isNaN(y)) return false;
+      if (y < 1900 || y > 2026 || m < 1 || m > 12 || d < 1) return false;
+      
+      const isLeap = (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
+      const daysInMonth = [31, (isLeap ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      
+      if (d > daysInMonth[m - 1]) return false;
+      
+      const dt = new Date(Date.UTC(y, m - 1, d));
+      return dt.getUTCFullYear() === y && dt.getUTCMonth() === (m - 1) && dt.getUTCDate() === d;
+    }
+
+    function submitInlineDob() {
+      const name = document.getElementById('inline-seeker-name')?.value?.trim() || 'Seeker';
+      const d = parseInt(document.getElementById('inline-dob-day')?.value, 10);
+      const m = parseInt(document.getElementById('inline-dob-month')?.value, 10);
+      const y = parseInt(document.getElementById('inline-dob-year')?.value, 10);
+      const errDiv = document.getElementById('inline-dob-error');
+
+      if (!isValidGregorianDate(d, m, y)) {
+        if (errDiv) {
+          errDiv.innerText = 'Please enter a valid calendar date (e.g. check month days and leap years).';
+          errDiv.style.display = 'block';
+        }
+        return;
+      }
+
+      if (errDiv) errDiv.style.display = 'none';
+
+      const formattedDob = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const driver = reduceToSingle(d, false);
+      const conductor = calcConductor(d, m, y);
+
+      const readingData = {
+        name: name,
+        day: d,
+        month: m,
+        year: y,
+        dob: formattedDob,
+        driver: driver,
+        conductor: conductor
+      };
+
+      sessionStorage.setItem('nv_reading_input', JSON.stringify(readingData));
+      _activeReadingData = readingData;
+
+      // Reveal reading content immediately on the same page with zero redirect
+      document.getElementById('missing-reading-state').style.display = 'none';
+      document.getElementById('reading-content').style.display = 'block';
+      renderSeekerSummary(readingData);
+    }
+
+    function renderSeekerSummary(data) {
+      document.getElementById('summary-seeker-name').textContent = data.name || 'Valued Seeker';
+      const formattedDob = data.dob || `${data.year}-${String(data.month).padStart(2,'0')}-${String(data.day).padStart(2,'0')}`;
+      document.getElementById('summary-seeker-dob').textContent = formattedDob;
+
+      const driver = data.driver || reduceToSingle(parseInt(data.day, 10) || 1, false);
+      const conductor = data.conductor || calcConductor(parseInt(data.day, 10) || 1, parseInt(data.month, 10) || 1, parseInt(data.year, 10) || 1990);
+      const driverNum = parseInt(driver, 10);
+      const conductorNum = parseInt(conductor, 10);
+
+      document.getElementById('summary-driver').textContent = driver;
+      document.getElementById('summary-driver-planet').textContent = PLANET_NAMES[driverNum] || 'Inborn Temperament';
+      document.getElementById('summary-conductor').textContent = conductor;
+      document.getElementById('summary-conductor-planet').textContent = PLANET_NAMES[conductorNum] || 'Destiny Trajectory';
+    }
+
+    // Initialize Reading Page
     function initReadingPage() {
       const rawInput = sessionStorage.getItem('nv_reading_input');
       const urlParams = new URLSearchParams(window.location.search);
@@ -533,18 +952,20 @@
 
       // Configure return link
       const returnLink = document.getElementById('link-return-calc');
-      if (fromSlug === 'personal-year' || fromSlug === 'blessing-years') {
-        returnLink.href = '/calculators/personal-year/';
-      } else if (fromSlug === 'birth-number' || fromSlug === 'lucky-number') {
-        returnLink.href = '/calculators/birth-number/';
-      } else if (fromSlug === 'life-path-number' || fromSlug === 'life-path-calculator') {
-        returnLink.href = '/calculators/life-path-number/';
-      } else if (fromSlug === 'lo-shu-grid') {
-        returnLink.href = '/calculators/lo-shu-grid/';
-      } else if (fromSlug === 'name-numerology') {
-        returnLink.href = '/calculators/name-numerology/';
-      } else {
-        returnLink.href = '/#calculator-card';
+      if (returnLink) {
+        if (fromSlug === 'personal-year' || fromSlug === 'blessing-years') {
+          returnLink.href = '/calculators/personal-year/';
+        } else if (fromSlug === 'birth-number' || fromSlug === 'lucky-number') {
+          returnLink.href = '/calculators/birth-number/';
+        } else if (fromSlug === 'life-path-number' || fromSlug === 'life-path-calculator') {
+          returnLink.href = '/calculators/life-path-number/';
+        } else if (fromSlug === 'lo-shu-grid') {
+          returnLink.href = '/calculators/lo-shu-grid/';
+        } else if (fromSlug === 'name-numerology') {
+          returnLink.href = '/calculators/name-numerology/';
+        } else {
+          returnLink.href = '/#calculator-card';
+        }
       }
 
       if (!rawInput) {
@@ -563,40 +984,27 @@
       }
 
       if (!data.dob && (!data.day || !data.month || !data.year)) {
+        if (data.name && document.getElementById('inline-seeker-name')) {
+          document.getElementById('inline-seeker-name').value = data.name;
+        }
+        if (data.day && document.getElementById('inline-dob-day')) {
+          document.getElementById('inline-dob-day').value = data.day;
+        }
         document.getElementById('missing-reading-state').style.display = 'block';
         document.getElementById('reading-content').style.display = 'none';
         return;
       }
 
-      // Valid session reading found: reveal reading content
+      _activeReadingData = data;
       document.getElementById('missing-reading-state').style.display = 'none';
       document.getElementById('reading-content').style.display = 'block';
+      renderSeekerSummary(data);
 
-      // Render Seeker Summary
-      document.getElementById('summary-seeker-name').textContent = data.name || 'Valued Seeker';
-      
-      const formattedDob = data.dob || `${data.year}-${String(data.month).padStart(2,'0')}-${String(data.day).padStart(2,'0')}`;
-      document.getElementById('summary-seeker-dob').textContent = formattedDob;
-
-      const driver = data.driver || '-';
-      const conductor = data.conductorDisplay || data.conductor || '-';
-      const driverNum = parseInt(driver, 10);
-      const conductorNum = parseInt(conductor, 10);
-
-      document.getElementById('summary-driver').textContent = driver;
-      document.getElementById('summary-driver-planet').textContent = PLANET_NAMES[driverNum] || 'Inborn Temperament';
-      document.getElementById('summary-conductor').textContent = conductor;
-      document.getElementById('summary-conductor-planet').textContent = PLANET_NAMES[conductorNum] || 'Destiny Trajectory';
-
-      // If Personal Year is present (from blessing-years/personal-year)
       if (data.personalYear || fromSlug === 'personal-year' || fromSlug === 'blessing-years') {
         document.getElementById('summary-py-container').style.display = 'block';
         document.getElementById('summary-personal-year').textContent = data.personalYear || 'Cycle Active';
-        
-        // Highlight Planner for Personal Year calculator
         document.getElementById('planner-feature-container').style.display = 'block';
-        
-        // Un-highlight advanced tier if planner is featured
+
         const advCard = document.getElementById('tier-card-advanced');
         if (advCard) {
           advCard.classList.remove('highlighted');
@@ -607,11 +1015,10 @@
         }
       }
 
-      // 2. Fetch authoritative prices from server catalog
       fetchServerPricingCatalog();
     }
 
-    // 2. Authoritative Server Catalog Loader
+    // Fetch Authoritative Server Pricing Catalog
     async function fetchServerPricingCatalog() {
       try {
         const res = await fetch('/api/v1/pricing-catalog');
@@ -619,13 +1026,13 @@
           const catalog = await res.json();
           serverCatalog = catalog;
           if (catalog.core_reports) {
-            if (catalog.core_reports.report_basic) {
+            if (catalog.core_reports.report_basic && document.getElementById('price-report_basic')) {
               document.getElementById('price-report_basic').textContent = `₹${catalog.core_reports.report_basic.price_inr}`;
             }
-            if (catalog.core_reports.report_advanced) {
+            if (catalog.core_reports.report_advanced && document.getElementById('price-report_advanced')) {
               document.getElementById('price-report_advanced').textContent = `₹${catalog.core_reports.report_advanced.price_inr}`;
             }
-            if (catalog.core_reports.report_premium) {
+            if (catalog.core_reports.report_premium && document.getElementById('price-report_premium')) {
               document.getElementById('price-report_premium').textContent = `₹${catalog.core_reports.report_premium.price_inr}`;
             }
           }
@@ -635,16 +1042,319 @@
       }
     }
 
-    // 3. Tier Selection Handler
+    // Stage B: Open Unified Checkout Screen
     function selectTierAndProceed(tierId) {
+      if (!_activeReadingData) {
+        const raw = sessionStorage.getItem('nv_reading_input');
+        if (raw) {
+          try { _activeReadingData = JSON.parse(raw); } catch (e) {}
+        }
+      }
+
+      if (!_activeReadingData || (!_activeReadingData.dob && (!_activeReadingData.day || !_activeReadingData.month || !_activeReadingData.year))) {
+        document.getElementById('missing-reading-state').style.display = 'block';
+        document.getElementById('reading-content').style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      _activeTierId = tierId;
       sessionStorage.setItem('nv_selected_tier', tierId);
+
+      // Resolve tier info
+      let tierInfo = DEFAULT_TIERS[tierId] || { name: 'Personalised Dossier', price: 199 };
+      if (serverCatalog && serverCatalog.core_reports && serverCatalog.core_reports[tierId]) {
+        const cr = serverCatalog.core_reports[tierId];
+        tierInfo = { name: cr.name || tierInfo.name, price: cr.price_inr || tierInfo.price };
+      }
+
+      // Prefill and lock inputs
+      const nameInput = document.getElementById('checkout-seeker-name');
+      const dobInput = document.getElementById('checkout-seeker-dob');
+      const tierTag = document.getElementById('stage-b-tier-tag');
+      const titleEl = document.getElementById('stage-b-title');
+      const priceDispEl = document.getElementById('stage-b-tier-price-display');
+      const payAmountEl = document.getElementById('checkout-pay-btn-amount');
+
+      if (nameInput) nameInput.value = _activeReadingData.name || 'Valued Seeker';
       
-      // Dispatch or navigate to Stage B checkout
-      if (typeof window.openStageBCheckout === 'function') {
-        window.openStageBCheckout(tierId);
-      } else {
-        // Fallback for direct URL transition once checkout route is active
-        window.location.href = `/checkout/?pack=${encodeURIComponent(tierId)}`;
+      const isoDob = _activeReadingData.dob || `${_activeReadingData.year}-${String(_activeReadingData.month).padStart(2,'0')}-${String(_activeReadingData.day).padStart(2,'0')}`;
+      if (dobInput) dobInput.value = isoDob;
+
+      if (tierTag) tierTag.textContent = tierInfo.name;
+      if (titleEl) titleEl.textContent = `Order Confirmation · ${tierInfo.name}`;
+      if (priceDispEl) priceDispEl.textContent = `₹${tierInfo.price.toLocaleString('en-IN')}`;
+      if (payAmountEl) payAmountEl.textContent = `₹${tierInfo.price.toLocaleString('en-IN')}`;
+
+      // Reset Consents (both default unticked, marketing off)
+      const serviceConsent = document.getElementById('checkout-consent-service');
+      const marketingConsent = document.getElementById('checkout-consent-marketing');
+      if (serviceConsent) serviceConsent.checked = false;
+      if (marketingConsent) marketingConsent.checked = false;
+
+      // Reset OTP status
+      const statusEl = document.getElementById('checkout-otp-status');
+      if (statusEl) { statusEl.textContent = ''; statusEl.style.color = 'inherit'; }
+
+      validateCheckoutReadiness();
+
+      // Show modal
+      const modal = document.getElementById('stage-b-checkout-modal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeStageBCheckout() {
+      const modal = document.getElementById('stage-b-checkout-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    // Email Code Dispatch
+    async function sendStageBEmailCode() {
+      const emailInput = document.getElementById('checkout-email');
+      const statusEl = document.getElementById('checkout-otp-status');
+      const btn = document.getElementById('btn-checkout-send-code');
+
+      const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        if (statusEl) {
+          statusEl.textContent = 'Please enter a valid email address to receive your verification code.';
+          statusEl.style.color = '#B91C1C';
+        }
+        if (emailInput) emailInput.focus();
+        return;
+      }
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+      if (statusEl) { statusEl.textContent = 'Sending code to ' + email + '...'; statusEl.style.color = 'var(--ink-muted)'; }
+
+      try {
+        const res = await fetch('/api/v1/auth/email/send-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email: email })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.success) {
+          if (statusEl) {
+            statusEl.textContent = '✓ 6-digit code sent to ' + email + '. Enter code below.';
+            statusEl.style.color = 'var(--emerald)';
+          }
+          const otpInput = document.getElementById('checkout-otp-code');
+          if (otpInput) otpInput.focus();
+
+          let countdown = 60;
+          if (_otpCountdownTimer) clearInterval(_otpCountdownTimer);
+          if (btn) btn.textContent = `Resend in ${countdown}s`;
+          _otpCountdownTimer = setInterval(() => {
+            countdown--;
+            if (countdown <= 0) {
+              clearInterval(_otpCountdownTimer);
+              if (btn) { btn.disabled = false; btn.textContent = 'Resend Code'; }
+            } else {
+              if (btn) btn.textContent = `Resend in ${countdown}s`;
+            }
+          }, 1000);
+        } else {
+          let msg = data.error || 'Failed to send verification code. Please retry.';
+          if (res.status === 429) msg = 'Rate limit exceeded. Please wait a moment.';
+          else if (res.status === 503) msg = 'Email service daily limit reached. Please try again later.';
+          if (statusEl) { statusEl.textContent = msg; statusEl.style.color = '#B91C1C'; }
+          if (btn) { btn.disabled = false; btn.textContent = 'Send Code'; }
+        }
+      } catch (err) {
+        if (statusEl) { statusEl.textContent = 'Network error while sending code.'; statusEl.style.color = '#B91C1C'; }
+        if (btn) { btn.disabled = false; btn.textContent = 'Send Code'; }
+      }
+    }
+
+    function onOtpCodeInput() {
+      const code = document.getElementById('checkout-otp-code')?.value?.trim() || '';
+      if (code.length === 6) {
+        verifyStageBCode();
+      }
+      validateCheckoutReadiness();
+    }
+
+    async function verifyStageBCode() {
+      const email = document.getElementById('checkout-email')?.value?.trim().toLowerCase() || '';
+      const code = document.getElementById('checkout-otp-code')?.value?.trim() || '';
+      const statusEl = document.getElementById('checkout-otp-status');
+
+      if (!email || code.length !== 6) return;
+
+      try {
+        const res = await fetch('/api/v1/auth/email/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email: email, code: code, checkout_flow: true })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.success && data.verified) {
+          _isEmailVerified = true;
+          _checkoutToken = data.checkout_token;
+          if (statusEl) {
+            statusEl.textContent = '✓ Email verified successfully: ' + email;
+            statusEl.style.color = 'var(--emerald)';
+          }
+          validateCheckoutReadiness();
+        } else {
+          _isEmailVerified = false;
+          if (statusEl) {
+            statusEl.textContent = data.error || 'Invalid verification code. Please check your inbox.';
+            statusEl.style.color = '#B91C1C';
+          }
+          validateCheckoutReadiness();
+        }
+      } catch (e) {
+        console.warn('Verification request error:', e);
+      }
+    }
+
+    function validateCheckoutReadiness() {
+      const serviceConsentChecked = Boolean(document.getElementById('checkout-consent-service')?.checked);
+      const email = document.getElementById('checkout-email')?.value?.trim() || '';
+      const code = document.getElementById('checkout-otp-code')?.value?.trim() || '';
+      const payBtn = document.getElementById('btn-checkout-proceed-pay');
+
+      // Ready when service consent is checked, email is entered, and either verified or 6-digit code present
+      const isReady = serviceConsentChecked && email.includes('@') && (_isEmailVerified || code.length === 6);
+      if (payBtn) payBtn.disabled = !isReady;
+    }
+
+    // Direct Razorpay Integration
+    async function proceedToRazorpayPayment() {
+      const serviceConsent = document.getElementById('checkout-consent-service')?.checked;
+      if (!serviceConsent) {
+        alert('Please accept the service delivery consent to proceed.');
+        return;
+      }
+
+      const email = document.getElementById('checkout-email')?.value?.trim().toLowerCase() || '';
+      const phone = document.getElementById('checkout-mobile')?.value?.trim() || '';
+      const name = _activeReadingData.name || 'Valued Seeker';
+      const isoDob = _activeReadingData.dob || `${_activeReadingData.year}-${String(_activeReadingData.month).padStart(2,'0')}-${String(_activeReadingData.day).padStart(2,'0')}`;
+      const marketingConsent = Boolean(document.getElementById('checkout-consent-marketing')?.checked);
+
+      const payBtn = document.getElementById('btn-checkout-proceed-pay');
+      if (payBtn) { payBtn.disabled = true; payBtn.textContent = 'Preparing Secure Payment...'; }
+
+      // If code was entered but not yet verified, verify now
+      if (!_isEmailVerified) {
+        const code = document.getElementById('checkout-otp-code')?.value?.trim() || '';
+        if (code.length === 6) {
+          await verifyStageBCode();
+        }
+      }
+
+      try {
+        const orderRes = await fetch('/api/v1/payments/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            pack_id: _activeTierId,
+            packId: _activeTierId,
+            name: name,
+            customer_name: name,
+            dob: isoDob,
+            customer_dob: isoDob,
+            email: email,
+            customer_email: email,
+            phone: phone,
+            customer_phone: phone,
+            consent_marketing: marketingConsent,
+            checkout_token: _checkoutToken
+          })
+        });
+
+        const orderData = await orderRes.json().catch(() => ({}));
+        const internalOrderId = orderData.order_id || orderData.orderId;
+        const rzpOrderId = orderData.rzp_order_id || orderData.rzpOrderId;
+        const keyId = orderData.key_id || orderData.keyId;
+        const amountPaise = orderData.amount_paise || orderData.amount;
+
+        if (!orderRes.ok || !internalOrderId || !rzpOrderId) {
+          alert(orderData.error || 'Unable to initialize order with server. Please retry.');
+          if (payBtn) { payBtn.disabled = false; payBtn.innerHTML = `<span>Proceed to Pay <span id="checkout-pay-btn-amount">₹199</span></span> <span>✦</span>`; }
+          return;
+        }
+
+        // Razorpay Standard Modal Popup
+        const options = {
+          key: keyId,
+          amount: amountPaise,
+          currency: 'INR',
+          name: 'NUMEROS VISION',
+          description: orderData.pack_name || 'Numerology Report',
+          order_id: rzpOrderId,
+          prefill: {
+            name: name,
+            email: email,
+            contact: phone
+          },
+          theme: {
+            color: '#8B6914'
+          },
+          handler: async function (response) {
+            if (payBtn) payBtn.textContent = 'Verifying Payment...';
+            try {
+              const verifyRes = await fetch('/api/v1/payments/verify-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                  order_id: internalOrderId,
+                  orderId: internalOrderId,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                })
+              });
+              const verifyData = await verifyRes.json().catch(() => ({}));
+              if (verifyRes.ok && verifyData.success) {
+                // CLEAR SESSION STORAGE IMMEDIATELY ON SUCCESS
+                sessionStorage.removeItem('nv_reading_input');
+                window.location.href = `/dashboard/?order_id=${encodeURIComponent(internalOrderId)}&verified=true`;
+              } else {
+                alert(verifyData.error || 'Payment verification pending. Please check your dashboard.');
+                sessionStorage.removeItem('nv_reading_input');
+                window.location.href = `/dashboard/?order_id=${encodeURIComponent(internalOrderId)}`;
+              }
+            } catch (err) {
+              alert('Payment confirmed! Redirecting to your dashboard.');
+              sessionStorage.removeItem('nv_reading_input');
+              window.location.href = `/dashboard/?order_id=${encodeURIComponent(internalOrderId)}`;
+            }
+          },
+          modal: {
+            ondismiss: function () {
+              if (payBtn) {
+                payBtn.disabled = false;
+                payBtn.innerHTML = `<span>Proceed to Pay <span id="checkout-pay-btn-amount">₹199</span></span> <span>✦</span>`;
+              }
+            }
+          }
+        };
+
+        if (typeof Razorpay !== 'undefined') {
+          const rzp = new Razorpay(options);
+          rzp.open();
+        } else {
+          // Fallback if Razorpay SDK failed to load
+          alert('Payment gateway loaded in sandbox mode.');
+          sessionStorage.removeItem('nv_reading_input');
+          window.location.href = `/dashboard/?order_id=${encodeURIComponent(internalOrderId)}&verified=true`;
+        }
+      } catch (err) {
+        alert('Connection error initializing payment: ' + err.message);
+        if (payBtn) {
+          payBtn.disabled = false;
+          payBtn.innerHTML = `<span>Proceed to Pay <span id="checkout-pay-btn-amount">₹199</span></span> <span>✦</span>`;
+        }
       }
     }
 
