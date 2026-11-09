@@ -2244,6 +2244,55 @@ export default {
       }
     }
 
+    // =========================================================================
+    // ROUTE: RECORD STATUTORY CONSENT (/api/v1/auth/consent) - BACKEND ONLY
+    // Records DPDP service delivery and marketing consents directly to user_consents
+    // =========================================================================
+    if (url.pathname === '/api/v1/auth/consent' && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      };
+      try {
+        const body = await request.json().catch(() => ({}));
+        const user = await authenticateUser(request, env);
+        const email = (body.email || '').trim().toLowerCase();
+        let targetUserId = user ? user.user_id : null;
+        const now = Date.now();
+        const ipSalt = requireSecret(env, 'IP_HASH_SALT');
+        const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+        const ipHash = await hmacSha256Hex(ipSalt, clientIp);
+
+        if (!targetUserId && email && body.checkout_token) {
+          const sessionSecret = requireSecret(env, 'SESSION_SECRET');
+          const tokenValid = await verifyCheckoutToken(sessionSecret, email, body.checkout_token);
+          if (tokenValid) {
+            targetUserId = 'chk_' + email;
+          }
+        }
+        if (!targetUserId) {
+          targetUserId = 'guest_' + ipHash.substring(0, 16);
+        }
+
+        const serviceGiven = body.consent_service !== false ? 1 : 0;
+        const marketingGiven = body.consent_marketing ? 1 : 0;
+
+        await recordUserConsent(env, targetUserId, 'service_delivery', serviceGiven, ipHash, now);
+        await recordUserConsent(env, targetUserId, 'marketing_communications', marketingGiven, ipHash, now);
+
+        return new Response(JSON.stringify({
+          success: true,
+          message: 'Consent preferences recorded successfully.',
+          version: 'v1.0_2026_{{CONSENT_TEXT_PENDING}}'
+        }), { status: 200, headers: corsHeaders });
+      } catch (err) {
+        return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500, headers: corsHeaders });
+      }
+    }
+
     // 1. ROUTE: SEND OTP (/api/v1/auth/otp/send) - GATED BEHIND OTP_ENABLED=false
     if (url.pathname === '/api/v1/auth/otp/send' && request.method === 'POST') {
       const corsHeaders = {
@@ -3543,21 +3592,47 @@ export default {
         }
       }
 
-      // 1. Session verification
-      const user = await authenticateUser(request, env);
+      const body = await request.json().catch(() => ({}));
+      const email = (body.customer_email || body.email || '').trim().toLowerCase();
+      const now = Date.now();
+
+      // 1. Session or Checkout Token verification
+      let user = await authenticateUser(request, env);
+      if (!user && (body.checkout_token || request.headers.get('X-Checkout-Token'))) {
+        const chkToken = body.checkout_token || request.headers.get('X-Checkout-Token');
+        const sessionSecret = requireSecret(env, 'SESSION_SECRET');
+        const isValid = await verifyCheckoutToken(sessionSecret, email, chkToken);
+        if (isValid) {
+          if (env.DB) {
+            try {
+              const u = await env.DB.prepare('SELECT id, email, created_at FROM users WHERE email = ?').bind(email).first();
+              if (u) {
+                user = { user_id: u.id, email: u.email, created_at: u.created_at };
+              }
+            } catch (e) {}
+          } else {
+            const u = memoryStore.users.get(email);
+            if (u) {
+              user = { user_id: u.id, email: u.email, created_at: u.createdAt };
+            }
+          }
+          if (!user) {
+            user = { user_id: 'usr_' + now + '_' + getRandomHex(4), email, created_at: now };
+          }
+        }
+      }
+
       if (!user) {
         return new Response(JSON.stringify({
           success: false,
-          error: 'Authentication required. Please sign in to initiate checkout.'
+          error: 'Authentication required. Please verify your email or sign in to initiate checkout.'
         }), { status: 401, headers: corsHeaders });
       }
 
-      const body = await request.json().catch(() => ({}));
       const packId = (body.packId || body.pack_id || body.plan || body.plan_id || '').trim();
       let subjectId = (body.subjectId || body.subject_id || '').trim();
       const customerName = (body.name || body.customer_name || 'Valued Seeker').trim();
       const customerDob = (body.dob || body.locked_dob || '').trim();
-      const now = Date.now();
 
       // 2. Deterministic pack lookup
       const pack = getPackById(packId);

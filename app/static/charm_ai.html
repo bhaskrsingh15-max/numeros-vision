@@ -763,6 +763,18 @@
       const modal = document.getElementById('charmPaywallModal');
       if (modal) {
         modal.style.display = 'flex';
+        // Prefill seeker Name & DOB
+        const nameVal = document.getElementById('ai_user_name')?.value?.trim();
+        const day = document.getElementById('ai_day')?.value;
+        const month = document.getElementById('ai_month')?.value;
+        const year = document.getElementById('ai_year')?.value;
+        const nameIn = document.getElementById('charm-checkout-name');
+        const dobIn = document.getElementById('charm-checkout-dob');
+        if (nameIn && nameVal && !nameIn.value) nameIn.value = nameVal;
+        if (dobIn && year && month && day && !dobIn.value) {
+          dobIn.value = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        }
+        renderCharmTurnstile();
       } else {
         window.location.href = '/charm_ai.html#pass';
       }
@@ -1631,40 +1643,413 @@
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
   <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer onload="renderCharmTurnstile()"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <!-- 🔒 CHARM AI PAYWALL / RECHARGE MODAL 🔒 -->
   <div id="charmPaywallModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(24,21,16,0.72); z-index:99999; backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
-    <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:20px; max-width:540px; width:100%; padding:28px 24px; box-shadow:0 12px 40px rgba(82,62,40,0.25); position:relative; text-align:center; animation:nvModalIn 0.25s ease-out;">
+    <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:20px; max-width:540px; width:100%; padding:26px 22px; box-shadow:0 12px 40px rgba(82,62,40,0.25); position:relative; text-align:center; animation:nvModalIn 0.25s ease-out; max-height:92vh; overflow-y:auto;">
       <button onclick="document.getElementById('charmPaywallModal').style.display='none'" style="position:absolute; top:14px; right:16px; background:none; border:none; font-size:1.6rem; color:#7A654D; cursor:pointer; line-height:1;" aria-label="Close Modal">&times;</button>
       
-      <div style="width:52px; height:52px; border-radius:50%; background:rgba(201,162,39,0.12); border:1.5px solid #C9A227; font-size:1.5rem; color:#8B6914; display:inline-flex; align-items:center; justify-content:center; margin-bottom:12px;">🔒</div>
+      <div style="width:48px; height:48px; border-radius:50%; background:rgba(201,162,39,0.12); border:1.5px solid #C9A227; font-size:1.4rem; color:#8B6914; display:inline-flex; align-items:center; justify-content:center; margin-bottom:10px;">🔒</div>
       
       <div style="font-family:'Cinzel', serif; font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:#8B6914; font-weight:700; margin-bottom:4px;">
         NUMEROS VISION · PAID FEATURE
       </div>
-      <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.75rem; font-weight:700; color:#523E28; margin:0 0 10px;">
+      <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.75rem; font-weight:700; color:#523E28; margin:0 0 8px;">
         Charm AI Career &amp; Transit Oracle
       </h3>
-      <p style="font-size:0.86rem; color:#7A654D; line-height:1.6; margin:0 0 20px;">
-        Every account receives <strong>3 free questions after verified sign-up</strong> (drawn from your free Lo Shu grid). For deep career inflection windows, transit radar, and acute timing, unlock additional questions:
+      <p style="font-size:0.86rem; color:#7A654D; line-height:1.55; margin:0 0 14px;">
+        Unlock the <strong>Charm AI Starter Pack (5 Questions)</strong> for in-depth career inflection windows, transit radar, and acute timing:
       </p>
 
-      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px; text-align:left;">
-        <!-- Option 1: Starter Pack -->
-        <a href="/charm_ai.html#pass" style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border:1.5px solid rgba(201,162,39,0.3); border-radius:12px; background:#FAF6EE; text-decoration:none; color:#523E28; transition:all 0.2s ease;">
-          <div>
-            <strong style="color:#8B6914; font-size:0.92rem; display:block;">Charm AI Starter Pack (5 Questions)</strong>
-            <span style="font-size:0.76rem; color:#7A654D;">5 Classical Inquiries · One-Time · Root 1</span>
-          </div>
-          <span style="font-family:'Cinzel', serif; font-size:1.15rem; font-weight:800; color:#8B6914;">₹199 →</span>
-        </a>
+      <div style="background:#FAF6EE; border:1.5px solid rgba(201,162,39,0.3); border-radius:12px; padding:10px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="text-align:left;">
+          <strong style="color:#8B6914; font-size:0.92rem; display:block;">Charm AI Starter Pack (5 Questions)</strong>
+          <span style="font-size:0.76rem; color:#7A654D;">5 Classical Inquiries · One-Time · Root 1</span>
+        </div>
+        <span style="font-family:'Cinzel', serif; font-size:1.3rem; font-weight:800; color:#8B6914;">₹199</span>
       </div>
 
-      <div style="font-size:0.78rem; color:#7A654D; margin-top:14px; border-top:1px solid rgba(201,162,39,0.2); padding-top:12px;">
-        Already purchased or registered? <a href="/login/" style="color:#8B6914; font-weight:700; text-decoration:underline;">Sign in to sync your questions →</a>
+      <!-- Charm Purchase Form -->
+      <div id="charm-purchase-form" style="text-align:left;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="display:block; font-size:0.78rem; font-weight:700; color:#523E28; margin-bottom:4px;">Seeker Name</label>
+            <input type="text" id="charm-checkout-name" placeholder="Full Name" required style="width:100%; padding:9px 12px; border:1px solid rgba(201,162,39,0.4); border-radius:8px; font-size:0.88rem; background:#FFFFFF; color:#523E28; box-sizing:border-box;" />
+          </div>
+          <div>
+            <label style="display:block; font-size:0.78rem; font-weight:700; color:#523E28; margin-bottom:4px;">Date of Birth</label>
+            <input type="date" id="charm-checkout-dob" required style="width:100%; padding:9px 12px; border:1px solid rgba(201,162,39,0.4); border-radius:8px; font-size:0.88rem; background:#FFFFFF; color:#523E28; box-sizing:border-box;" />
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.78rem; font-weight:700; color:#523E28; margin-bottom:4px;">Email Address (Required for Verification &amp; Credits)</label>
+          <div style="display:flex; gap:8px;">
+            <input type="email" id="charm-checkout-email" placeholder="name@example.com" required style="flex:1; padding:9px 12px; border:1px solid rgba(201,162,39,0.4); border-radius:8px; font-size:0.88rem; background:#FFFFFF; color:#523E28; box-sizing:border-box;" />
+            <button type="button" id="btn-charm-send-code" onclick="sendCharmEmailCode()" class="btn-secondary-pearl" style="padding:0 14px; font-size:0.8rem; font-weight:700; white-space:nowrap; border-radius:8px;">Send Code</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.78rem; font-weight:700; color:#523E28; margin-bottom:4px;">Mobile (+91, Optional)</label>
+          <input type="tel" id="charm-checkout-phone" placeholder="10-digit mobile" maxlength="10" style="width:100%; padding:9px 12px; border:1px solid rgba(201,162,39,0.4); border-radius:8px; font-size:0.88rem; background:#FFFFFF; color:#523E28; box-sizing:border-box;" />
+        </div>
+
+        <!-- Turnstile Widget Container -->
+        <div id="charm-turnstile-container" style="margin-bottom:12px; min-height:44px;"></div>
+
+        <!-- 6-digit Code Entry Row -->
+        <div id="charm-otp-verify-row" style="display:none; background:#FAF6EE; border:1px solid rgba(201,162,39,0.4); border-radius:10px; padding:12px 14px; margin-bottom:14px;">
+          <div style="font-size:0.8rem; color:#523E28; margin-bottom:6px; font-weight:600;">
+            Enter 6-digit verification code sent to <span id="charm-otp-email-display" style="font-weight:700;">your email</span>:
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="charm-otp-input" placeholder="6-digit code" maxlength="6" style="flex:1; padding:9px 12px; border:1px solid rgba(201,162,39,0.5); border-radius:8px; font-size:1.05rem; letter-spacing:0.18em; text-align:center; background:#FFFFFF; color:#523E28;" />
+            <button type="button" id="btn-charm-verify-code" onclick="verifyCharmEmailCode()" class="btn-primary-gold" style="padding:0 16px; font-size:0.82rem; font-weight:700; border-radius:8px;">Verify Code</button>
+          </div>
+          <div id="charm-otp-error" style="display:none; color:#C53030; font-size:0.78rem; margin-top:6px; font-weight:600;"></div>
+        </div>
+
+        <!-- Email Verified Status Badge -->
+        <div id="charm-email-verified-badge" style="display:none; background:#EBF7F2; border:1px solid rgba(22,131,91,0.3); border-radius:8px; padding:8px 12px; margin-bottom:14px; color:#16835B; font-size:0.82rem; font-weight:700; align-items:center; gap:8px;">
+          <span>✓ Email Verified: <span id="charm-verified-email-text"></span></span>
+        </div>
+
+        <!-- Statutory Consent Block (DPDP Act 2023) -->
+        <div id="charm-consent-block" style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.25); border-radius:10px; padding:10px 14px; margin-bottom:14px;">
+          <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.80rem; color:#523E28; cursor:pointer; margin-bottom:6px;">
+            <input type="checkbox" id="charm-consent-service" checked required style="margin-top:2px; accent-color:#8B6914;" />
+            <span><strong>Service Consent (Required):</strong> I consent to processing my birth details for personalized calculations and oracle responses ({{CONSENT_TEXT_PENDING}}).</span>
+          </label>
+          <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.80rem; color:#7A654D; cursor:pointer;">
+            <input type="checkbox" id="charm-consent-marketing" style="margin-top:2px; accent-color:#8B6914;" />
+            <span>Send me auspicious transit notifications via email (optional) ({{CONSENT_TEXT_PENDING}}).</span>
+          </label>
+        </div>
+
+        <!-- Action Button -->
+        <div style="text-align:center; margin-top:14px;">
+          <button type="button" id="btn-charm-pay" class="btn-primary-gold" onclick="launchCharmCheckout()" style="width:100%; padding:13px 24px; font-size:1.02rem; font-weight:700; border-radius:999px; box-shadow:0 6px 20px rgba(201,162,39,0.28); cursor:pointer;">
+            <span>Proceed to Pay ₹199 ✦</span>
+          </button>
+        </div>
+
+        <!-- Returning User Sign-In Entry -->
+        <div style="font-size:0.78rem; color:#7A654D; margin-top:12px; text-align:center; display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;">
+          <span>Returning user?</span>
+          <a href="javascript:void(0)" onclick="triggerCharmEmailQuickSignIn()" style="color:#8B6914; font-weight:700; text-decoration:underline;">Sign in via email code</a>
+          <span>or</span>
+          <button type="button" onclick="triggerGoogleSignIn()" style="background:#FFFFFF; border:1px solid rgba(201,162,39,0.45); border-radius:100px; padding:3px 10px; font-size:0.72rem; font-weight:600; color:#523E28; cursor:pointer; display:inline-flex; align-items:center; gap:5px;">
+            <svg width="12" height="12" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+            <span>Sign in with Google</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
+  <script>
+    let _charmCheckoutToken = null;
+    let _charmOtpTimer = null;
+    let _isCharmEmailVerified = false;
+
+    function renderCharmTurnstile() {
+      if (window.turnstile && document.getElementById('charm-turnstile-container') && window._charmTurnstileWidgetId === undefined) {
+        try {
+          const siteKey = window.NV_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
+          window._charmTurnstileWidgetId = window.turnstile.render('#charm-turnstile-container', {
+            sitekey: siteKey,
+            theme: 'light'
+          });
+        } catch (e) {}
+      }
+    }
+
+    async function sendCharmEmailCode() {
+      const emailInput = document.getElementById('charm-checkout-email');
+      const errEl = document.getElementById('charm-otp-error');
+      if (errEl) errEl.style.display = 'none';
+
+      const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        alert('Please enter a valid email address to receive your 6-digit verification code.');
+        if (emailInput) emailInput.focus();
+        return;
+      }
+
+      let turnstileToken = '';
+      if (window.turnstile && window._charmTurnstileWidgetId !== undefined) {
+        try { turnstileToken = window.turnstile.getResponse(window._charmTurnstileWidgetId); } catch(e) {}
+      }
+      if (!turnstileToken) {
+        turnstileToken = window.NV_TURNSTILE_TOKEN || (location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? 'test_turnstile_pass' : '');
+      }
+
+      const btn = document.getElementById('btn-charm-send-code');
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+
+      try {
+        const res = await fetch('/api/v1/auth/email/send-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, turnstile_token: turnstileToken })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.success) {
+          const row = document.getElementById('charm-otp-verify-row');
+          const disp = document.getElementById('charm-otp-email-display');
+          if (row) row.style.display = 'block';
+          if (disp) disp.textContent = email;
+          const otpInput = document.getElementById('charm-otp-input');
+          if (otpInput) otpInput.focus();
+
+          let countdown = 60;
+          if (_charmOtpTimer) clearInterval(_charmOtpTimer);
+          if (btn) btn.textContent = `Resend in ${countdown}s`;
+          _charmOtpTimer = setInterval(() => {
+            countdown--;
+            if (countdown <= 0) {
+              clearInterval(_charmOtpTimer);
+              if (btn) { btn.disabled = false; btn.textContent = 'Resend Code'; }
+            } else {
+              if (btn) btn.textContent = `Resend in ${countdown}s`;
+            }
+          }, 1000);
+        } else {
+          let msg = data.error || 'Unable to send verification code. Please try again.';
+          if (res.status === 429) msg = 'Rate limit exceeded. Please wait before requesting another code.';
+          else if (res.status === 503) msg = 'Email service daily cap reached. Delivery temporarily paused.';
+          else if (res.status === 403) msg = 'Security verification failed. Please check Turnstile challenge.';
+          if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+          alert(msg);
+          if (btn) { btn.disabled = false; btn.textContent = 'Send Code'; }
+        }
+      } catch (e) {
+        if (errEl) { errEl.textContent = 'Connection error while sending code.'; errEl.style.display = 'block'; }
+        if (btn) { btn.disabled = false; btn.textContent = 'Send Code'; }
+      }
+    }
+
+    async function verifyCharmEmailCode() {
+      const emailInput = document.getElementById('charm-checkout-email');
+      const otpInput = document.getElementById('charm-otp-input');
+      const errEl = document.getElementById('charm-otp-error');
+      if (errEl) errEl.style.display = 'none';
+
+      const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
+      const otp = (otpInput ? otpInput.value : '').trim();
+
+      if (!otp || otp.length !== 6) {
+        if (errEl) { errEl.textContent = 'Please enter the 6-digit verification code.'; errEl.style.display = 'block'; }
+        return;
+      }
+
+      const btn = document.getElementById('btn-charm-verify-code');
+      if (btn) { btn.disabled = true; btn.textContent = 'Verifying...'; }
+
+      const consentMarketing = document.getElementById('charm-consent-marketing')?.checked || false;
+
+      try {
+        const res = await fetch('/api/v1/auth/email/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            email,
+            code: otp,
+            checkout_flow: true,
+            consent_marketing: consentMarketing
+          })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.success && data.verified) {
+          _isCharmEmailVerified = true;
+          _charmCheckoutToken = data.checkout_token;
+          const verifyRow = document.getElementById('charm-otp-verify-row');
+          const badge = document.getElementById('charm-email-verified-badge');
+          const emailText = document.getElementById('charm-verified-email-text');
+          const sendBtn = document.getElementById('btn-charm-send-code');
+
+          if (verifyRow) verifyRow.style.display = 'none';
+          if (badge) badge.style.display = 'flex';
+          if (emailText) emailText.textContent = email;
+          if (sendBtn) sendBtn.style.display = 'none';
+
+          // Record statutory consent asynchronously via backend
+          try {
+            await fetch('/api/v1/auth/consent', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({
+                email,
+                checkout_token: _charmCheckoutToken,
+                consent_service: true,
+                consent_marketing: consentMarketing
+              })
+            });
+          } catch(e) {}
+        } else {
+          let msg = data.error || 'Incorrect verification code. Please check and retry.';
+          if (res.status === 400 && data.error && data.error.includes('expired')) {
+            msg = 'Verification code expired (10-minute limit). Please request a new code.';
+          } else if (res.status === 429 && data.error && (data.error.includes('locked') || data.error.includes('Too many failed'))) {
+            msg = 'Too many failed attempts. Code locked for security. Please request a new code.';
+          } else if (res.status === 429) {
+            msg = 'Rate limit exceeded. Please wait before requesting another code.';
+          } else if (res.status === 503) {
+            msg = 'Email service daily cap reached. Delivery temporarily paused.';
+          }
+          if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+        }
+      } catch (err) {
+        if (errEl) { errEl.textContent = 'Verification connection error. Please retry.'; errEl.style.display = 'block'; }
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Verify Code'; }
+      }
+    }
+
+    async function triggerCharmEmailQuickSignIn() {
+      const email = prompt('Enter your registered account email address:');
+      if (!email || !email.includes('@')) return;
+      const emailIn = document.getElementById('charm-checkout-email');
+      if (emailIn) emailIn.value = email;
+      sendCharmEmailCode();
+    }
+
+    function triggerGoogleSignIn() {
+      if (window.google && window.google.accounts && window.google.accounts.id) {
+        google.accounts.id.initialize({
+          client_id: "849204859201-numerosvision.apps.googleusercontent.com",
+          callback: async function(resp) {
+            if (resp && resp.credential) {
+              try {
+                const res = await fetch('/api/v1/auth/google', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  credentials: 'include',
+                  body: JSON.stringify({ credential: resp.credential })
+                });
+                const d = await res.json();
+                if (res.ok && d.success) {
+                  _isCharmEmailVerified = true;
+                  initCharmAiSession();
+                }
+              } catch(e) {}
+            }
+          }
+        });
+        google.accounts.id.prompt();
+      } else {
+        window.location.href = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname);
+      }
+    }
+
+    async function launchCharmCheckout() {
+      const nameInput = document.getElementById('charm-checkout-name');
+      const dobInput = document.getElementById('charm-checkout-dob');
+      const emailInput = document.getElementById('charm-checkout-email');
+      const phoneInput = document.getElementById('charm-checkout-phone');
+
+      const name = (nameInput ? nameInput.value : '').trim();
+      const dob = (dobInput ? dobInput.value : '').trim();
+      const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
+      const phone = (phoneInput ? phoneInput.value : '').trim().replace(/[^0-9]/g, '');
+
+      if (!name) { alert('Please enter your name.'); nameInput.focus(); return; }
+      if (!dob) { alert('Please select your Date of Birth.'); dobInput.focus(); return; }
+      if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); emailInput.focus(); return; }
+
+      const consentService = document.getElementById('charm-consent-service');
+      if (consentService && !consentService.checked) {
+        alert('Please accept the required Service Consent to proceed.');
+        return;
+      }
+
+      if (!_isCharmEmailVerified) {
+        alert('Please complete quick email verification to protect your Charm AI credits.');
+        sendCharmEmailCode();
+        return;
+      }
+
+      const payBtn = document.getElementById('btn-charm-pay');
+      if (payBtn) { payBtn.disabled = true; payBtn.textContent = 'Preparing Payment...'; }
+
+      try {
+        const orderRes = await fetch('/api/v1/payments/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            pack_id: 'charm_single',
+            customer_name: name,
+            customer_dob: dob,
+            customer_email: email,
+            customer_phone: phone,
+            checkout_token: _charmCheckoutToken
+          })
+        });
+        const orderData = await orderRes.json();
+        if (!orderRes.ok || !orderData.order_id || !orderData.rzp_order_id) {
+          alert(orderData.error || 'Failed to initialize payment order. Please retry.');
+          if (payBtn) { payBtn.disabled = false; payBtn.textContent = 'Proceed to Pay ₹199 ✦'; }
+          return;
+        }
+
+        const options = {
+          key: orderData.key_id,
+          amount: orderData.amount_paise,
+          currency: 'INR',
+          name: 'NUMEROS VISION',
+          description: 'Charm AI Starter Pack (5 Questions)',
+          order_id: orderData.rzp_order_id,
+          prefill: { name, email, contact: phone },
+          theme: { color: '#8B6914' },
+          handler: async function (response) {
+            try {
+              const verifyRes = await fetch('/api/v1/payments/verify-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                  order_id: orderData.order_id,
+                  rzp_order_id: response.razorpay_order_id,
+                  rzp_payment_id: response.razorpay_payment_id,
+                  rzp_signature: response.razorpay_signature,
+                  email: email,
+                  checkout_token: _charmCheckoutToken
+                })
+              });
+              const verifyData = await verifyRes.json();
+              if (verifyRes.ok && (verifyData.success || verifyData.status === 'ok' || verifyData.status === 'PAID')) {
+                alert('✦ Payment Successful! 5 In-Depth Questions have been credited to your account.');
+                document.getElementById('charmPaywallModal').style.display = 'none';
+                await initCharmAiSession();
+              } else {
+                alert(verifyData.error || 'Payment verification encountered a delay.');
+              }
+            } catch(e) {
+              alert('Payment verification connection error.');
+            }
+          },
+          modal: {
+            ondismiss: function () {
+              if (payBtn) { payBtn.disabled = false; payBtn.textContent = 'Proceed to Pay ₹199 ✦'; }
+            }
+          }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      } catch (e) {
+        alert('Network error connecting to payment gateway.');
+        if (payBtn) { payBtn.disabled = false; payBtn.textContent = 'Proceed to Pay ₹199 ✦'; }
+      }
+    }
+  </script>
 </body>
 </html>

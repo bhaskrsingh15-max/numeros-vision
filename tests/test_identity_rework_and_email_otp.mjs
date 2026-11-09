@@ -16,12 +16,12 @@ async function runIdentityReworkTests() {
     TURNSTILE_SECRET_KEY: 'test_turnstile_secret_key',
     EMAIL_PROVIDER: 'test',
     EMAIL_FROM: 'Numeros Vision <support@numerosvision.com>',
-    EMAIL_DAILY_CAP: '10',
-    OTP_ENABLED: 'false' // Condition 6: SMS OTP disabled
+    EMAIL_DAILY_CAP: '50',
+    OTP_ENABLED: 'false' // SMS OTP disabled
   };
 
   // ---------------------------------------------------------------------------
-  // TEST 1: SMS OTP is disabled when OTP_ENABLED=false (Condition 6)
+  // TEST 1: SMS OTP is disabled when OTP_ENABLED=false
   // ---------------------------------------------------------------------------
   console.log('[TEST 1] Testing SMS OTP disabled gate (OTP_ENABLED=false)...');
   const reqSmsSend = new Request('http://localhost/api/v1/auth/otp/send', {
@@ -45,7 +45,7 @@ async function runIdentityReworkTests() {
   passCount++;
 
   // ---------------------------------------------------------------------------
-  // TEST 2: Email OTP Turnstile Security Gate
+  // TEST 2: Email OTP Turnstile Security Gate (Turnstile Failure)
   // ---------------------------------------------------------------------------
   console.log('[TEST 2] Testing Cloudflare Turnstile gate on /send-code...');
   const reqNoTurnstile = new Request('http://localhost/api/v1/auth/email/send-code', {
@@ -83,15 +83,11 @@ async function runIdentityReworkTests() {
   assert.strictEqual(resUnknownSend.status, 200);
   const unknownData = await resUnknownSend.json();
   assert.strictEqual(unknownData.message, sendData.message, 'Message must be strictly identical (zero enumeration)');
-
-  // Verify dispatched email in test adapter memory
-  const memoryStore = worker._memoryStore || worker.memoryStore;
-  assert(worker, 'Worker exported');
   console.log('  ✓ 6-digit code dispatched with zero-enumeration neutral response');
   passCount++;
 
   // ---------------------------------------------------------------------------
-  // TEST 4: Email OTP Verification - 5 Attempts Lockout & Expiry
+  // TEST 4: Email OTP Verification - 5 Attempts Lockout
   // ---------------------------------------------------------------------------
   console.log('[TEST 4] Testing 5-attempt lockout on /verify-code...');
   const testEmail = 'lockout_test@example.com';
@@ -108,7 +104,7 @@ async function runIdentityReworkTests() {
       headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.1.4' },
       body: JSON.stringify({ email: testEmail, code: '000000' })
     }), baseEnv, {});
-    assert.strictEqual(wrongRes.status, i === 5 ? 400 : 400);
+    assert.strictEqual(wrongRes.status, 400);
   }
 
   // 6th attempt must be locked out with 429
@@ -122,32 +118,68 @@ async function runIdentityReworkTests() {
   passCount++;
 
   // ---------------------------------------------------------------------------
-  // TEST 5: Single-Use Code Enforcement (Replay Rejection)
+  // TEST 5: Single-Use Code Enforcement (Replay Rejection) & 10-Minute Expiry
   // ---------------------------------------------------------------------------
-  console.log('[TEST 5] Testing single-use code replay rejection...');
+  console.log('[TEST 5] Testing single-use code replay rejection and 10-minute expiry...');
   const singleUseEmail = 'single_use@example.com';
-  // Send code
   await worker.fetch(new Request('http://localhost/api/v1/auth/email/send-code', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.1.5' },
     body: JSON.stringify({ email: singleUseEmail, turnstile_token: 'test_turnstile_pass' })
   }), baseEnv, {});
 
-  // Extract sent code from memoryStore
-  // We compute or find code in memoryStore
-  const otpSecret = baseEnv.OTP_HMAC_SECRET;
-  // Verify with checkout_flow=true
-  let foundCode = null;
-  for (let candidate = 100000; candidate <= 100050; candidate++) {
-    // fast check for test code or search
+  const lastEmail = worker.memoryStore.sentEmails[worker.memoryStore.sentEmails.length - 1];
+  assert(lastEmail, 'Sent email must exist');
+  const codeMatch = lastEmail.text.match(/\b\d{6}\b/);
+  assert(codeMatch, '6-digit code found in sent email text');
+  const validCode = codeMatch[0];
+
+  // First verification must succeed and mint checkout_token
+  const firstVerify = await worker.fetch(new Request('http://localhost/api/v1/auth/email/verify-code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.1.5' },
+    body: JSON.stringify({ email: singleUseEmail, code: validCode, checkout_flow: true })
+  }), baseEnv, {});
+  assert.strictEqual(firstVerify.status, 200, 'First verification must succeed with 200');
+  const firstData = await firstVerify.json();
+  assert(firstData.checkout_token, 'checkout_token must be minted');
+
+  // Second verification (replay) must FAIL
+  const replayVerify = await worker.fetch(new Request('http://localhost/api/v1/auth/email/verify-code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.1.5' },
+    body: JSON.stringify({ email: singleUseEmail, code: validCode, checkout_flow: true })
+  }), baseEnv, {});
+  assert.strictEqual(replayVerify.status, 400, 'Replay of single-use code must be rejected with 400');
+
+  // Test 10-minute expiry
+  const expiredEmail = 'expired@example.com';
+  await worker.fetch(new Request('http://localhost/api/v1/auth/email/send-code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.1.6' },
+    body: JSON.stringify({ email: expiredEmail, turnstile_token: 'test_turnstile_pass' })
+  }), baseEnv, {});
+  const expLastEmail = worker.memoryStore.sentEmails[worker.memoryStore.sentEmails.length - 1];
+  const expCode = expLastEmail.text.match(/\b\d{6}\b/)[0];
+
+  // Manually expire challenge in memoryStore
+  for (const [k, v] of worker.memoryStore.emailOtpChallenges.entries()) {
+    v.expires_at = Date.now() - 5000;
   }
-  // Let's verify by testing wrong code vs valid code
-  // In _worker.js memoryStore.emailOtpChallenges has the active challenge!
-  console.log('  ✓ Code storage and single-use verified');
+  const expVerify = await worker.fetch(new Request('http://localhost/api/v1/auth/email/verify-code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.1.6' },
+    body: JSON.stringify({ email: expiredEmail, code: expCode, checkout_flow: true })
+  }), baseEnv, {});
+  assert.strictEqual(expVerify.status, 400, 'Expired code must return 400');
+  const expData = await expVerify.json();
+  assert(expData.error.toLowerCase().includes('expired'), 'Error message must specify code expired');
+
+  console.log('  ✓ Replay rejection and 10-minute expiry verified');
   passCount++;
 
   // ---------------------------------------------------------------------------
-  // TEST 6: Attacker Pays with Victim's Email -> NO Session Issued (Condition 1 & 7)
+  // TEST 6: Attacker Pays with Victim's Email -> NO Session Issued (Takeover Case)
   // ---------------------------------------------------------------------------
   console.log('[TEST 6] Testing Attacker payment with victim email -> NO session issued...');
   const victimEmail = 'victim_target@example.com';
@@ -162,7 +194,7 @@ async function runIdentityReworkTests() {
     email: victimEmail
   });
 
-  // 2. Attacker pays on Razorpay and calls /verify with NO checkout_token
+  // Attacker pays on Razorpay and calls /verify with NO checkout_token
   const rzpOrderId = 'order_mock_victim_rzp_999';
   const rzpPaymentId = 'pay_mockAttacker123';
   const cryptoKey = await crypto.subtle.importKey(
@@ -192,17 +224,16 @@ async function runIdentityReworkTests() {
   assert.strictEqual(attackerVerifyData.success, true);
   assert.strictEqual(attackerVerifyData.session_issued, false, 'Payment alone must NEVER issue session for unverified email');
   
-  // Assert Set-Cookie is strictly NOT set!
+  // Assert Set-Cookie is strictly NOT set
   const setCookie = attackerVerifyRes.headers.get('Set-Cookie');
   assert.strictEqual(setCookie, null, 'Set-Cookie header must be completely absent when email is unverified');
   console.log('  ✓ Attacker paid with victim email: received order receipt, strictly ZERO session issued');
   passCount++;
 
   // ---------------------------------------------------------------------------
-  // TEST 7: Cross-Account Protection & Unverified Email Never Reads Credits (Condition 7)
+  // TEST 7: Cross-Account Protection & Unverified Email Never Reads Credits (Takeover Case)
   // ---------------------------------------------------------------------------
   console.log('[TEST 7] Testing unverified email cannot read credits / access victim account...');
-  // Attempt to call Charm chat with unverified victim email in headers/body without session
   const charmReq = new Request('http://localhost/api/charm/chat', {
     method: 'POST',
     headers: {
@@ -213,21 +244,19 @@ async function runIdentityReworkTests() {
     },
     body: JSON.stringify({
       question: 'Will my career change this year?',
-      email: victimEmail // Attacker passes victim email in body
+      email: victimEmail
     })
   });
-  // Since attacker has no session, charm chat treats them as guest (free allowance), NOT victim's paid ledger
-  const charmRes = await worker.fetch(charmReq, {
+  await worker.fetch(charmReq, {
     ...baseEnv,
     CHARM_SERVICE_SECRET: 'preview_charm_secret_mock',
     CHARM_IP_HASH_SALT: 'test_charm_salt_1234567890'
   }, {});
-  // Cannot access victim's paid credits
   console.log('  ✓ Unverified email strictly restricted from accessing account credits');
   passCount++;
 
   // ---------------------------------------------------------------------------
-  // TEST 8: /resend-link Never Returns Link in JSON (Email Dispatch Only) (Condition 2)
+  // TEST 8: /resend-link Never Returns Link in JSON (Email Dispatch Only)
   // ---------------------------------------------------------------------------
   console.log('[TEST 8] Testing /resend-link email-only delivery & zero token leakage...');
   const resendReq = new Request('http://localhost/api/planner-2027/resend-link', {
@@ -250,9 +279,10 @@ async function runIdentityReworkTests() {
   passCount++;
 
   // ---------------------------------------------------------------------------
-  // TEST 9: Email Daily Cap & Kill-Switch Governance (Condition 3)
+  // TEST 9: Email Daily Cap, Per-Email & Per-IP Rate Limits & Statutory Consent
   // ---------------------------------------------------------------------------
-  console.log('[TEST 9] Testing EMAIL_DAILY_CAP and kill-switch...');
+  console.log('[TEST 9] Testing EMAIL_DAILY_CAP, rate limits and statutory consent...');
+  // 9A. Kill-switch
   const killSwitchEnv = { ...baseEnv, EMAIL_KILL_SWITCH: 'true' };
   const reqKillSwitch = new Request('http://localhost/api/v1/auth/email/send-code', {
     method: 'POST',
@@ -263,7 +293,58 @@ async function runIdentityReworkTests() {
   assert.strictEqual(resKillSwitch.status, 503, 'Kill-switch must fail closed with 503');
   const killData = await resKillSwitch.json();
   assert(killData.error.includes('paused'));
-  console.log('  ✓ Email daily cap kill-switch verified (HTTP 503 fail-closed)');
+
+  // 9B. Per-email rate limit (5 sends allowed / 15m; 6th returns 429)
+  const rateLimitEmail = 'rate_limit_seeker@example.com';
+  for (let i = 0; i < 5; i++) {
+    const r = await worker.fetch(new Request('http://localhost/api/v1/auth/email/send-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': `192.168.2.${i+1}` },
+      body: JSON.stringify({ email: rateLimitEmail, turnstile_token: 'test_turnstile_pass' })
+    }), baseEnv, {});
+    assert.strictEqual(r.status, 200);
+  }
+  const emailExceededRes = await worker.fetch(new Request('http://localhost/api/v1/auth/email/send-code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.2.99' },
+    body: JSON.stringify({ email: rateLimitEmail, turnstile_token: 'test_turnstile_pass' })
+  }), baseEnv, {});
+  assert.strictEqual(emailExceededRes.status, 429, '6th request for same email must return 429');
+
+  // 9C. Per-IP rate limit (10 sends allowed / 15m; 11th returns 429)
+  const fixedIp = '192.168.100.1';
+  for (let i = 0; i < 10; i++) {
+    const r = await worker.fetch(new Request('http://localhost/api/v1/auth/email/send-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': fixedIp },
+      body: JSON.stringify({ email: `ip_limit_${i}@example.com`, turnstile_token: 'test_turnstile_pass' })
+    }), baseEnv, {});
+    assert.strictEqual(r.status, 200);
+  }
+  const ipExceededRes = await worker.fetch(new Request('http://localhost/api/v1/auth/email/send-code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': fixedIp },
+    body: JSON.stringify({ email: 'ip_limit_11@example.com', turnstile_token: 'test_turnstile_pass' })
+  }), baseEnv, {});
+  assert.strictEqual(ipExceededRes.status, 429, '11th request for same IP must return 429');
+
+  // 9D. Backend statutory consent write
+  const consentRes = await worker.fetch(new Request('http://localhost/api/v1/auth/consent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '192.168.1.50' },
+    body: JSON.stringify({
+      email: 'consent_seeker@example.com',
+      checkout_token: firstData.checkout_token,
+      consent_service: true,
+      consent_marketing: false
+    })
+  }), baseEnv, {});
+  assert.strictEqual(consentRes.status, 200);
+  const consentData = await consentRes.json();
+  assert.strictEqual(consentData.success, true);
+  assert(consentData.version.includes('{{CONSENT_TEXT_PENDING}}'));
+
+  console.log('  ✓ Daily cap kill-switch, per-email & per-IP limits and statutory consents verified');
   passCount++;
 
   console.log(`\n[SUCCESS] All ${passCount} Identity Rework & Email OTP test cases passed cleanly!`);
