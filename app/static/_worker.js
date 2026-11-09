@@ -473,7 +473,7 @@ async function verifyTurnstileToken(env, token, clientIp) {
     }
   }
   if (!token || typeof token !== 'string') return false;
-  const secretKey = env && env.TURNSTILE_SECRET_KEY ? env.TURNSTILE_SECRET_KEY.trim() : '';
+  let secretKey = env && env.TURNSTILE_SECRET_KEY ? env.TURNSTILE_SECRET_KEY.trim() : '';
   if (!secretKey) {
     if (env && (env.ENVIRONMENT === 'test' || env.ENVIRONMENT === 'local')) return true;
     return false;
@@ -481,6 +481,9 @@ async function verifyTurnstileToken(env, token, clientIp) {
   const currentEnv = ((env && env.ENVIRONMENT) || 'production').toLowerCase().trim();
   if (currentEnv !== 'preview' && currentEnv !== 'test' && currentEnv !== 'local') {
     if (isCloudflareTestKey(secretKey)) return false;
+  } else if (isCloudflareTestKey(secretKey)) {
+    // In preview/test/local, canonicalize test secret key to ensure exact 31-zero matching
+    secretKey = '1x0000000000000000000000000000000AA';
   }
   try {
     const formData = new URLSearchParams();
