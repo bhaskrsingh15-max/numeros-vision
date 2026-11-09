@@ -882,16 +882,16 @@
               </div>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              ${isReady ? `
-                <a href="${r.downloadUrl || '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'}" target="_blank" download class="nv-btn-cta" style="background:var(--emerald); padding:8px 16px; font-size:0.80rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:#FFFFFF; border-radius:6px; font-weight:700;">
+              ${(isReady && r.downloadUrl) ? `
+                <a href="${r.downloadUrl}" target="_blank" download class="nv-btn-cta" style="background:var(--emerald); padding:8px 16px; font-size:0.80rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:#FFFFFF; border-radius:6px; font-weight:700;">
                   📥 Download PDF (${r.pages} Pages)
                 </a>
-                <a href="${r.downloadUrl || '/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf'}" target="_blank" style="color:var(--gold-dark); font-weight:700; font-size:0.80rem; text-decoration:underline;">
+                <a href="${r.downloadUrl}" target="_blank" style="color:var(--gold-dark); font-weight:700; font-size:0.80rem; text-decoration:underline;">
                   Open ↗
                 </a>
               ` : `
                 <span style="font-size:0.78rem; font-weight:600; color:var(--gold-dark);">
-                  ${isFailed ? 'Retrying automatically' : 'Ready within a few minutes'}
+                  ${isReady ? 'Preparing download link... or <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">contact support</a>' : (isFailed ? 'Retrying automatically' : 'Ready within a few minutes')}
                 </span>
               `}
             </div>

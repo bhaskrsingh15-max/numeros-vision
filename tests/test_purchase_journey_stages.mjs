@@ -451,6 +451,53 @@ async function runTests() {
     assert(false, `Global Turnstile caller enforcement test threw error: ${err.message}`);
   }
 
+  // ── TEST 11: Dashboard Sample-PDF Purge & Zero-Entitlement URL Verification ──
+  try {
+    const fs = await import('fs');
+    const path = await import('path');
+    const staticDir = join(rootDir, 'app/static');
+    const dashboardHtml = fs.readFileSync(join(staticDir, 'dashboard.html'), 'utf-8');
+
+    // 1. Zero sample-PDF fallback in dashboard.html
+    assert(!dashboardHtml.includes('Numeros_Vision_Sample_Excerpt'), 'dashboard.html has zero sample excerpt fallback');
+    assert(!dashboardHtml.includes('/samples/'), 'dashboard.html contains zero sample-PDF paths');
+    assert(dashboardHtml.includes('contact support') || dashboardHtml.includes('Preparing download link'), 'dashboard.html instructs customer to wait or contact support when downloadUrl is missing');
+
+    // 2. verified=true in query parameters grants zero entitlement
+    assert(!dashboardHtml.includes("get('verified')"), 'dashboard.html never inspects verified URL parameter');
+    assert(!dashboardHtml.includes('["verified"]'), 'dashboard.html never binds to verified parameter');
+
+    // 3. Opening dashboard endpoints with verified=true and no session returns 401
+    const workerModule = await import('../app/static/_worker.js');
+    const worker = workerModule.default;
+    const mockEnv = {
+      ENVIRONMENT: 'test',
+      SESSION_SECRET: 'test_session_secret_32b_journey_',
+      IP_HASH_SALT: 'test_ip_hash_salt_32b_journey_00',
+      DATA_ENCRYPTION_KEY: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      ASSETS: { fetch: async () => new Response('Asset stub', { status: 200 }) }
+    };
+
+    const unauthReq = new Request('https://numerosvision.com/api/v1/dashboard/view?order_id=ord_fake_123&verified=true', {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'Origin': 'https://numerosvision.com' }
+    });
+    const unauthRes = await worker.fetch(unauthReq, mockEnv, { waitUntil: () => {} });
+    assert(unauthRes.status === 401, `Dashboard view with verified=true but no session must return 401 (got ${unauthRes.status})`);
+    const unauthBody = await unauthRes.json().catch(() => ({}));
+    assert(!unauthBody.orders && !unauthBody.reports, 'No orders or reports returned to unauthenticated session');
+
+    // 4. /api/me check with verified=true and no session returns 401
+    const meReq = new Request('https://numerosvision.com/api/me?order_id=ord_fake_123&verified=true', {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'Origin': 'https://numerosvision.com' }
+    });
+    const meRes = await worker.fetch(meReq, mockEnv, { waitUntil: () => {} });
+    assert(meRes.status === 401, `api/me with verified=true but no session must return 401 (got ${meRes.status})`);
+  } catch (err) {
+    assert(false, `Dashboard sample purge & verified query parameter test threw error: ${err.message}`);
+  }
+
   console.log(`\nTests Completed: ${passCount} Passed, ${failCount} Failed\n`);
   if (failCount > 0) {
     process.exit(1);
