@@ -465,19 +465,38 @@ async function verifyCheckoutToken(secret, email, token) {
   return timingSafeEqual(expectedSig, sig);
 }
 
+async function signOrderAccessToken(secret, orderId, expiresAt) {
+  const payload = `${orderId}:${expiresAt}`;
+  const sig = await hmacSha256Hex(secret, payload);
+  return `${expiresAt}.${sig}`;
+}
+
+async function verifyOrderAccessToken(secret, orderId, token) {
+  if (!token || typeof token !== 'string' || !token.includes('.')) return false;
+  const [expStr, sig] = token.split('.');
+  const expiresAt = parseInt(expStr, 10);
+  if (!expiresAt || isNaN(expiresAt)) return false;
+  const now = Date.now();
+  if (now > expiresAt) return false; // Time-bound expired
+  const expectedSig = await hmacSha256Hex(secret, `${orderId}:${expiresAt}`);
+  return timingSafeEqual(expectedSig, sig);
+}
+
 async function verifyTurnstileToken(env, token, clientIp) {
-  const isLocalOrTest = (env && (env.ENVIRONMENT === 'test' || env.ENVIRONMENT === 'local')) ||
-                        clientIp === '127.0.0.1' || clientIp === '::1' || clientIp === 'localhost';
-  if (isLocalOrTest) {
-    if (!token && env && env.ENVIRONMENT === 'test' && (!env.TURNSTILE_SECRET_KEY || isCloudflareTestKey(env.TURNSTILE_SECRET_KEY))) return true;
+  const currentEnv = ((env && env.ENVIRONMENT) || 'production').toLowerCase().trim();
+  const isPreviewOrDev = currentEnv === 'preview' || currentEnv === 'test' || currentEnv === 'local';
+
+  if (isPreviewOrDev) {
+    if (!token && currentEnv === 'test' && (!env.TURNSTILE_SECRET_KEY || isCloudflareTestKey(env.TURNSTILE_SECRET_KEY))) return true;
     if (token === 'test_turnstile_pass' || (typeof token === 'string' && token.startsWith('1x0000000000000000000000000000000AA'))) {
       return true;
     }
   }
+
   if (!token || typeof token !== 'string') return false;
+
   let secretKey = env && env.TURNSTILE_SECRET_KEY ? env.TURNSTILE_SECRET_KEY.trim() : '';
-  const currentEnv = ((env && env.ENVIRONMENT) || 'production').toLowerCase().trim();
-  const isPreviewOrDev = currentEnv === 'preview' || currentEnv === 'test' || currentEnv === 'local' || isLocalOrTest;
+
   if (!secretKey) {
     if (isPreviewOrDev) {
       secretKey = '1x0000000000000000000000000000000AA';
@@ -485,12 +504,14 @@ async function verifyTurnstileToken(env, token, clientIp) {
       return false;
     }
   }
+
   if (!isPreviewOrDev) {
     if (isCloudflareTestKey(secretKey)) return false;
   } else if (isCloudflareTestKey(secretKey)) {
     // In preview/test/local, canonicalize test secret key to ensure exact 31-zero matching
     secretKey = '1x0000000000000000000000000000000AA';
   }
+
   try {
     const formData = new URLSearchParams();
     formData.append('secret', secretKey);
@@ -991,7 +1012,15 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
 
   if (customerEmail && customerEmail.includes('@')) {
     const packName = pack ? pack.name : 'Numerology Report';
-    const orderLink = `https://numerosvision.com/dashboard/?order_id=${encodeURIComponent(order.id)}`;
+    const sessionSecret = env.SESSION_SECRET ? env.SESSION_SECRET.trim() : '';
+    const tokenExpiresAt = now + (30 * 24 * 60 * 60 * 1000); // 30-day time-bound token
+    let orderToken = '';
+    if (sessionSecret) {
+      orderToken = await signOrderAccessToken(sessionSecret, order.id, tokenExpiresAt);
+    }
+    const orderLink = orderToken
+      ? `https://numerosvision.com/dashboard/?order_id=${encodeURIComponent(order.id)}&token=${encodeURIComponent(orderToken)}`
+      : `https://numerosvision.com/dashboard/?order_id=${encodeURIComponent(order.id)}`;
     const emailSubject = `Order Confirmation: Your ${packName} · Numeros Vision`;
     const emailText = `Thank you for your order with Numeros Vision.\n\nOrder ID: ${order.id}\nProduct: ${packName}\n\nYour personalized dossier is being prepared deterministically. You can view your order status and access your report directly on your private dashboard:\n${orderLink}\n\nIf you have any questions, write to support@numerosvision.com.`;
     const emailHtml = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:540px;margin:0 auto;padding:32px 24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:14px;color:#523E28;">
@@ -1940,6 +1969,9 @@ export {
   doesReportExistOrWasServed,
   fulfillPaidOrder,
   mintUserSession,
+  signOrderAccessToken,
+  verifyOrderAccessToken,
+  verifyTurnstileToken,
   memoryStore
 };
 export default {
@@ -2072,8 +2104,11 @@ export default {
       const configuredAdminToken = (env && env.ADMIN_TOKEN ? env.ADMIN_TOKEN.trim() : '');
       const isAdmin = Boolean(configuredAdminToken && adminHeader && timingSafeEqual(adminHeader, configuredAdminToken));
 
+      const isTurnstileFallbackActive = (currentEnv === 'preview' || currentEnv === 'test' || currentEnv === 'local') &&
+        (!env.TURNSTILE_SECRET_KEY || isCloudflareTestKey(env.TURNSTILE_SECRET_KEY));
       const payload = {
-        status: hasDangerousInProd ? 'degraded' : 'ok'
+        status: hasDangerousInProd ? 'degraded' : 'ok',
+        turnstile_fallback_active: isTurnstileFallbackActive
       };
       if (isAdmin) {
         payload.environment = currentEnv;
@@ -4644,8 +4679,74 @@ export default {
       };
 
       const user = await authenticateUser(request, env);
+      const queryOrderId = (url.searchParams.get('order_id') || '').trim();
+      const queryToken = (url.searchParams.get('token') || url.searchParams.get('order_token') || '').trim();
+      const sessionSecret = env.SESSION_SECRET ? env.SESSION_SECRET.trim() : '';
+
+      let tokenOrder = null;
       if (!user) {
-        return new Response(JSON.stringify({ error: 'Unauthorized. Please sign in.' }), { status: 401, headers: corsHeaders });
+        if (queryOrderId && queryToken && sessionSecret) {
+          const isValid = await verifyOrderAccessToken(sessionSecret, queryOrderId, queryToken);
+          if (isValid) {
+            if (env.DB) {
+              tokenOrder = await env.DB.prepare('SELECT * FROM orders WHERE id = ?').bind(queryOrderId).first();
+            } else if (memoryStore && memoryStore.orders) {
+              tokenOrder = memoryStore.orders.get(queryOrderId);
+            }
+          }
+        }
+        if (!tokenOrder) {
+          return new Response(JSON.stringify({ error: 'Unauthorized. Please sign in.' }), { status: 401, headers: corsHeaders });
+        }
+      }
+
+      if (tokenOrder) {
+        let job = null;
+        if (env.DB) {
+          job = await env.DB.prepare('SELECT id, status, r2_key, download_url, attempts, created_at, updated_at FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(tokenOrder.id).first();
+        } else if (memoryStore && memoryStore.reportJobs) {
+          for (const j of memoryStore.reportJobs.values()) {
+            if (j.order_id === tokenOrder.id) { job = j; break; }
+          }
+        }
+        const pack = getPackById(tokenOrder.pack_id);
+        const st = job ? String(job.status || 'QUEUED').toUpperCase() : 'QUEUED';
+        const attempts = job ? (job.attempts || 0) : 0;
+        let displayStatus = 'preparing';
+        let statusBadge = 'Preparing';
+        let message = 'Your report is being prepared deterministically.';
+        let isDownloadable = false;
+
+        if (st === 'COMPLETED' || st === 'DOWNLOADED' || (job && (job.r2_key || job.download_url))) {
+          displayStatus = 'ready';
+          statusBadge = 'Ready';
+          message = 'Your bespoke dossier has been rendered and verified.';
+          isDownloadable = true;
+        } else if (st === 'FAILED' || attempts >= 3) {
+          displayStatus = 'needs_attention';
+          statusBadge = 'Needs Attention';
+          message = "We’re checking this order. If it isn’t ready within 30 minutes, write to support@numerosvision.com.";
+        }
+
+        const reportItem = {
+          orderId: tokenOrder.id,
+          packId: tokenOrder.pack_id,
+          title: pack ? pack.name : 'Numerology Report',
+          pages: pack ? pack.pages : 0,
+          status: displayStatus,
+          statusBadge: statusBadge,
+          message: message,
+          isDownloadable: isDownloadable,
+          downloadUrl: (job && job.download_url) ? job.download_url : null,
+          createdAt: tokenOrder.created_at,
+          amountPaise: tokenOrder.amount_paise
+        };
+
+        return new Response(JSON.stringify({
+          user: { email: tokenOrder.email || 'Customer' },
+          subjects: [],
+          reports: [reportItem]
+        }), { status: 200, headers: corsHeaders });
       }
 
       const dataEncKey = requireSecret(env, 'DATA_ENCRYPTION_KEY');

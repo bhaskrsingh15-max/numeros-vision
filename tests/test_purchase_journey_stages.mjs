@@ -217,7 +217,7 @@ async function runTests() {
     };
 
     // Mock fetch for Razorpay
-    const originalFetch = globalThis.fetch;
+    const test4OriginalFetch = globalThis.fetch;
     let createdRazorpayAmount = null;
 
     globalThis.fetch = async (url, options = {}) => {
@@ -234,7 +234,7 @@ async function runTests() {
           status: 'created'
         }), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
-      return originalFetch(url, options);
+      return test4OriginalFetch(url, options);
     };
 
     // Generate valid checkout token for test email (${timestamp}.${sig})
@@ -283,7 +283,7 @@ async function runTests() {
     );
 
     // Restore fetch
-    globalThis.fetch = originalFetch;
+    globalThis.fetch = test4OriginalFetch;
   } catch (err) {
     assert(false, `Price tampering override test threw error: ${err.message}`);
   }
@@ -499,6 +499,7 @@ async function runTests() {
   }
 
   // ── TEST 12: End-to-End Worker Lifecycle: Send-Code -> Verify-Code -> Create-Order -> Verify-Payment (Session Minting) -> Dashboard View ──
+  let lifecycleOriginalFetch = globalThis.fetch;
   try {
     const crypto = await import('crypto');
     const workerModule = await import('../app/static/_worker.js');
@@ -521,7 +522,7 @@ async function runTests() {
     };
 
     // Mock fetch for Razorpay order creation
-    const originalFetch = globalThis.fetch;
+    const lifecycleOriginalFetch = globalThis.fetch;
     globalThis.fetch = async (url, options = {}) => {
       const urlStr = String(url);
       if (urlStr.includes('api.razorpay.com/v1/orders')) {
@@ -535,7 +536,7 @@ async function runTests() {
           status: 'created'
         }), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
-      return originalFetch(url, options);
+      return lifecycleOriginalFetch(url, options);
     };
 
     // 1. Simulate send-code
@@ -702,9 +703,75 @@ async function runTests() {
     const wrongEmailPayData = await wrongEmailPayRes.json();
     assert(wrongEmailPayData.session_issued === false, 'Payment with mismatched email must have session_issued=false');
     assert(!wrongEmailPayRes.headers.get('set-cookie'), 'Payment with mismatched email MUST NOT receive a session cookie');
-    globalThis.fetch = originalFetch;
+    // 11. ASSERT: Order Email Link with Signed, Time-Bound Token
+    // A. Link without token shows nothing (401 Unauthorized)
+    const linkNoTokenReq = new Request(`https://numerosvision.com/api/v1/dashboard/view?order_id=${encodeURIComponent(internalOrderId)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'Origin': 'https://numerosvision.com' }
+    });
+    const linkNoTokenRes = await worker.fetch(linkNoTokenReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(linkNoTokenRes.status === 401, `Email link without token must return 401 (got ${linkNoTokenRes.status})`);
+
+    // B. Link with forged/tampered token shows nothing (401 Unauthorized)
+    const forgedToken = `${Date.now() + 86400000}.badbeef000000000000000000000000000000000000000000000000000000000`;
+    const linkForgedReq = new Request(`https://numerosvision.com/api/v1/dashboard/view?order_id=${encodeURIComponent(internalOrderId)}&token=${encodeURIComponent(forgedToken)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'Origin': 'https://numerosvision.com' }
+    });
+    const linkForgedRes = await worker.fetch(linkForgedReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(linkForgedRes.status === 401, `Email link with forged token must return 401 (got ${linkForgedRes.status})`);
+
+    // C. Link with expired token shows nothing (401 Unauthorized)
+    const pastExpiry = Date.now() - 3600000; // 1 hour ago
+    const expiredToken = await workerModule.signOrderAccessToken(testSecret, internalOrderId, pastExpiry);
+    const linkExpiredReq = new Request(`https://numerosvision.com/api/v1/dashboard/view?order_id=${encodeURIComponent(internalOrderId)}&token=${encodeURIComponent(expiredToken)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'Origin': 'https://numerosvision.com' }
+    });
+    const linkExpiredRes = await worker.fetch(linkExpiredReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(linkExpiredRes.status === 401, `Email link with expired token must return 401 (got ${linkExpiredRes.status})`);
+
+    // D. Valid signed token shows ONLY that order
+    const validExpiry = Date.now() + (30 * 24 * 60 * 60 * 1000);
+    const validOrderToken = await workerModule.signOrderAccessToken(testSecret, internalOrderId, validExpiry);
+    
+    // Plant a second order in memoryStore to ensure strict single-order scoping
+    const secondOrderId = 'ord_other_seeker_999';
+    mStore.orders.set(secondOrderId, {
+      id: secondOrderId,
+      user_id: 'usr_other_999',
+      pack_id: 'report_deep',
+      amount_paise: 51000,
+      email: 'other@example.com',
+      created_at: Date.now()
+    });
+
+    const linkValidReq = new Request(`https://numerosvision.com/api/v1/dashboard/view?order_id=${encodeURIComponent(internalOrderId)}&token=${encodeURIComponent(validOrderToken)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'Origin': 'https://numerosvision.com' }
+    });
+    const linkValidRes = await worker.fetch(linkValidReq, lifecycleEnv, { waitUntil: () => {} });
+    assert(linkValidRes.status === 200, `Email link with valid signed token must return 200 (got ${linkValidRes.status})`);
+    const linkValidData = await linkValidRes.json();
+    assert(Array.isArray(linkValidData.reports) && linkValidData.reports.length === 1, 'Valid email link returns exactly 1 report');
+    assert(linkValidData.reports[0].orderId === internalOrderId, 'Valid email link shows strictly the authorized order');
+    assert(!linkValidData.reports.some(r => r.orderId === secondOrderId), 'Valid email link NEVER exposes other orders');
+    assert(Array.isArray(linkValidData.subjects) && linkValidData.subjects.length === 0, 'Token-scoped view does not leak account subjects');
+
+    // E. Health probe visibility of Turnstile fallback
+    const healthPreviewReq = new Request('https://numerosvision.com/api/health');
+    const healthPreviewRes = await worker.fetch(healthPreviewReq, { ENVIRONMENT: 'preview' }, {});
+    const healthPreviewData = await healthPreviewRes.json();
+    assert(healthPreviewData.turnstile_fallback_active === true, 'Health probe reports turnstile_fallback_active=true on preview without live secret');
+
+    const healthProdReq = new Request('https://numerosvision.com/api/health');
+    const healthProdRes = await worker.fetch(healthProdReq, { ENVIRONMENT: 'production', TURNSTILE_SECRET_KEY: 'live_prod_key' }, {});
+    const healthProdData = await healthProdRes.json();
+    assert(healthProdData.turnstile_fallback_active === false, 'Health probe reports turnstile_fallback_active=false on production with live secret');
+
+    globalThis.fetch = lifecycleOriginalFetch;
   } catch (err) {
-    globalThis.fetch = originalFetch;
+    globalThis.fetch = lifecycleOriginalFetch;
     assert(false, `Worker lifecycle and session minting test threw error: ${err.message}`);
   }
 

@@ -773,9 +773,19 @@
       } catch (e) {}
 
       try {
-        const meRes = await fetch('/api/me');
-        const meData = meRes.ok ? await meRes.json().catch(() => ({})) : null;
-        if (meRes.status === 401 || !meData || !meData.authenticated) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderIdParam = (urlParams.get('order_id') || urlParams.get('orderId') || '').trim();
+        const tokenParam = (urlParams.get('token') || urlParams.get('order_token') || '').trim();
+        _activeSubjectId = urlParams.get('subjectId') || '';
+
+        const queryParts = [];
+        if (_activeSubjectId) queryParts.push(`subjectId=${encodeURIComponent(_activeSubjectId)}`);
+        if (orderIdParam) queryParts.push(`order_id=${encodeURIComponent(orderIdParam)}`);
+        if (tokenParam) queryParts.push(`token=${encodeURIComponent(tokenParam)}`);
+        const viewUrl = '/api/v1/dashboard/view' + (queryParts.length > 0 ? `?${queryParts.join('&')}` : '');
+
+        const viewRes = await fetch(viewUrl);
+        if (!viewRes.ok) {
           const loginUrl = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname + window.location.search);
           const promptEl = document.getElementById('dashSignedOutPrompt');
           const authContent = document.getElementById('dashAuthenticatedContent');
@@ -785,19 +795,11 @@
           if (promptEl) promptEl.style.display = 'block';
           return;
         }
+
         const promptEl = document.getElementById('dashSignedOutPrompt');
         const authContent = document.getElementById('dashAuthenticatedContent');
         if (promptEl) promptEl.style.display = 'none';
         if (authContent) authContent.style.display = 'block';
-
-        const urlParams = new URLSearchParams(window.location.search);
-        _activeSubjectId = urlParams.get('subjectId') || '';
-        const viewUrl = '/api/v1/dashboard/view' + (_activeSubjectId ? `?subjectId=${encodeURIComponent(_activeSubjectId)}` : '');
-        const viewRes = await fetch(viewUrl);
-        if (!viewRes.ok) {
-          console.error('Failed to load dashboard view:', viewRes.status);
-          return;
-        }
 
         _dashboardState = await viewRes.json();
         renderDashboard(_dashboardState);
@@ -876,7 +878,13 @@
             return;
           }
           try {
-            const viewUrl = '/api/v1/dashboard/view' + (_activeSubjectId ? `?subjectId=${encodeURIComponent(_activeSubjectId)}` : '');
+            const urlParams = new URLSearchParams(window.location.search);
+            const tokenParam = (urlParams.get('token') || urlParams.get('order_token') || '').trim();
+            const qParts = [];
+            if (_activeSubjectId) qParts.push(`subjectId=${encodeURIComponent(_activeSubjectId)}`);
+            if (activeOrderId) qParts.push(`order_id=${encodeURIComponent(activeOrderId)}`);
+            if (tokenParam) qParts.push(`token=${encodeURIComponent(tokenParam)}`);
+            const viewUrl = '/api/v1/dashboard/view' + (qParts.length > 0 ? `?${qParts.join('&')}` : '');
             const res = await fetch(viewUrl);
             if (res.ok) {
               _dashboardState = await res.json();
