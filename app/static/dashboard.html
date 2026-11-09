@@ -785,7 +785,7 @@
         if (tokenParam) queryParts.push(`token=${encodeURIComponent(tokenParam)}`);
         const viewUrl = '/api/v1/dashboard/view' + (queryParts.length > 0 ? `?${queryParts.join('&')}` : '');
 
-        const viewRes = await fetch(viewUrl);
+        const viewRes = await fetch(viewUrl, { credentials: 'include' });
         if (!viewRes.ok) {
           const loginUrl = '/login.html?returnTo=' + encodeURIComponent(window.location.pathname + window.location.search);
           const promptEl = document.getElementById('dashSignedOutPrompt');

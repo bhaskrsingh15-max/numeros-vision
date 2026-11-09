@@ -4094,8 +4094,14 @@ export default {
             let code = 'GATEWAY_ERROR';
             let errMsg = 'Failed to create order with payment gateway.';
             if (rzpStatus === 401) {
+              console.error('[GATEWAY_AUTH_ERROR] Provider credentials rejected by Razorpay (HTTP 401):', errData?.error?.description || '');
               code = 'GATEWAY_AUTHENTICATION_FAILED';
-              errMsg = 'Payment gateway authentication failed. Please verify provider credentials.';
+              errMsg = 'Unable to initialize payment at this moment. Please try again shortly or contact support.';
+              return new Response(JSON.stringify({
+                success: false,
+                code: code,
+                error: errMsg
+              }), { status: 401, headers: corsHeaders });
             } else if (errData?.error?.code) {
               code = `GATEWAY_${String(errData.error.code).toUpperCase()}`;
               errMsg = errData?.error?.description || errMsg;
