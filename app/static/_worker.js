@@ -5043,15 +5043,23 @@ export default {
         });
       }
 
+      // Live key refusal check
+      if ((env.RAZORPAY_KEY_ID || '').trim().startsWith('rzp_live')) {
+        return new Response(JSON.stringify({
+          error: 'FATAL SECURITY VIOLATION: Live Razorpay key detected in test/preview console.'
+        }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      // ADMIN_TOKEN must be read strictly from header (not URL query)
       const authHeader = request.headers.get('Authorization') || request.headers.get('X-Admin-Token') || '';
-      const queryToken = (url.searchParams.get('token') || url.searchParams.get('admin_token') || '').trim();
       let providedToken = '';
       if (authHeader.startsWith('Bearer ')) {
         providedToken = authHeader.slice(7).trim();
       } else if (authHeader) {
         providedToken = authHeader.trim();
-      } else if (queryToken) {
-        providedToken = queryToken;
       }
 
       if (!providedToken || !timingSafeEqual(providedToken, expectedAdminToken)) {

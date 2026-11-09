@@ -116,14 +116,20 @@ async function runSuite() {
   });
   assert.equal(resProd.status, 404, 'Test console must return 404 in production environment');
 
-  // 6B. Missing token in preview must return 403
+  // 6B. Unset ENVIRONMENT must return clean 404 (strictly allow-listed only when ENVIRONMENT === 'preview')
+  const resUnsetEnv = await worker.fetch(new Request('https://numerosvision.com/admin/test-console'), {
+    ADMIN_TOKEN: 'secret_admin_token_999'
+  });
+  assert.equal(resUnsetEnv.status, 404, 'Test console must return 404 when ENVIRONMENT is unset');
+
+  // 6C. Missing token in preview must return 403
   const resNoToken = await worker.fetch(new Request('https://preview.numerosvision.com/admin/test-console'), {
     ENVIRONMENT: 'preview',
     ADMIN_TOKEN: 'secret_admin_token_999'
   });
   assert.equal(resNoToken.status, 403, 'Missing ADMIN_TOKEN must return 403');
 
-  // 6C. Wrong token in preview must return 403
+  // 6D. Wrong token in preview must return 403
   const resWrongToken = await worker.fetch(new Request('https://preview.numerosvision.com/admin/test-console', {
     headers: { 'Authorization': 'Bearer wrong_token' }
   }), {
@@ -132,7 +138,24 @@ async function runSuite() {
   });
   assert.equal(resWrongToken.status, 403, 'Wrong ADMIN_TOKEN must return 403');
 
-  // 6D. Unset ADMIN_TOKEN on server must return 503
+  // 6E. Token in URL query must be rejected (headers only) -> 403
+  const resQueryToken = await worker.fetch(new Request('https://preview.numerosvision.com/admin/test-console?token=secret_admin_token_999'), {
+    ENVIRONMENT: 'preview',
+    ADMIN_TOKEN: 'secret_admin_token_999'
+  });
+  assert.equal(resQueryToken.status, 403, 'Query param token must be rejected (header-only auth)');
+
+  // 6F. Live Razorpay key refusal -> 500 error
+  const resLiveKey = await worker.fetch(new Request('https://preview.numerosvision.com/admin/test-console', {
+    headers: { 'X-Admin-Token': 'secret_admin_token_999' }
+  }), {
+    ENVIRONMENT: 'preview',
+    ADMIN_TOKEN: 'secret_admin_token_999',
+    RAZORPAY_KEY_ID: 'rzp_live_testkey12345678'
+  });
+  assert.equal(resLiveKey.status, 500, 'Test console must refuse to run if RAZORPAY_KEY_ID starts with rzp_live');
+
+  // 6G. Unset ADMIN_TOKEN on server must return 503
   const resUnsetSecret = await worker.fetch(new Request('https://preview.numerosvision.com/admin/test-console', {
     headers: { 'Authorization': 'Bearer any_token' }
   }), {
