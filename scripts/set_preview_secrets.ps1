@@ -54,7 +54,7 @@ function Put-PagesSecret {
                 break
             }
         }
-        Write-Host "FAILED $Name: $errClean" -ForegroundColor Red
+        Write-Host "FAILED ${Name}: $errClean" -ForegroundColor Red
     }
 }
 
