@@ -5062,12 +5062,96 @@ export default {
         providedToken = authHeader.trim();
       }
 
-      if (!providedToken || !timingSafeEqual(providedToken, expectedAdminToken)) {
-        return new Response(JSON.stringify({
-          error: 'Access Denied: Invalid or missing admin authorization token.'
-        }), {
+      const isAuthorized = Boolean(providedToken && timingSafeEqual(providedToken, expectedAdminToken));
+      const wantsJson = (request.headers.get('Accept') || '').includes('application/json') || url.searchParams.get('format') === 'json' || url.pathname === '/api/admin/test-console';
+
+      if (!isAuthorized) {
+        if (wantsJson) {
+          return new Response(JSON.stringify({
+            error: 'Access Denied: Invalid or missing admin authorization token.'
+          }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        // Browser navigation to /admin/test-console: serve styled token input to send header
+        const authHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preview Test Console — Authorization</title>
+  <style>
+    body { margin:0; padding:40px 20px; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#FFFDF7; color:#523E28; display:flex; justify-content:center; align-items:center; min-height:80vh; }
+    .auth-card { max-width:480px; width:100%; background:#FFFFFF; border:1.5px solid rgba(201,162,39,0.35); border-radius:16px; padding:32px; box-shadow:0 8px 32px rgba(180,155,110,0.12); text-align:center; }
+    h1 { font-family:'Cinzel',serif,Georgia; font-size:1.4rem; color:#8B6914; margin:0 0 8px; letter-spacing:0.04em; }
+    p { font-size:0.88rem; color:#7A654D; margin:0 0 24px; line-height:1.5; }
+    .input-group { margin-bottom:18px; text-align:left; }
+    label { display:block; font-size:0.78rem; font-weight:700; text-transform:uppercase; color:#8B6914; margin-bottom:6px; letter-spacing:0.03em; }
+    input[type="password"] { width:100%; box-sizing:border-box; padding:12px 14px; border:1.5px solid rgba(201,162,39,0.3); border-radius:8px; font-size:0.95rem; color:#523E28; background:#FFFDF7; outline:none; }
+    input[type="password"]:focus { border-color:#8B6914; box-shadow:0 0 0 3px rgba(201,162,39,0.15); }
+    button { width:100%; padding:12px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF; border:none; border-radius:8px; font-weight:700; font-size:0.92rem; cursor:pointer; letter-spacing:0.03em; }
+    button:hover { opacity:0.92; }
+    #errBox { display:none; margin-top:14px; padding:10px; background:#FDF2F2; border:1px solid #F8B4B4; border-radius:8px; color:#9B1C1C; font-size:0.82rem; }
+  </style>
+</head>
+<body>
+  <div class="auth-card" id="authBox">
+    <h1>✦ PREVIEW TEST CONSOLE</h1>
+    <p>Header authentication required. Enter your <code>ADMIN_TOKEN</code> below to unlock the test console from your browser.</p>
+    <div class="input-group">
+      <label for="adminToken">Admin Token</label>
+      <input type="password" id="adminToken" placeholder="Enter ADMIN_TOKEN" autocomplete="off" />
+    </div>
+    <button type="button" onclick="loadConsole()">Unlock Preview Console</button>
+    <div id="errBox"></div>
+  </div>
+  <script>
+    async function loadConsole() {
+      const token = (document.getElementById('adminToken').value || '').trim();
+      const err = document.getElementById('errBox');
+      if (!token) {
+        err.style.display = 'block';
+        err.textContent = 'Please enter an ADMIN_TOKEN.';
+        return;
+      }
+      try {
+        const resp = await fetch('/api/admin/test-console?format=json', {
+          headers: { 'X-Admin-Token': token, 'Accept': 'application/json' }
+        });
+        if (!resp.ok) {
+          const data = await resp.json().catch(() => ({}));
+          err.style.display = 'block';
+          err.textContent = data.error || ('Access Denied (HTTP ' + resp.status + ')');
+          return;
+        }
+        sessionStorage.setItem('nv_admin_token', token);
+        const htmlResp = await fetch('/admin/test-console', {
+          headers: { 'X-Admin-Token': token }
+        });
+        const html = await htmlResp.text();
+        document.open();
+        document.write(html);
+        document.close();
+      } catch (e) {
+        err.style.display = 'block';
+        err.textContent = 'Connection error: ' + e.message;
+      }
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = sessionStorage.getItem('nv_admin_token');
+      if (saved) {
+        document.getElementById('adminToken').value = saved;
+        loadConsole();
+      }
+    });
+  </script>
+</body>
+</html>`;
+        return new Response(authHtml, {
           status: 403,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'text/html; charset=utf-8' }
         });
       }
 
@@ -5197,7 +5281,6 @@ export default {
         });
       }
 
-      const wantsJson = (request.headers.get('Accept') || '').includes('application/json') || url.searchParams.get('format') === 'json';
       if (wantsJson) {
         return new Response(JSON.stringify({
           status: 'ok',
@@ -5275,6 +5358,16 @@ export default {
         <div style="font-size:0.74rem; color:#7A654D; margin-top:4px;">Evaluated: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</div>
       </div>
     </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:12px 16px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <label for="adminToken" style="font-size:0.8rem; font-weight:700; color:#8B6914; text-transform:uppercase;">Admin Token (Header)</label>
+        <input type="password" id="adminToken" placeholder="Enter ADMIN_TOKEN" value="" style="padding:6px 12px; border:1.5px solid rgba(201,162,39,0.4); border-radius:6px; font-size:0.82rem; background:#FFF; color:#523E28; width:220px;" />
+        <button type="button" onclick="updateTokenHeader()" style="background:#8B6914; color:#FFF; border:none; border-radius:6px; padding:6px 14px; font-size:0.8rem; font-weight:600; cursor:pointer;">Update Header</button>
+      </div>
+      <div>
+        <button type="button" onclick="sessionStorage.removeItem('nv_admin_token'); location.reload();" style="background:transparent; color:#8B6914; border:1px solid #8B6914; border-radius:6px; padding:5px 12px; font-size:0.75rem; font-weight:600; cursor:pointer;">Sign Out</button>
+      </div>
+    </div>
     <div style="overflow-x:auto;">
       <table>
         <thead>
@@ -5296,6 +5389,23 @@ export default {
       </table>
     </div>
   </div>
+  <script>
+    function updateTokenHeader() {
+      const t = (document.getElementById('adminToken').value || '').trim();
+      if (t) {
+        sessionStorage.setItem('nv_admin_token', t);
+        fetch('/admin/test-console', { headers: { 'X-Admin-Token': t } })
+          .then(r => r.text())
+          .then(h => { document.open(); document.write(h); document.close(); });
+      }
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = sessionStorage.getItem('nv_admin_token');
+      if (saved) {
+        document.getElementById('adminToken').value = saved;
+      }
+    });
+  </script>
 </body>
 </html>`;
 

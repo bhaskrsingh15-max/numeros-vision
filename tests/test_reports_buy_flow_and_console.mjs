@@ -122,12 +122,15 @@ async function runSuite() {
   });
   assert.equal(resUnsetEnv.status, 404, 'Test console must return 404 when ENVIRONMENT is unset');
 
-  // 6C. Missing token in preview must return 403
+  // 6C. Missing token in preview must return 403 HTML with token input for browser usage
   const resNoToken = await worker.fetch(new Request('https://preview.numerosvision.com/admin/test-console'), {
     ENVIRONMENT: 'preview',
     ADMIN_TOKEN: 'secret_admin_token_999'
   });
   assert.equal(resNoToken.status, 403, 'Missing ADMIN_TOKEN must return 403');
+  const noTokenHtml = await resNoToken.text();
+  assert.ok(noTokenHtml.includes('id="adminToken"'), 'Test console unauthenticated page must contain input for adminToken');
+  assert.ok(noTokenHtml.includes('loadConsole()'), 'Test console unauthenticated page must provide header-dispatching unlock action');
 
   // 6D. Wrong token in preview must return 403
   const resWrongToken = await worker.fetch(new Request('https://preview.numerosvision.com/admin/test-console', {
