@@ -1,0 +1,273 @@
+/**
+ * Purchase Journey Verification Suite
+ * 
+ * Tests:
+ * 1. Parity between app/config/packs.ts and app/static/_worker.js (prices, amount_paise, status, pack_id)
+ * 2. URL privacy guard: no personal data (DOB, name, phone, email) in any transition URL
+ * 3. Consents default to unticked
+ * 4. Server-side price authority overrides any tampered client price
+ * 5. Dashboard security: refuses unauthenticated / unverified access
+ */
+
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const rootDir = join(__dirname, '..');
+
+async function runTests() {
+  console.log('\n--- STARTING PURCHASE JOURNEY STAGES VERIFICATION ---\n');
+  let passCount = 0;
+  let failCount = 0;
+
+  function assert(condition, message) {
+    if (condition) {
+      console.log(`✔ PASS: ${message}`);
+      passCount++;
+    } else {
+      console.error(`✖ FAIL: ${message}`);
+      failCount++;
+    }
+  }
+
+  // ── TEST 1: packs.ts and _worker.js Parity Check ──
+  try {
+    const packsTsContent = readFileSync(join(rootDir, 'app/config/packs.ts'), 'utf-8');
+    const workerContent = readFileSync(join(rootDir, 'app/static/_worker.js'), 'utf-8');
+
+    // Extract JSON object from packs.ts
+    const jsonMatchPacks = packsTsContent.match(/export const PACK_CATALOG[\s\S]*?=\s*({[\s\S]*?});\s*export default/);
+    if (!jsonMatchPacks) throw new Error('Could not parse PACK_CATALOG from packs.ts');
+    const packsCatalog = JSON.parse(jsonMatchPacks[1]);
+
+    // Extract PACK_CATALOG from _worker.js
+    const workerCatalogMatch = workerContent.match(/const PACK_CATALOG\s*=\s*({[\s\S]*?});\s*function getPackById/);
+    if (!workerCatalogMatch) throw new Error('Could not parse PACK_CATALOG from _worker.js');
+    
+    // Evaluate worker catalog safely
+    const workerCatalog = eval('(' + workerCatalogMatch[1] + ')');
+
+    let allMatch = true;
+    const categories = ['core_reports', 'charm_ai', 'bundles'];
+
+    for (const cat of categories) {
+      const tsPacks = packsCatalog[cat] || {};
+      const workerPacks = workerCatalog[cat] || {};
+
+      for (const [id, def] of Object.entries(tsPacks)) {
+        const wDef = workerPacks[id];
+        if (!wDef) {
+          assert(false, `Worker catalog missing pack "${id}" in ${cat}`);
+          allMatch = false;
+          continue;
+        }
+        if (def.price_inr !== wDef.price_inr) {
+          assert(false, `Price mismatch on "${id}": packs.ts has ₹${def.price_inr}, worker has ₹${wDef.price_inr}`);
+          allMatch = false;
+        }
+        if (def.amount_paise !== wDef.amount_paise) {
+          assert(false, `Amount paise mismatch on "${id}": packs.ts has ${def.amount_paise}, worker has ${wDef.amount_paise}`);
+          allMatch = false;
+        }
+        if (def.status !== wDef.status) {
+          assert(false, `Status mismatch on "${id}": packs.ts has ${def.status}, worker has ${wDef.status}`);
+          allMatch = false;
+        }
+      }
+    }
+
+    if (allMatch) {
+      assert(true, 'app/config/packs.ts and app/static/_worker.js have 100% price and pack_id parity');
+    }
+  } catch (err) {
+    assert(false, `Packs catalog parity check threw error: ${err.message}`);
+  }
+
+  // ── TEST 2: URL Privacy Guard — No PII in Query Strings or Links ──
+  try {
+    const htmlFiles = ['index.html', 'your-reading.html'].map(f => {
+      try {
+        return { file: f, content: readFileSync(join(rootDir, 'app/static', f), 'utf-8') };
+      } catch (e) {
+        return { file: f, content: '' };
+      }
+    });
+
+    let piiFoundInLinks = false;
+    for (const { file, content } of htmlFiles) {
+      if (!content) continue;
+      // Check for patterns like ?dob=, &dob=, ?name=, &name=, ?email=, &email=, ?phone=, &phone= in anchor tags or window.location hrefs
+      const suspiciousUrlMatches = content.match(/href=["'][^"']*[?&](dob|birth_date|customer_name|email|mobile|phone)=/gi) || [];
+      const locationAssignMatches = content.match(/location\.(href|assign)\s*=[^;]*[?&](dob|birth_date|customer_name|email|mobile|phone)=/gi) || [];
+      if (suspiciousUrlMatches.length > 0 || locationAssignMatches.length > 0) {
+        piiFoundInLinks = true;
+        assert(false, `PII query parameter found in ${file}: ${[...suspiciousUrlMatches, ...locationAssignMatches].join(', ')}`);
+      }
+    }
+
+    if (!piiFoundInLinks) {
+      assert(true, 'No personal data (DOB, name, email, phone) exposed in URL query parameters');
+    }
+  } catch (err) {
+    assert(false, `URL privacy guard check threw error: ${err.message}`);
+  }
+
+  // ── TEST 3: Statutory Consents Default Unticked ──
+  try {
+    const htmlFiles = ['index.html', 'your-reading.html', 'signup.html', 'charm_ai.html'];
+    let hardcodedCheckFound = false;
+
+    for (const file of htmlFiles) {
+      const p = join(rootDir, 'app/static', file);
+      try {
+        const content = readFileSync(p, 'utf-8');
+        // Match consent checkboxes with checked attribute
+        const matches = content.match(/id=["'][^"']*consent[^"']*["'][^>]*\bchecked\b/gi);
+        if (matches) {
+          hardcodedCheckFound = true;
+          assert(false, `Consent checkbox hardcoded as checked in ${file}: ${matches.join(', ')}`);
+        }
+      } catch (e) {}
+    }
+
+    if (!hardcodedCheckFound) {
+      assert(true, 'All statutory DPDP consent checkboxes default to unticked across pages');
+    }
+  } catch (err) {
+    assert(false, `Consent check threw error: ${err.message}`);
+  }
+
+  // ── TEST 4: /your-reading/ marked noindex ──
+  try {
+    const yourReadingHtml = readFileSync(join(rootDir, 'app/static/your-reading.html'), 'utf-8');
+    const hasNoIndex = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(yourReadingHtml);
+    assert(hasNoIndex, '/your-reading/ page is marked strictly noindex');
+  } catch (e) {
+    assert(false, `/your-reading/ noindex check failed: ${e.message}`);
+  }
+
+  // ── TEST 5: Server-side Price Overrides Tampered Client Price ──
+  try {
+    const workerModule = await import('../app/static/_worker.js');
+    const worker = workerModule.default;
+
+    const mockEnv = {
+      ENVIRONMENT: 'test',
+      RAZORPAY_KEY_ID: 'rzp_test_MOCK_JOURNEY_KEY',
+      RAZORPAY_KEY_SECRET: 'test_secret_for_journey_payments',
+      OTP_HMAC_SECRET: 'test_otp_hmac_secret_32b_journey',
+      SESSION_SECRET: 'test_session_secret_32b_journey_',
+      IP_HASH_SALT: 'test_ip_hash_salt_32b_journey_00',
+      DATA_ENCRYPTION_KEY: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      ASSETS: { fetch: async () => new Response('Asset stub', { status: 200 }) }
+    };
+
+    // Mock fetch for Razorpay
+    const originalFetch = globalThis.fetch;
+    let createdRazorpayAmount = null;
+
+    globalThis.fetch = async (url, options = {}) => {
+      const urlStr = String(url);
+      if (urlStr.includes('api.razorpay.com/v1/orders')) {
+        const body = JSON.parse(options.body || '{}');
+        createdRazorpayAmount = body.amount;
+        return new Response(JSON.stringify({
+          id: 'order_rzp_mock_tamper_test',
+          entity: 'order',
+          amount: body.amount,
+          currency: body.currency || 'INR',
+          receipt: body.receipt,
+          status: 'created'
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      return originalFetch(url, options);
+    };
+
+    // Generate valid checkout token for test email (${timestamp}.${sig})
+    const email = 'tester.tamper@example.com';
+    const now = Date.now();
+    const testSecret = mockEnv.SESSION_SECRET;
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(testSecret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    const payload = `${email.toLowerCase().trim()}:${now}`;
+    const sigBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
+    const sigHex = Array.from(new Uint8Array(sigBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    const validCheckoutToken = `${now}.${sigHex}`;
+
+    // Attempt to tamper with price: send amount: 100 paise (₹1) for Basic Report (₹199 / 19900 paise)
+    const tamperReq = new Request('https://numerosvision.com/api/v1/payments/create-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Origin': 'https://numerosvision.com'
+      },
+      body: JSON.stringify({
+        pack_id: 'report_basic',
+        name: 'Tamper Tester',
+        dob: '1990-05-15',
+        email: email,
+        amount: 100, // Tampered ₹1
+        amount_paise: 100, // Tampered ₹1
+        price: 1, // Tampered ₹1
+        checkout_token: validCheckoutToken
+      })
+    });
+
+    const tamperRes = await worker.fetch(tamperReq, mockEnv);
+    const tamperData = await tamperRes.json();
+
+    assert(tamperRes.status === 200, `create-order returns HTTP 200 (got ${tamperRes.status})`);
+    assert(
+      tamperData.amount === 19900 && createdRazorpayAmount === 19900,
+      `Server-side price (19900 paise) strictly overrides tampered client price (100 paise)`
+    );
+
+    // Restore fetch
+    globalThis.fetch = originalFetch;
+  } catch (err) {
+    assert(false, `Price tampering override test threw error: ${err.message}`);
+  }
+
+  // ── TEST 6: Dashboard Refuses Unauthenticated / Unverified Access ──
+  try {
+    const workerModule = await import('../app/static/_worker.js');
+    const worker = workerModule.default;
+
+    const mockEnv = {
+      ENVIRONMENT: 'test',
+      SESSION_SECRET: 'test_session_secret_32b_journey_',
+      IP_HASH_SALT: 'test_ip_hash_salt_32b_journey_00',
+      DATA_ENCRYPTION_KEY: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      ASSETS: { fetch: async () => new Response('Asset stub', { status: 200 }) }
+    };
+
+    // Anonymous request with no cookie or token
+    const unauthReq = new Request('https://numerosvision.com/api/v1/dashboard/view', {
+      method: 'GET',
+      headers: { 'Origin': 'https://numerosvision.com' }
+    });
+
+    const unauthRes = await worker.fetch(unauthReq, mockEnv);
+    assert(
+      unauthRes.status === 401,
+      `Dashboard view rejects unverified / unauthenticated session with HTTP 401 (got ${unauthRes.status})`
+    );
+  } catch (err) {
+    assert(false, `Dashboard unverified session test threw error: ${err.message}`);
+  }
+
+  console.log(`\nTests Completed: ${passCount} Passed, ${failCount} Failed\n`);
+  if (failCount > 0) {
+    process.exit(1);
+  }
+}
+
+runTests();

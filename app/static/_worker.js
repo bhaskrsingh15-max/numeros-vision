@@ -5019,8 +5019,8 @@ export default {
       return new Response(JSON.stringify({ status: 'success', event: event }), { status: 200, headers: corsHeaders });
     }
 
-    // 7f. ROUTE: PRICING CATALOG (/api/v1/pricing-catalog & /api/v1/payments/pricing-catalog)
-    if ((url.pathname === '/api/v1/pricing-catalog' || url.pathname === '/api/v1/payments/pricing-catalog') && request.method === 'GET') {
+    // 7f. ROUTE: PRICING CATALOG (/api/v1/pricing-catalog & /api/v1/payments/pricing-catalog & /api/v1/packs)
+    if ((url.pathname === '/api/v1/pricing-catalog' || url.pathname === '/api/v1/payments/pricing-catalog' || url.pathname === '/api/v1/packs') && request.method === 'GET') {
       const corsHeaders = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': getCorsOrigin(request, env),

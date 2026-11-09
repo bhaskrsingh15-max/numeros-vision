@@ -2025,14 +2025,11 @@
           <!-- Planetary Characteristics & Archetype Blueprint -->
           <div id="planet-characteristics-results"></div>
 
-          <!-- SINGLE PRIMARY CTA BY CONTEXT & ONE QUIET SECONDARY LINK (Zero Other Paid Entry Points) -->
+          <!-- SINGLE PRIMARY CTA: SEE MY REPORT OPTIONS -->
           <div id="calc-after-cta-block" style="text-align:center; margin-top:28px; margin-bottom:8px;">
-            <button type="button" class="btn-primary-gold" onclick="selectReportTier('report_basic')" style="padding:14px 34px; font-size:1.02rem; font-weight:700; border-radius:999px; box-shadow:0 6px 22px rgba(201,162,39,0.28); cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
-              <span>Get Your Full Numerology Report (from ₹199)</span> <span>✦</span>
+            <button type="button" id="btn-see-report-options" class="btn-primary-gold" onclick="navigateToReportOptions('home')" style="padding:15px 36px; font-size:1.05rem; font-weight:700; border-radius:999px; box-shadow:0 6px 22px rgba(201,162,39,0.28); cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+              <span>See my report options</span> <span>✦</span>
             </button>
-            <div style="margin-top:10px;">
-              <a href="#reports" class="nv-quiet-link" onclick="selectReportTier('report_advanced')" style="font-size:0.86rem; color:#7A654D; text-decoration:underline;">Compare all 3 report tiers &amp; inclusions ↓</a>
-            </div>
           </div>
           <div id="heroSaveProfileContainer"></div>
         </div>
@@ -2367,81 +2364,14 @@
       </div>
 
       <div id="reports"></div>
-      <div class="pricing-grid">
-        <!-- 1. Basic Report (3 Pages) -->
-        <div class="price-card" id="card-report-basic" onclick="selectReportTier('report_basic')" style="cursor:pointer; box-shadow:0 6px 20px rgba(180,155,110,0.06); transition:all 0.25s ease;">
-          <div>
-            <span class="calc-tool-badge">Entry Tier · 3 Pages</span>
-            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.65rem; color:var(--gold-dark); margin:8px 0 0;">
-              Basic Report
-            </h3>
-            <div class="price-val" style="font-size:1.95rem; color:var(--gold-dark, #8B6914); font-weight:700;">₹199</div>
-            <div style="font-size:0.75rem; color:#7A654D; margin-bottom:4px;">Personal 3-page executive summary</div>
-            <ul class="price-feature-list">
-              <li>3-Page Personalised PDF Dossier</li>
-              <li>Driver (Mulank) &amp; Conductor (Bhagyank) Personality Profile</li>
-              <li>Lo Shu 3×3 Grid &amp; Missing Number Identifications</li>
-              <li>Immediate 90-Day Focus Roadmap</li>
-              <li>Authentic Classical Insights &amp; Guidance</li>
-            </ul>
-          </div>
-          <button type="button" class="btn-secondary-pearl" onclick="event.stopPropagation(); selectReportTier('report_basic');" style="width:100%; justify-content:center;">
-            Select Basic Report (₹199) ✦
-          </button>
-        </div>
-
-        <!-- 2. Advanced Report (12 Pages) · Most Popular -->
-        <div class="price-card popular" id="card-report-advanced" onclick="selectReportTier('report_advanced')" style="cursor:pointer; border: 2.5px solid var(--gold-primary); box-shadow: 0 10px 36px rgba(201,162,39,0.24); transform: translateY(-4px); transition:all 0.25s ease;">
-          <span class="popular-pill" style="letter-spacing:0.06em;">✦ Most Popular · Best Value ✦</span>
-          <div>
-            <span class="calc-tool-badge" style="background:rgba(201,162,39,0.18); color:var(--gold-dark);">Master Tier · 12 Pages</span>
-            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.7rem; color:var(--gold-dark); margin:8px 0 0;">
-              Advanced Master Dossier
-            </h3>
-            <div class="price-val" style="font-size:2.3rem; color:var(--gold-dark, #8B6914); font-weight:800;">₹510</div>
-            <div style="font-size:0.75rem; color:#8B6914; font-weight:600; margin-bottom:4px;">Most popular 12-page roadmap</div>
-            <div style="font-size:0.8rem; color:#7A654D; font-weight:600;">12 Pages · Enabled Numbers in Depth &amp; Initiation Windows</div>
-            <ul class="price-feature-list">
-              <li>12-Page Comprehensive Master Synthesis Dossier</li>
-              <li>Table of Contents &amp; Executive Summary</li>
-              <li>Enabled Numbers in Depth &amp; Benefic vs Malefic Matrix</li>
-              <li>Lo Shu 8-Plane Comprehensive Scan</li>
-              <li>Auspicious Initiation Windows &amp; Personal Year Cycles</li>
-              <li>Safe Non-Fear Remedies &amp; Alignment Protocols</li>
-            </ul>
-          </div>
-          <button type="button" class="btn-primary-gold" onclick="event.stopPropagation(); selectReportTier('report_advanced');" style="width:100%; justify-content:center; font-weight:700;">
-            Select Advanced Dossier (₹510) ✦
-          </button>
-        </div>
-
-        <!-- 3. Premium Report (32 Pages) -->
-        <div class="price-card" id="card-report-premium" onclick="selectReportTier('report_premium')" style="cursor:pointer; box-shadow:0 6px 24px rgba(180,155,110,0.08); transition:all 0.25s ease;">
-          <div>
-            <span class="calc-tool-badge" style="background:rgba(22,131,91,0.12); color:#16835B;">Sovereign Tier · 32 Pages</span>
-            <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.65rem; color:#16835B; margin:8px 0 0;">
-              Premium Sovereign Blueprint
-            </h3>
-            <div class="price-val" style="font-size:2rem; color:var(--gold-dark, #8B6914); font-weight:700;">₹1,050</div>
-            <div style="font-size:0.75rem; color:#7A654D; margin-bottom:4px;">Complete 32-page sovereign blueprint</div>
-            <div style="font-size:0.8rem; color:#7A654D; font-weight:600;">32 Pages · In-Depth Analysis &amp; 10-Year Radar</div>
-            <ul class="price-feature-list">
-              <li>32-Page Sovereign Master Dossier</li>
-              <li>Calling Name vs Legal Name Acoustic Harmonization</li>
-              <li>10-Year Macro Planetary Timing Radar (Quarter Breakdown) + 90-Day Execution Window</li>
-              <li>Multi-System Synastry &amp; Spatial Alignment</li>
-              <li>Vedic Gharelu Remedies, Beej Mantras &amp; Auspicious Colors</li>
-              <li>Complete Mathematical Proofs Appendix</li>
-            </ul>
-          </div>
-          <button type="button" class="btn-secondary-pearl" onclick="event.stopPropagation(); selectReportTier('report_premium');" style="width:100%; justify-content:center;">
-            Select Premium Blueprint (₹1,050) ✦
-          </button>
-        </div>
+      <div style="text-align:center; padding:16px 0 24px;">
+        <button type="button" class="btn-primary-gold" onclick="navigateToReportOptions('home')" style="padding:15px 38px; font-size:1.05rem; font-weight:700; border-radius:999px; box-shadow:0 6px 22px rgba(201,162,39,0.28); cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+          <span>See my report options</span> <span>✦</span>
+        </button>
       </div>
 
-      <!-- IN-PAGE REPORTS PURCHASE CONSOLE -->
-      <div id="reports-checkout-console" style="background:#FFFFFF; border:2px solid var(--gold-primary); border-radius:20px; padding:32px 28px; margin-top:32px; box-shadow:0 10px 36px rgba(201,162,39,0.14);">
+      <!-- IN-PAGE REPORTS PURCHASE CONSOLE (Consolidated to /your-reading/ for clean, zero-clutter experience) -->
+      <div id="reports-checkout-console" style="display:none;">
         <div style="border-bottom:1px solid rgba(201,162,39,0.25); padding-bottom:14px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <div>
             <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; color:#8B6914; font-weight:700;">Selected Consultation Tier</span>
@@ -3507,6 +3437,42 @@
     }
 
 
+
+    function navigateToReportOptions(slug = 'home') {
+      const nameEl = document.getElementById('f-name');
+      const d = parseInt(document.getElementById('f-day')?.value, 10);
+      const m = parseInt(document.getElementById('f-month')?.value, 10);
+      const y = parseInt(document.getElementById('f-year')?.value, 10);
+
+      const name = (nameEl ? nameEl.value.trim() : '') || clientState.name || 'Valued Seeker';
+      const day = d || clientState.day;
+      const month = m || clientState.month;
+      const year = y || clientState.year;
+
+      if (!day || !month || !year || isNaN(day) || isNaN(month) || isNaN(year)) {
+        alert('Please enter your birth date above first.');
+        document.getElementById('f-day')?.focus();
+        return;
+      }
+
+      const formattedDob = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const driver = clientState.driver || reduceToSingleDigit(day);
+      const conductor = clientState.conductorDisplay || clientState.conductor;
+
+      // Carry strictly in sessionStorage as inputs, never in the URL
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
+        name,
+        day,
+        month,
+        year,
+        dob: formattedDob,
+        driver,
+        conductor
+      }));
+
+      // Only slug in URL
+      window.location.href = `/your-reading/?from=${encodeURIComponent(slug)}`;
+    }
 
     function calculateHeroProfile() {
       const nameEl = document.getElementById('f-name');

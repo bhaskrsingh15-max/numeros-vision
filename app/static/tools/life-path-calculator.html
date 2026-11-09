@@ -862,6 +862,28 @@
       }
     }
 
+        function seeLifePathReportOptions() {
+      const d = parseInt(document.getElementById('lp-day').value);
+      const m = parseInt(document.getElementById('lp-month').value);
+      const y = parseInt(document.getElementById('lp-year').value);
+      const personName = document.getElementById('lp-name')?.value?.trim() || 'Seeker';
+      const formattedDob = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const lp = calcLP(d,m,y);
+      const driver = reduceToSingle(d, false);
+
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
+        name: personName,
+        day: d,
+        month: m,
+        year: y,
+        dob: formattedDob,
+        driver: driver,
+        conductor: lp
+      }));
+
+      window.location.href = '/your-reading/?from=life-path-number';
+    }
+
     function doRenderLifePath(d, m, y) {
       const driver = reduceToSingle(d, false);
       const lp = calcLP(d,m,y);

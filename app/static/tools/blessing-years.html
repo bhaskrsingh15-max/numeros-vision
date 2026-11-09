@@ -384,15 +384,12 @@
       <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:#8B6914; margin-bottom:14px;">Sample Timeline Progression</h3>
       <div id="timeline-list"></div>
 
-      <!-- Consecrated Timing Action Blueprint & Remedy Lock Card -->
-      <div id="res-funnel-offer-personal_year"></div>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    if (window.nvFunnel && typeof window.nvFunnel.renderOfferBridge === "function") {
-      window.nvFunnel.renderOfferBridge("res-funnel-offer-personal_year", { productId: "personal_year" });
-    }
-  });
-</script>
+      <!-- Consecrated Timing Action Blueprint & Single Report Options CTA -->
+      <div style="text-align:center; margin-top:32px;">
+        <button type="button" class="btn-primary-gold" onclick="seeBlessingReportOptions()" style="padding:15px 36px; font-size:1.05rem; font-weight:700; border-radius:999px; box-shadow:0 6px 22px rgba(201,162,39,0.28); cursor:pointer; display:inline-flex; align-items:center; gap:8px;">
+          <span>See my report options</span> <span>✦</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -553,6 +550,24 @@
         window.location.href = '/signup/?source=calculator_gate&' + qp;
       
       }
+    }
+
+        function seeBlessingReportOptions() {
+      const d = parseInt(document.getElementById('bDay').value);
+      const m = parseInt(document.getElementById('bMonth').value);
+      const y = parseInt(document.getElementById('bYear').value);
+      const dobStr = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
+        name: 'Seeker',
+        day: d,
+        month: m,
+        year: y,
+        dob: dobStr,
+        personalYear: document.getElementById('stat-nearest')?.innerText || 'Active Cycle'
+      }));
+
+      window.location.href = '/your-reading/?from=personal-year';
     }
 
     function renderBlessings(b) {

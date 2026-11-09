@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Your Personalised Numerology Reading | NUMEROS VISION</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="/static/css/theme.css?v=5.5.0" />
+  <link rel="stylesheet" href="/static/css/nav.css?v=5.5.0" />
+
+  <style>
+    :root {
+      --bg-cream: #FFFDF7;
+      --bg-surface: #F7F3EA;
+      --gold-primary: #C9A227;
+      --gold-dark: #8B6914;
+      --gold-soft: #E2B84B;
+      --emerald: #16835B;
+      --ink: #523E28;
+      --ink-muted: #7A654D;
+      --border-gold: rgba(201, 162, 39, 0.35);
+    }
+
+    body {
+      background: var(--bg-cream);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .reading-hero {
+      padding: 48px 20px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, #F7F3EA 0%, #FFFDF7 100%);
+      border-bottom: 1px solid var(--border-gold);
+    }
+
+    .reading-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .summary-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin: -24px auto 36px;
+      box-shadow: 0 10px 32px rgba(201, 162, 39, 0.12);
+      max-width: 860px;
+      box-sizing: border-box;
+    }
+
+    .summary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+
+    .seeker-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    .seeker-meta {
+      font-size: 0.86rem;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .num-pill {
+      background: #FFFDF7;
+      border: 1px solid var(--border-gold);
+      border-radius: 14px;
+      padding: 16px 20px;
+      text-align: center;
+    }
+
+    .num-label {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-dark);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .num-val {
+      font-size: 2.6rem;
+      font-weight: 800;
+      font-family: 'Cinzel', serif;
+      color: var(--gold-dark);
+      line-height: 1.1;
+    }
+
+    .num-sub {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-top: 4px;
+    }
+
+    /* TIERS SECTION */
+    .tiers-header {
+      text-align: center;
+      margin: 40px auto 28px;
+      max-width: 720px;
+    }
+
+    .tiers-eyebrow {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold-dark);
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    .tiers-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 10px;
+    }
+
+    .tiers-sub {
+      font-size: 0.94rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .tier-card {
+      background: #FFFFFF;
+      border: 1.5px solid rgba(201, 162, 39, 0.28);
+      border-radius: 20px;
+      padding: 32px 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+
+    .tier-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(201, 162, 39, 0.16);
+      border-color: var(--gold-primary);
+    }
+
+    .tier-card.highlighted {
+      border: 2px solid var(--gold-primary);
+      box-shadow: 0 14px 40px rgba(201, 162, 39, 0.22);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF7 100%);
+    }
+
+    .tier-badge {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold-primary);
+      color: #FFFFFF;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .tier-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      color: var(--ink);
+      margin: 4px 0 8px;
+      font-weight: 700;
+    }
+
+    .tier-meta {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      margin-bottom: 16px;
+    }
+
+    .tier-price {
+      font-family: 'Cinzel', serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--gold-dark);
+      margin-bottom: 4px;
+    }
+
+    .tier-price-sub {
+      font-size: 0.76rem;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .tier-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px;
+      font-size: 0.86rem;
+      color: var(--ink);
+      line-height: 1.6;
+      border-top: 1px solid rgba(201, 162, 39, 0.18);
+      padding-top: 18px;
+    }
+
+    .tier-features li {
+      padding: 6px 0 6px 20px;
+      position: relative;
+    }
+
+    .tier-features li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: var(--gold-primary);
+      font-size: 0.78rem;
+    }
+
+    .btn-select-tier {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-sizing: border-box;
+      text-decoration: none;
+    }
+
+    .btn-select-gold {
+      background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(201, 162, 39, 0.3);
+    }
+
+    .btn-select-gold:hover {
+      box-shadow: 0 6px 22px rgba(201, 162, 39, 0.42);
+      transform: translateY(-1px);
+    }
+
+    .btn-select-outline {
+      background: #FFFDF7;
+      color: var(--gold-dark);
+      border: 1.5px solid var(--gold-primary);
+    }
+
+    .btn-select-outline:hover {
+      background: var(--bg-surface);
+      color: var(--ink);
+    }
+
+    .empty-state-notice {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+      max-width: 540px;
+      margin: 40px auto;
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MASTER HEADER -->
+  <header class="nv-header">
+    <div class="nv-header-inner">
+      <a href="/" class="nv-brand">
+        <span class="nv-brand-mark">✦</span>
+        <span class="nv-brand-text">NUMEROS VISION</span>
+      </a>
+      <div style="font-size:0.75rem; letter-spacing:0.1em; color:var(--gold-dark); font-weight:700;">
+        ANVIEL EVERY CHARM
+      </div>
+    </div>
+  </header>
+
+  <!-- EMPTY STATE REDIRECT CONTAINER -->
+  <div id="missing-reading-state" class="empty-state-notice">
+    <div style="font-size:2.4rem; color:var(--gold-primary); margin-bottom:12px;">✦</div>
+    <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:var(--ink); margin:0 0 10px;">
+      Calculation Inputs Not Found
+    </h3>
+    <p style="font-size:0.9rem; color:var(--ink-muted); line-height:1.6; margin-bottom:24px;">
+      Please calculate your free numbers first to view your personalized report options.
+    </p>
+    <a id="link-return-calc" href="/#calculator-card" class="btn-select-tier btn-select-gold" style="max-width:240px; margin:0 auto;">
+      <span>Go to Calculator</span> <span>&rarr;</span>
+    </a>
+  </div>
+
+  <!-- ACTIVE READING CONTAINER -->
+  <main id="reading-content" style="display:none;">
+    
+    <div class="reading-hero">
+      <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--gold-dark); font-weight:700; margin-bottom:8px;">
+        ✦ VERIFIED NUMEROLOGICAL SYNTHESIS
+      </div>
+      <h1 style="font-family:'Cormorant Garamond',serif; font-size:2.6rem; color:var(--ink); margin:0 0 8px; font-weight:700;">
+        Your Free Profile &amp; Report Options
+      </h1>
+      <p style="font-size:0.95rem; color:var(--ink-muted); margin:0 auto; max-width:600px;">
+        Your foundational calculations are complete. Below is your initial synthesis, followed by our in-depth analytical dossiers.
+      </p>
+    </div>
+
+    <div class="reading-container">
+
+      <!-- 1. FREE CALCULATION SUMMARY CARD (Top of Page) -->
+      <div class="summary-card">
+        <div class="summary-header">
+          <div>
+            <h2 class="seeker-title" id="summary-seeker-name">Seeker Profile</h2>
+            <div class="seeker-meta">
+              Date of Birth: <strong id="summary-seeker-dob">--</strong>
+            </div>
+          </div>
+          <div style="font-size:0.78rem; background:rgba(22,131,91,0.1); color:var(--emerald); border:1px solid var(--emerald); padding:4px 10px; border-radius:6px; font-weight:700;">
+            ✦ FREE CALCULATION VALIDATED
+          </div>
+        </div>
+
+        <div class="numbers-grid">
+          <div class="num-pill">
+            <div class="num-label">Driver (Mulank)</div>
+            <div class="num-val" id="summary-driver">-</div>
+            <div class="num-sub" id="summary-driver-planet">Ruling Planet</div>
+          </div>
+          <div class="num-pill">
+            <div class="num-label">Conductor (Bhagyank)</div>
+            <div class="num-val" id="summary-conductor" style="color:var(--emerald);">-</div>
+            <div class="num-sub" id="summary-conductor-planet">Destiny Trajectory</div>
+          </div>
+          <div class="num-pill" id="summary-py-container" style="display:none;">
+            <div class="num-label">Personal Year</div>
+            <div class="num-val" id="summary-personal-year" style="color:#C9A227;">-</div>
+            <div class="num-sub" id="summary-py-theme">Current 12-Month Cycle</div>
+          </div>
+        </div>
+
+        <div id="summary-narrative" style="font-size:0.88rem; color:var(--ink-muted); line-height:1.6; border-top:1px solid rgba(201,162,39,0.2); padding-top:14px;">
+          Your Driver and Conductor numbers govern your instinctive temperament and overarching life purpose. Review our analytical report options below to explore complete dasha timing windows, acoustic name harmonization, and elemental balance.
+        </div>
+      </div>
+
+      <!-- 2. REPORT SELECTION SECTION -->
+      <div class="tiers-header">
+        <span class="tiers-eyebrow">DETERMINISTIC DOSSIER SELECTION</span>
+        <h2 class="tiers-title">Choose Your Personalised Dossier</h2>
+        <p class="tiers-sub">
+          All reports are generated deterministically from your verified birth data. The server authoritatively establishes pricing and deliverables.
+        </p>
+      </div>
+
+      <!-- SPECIAL ANNUAL PLANNER CONTAINER (Triggered when ?from=personal-year) -->
+      <div id="planner-feature-container" style="display:none; margin-bottom:32px;">
+        <div class="tier-card highlighted" style="border:2px solid var(--gold-dark); max-width:860px; margin:0 auto; padding:32px 36px;">
+          <div class="tier-badge" style="background:var(--gold-dark);">RECOMMENDED FOR ANNUAL CYCLES</div>
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+            <div>
+              <span style="font-size:0.75rem; color:var(--gold-dark); text-transform:uppercase; font-weight:700; letter-spacing:0.08em;">Annual Planetary Guide</span>
+              <h3 class="tier-name" style="font-size:2rem; margin:4px 0;">2027 Year Ahead Planner</h3>
+              <div class="tier-meta">24-Page Personalized Annual Astrological &amp; Vibrational Blueprint</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.8rem; text-decoration:line-through; color:var(--ink-muted);">List Price: ₹1,999</div>
+              <div class="tier-price" id="planner-price-display">₹1,499</div>
+              <div class="tier-price-sub">Special Early-Access Offer</div>
+            </div>
+          </div>
+          <ul class="tier-features" style="margin-top:16px;">
+            <li>Comprehensive 24-page month-by-month personal year dasha analysis</li>
+            <li>Quarterly milestone breakdown with high-support timing windows</li>
+            <li>Customized remedial alignments and auspicious transit calendar</li>
+          </ul>
+          <button type="button" class="btn-select-tier btn-select-gold" onclick="selectTierAndProceed('planner_2027')" style="font-size:1.02rem;">
+            <span>Select 2027 Planner (₹1,499)</span> <span>✦</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CORE REPORT TIERS (Basic, Advanced, Premium) -->
+      <div class="tiers-grid" id="core-tiers-grid">
+        
+        <!-- Basic Report (₹199) -->
+        <div class="tier-card" id="tier-card-basic">
+          <div>
+            <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Foundation · 3 Pages</div>
+            <h3 class="tier-name">Basic Report</h3>
+            <div class="tier-meta">Core Numbers &amp; Elemental Distribution</div>
+            <div class="tier-price" id="price-report_basic">₹199</div>
+            <div class="tier-price-sub">One-time payment · Instant digital PDF</div>
+            <ul class="tier-features" id="features-report_basic">
+              <li>3-Page Personalised Executive PDF</li>
+              <li>Deterministic Mulank &amp; Bhagyank Calculations</li>
+              <li>Lo Shu 3×3 Grid Matrix &amp; Elemental Breakdown</li>
+              <li>Chaldean Single Root &amp; Compound Letter Analysis</li>
+              <li>Methodology Summary &amp; Practical Notes</li>
+            </ul>
+          </div>
+          <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_basic" onclick="selectTierAndProceed('report_basic')">
+            <span>Select Basic Report</span> <span>&rarr;</span>
+          </button>
+        </div>
+
+        <!-- Advanced Report (₹510) - HIGHLIGHTED DEFAULT -->
+        <div class="tier-card highlighted" id="tier-card-advanced">
+          <div class="tier-badge">RECOMMENDED</div>
+          <div>
+            <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Synthesis · 12 Pages</div>
+            <h3 class="tier-name">Advanced Master Dossier</h3>
+            <div class="tier-meta">5-Year Dasha Timing &amp; Remedy Protocols</div>
+            <div class="tier-price" id="price-report_advanced">₹510</div>
+            <div class="tier-price-sub">One-time payment · Complete multi-year blueprint</div>
+            <ul class="tier-features" id="features-report_advanced">
+              <li>12-Page Master Synthesis PDF Dossier</li>
+              <li>Includes all Basic calculations + 5-Year Dasha Timing</li>
+              <li>Complete Lo Shu Plane Analysis (Thought, Will, Action)</li>
+              <li>Chaldean Sound Frequency &amp; Name Harmony Matrix</li>
+              <li>7-Layer Safe Planetary Remedy Protocols</li>
+            </ul>
+          </div>
+          <button type="button" class="btn-select-tier btn-select-gold" id="btn-select-report_advanced" onclick="selectTierAndProceed('report_advanced')">
+            <span>Select Advanced Dossier</span> <span>✦</span>
+          </button>
+        </div>
+
+        <!-- Premium Dossier (₹1,050) -->
+        <div class="tier-card" id="tier-card-premium">
+          <div>
+            <div style="font-size:0.72rem; color:var(--emerald); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Sovereign · 32 Pages</div>
+            <h3 class="tier-name">Premium Sovereign Blueprint</h3>
+            <div class="tier-meta">10-Year Timing Radar &amp; Dual Synastry</div>
+            <div class="tier-price" id="price-report_premium">₹1,050</div>
+            <div class="tier-price-sub">One-time payment · Exhaustive master document</div>
+            <ul class="tier-features" id="features-report_premium">
+              <li>32-Page Sovereign Executive Master Blueprint PDF</li>
+              <li>Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)</li>
+              <li>10-Year Macro Planetary Timing Radar &amp; Execution Windows</li>
+              <li>Multi-Generational Synastry &amp; Spatial Alignment</li>
+              <li>Complete Technical Appendix with Mathematical Proofs</li>
+            </ul>
+          </div>
+          <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_premium" onclick="selectTierAndProceed('report_premium')">
+            <span>Select Premium Blueprint</span> <span>&rarr;</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MASTER FOOTER -->
+  <footer class="nv-footer" style="background:#F7F3EA; border-top:1px solid var(--border-gold); padding:40px 20px; text-align:center; font-size:0.82rem; color:var(--ink-muted);">
+    <div style="max-width:800px; margin:0 auto; line-height:1.6;">
+      <div style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:700; color:var(--ink); margin-bottom:8px;">
+        NUMEROS VISION · ANVIEL EVERY CHARM
+      </div>
+      <p style="margin:0 0 12px;">{{DISCLAIMER_APPROVED_TEXT}}</p>
+      <div style="font-size:0.75rem; color:var(--ink-muted);">
+        &copy; 2026 NUMEROS VISION. All rights reserved. Server-side deterministic pricing strictly enforced.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const PLANET_NAMES = {
+      1: 'Sun · Leadership & Purpose',
+      2: 'Moon · Intuition & Receptivity',
+      3: 'Jupiter · Wisdom & Expansion',
+      4: 'Rahu · Structure & Unconventional Mind',
+      5: 'Mercury · Adaptability & Commerce',
+      6: 'Venus · Harmony & Creative Resonance',
+      7: 'Ketu · Depth & Analytical Perception',
+      8: 'Saturn · Endurance & Mastery',
+      9: 'Mars · Courage & Catalytic Drive'
+    };
+
+    let serverCatalog = null;
+
+    // 1. Session Storage Reader & Route Validator
+    function initReadingPage() {
+      const rawInput = sessionStorage.getItem('nv_reading_input');
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromSlug = (urlParams.get('from') || 'home').trim().toLowerCase();
+
+      // Configure return link
+      const returnLink = document.getElementById('link-return-calc');
+      if (fromSlug === 'personal-year' || fromSlug === 'blessing-years') {
+        returnLink.href = '/calculators/personal-year/';
+      } else if (fromSlug === 'birth-number' || fromSlug === 'lucky-number') {
+        returnLink.href = '/calculators/birth-number/';
+      } else if (fromSlug === 'life-path-number' || fromSlug === 'life-path-calculator') {
+        returnLink.href = '/calculators/life-path-number/';
+      } else if (fromSlug === 'lo-shu-grid') {
+        returnLink.href = '/calculators/lo-shu-grid/';
+      } else if (fromSlug === 'name-numerology') {
+        returnLink.href = '/calculators/name-numerology/';
+      } else {
+        returnLink.href = '/#calculator-card';
+      }
+
+      if (!rawInput) {
+        document.getElementById('missing-reading-state').style.display = 'block';
+        document.getElementById('reading-content').style.display = 'none';
+        return;
+      }
+
+      let data = {};
+      try {
+        data = JSON.parse(rawInput);
+      } catch (e) {
+        document.getElementById('missing-reading-state').style.display = 'block';
+        document.getElementById('reading-content').style.display = 'none';
+        return;
+      }
+
+      if (!data.dob && (!data.day || !data.month || !data.year)) {
+        document.getElementById('missing-reading-state').style.display = 'block';
+        document.getElementById('reading-content').style.display = 'none';
+        return;
+      }
+
+      // Valid session reading found: reveal reading content
+      document.getElementById('missing-reading-state').style.display = 'none';
+      document.getElementById('reading-content').style.display = 'block';
+
+      // Render Seeker Summary
+      document.getElementById('summary-seeker-name').textContent = data.name || 'Valued Seeker';
+      
+      const formattedDob = data.dob || `${data.year}-${String(data.month).padStart(2,'0')}-${String(data.day).padStart(2,'0')}`;
+      document.getElementById('summary-seeker-dob').textContent = formattedDob;
+
+      const driver = data.driver || '-';
+      const conductor = data.conductorDisplay || data.conductor || '-';
+      const driverNum = parseInt(driver, 10);
+      const conductorNum = parseInt(conductor, 10);
+
+      document.getElementById('summary-driver').textContent = driver;
+      document.getElementById('summary-driver-planet').textContent = PLANET_NAMES[driverNum] || 'Inborn Temperament';
+      document.getElementById('summary-conductor').textContent = conductor;
+      document.getElementById('summary-conductor-planet').textContent = PLANET_NAMES[conductorNum] || 'Destiny Trajectory';
+
+      // If Personal Year is present (from blessing-years/personal-year)
+      if (data.personalYear || fromSlug === 'personal-year' || fromSlug === 'blessing-years') {
+        document.getElementById('summary-py-container').style.display = 'block';
+        document.getElementById('summary-personal-year').textContent = data.personalYear || 'Cycle Active';
+        
+        // Highlight Planner for Personal Year calculator
+        document.getElementById('planner-feature-container').style.display = 'block';
+        
+        // Un-highlight advanced tier if planner is featured
+        const advCard = document.getElementById('tier-card-advanced');
+        if (advCard) {
+          advCard.classList.remove('highlighted');
+          const badge = advCard.querySelector('.tier-badge');
+          if (badge) badge.style.display = 'none';
+          const btn = document.getElementById('btn-select-report_advanced');
+          if (btn) { btn.className = 'btn-select-tier btn-select-outline'; btn.innerHTML = '<span>Select Advanced Dossier</span> <span>&rarr;</span>'; }
+        }
+      }
+
+      // 2. Fetch authoritative prices from server catalog
+      fetchServerPricingCatalog();
+    }
+
+    // 2. Authoritative Server Catalog Loader
+    async function fetchServerPricingCatalog() {
+      try {
+        const res = await fetch('/api/v1/pricing-catalog');
+        if (res.ok) {
+          const catalog = await res.json();
+          serverCatalog = catalog;
+          if (catalog.core_reports) {
+            if (catalog.core_reports.report_basic) {
+              document.getElementById('price-report_basic').textContent = `₹${catalog.core_reports.report_basic.price_inr}`;
+            }
+            if (catalog.core_reports.report_advanced) {
+              document.getElementById('price-report_advanced').textContent = `₹${catalog.core_reports.report_advanced.price_inr}`;
+            }
+            if (catalog.core_reports.report_premium) {
+              document.getElementById('price-report_premium').textContent = `₹${catalog.core_reports.report_premium.price_inr}`;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('[Server_Catalog_Sync] Operating on cached schema authority.');
+      }
+    }
+
+    // 3. Tier Selection Handler
+    function selectTierAndProceed(tierId) {
+      sessionStorage.setItem('nv_selected_tier', tierId);
+      
+      // Dispatch or navigate to Stage B checkout
+      if (typeof window.openStageBCheckout === 'function') {
+        window.openStageBCheckout(tierId);
+      } else {
+        // Fallback for direct URL transition once checkout route is active
+        window.location.href = `/checkout/?pack=${encodeURIComponent(tierId)}`;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initReadingPage);
+  </script>
+
+</body>
+</html>

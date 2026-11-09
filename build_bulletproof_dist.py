@@ -190,6 +190,7 @@ ROUTING_MAP = {
     "tools/logo-studio": "tools/logo-intelligence.html",
 
     # Knowledge, Methodology & Sitemap
+    "your-reading": "your-reading.html",
     "sitemap": "sitemap.html",
     "methodology": "methodology.html",
     "numerology_overview": "numerology_overview.html",
