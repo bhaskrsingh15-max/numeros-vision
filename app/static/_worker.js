@@ -1407,6 +1407,33 @@ async function viewFor(user, subject, env, targetPackId = null) {
     elements[elName] = { count: cnt, present: cnt > 0, digits: elDigits };
   }
 
+  // Kua & Personal Year Calculation
+  const gender = (subject.gender || 'male').toLowerCase();
+  const ySum = reduceToSingle(parseInt(String(year).slice(-2), 10) || 1);
+  let kuaNum = 1;
+  if (gender === 'female') {
+    const k = reduceToSingle(ySum + 5);
+    kuaNum = (k === 5) ? 8 : k;
+  } else {
+    let k = 10 - ySum;
+    if (k <= 0) k += 9;
+    k = reduceToSingle(k);
+    kuaNum = (k === 5) ? 2 : k;
+  }
+  const KUA_DIRECTIONS = {
+    1: 'Water · East Group (SE / E / S / N)',
+    2: 'Earth · West Group (NE / W / NW / SW)',
+    3: 'Wood · East Group (S / N / SE / E)',
+    4: 'Wood · East Group (N / S / E / SE)',
+    5: 'Earth · West Group (NE / W / NW / SW)',
+    6: 'Metal · West Group (W / NE / SW / NW)',
+    7: 'Metal · West Group (NW / SW / NE / W)',
+    8: 'Earth · West Group (SW / NW / W / NE)',
+    9: 'Fire · East Group (E / SE / N / S)'
+  };
+  const currentYear = new Date().getFullYear();
+  const personalYear = reduceToSingle(driver + reduceToSingle(month) + reduceToSingle(currentYear));
+
   const hasBasic = tier === 'basic' || tier === 'advanced' || tier === 'premium';
   const hasAdvanced = tier === 'advanced' || tier === 'premium';
   const hasPremium = tier === 'premium';
@@ -1601,7 +1628,12 @@ async function viewFor(user, subject, env, targetPackId = null) {
       conductorRaw,
       conductorDisplay,
       driverPlanet: PLANETS[driver].name,
+      driverSanskrit: PLANETS[driver].sanskrit,
       conductorPlanet: PLANETS[conductor].name,
+      conductorSanskrit: PLANETS[conductor].sanskrit,
+      kua: kuaNum,
+      kuaDirection: KUA_DIRECTIONS[kuaNum] || 'East Group',
+      personalYear,
       counts,
       presentDigits,
       missingDigits,
@@ -4109,6 +4141,57 @@ export default {
         }), { status: 400, headers: corsHeaders });
       }
 
+      // 3b. Purchase Guard: Prevent purchasing the same pack twice for the same profile
+      let alreadyPurchased = false;
+      if (env.DB) {
+        const entRow = await env.DB.prepare(`
+          SELECT e.id FROM entitlements e
+          LEFT JOIN orders o ON e.order_id = o.id
+          WHERE e.user_id = ? AND e.subject_id = ? AND e.pack_id = ?
+            AND (o.status IS NULL OR o.status != 'REFUNDED')
+          LIMIT 1
+        `).bind(user.user_id, subjectId, pack.pack_id).first();
+        if (entRow) {
+          alreadyPurchased = true;
+        } else {
+          const paidOrder = await env.DB.prepare(`
+            SELECT id FROM orders
+            WHERE user_id = ? AND subject_id = ? AND pack_id = ? AND status = 'PAID'
+            LIMIT 1
+          `).bind(user.user_id, subjectId, pack.pack_id).first();
+          if (paidOrder) alreadyPurchased = true;
+        }
+      } else if (typeof memoryStore !== 'undefined') {
+        if (memoryStore.entitlements) {
+          for (const ent of memoryStore.entitlements.values()) {
+            if (ent.user_id === user.user_id && ent.subject_id === subjectId && ent.pack_id === pack.pack_id) {
+              const ord = ent.order_id ? memoryStore.orders.get(ent.order_id) : null;
+              if (!ord || ord.status !== 'REFUNDED') {
+                alreadyPurchased = true;
+                break;
+              }
+            }
+          }
+        }
+        if (!alreadyPurchased && memoryStore.orders) {
+          for (const ord of memoryStore.orders.values()) {
+            if (ord.user_id === user.user_id && ord.subject_id === subjectId && ord.pack_id === pack.pack_id && ord.status === 'PAID') {
+              alreadyPurchased = true;
+              break;
+            }
+          }
+        }
+      }
+
+      if (alreadyPurchased) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'ALREADY_PURCHASED',
+          alreadyPurchased: true,
+          error: 'This report pack has already been purchased for this profile. You can download your report directly from your dashboard.'
+        }), { status: 409, headers: corsHeaders });
+      }
+
       // 4. Pending order expiration check (~30 minutes window)
       const THIRTY_MINUTES_MS = 30 * 60 * 1000;
       let existingOrder = null;
@@ -5068,7 +5151,36 @@ export default {
         }
       }
 
-      const formattedReports = rawReportJobs.map(job => {
+      // Deduplicate report jobs: strictly ONE row per (profile, pack) using latest completed job
+      const jobsByProfilePack = new Map();
+      for (const job of rawReportJobs) {
+        const key = `${job.subject_id || ''}::${job.pack_id || ''}`;
+        const existing = jobsByProfilePack.get(key);
+        const st = String(job.status || '').toUpperCase();
+        const isComp = st === 'COMPLETED' || st === 'DOWNLOADED' || !!job.r2_key;
+
+        if (!existing) {
+          jobsByProfilePack.set(key, job);
+        } else {
+          const exSt = String(existing.status || '').toUpperCase();
+          const exComp = exSt === 'COMPLETED' || exSt === 'DOWNLOADED' || !!existing.r2_key;
+          if (isComp && !exComp) {
+            jobsByProfilePack.set(key, job);
+          } else if (isComp && exComp) {
+            if ((job.created_at || 0) > (existing.created_at || 0)) {
+              jobsByProfilePack.set(key, job);
+            }
+          } else if (!isComp && !exComp) {
+            if ((job.created_at || 0) > (existing.created_at || 0)) {
+              jobsByProfilePack.set(key, job);
+            }
+          }
+        }
+      }
+
+      const deduplicatedJobs = Array.from(jobsByProfilePack.values()).sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+      const formattedReports = deduplicatedJobs.map(job => {
         const packInfo = getPackById(job.pack_id);
         const subj = subjects.find(s => s.id === job.subject_id) || activeSubject || { name: 'Member', dob: '' };
         const st = String(job.status || 'QUEUED').toUpperCase();

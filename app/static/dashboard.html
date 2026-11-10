@@ -23,6 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/css/theme.css?v=5.6.0" />
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
 
   <style>
     :root {
@@ -990,8 +991,8 @@
       // Vectors
       const dVal = calc.driver || '--';
       const cVal = calc.conductorDisplay || calc.conductor || '--';
-      const dPlanet = calc.driverPlanet ? `${calc.driverPlanet} (Surya)` : '--';
-      const cPlanet = calc.conductorPlanet ? `${calc.conductorPlanet} (Rahu)` : '--';
+      const dPlanet = calc.driverPlanet ? `${calc.driverPlanet} (${calc.driverSanskrit || ''})` : '--';
+      const cPlanet = calc.conductorPlanet ? `${calc.conductorPlanet} (${calc.conductorSanskrit || ''})` : '--';
 
       const dValEl = document.getElementById('dashDriverVal');
       const cValEl = document.getElementById('dashConductorVal');
@@ -1005,9 +1006,9 @@
       if (cValEl) cValEl.textContent = cVal;
       if (dPlanetEl) dPlanetEl.textContent = dPlanet;
       if (cPlanetEl) cPlanetEl.textContent = cPlanet;
-      if (kuaValEl) kuaValEl.textContent = '1';
-      if (kuaDirEl) kuaDirEl.textContent = 'Water · East Group';
-      if (pyValEl) pyValEl.textContent = '8';
+      if (kuaValEl) kuaValEl.textContent = calc.kua || '—';
+      if (kuaDirEl) kuaDirEl.textContent = calc.kuaDirection || '—';
+      if (pyValEl) pyValEl.textContent = calc.personalYear || '—';
 
       // 3x3 Grid Cells
       secGrid.forEach(cell => {
@@ -1058,48 +1059,63 @@
 
       const userTier = (view && view.tier) || 'free';
       const entitlements = (view && view.entitlements) || [];
+      const reportList = reports || (_dashboardState && _dashboardState.reports) || [];
 
-      // Determine owned tiers
+      // Determine owned tiers for active subject profile
       const isBasicOwned = userTier === 'basic' || userTier === 'advanced' || userTier === 'premium' || entitlements.includes('report_basic');
       const isAdvancedOwned = userTier === 'advanced' || userTier === 'premium' || entitlements.includes('report_advanced');
       const isPremiumOwned = userTier === 'premium' || entitlements.includes('report_premium');
 
-      // Filter tiers to display in ONE horizontal row
-      const availableTiers = PACK_TIERS.filter(t => {
-        if (t.id === 'report_basic' && isBasicOwned) return false;
-        if (t.id === 'report_advanced' && isAdvancedOwned) return false;
-        if (t.id === 'report_premium' && isPremiumOwned) return false;
-        return true;
-      });
-
-      if (availableTiers.length === 0) {
-        container.innerHTML = `
-          <div style="grid-column:1 / -1; background:var(--pearl-bg); border:1.5px solid var(--emerald); border-radius:12px; padding:20px; text-align:center;">
-            <span style="font-size:0.75rem; font-weight:700; color:var(--emerald); background:var(--emerald-bg); padding:3px 8px; border-radius:6px;">✦ SOVEREIGN ACCESS UNLOCKED</span>
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--gold-dark); margin:8px 0 4px 0; font-weight:700;">
-              You hold full access to all report tiers
-            </div>
-            <p style="font-size:0.80rem; color:var(--ink-dark); margin:0;">
-              Your 32-page Sovereign Executive Master Blueprint and all elemental balancing matrices are fully accessible in the My Reports section above.
-            </p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = availableTiers.map(t => {
+      container.innerHTML = PACK_TIERS.map(t => {
         const priceStr = `₹${t.priceInr.toLocaleString('en-IN')}`;
-        return `
-          <div class="tier-card" id="tierCard_${t.id}">
-            <div>
-              <span class="tier-badge" style="background:rgba(201,162,39,0.12); color:var(--gold-dark); border:1px solid rgba(201,162,39,0.3);">${t.badge}</span>
-              <h3 class="tier-title">${t.name}</h3>
-              <div class="tier-price">${priceStr}</div>
-              <p class="tier-desc">${t.desc}</p>
-            </div>
+        const isOwned = (t.id === 'report_basic' && isBasicOwned) ||
+                        (t.id === 'report_advanced' && isAdvancedOwned) ||
+                        (t.id === 'report_premium' && isPremiumOwned);
+
+        const matchingReport = reportList.find(r => r.packId === t.id && (r.isDownloadable || r.status === 'ready'));
+
+        let buttonHtml = '';
+        if (isOwned && matchingReport) {
+          buttonHtml = `
+            <button type="button" 
+                    onclick="triggerReportDownload('${matchingReport.id}', '${matchingReport.title}')" 
+                    data-subject-id="${matchingReport.subjectId || ''}" 
+                    data-pack-id="${matchingReport.packId}" 
+                    data-job-id="${matchingReport.id}" 
+                    class="tier-btn" 
+                    style="background:var(--emerald); border-color:var(--emerald); color:#FFFFFF; font-weight:700;">
+              📥 Download Report (${t.pages} Pages)
+            </button>
+            <div id="dlMsg_${matchingReport.id}" style="font-size:0.75rem; color:#A61C1C; margin-top:4px; display:none; text-align:center;"></div>
+          `;
+        } else if (isOwned) {
+          buttonHtml = `
+            <button type="button" 
+                    onclick="document.getElementById('dashReportsContainer').scrollIntoView({ behavior:'smooth' })" 
+                    class="tier-btn" 
+                    style="background:#FAF6EE; border-color:var(--emerald); color:var(--emerald); font-weight:700;">
+              ✓ Purchased · View Status Above
+            </button>
+          `;
+        } else {
+          buttonHtml = `
             <button type="button" onclick="triggerTierCheckout('${t.id}', '${t.name}', ${t.priceInr})" class="tier-btn">
               Unlock ${t.name.split(' ')[0]} (${priceStr}) 🔒
             </button>
+          `;
+        }
+
+        return `
+          <div class="tier-card" id="tierCard_${t.id}" style="${isOwned ? 'border-color:var(--emerald); background:rgba(22,131,91,0.03);' : ''}">
+            <div>
+              <span class="tier-badge" style="${isOwned ? 'background:var(--emerald-bg); color:var(--emerald); border:1px solid var(--emerald);' : 'background:rgba(201,162,39,0.12); color:var(--gold-dark); border:1px solid rgba(201,162,39,0.3);'}">
+                ${isOwned ? 'PURCHASED ✓' : t.badge}
+              </span>
+              <h3 class="tier-title">${t.name}</h3>
+              <div class="tier-price" style="${isOwned ? 'color:var(--emerald);' : ''}">${isOwned ? 'Active Profile Entitlement' : priceStr}</div>
+              <p class="tier-desc">${t.desc}</p>
+            </div>
+            ${buttonHtml}
           </div>
         `;
       }).join('');
@@ -1199,6 +1215,19 @@
 
     function triggerTierCheckout(packId, packName, amountInr) {
       const activeSubj = (_dashboardState && _dashboardState.activeSubject) || {};
+      const entitlements = (_dashboardState && _dashboardState.view && _dashboardState.view.entitlements) || [];
+
+      // Purchase guard: check if pack already purchased for active subject
+      if (entitlements.includes(packId)) {
+        const matchingReport = (_dashboardState && _dashboardState.reports || []).find(r => r.packId === packId && r.isDownloadable);
+        if (matchingReport) {
+          triggerReportDownload(matchingReport.id, matchingReport.title);
+        } else {
+          const el = document.getElementById('dashReportsContainer');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+        return;
+      }
       if (window.NVPaymentGateway && typeof window.NVPaymentGateway.openCheckout === 'function') {
         window.NVPaymentGateway.openCheckout(packId, {
           amount: amountInr,

@@ -43,6 +43,62 @@ from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable, Image
 )
 from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+FONT_SERIF_REGULAR = 'Times-Roman'
+FONT_SERIF_BOLD = 'Times-Bold'
+FONT_SERIF_ITALIC = 'Times-Italic'
+FONT_SANS_REGULAR = 'Helvetica'
+FONT_SANS_BOLD = 'Helvetica-Bold'
+
+def _init_theme_fonts():
+    global FONT_SERIF_REGULAR, FONT_SERIF_BOLD, FONT_SERIF_ITALIC, FONT_SANS_REGULAR, FONT_SANS_BOLD
+    base_dirs = [
+        os.path.join(os.path.dirname(__file__), "..", "fonts"),
+        os.path.join(os.path.dirname(__file__), "..", "..", "pdf_service", "app", "fonts"),
+        r"C:\Windows\Fonts",
+        "/usr/share/fonts/truetype/dejavu",
+        "/usr/share/fonts/truetype/liberation"
+    ]
+    for d in base_dirs:
+        t_reg = os.path.join(d, "times.ttf")
+        t_bld = os.path.join(d, "timesbd.ttf")
+        t_itl = os.path.join(d, "timesi.ttf")
+        if os.path.exists(t_reg):
+            try:
+                pdfmetrics.registerFont(TTFont('ThemeSerif', t_reg))
+                FONT_SERIF_REGULAR = 'ThemeSerif'
+                if os.path.exists(t_bld):
+                    pdfmetrics.registerFont(TTFont('ThemeSerif-Bold', t_bld))
+                    FONT_SERIF_BOLD = 'ThemeSerif-Bold'
+                else:
+                    FONT_SERIF_BOLD = 'ThemeSerif'
+                if os.path.exists(t_itl):
+                    pdfmetrics.registerFont(TTFont('ThemeSerif-Italic', t_itl))
+                    FONT_SERIF_ITALIC = 'ThemeSerif-Italic'
+                else:
+                    FONT_SERIF_ITALIC = 'ThemeSerif'
+                break
+            except Exception:
+                pass
+    for d in base_dirs:
+        a_reg = os.path.join(d, "arial.ttf")
+        a_bld = os.path.join(d, "arialbd.ttf")
+        if os.path.exists(a_reg):
+            try:
+                pdfmetrics.registerFont(TTFont('ThemeSans', a_reg))
+                FONT_SANS_REGULAR = 'ThemeSans'
+                if os.path.exists(a_bld):
+                    pdfmetrics.registerFont(TTFont('ThemeSans-Bold', a_bld))
+                    FONT_SANS_BOLD = 'ThemeSans-Bold'
+                else:
+                    FONT_SANS_BOLD = 'ThemeSans'
+                break
+            except Exception:
+                pass
+
+_init_theme_fonts()
 
 # Classical Accuracy Imports
 from app.engine.core_matrix_engine import (
@@ -92,7 +148,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     title_style = ParagraphStyle(
         'CoverTitle',
         parent=base['Normal'],
-        fontName='Times-Bold',
+        fontName=FONT_SERIF_BOLD,
         fontSize=24,
         leading=28,
         textColor=COLOR_GOLD_DARK,
@@ -103,7 +159,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     subtitle_style = ParagraphStyle(
         'CoverSubtitle',
         parent=base['Normal'],
-        fontName='Times-Roman',
+        fontName=FONT_SERIF_REGULAR,
         fontSize=10,
         leading=14,
         textColor=COLOR_INK_MUTED,
@@ -114,7 +170,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     h1_style = ParagraphStyle(
         'SectionH1',
         parent=base['Normal'],
-        fontName='Times-Bold',
+        fontName=FONT_SERIF_BOLD,
         fontSize=14,
         leading=17,
         textColor=COLOR_GOLD_DARK,
@@ -126,7 +182,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     h2_style = ParagraphStyle(
         'SectionH2',
         parent=base['Normal'],
-        fontName='Times-Bold',
+        fontName=FONT_SERIF_BOLD,
         fontSize=10.5,
         leading=13,
         textColor=COLOR_INK_DARK,
@@ -138,7 +194,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     body_style = ParagraphStyle(
         'ReportBody',
         parent=base['Normal'],
-        fontName='Times-Roman',
+        fontName=FONT_SERIF_REGULAR,
         fontSize=8.5,
         leading=11.5,
         textColor=COLOR_INK_DARK,
@@ -148,13 +204,13 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     body_bold = ParagraphStyle(
         'ReportBodyBold',
         parent=body_style,
-        fontName='Times-Bold'
+        fontName=FONT_SERIF_BOLD
     )
 
     meta_label = ParagraphStyle(
         'MetaLabel',
         parent=base['Normal'],
-        fontName='Times-Bold',
+        fontName=FONT_SERIF_BOLD,
         fontSize=8.5,
         leading=11,
         textColor=COLOR_GOLD_DARK
@@ -163,7 +219,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     meta_val = ParagraphStyle(
         'MetaValue',
         parent=base['Normal'],
-        fontName='Times-Roman',
+        fontName=FONT_SERIF_REGULAR,
         fontSize=8.5,
         leading=11,
         textColor=COLOR_INK_DARK
@@ -172,7 +228,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     tbl_header = ParagraphStyle(
         'TableHeader',
         parent=base['Normal'],
-        fontName='Times-Bold',
+        fontName=FONT_SERIF_BOLD,
         fontSize=8.5,
         leading=11,
         textColor=COLOR_GOLD_DARK,
@@ -182,7 +238,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     tbl_cell = ParagraphStyle(
         'TableCell',
         parent=base['Normal'],
-        fontName='Times-Roman',
+        fontName=FONT_SERIF_REGULAR,
         fontSize=8.2,
         leading=11,
         textColor=COLOR_INK_DARK
@@ -191,7 +247,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     tbl_cell_dense = ParagraphStyle(
         'TableCellDense',
         parent=base['Normal'],
-        fontName='Times-Roman',
+        fontName=FONT_SERIF_REGULAR,
         fontSize=7.2,
         leading=9.2,
         textColor=COLOR_INK_DARK
@@ -206,7 +262,7 @@ def _build_styles() -> Dict[str, ParagraphStyle]:
     callout_style = ParagraphStyle(
         'CalloutText',
         parent=base['Normal'],
-        fontName='Times-Italic',
+        fontName=FONT_SERIF_ITALIC,
         fontSize=8.5,
         leading=12,
         textColor=COLOR_INK_DARK
@@ -255,17 +311,19 @@ def draw_page_background(canvas_obj, doc):
     canvas_obj.rect(cx - 20, cy - 20, 40, 40, stroke=1, fill=0)
     canvas_obj.rect(cx - 14, cy - 14, 28, 28, stroke=1, fill=0)
 
-    # 3. Official Logo Mark Image Watermark
-    logo_file = os.path.join(os.path.dirname(__file__), "..", "static", "logos", "nv-logo-mark.png")
+    # 3. Official Logo Mark Image Watermark (Approved centered watermark at 7% opacity)
+    logo_file = os.path.join(os.path.dirname(__file__), "..", "assets", "nv-logo-mark.png")
     if not os.path.exists(logo_file):
-        logo_file = os.path.join("app", "static", "logos", "anveil-charm-square.png")
+        logo_file = os.path.join(os.path.dirname(__file__), "..", "static", "logos", "nv-logo-mark.png")
     if not os.path.exists(logo_file):
-        logo_file = os.path.join("app", "static", "logos", "logo-yantra.png")
+        logo_file = os.path.join("app", "static", "logos", "nv-logo-mark.png")
+    if not os.path.exists(logo_file):
+        logo_file = os.path.join("pdf_service", "app", "assets", "nv-logo-mark.png")
 
     if os.path.exists(logo_file):
         try:
-            canvas_obj.setFillAlpha(0.045)
-            img_size = 240
+            canvas_obj.setFillAlpha(0.07)  # 7% opacity (within approved 6-8% band)
+            img_size = 220
             canvas_obj.drawImage(logo_file, cx - img_size / 2, cy - img_size / 2,
                                  width=img_size, height=img_size, mask='auto',
                                  preserveAspectRatio=True)
@@ -316,15 +374,15 @@ class NumerosReportCanvas(canvas.Canvas):
             except Exception:
                 pass
 
-        self.setFont("Times-Bold", 8)
+        self.setFont(FONT_SERIF_BOLD, 8)
         self.setFillColor(COLOR_GOLD_DARK)
         self.drawString(51, h - 28, "NUMEROS VISION")
 
-        self.setFont("Times-Italic", 7.5)
+        self.setFont(FONT_SERIF_ITALIC, 7.5)
         self.setFillColor(COLOR_INK_MUTED)
         self.drawString(136, h - 28, "·   ANVEIL EVERY CHARM")
 
-        self.setFont("Times-Roman", 7.5)
+        self.setFont(FONT_SERIF_REGULAR, 7.5)
         if total_pages == 3:
             self.setFillColor(COLOR_EMERALD)
             if self._pageNumber == 1:
@@ -347,11 +405,11 @@ class NumerosReportCanvas(canvas.Canvas):
         self.setLineWidth(0.6)
         self.line(34, 38, w - 34, 38)
 
-        self.setFont("Times-Roman", 7.5)
+        self.setFont(FONT_SERIF_REGULAR, 7.5)
         self.setFillColor(COLOR_INK_MUTED)
         self.drawString(34, 26, "Numeros Vision — ANVEIL EVERY CHARM")
 
-        self.setFont("Times-Bold", 8)
+        self.setFont(FONT_SERIF_BOLD, 8)
         self.setFillColor(COLOR_GOLD_DARK)
         self.drawCentredString(w / 2.0, 26, "✦ VERIFIED ROYAL SEAL ✦")
 
@@ -824,19 +882,19 @@ class NumerosPdfReportBuilder:
         day_num = d.get("day", 28)
 
         # Style helpers
-        s_top_star = ParagraphStyle('TopStar', parent=s['ReportBody'], fontName='Times-Bold', fontSize=8.5, leading=11, textColor=COLOR_GOLD_DARK, alignment=1)
-        s_name = ParagraphStyle('Name', parent=s['ReportBody'], fontName='Times-Bold', fontSize=22, leading=26, textColor=COLOR_GOLD_DARK, alignment=1)
-        s_sub = ParagraphStyle('Sub', parent=s['ReportBody'], fontName='Times-Roman', fontSize=10, leading=13, textColor=COLOR_INK_DARK, alignment=1)
+        s_top_star = ParagraphStyle('TopStar', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=8.5, leading=11, textColor=COLOR_GOLD_DARK, alignment=1)
+        s_name = ParagraphStyle('Name', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=22, leading=26, textColor=COLOR_GOLD_DARK, alignment=1)
+        s_sub = ParagraphStyle('Sub', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=10, leading=13, textColor=COLOR_INK_DARK, alignment=1)
 
-        s_pill_lbl = ParagraphStyle('PillLbl', parent=s['ReportBody'], fontName='Times-Roman', fontSize=7, leading=9, textColor=COLOR_INK_MUTED, alignment=1)
-        s_pill_val = ParagraphStyle('PillVal', parent=s['ReportBody'], fontName='Times-Bold', fontSize=10, leading=12, textColor=COLOR_EMERALD, alignment=1)
+        s_pill_lbl = ParagraphStyle('PillLbl', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=7, leading=9, textColor=COLOR_INK_MUTED, alignment=1)
+        s_pill_val = ParagraphStyle('PillVal', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=10, leading=12, textColor=COLOR_EMERALD, alignment=1)
 
-        s_card_h = ParagraphStyle('CardH', parent=s['ReportBody'], fontName='Times-Bold', fontSize=8.5, leading=11, textColor=COLOR_GOLD_DARK)
-        s_card_txt = ParagraphStyle('CardTxt', parent=s['ReportBody'], fontName='Times-Roman', fontSize=8, leading=11, textColor=COLOR_INK_DARK)
+        s_card_h = ParagraphStyle('CardH', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=8.5, leading=11, textColor=COLOR_GOLD_DARK)
+        s_card_txt = ParagraphStyle('CardTxt', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=8, leading=11, textColor=COLOR_INK_DARK)
 
-        s_cell_sub = ParagraphStyle('CellSub', parent=s['ReportBody'], fontName='Times-Roman', fontSize=7, leading=8.5, textColor=COLOR_INK_MUTED, alignment=1)
-        s_gap_item = ParagraphStyle('GapItem', parent=s['ReportBody'], fontName='Times-Roman', fontSize=7.5, leading=10.5, textColor=COLOR_INK_DARK)
-        s_alert = ParagraphStyle('Alert', parent=s['ReportBody'], fontName='Times-Bold', fontSize=7.5, leading=10, textColor=COLOR_RED_ALERT)
+        s_cell_sub = ParagraphStyle('CellSub', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=7, leading=8.5, textColor=COLOR_INK_MUTED, alignment=1)
+        s_gap_item = ParagraphStyle('GapItem', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=7.5, leading=10.5, textColor=COLOR_INK_DARK)
+        s_alert = ParagraphStyle('Alert', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=7.5, leading=10, textColor=COLOR_RED_ALERT)
 
         # ── PAGE 1: Foundational Profile & Lo Shu Grid Matrix (EXACT SCREENSHOT FORMAT) ──
         self.story.append(Paragraph("✦ BASIC REPORT · ELEMENT BALANCING &amp; FOUNDATIONAL BLUEPRINT ✦", s_top_star))
@@ -965,7 +1023,7 @@ class NumerosPdfReportBuilder:
         gap_header_tbl = Table([
             [Paragraph("<b>✦ NATAL GAP ANALYSIS (UNLOCKED CHART READING)</b>", s_card_h),
              Paragraph(f"<font color='#A13030'><b>{len(missing)} GAPS IDENTIFIED</b></font>", ParagraphStyle('Badge', parent=s_card_h, alignment=2))]
-        ], colWidths=[380, 140])
+        ], colWidths=[360, 130])
         gap_header_tbl.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'MIDDLE')]))
 
         gap_table_content = [
@@ -994,11 +1052,12 @@ class NumerosPdfReportBuilder:
 
         # Elemental Planes Table
         def plane_status_str(digits):
-            if all(cnts.get(n, 0) > 0 for n in digits):
+            cnt = sum(1 for n in digits if cnts.get(n, 0) > 0)
+            if cnt == len(digits):
                 return "COMPLETE"
-            if any(cnts.get(n, 0) > 0 for n in digits):
-                return "PARTIAL"
-            return "INACTIVE"
+            if cnt >= 1 and (cnt / len(digits)) > 0.33:
+                return "ACTIVE"
+            return "DORMANT"
 
         plane_rows = [
             [Paragraph("<b>PLANE</b>", s_card_h), Paragraph("<b>DIGITS</b>", s_card_h), Paragraph("<b>STATUS</b>", s_card_h), Paragraph("<b>CORE OPERATING FUNCTION</b>", s_card_h)],
@@ -1009,7 +1068,7 @@ class NumerosPdfReportBuilder:
             [Paragraph("Will Plane", s_card_txt), Paragraph("9 - 5 - 1", s_card_txt), Paragraph(plane_status_str([9,5,1]), s_card_txt), Paragraph("Determination, persistence under friction, willpower", s_card_txt)],
             [Paragraph("Action Plane", s_card_txt), Paragraph("2 - 7 - 6", s_card_txt), Paragraph(plane_status_str([2,7,6]), s_card_txt), Paragraph("Speed to market, direct action, physical movement", s_card_txt)],
             [Paragraph("Golden Raj Yoga", s_card_txt), Paragraph("4 - 5 - 6", s_card_txt), Paragraph(plane_status_str([4,5,6]), s_card_txt), Paragraph("Prosperity axis, balanced intellect and wealth compounding", s_card_txt)],
-            [Paragraph("Silver Earth Yoga", s_card_txt), Paragraph("2 - 5 - 8", s_card_txt), Paragraph(plane_status_str([2,5,8]), s_card_txt), Paragraph("Property stability, grounded emotional resilience, assets", s_card_txt)]
+            [Paragraph("Silver Raj Yoga", s_card_txt), Paragraph("2 - 5 - 8", s_card_txt), Paragraph(plane_status_str([2,5,8]), s_card_txt), Paragraph("Property stability, grounded emotional resilience, assets", s_card_txt)]
         ]
         t_planes = Table(plane_rows, colWidths=[105, 65, 75, 265], hAlign='CENTER')
         t_planes.setStyle(TableStyle([
@@ -1036,7 +1095,7 @@ class NumerosPdfReportBuilder:
             [Paragraph("Metal", s_card_txt), Paragraph("Venus (6), Ketu (7)", s_card_txt), Paragraph(str(cnts.get(6,0)+cnts.get(7,0)), s_card_txt), Paragraph("Refined discernment, systematic organization and taste." if (cnts.get(6,0)+cnts.get(7,0)) in [1,2] else "Introduce clean structural order and clarity into workspace." if (cnts.get(6,0)+cnts.get(7,0))==0 else "Moderate critical perfectionism; prioritize pragmatic shipping.", s_card_txt)],
             [Paragraph("Water", s_card_txt), Paragraph("Sun (1)", s_card_txt), Paragraph(str(cnts.get(1,0)), s_card_txt), Paragraph("Fluid career adaptability, communicative eloquence and flow." if cnts.get(1,0) in [1,2] else "Ensure hydration and cultivate active conversational listening." if cnts.get(1,0)==0 else "Focus communicative vitality into single high-impact initiatives.", s_card_txt)]
         ]
-        t_elem = Table(elem_data, colWidths=[65, 115, 65, 265], hAlign='CENTER')
+        t_elem = Table(elem_data, colWidths=[65, 110, 75, 270], hAlign='CENTER')
         t_elem.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
             ('BOX', (0,0), (-1,-1), 0.8, COLOR_GOLD),
@@ -1053,38 +1112,65 @@ class NumerosPdfReportBuilder:
         self.story.append(PageBreak())
         self.story.append(Paragraph("5-ELEMENT BALANCING ACTIONS &amp; 90-DAY ROADMAP", s_name))
         self.story.append(Paragraph("Practical Lifestyle Cadence · Auspicious Directional Alignment · Grounded Next Steps", s_sub))
-        self.story.append(Spacer(1, 12))
+        self.story.append(Spacer(1, 6))
+
+        # 1. Kua Auspicious Spatial Alignment Vector Card
+        kua_raw = d.get('kua_element', 'East Group')
+        kua_sector = kua_raw.split('(')[-1].rstrip(')').strip() if '(' in kua_raw else kua_raw
+        kua_desk = kua_sector.split('/')[0].strip()
+        kua_data = [
+            [
+                Paragraph(f"<b>Kua Vector:</b> {kua} ({kua_raw.split('·')[0].strip()})", s_card_txt),
+                Paragraph(f"<b>Auspicious Sector:</b> {kua_sector}", s_card_txt),
+                Paragraph(f"<b>Desk Orientation:</b> {kua_desk} Vector", s_card_txt),
+            ]
+        ]
+        t_kua_sec = Table(
+            [[Paragraph("<b>✦ KUA COSMIC VECTOR &amp; SPATIAL ALIGNMENT</b>", s_card_h)],
+             [Table(kua_data, colWidths=[165, 175, 170])]],
+            colWidths=[520]
+        )
+        t_kua_sec.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,-1), COLOR_PEARL_BG),
+            ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
+            ('TOPPADDING', (0,0), (-1,-1), 5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 5),
+            ('LEFTPADDING', (0,0), (-1,-1), 8),
+            ('RIGHTPADDING', (0,0), (-1,-1), 8),
+        ]))
+        self.story.append(t_kua_sec)
+        self.story.append(Spacer(1, 6))
 
         # Practical Balancing Actions Card
         actions_card = [
             [Paragraph("<b>✦ ELEMENTAL HARMONIZATION PROTOCOL</b>", s_card_h)],
-            [Spacer(1, 6)],
+            [Spacer(1, 4)],
             [Paragraph(f"Based on your <b>Driver {driver}</b> and <b>Conductor {d.get('conductor_display', conductor)}</b>, your system operates best when cognitive velocity is matched with grounded environmental stability. Follow these practical self-reflection measures:", s_card_txt)],
-            [Spacer(1, 8)],
+            [Spacer(1, 5)],
             [Paragraph("• <b>Primary Workspace Direction:</b> Align your primary desk facing <b>East or North-East</b> to synchronize cognitive retention and mental clarity.", s_card_txt)],
-            [Spacer(1, 4)],
+            [Spacer(1, 3)],
             [Paragraph("• <b>Daily Pacing Cadence:</b> Schedule high-focus strategic decisions during morning hours (08:00–11:00) when solar vitality is ascending.", s_card_txt)],
-            [Spacer(1, 4)],
+            [Spacer(1, 3)],
             [Paragraph("• <b>Harmonious Environmental Hues:</b> Favor subtle ivory, soft gold, and muted emerald accents; avoid sharp discordant color clashes in your primary workspace.", s_card_txt)],
-            [Spacer(1, 4)],
+            [Spacer(1, 3)],
             [Paragraph("• <b>Boundary Hygiene:</b> Maintain clear separation between operational execution blocks and contemplative creative incubation.", s_card_txt)]
         ]
-        t_actions = Table(actions_card, colWidths=[510], hAlign='CENTER')
+        t_actions = Table(actions_card, colWidths=[520], hAlign='CENTER')
         t_actions.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), colors.white),
             ('BOX', (0,0), (-1,-1), 0.8, COLOR_GOLD),
-            ('TOPPADDING', (0,0), (-1,-1), 12),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 12),
-            ('LEFTPADDING', (0,0), (-1,-1), 14),
-            ('RIGHTPADDING', (0,0), (-1,-1), 14)
+            ('TOPPADDING', (0,0), (-1,-1), 6),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+            ('LEFTPADDING', (0,0), (-1,-1), 10),
+            ('RIGHTPADDING', (0,0), (-1,-1), 10)
         ]))
         self.story.append(t_actions)
-        self.story.append(Spacer(1, 12))
+        self.story.append(Spacer(1, 6))
 
         # 90-Day Execution Horizon
         roadmap_card = [
             [Paragraph("<b>✦ 90-DAY SYSTEMATIC EXECUTION HORIZON</b>", s_card_h)],
-            [Spacer(1, 6)],
+            [Spacer(1, 4)],
             [Table([
                 [Paragraph("<b>DAYS 1–30</b>", s_card_h), Paragraph("<b>DAYS 31–60</b>", s_card_h), Paragraph("<b>DAYS 61–90</b>", s_card_h)],
                 [
@@ -1092,26 +1178,26 @@ class NumerosPdfReportBuilder:
                     Paragraph("<b>Vibrational Alignment</b><br/>Calibrate daily routines to your Driver planetary rhythm. Review relationship and partnership communication patterns.", s_card_txt),
                     Paragraph("<b>Review &amp; Consolidation</b><br/>Assess tangible execution outcomes. Solidify habits that reduced friction. Plan next quarterly initiation window.", s_card_txt)
                 ]
-            ], colWidths=[160, 160, 160], hAlign='CENTER', style=[
+            ], colWidths=[166, 166, 168], hAlign='CENTER', style=[
                 ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
                 ('BOX', (0,0), (-1,-1), 0.6, COLOR_GOLD_LIGHT),
                 ('INNERGRID', (0,0), (-1,-1), 0.4, COLOR_GOLD_LIGHT),
-                ('TOPPADDING', (0,0), (-1,-1), 6),
-                ('BOTTOMPADDING', (0,0), (-1,-1), 6),
-                ('LEFTPADDING', (0,0), (-1,-1), 8),
-                ('RIGHTPADDING', (0,0), (-1,-1), 8)
+                ('TOPPADDING', (0,0), (-1,-1), 5),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 5),
+                ('LEFTPADDING', (0,0), (-1,-1), 6),
+                ('RIGHTPADDING', (0,0), (-1,-1), 6)
             ])],
-            [Spacer(1, 10)],
+            [Spacer(1, 6)],
             [Paragraph("<font size=7 color='#7A654D'>Master Brand: NUMEROS VISION · Tagline: ANVEIL EVERY CHARM · Deterministic Grounded Numerology Analysis</font>", s_sub)]
         ]
-        t_roadmap = Table(roadmap_card, colWidths=[510], hAlign='CENTER')
+        t_roadmap = Table(roadmap_card, colWidths=[520], hAlign='CENTER')
         t_roadmap.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), colors.white),
             ('BOX', (0,0), (-1,-1), 0.8, COLOR_GOLD),
-            ('TOPPADDING', (0,0), (-1,-1), 12),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 12),
-            ('LEFTPADDING', (0,0), (-1,-1), 14),
-            ('RIGHTPADDING', (0,0), (-1,-1), 14),
+            ('TOPPADDING', (0,0), (-1,-1), 6),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+            ('LEFTPADDING', (0,0), (-1,-1), 10),
+            ('RIGHTPADDING', (0,0), (-1,-1), 10),
             ('ALIGN', (0,-1), (-1,-1), 'CENTER')
         ]))
         self.story.append(t_roadmap)
