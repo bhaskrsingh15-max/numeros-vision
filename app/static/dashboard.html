@@ -960,11 +960,18 @@
                 ${r.message}
               </div>
             </div>
-            <div style="display:flex; align-items:center; gap:8px;">
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
               ${(isReady && (r.isDownloadable || r.downloadUrl)) ? `
-                <button type="button" class="nv-btn-cta download-btn" id="dlBtn_${r.id}" onclick="triggerReportDownload('${r.subjectId}', '${r.packId}', '${r.id}', this, ${r.pages})" style="background:var(--emerald); padding:8px 16px; font-size:0.80rem; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#FFFFFF; border-radius:6px; font-weight:700;">
+                <button type="button" class="nv-btn-cta download-btn" id="dlBtn_${r.id}"
+                  data-subject-id="${r.subjectId}"
+                  data-pack-id="${r.packId}"
+                  data-job-id="${r.id}"
+                  data-pages="${r.pages}"
+                  onclick="triggerReportDownload(this)"
+                  style="background:var(--emerald); padding:8px 16px; font-size:0.80rem; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#FFFFFF; border-radius:6px; font-weight:700;">
                   📥 Download PDF (${r.pages} Pages)
                 </button>
+                <div id="dlMsg_${r.id}" style="font-size:0.75rem; color:#A61C1C; margin-top:2px; display:none; max-width:240px; text-align:right;"></div>
               ` : `
                 <span style="font-size:0.78rem; font-weight:600; color:var(--gold-dark);">
                   ${isReady ? 'Preparing download link... or <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">contact support</a>' : (isNeedsAttention ? 'We’re checking this order. If it isn’t ready within 30 minutes, write to <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">support@numerosvision.com</a>' : 'Ready within a few minutes')}
@@ -1205,8 +1212,18 @@
       }
     }
 
-    async function triggerReportDownload(subjectId, packId, jobId, btnEl, pages) {
+    async function triggerReportDownload(btnEl) {
       if (!btnEl) return;
+      const subjectId = (btnEl.getAttribute('data-subject-id') || '').trim();
+      const packId = (btnEl.getAttribute('data-pack-id') || '').trim();
+      const jobId = (btnEl.getAttribute('data-job-id') || '').trim();
+      const pages = (btnEl.getAttribute('data-pages') || '3').trim();
+      const msgEl = document.getElementById(`dlMsg_${jobId}`);
+      if (msgEl) {
+        msgEl.style.display = 'none';
+        msgEl.textContent = '';
+      }
+
       const originalHtml = btnEl.innerHTML;
       btnEl.disabled = true;
       btnEl.style.opacity = '0.7';
@@ -1238,10 +1255,16 @@
         }, 3000);
       } catch (err) {
         console.error('[DownloadError]', err);
-        alert(err.message || 'Unable to download report. Please try again or contact support.');
         btnEl.disabled = false;
         btnEl.style.opacity = '1';
         btnEl.innerHTML = originalHtml;
+        if (msgEl) {
+          msgEl.textContent = 'Unable to prepare download right now. Please try again or contact support.';
+          msgEl.style.display = 'block';
+          setTimeout(() => {
+            if (msgEl) msgEl.style.display = 'none';
+          }, 6000);
+        }
       }
     }
 
