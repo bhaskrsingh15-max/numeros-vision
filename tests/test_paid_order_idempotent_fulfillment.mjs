@@ -630,7 +630,12 @@ async function runTestSuite() {
     assert.strictEqual(item.email, undefined, 'Must contain NO personal email');
     assert.strictEqual(item.phone, undefined, 'Must contain NO phone number');
 
-    console.log('✓ PASS: /api/admin/test-console exposes paid_unfulfilled_orders with strictly sanitized status fields.');
+    // Gateway check validation
+    assert(adminData.gateway_check, 'Response must contain gateway_check object');
+    assert.strictEqual(adminData.gateway_check.key_id_prefix, 'rzp_test_');
+    assert(adminData.gateway_check.razorpay_status !== undefined, 'Gateway check must report razorpay_status');
+
+    console.log('✓ PASS: /api/admin/test-console exposes paid_unfulfilled_orders and read-only gateway_check.');
   }
 
   console.log('--- ALL SUITE TESTS PASSED SUCCESSFULLY (6/6) ---');

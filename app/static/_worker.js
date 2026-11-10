@@ -6660,12 +6660,41 @@ export default {
         }
       }
 
+      // Admin-only Gateway Credentials Check (read-only call; ZERO secrets or full keys exposed)
+      let gatewayCheck = {
+        razorpay_status: null,
+        key_id_prefix: (env.RAZORPAY_KEY_ID || '').startsWith('rzp_test_') ? 'rzp_test_' : ((env.RAZORPAY_KEY_ID || '').startsWith('rzp_live_') ? 'rzp_live_' : 'unknown'),
+        accepted: false
+      };
+
+      if (env.RAZORPAY_KEY_ID && env.RAZORPAY_KEY_SECRET) {
+        try {
+          const authHeader = 'Basic ' + btoa(env.RAZORPAY_KEY_ID + ':' + env.RAZORPAY_KEY_SECRET);
+          const rzpProbe = await fetch('https://api.razorpay.com/v1/orders?count=1', {
+            method: 'GET',
+            headers: {
+              'Authorization': authHeader,
+              'Accept': 'application/json'
+            }
+          });
+          gatewayCheck.razorpay_status = rzpProbe.status;
+          gatewayCheck.accepted = (rzpProbe.status === 200);
+        } catch (err) {
+          gatewayCheck.razorpay_status = 502;
+          gatewayCheck.accepted = false;
+        }
+      } else {
+        gatewayCheck.razorpay_status = 503;
+        gatewayCheck.accepted = false;
+      }
+
       if (wantsJson) {
         return new Response(JSON.stringify({
           status: 'ok',
           environment: env.ENVIRONMENT,
           timestamp: new Date().toISOString(),
           overall_status: 'PASS',
+          gateway_check: gatewayCheck,
           skus: skuRows,
           needs_attention_orders: needsAttentionOrders,
           paid_unfulfilled_orders: paidUnfulfilledOrders
@@ -6747,6 +6776,14 @@ export default {
       </div>
       <div>
         <button type="button" onclick="sessionStorage.removeItem('nv_admin_token'); location.reload();" style="background:transparent; color:#8B6914; border:1px solid #8B6914; border-radius:6px; padding:5px 12px; font-size:0.75rem; font-weight:600; cursor:pointer;">Sign Out</button>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; background:${gatewayCheck.accepted ? '#EBF7F2' : '#FDF2F2'}; border:1px solid ${gatewayCheck.accepted ? '#B4E3D0' : '#F8B4B4'}; border-radius:10px; padding:12px 16px;">
+      <div style="font-size:0.86rem; color:${gatewayCheck.accepted ? '#16835B' : '#9B1C1C'}; font-weight:700;">
+        Gateway Check (Read-Only): ${gatewayCheck.accepted ? 'ACCEPTED (HTTP 200)' : 'REJECTED / UNVERIFIED (HTTP ' + gatewayCheck.razorpay_status + ')'} · Key ID Prefix: <code>${gatewayCheck.key_id_prefix}</code>
+      </div>
+      <div>
+        <span class="badge" style="background:${gatewayCheck.accepted ? '#16835B' : '#9B1C1C'}; color:#FFFFFF;">${gatewayCheck.accepted ? 'GATEWAY READY' : 'GATEWAY ERROR'}</span>
       </div>
     </div>
     <div style="overflow-x:auto;">

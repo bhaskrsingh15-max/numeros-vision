@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   
   <link rel="stylesheet" href="/static/css/theme.css?v=5.5.0" />
-  <link rel="stylesheet" href="/static/css/nav.css?v=5.5.0" />
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="/api/turnstile-config.js"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -530,14 +530,23 @@
 
   <!-- MASTER HEADER -->
   <header class="nv-header">
-    <div class="nv-header-inner">
-      <a href="/" class="nv-brand">
-        <span class="nv-brand-mark">✦</span>
-        <span class="nv-brand-text">NUMEROS VISION</span>
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" width="38" height="38" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
       </a>
-      <div style="font-size:0.75rem; letter-spacing:0.1em; color:var(--gold-dark); font-weight:700;">
-        ANVIEL EVERY CHARM
-      </div>
+      <nav class="nv-nav-menu" id="nvNavMenu">
+        <a href="/" class="nv-nav-item">Home</a>
+        <a href="/pricing/" class="nv-nav-item">Pricing</a>
+        <a href="/charm_ai.html" class="nv-nav-item">Charm AI</a>
+        <a href="/contact/" class="nv-nav-item">Contact</a>
+        <a href="/dashboard/" class="nv-nav-item">My Dashboard</a>
+      </nav>
     </div>
   </header>
 
@@ -800,11 +809,11 @@
         <!-- Row 4: DPDP Statutory Consents (Both start unticked; Marketing optional & off by default) -->
         <div class="checkout-consents">
           <label class="checkout-consent-item" for="checkout-consent-service">
-            <input type="checkbox" id="checkout-consent-service" onchange="validateCheckoutReadiness()" />
+            <input type="checkbox" id="checkout-consent-service" autocomplete="off" onchange="validateCheckoutReadiness()" />
             <span><strong>Service Delivery Consent (Required):</strong> I agree to the processing of my birth details strictly for personalized calculations and report generation ({{CONSENT_TEXT_PENDING}}).</span>
           </label>
           <label class="checkout-consent-item" for="checkout-consent-marketing">
-            <input type="checkbox" id="checkout-consent-marketing" />
+            <input type="checkbox" id="checkout-consent-marketing" autocomplete="off" />
             <span>Send me transit alerts and personalized planetary timing updates via email (optional) ({{CONSENT_TEXT_PENDING}}).</span>
           </label>
         </div>
@@ -822,14 +831,66 @@
   </div>
 
   <!-- MASTER FOOTER -->
-  <footer class="nv-footer" style="background:#F7F3EA; border-top:1px solid var(--border-gold); padding:40px 20px; text-align:center; font-size:0.82rem; color:var(--ink-muted);">
-    <div style="max-width:800px; margin:0 auto; line-height:1.6;">
-      <div style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:700; color:var(--ink); margin-bottom:8px;">
-        NUMEROS VISION · ANVIEL EVERY CHARM
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" width="38" height="38" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            Transparent numerological calculations combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/tools/birth-number">Birth Number (Mulank)</a></li>
+            <li><a href="/tools/life-path-calculator">Life Path (Bhagyank)</a></li>
+            <li><a href="/tools/name-numerology">Name Balancing</a></li>
+            <li><a href="/tools/lo-shu-grid">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/tools/mobile-numerology">Mobile Numerology</a></li>
+            <li><a href="/tools/blessing-years">Personal Year Calculator</a></li>
+          </ul>
+        </div>
+        <div class="nv-footer-col">
+          <h4>Intelligence &amp; Plans</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/charm_ai.html">Charm AI Assistant</a></li>
+            <li><a href="/reports_catalogue.html">Reports Catalogue</a></li>
+            <li><a href="/sample.html">Sample Dossier</a></li>
+            <li><a href="/pricing.html">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation.html">1-on-1 Consultation</a></li>
+          </ul>
+        </div>
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/insights_hub.html">Insights Learning Hub</a></li>
+            <li><a href="/about.html">About Numeros Vision</a></li>
+            <li><a href="/contact.html">Contact Support</a></li>
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/disclaimer.html">Disclaimer</a></li>
+            <li><a href="/terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
       </div>
-      <p style="margin:0 0 12px;">{{DISCLAIMER_APPROVED_TEXT}}</p>
-      <div style="font-size:0.75rem; color:var(--ink-muted);">
-        &copy; 2026 NUMEROS VISION. All rights reserved. Server-side deterministic pricing strictly enforced.
+      <div style="margin: 20px auto 14px; max-width: 900px; padding: 12px 16px; background: rgba(201, 162, 39, 0.08); border: 1px solid var(--border-gold); border-radius: 8px; font-size: 0.76rem; color: var(--ink-muted); text-align: center; line-height: 1.5;">
+        <p style="margin:0;">{{DISCLAIMER_APPROVED_TEXT}}</p>
+      </div>
+      <div class="nv-footer-bottom">
+        <div>&copy; 2026 Numeros Vision. All rights reserved. Master Brand: NUMEROS VISION · Tagline: ANVEIL EVERY CHARM.</div>
+        <div class="nv-footer-legal-inline">
+          <a href="/privacy.html">Privacy Policy</a>
+          <a href="/terms.html">Terms</a>
+          <a href="/refund.html">Refund Policy</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -1544,6 +1605,14 @@
         }
       }
     }
+
+    window.addEventListener('pageshow', function() {
+      const serviceConsent = document.getElementById('checkout-consent-service');
+      const marketingConsent = document.getElementById('checkout-consent-marketing');
+      if (serviceConsent) serviceConsent.checked = false;
+      if (marketingConsent) marketingConsent.checked = false;
+      if (typeof validateCheckoutReadiness === 'function') validateCheckoutReadiness();
+    });
 
     window.addEventListener('DOMContentLoaded', initReadingPage);
   </script>
