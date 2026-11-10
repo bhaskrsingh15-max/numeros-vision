@@ -6,6 +6,7 @@
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
+Disallow: /dashboard/
 Disallow: /docs
 Disallow: /redoc
 Disallow: /data/
@@ -108,7 +109,7 @@ Allow: /llms-full.txt
 Allow: /BingSiteAuth.xml
 Allow: /49bf97a1d74343ce951918a3a0e676d4.txt
 Allow: /sitemap.xml
-Allow: /sitemap/
+Disallow: /dashboard/
 Disallow: /api/
 Disallow: /docs
 Disallow: /redoc

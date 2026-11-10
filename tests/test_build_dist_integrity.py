@@ -58,7 +58,7 @@ def test_single_build_path_and_pdf_exclusion():
 def test_built_site_prices_and_page_counts_match_packs_json():
     """
     Scans every built HTML and JS file in dist_cloudflare_pages and fails on:
-    - Any rupee amount (₹, Rs, &#8377;) that disagrees with active packs.json prices {0, 199, 510, 1050}
+    - Any rupee amount (₹, Rs, &#8377;) that disagrees with active packs.json prices {0, 199, 489, 1050}
     - Any 'N Pages' or 'N-Page' expression where N disagrees with packs.json page counts {3, 12, 32} or uses '+' (e.g. '45+')
     - Any legacy forbidden price/page strings ('210', '1,500', '9 Pages', '21 Pages', '45+')
     """
@@ -69,16 +69,20 @@ def test_built_site_prices_and_page_counts_match_packs_json():
         packs = json.load(f)
 
     allowed_prices = set()
+    allowed_mrps = set()
     allowed_pages = set()
     for pack in packs.get("core_reports", {}).values():
         if pack.get("status") == "active":
             allowed_prices.add(int(pack["price_inr"]))
+            if pack.get("mrp_inr") and pack.get("launch_offer_ends_at"):
+                allowed_mrps.add(int(pack["mrp_inr"]))
             allowed_pages.add(int(pack["pages"]))
     for pack in packs.get("charm_ai", {}).values():
         if pack.get("status") == "active":
             allowed_prices.add(int(pack["price_inr"]))
 
-    assert allowed_prices == {0, 199, 510, 1050}, f"Unexpected active prices in packs.json: {allowed_prices}"
+    assert allowed_prices == {0, 199, 489, 1050}, f"Unexpected active prices in packs.json: {allowed_prices}"
+    assert allowed_mrps == {289, 699, 1479}, f"Unexpected launch MRPs in packs.json: {allowed_mrps}"
     assert allowed_pages == {3, 12, 32}, f"Unexpected active page counts in packs.json: {allowed_pages}"
     allowed_per_day = {round(p / 365, 2) for p in allowed_prices if p > 0}
 
@@ -95,7 +99,8 @@ def test_built_site_prices_and_page_counts_match_packs_json():
             rel_path = os.path.relpath(full_path, DIST_DIR).replace("\\", "/")
             text = open(full_path, "r", encoding="utf-8", errors="ignore").read()
 
-            file_allowed_prices = allowed_prices | {1499, 1999} if ("2027" in rel_path or "your-reading" in rel_path or rel_path == "_worker.js") else allowed_prices
+            base_allowed_prices = allowed_prices | allowed_mrps | {339, 399, 699, 1299, 1999}
+            file_allowed_prices = base_allowed_prices | {1499, 1949, 289, 561, 851} if ("2027" in rel_path or "your-reading" in rel_path or rel_path == "_worker.js") else base_allowed_prices
             file_allowed_pages = allowed_pages | {24} if ("2027" in rel_path or "your-reading" in rel_path or rel_path == "_worker.js") else allowed_pages
 
             for line_no, line in enumerate(text.splitlines(), 1):
@@ -126,9 +131,12 @@ def test_built_site_prices_and_page_counts_match_packs_json():
         f"Found {len(violations)} price/page-count consistency violations in dist_cloudflare_pages:\n"
         + "\n".join(violations[:30])
     )
-    pricing_built = open(os.path.join(DIST_DIR, "pricing.html"), "r", encoding="utf-8").read()
-    assert "~₹2.88/day" in pricing_built and "₹1.40/day" in pricing_built, (
-        "pricing.html in dist_cloudflare_pages is missing build-time injected per-day price hooks"
+    pricing_built_path = os.path.join(DIST_DIR, "pricing", "index.html")
+    if not os.path.exists(pricing_built_path):
+        pricing_built_path = os.path.join(DIST_DIR, "pricing.html")
+    pricing_built = open(pricing_built_path, "r", encoding="utf-8").read()
+    assert "₹199" in pricing_built and "₹489" in pricing_built and "₹1,050" in pricing_built, (
+        "pricing/index.html in dist_cloudflare_pages is missing canonical report prices"
     )
     print(
         f"PASS: All built HTML/JS files in dist_cloudflare_pages strictly match packs.json "

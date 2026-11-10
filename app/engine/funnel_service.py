@@ -221,7 +221,7 @@ PRODUCT_FUNNEL_CATALOG: Dict[str, Dict[str, Any]] = {
         "tertiary_link": "View Deliverables & Terms",
         "recommended_plan": "report_master",
         "plan_name": "Advanced Numerology Report",
-        "price_inr": 510,
+        "price_inr": 489,
         "original_price_inr": 999,
         "deliverables": [
             "35-40 Page Master Synthesis Dossier",
@@ -268,7 +268,7 @@ PRODUCT_FUNNEL_CATALOG: Dict[str, Dict[str, Any]] = {
         "tertiary_link": "View Chaldean Methodology",
         "recommended_plan": "report_master",
         "plan_name": "Advanced Numerology Report",
-        "price_inr": 510,
+        "price_inr": 489,
         "original_price_inr": 999,
         "deliverables": [
             "Chaldean Sound Frequency Analysis across all syllables",
@@ -290,7 +290,7 @@ PRODUCT_FUNNEL_CATALOG: Dict[str, Dict[str, Any]] = {
         "tertiary_link": "Explore Plane Meanings",
         "recommended_plan": "report_master",
         "plan_name": "Advanced Numerology Report",
-        "price_inr": 510,
+        "price_inr": 489,
         "original_price_inr": 999,
         "deliverables": [
             "8 Planes of Lo Shu comprehensive audit",
@@ -312,7 +312,7 @@ PRODUCT_FUNNEL_CATALOG: Dict[str, Dict[str, Any]] = {
         "tertiary_link": "Privacy & Data Masking Policy",
         "recommended_plan": "report_master",
         "plan_name": "Advanced Numerology Report",
-        "price_inr": 510,
+        "price_inr": 489,
         "original_price_inr": 999,
         "deliverables": [
             "Complete 9-pair frequency audit (anti-pairs like 2-8, 4-8, 1-8)",
@@ -356,7 +356,7 @@ PRODUCT_FUNNEL_CATALOG: Dict[str, Dict[str, Any]] = {
         "tertiary_link": "View Synastry Principles",
         "recommended_plan": "report_master",
         "plan_name": "Advanced Numerology Report",
-        "price_inr": 510,
+        "price_inr": 489,
         "original_price_inr": 999,
         "deliverables": [
             "Dual-Chart complete cross-synastry matrix",
@@ -444,7 +444,7 @@ PRODUCT_FUNNEL_CATALOG: Dict[str, Dict[str, Any]] = {
         "tertiary_link": "View Sample Dossier",
         "recommended_plan": "report_master",
         "plan_name": "Advanced Numerology Report",
-        "price_inr": 510,
+        "price_inr": 489,
         "original_price_inr": 999,
         "deliverables": [
             "35+ Page Comprehensive Synthesis Dossier",

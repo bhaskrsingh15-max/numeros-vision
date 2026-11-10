@@ -7,7 +7,7 @@ calculators, checkout, payment webhooks, and PDF report delivery.
 
 Enforces:
 1. Four Distinct Product Families:
-   - Standalone Reports (Basic ₹199 / Advanced ₹510 / Premium ₹1,050)
+   - Standalone Reports (Basic ₹199 / Advanced ₹489 / Premium ₹1,050)
    - Multi-Report Bundles (Starter / Discovery / Comprehensive · Coming soon)
    - Charm AI Access (Free ₹0 / Starter ₹199)
    - Human Consultation (Standard 1-on-1 Session ₹1,050)
@@ -16,7 +16,7 @@ Enforces:
 3. Server-Side Validation:
    - Client prices are strictly rejected; the server resolves payable amounts from this catalog.
 4. Deterministic Digit Root Verification:
-   - 199 (root 1), 510 (root 6), 1050 (root 6), 399 (root 3), 699 (root 6), 1050 (root 6).
+   - 199 (root 1), 489 (root 3), 1050 (root 6), 399 (root 3), 699 (root 6), 1050 (root 6).
 """
 
 from typing import Dict, Any, List, Optional
@@ -56,9 +56,9 @@ REPORT_TIERS: Dict[str, Dict[str, Any]] = {
         "display_name": "Advanced Master Dossier · Recommended",
         "pages": 12,
         "page_target": "12-page PDF",
-        "price_inr": 510,
-        "amount_paise": 51000,
-        "digital_root": 6,  # 5+1+0=6 (Venus / Harmony)
+        "price_inr": 489,
+        "amount_paise": 48900,
+        "digital_root": 3,  # 4+8+9=21 -> 3 (Jupiter / Wisdom)
         "popular": True,
         "purpose": "Expanded analysis, supporting calculations, comparisons, and structured guidance.",
         "deliverables": [
@@ -504,7 +504,7 @@ CONSULTATION_PACKS: Dict[str, Dict[str, Any]] = {
             "45-Minute Private 1-on-1 Consultation Session",
             "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
             "Comprehensive personal strategy & custom remedial protocols",
-            "Complimentary 12-Page Advanced PDF Dossier (₹510 value)",
+            "Complimentary 12-Page Advanced PDF Dossier (₹489 value)",
             "Audio recording and written consultation summary",
             "Free 1-time rescheduling up to 24 hours prior"
         ]

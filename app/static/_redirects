@@ -1,3 +1,36 @@
 # Cloudflare Pages Redirects & Clean URL Rewrites
+# Dead duplicates & legacy paths -> canonical clean trailing-slash URLs (301)
+/charm_ai.html                      /charm-ai/                          301
+/charm_ai                           /charm-ai/                          301
+/privacy-policy                     /privacy/                           301
+/privacy-policy/                    /privacy/                           301
+/sample-report                      /sample_roadmap/                    301
+/sample-report/                     /sample_roadmap/                    301
+/sample_report                      /sample_roadmap/                    301
+/sample_report/                     /sample_roadmap/                    301
+/reports                            /reports_catalogue/                 301
+/reports/                           /reports_catalogue/                 301
+
+/refund                             /refund-policy/                     301
+
+/refund/                            /refund-policy/                     301
+
+/year_2027.html                     /year-2027/                         301
+
+/year_2027                          /year-2027/                         301
+
+/year_2027/                         /year-2027/                         301
+
+# Approved tool rename & blog consolidation (301)
+/tools/lucky-number                 /tools/favourable-numbers/          301
+/tools/lucky-number/                /tools/favourable-numbers/          301
+/tools/lucky-number.html            /tools/favourable-numbers/          301
+/blog/gemstone-remedies             /blog/vedic-gemstone-remedies/      301
+/blog/gemstone-remedies/            /blog/vedic-gemstone-remedies/      301
+/blog/gemstone-remedies.html        /blog/vedic-gemstone-remedies/      301
+
+# Legacy .html blog URLs -> clean trailing-slash URLs (301)
+/blog/*.html                        /blog/:splat/                       301
+
 # Static asset alias for FastAPI /static/ path parity
-/static/*                   /:splat                     200
+/static/*                           /:splat                             200

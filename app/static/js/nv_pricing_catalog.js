@@ -39,9 +39,9 @@
       "display_name": "Advanced Master Dossier \u00b7 Recommended",
       "pages": 12,
       "page_target": "12-page PDF",
-      "price_inr": 510,
-      "amount_paise": 51000,
-      "digital_root": 6,
+      "price_inr": 489,
+      "amount_paise": 48900,
+      "digital_root": 3,
       "popular": true,
       "purpose": "Expanded analysis, supporting calculations, comparisons, and structured guidance.",
       "deliverables": [
@@ -428,7 +428,7 @@
         "45-Minute Private 1-on-1 Consultation Session",
         "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
         "Comprehensive personal strategy & custom remedial protocols",
-        "Complimentary 12-Page Advanced PDF Dossier (\u20b9510 value)",
+        "Complimentary 12-Page Advanced PDF Dossier (\u20b9489 value)",
         "Audio recording and written consultation summary",
         "Free 1-time rescheduling up to 24 hours prior"
       ]
@@ -458,8 +458,8 @@
       "name": "Advanced Master Dossier",
       "tier": "advanced",
       "pages": 12,
-      "amount_inr": 510,
-      "amount_paise": 51000,
+      "amount_inr": 489,
+      "amount_paise": 48900,
       "currency": "INR",
       "deliverables": [
         "12-Page Master Synthesis PDF Dossier",
@@ -602,7 +602,7 @@
         "45-Minute Private 1-on-1 Consultation Session",
         "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
         "Comprehensive personal strategy & custom remedial protocols",
-        "Complimentary 12-Page Advanced PDF Dossier (\u20b9510 value)",
+        "Complimentary 12-Page Advanced PDF Dossier (\u20b9489 value)",
         "Audio recording and written consultation summary",
         "Free 1-time rescheduling up to 24 hours prior"
       ]
@@ -737,7 +737,7 @@
       },
       "ADVANCED_REPORT": {
         "sku": "report_advanced",
-        "price_inr": 510,
+        "price_inr": 489,
         "pages": 12
       },
       "PREMIUM_REPORT": {
@@ -777,13 +777,13 @@
     getPrice(skuId) {
       const clean = (skuId || '').toLowerCase();
       if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential') return 199;
-      if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master') return 510;
+      if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master') return 489;
       if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine') return 1050;
       if (clean === 'charm_single' || clean === 'charm_starter' || clean === 'starter_5q') return 199;
 
       // Fallback
       if (CATALOG.report_tiers[clean]) return CATALOG.report_tiers[clean].price_inr;
-      return 510;
+      return 489;
     },
 
     formatPrice(skuId) {

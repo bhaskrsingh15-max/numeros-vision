@@ -367,7 +367,7 @@ async function runTests() {
       user_id: userId,
       subject_id: subjectId,
       pack_id: 'report_advanced',
-      amount_paise: 51000,
+      amount_paise: 48900,
       currency: 'INR',
       rzp_order_id: rzpOrderId,
       status: 'CREATED',
@@ -386,7 +386,7 @@ async function runTests() {
       event_id: 'evt_6b_waituntil_1',
       payload: {
         order: { entity: { id: rzpOrderId } },
-        payment: { entity: { id: 'pay_6b_waituntil_1', amount: 51000, currency: 'INR', order_id: rzpOrderId } }
+        payment: { entity: { id: 'pay_6b_waituntil_1', amount: 48900, currency: 'INR', order_id: rzpOrderId } }
       }
     });
     const whSig = crypto.createHmac('sha256', env.RAZORPAY_WEBHOOK_SECRET).update(whBody).digest('hex');

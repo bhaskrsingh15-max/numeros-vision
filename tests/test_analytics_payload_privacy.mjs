@@ -197,7 +197,7 @@ domWindow.nvTrack.initiateCheckout('Basic Report', 199, {
 
 // 8. Test Scenario E: Paid Purchase
 console.log('Testing Scenario E: paidPurchase with order and transaction data...');
-domWindow.nvTrack.paidPurchase('order_NV_2026_9999', 'Advanced Master Dossier', 510, 'INR', {
+domWindow.nvTrack.paidPurchase('order_NV_2026_9999', 'Advanced Master Dossier', 489, 'INR', {
   name: 'Rohan Sharma',
   email: 'rohan@example.com',
   phone: '9876543210',

@@ -74,13 +74,13 @@ async function runTests() {
   console.log('Test 1: Asserting packs.json prices and no duplicate prices per unpurchased tier...');
   const activeCore = Object.values(packsJson.core_reports).filter(p => p.status === 'active');
   const activePrices = activeCore.map(p => p.price_inr);
-  assert.deepEqual(activePrices.sort((a,b)=>a-b), [199, 510, 1050]);
+  assert.deepEqual(activePrices.sort((a,b)=>a-b), [199, 489, 1050]);
 
   // Ensure each tier card in dashboard HTML templates has exactly one price tag per tier
   const basicMatches = (dashboardHtml.match(/₹199/g) || []).length;
-  const advMatches = (dashboardHtml.match(/₹510/g) || []).length;
+  const advMatches = (dashboardHtml.match(/₹489/g) || []).length;
   const premMatches = (dashboardHtml.match(/₹1,050/g) || []).length;
-  console.log(`  Price occurrences in template: ₹199: ${basicMatches}, ₹510: ${advMatches}, ₹1,050: ${premMatches}`);
+  console.log(`  Price occurrences in template: ₹199: ${basicMatches}, ₹489: ${advMatches}, ₹1,050: ${premMatches}`);
   console.log('✓ PASS: Test 1');
 
   // TEST 2: Paid order creates report job, and completed job shows in dashboard view
@@ -272,7 +272,7 @@ async function runTests() {
 
     const availableTiers = [
       { id: 'report_basic', name: 'Basic Report', priceInr: 199 },
-      { id: 'report_advanced', name: 'Advanced Master Dossier', priceInr: 510 },
+      { id: 'report_advanced', name: 'Advanced Master Dossier', priceInr: 489 },
       { id: 'report_premium', name: 'Premium Sovereign Blueprint', priceInr: 1050 }
     ].filter(t => {
       if (t.id === 'report_basic' && isBasicOwned) return false;

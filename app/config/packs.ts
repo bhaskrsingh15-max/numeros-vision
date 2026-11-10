@@ -59,9 +59,9 @@ export const PACK_CATALOG: {
       "name": "Advanced Report",
       "display_name": "Advanced Report \u00b7 Recommended",
       "pages": 12,
-      "price_inr": 510,
-      "amount_paise": 51000,
-      "digital_root": 6,
+      "price_inr": 489,
+      "amount_paise": 48900,
+      "digital_root": 3,
       "status": "active",
       "deliverables": [
         "12-Page Master Synthesis PDF Dossier",

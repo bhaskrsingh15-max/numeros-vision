@@ -1,9 +1,9 @@
 {
-  "id": "/?source=pwa",
+  "id": "/",
   "name": "Numeros Vision — ANVEIL EVERY CHARM",
   "short_name": "Numeros Vision",
   "description": "Deterministic numerology calculations, Vedic remedies, and multi-tradition AI guidance. ANVEIL EVERY CHARM.",
-  "start_url": "/?source=pwa",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
@@ -65,21 +65,21 @@
       "name": "Auspicious Baby Naming",
       "short_name": "Baby Naming",
       "description": "Find auspicious baby names with Chaldean vibrations",
-      "url": "/tools/baby-naming?source=pwa",
+      "url": "/tools/baby-naming/",
       "icons": [{"src": "/static/icons/icon-96.png", "sizes": "96x96"}]
     },
     {
       "name": "Calculators Hub",
       "short_name": "Calculators",
       "description": "Access 11+ deterministic numerology calculators",
-      "url": "/calculators/?source=pwa",
+      "url": "/calculators/",
       "icons": [{"src": "/static/icons/icon-96.png", "sizes": "96x96"}]
     },
     {
       "name": "Charm AI",
       "short_name": "Charm AI",
       "description": "Consult Charm AI multi-tradition intelligence",
-      "url": "/?source=pwa#charm-ai",
+      "url": "/charm-ai/",
       "icons": [{"src": "/static/icons/icon-96.png", "sizes": "96x96"}]
     }
   ],

@@ -10,7 +10,7 @@ Architecture:
 2. Layer B: Governed Interpretation & Dynamic Package-Based Assembly
    - Three standard tiers:
      * Basic Report (Target: 3 Pages · ₹199)
-     * Advanced Report (Target: 12 Pages · ₹510 / Active Charm Present Numbers)
+     * Advanced Report (Target: 12 Pages · ₹489 / Active Charm Present Numbers)
      * Premium Dossier (Target: 32 Pages · ₹1,050 / Anveil Charm Missing Numbers)
    - Dynamic Topic Prioritization:
      * Lo Shu Grid & Life Path foundational basics always come first (Pages 1-4).
@@ -30,11 +30,41 @@ Architecture:
 
 import os
 import io
+import json
 import time
 import math
 import hashlib
 import datetime
 from typing import Dict, Any, List, Optional, Tuple, Union
+
+# Load Content Library and Terminology for Report Generation
+_BASE_APP_DATA = os.path.join(os.path.dirname(__file__), "..", "data")
+_LIB_FILE = os.path.join(_BASE_APP_DATA, "basic_report_content_library.json")
+_GEO_FILE = os.path.join(_BASE_APP_DATA, "terminology_geo.json")
+
+CONTENT_LIB: Dict[str, Any] = {}
+if os.path.exists(_LIB_FILE):
+    try:
+        with open(_LIB_FILE, "r", encoding="utf-8") as _lf:
+            CONTENT_LIB = json.load(_lf)
+    except Exception:
+        CONTENT_LIB = {}
+
+GEO_TERMS: Dict[str, Any] = {}
+if os.path.exists(_GEO_FILE):
+    try:
+        with open(_GEO_FILE, "r", encoding="utf-8") as _gf:
+            GEO_TERMS = json.load(_gf)
+    except Exception:
+        GEO_TERMS = {}
+
+def get_geo_label(term_key: str, edition: str = "india") -> str:
+    t = GEO_TERMS.get("terms", {}).get(term_key, {})
+    if not t:
+        return term_key.upper()
+    if (edition or "india").lower() == "international":
+        return f"{t.get('intl_primary')} ({t.get('intl_secondary')})"
+    return f"{t.get('india_primary')} ({t.get('india_secondary')})"
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
@@ -411,7 +441,7 @@ class NumerosReportCanvas(canvas.Canvas):
 
         self.setFont(FONT_SERIF_BOLD, 8)
         self.setFillColor(COLOR_GOLD_DARK)
-        self.drawCentredString(w / 2.0, 26, "✦ VERIFIED ROYAL SEAL ✦")
+        self.drawCentredString(w / 2.0, 26, "— VERIFIED ROYAL SEAL —")
 
         page_str = f"Page {self._pageNumber} of {total_pages}"
         self.drawRightString(w - 34, 26, page_str)
@@ -431,7 +461,9 @@ def run_deterministic_calculation(
     vehicle_number: Optional[str] = None,
     property_number: Optional[str] = None,
     purchase_date: Optional[Union[str, datetime.date, datetime.datetime]] = None,
-    purchase_year: Optional[int] = None
+    purchase_year: Optional[int] = None,
+    gender: Optional[str] = "male",
+    edition: str = "india"
 ) -> Dict[str, Any]:
     clean_name = name.strip() or "Seeker"
 
@@ -584,7 +616,9 @@ def run_deterministic_calculation(
         "poorak_info": poorak_info,
         "gharelu_remedies": gharelu_remedies,
         "topic_id": topic_id,
-        "tier": tier
+        "tier": tier,
+        "gender": (gender or "male"),
+        "edition": (edition or "india")
     }
 
 
@@ -620,7 +654,7 @@ class NumerosPdfReportBuilder:
         elif any(k in t for k in ("health", "vitality", "ayurved")):
             return "health_vitality"
         elif is_advanced_only:
-            # In the 12-page Advanced Master Dossier (Rs 510), Enabled/Present Numbers in Depth
+            # In the 12-page Advanced Master Dossier (Rs 489), Enabled/Present Numbers in Depth
             # is the default analytical focus; Missing Numbers in Depth and Full Name Balancing
             # are exclusively in the 32-page Premium Sovereign Blueprint (Rs 1,050).
             return "present_numbers"
@@ -639,21 +673,21 @@ class NumerosPdfReportBuilder:
         if t == "present_numbers":
             title = "ACTIVE CHARM PRESENT NUMBERS REPORT"
             subtitle = "12-Page Present Numbers Master Dossier · Benefic vs Malefic & Inborn Career Mastery" if not is_premium else "32-Page Sovereign Roadmap · Complete Natal Numbers Compendium"
-            badge = "ADVANCED MASTER DOSSIER · 12-PAGE PRESENT NUMBERS DOSSIER · ₹510" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · 32-PAGE SOVEREIGN ROADMAP · ₹1,050"
+            badge = "ADVANCED MASTER DOSSIER · 12-PAGE PRESENT NUMBERS DOSSIER · ₹489" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · 32-PAGE SOVEREIGN ROADMAP · ₹1,050"
             sec3 = "Section 3: Natal Present Numbers Deep Audit & Frequency Analysis"
             sec4 = "Section 4: Present Numbers Benefic vs Malefic Planetary Operating Matrix"
             sec5 = "Section 5: Inborn Career Fruitfulness & High-Yield Vocations"
         elif t == "love_relationship":
             title = "LOVE, RELATIONSHIP & COMPANIONSHIP DOSSIER"
             subtitle = "Romantic Synastry, Marriage Timing Windows & Domestic Harmony Blueprint"
-            badge = "ADVANCED MASTER DOSSIER · LOVE & COMPANIONSHIP (12 PAGES · ₹510)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · LIFETIME UNION ROADMAP (32 PAGES · ₹1,050)"
+            badge = "ADVANCED MASTER DOSSIER · LOVE & COMPANIONSHIP (12 PAGES · ₹489)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · LIFETIME UNION ROADMAP (32 PAGES · ₹1,050)"
             sec3 = "Section 3: Love Style, Romantic Resonance & Spousal Temperament"
             sec4 = "Section 4: Ideal Partner Compatibility & Vedic Synastry Matrix (1 to 9)"
             sec5 = "Section 5: Marriage Timing Windows, Numerology Dasha & Domestic Harmony"
         elif t == "career_wealth":
             title = "CAREER, ENTERPRISE & FINANCIAL DIRECTION DOSSIER"
             subtitle = "High-Growth Vocations, Commercial Timing & Wealth Compounding Radar"
-            badge = "ADVANCED MASTER DOSSIER · CAREER & WEALTH (12 PAGES · ₹510)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · ENTERPRISE ROADMAP (32 PAGES · ₹1,050)"
+            badge = "ADVANCED MASTER DOSSIER · CAREER & WEALTH (12 PAGES · ₹489)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · ENTERPRISE ROADMAP (32 PAGES · ₹1,050)"
             sec3 = "Section 3: High-Growth Enterprise Vocations & Programmatic Scale"
             sec4 = f"Section 4: Commercial Timing Corridors & 5-Year Numerology Dasha Radar ({self.data.get('current_year', datetime.datetime.now().year)}–{self.data.get('current_year', datetime.datetime.now().year)+4})"
         
@@ -661,14 +695,14 @@ class NumerosPdfReportBuilder:
         elif t == "health_vitality":
             title = "HEALTH, VITALITY & AYURVEDIC CHRONOBIOLOGY DOSSIER"
             subtitle = "Pitta-Vata Balancing, Circadian Peak Hours & Non-Invasive Lifestyle Cures"
-            badge = "ADVANCED MASTER DOSSIER · HEALTH & VITALITY (12 PAGES · ₹510)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · VITALITY COMPENDIUM (32 PAGES · ₹1,050)"
+            badge = "ADVANCED MASTER DOSSIER · HEALTH & VITALITY (12 PAGES · ₹489)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · VITALITY COMPENDIUM (32 PAGES · ₹1,050)"
             sec3 = "Section 3: Ayurvedic Chronobiology & Pitta-Vata Dosha Balancing"
             sec4 = "Section 4: Circadian Peak Performance Windows & Hydration Protocols"
             sec5 = "Section 5: Cognitive Decompression, Sleep Restoration & Vitality Cures"
         else: # missing_numbers_vastu & core_blueprint
             title = "ANVEIL CHARM MISSING NUMBERS SOVEREIGN ROADMAP"
             subtitle = "32-Page Sovereign Lifetime Architecture & Missing Number Rectification Compendium" if is_premium else "12-Page Master Synthesis Dossier & Missing Numbers Rectification"
-            badge = "PREMIUM SOVEREIGN BLUEPRINT · 32-PAGE SOVEREIGN ROADMAP · ₹1,050" if is_premium else "ADVANCED MASTER DOSSIER · 12-PAGE MASTER DOSSIER · ₹510"
+            badge = "PREMIUM SOVEREIGN BLUEPRINT · 32-PAGE SOVEREIGN ROADMAP · ₹1,050" if is_premium else "ADVANCED MASTER DOSSIER · 12-PAGE MASTER DOSSIER · ₹489"
             sec3 = "Section 3: Missing Numbers Deep Void Diagnosis & Elemental Gaps"
             sec4 = "Section 4: Name Balancing, Acoustic Spelling & Poorak Numbers Activation"
             sec5 = "Section 5: Element Yogas Balancing — Golden Raj Yoga & Silver Earth Plane"
@@ -772,7 +806,7 @@ class NumerosPdfReportBuilder:
                 repeated = str(num) * c
                 return Paragraph(f"<font size=11 color='#8B6914'><b>{repeated}</b></font><br/><font size=7 color='#16835B'><b>Present ×{c}</b></font><br/><font size=7 color='#7A654D'>{elem}</font>", s['TableCellCenter'])
             else:
-                return Paragraph(f"<font size=8 color='#8B6914'><b>🔒 ANVEIL CHARM</b></font><br/><font size=10 color='#523E28'><b>{num}</b></font><br/><font size=7 color='#7A654D'>{elem} · Unsealed</font>", s['TableCellCenter'])
+                return Paragraph(f"<font size=8 color='#8B6914'><b>OPEN · ANVEIL CHARM</b></font><br/><font size=10 color='#523E28'><b>{num}</b></font><br/><font size=7 color='#7A654D'>{elem} · Unsealed</font>", s['TableCellCenter'])
 
         grid_data = [
             [cell_txt(4, "Wood · Wealth"), cell_txt(9, "Fire · Fame"), cell_txt(2, "Earth · Marriage")],
@@ -870,165 +904,182 @@ class NumerosPdfReportBuilder:
 
     # ── BASIC REPORT: EXACTLY 3 PAGES ─────────────────────────────────────────
     def _assemble_basic_3_pages(self):
+
         s = self.styles
         d = self.data
         cnts = d.get("counts", {})
         missing = d.get("missing_numbers", [])
         driver = d.get("driver_number", 1)
         conductor = d.get("conductor_number", 4)
+        conductor_root = d.get("conductor_root", 4)
+        c_root = d.get("chaldean_name_root", 5)
+        c_compound = d.get("chaldean_name_compound", 32)
         kua = d.get("kua_number", 1)
+        gender = d.get("gender", "male")
+        edition = d.get("edition", "india")
         name = d.get("seeker_name", "Seeker").upper()
         dob = d.get("dob_formatted", "1981-11-28")
         day_num = d.get("day", 28)
+        py = d.get("personal_year", 4)
 
-        # Style helpers
-        s_top_star = ParagraphStyle('TopStar', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=8.5, leading=11, textColor=COLOR_GOLD_DARK, alignment=1)
-        s_name = ParagraphStyle('Name', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=22, leading=26, textColor=COLOR_GOLD_DARK, alignment=1)
-        s_sub = ParagraphStyle('Sub', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=10, leading=13, textColor=COLOR_INK_DARK, alignment=1)
+        # Styles
+        s_top_star = ParagraphStyle('TopStar', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=8, leading=10, textColor=COLOR_GOLD_DARK, alignment=1)
+        s_name = ParagraphStyle('Name', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=20, leading=23, textColor=COLOR_GOLD_DARK, alignment=1)
+        s_sub = ParagraphStyle('Sub', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=9, leading=11, textColor=COLOR_INK_DARK, alignment=1)
 
-        s_pill_lbl = ParagraphStyle('PillLbl', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=7, leading=9, textColor=COLOR_INK_MUTED, alignment=1)
-        s_pill_val = ParagraphStyle('PillVal', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=10, leading=12, textColor=COLOR_EMERALD, alignment=1)
+        s_pill_lbl = ParagraphStyle('PillLbl', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=6.5, leading=8.5, textColor=COLOR_INK_MUTED, alignment=1)
+        s_card_h = ParagraphStyle('CardH', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=8, leading=10, textColor=COLOR_GOLD_DARK)
+        s_card_txt = ParagraphStyle('CardTxt', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=7.5, leading=10, textColor=COLOR_INK_DARK)
+        s_cell_sub = ParagraphStyle('CellSub', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=6.5, leading=8, textColor=COLOR_INK_MUTED, alignment=1)
+        s_gap_item = ParagraphStyle('GapItem', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=7, leading=9.5, textColor=COLOR_INK_DARK)
+        s_alert = ParagraphStyle('Alert', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=7, leading=9.5, textColor=COLOR_RED_ALERT)
 
-        s_card_h = ParagraphStyle('CardH', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=8.5, leading=11, textColor=COLOR_GOLD_DARK)
-        s_card_txt = ParagraphStyle('CardTxt', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=8, leading=11, textColor=COLOR_INK_DARK)
-
-        s_cell_sub = ParagraphStyle('CellSub', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=7, leading=8.5, textColor=COLOR_INK_MUTED, alignment=1)
-        s_gap_item = ParagraphStyle('GapItem', parent=s['ReportBody'], fontName=FONT_SERIF_REGULAR, fontSize=7.5, leading=10.5, textColor=COLOR_INK_DARK)
-        s_alert = ParagraphStyle('Alert', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=7.5, leading=10, textColor=COLOR_RED_ALERT)
-
-        # ── PAGE 1: Foundational Profile & Lo Shu Grid Matrix (EXACT SCREENSHOT FORMAT) ──
-        self.story.append(Paragraph("✦ BASIC REPORT · ELEMENT BALANCING &amp; FOUNDATIONAL BLUEPRINT ✦", s_top_star))
+        # ── PAGE 1: Foundational Profile, Readings & Lo Shu Grid ──
+        self.story.append(Paragraph("BASIC REPORT · ELEMENT BALANCING &amp; FOUNDATIONAL BLUEPRINT", s_top_star))
         self.story.append(Spacer(1, 1))
         self.story.append(Paragraph(name, s_name))
         self.story.append(Spacer(1, 1))
-        self.story.append(Paragraph("Foundational Planetary Frequency &amp; Lo Shu Grid Matrix", s_sub))
-        self.story.append(Spacer(1, 3))
+        self.story.append(Paragraph(f"Foundational Planetary Frequency &amp; Lo Shu Grid Matrix ({edition.title()} Edition)", s_sub))
+        self.story.append(Spacer(1, 2))
 
-        logo_mark = os.path.join(os.path.dirname(__file__), "..", "static", "logos", "nv-logo-mark.png")
+        logo_mark = os.path.join("app", "static", "logos", "nv-logo-mark.png")
         if not os.path.exists(logo_mark):
             logo_mark = os.path.join("app", "static", "logos", "anveil-charm-square.png")
         if os.path.exists(logo_mark):
-            img_tbl = Table([[Image(logo_mark, width=36, height=36)]], colWidths=[520], hAlign='CENTER')
+            img_tbl = Table([[Image(logo_mark, width=32, height=32)]], colWidths=[520], hAlign='CENTER')
             img_tbl.setStyle(TableStyle([
                 ('ALIGN', (0,0), (-1,-1), 'CENTER'),
                 ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
                 ('TOPPADDING', (0,0), (-1,-1), 0),
-                ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 1),
             ]))
             self.story.append(img_tbl)
 
-        # 4 Metric Pills
+        def _planet_geo(n: int) -> str:
+            mapping = {
+                1: "Sun (Surya)" if edition != "international" else "Sun",
+                2: "Moon (Chandra)" if edition != "international" else "Moon",
+                3: get_geo_label('guru', edition),
+                4: get_geo_label('rahu', edition),
+                5: get_geo_label('budh', edition),
+                6: get_geo_label('shukra', edition),
+                7: get_geo_label('ketu', edition),
+                8: "Shani (Saturn)" if edition != "international" else "Saturn (Shani)",
+                9: "Mangal (Mars)" if edition != "international" else "Mars (Mangal)",
+            }
+            return mapping.get(n, "Planetary Indicator")
+
+        # 4 Metric Pills with Geo-Switching
         pills_data = [
             [
-                Paragraph(f"PSYCHIC (MULANK)<br/><font size=10 color='#16835B'><b>{driver} · {d.get('driver_planet', 'Sun')}</b></font>", s_pill_lbl),
-                Paragraph(f"DESTINY (BHAGYANK)<br/><font size=10 color='#16835B'><b>{d.get('conductor_display', conductor)} · {d.get('conductor_planet', 'Rahu')}</b></font>", s_pill_lbl),
-                Paragraph(f"COSMIC VECTOR<br/><font size=10 color='#16835B'><b>{kua} ({d.get('kua_element', 'East Group').split('·')[0].strip()})</b></font>", s_pill_lbl),
-                Paragraph(f"CALLING NAME<br/><font size=10 color='#16835B'><b>{d.get('chaldean_name_root', 5)} ({d.get('chaldean_name_compound', 32)})</b></font>", s_pill_lbl),
+                Paragraph(f"{get_geo_label('driver', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{driver} · {_planet_geo(driver)}</b></font>", s_pill_lbl),
+                Paragraph(f"{get_geo_label('conductor', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{d.get('conductor_display', conductor)} · {_planet_geo(conductor_root)}</b></font>", s_pill_lbl),
+                Paragraph(f"{get_geo_label('kua', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{kua} ({d.get('kua_element', 'East Group').split('·')[0].strip()})</b></font>", s_pill_lbl),
+                Paragraph(f"{get_geo_label('calling_name', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{c_root} ({c_compound})</b></font>", s_pill_lbl),
             ]
         ]
-        t_pills = Table(pills_data, colWidths=[130, 130, 130, 130], rowHeights=[32])
+        t_pills = Table(pills_data, colWidths=[130, 130, 130, 130], rowHeights=[30])
         t_pills.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), colors.white),
             ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
             ('INNERGRID', (0,0), (-1,-1), 0.5, COLOR_BORDER),
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('TOPPADDING', (0,0), (-1,-1), 3),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+            ('TOPPADDING', (0,0), (-1,-1), 2),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 2),
         ]))
         self.story.append(t_pills)
-        self.story.append(Spacer(1, 5))
+        self.story.append(Spacer(1, 4))
 
-        # Verified Chart Coordinates
-        coords_data = [
-            [
-                Paragraph(f"<b>Full Name:</b> {d.get('seeker_name', 'Seeker')}", s_card_txt),
-                Paragraph(f"<b>Date of Birth:</b> {dob}", s_card_txt),
-                Paragraph(f"<b>Day Number:</b> Day {day_num}", s_card_txt),
-                Paragraph(f"<b>Cosmic Archetype:</b> {d.get('driver_planet', 'Sun').split('(')[0].strip()} Leadership", s_card_txt),
-            ],
-            [
-                Paragraph("<b>Access Level:</b> Basic Report (3 Pages · ₹199)", s_card_txt),
-                Paragraph("", s_card_txt),
-                Paragraph("", s_card_txt),
-                Paragraph("", s_card_txt),
-            ]
+        # Core Specific Readings from Content Library
+        bd_read = CONTENT_LIB['topics']['birth_day'].get(str(driver), {}).get('depth_1_basic', {}).get('text', '')
+        lp_entry = CONTENT_LIB['topics']['life_path'].get(str(conductor)) or CONTENT_LIB['topics']['life_path'].get(str(conductor_root), {})
+        lp_read = lp_entry.get('depth_1_basic', {}).get('text', '')
+        name_read = CONTENT_LIB['topics']['name_number'].get(str(c_root), {}).get('depth_1_basic', {}).get('text', '')
+        dc_key = f"{driver}_{conductor_root}"
+        dc_info = CONTENT_LIB['topics']['driver_conductor'].get(dc_key, {})
+        dc_summary = dc_info.get('depth_1_basic', {}).get('summary', '')
+        dc_rel = dc_info.get('relationship_type', 'Neutral')
+        dc_rating = dc_info.get('star_rating', 3.5)
+
+        readings_table = [
+            [Paragraph(f"<b>• {get_geo_label('driver', edition)} {driver}:</b> {bd_read}", s_card_txt)],
+            [Paragraph(f"<b>• {get_geo_label('conductor', edition)} {d.get('conductor_display', conductor)}:</b> {lp_read}", s_card_txt)],
+            [Paragraph(f"<b>• {get_geo_label('calling_name', edition)} {c_root} ({c_compound}):</b> {name_read}", s_card_txt)],
+            [Paragraph(f"<b>• {driver}–{conductor_root} Relationship ({dc_rel} · {dc_rating}/5):</b> {dc_summary}", s_card_txt)],
         ]
-        t_coords = Table(
-            [[Paragraph("<b>✦ VERIFIED CHART COORDINATES</b>", s_card_h)],
-             [Table(coords_data, colWidths=[125, 125, 125, 125])]],
-            colWidths=[520]
-        )
-        t_coords.setStyle(TableStyle([
+        t_readings = Table(readings_table, colWidths=[520])
+        t_readings.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), COLOR_PEARL_BG),
-            ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 3),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+            ('BOX', (0,0), (-1,-1), 0.8, COLOR_GOLD),
+            ('TOPPADDING', (0,0), (-1,-1), 2.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
             ('LEFTPADDING', (0,0), (-1,-1), 6),
             ('RIGHTPADDING', (0,0), (-1,-1), 6),
         ]))
-        self.story.append(t_coords)
-        self.story.append(Spacer(1, 5))
+        self.story.append(t_readings)
+        self.story.append(Spacer(1, 4))
 
         # Centered Lo Shu Grid
-        self.story.append(Paragraph("<font size=9 color='#8B6914'><b>NATAL LO SHU 3×3 GRID &amp; ELEMENTAL FREQUENCIES</b></font>", s_top_star))
-        self.story.append(Spacer(1, 3))
+        self.story.append(Paragraph(f"<font size=8.5 color='#8B6914'><b>{get_geo_label('loshu_grid', edition).upper()} &amp; ELEMENTAL FREQUENCIES</b></font>", s_top_star))
+        self.story.append(Spacer(1, 2))
 
         def ls_cell(num, elem):
             c = cnts.get(num, 0)
             if c == 0:
-                return Paragraph(f"<font size=7 color='#A13030'><b>GAP</b></font><br/><font size=11 color='#8C827A'><b>{num}</b></font><br/><font size=6.5 color='#7A654D'>{elem}</font>", s_cell_sub)
+                return Paragraph(f"<font size=6 color='#A13030'><b>OPEN</b></font><br/><font size=10 color='#8C827A'><b>{num}</b></font><br/><font size=6 color='#7A654D'>{elem}</font>", s_cell_sub)
             else:
                 rep = str(num) * c
-                return Paragraph(f"<font size=7 color='#16835B'><b>×{c}</b></font><br/><font size=11 color='#523E28'><b>{rep}</b></font><br/><font size=6.5 color='#7A654D'>{elem}</font>", s_cell_sub)
+                return Paragraph(f"<font size=6 color='#16835B'><b>×{c}</b></font><br/><font size=10 color='#523E28'><b>{rep}</b></font><br/><font size=6 color='#7A654D'>{elem}</font>", s_cell_sub)
 
         grid_rows = [
             [ls_cell(4, "Wood"), ls_cell(9, "Fire"), ls_cell(2, "Earth")],
             [ls_cell(3, "Wood"), ls_cell(5, "Earth"), ls_cell(7, "Metal")],
             [ls_cell(8, "Earth"), ls_cell(1, "Water"), ls_cell(6, "Metal")]
         ]
-        t_loshu = Table(grid_rows, colWidths=[70, 70, 70], rowHeights=[36, 36, 36], hAlign='CENTER')
+        t_loshu = Table(grid_rows, colWidths=[65, 65, 65], rowHeights=[32, 32, 32], hAlign='CENTER')
         t_loshu.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), colors.white),
             ('BOX', (0,0), (-1,-1), 1.2, COLOR_GOLD),
             ('INNERGRID', (0,0), (-1,-1), 0.6, COLOR_BORDER),
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('TOPPADDING', (0,0), (-1,-1), 2),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 2),
+            ('TOPPADDING', (0,0), (-1,-1), 1),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 1),
         ]))
         self.story.append(t_loshu)
-        self.story.append(Spacer(1, 5))
+        self.story.append(Spacer(1, 4))
 
         # Natal Gap Analysis Card
-        GAP_MAP = {
-            1: "Water · Career Vitality: Creative drive oscillation; communication clarity needs grounding.",
-            2: "Earth · Moon Intuition: Emotional impatience; relationship friction; feeling ungrounded in team dynamics.",
-            3: "Wood · Jupiter Knowledge: Creative stagnation; public expression hesitation; under-leveraging personal expertise.",
-            4: "Wood · Rahu Vault & Discipline: Structural wealth leak; high revenue struggles to convert into permanent physical assets.",
-            5: "Earth · Mercury Center / Brahmasthan: Severe instability in focus; career restlessness; emotional oscillation during stress.",
-            6: "Metal · Venus Luxury Vibration: Delayed comfort manifestation; working hard but experiencing friction in family harmony.",
-            7: "Metal · Ketu Wisdom & Research: Repeating old mistakes; feeling spiritually disconnected; lack of deep analytical anchoring.",
-            8: "Earth · Saturn Perseverance: Cautious hesitation; delayed rewards; need for structured long-range planning.",
-            9: "Fire · Mars Finishing Drive: Scattered stamina; beginning projects with enthusiasm but struggling to finish decisively."
-        }
-
         gap_items = []
-        for m in missing:
-            p_desc = GAP_MAP.get(m, "Planetary void requiring elemental harmonizing.")
-            gap_items.append(Paragraph(f"<b>✦ Missing {m} ({d.get('PLANETS', {}).get(m, 'Planetary Force').split('(')[0].strip()}):</b> {p_desc}", s_gap_item))
+        GAP_MAP = {
+            1: "Water · Sun: Keep written daily priorities and practice steady, clear self-expression.",
+            2: "Earth · Moon: Build unhurried listening habits and supportive team check-ins.",
+            3: f"Wood · {get_geo_label('guru', edition)}: Set aside regular study blocks and share practical knowledge.",
+            4: f"Wood · {get_geo_label('rahu', edition)}: Keep checklists, tidy folders, and consistent weekly routines.",
+            5: f"Earth · {get_geo_label('budh', edition)} / {get_geo_label('brahmasthan', edition)}: Keep midday pauses and steady task transitions.",
+            6: f"Metal · {get_geo_label('shukra', edition)}: Maintain an uncluttered home corner and unhurried family time.",
+            7: f"Metal · {get_geo_label('ketu', edition)}: Set aside quiet reading and reflection notes each week.",
+            8: "Earth · Saturn: Track commitments in writing and review progress calmly each week.",
+            9: "Fire · Mars: Break projects into small milestones so begun work reaches completion."
+        }
+        for m_num in missing:
+            p_desc = GAP_MAP.get(m_num, "Open grid position suited to steady daily habit balance.")
+            gap_items.append(Paragraph(f"<b>• Open {m_num}:</b> {p_desc}", s_gap_item))
 
         golden_missing = [n for n in (4, 5, 6) if n in missing]
         if golden_missing:
-            gap_items.append(Paragraph(f"<b>▲ Golden Prosperity Plane (4-5-6) Incomplete (Missing: {', '.join(str(n) for n in golden_missing)}):</b> Revenue enters through Driver/Conductor but leaks before compounding.", s_alert))
+            gap_items.append(Paragraph(f"<b>▲ {get_geo_label('golden_raj_yoga', edition)} — Open Positions ({', '.join(str(n) for n in golden_missing)}):</b> Focus on steady planning and follow-through routines.", s_alert))
+        else:
+            gap_items.append(Paragraph(f"<b>• {get_geo_label('golden_raj_yoga', edition)} — Complete (4-5-6 Present):</b> Keep structured weekly reviews to sustain balanced momentum.", s_gap_item))
 
         gap_header_tbl = Table([
-            [Paragraph("<b>✦ NATAL GAP ANALYSIS (UNLOCKED CHART READING)</b>", s_card_h),
-             Paragraph(f"<font color='#A13030'><b>{len(missing)} GAPS IDENTIFIED</b></font>", ParagraphStyle('Badge', parent=s_card_h, alignment=2))]
-        ], colWidths=[360, 130])
-        gap_header_tbl.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'MIDDLE')]))
+            [Paragraph(f"<b>• {get_geo_label('missing_numbers', edition).upper()} OVERVIEW ({dob})</b>", s_card_h),
+             Paragraph(f"<font color='#A13030'><b>{len(missing)} OPEN POSITIONS</b></font>", ParagraphStyle('Badge', parent=s_card_h, alignment=2))]
+        ], colWidths=[360, 150])
+        gap_header_tbl.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'MIDDLE'), ('TOPPADDING', (0,0), (-1,-1), 0), ('BOTTOMPADDING', (0,0), (-1,-1), 0)]))
 
         gap_table_content = [
             [gap_header_tbl],
-            [Paragraph(f"Your birth matrix contains unsealed energetic voids in <b>Missing Numbers: [{', '.join(str(n) for n in missing)}]</b>. These voids cause vital momentum and wealth to leak away prematurely:", s_card_txt)],
+            [Paragraph(f"For <b>{d['seeker_name']}</b> ({dob}), open birth-date positions are <b>[{', '.join(str(n) for n in missing) or 'None'}]</b>, guiding the everyday habit focus below:", s_card_txt)],
         ]
         for item in gap_items:
             gap_table_content.append([item])
@@ -1037,167 +1088,213 @@ class NumerosPdfReportBuilder:
         t_gap.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), colors.white),
             ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 2.5),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 2.5),
+            ('TOPPADDING', (0,0), (-1,-1), 3),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 3),
             ('LEFTPADDING', (0,0), (-1,-1), 6),
             ('RIGHTPADDING', (0,0), (-1,-1), 6),
         ]))
         self.story.append(t_gap)
 
-        # ── PAGE 2: 8 Elemental Planes & Raj Yogas (UNLOCKED IN BASIC ₹199) ──
+        # ── PAGE 2: 8 Elemental Planes & 5-Element Equilibrium Audit ──
         self.story.append(PageBreak())
-        self.story.append(Paragraph("8 ELEMENTAL PLANES &amp; RAJ YOGA AUDIT", s_name))
-        self.story.append(Paragraph("Cognitive, Will &amp; Action Balance · 5-Element Frequency Distribution", s_sub))
-        self.story.append(Spacer(1, 12))
+        self.story.append(Paragraph(f"8 PLANES OF {get_geo_label('loshu_grid', edition).upper()} &amp; 5-ELEMENT AUDIT", s_name))
+        self.story.append(Paragraph(f"Prepared for {d['seeker_name']} ({dob}) · Active Digits: {', '.join(str(k) for k, v in cnts.items() if v > 0)}", s_sub))
+        self.story.append(Spacer(1, 6))
 
-        # Elemental Planes Table
-        def plane_status_str(digits):
-            cnt = sum(1 for n in digits if cnts.get(n, 0) > 0)
-            if cnt == len(digits):
-                return "COMPLETE"
-            if cnt >= 1 and (cnt / len(digits)) > 0.33:
-                return "ACTIVE"
-            return "DORMANT"
+        def plane_status_str(nums):
+            present = sum(1 for n in nums if cnts.get(n, 0) > 0)
+            if present == 3: return "<font color='#16835B'><b>Complete (3/3)</b></font>"
+            elif present == 2: return "<font color='#C9A227'><b>Partial (2/3)</b></font>"
+            elif present == 1: return "<font color='#7A654D'><b>Partial (1/3)</b></font>"
+            else: return "<font color='#A13030'><b>Open (0/3)</b></font>"
+
+        def plane_detail_str(plane_key, nums):
+            act = [str(n) for n in nums if cnts.get(n, 0) > 0]
+            opn = [str(n) for n in nums if cnts.get(n, 0) == 0]
+            p_obj = CONTENT_LIB['topics']['planes'][plane_key]
+            st_key = 'complete' if len(act) == 3 else ('partial' if len(act) > 0 else 'missing')
+            st_txt = p_obj.get('states', {}).get(st_key, {}).get('depth_1_basic', p_obj['focus'])
+            tag = f"Active: {', '.join(act) if act else 'None'} · Open: {', '.join(opn) if opn else 'None'}"
+            return f"{st_txt} ({tag})"
 
         plane_rows = [
-            [Paragraph("<b>PLANE</b>", s_card_h), Paragraph("<b>DIGITS</b>", s_card_h), Paragraph("<b>STATUS</b>", s_card_h), Paragraph("<b>CORE OPERATING FUNCTION</b>", s_card_h)],
-            [Paragraph("Mental Plane", s_card_txt), Paragraph("4 - 9 - 2", s_card_txt), Paragraph(plane_status_str([4,9,2]), s_card_txt), Paragraph("Memory, cognitive retention, and analytical synthesis", s_card_txt)],
-            [Paragraph("Emotional Plane", s_card_txt), Paragraph("3 - 5 - 7", s_card_txt), Paragraph(plane_status_str([3,5,7]), s_card_txt), Paragraph("Intuition, spiritual empathy, and relational bonding", s_card_txt)],
-            [Paragraph("Practical Plane", s_card_txt), Paragraph("8 - 1 - 6", s_card_txt), Paragraph(plane_status_str([8,1,6]), s_card_txt), Paragraph("Commercial manifestation, physical tenacity, execution", s_card_txt)],
-            [Paragraph("Thought Plane", s_card_txt), Paragraph("4 - 3 - 8", s_card_txt), Paragraph(plane_status_str([4,3,8]), s_card_txt), Paragraph("Strategic ideation and architectural foresight", s_card_txt)],
-            [Paragraph("Will Plane", s_card_txt), Paragraph("9 - 5 - 1", s_card_txt), Paragraph(plane_status_str([9,5,1]), s_card_txt), Paragraph("Determination, persistence under friction, willpower", s_card_txt)],
-            [Paragraph("Action Plane", s_card_txt), Paragraph("2 - 7 - 6", s_card_txt), Paragraph(plane_status_str([2,7,6]), s_card_txt), Paragraph("Speed to market, direct action, physical movement", s_card_txt)],
-            [Paragraph("Golden Raj Yoga", s_card_txt), Paragraph("4 - 5 - 6", s_card_txt), Paragraph(plane_status_str([4,5,6]), s_card_txt), Paragraph("Prosperity axis, balanced intellect and wealth compounding", s_card_txt)],
-            [Paragraph("Silver Raj Yoga", s_card_txt), Paragraph("2 - 5 - 8", s_card_txt), Paragraph(plane_status_str([2,5,8]), s_card_txt), Paragraph("Property stability, grounded emotional resilience, assets", s_card_txt)]
+            [Paragraph("<b>PLANE NAME</b>", s_card_h), Paragraph("<b>NUMBERS</b>", s_card_h), Paragraph("<b>STATUS</b>", s_card_h), Paragraph("<b>YOUR CHART PATTERN &amp; PRACTICAL READING</b>", s_card_h)],
+            [Paragraph("Mental Plane", s_card_txt), Paragraph("4 - 9 - 2", s_card_txt), Paragraph(plane_status_str([4,9,2]), s_card_txt), Paragraph(plane_detail_str('mental', [4,9,2]), s_card_txt)],
+            [Paragraph("Emotional Plane", s_card_txt), Paragraph("3 - 5 - 7", s_card_txt), Paragraph(plane_status_str([3,5,7]), s_card_txt), Paragraph(plane_detail_str('emotional', [3,5,7]), s_card_txt)],
+            [Paragraph("Practical Plane", s_card_txt), Paragraph("8 - 1 - 6", s_card_txt), Paragraph(plane_status_str([8,1,6]), s_card_txt), Paragraph(plane_detail_str('practical', [8,1,6]), s_card_txt)],
+            [Paragraph("Thought Plane", s_card_txt), Paragraph("4 - 3 - 8", s_card_txt), Paragraph(plane_status_str([4,3,8]), s_card_txt), Paragraph(plane_detail_str('thought', [4,3,8]), s_card_txt)],
+            [Paragraph("Willpower Plane", s_card_txt), Paragraph("9 - 5 - 1", s_card_txt), Paragraph(plane_status_str([9,5,1]), s_card_txt), Paragraph(plane_detail_str('will', [9,5,1]), s_card_txt)],
+            [Paragraph("Action Plane", s_card_txt), Paragraph("2 - 7 - 6", s_card_txt), Paragraph(plane_status_str([2,7,6]), s_card_txt), Paragraph(plane_detail_str('action', [2,7,6]), s_card_txt)],
+            [Paragraph(get_geo_label('golden_raj_yoga', edition), s_card_txt), Paragraph("4 - 5 - 6", s_card_txt), Paragraph(plane_status_str([4,5,6]), s_card_txt), Paragraph(plane_detail_str('golden_raj_yoga', [4,5,6]), s_card_txt)],
+            [Paragraph(get_geo_label('silver_raj_yoga', edition), s_card_txt), Paragraph("2 - 5 - 8", s_card_txt), Paragraph(plane_status_str([2,5,8]), s_card_txt), Paragraph(plane_detail_str('silver_raj_yoga', [2,5,8]), s_card_txt)]
         ]
-        t_planes = Table(plane_rows, colWidths=[105, 65, 75, 265], hAlign='CENTER')
+        t_planes = Table(plane_rows, colWidths=[118, 52, 76, 274], hAlign='CENTER')
         t_planes.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
             ('BOX', (0,0), (-1,-1), 0.8, COLOR_GOLD),
             ('INNERGRID', (0,0), (-1,-1), 0.4, COLOR_GOLD_LIGHT),
-            ('TOPPADDING', (0,0), (-1,-1), 5),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 5),
-            ('LEFTPADDING', (0,0), (-1,-1), 6),
-            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+            ('TOPPADDING', (0,0), (-1,-1), 3.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 3.5),
+            ('LEFTPADDING', (0,0), (-1,-1), 5),
+            ('RIGHTPADDING', (0,0), (-1,-1), 5),
             ('ALIGN', (1,1), (2,-1), 'CENTER')
         ]))
         self.story.append(t_planes)
-        self.story.append(Spacer(1, 14))
+        self.story.append(Spacer(1, 8))
 
         # 5 Elements Hygiene Table
-        self.story.append(Paragraph("<b>5-ELEMENT EQUILIBRIUM AUDIT</b>", s_card_h))
-        self.story.append(Spacer(1, 6))
+        self.story.append(Paragraph(f"<b>5-ELEMENT EQUILIBRIUM AUDIT ({d['seeker_name'].upper()})</b>", s_card_h))
+        self.story.append(Spacer(1, 3))
+
+        def get_elem_state_and_remedy(elem_name, count):
+            elem_data = CONTENT_LIB['topics']['elements'][elem_name]['states']
+            if count == 0:
+                return "Missing (0)", elem_data['missing']['remedy']
+            elif elem_name in ("Wood", "Earth", "Metal") and count == 1:
+                return f"Low ({count})", elem_data['low']['remedy']
+            elif count > (3 if elem_name == "Earth" else 2):
+                return f"Strong ({count})", elem_data['strong']['remedy']
+            else:
+                return f"Balanced ({count})", elem_data['balanced']['remedy']
+
+        wood_c = cnts.get(3, 0) + cnts.get(4, 0)
+        fire_c = cnts.get(9, 0)
+        earth_c = cnts.get(2, 0) + cnts.get(5, 0) + cnts.get(8, 0)
+        metal_c = cnts.get(6, 0) + cnts.get(7, 0)
+        water_c = cnts.get(1, 0)
+
+        w_st, w_rem = get_elem_state_and_remedy("Wood", wood_c)
+        f_st, f_rem = get_elem_state_and_remedy("Fire", fire_c)
+        e_st, e_rem = get_elem_state_and_remedy("Earth", earth_c)
+        m_st, m_rem = get_elem_state_and_remedy("Metal", metal_c)
+        wa_st, wa_rem = get_elem_state_and_remedy("Water", water_c)
+
         elem_data = [
-            [Paragraph("<b>ELEMENT</b>", s_card_h), Paragraph("<b>RULING PLANETS</b>", s_card_h), Paragraph("<b>FREQUENCY</b>", s_card_h), Paragraph("<b>EQUILIBRIUM STATUS &amp; PRACTICAL ATTUNEMENT</b>", s_card_h)],
-            [Paragraph("Wood", s_card_txt), Paragraph("Jupiter (3), Rahu (4)", s_card_txt), Paragraph(str(cnts.get(3,0)+cnts.get(4,0)), s_card_txt), Paragraph("Balanced cognitive flexibility and expansion cadence." if (cnts.get(3,0)+cnts.get(4,0)) in [1,2] else "Cultivate gradual structured learning." if (cnts.get(3,0)+cnts.get(4,0))==0 else "Channel surplus creative ideation into grounded execution.", s_card_txt)],
-            [Paragraph("Fire", s_card_txt), Paragraph("Mars (9)", s_card_txt), Paragraph(str(cnts.get(9,0)), s_card_txt), Paragraph("Sustained executive drive and clear passion focus." if cnts.get(9,0)==1 else "Engage regular cardiovascular vitality routines." if cnts.get(9,0)==0 else "Balance acute fiery urgency with contemplative evening breathwork.", s_card_txt)],
-            [Paragraph("Earth", s_card_txt), Paragraph("Moon (2), Mercury (5), Saturn (8)", s_card_txt), Paragraph(str(cnts.get(2,0)+cnts.get(5,0)+cnts.get(8,0)), s_card_txt), Paragraph("Sturdy emotional stability and pragmatic financial foundation." if (cnts.get(2,0)+cnts.get(5,0)+cnts.get(8,0)) in [1,2,3] else "Anchor daily life with predictable scheduled routines." if (cnts.get(2,0)+cnts.get(5,0)+cnts.get(8,0))==0 else "Avoid cognitive rigidity; maintain mental agility across projects.", s_card_txt)],
-            [Paragraph("Metal", s_card_txt), Paragraph("Venus (6), Ketu (7)", s_card_txt), Paragraph(str(cnts.get(6,0)+cnts.get(7,0)), s_card_txt), Paragraph("Refined discernment, systematic organization and taste." if (cnts.get(6,0)+cnts.get(7,0)) in [1,2] else "Introduce clean structural order and clarity into workspace." if (cnts.get(6,0)+cnts.get(7,0))==0 else "Moderate critical perfectionism; prioritize pragmatic shipping.", s_card_txt)],
-            [Paragraph("Water", s_card_txt), Paragraph("Sun (1)", s_card_txt), Paragraph(str(cnts.get(1,0)), s_card_txt), Paragraph("Fluid career adaptability, communicative eloquence and flow." if cnts.get(1,0) in [1,2] else "Ensure hydration and cultivate active conversational listening." if cnts.get(1,0)==0 else "Focus communicative vitality into single high-impact initiatives.", s_card_txt)]
+            [Paragraph("<b>ELEMENT</b>", s_card_h), Paragraph("<b>TRADITIONAL RULERS</b>", s_card_h), Paragraph("<b>COUNT</b>", s_card_h), Paragraph("<b>BALANCE STATUS &amp; PRACTICAL HABIT</b>", s_card_h)],
+            [Paragraph("Wood", s_card_txt), Paragraph(f"{get_geo_label('guru', edition)} (3), {get_geo_label('rahu', edition)} (4)", s_card_txt), Paragraph(w_st, s_card_txt), Paragraph(w_rem, s_card_txt)],
+            [Paragraph("Fire", s_card_txt), Paragraph("Mars (9)", s_card_txt), Paragraph(f_st, s_card_txt), Paragraph(f_rem, s_card_txt)],
+            [Paragraph("Earth", s_card_txt), Paragraph(f"Moon (2), {get_geo_label('budh', edition)} (5), Saturn (8)", s_card_txt), Paragraph(e_st, s_card_txt), Paragraph(e_rem, s_card_txt)],
+            [Paragraph("Metal", s_card_txt), Paragraph(f"{get_geo_label('shukra', edition)} (6), {get_geo_label('ketu', edition)} (7)", s_card_txt), Paragraph(m_st, s_card_txt), Paragraph(m_rem, s_card_txt)],
+            [Paragraph("Water", s_card_txt), Paragraph("Sun (1)", s_card_txt), Paragraph(wa_st, s_card_txt), Paragraph(wa_rem, s_card_txt)]
         ]
-        t_elem = Table(elem_data, colWidths=[65, 110, 75, 270], hAlign='CENTER')
+        t_elem = Table(elem_data, colWidths=[58, 122, 72, 268], hAlign='CENTER')
         t_elem.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
             ('BOX', (0,0), (-1,-1), 0.8, COLOR_GOLD),
             ('INNERGRID', (0,0), (-1,-1), 0.4, COLOR_GOLD_LIGHT),
-            ('TOPPADDING', (0,0), (-1,-1), 5),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 5),
-            ('LEFTPADDING', (0,0), (-1,-1), 6),
-            ('RIGHTPADDING', (0,0), (-1,-1), 6),
+            ('TOPPADDING', (0,0), (-1,-1), 3.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 3.5),
+            ('LEFTPADDING', (0,0), (-1,-1), 5),
+            ('RIGHTPADDING', (0,0), (-1,-1), 5),
             ('ALIGN', (2,1), (2,-1), 'CENTER')
         ]))
         self.story.append(t_elem)
 
-        # ── PAGE 3: 5-Element Actions & 90-Day Auspicious Directional Alignment ──
+        # ── PAGE 3: 5-Element Actions & 90-Day Execution Horizon ──
         self.story.append(PageBreak())
-        self.story.append(Paragraph("5-ELEMENT BALANCING ACTIONS &amp; 90-DAY ROADMAP", s_name))
-        self.story.append(Paragraph("Practical Lifestyle Cadence · Auspicious Directional Alignment · Grounded Next Steps", s_sub))
-        self.story.append(Spacer(1, 6))
+        self.story.append(Paragraph(f"5-ELEMENT ACTIONS &amp; 90-DAY PLAN ({d['seeker_name'].upper()})", s_name))
+        self.story.append(Paragraph(f"{get_geo_label('vastu', edition)} Orientation · {get_geo_label('driver', edition)} {driver} &amp; {get_geo_label('conductor', edition)} {d.get('conductor_display', conductor)} · {edition.title()} Edition", s_sub))
+        self.story.append(Spacer(1, 4))
 
-        # 1. Kua Auspicious Spatial Alignment Vector Card
+        # Kua & Personal Year Coordinates
         kua_raw = d.get('kua_element', 'East Group')
         kua_sector = kua_raw.split('(')[-1].rstrip(')').strip() if '(' in kua_raw else kua_raw
         kua_desk = kua_sector.split('/')[0].strip()
         kua_data = [
             [
-                Paragraph(f"<b>Kua Vector:</b> {kua} ({kua_raw.split('·')[0].strip()})", s_card_txt),
-                Paragraph(f"<b>Auspicious Sector:</b> {kua_sector}", s_card_txt),
-                Paragraph(f"<b>Desk Orientation:</b> {kua_desk} Vector", s_card_txt),
+                Paragraph(f"<b>{get_geo_label('kua', edition)}:</b> {kua} ({kua_raw.split('·')[0].strip()})", s_card_txt),
+                Paragraph(f"<b>{get_geo_label('vastu', edition)} Group:</b> {kua_sector}", s_card_txt),
+                Paragraph(f"<b>Desk Orientation:</b> {kua_desk} Direction", s_card_txt),
+            ],
+            [
+                Paragraph(f"<b>Profile Input:</b> {gender.title()} · Born {dob}", s_card_txt),
+                Paragraph(f"<b>{get_geo_label('personal_year', edition)} {py}:</b> (Day {day_num} + Month {d.get('month', 11)} + {d.get('current_year', 2026)} → {py})", s_card_txt),
+                Paragraph(f"<b>Annual Focus:</b> {d.get('personal_year_theme', 'Steady Foundation')}", s_card_txt)
             ]
         ]
         t_kua_sec = Table(
-            [[Paragraph("<b>✦ KUA COSMIC VECTOR &amp; SPATIAL ALIGNMENT</b>", s_card_h)],
-             [Table(kua_data, colWidths=[165, 175, 170])]],
+            [[Paragraph(f"<b>• {get_geo_label('kua', edition).upper()} &amp; {get_geo_label('vastu', edition).upper()} ORIENTATION</b>", s_card_h)],
+             [Table(kua_data, colWidths=[170, 175, 165])]],
             colWidths=[520]
         )
         t_kua_sec.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), COLOR_PEARL_BG),
             ('BOX', (0,0), (-1,-1), 1, COLOR_BORDER),
-            ('TOPPADDING', (0,0), (-1,-1), 5),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 5),
-            ('LEFTPADDING', (0,0), (-1,-1), 8),
-            ('RIGHTPADDING', (0,0), (-1,-1), 8),
+            ('TOPPADDING', (0,0), (-1,-1), 4),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+            ('LEFTPADDING', (0,0), (-1,-1), 6),
+            ('RIGHTPADDING', (0,0), (-1,-1), 6),
         ]))
         self.story.append(t_kua_sec)
-        self.story.append(Spacer(1, 6))
+        self.story.append(Spacer(1, 4))
 
-        # Practical Balancing Actions Card
-        actions_card = [
-            [Paragraph("<b>✦ ELEMENTAL HARMONIZATION PROTOCOL</b>", s_card_h)],
-            [Spacer(1, 4)],
-            [Paragraph(f"Based on your <b>Driver {driver}</b> and <b>Conductor {d.get('conductor_display', conductor)}</b>, your system operates best when cognitive velocity is matched with grounded environmental stability. Follow these practical self-reflection measures:", s_card_txt)],
-            [Spacer(1, 5)],
-            [Paragraph("• <b>Primary Workspace Direction:</b> Align your primary desk facing <b>East or North-East</b> to synchronize cognitive retention and mental clarity.", s_card_txt)],
-            [Spacer(1, 3)],
-            [Paragraph("• <b>Daily Pacing Cadence:</b> Schedule high-focus strategic decisions during morning hours (08:00–11:00) when solar vitality is ascending.", s_card_txt)],
-            [Spacer(1, 3)],
-            [Paragraph("• <b>Harmonious Environmental Hues:</b> Favor subtle ivory, soft gold, and muted emerald accents; avoid sharp discordant color clashes in your primary workspace.", s_card_txt)],
-            [Spacer(1, 3)],
-            [Paragraph("• <b>Boundary Hygiene:</b> Maintain clear separation between operational execution blocks and contemplative creative incubation.", s_card_txt)]
+        # Dynamic Ranking of Out-of-Balance Elements (Ranked by Gap Size)
+        elem_counts = [
+            ("Wood", wood_c, 3 in missing or 4 in missing),
+            ("Fire", fire_c, 9 in missing),
+            ("Earth", earth_c, 2 in missing or 5 in missing or 8 in missing),
+            ("Metal", metal_c, 6 in missing or 7 in missing),
+            ("Water", water_c, 1 in missing),
         ]
+        ranked_elems = sorted(elem_counts, key=lambda x: (0 if x[2] else 1, x[1]))
+        biggest_gap_elem = ranked_elems[0][0] if ranked_elems[0][2] else "Balanced"
+        top3_names = ", ".join(f"{en} ({cv})" for en, cv, _ in ranked_elems[:3])
+
+        actions_card = [
+            [Paragraph(f"<b>• RANKED 5-ELEMENT HABITS FOR {d['seeker_name'].upper()} ({top3_names.upper()})</b>", s_card_h)],
+            [Spacer(1, 2)],
+            [Paragraph(f"From your {dob} grid (Wood {wood_c}, Fire {fire_c}, Earth {earth_c}, Metal {metal_c}, Water {water_c}), your top three practical focus areas are <b>{top3_names}</b> — everyday workspace and routine habits with no gemstones or rituals:", s_card_txt)],
+            [Spacer(1, 3)]
+        ]
+        for elem_name, c_val, is_gap in ranked_elems[:3]:
+            rem_text = CONTENT_LIB['topics']['elements'][elem_name]['states']['missing' if is_gap else ('low' if c_val == 1 else 'strong')]['remedy']
+            actions_card.append([Paragraph(f"• <b>{elem_name} Focus ({'Open Digit in Grid' if is_gap else f'Count {c_val}'}):</b> {rem_text}", s_card_txt)])
+            actions_card.append([Spacer(1, 2)])
+
         t_actions = Table(actions_card, colWidths=[520], hAlign='CENTER')
         t_actions.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), colors.white),
             ('BOX', (0,0), (-1,-1), 0.8, COLOR_GOLD),
-            ('TOPPADDING', (0,0), (-1,-1), 6),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 6),
-            ('LEFTPADDING', (0,0), (-1,-1), 10),
-            ('RIGHTPADDING', (0,0), (-1,-1), 10)
+            ('TOPPADDING', (0,0), (-1,-1), 5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 5),
+            ('LEFTPADDING', (0,0), (-1,-1), 8),
+            ('RIGHTPADDING', (0,0), (-1,-1), 8)
         ]))
         self.story.append(t_actions)
-        self.story.append(Spacer(1, 6))
+        self.story.append(Spacer(1, 4))
 
-        # 90-Day Execution Horizon
+        # 90-Day Execution Horizon Selected from Largest Gap
+        plan_info = CONTENT_LIB['topics']['ninety_day_plan'].get(biggest_gap_elem, CONTENT_LIB['topics']['ninety_day_plan']['Balanced'])['depth_1_basic']
         roadmap_card = [
-            [Paragraph("<b>✦ 90-DAY SYSTEMATIC EXECUTION HORIZON</b>", s_card_h)],
-            [Spacer(1, 4)],
+            [Paragraph(f"<b>• 90-DAY PRACTICAL PLAN ({biggest_gap_elem.upper()} PRIMARY FOCUS) — {CONTENT_LIB['topics']['ninety_day_plan'].get(biggest_gap_elem, {})['gap_focus']}</b>", s_card_h)],
+            [Spacer(1, 2)],
             [Table([
                 [Paragraph("<b>DAYS 1–30</b>", s_card_h), Paragraph("<b>DAYS 31–60</b>", s_card_h), Paragraph("<b>DAYS 61–90</b>", s_card_h)],
                 [
-                    Paragraph("<b>Foundation &amp; Spatial Order</b><br/>Audit primary working directions. Clear physical clutter in the North and East vectors. Establish consistent morning focus blocks.", s_card_txt),
-                    Paragraph("<b>Vibrational Alignment</b><br/>Calibrate daily routines to your Driver planetary rhythm. Review relationship and partnership communication patterns.", s_card_txt),
-                    Paragraph("<b>Review &amp; Consolidation</b><br/>Assess tangible execution outcomes. Solidify habits that reduced friction. Plan next quarterly initiation window.", s_card_txt)
+                    Paragraph(plan_info['days_1_30'], s_card_txt),
+                    Paragraph(plan_info['days_31_60'], s_card_txt),
+                    Paragraph(plan_info['days_61_90'], s_card_txt)
                 ]
             ], colWidths=[166, 166, 168], hAlign='CENTER', style=[
                 ('BACKGROUND', (0,0), (-1,0), COLOR_PEARL_MID),
                 ('BOX', (0,0), (-1,-1), 0.6, COLOR_GOLD_LIGHT),
                 ('INNERGRID', (0,0), (-1,-1), 0.4, COLOR_GOLD_LIGHT),
-                ('TOPPADDING', (0,0), (-1,-1), 5),
-                ('BOTTOMPADDING', (0,0), (-1,-1), 5),
-                ('LEFTPADDING', (0,0), (-1,-1), 6),
-                ('RIGHTPADDING', (0,0), (-1,-1), 6)
+                ('TOPPADDING', (0,0), (-1,-1), 4),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+                ('LEFTPADDING', (0,0), (-1,-1), 5),
+                ('RIGHTPADDING', (0,0), (-1,-1), 5)
             ])],
-            [Spacer(1, 6)],
-            [Paragraph("<font size=7 color='#7A654D'>Master Brand: NUMEROS VISION · Tagline: ANVEIL EVERY CHARM · Deterministic Grounded Numerology Analysis</font>", s_sub)]
+            [Spacer(1, 3)],
+            [Paragraph(f"<font size=6.5 color='#7A654D'><b>Chart Reference ({d['seeker_name']} · {dob} · {edition.title()} Edition):</b> {get_geo_label('driver', edition)} = {driver} · {get_geo_label('conductor', edition)} = {d.get('conductor_display', conductor)} · {get_geo_label('calling_name', edition)} = {c_root} ({c_compound}) · {get_geo_label('kua', edition)} = {kua} · Open Digits = [{', '.join(str(n) for n in missing) or 'None'}].</font>", s_sub)]
         ]
         t_roadmap = Table(roadmap_card, colWidths=[520], hAlign='CENTER')
         t_roadmap.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), colors.white),
             ('BOX', (0,0), (-1,-1), 0.8, COLOR_GOLD),
-            ('TOPPADDING', (0,0), (-1,-1), 6),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 6),
-            ('LEFTPADDING', (0,0), (-1,-1), 10),
-            ('RIGHTPADDING', (0,0), (-1,-1), 10),
+            ('TOPPADDING', (0,0), (-1,-1), 5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 5),
+            ('LEFTPADDING', (0,0), (-1,-1), 8),
+            ('RIGHTPADDING', (0,0), (-1,-1), 8),
             ('ALIGN', (0,-1), (-1,-1), 'CENTER')
         ]))
         self.story.append(t_roadmap)
@@ -1220,7 +1317,7 @@ class NumerosPdfReportBuilder:
         self.story.append(Spacer(1, 4))
         self.story.append(Paragraph("TABLE OF CONTENTS", s['SectionH1']))
         if is_premium_tier:
-            self.story.append(Paragraph("✦   SOVEREIGN COMPENDIUM · 30 STANDARD SECTIONS ACROSS 32 PAGES   ✦", s['CoverSubtitle']))
+            self.story.append(Paragraph("SOVEREIGN COMPENDIUM · 30 STANDARD SECTIONS ACROSS 32 PAGES", s['CoverSubtitle']))
             self.story.append(Spacer(1, 4))
 
             toc_rows = [
@@ -1248,7 +1345,7 @@ class NumerosPdfReportBuilder:
             self.story.append(t_toc)
             self.story.append(Spacer(1, 8))
         else:
-            self.story.append(Paragraph("✦   MASTER SYNTHESIS DOSSIER · NV THINK™ LOGIC-TO-PSYCHOLOGY ARCHITECTURE   ✦", s['CoverSubtitle']))
+            self.story.append(Paragraph("MASTER SYNTHESIS DOSSIER · NV THINK™ LOGIC-TO-PSYCHOLOGY ARCHITECTURE", s['CoverSubtitle']))
             self.story.append(Spacer(1, 6))
 
             toc_rows = [
@@ -1389,11 +1486,11 @@ class NumerosPdfReportBuilder:
         self.story.append(Spacer(1, 6))
 
         muhurat_items = [
-            ("✦ Perpetual Golden Dates of Any Month",
+            ("• Perpetual Golden Dates of Any Month",
              "Your primary power dates are the <b>1st, 10th, 19th, and 28th</b> (ruled by Sun 1). Your secondary commercial dates are the <b>5th, 14th, and 23rd</b> (ruled by Mercury 5). Schedule client contract signings, entity formations, and product launches on these dates whenever possible."),
-            ("✦ Harmonic Days of the Week",
+            ("• Harmonic Days of the Week",
              "<b>Sunday</b> is your primary day for visionary roadmapping and leadership decrees. <b>Wednesday</b> is your optimal day for high-velocity commercial deals, ad campaign deployments, and sales pitches. Avoid contentious legal filings on Saturdays."),
-            ("✦ Auspicious Hourly Horas (Solar & Mercurial Windows)",
+            ("• Auspicious Hourly Horas (Solar & Mercurial Windows)",
              "Initiate high-stakes calls during the first hour after local sunrise (Solar Hora) or during the Mercury Hora (traditionally the 4th or 11th hour from sunrise depending on weekday calculations).")
         ]
         for h_p, b_p in muhurat_items:
@@ -1605,11 +1702,11 @@ class NumerosPdfReportBuilder:
             self.story.append(Spacer(1, 6))
 
             love_traits = [
-                ("✦ Core Romantic Psychology",
+                ("• Core Romantic Psychology",
                  "You express love through steadfast protection, providing long-term security, and championing your partner's ambitions. You need a partner who genuinely respects your independent vision and never engages in public belittlement."),
-                ("✦ Quadruple 1 Relational Shadow",
+                ("• Quadruple 1 Relational Shadow",
                  "Carrying four 1s means you can sometimes become absorbed in internal strategic thoughts, appearing emotionally distant or commanding. Ensure you consciously switch off 'CEO mode' when crossing your home threshold."),
-                ("✦ Ideal Spousal Archetype",
+                ("• Ideal Spousal Archetype",
                  "Your soul is soothed by a partner carrying Moon 2 (intuitive calm, gentle emotional grounding) or Venus 6 (domestic elegance, creative beauty, and social warmth). Such a union balances your solar fire with refreshing cool water.")
             ]
             for h_p, b_p in love_traits:
@@ -1661,13 +1758,13 @@ class NumerosPdfReportBuilder:
             self.story.append(Spacer(1, 6))
 
             timing_pillars = [
-                ("✦ Personal Year 5 (2027) — Romantic Velocity & Social Expansion",
+                ("• Personal Year 5 (2027) — Romantic Velocity & Social Expansion",
                  "Ruled by Mercury 5, 2027 initiates exciting social mobility, romantic meetings, mutual travel, and relationship breakthroughs. An optimal year for public engagement or renewing marital vows."),
-                ("✦ Personal Year 6 (2028) — Golden Marital & Family Anchor",
+                ("• Personal Year 6 (2028) — Golden Marital & Family Anchor",
                  "Ruled by Venus 6, 2028 is the quintessential year of home, family harmony, and sacred marriage commitments. Brings domestic peace, luxury property acquisition, and family blessing."),
-                ("✦ Domestic Vastu for Relationship Harmony",
+                ("• Domestic Vastu for Relationship Harmony",
                  "Position your primary master bedroom in the South-West sector (Earth zone) to anchor emotional stability. Paint walls in soft Venus Pearl (#FFFDF7) or warm Sandalwood. Strictly remove work papers and exercise machinery from the bedroom."),
-                ("✦ Vedic Gharelu Remedy for Spousal Love",
+                ("• Vedic Gharelu Remedy for Spousal Love",
                  "Keep fresh white flowers (such as mogra, jasmine, or white roses) in the bedroom on Friday evenings. Both partners should take blessings from elders before embarking on shared travel.")
             ]
             for title_p, desc_p in timing_pillars:
@@ -1687,11 +1784,11 @@ class NumerosPdfReportBuilder:
             self.story.append(Spacer(1, 6))
 
             cw_pillars = [
-                ("✦ Programmatic Yield Optimization & Ad Exchange Platforms",
+                ("• Programmatic Yield Optimization & Ad Exchange Platforms",
                  "Rahu 4 excels in electronic systems, real-time automated auctions, and distributed advertising inventory. Focus on owning the proprietary adtech infrastructure rather than servicing commoditized agency retainers."),
-                ("✦ Strategic B2B Sales to C-Suite Executives",
+                ("• Strategic B2B Sales to C-Suite Executives",
                  "Chaldean 32/5 gives persuasive commercial charm. Pitch directly to enterprise founders, CTOs, and CMOs (Sun 1 authority); middle management will dilute your speed."),
-                ("✦ Intellectual Property & Automated Data Moats",
+                ("• Intellectual Property & Automated Data Moats",
                  "Build defensive software moats around proprietary audience modeling and programmatic bidding logic to ensure recurring high-margin contract cashflows.")
             ]
             for title_p, desc_p in cw_pillars:
@@ -1744,11 +1841,11 @@ class NumerosPdfReportBuilder:
             self.story.append(Spacer(1, 6))
 
             rep_pillars = [
-                ("✦ Harmonious Corporate Entity Compound Numbers",
+                ("• Harmonious Corporate Entity Compound Numbers",
                  "Ensure candidate LLC, corporate trademarks, and digital domains sum to auspicious roots 15, 19, 23, 24, 32, 37, 41, or 42. Compound 19 ('Prince of Heaven') and 23 ('Royal Star of the Gem') bring explosive tech adoption."),
-                ("✦ Treasury Protection: The 25% Rule",
+                ("• Treasury Protection: The 25% Rule",
                  "Mitigate the natal missing 5 center by implementing an automated rule: sweep 25% of all gross company profits directly into low-volatility sovereign bonds or physical gold before deploying capital into discretionary expenses."),
-                ("✦ Strategic Board & Co-Founder Synastry",
+                ("• Strategic Board & Co-Founder Synastry",
                  "Pair yourself with a trusted Number 3 (Jupiter) advisor for institutional governance, and Number 5 (Mercury) growth leads for international business development.")
             ]
             for title_p, desc_p in rep_pillars:
@@ -2144,7 +2241,9 @@ def generate_customised_pdf_report(
     vehicle_number: Optional[str] = None,
     property_number: Optional[str] = None,
     purchase_date: Optional[Union[str, datetime.date, datetime.datetime]] = None,
-    purchase_year: Optional[int] = None
+    purchase_year: Optional[int] = None,
+    gender: Optional[str] = "male",
+    edition: str = "india"
 ) -> Tuple[bytes, Dict[str, Any]]:
     """
     Primary API entrypoint: Computes deterministic data and compiles
@@ -2161,7 +2260,9 @@ def generate_customised_pdf_report(
         vehicle_number=vehicle_number,
         property_number=property_number,
         purchase_date=purchase_date,
-        purchase_year=purchase_year
+        purchase_year=purchase_year,
+        gender=gender,
+        edition=edition
     )
 
     builder = NumerosPdfReportBuilder(calc_data, tier=tier, topic_id=topic_id)

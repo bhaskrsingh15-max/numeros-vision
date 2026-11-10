@@ -11,10 +11,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
 
-  <title>Free Lucky Number Calculator — Numeros Vision</title>
-  <meta name="description" content="Find your lucky numbers free instantly. Calculate your personal lucky number, lucky day, lucky colour, and lucky gemstone from your date of birth. Powered by Numeros Vision AI." />
-  <meta name="keywords" content="lucky number calculator, lucky number by date of birth, my lucky number today, lucky number numerology, personal lucky number free" />
-  <link rel="canonical" href="https://numerosvision.com/tools/lucky-number/" />
+  <title>Free Favourable Numbers Calculator — Numeros Vision</title>
+  <meta name="description" content="Find your lucky numbers free instantly. Calculate your personal lucky number, lucky day, lucky colour, and lucky gemstone from your date of birth." />
+  <meta name="keywords" content="Favourable Numbers Calculator, lucky number by date of birth, my lucky number today, lucky number numerology, personal lucky number free" />
+  <link rel="canonical" href="https://numerosvision.com/tools/favourable-numbers/" />
   <!-- Search Engine Crawl & Indexing Directives -->
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
@@ -26,14 +26,14 @@
   <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
   <meta property="og:site_name" content="Numeros Vision" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://numerosvision.com/tools/lucky-number" />
-  <meta property="og:title" content="Free Lucky Number Calculator — Numeros Vision" />
+  <meta property="og:url" content="https://numerosvision.com/tools/favourable-numbers/" />
+  <meta property="og:title" content="Free Favourable Numbers Calculator — Numeros Vision" />
   <meta property="og:description" content="Find your lucky numbers free instantly. Calculate your personal lucky number, lucky day, lucky colour, and lucky gemstone from your date of birth. Powered by Numeros Vision AI." />
   <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
 
   <!-- Twitter Card Directives -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Free Lucky Number Calculator — Numeros Vision" />
+  <meta name="twitter:title" content="Free Favourable Numbers Calculator — Numeros Vision" />
   <meta name="twitter:description" content="Find your lucky numbers free instantly. Calculate your personal lucky number, lucky day, lucky colour, and lucky gemstone from your date of birth. Powered by Numeros Vision AI." />
   <meta name="twitter:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" />
@@ -44,9 +44,9 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Lucky Number Calculator",
-    "description": "Free personal lucky number calculator by Numeros Vision",
-    "url": "https://numerosvision.com/tools/lucky-number",
+    "name": "Favourable Numbers Calculator",
+    "description": "Free personal Favourable Numbers Calculator by Numeros Vision",
+    "url": "https://numerosvision.com/tools/favourable-numbers/",
     "applicationCategory": "LifestyleApplication",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
     "provider": { "@type": "Organization", "name": "Numeros Vision" }
@@ -354,7 +354,7 @@
               <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
               <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
               <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
-              <li><a href="/blog/gemstone-remedies" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
+              <li><a href="/blog/vedic-gemstone-remedies/" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
             </ul>
           </li>
 
@@ -446,7 +446,7 @@
     <label>Your Full Name (for Name Energy alignment)</label>
     <input type="text" id="ln-name" placeholder="As written on birth certificate" />
   </div>
-  <button class="btn-calc" onclick="calcLucky()">✦ Find My Lucky Numbers</button>
+  <button class="btn-calc" onclick="calcLucky()">✦ Find My Favourable Numbers</button>
 </div>
 
 <!-- ───── RESULT ───── -->
@@ -723,7 +723,7 @@ function calcLucky(){
     tool: 'lucky_number',
     name: name || 'Seeker',
     dob: dobStr,
-    summary: `Lucky Numbers calculation for ${dobStr}`
+    summary: `Favourable Numbers calculation for ${dobStr}`
   };
 
   const doRenderLucky = function() {

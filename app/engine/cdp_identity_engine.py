@@ -740,7 +740,7 @@ def ensure_seed_golden_profiles():
             "device_id": "nv_dev_desk_7710",
             "device_type": "desktop",
             "chart": {"mulank": 5, "bhagyank": 6, "mahadasha": "Mercury", "antardasha": "Venus", "sun_sign": "Gemini"},
-            "tx": {"total_spend_inr": 510.0, "purchase_count": 1},
+            "tx": {"total_spend_inr": 489.0, "purchase_count": 1},
             "beh": {"page_views_career": 6, "page_views_love": 2}
         },
         {
@@ -772,7 +772,7 @@ def ensure_seed_golden_profiles():
             "device_id": "nv_dev_mac_m3_42",
             "device_type": "desktop",
             "chart": {"mulank": 6, "bhagyank": 9, "mahadasha": "Venus", "antardasha": "Mars", "sun_sign": "Taurus"},
-            "tx": {"total_spend_inr": 510.0, "purchase_count": 1},
+            "tx": {"total_spend_inr": 489.0, "purchase_count": 1},
             "beh": {"page_views_career": 4, "viewed_business_consultation": True}
         }
     ]

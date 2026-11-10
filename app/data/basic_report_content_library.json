@@ -1,0 +1,3775 @@
+{
+  "version": "2.0.0",
+  "status": "DRAFT",
+  "governance": "Section 1 & 19 NV Master Rules",
+  "last_updated": "2026-11-10",
+  "topics": {
+    "birth_day": {
+      "1": {
+        "planet": "Sun (Surya)",
+        "element": "Water",
+        "archetype": "Pioneering Executive Leadership",
+        "depth_1_basic": {
+          "text": "Innate drive for autonomy, original initiative, and commanding executive focus. You operate best when holding clear accountability for project vision and strategic direction.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Driven by solar vitality, Number 1 individuals possess an innate capacity for visionary strategic planning, independent enterprise, and authoritative problem-solving. Potential challenge: impatience with slower operational cadences and reluctance to delegate.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Solar sovereign frequency in full depth: commanding authority, uncompromising originality, and sovereign boundary architecture. Masters high-stakes negotiation by anchoring executive charisma into verifiable operational systems.",
+          "status": "DRAFT"
+        }
+      },
+      "2": {
+        "planet": "Moon (Chandra)",
+        "element": "Earth",
+        "archetype": "Intuitive Diplomacy & Mediation",
+        "depth_1_basic": {
+          "text": "Natural sensitivity to environmental nuance, empathetic collaboration, and collaborative partnership building. You bring balance and psychological insight to interpersonal dynamics.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Lunar consciousness imparts high perceptive sensitivity, cooperative mediation, and diplomatic precision. Potential challenge: over-absorption of collective workplace stress and hesitation in confrontational decision-making.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Deep psychological resonance: navigating emotional undercurrents, high-context alliance building, and relational strategy. Converts quiet observation into master diplomatic leverage.",
+          "status": "DRAFT"
+        }
+      },
+      "3": {
+        "planet": "Jupiter (Guru / Brihaspati)",
+        "element": "Wood",
+        "archetype": "Creative Wisdom & Pedagogical Vision",
+        "depth_1_basic": {
+          "text": "Expansive expressive talent, conceptual clarity, and mentorship instinct. You thrive when communicating complex ideas, guiding teams, and synthesizing cross-disciplinary knowledge.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Jupiterian frequency provides expansive intellectual curiosity, pedagogical communication, and creative optimism. Potential challenge: multi-project scatter and difficulty sustaining tedious routine tasks.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "The sage architect: high-order conceptualization, philosophical doctrine building, and thought leadership. Bridges visionary strategy with pedagogical institutional frameworks.",
+          "status": "DRAFT"
+        }
+      },
+      "4": {
+        "planet": "Rahu (North Lunar Node)",
+        "element": "Wood",
+        "archetype": "Systemic Execution & Structural Innovation",
+        "depth_1_basic": {
+          "text": "Methodical discipline, unconventional analytical insight, and rigorous structural organization. You build enduring foundations where others see complexity.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Rahu imparts disruptive systemic vision paired with meticulous mechanical discipline. Potential challenge: rigid perfectionism, sudden operational stress, and friction with conventional protocols.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "The systemic engineer: architectural endurance, stress-tested organizational design, and transformative technological implementation. Masters structural longevity under chaotic external market friction.",
+          "status": "DRAFT"
+        }
+      },
+      "5": {
+        "planet": "Mercury (Budh)",
+        "element": "Earth",
+        "archetype": "Adaptive Commercial Intelligence",
+        "depth_1_basic": {
+          "text": "Rapid mental agility, versatility, and persuasive commercial communication. You excel in fast-moving environments requiring quick pivot execution and market connection.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Mercurial agility drives quick-witted networking, commercial opportunism, and multilingual conceptual agility. Potential challenge: restlessness, short attention spans, and premature project abandonment.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "The commercial strategist: dynamic arbitrage, multi-channel networking, and real-time market translation. Bridges disparate systems through high-velocity communication and commercial negotiation.",
+          "status": "DRAFT"
+        }
+      },
+      "6": {
+        "planet": "Venus (Shukra)",
+        "element": "Metal",
+        "archetype": "Aesthetic Harmony & Custodial Responsibility",
+        "depth_1_basic": {
+          "text": "Refined aesthetic judgment, community responsibility, and magnetic collaborative charm. You naturally cultivate order, beauty, and emotional security in your environment.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Venusian resonance fosters high aesthetic discernment, hospitality, brand refinement, and family stewardship. Potential challenge: perfectionist aesthetic over-investment and conflict avoidance.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "The harmonious steward: luxury brand architecture, institutional aesthetics, and restorative relationship stewardship. Integrates premium sensory balance with long-term human asset governance.",
+          "status": "DRAFT"
+        }
+      },
+      "7": {
+        "planet": "Ketu (South Lunar Node)",
+        "element": "Metal",
+        "archetype": "Analytical Discernment & Philosophical Depth",
+        "depth_1_basic": {
+          "text": "Deep introspective analysis, technical precision, and quiet spiritual discernment. You see beyond surface appearances into root causes and hidden data patterns.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Ketu frequency commands profound research acumen, philosophical detachment, and non-conformist technical insight. Potential challenge: social withdrawal, cynicism, and communication reserve.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "The investigative sage: esoteric and technical pattern recognition, unvarnished analytical diagnostics, and boundary mastery. Decodes hidden systematic causalities with uncompromising analytical rigor.",
+          "status": "DRAFT"
+        }
+      },
+      "8": {
+        "planet": "Saturn (Shani)",
+        "element": "Earth",
+        "archetype": "Executive Governance & Karmic Endurance",
+        "depth_1_basic": {
+          "text": "Unshakable resilience, pragmatic governance, and long-range material compounding. You master difficult obstacles through methodical perseverance and structured responsibility.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Saturnian discipline demands rigorous integrity, patience through developmental gestation, and large-scale administrative capability. Potential challenge: perceived severity and delayed public recognition.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "The institutional sovereign: long-horizon capital preservation, judicial execution, and karmic resilience. Compounds enduring generational value through unwavering procedural mastery.",
+          "status": "DRAFT"
+        }
+      },
+      "9": {
+        "planet": "Mars (Mangal)",
+        "element": "Fire",
+        "archetype": "Dynamic Vitality & Humanitarian Valor",
+        "depth_1_basic": {
+          "text": "High energetic courage, protective initiative, and passionate execution. You lead from the front with decisive resolve and a desire to make a meaningful positive impact.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Martian dynamism powers righteous action, physical stamina, and courageous defense of enterprise. Potential challenge: impulsive anger, burnout from relentless overdrive, and confrontational pacing.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "The commander of enterprise: high-stakes crisis leadership, moral courage, and transformative mission execution. Mobilizes human and operational capital toward definitive societal transformation.",
+          "status": "DRAFT"
+        }
+      }
+    },
+    "life_path": {
+      "1": {
+        "archetype": "Path of Sovereign Initiative",
+        "depth_1_basic": {
+          "text": "Your ultimate life trajectory calls for pioneering independent leadership and building original paths where no precedent existed.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Life Path of the Pioneer: learning to stand fully in self-reliance, overcome early doubts of authority, and establish recognized domain expertise.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Architect of sovereign selfhood: transforming raw personal ambition into institutionalized platforms that empower subsequent generations of creators.",
+          "status": "DRAFT"
+        }
+      },
+      "2": {
+        "archetype": "Path of Harmonious Alliance",
+        "depth_1_basic": {
+          "text": "Your ultimate life trajectory centers on master mediation, collaborative partnership, and bringing equilibrium to conflicting forces.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Life Path of the Peacemaker: mastering emotional boundaries, navigating sensitive negotiations, and orchestrating synergistic collective efforts.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Architect of diplomatic consensus: weaving disparate cultural and commercial factions into resilient, lasting coalitions.",
+          "status": "DRAFT"
+        }
+      },
+      "3": {
+        "archetype": "Path of Creative Expression",
+        "depth_1_basic": {
+          "text": "Your ultimate life trajectory is guided by inspiring communication, cultural upliftment, and creative wisdom sharing.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Life Path of the Communicator: transmuting emotional and philosophical depth into accessible creative language that illuminates others.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Master of cultural synthesis: developing enduring literature, educational paradigms, and multi-media intellectual legacies.",
+          "status": "DRAFT"
+        }
+      },
+      "4": {
+        "archetype": "Path of Enduring Structure",
+        "depth_1_basic": {
+          "text": "Your ultimate life trajectory requires establishing reliable systems, grounded discipline, and practical security that stand the test of time.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Life Path of the Master Builder: converting chaotic ideas into concrete operational blueprints, disciplined execution, and permanent asset architecture.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Institutional anchor: erecting generational systems, regulatory compliance frameworks, and infrastructure capable of weathering societal shifts.",
+          "status": "DRAFT"
+        }
+      },
+      "5": {
+        "archetype": "Path of Dynamic Versatility",
+        "depth_1_basic": {
+          "text": "Your ultimate life trajectory demands progressive adaptability, exploratory vision, and pioneering communication across changing landscapes.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Life Path of the Catalyst: embracing progressive change, championing freedom with constructive self-discipline, and connecting diverse global currents.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Global cultural and commercial bridge: navigating systemic turbulence and guiding collectives through technological and paradigm transitions.",
+          "status": "DRAFT"
+        }
+      },
+      "6": {
+        "archetype": "Path of Protective Stewardship",
+        "depth_1_basic": {
+          "text": "Your ultimate life trajectory is devoted to familial, corporate, or community stewardship, aesthetic harmony, and moral guidance.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Life Path of the Guardian: balancing the service of loved ones with rigorous personal boundary maintenance and dignified civic leadership.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Civilizational caretaker: designing regenerative communities, ethical governance codes, and enduring social wellness institutions.",
+          "status": "DRAFT"
+        }
+      },
+      "7": {
+        "archetype": "Path of Contemplative Truth",
+        "depth_1_basic": {
+          "text": "Your ultimate life trajectory requires rigorous search for underlying truth, specialized intellectual research, and inner spiritual awakening.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Life Path of the Investigator: reconciling technical or scientific rigor with profound intuitive and metaphysical realities.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Epistemological pioneer: unearthing concealed laws of nature, consciousness, and data systems to advance collective awareness.",
+          "status": "DRAFT"
+        }
+      },
+      "8": {
+        "archetype": "Path of Material Mastery & Governance",
+        "depth_1_basic": {
+          "text": "Your ultimate life trajectory involves mastering resource governance, large-scale responsibility, and righteous stewardship of power.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Life Path of the Sovereign Executive: balancing material ambition with uncompromising ethical accountability and karmic stewardship.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Steward of collective capital: directing vast enterprise, industrial infrastructure, and philanthropic trusts with judicial equilibrium.",
+          "status": "DRAFT"
+        }
+      },
+      "9": {
+        "archetype": "Path of Universal Humanitarian Service",
+        "depth_1_basic": {
+          "text": "Your ultimate life trajectory focuses on expansive compassion, humanitarian advocacy, and selfless contribution to collective elevation.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Life Path of the Philanthropist: transcending parochial attachments to champion universal human dignity, artistic nobility, and global healing.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Universal visionary: synthesizing diverse philosophical traditions into universal humanitarian charters and transformational global initiatives.",
+          "status": "DRAFT"
+        }
+      },
+      "11": {
+        "archetype": "Master Pathway of Intuitive Illumination",
+        "depth_1_basic": {
+          "text": "High-voltage intuitive sensitivity channeled into visionary inspiration, psychological insight, and uplifting community consciousness.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Master Illuminator: bridging subtle spiritual awareness with practical reality; requires grounding to manage high nervous system sensitivity.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Avatar of illumination: transmitting transcendent wisdom into groundbreaking cultural movements and profound personal transformations.",
+          "status": "DRAFT"
+        }
+      },
+      "22": {
+        "archetype": "Master Pathway of the Cosmic Architect",
+        "depth_1_basic": {
+          "text": "Unprecedented capacity to ground grand idealistic visions into concrete physical and institutional realities that benefit humanity.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Master Builder: uniting the high-voltage idealism of 11 with the disciplined pragmatism of 4; requires patience through vast systemic projects.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Architect of civilizational infrastructure: executing international treaties, macro-economic systems, and enduring humanitarian institutions.",
+          "status": "DRAFT"
+        }
+      },
+      "33": {
+        "archetype": "Master Pathway of Compassionate Upliftment",
+        "depth_1_basic": {
+          "text": "Universal custodial devotion, selfless healing presence, and profound spiritual mentorship offered without personal ego attachment.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "The Master Teacher: embodying the highest octave of unconditional love and protective service; demands absolute emotional purity and dedication.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Living sanctuary: anchoring divine compassion in places of intense societal suffering, initiating global relief and spiritual regeneration.",
+          "status": "DRAFT"
+        }
+      }
+    },
+    "name_number": {
+      "1": {
+        "depth_1_basic": {
+          "text": "Solar name vibration: projects authority, pioneering ambition, and sharp professional focus.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Advanced vibrational resonance: Solar name vibration: projects authority, pioneering ambition, and sharp professional focus. Evaluates phonetic vowels and consonant stresses.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Complete Chaldean compound decomposition: Solar name vibration: projects authority, pioneering ambition, and sharp professional focus. Aligns with personal birth coordinates.",
+          "status": "DRAFT"
+        }
+      },
+      "2": {
+        "depth_1_basic": {
+          "text": "Lunar name vibration: radiates approachable diplomacy, emotional warmth, and collaborative grace.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Advanced vibrational resonance: Lunar name vibration: radiates approachable diplomacy, emotional warmth, and collaborative grace. Evaluates phonetic vowels and consonant stresses.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Complete Chaldean compound decomposition: Lunar name vibration: radiates approachable diplomacy, emotional warmth, and collaborative grace. Aligns with personal birth coordinates.",
+          "status": "DRAFT"
+        }
+      },
+      "3": {
+        "depth_1_basic": {
+          "text": "Jupiterian name vibration: stimulates expressive eloquence, intellectual authority, and creative enthusiasm.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Advanced vibrational resonance: Jupiterian name vibration: stimulates expressive eloquence, intellectual authority, and creative enthusiasm. Evaluates phonetic vowels and consonant stresses.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Complete Chaldean compound decomposition: Jupiterian name vibration: stimulates expressive eloquence, intellectual authority, and creative enthusiasm. Aligns with personal birth coordinates.",
+          "status": "DRAFT"
+        }
+      },
+      "4": {
+        "depth_1_basic": {
+          "text": "Rahu name vibration: conveys grounded structural credibility, methodical reliability, and systemic rigor.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Advanced vibrational resonance: Rahu name vibration: conveys grounded structural credibility, methodical reliability, and systemic rigor. Evaluates phonetic vowels and consonant stresses.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Complete Chaldean compound decomposition: Rahu name vibration: conveys grounded structural credibility, methodical reliability, and systemic rigor. Aligns with personal birth coordinates.",
+          "status": "DRAFT"
+        }
+      },
+      "5": {
+        "depth_1_basic": {
+          "text": "Mercurial name vibration: radiates commercial charisma, rapid communicative agility, and versatile adaptability.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Advanced vibrational resonance: Mercurial name vibration: radiates commercial charisma, rapid communicative agility, and versatile adaptability. Evaluates phonetic vowels and consonant stresses.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Complete Chaldean compound decomposition: Mercurial name vibration: radiates commercial charisma, rapid communicative agility, and versatile adaptability. Aligns with personal birth coordinates.",
+          "status": "DRAFT"
+        }
+      },
+      "6": {
+        "depth_1_basic": {
+          "text": "Venusian name vibration: projects refined aesthetic elegance, trustworthy warmth, and harmonious relationship resonance.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Advanced vibrational resonance: Venusian name vibration: projects refined aesthetic elegance, trustworthy warmth, and harmonious relationship resonance. Evaluates phonetic vowels and consonant stresses.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Complete Chaldean compound decomposition: Venusian name vibration: projects refined aesthetic elegance, trustworthy warmth, and harmonious relationship resonance. Aligns with personal birth coordinates.",
+          "status": "DRAFT"
+        }
+      },
+      "7": {
+        "depth_1_basic": {
+          "text": "Ketu name vibration: emanates contemplative intellectual depth, specialized analytical precision, and dignity.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Advanced vibrational resonance: Ketu name vibration: emanates contemplative intellectual depth, specialized analytical precision, and dignity. Evaluates phonetic vowels and consonant stresses.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Complete Chaldean compound decomposition: Ketu name vibration: emanates contemplative intellectual depth, specialized analytical precision, and dignity. Aligns with personal birth coordinates.",
+          "status": "DRAFT"
+        }
+      },
+      "8": {
+        "depth_1_basic": {
+          "text": "Saturnian name vibration: conveys executive stature, enduring authority, and serious commercial reliability.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Advanced vibrational resonance: Saturnian name vibration: conveys executive stature, enduring authority, and serious commercial reliability. Evaluates phonetic vowels and consonant stresses.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Complete Chaldean compound decomposition: Saturnian name vibration: conveys executive stature, enduring authority, and serious commercial reliability. Aligns with personal birth coordinates.",
+          "status": "DRAFT"
+        }
+      },
+      "9": {
+        "depth_1_basic": {
+          "text": "Martian name vibration: projects dynamic vitality, decisive courage, and passionate humanitarian drive.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "text": "Advanced vibrational resonance: Martian name vibration: projects dynamic vitality, decisive courage, and passionate humanitarian drive. Evaluates phonetic vowels and consonant stresses.",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "text": "Complete Chaldean compound decomposition: Martian name vibration: projects dynamic vitality, decisive courage, and passionate humanitarian drive. Aligns with personal birth coordinates.",
+          "status": "DRAFT"
+        }
+      }
+    },
+    "driver_conductor": {
+      "1_1": {
+        "driver": 1,
+        "conductor": 1,
+        "synergy_title": "1-1: Two Kings in Conjunction",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Two Kings: immense executive power and independent authority, but requires conscious humility to avoid ego deadlock.",
+          "guidance": "Dual king energy causes ego friction; one star is dropped due to mutual pride. Must cultivate active listening.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "High executive power",
+            "Natural commanding leadership",
+            "Independent initiative",
+            "Unshakable self-confidence"
+          ],
+          "negative_traits": [
+            "Ego clashes with peers",
+            "Resistance to compromise",
+            "Stubbornness",
+            "Difficulty accepting second position"
+          ],
+          "recommended_careers": [
+            "Government Administration",
+            "Public Policy",
+            "Executive Directorship",
+            "Political Leadership",
+            "Entrepreneurship"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Sun (Surya) and Sun (Surya). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "1_2": {
+        "driver": 1,
+        "conductor": 2,
+        "synergy_title": "1-2: King and Queen Harmonic Alliance",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "King and Queen: authority tempered by emotional intelligence; supreme aptitude for Navy, defense, and high public administration.",
+          "guidance": "Water and Fire balance naturally. Because 2 is water-linked, top positions in Navy, maritime, or water resources bring stellar success.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Balanced authority and empathy",
+            "Diplomatic charm",
+            "High administrative intelligence",
+            "Public popularity"
+          ],
+          "negative_traits": [
+            "Mood swings under stress",
+            "Occasional emotional hesitation",
+            "Over-concern with public perception"
+          ],
+          "recommended_careers": [
+            "Naval Defense & Maritime Leadership",
+            "Armed Forces (Colonel/Captain)",
+            "Water & Beverage Industries",
+            "Public Diplomacy",
+            "Civil Services"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Sun (Surya) and Moon (Chandra). Harmonizing Poorak Number: 9.",
+          "status": "DRAFT"
+        }
+      },
+      "1_3": {
+        "driver": 1,
+        "conductor": 3,
+        "synergy_title": "1-3: King Guided by the Divine Counselor",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "King and Dev Guru: wisdom meets command; exceptional for judiciary, higher education, and institutional directorship.",
+          "guidance": "A highly fortunate intellectual and ethical pairing. Avoid dogmatic intellectual arrogance.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Moral authority",
+            "Visionary wisdom",
+            "High administrative ethics",
+            "Natural counseling ability",
+            "Respected leadership"
+          ],
+          "negative_traits": [
+            "Self-righteous dogmatism",
+            "Impatience with corruption",
+            "Tendency to preach without listening"
+          ],
+          "recommended_careers": [
+            "Judiciary & Corporate Law",
+            "Higher Education Leadership",
+            "Institutional Governance",
+            "Spiritual Counseling",
+            "Publishing"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Sun (Surya) and Jupiter (Guru). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "1_4": {
+        "driver": 1,
+        "conductor": 4,
+        "synergy_title": "1-4: Sovereign Disruptor & Political Strategist",
+        "relationship_type": "Neutral",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "King and Rahu: bold political and technical strategist; excellent for government liaison, IT systems, and innovative enterprise.",
+          "guidance": "Rahu creates sudden shifts; maintain strict adherence to legal and financial compliance to prevent sudden setbacks.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Strategic political acumen",
+            "Out-of-the-box system vision",
+            "High technological focus",
+            "Disruptive innovation"
+          ],
+          "negative_traits": [
+            "Sudden career ups and downs",
+            "Friction with conservative authorities",
+            "Secretiveness",
+            "Impulsive decisions"
+          ],
+          "recommended_careers": [
+            "Politics & Government Liaison",
+            "Cybersecurity Strategy",
+            "IT Enterprise Leadership",
+            "Structural Engineering",
+            "Public Affairs"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Sun (Surya) and Rahu (North Node). Harmonizing Poorak Number: 6.",
+          "status": "DRAFT"
+        }
+      },
+      "1_5": {
+        "driver": 1,
+        "conductor": 5,
+        "synergy_title": "1-5: The Budhaditya Sovereign & Commercial Master",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "King and Prince: supreme commercial instinct and negotiation power; highly favored for banking, trading, and massive business growth.",
+          "guidance": "Forms a classical Budhaditya resonance. Thrives in business, banking, and commerce; keep routine operations grounded.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Supreme business acumen",
+            "Rapid calculation and dealmaking",
+            "Articulate executive communication",
+            "Natural financial magnetism"
+          ],
+          "negative_traits": [
+            "Restless desire for constant expansion",
+            "Impatience with routine operational details",
+            "Over-committing"
+          ],
+          "recommended_careers": [
+            "Investment Banking",
+            "Venture Capital",
+            "Commercial Trading",
+            "Fintech Enterprise",
+            "Corporate Brokerage"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Sun (Surya) and Mercury (Budh). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "1_6": {
+        "driver": 1,
+        "conductor": 6,
+        "synergy_title": "1-6: Sovereign of Luxury & Diplomatic Arts",
+        "relationship_type": "Neutral",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "King and Daitya Guru: charismatic, luxurious, and media-savvy; excels in high-end brand leadership, cinema, and luxury enterprise.",
+          "guidance": "Sun and Venus require balance between executive duty and luxury desires. Guard against lifestyle inflation.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Refined public charisma",
+            "High aesthetic taste",
+            "Luxury lifestyle attraction",
+            "Media and public presence"
+          ],
+          "negative_traits": [
+            "Extravagance in spending",
+            "Ego clashes in romance",
+            "Sensory distractions from core mission"
+          ],
+          "recommended_careers": [
+            "Luxury Brand Leadership",
+            "Cinematic Arts & Entertainment",
+            "Diplomatic Ambassadorship",
+            "High-End Hospitality",
+            "Cosmetic Real Estate"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Sun (Surya) and Venus (Shukra). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "1_7": {
+        "driver": 1,
+        "conductor": 7,
+        "synergy_title": "1-7: The Sovereign Researcher & Occult Master",
+        "relationship_type": "Neutral",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "King and Ketu: profound researcher and occult healer; excels in higher education, esoteric consultation, and scientific analytics.",
+          "guidance": "Ketu is a body without a head, reducing raw material aggression. If native enters research, occult, or healing, results multiply exponentially.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Deep research intelligence",
+            "Occult and philosophical depth",
+            "Intuitive truth-seeking",
+            "Independent authority"
+          ],
+          "negative_traits": [
+            "Spiritual aloofness",
+            "Lack of interest in mundane corporate games",
+            "Feeling misunderstood",
+            "Secretive nature"
+          ],
+          "recommended_careers": [
+            "Higher Academic Research",
+            "Occult & Astrology Consultation",
+            "Alternative Healing",
+            "Deep Data Intelligence",
+            "Spiritual Authorship"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Sun (Surya) and Ketu (South Node). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "1_8": {
+        "driver": 1,
+        "conductor": 8,
+        "synergy_title": "1-8: The Sun-Saturn Karmic Crucible",
+        "relationship_type": "Enemy",
+        "star_rating": 0.5,
+        "depth_1_basic": {
+          "summary": "Permanent Warning: Father and Son clash; intense career and marriage hurdles; requires continuous Panch Tattva hygiene and legal vigilance.",
+          "guidance": "CRITICAL LIFETIME WARNING: Sun and Saturn are astrological arch-enemies. Takes native high then drops abruptly. High struggle in marriage and partnerships. Mandatory remedies required.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Titanic crisis stamina post-mastery",
+            "Ironclad legal and administrative discipline",
+            "Ability to rebuild after devastation"
+          ],
+          "negative_traits": [
+            "Severe career and financial struggle",
+            "Sudden massive rise followed by abrupt losses",
+            "Deep marriage discord or late marriage",
+            "Father-son or authority conflicts"
+          ],
+          "recommended_careers": [
+            "Corporate Restructuring Law",
+            "Labor Governance",
+            "Mining & Metallurgy",
+            "Forensic Auditing",
+            "Heavy Construction"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Sun (Surya) and Saturn (Shani). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "1_9": {
+        "driver": 1,
+        "conductor": 9,
+        "synergy_title": "1-9: Sovereign & Supreme Commander (Super Success)",
+        "relationship_type": "Friendly",
+        "star_rating": 5.0,
+        "depth_1_basic": {
+          "summary": "Super Success: King and Commander-in-Chief; five out of five stars; supreme authority, courage, and unstoppable administrative victory.",
+          "guidance": "BEST COMBINATION IN NUMEROLOGY. Mars melts its ego before the King, delivering full 5-star super success across all endeavors.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Unstoppable manifestation power",
+            "Heroic courage",
+            "Supreme administrative status",
+            "Fearless execution",
+            "Radiant public authority"
+          ],
+          "negative_traits": [
+            "Hot temper when provoked",
+            "Impatient with slow pace",
+            "High personal expectations causing stress"
+          ],
+          "recommended_careers": [
+            "Defense & Military Command",
+            "Civil Police & IPS",
+            "Top-Tier Administration (IAS)",
+            "Surgical Medicine",
+            "Disruptive Industrial Enterprise"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Sun (Surya) and Mars (Mangal). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "2_1": {
+        "driver": 2,
+        "conductor": 1,
+        "synergy_title": "2-1: The Intuitive Sovereign",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Queen backed by King: intuitive grace supported by executive power; excellent for cultural diplomacy, public service, and counseling.",
+          "guidance": "Queen holds steering but is backed by King's power; delivers steady success when native trusts their inner intuition.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Diplomatic grace backed by power",
+            "High public empathy",
+            "Creative vision",
+            "Support from influential patrons"
+          ],
+          "negative_traits": [
+            "Occasional hesitation before asserting command",
+            "Mood shifts under heavy executive pressure"
+          ],
+          "recommended_careers": [
+            "Public Administration",
+            "Arts & Cultural Diplomacy",
+            "Hospitality Management",
+            "Counseling Psychology",
+            "Public Relations"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Moon (Chandra) and Sun (Surya). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "2_2": {
+        "driver": 2,
+        "conductor": 2,
+        "synergy_title": "2-2: Deep Sensitivity & Emotional Mirror",
+        "relationship_type": "Neutral",
+        "star_rating": 2.5,
+        "depth_1_basic": {
+          "summary": "Dual Moon: profound artistic empathy, but prone to chronic indecision and mood swings; needs structured daily anchors.",
+          "guidance": "Two Queens struggle to make hard decisions; requires a grounded partner and daily emotional grounding exercises.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Profound empathy",
+            "High artistic intuition",
+            "Gentle healing nature",
+            "Caring domestic presence"
+          ],
+          "negative_traits": [
+            "Chronic indecision",
+            "Hypersensitivity to criticism",
+            "Vulnerability to emotional depression",
+            "Fear of confrontation"
+          ],
+          "recommended_careers": [
+            "Creative Arts & Poetry",
+            "Nursing & Pediatric Care",
+            "Culinary Arts",
+            "Interior Decorating",
+            "Child Psychology"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Moon (Chandra) and Moon (Chandra). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "2_3": {
+        "driver": 2,
+        "conductor": 3,
+        "synergy_title": "2-3: Intuitive Wisdom & Graceful Guidance",
+        "relationship_type": "Friendly",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Queen and Dev Guru: warm counseling and creative wisdom; highly suitable for education, counseling, and spiritual literature.",
+          "guidance": "A gentle, nurturing vibration. Guard against financial exploitation by overly relying on trust.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Warm teaching presence",
+            "High moral empathy",
+            "Creative imagination",
+            "Philosophical optimism"
+          ],
+          "negative_traits": [
+            "Over-promising assistance",
+            "Emotional exhaustion from helping others",
+            "Difficulty charging fair commercial fees"
+          ],
+          "recommended_careers": [
+            "School & University Counseling",
+            "Creative Writing & Literature",
+            "Social Welfare Leadership",
+            "Holistic Wellness",
+            "Community Arts"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Moon (Chandra) and Jupiter (Guru). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "2_4": {
+        "driver": 2,
+        "conductor": 4,
+        "synergy_title": "2-4: The Eclipse Struggle & Emotional Crucible",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Warning: Moon-Rahu eclipse friction; prone to depression, over-thinking, and mental stress; requires strict emotional grounding.",
+          "guidance": "Forms classical Grahan (Eclipse) energy. Prone to anxiety and emotional depression. Regular meditation and silver water remedies mandatory.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Unconventional artistic insight",
+            "Deep interest in psychology",
+            "Ability to perceive hidden realities"
+          ],
+          "negative_traits": [
+            "Vulnerability to severe depression and anxiety",
+            "Chronic mental stress",
+            "Over-thinking and restlessness",
+            "Sudden emotional breakdowns"
+          ],
+          "recommended_careers": [
+            "Psychological Research",
+            "Subconscious Behavioral Studies",
+            "Alternative Arts",
+            "Forensic Photography"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Moon (Chandra) and Rahu (North Node). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "2_5": {
+        "driver": 2,
+        "conductor": 5,
+        "synergy_title": "2-5: Intuitive Commerce & Public Communication",
+        "relationship_type": "Friendly",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Queen and Prince: sharp communication and commercial instinct; excels in PR, media trading, and financial banking.",
+          "guidance": "Queen and Prince form a friendly alliance. Good for commercial trading and communication when focus is sustained.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Articulate persuasive speech",
+            "Sharp commercial intuition",
+            "Fast adaptability",
+            "Sociable and engaging"
+          ],
+          "negative_traits": [
+            "Fickle decision-making",
+            "Restlessness",
+            "Difficulty focusing on long-term routine projects"
+          ],
+          "recommended_careers": [
+            "Commercial Banking",
+            "Public Relations",
+            "Media Reporting",
+            "Dairy & Food Trading",
+            "Event Management"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Moon (Chandra) and Mercury (Budh). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "2_6": {
+        "driver": 2,
+        "conductor": 6,
+        "synergy_title": "2-6: The Sovereign of Beauty, Water & Luxury",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Queen and Venus: supreme artistic elegance; excels in water-linked businesses, dairy, cosmetics, hospitality, and luxury fashion.",
+          "guidance": "Water (2) and Luxury (6) unite. Any profession linked to water, dairy, beverages, cosmetics, or luxury hospitality yields top success.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Exceptional aesthetic and culinary taste",
+            "Natural luxury attraction",
+            "Deep romantic warmth",
+            "Hospitality genius"
+          ],
+          "negative_traits": [
+            "Over-indulgence in comfort",
+            "Susceptibility to emotional heartbreak",
+            "Financial over-spending on luxury"
+          ],
+          "recommended_careers": [
+            "Dairy, Water & Beverage Trade",
+            "Luxury Hospitality & Resorts",
+            "Cosmetics & Fine Perfumes",
+            "Fashion Design",
+            "Interior Decor"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Moon (Chandra) and Venus (Shukra). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "2_7": {
+        "driver": 2,
+        "conductor": 7,
+        "synergy_title": "2-7: The Mystic Intuitive & Solitary Healer",
+        "relationship_type": "Neutral",
+        "star_rating": 2.5,
+        "depth_1_basic": {
+          "summary": "Queen and Ketu: intense psychic intuition and healing talent; best suited for occult consultation, research, and holistic therapy.",
+          "guidance": "Gentle, non-materialistic pairing. Avoid speculative business; focus on consultative, healing, and research roles.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Uncanny psychic intuition",
+            "Deep healing touch",
+            "Philosophical contemplation",
+            "Truth-seeking intellect"
+          ],
+          "negative_traits": [
+            "Emotional moodiness and withdrawal",
+            "Low confidence in material transactions",
+            "Feeling misunderstood"
+          ],
+          "recommended_careers": [
+            "Astrology & Tarot Consultation",
+            "Spiritual Healing & Reiki",
+            "Psychological Research",
+            "Water Conservation",
+            "Esoteric Writing"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Moon (Chandra) and Ketu (South Node). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "2_8": {
+        "driver": 2,
+        "conductor": 8,
+        "synergy_title": "2-8: The Vish Yoga Crucible",
+        "relationship_type": "Enemy",
+        "star_rating": 1.0,
+        "depth_1_basic": {
+          "summary": "Warning: Vish Yoga friction; brings health and emotional delays; requires persistent patience, white crystal remedies, and service to elders.",
+          "guidance": "Forms classical Vish Yoga. Heavy struggle and health challenges. Never ignore mental health or joint issues; regular remedies essential.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Endurance through deep suffering",
+            "Patience with elderly or chronically ill",
+            "Realistic grounding post-mastery"
+          ],
+          "negative_traits": [
+            "Severe chronic delays and depression",
+            "Health vulnerabilities (bones, joints, fluids)",
+            "Prolonged struggle in career",
+            "Cold relationship dynamics"
+          ],
+          "recommended_careers": [
+            "Geriatric Healthcare",
+            "Palliative Care",
+            "Historical Research",
+            "Mining Safety",
+            "Waste Water Management"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Moon (Chandra) and Saturn (Shani). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "2_9": {
+        "driver": 2,
+        "conductor": 9,
+        "synergy_title": "2-9: The Stormy Passion & Marital Crucible",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Warning: Water and Fire contradiction; causes late marriage or relationship friction; requires cooling mindfulness and emotional balance.",
+          "guidance": "Moon (water) and Mars (fire) clash emotionally. Causes marital friction and relationship volatility. Cultivate calm communication.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Raw emotional drive",
+            "Fierce protection of family",
+            "High creative passion",
+            "Resilience in adversity"
+          ],
+          "negative_traits": [
+            "Relationship and marital conflict",
+            "Late marriage or emotional friction",
+            "Impulsive temper conflicting with sensitivity"
+          ],
+          "recommended_careers": [
+            "Trauma Medicine & Nursing",
+            "Crisis Response",
+            "Culinary Arts with Fire/Baking",
+            "Maritime Engineering"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Moon (Chandra) and Mars (Mangal). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "3_1": {
+        "driver": 3,
+        "conductor": 1,
+        "synergy_title": "3-1: The Sovereign Sage & Supreme Mentor",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Dev Guru backed by King: supreme intellectual authority and administrative respect; thrives in law, higher education, and policy leadership.",
+          "guidance": "A noble, victorious combination. Especially powerful after age 40 when Jupiterian wisdom fully aligns with solar command.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Commanding wisdom",
+            "High administrative ethics",
+            "Visionary mentorship",
+            "Executive respect across institutions"
+          ],
+          "negative_traits": [
+            "Intellectual self-righteousness",
+            "Impatience with corruption",
+            "High expectations of peers"
+          ],
+          "recommended_careers": [
+            "Judiciary & Supreme Court Law",
+            "University Chancellorship",
+            "National Policy Making",
+            "Religious Leadership",
+            "Executive Advisory"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Jupiter (Guru) and Sun (Surya). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "3_2": {
+        "driver": 3,
+        "conductor": 2,
+        "synergy_title": "3-2: The Gajakesari Harmonics & Peaceful Mentor",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Dev Guru and Queen: Gajakesari resonance; brings broad public affection, teaching grace, and deep psychological counseling wisdom.",
+          "guidance": "Forms classical Gajakesari resonance. Excellent for peace, respect, and counseling; maintain commercial firmness.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Profound emotional wisdom",
+            "Gentle counseling presence",
+            "Creative literary genius",
+            "Public respect and warmth"
+          ],
+          "negative_traits": [
+            "Over-generosity leading to personal depletion",
+            "Hesitation in aggressive commercial battles"
+          ],
+          "recommended_careers": [
+            "Psychotherapy & Counseling",
+            "Higher Educational Administration",
+            "Literary Publishing",
+            "Holistic Wellness",
+            "Philanthropic Foundations"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Jupiter (Guru) and Moon (Chandra). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "3_3": {
+        "driver": 3,
+        "conductor": 3,
+        "synergy_title": "3-3: The Double Temple of Wisdom",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Dual Jupiter: monumental knowledge and teaching authority; outstanding for professorship, spirituality, and legal jurisprudence.",
+          "guidance": "Deeply spiritual and intellectual. Ensure that lofty philosophical ideals are translated into grounded revenue streams.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Immense philosophical knowledge",
+            "Natural teaching authority",
+            "High ethical stature",
+            "Creative conceptual power"
+          ],
+          "negative_traits": [
+            "Dogmatism and intellectual stubbornness",
+            "Preaching rather than acting",
+            "Under-monetization of practical skills"
+          ],
+          "recommended_careers": [
+            "Academic Professorship",
+            "Spiritual Authorship",
+            "Theology & Philosophy",
+            "Higher Judiciary",
+            "Master Educational Coaching"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Jupiter (Guru) and Jupiter (Guru). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "3_4": {
+        "driver": 3,
+        "conductor": 4,
+        "synergy_title": "3-4: The Unconventional Philosopher & Tech Theorist",
+        "relationship_type": "Neutral",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Dev Guru and Rahu: bridges ancient wisdom with cutting-edge technology; excels in AI ethics, tech law, and innovative research.",
+          "guidance": "Forms Guru-Chandal undertones. Channel into modern tech ethics or advanced research to avoid ideological conflicts.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Disruptive intellectual models",
+            "Ability to merge ancient wisdom with modern tech",
+            "Sharp strategic analysis"
+          ],
+          "negative_traits": [
+            "Intellectual skepticism",
+            "Sudden conflicts with conservative traditions",
+            "Restlessness with routine academia"
+          ],
+          "recommended_careers": [
+            "AI Philosophy & Ethics",
+            "Cybersecurity Strategy",
+            "Intellectual Property Law",
+            "Alternative Educational Tech",
+            "Forensic Data Research"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Jupiter (Guru) and Rahu (North Node). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "3_5": {
+        "driver": 3,
+        "conductor": 5,
+        "synergy_title": "3-5: The Strategic Economist & Corporate Advisor",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Dev Guru and Prince: wisdom meets mercantile speed; top-tier alignment for wealth management, corporate advisory, and economics.",
+          "guidance": "Blends wisdom with commercial speed. Highly successful in business, wealth management, and corporate strategy.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Brilliant commercial logic",
+            "Strategic communication",
+            "Fast deal structuring",
+            "High financial intelligence"
+          ],
+          "negative_traits": [
+            "Restlessness to expand too fast",
+            "Over-intellectualizing simple operational issues"
+          ],
+          "recommended_careers": [
+            "Corporate Financial Advisory",
+            "Commercial Arbitration",
+            "Wealth Management",
+            "Economic Journalism",
+            "Executive Consulting"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Jupiter (Guru) and Mercury (Budh). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "3_6": {
+        "driver": 3,
+        "conductor": 6,
+        "synergy_title": "3-6: The Opposing Gurus Crucible (36 ka Aankda)",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Warning: Opposing Gurus conflict; high potential for marital ego clashes and health vulnerabilities; requires mutual patience and Lo Shu remedies.",
+          "guidance": "CRITICAL OPPOSING GURUS WARNING: Jupiter and Venus represent conflicting ideological masters (spiritual vs luxury). High risk of marital and health issues. Need careful Lo Shu balancing.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "High creative and aesthetic talent",
+            "Sophisticated philosophical taste",
+            "Charismatic speaking"
+          ],
+          "negative_traits": [
+            "Relationship and marital conflict",
+            "Ego clashes in partnerships",
+            "Health vulnerabilities (hormonal/digestive)",
+            "Hypocrisy in personal versus public ethics"
+          ],
+          "recommended_careers": [
+            "Art History & Curatorial Research",
+            "Creative Media Ethics",
+            "Luxury Philosophy",
+            "Fashion Journalism"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Jupiter (Guru) and Venus (Shukra). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "3_7": {
+        "driver": 3,
+        "conductor": 7,
+        "synergy_title": "3-7: The Divine Connection & Occult Healer",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Dev Guru and Ketu: four out of five stars; supreme alignment for occult wisdom, spiritual coaching, healing, and higher research.",
+          "guidance": "One of the most powerful spiritual pairings. Numeros Vision analysis highlights 3-7 for education, occult, healing, research, and divine connection.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Profound spiritual intuition",
+            "Occult and esoteric mastery",
+            "Natural teaching and coaching authority",
+            "High research genius",
+            "Divine inner connection"
+          ],
+          "negative_traits": [
+            "Detachment from mundane material wealth",
+            "Impatience with superficial commercial games"
+          ],
+          "recommended_careers": [
+            "Occult & Vedic Astrology",
+            "Spiritual Coaching & Teaching",
+            "Higher Research & Philosophy",
+            "Alternative Medicine & Healing",
+            "Theological Authorship"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Jupiter (Guru) and Ketu (South Node). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "3_8": {
+        "driver": 3,
+        "conductor": 8,
+        "synergy_title": "3-8: The Judicial Pillar & Institutional Arbiter",
+        "relationship_type": "Neutral",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Dev Guru and Saturn: ethical wisdom meets karmic discipline; highly suited for judiciary, corporate governance, and institutional law.",
+          "guidance": "Steady and disciplined. Progress is slow initially but leads to commanding judicial or institutional respect.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Steadfast legal discipline",
+            "Long-term institutional governance",
+            "High ethical stamina",
+            "Compounding financial intellect"
+          ],
+          "negative_traits": [
+            "Overly serious or stern demeanor",
+            "Slow initial career momentum",
+            "Rigid adherence to doctrine"
+          ],
+          "recommended_careers": [
+            "Judiciary & Constitutional Law",
+            "Institutional Regulatory Compliance",
+            "Corporate Governance",
+            "Estate Management",
+            "Historical Academia"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Jupiter (Guru) and Saturn (Shani). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "3_9": {
+        "driver": 3,
+        "conductor": 9,
+        "synergy_title": "3-9: The Righteous Warrior & Medical Leader",
+        "relationship_type": "Friendly",
+        "star_rating": 4.5,
+        "depth_1_basic": {
+          "summary": "Dev Guru and Mars: four and a half stars; righteous champion; supreme aptitude for top surgeons, military command, and civil administration.",
+          "guidance": "Combines Jupiterian wisdom with Martian courage. Highly favored for top doctors, surgeons, army officers, and civil administrators.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Commanding executive energy",
+            "Fearless defense of truth",
+            "High academic and physical discipline",
+            "Inspiring administrative presence"
+          ],
+          "negative_traits": [
+            "Fierce indignation against injustice",
+            "Impatience with administrative bureaucracy",
+            "Hot temper when crossed"
+          ],
+          "recommended_careers": [
+            "Medical & Surgical Leadership",
+            "Armed Forces Administration (Defense/IPS)",
+            "University Directorship",
+            "Civil Services",
+            "Athletic Directorship"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Jupiter (Guru) and Mars (Mangal). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "4_1": {
+        "driver": 4,
+        "conductor": 1,
+        "synergy_title": "4-1: The Political Strategist & System Architect",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Rahu backed by Sun: sharp political strategist; excels in government liaison, disruptive tech leadership, and infrastructure.",
+          "guidance": "Numeros Vision analysis highlights 4-1 for politicians, government officers, or leaders closely connected with political power.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Acute political and tactical intellect",
+            "Ability to forge government connections",
+            "Unconventional system leadership",
+            "Disruptive ambition"
+          ],
+          "negative_traits": [
+            "Sudden friction with superiors",
+            "Tendency to push ethical boundaries",
+            "Secretive power plays"
+          ],
+          "recommended_careers": [
+            "Political Strategy & Governance",
+            "Government Liaison & Regulatory Affairs",
+            "Cybersecurity Command",
+            "Disruptive Tech Founder",
+            "Infrastructure Logistics"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Rahu (North Node) and Sun (Surya). Harmonizing Poorak Number: 6.",
+          "status": "DRAFT"
+        }
+      },
+      "4_2": {
+        "driver": 4,
+        "conductor": 2,
+        "synergy_title": "4-2: The Restless Mind & Eclipse Friction",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Warning: Rahu-Moon eclipse friction; prone to depression and mental anxiety; requires regular emotional grounding and silver water remedies.",
+          "guidance": "Rahu eclipses the Moon. Causes depression, emotional anxiety, and erratic sleep. Silver water and grounding essential.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Psychological perceptiveness",
+            "Unconventional creative concepts",
+            "Deep emotional complexity"
+          ],
+          "negative_traits": [
+            "Vulnerability to depression and anxiety",
+            "Sudden mental panic",
+            "Suspicion and trust issues",
+            "Erratic moods"
+          ],
+          "recommended_careers": [
+            "Subconscious Psychology",
+            "Surrealist Arts",
+            "Forensic Mental Health",
+            "Night Operations Logistics"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Rahu (North Node) and Moon (Chandra). Harmonizing Poorak Number: 6.",
+          "status": "DRAFT"
+        }
+      },
+      "4_3": {
+        "driver": 4,
+        "conductor": 3,
+        "synergy_title": "4-3: The Radical Theorist & Systems Philosopher",
+        "relationship_type": "Neutral",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Rahu and Dev Guru: radical intellect; excels in artificial intelligence, patent law, quantum systems, and alternative tech.",
+          "guidance": "Channel rebellious intellect into cutting-edge technology or patent law rather than ideological debates.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Unorthodox problem-solving",
+            "Technological foresight",
+            "Ability to challenge outdated dogmas",
+            "Broad systemic vision"
+          ],
+          "negative_traits": [
+            "Rebellious cynicism toward tradition",
+            "Impatience with routine academic pace",
+            "Intellectual restlessness"
+          ],
+          "recommended_careers": [
+            "AI Architecture",
+            "Data Science & Quantum Computing",
+            "Patent Law",
+            "Alternative Energy Research",
+            "Systems Engineering"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Rahu (North Node) and Jupiter (Guru). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "4_4": {
+        "driver": 4,
+        "conductor": 4,
+        "synergy_title": "4-4: The Permanent Rahu Struggle & High Volatility",
+        "relationship_type": "Enemy",
+        "star_rating": 1.0,
+        "depth_1_basic": {
+          "summary": "Critical Warning: Dual Rahu; high risk of surgeries, sudden disruptions, and severe career struggle; requires continuous Panch Tattva shielding.",
+          "guidance": "LIFETIME STRUGGLE WARNING: Two Rahus create permanent friction. High risk of surgeries, sudden accidents, and disruptions. Daily Wood element hygiene non-negotiable.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Unprecedented technical disruptions",
+            "Genius level out-of-box invention",
+            "Iron resilience under pressure"
+          ],
+          "negative_traits": [
+            "Severe career and life instability",
+            "High risk of accidents, surgeries, or sudden reversals",
+            "Extreme rebellious stubbornness",
+            "Chronic misunderstandings"
+          ],
+          "recommended_careers": [
+            "Advanced Cybersecurity Forensics",
+            "Extreme Tech R&D",
+            "Demolition & Structural Recovery",
+            "High-Risk Systems Engineering"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Rahu (North Node) and Rahu (North Node). Harmonizing Poorak Number: 6.",
+          "status": "DRAFT"
+        }
+      },
+      "4_5": {
+        "driver": 4,
+        "conductor": 5,
+        "synergy_title": "4-5: The Digital Dealmaker & Systems Marketer",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Rahu and Prince: dynamic tech dealmaker; highly successful in digital marketing, e-commerce, SaaS, and algorithmic commerce.",
+          "guidance": "Rahu and Mercury create sharp commercial minds. Ideal for digital marketing, software, and tech trade.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Exceptional digital marketing instinct",
+            "Fast algorithmic thinking",
+            "Lucrative commercial networking",
+            "High adaptability"
+          ],
+          "negative_traits": [
+            "Temptation to take speculative shortcuts",
+            "Restless financial focus",
+            "Impatience with slow compliance"
+          ],
+          "recommended_careers": [
+            "Digital Growth Marketing",
+            "IT Brokerage & SaaS",
+            "E-commerce Logistics",
+            "Data Analytics Trading",
+            "Commercial Tech"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Rahu (North Node) and Mercury (Budh). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "4_6": {
+        "driver": 4,
+        "conductor": 6,
+        "synergy_title": "4-6: The Media Visionary & Modern Aesthetician",
+        "relationship_type": "Friendly",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Rahu and Venus: modern glamour and digital media; excels in cinema, visual effects, luxury gaming, and futuristic design.",
+          "guidance": "Rahu expands Venusian desire. Excellent for cinema, animation, and fashion; maintain strict personal financial boundaries.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Futuristic aesthetic design",
+            "Glamour and cinematic magnetism",
+            "Luxurious technological vision",
+            "Creative branding"
+          ],
+          "negative_traits": [
+            "Extravagant financial spending",
+            "Romantic illusions and complicated attachments",
+            "Hedonistic temptations"
+          ],
+          "recommended_careers": [
+            "Cinematography & CGI VFX",
+            "Modern Interior Architecture",
+            "Fashion Tech",
+            "Celebrity Digital Media",
+            "Luxury Gaming"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Rahu (North Node) and Venus (Shukra). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "4_7": {
+        "driver": 4,
+        "conductor": 7,
+        "synergy_title": "4-7: The Innovative Strategist & Market Architect",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Four stars: High synergy between overarching structural vision and technical execution; exceptional potential in enterprise technology, product growth, and analytics.",
+          "guidance": "Number 4 systems architecture aligns seamlessly with Number 7 analytical depth, unlocking breakthrough innovation in tech, finance, and specialized consulting.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Holistic system vision combined with specialized technical precision",
+            "Innovative product architecture and data-driven marketing acumen",
+            "Deep analytical problem-solving in complex industries",
+            "High adaptability in international and digital markets"
+          ],
+          "negative_traits": [
+            "Unconventional lifestyle baffling traditional peers",
+            "Periods of deep withdrawal following public triumphs"
+          ],
+          "recommended_careers": [
+            "Product Strategy & High-Tech Growth",
+            "Digital Enterprise & Global Systems",
+            "Data Analytics & Market Intelligence",
+            "Fintech & Specialized Consulting",
+            "Media & Strategic Communications"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Rahu (North Node) and Ketu (South Node). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "4_8": {
+        "driver": 4,
+        "conductor": 8,
+        "synergy_title": "4-8: The Dark Karmic Crucible & Structural Battle",
+        "relationship_type": "Enemy",
+        "star_rating": 1.0,
+        "depth_1_basic": {
+          "summary": "Permanent Warning: Rahu and Saturn create intense delays and legal/structural struggle; demands continuous patience and ethical rigor.",
+          "guidance": "CRITICAL PERMANENT WARNING: Rahu and Saturn together create extreme karmic delay and structural friction. Regular Saturn/Rahu remedies mandatory.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Ironclad endurance through severe adversity",
+            "Mastery of harsh industrial environments",
+            "Unyielding persistence"
+          ],
+          "negative_traits": [
+            "Heavy chronic delays and obstacles",
+            "Litigation and contractual disputes",
+            "Physical bone/joint or systemic strain",
+            "Severe career frustration"
+          ],
+          "recommended_careers": [
+            "Heavy Metallurgy & Mining",
+            "Industrial Demolition",
+            "Environmental Hazard Recovery",
+            "Litigation Law"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Rahu (North Node) and Saturn (Shani). Harmonizing Poorak Number: 6.",
+          "status": "DRAFT"
+        }
+      },
+      "4_9": {
+        "driver": 4,
+        "conductor": 9,
+        "synergy_title": "4-9: The Angarak Crucible & Master Surgeon",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Warning / Dual Destiny: Mars-Rahu Angarak tension; brings accident and surgery risks, but creates world-class trauma surgeons and defense engineers.",
+          "guidance": "Numeros Vision analysis highlights 4-9: Mars and Rahu connection governs blood, surgery, and combat. Risk of accidents or surgery, but makes brilliant surgeons/doctors.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Fearless crisis intervention",
+            "Natural affinity for surgical instruments and blood medicine",
+            "Engineering brilliance under extreme pressure"
+          ],
+          "negative_traits": [
+            "High risk of physical accidents and surgeries",
+            "Volcanic rage when provoked",
+            "Fierce disputes with competitors"
+          ],
+          "recommended_careers": [
+            "General & Trauma Surgery",
+            "Emergency Medicine",
+            "Military Weapons Engineering",
+            "Forensic Investigation",
+            "Heavy Industrial Mechanics"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Rahu (North Node) and Mars (Mangal). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "5_1": {
+        "driver": 5,
+        "conductor": 1,
+        "synergy_title": "5-1: The Crowned Commercial Leader",
+        "relationship_type": "Friendly",
+        "star_rating": 4.5,
+        "depth_1_basic": {
+          "summary": "Four and a half stars: Prince backed by King; supreme commercial leadership, banking authority, and rapid enterprise expansion.",
+          "guidance": "God-gifted commercial talent. Mercury leads and the Sun provides sovereign authority; high success across all business lines.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Brilliant business strategy",
+            "Commanding persuasive articulation",
+            "Executive dealmaking",
+            "Rapid market dominance"
+          ],
+          "negative_traits": [
+            "Impatience with slow partners",
+            "Tendency to demand immediate commercial results"
+          ],
+          "recommended_careers": [
+            "Commercial Enterprise Leadership",
+            "Banking & Finance Directorship",
+            "Corporate Strategy",
+            "High-Tech Trade",
+            "Government Commerce"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mercury (Budh) and Sun (Surya). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "5_2": {
+        "driver": 5,
+        "conductor": 2,
+        "synergy_title": "5-2: Intuitive Commerce & Public Communications",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Prince and Queen: intuitive communication and public charm; excels in media, PR, dairy trading, and creative advertising.",
+          "guidance": "Combines emotional appeal with sharp wit. Highly successful in PR, creative media, and hospitality trading.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Empathetic salesmanship",
+            "Articulate communication",
+            "Public charm",
+            "Versatile commercial adaptability"
+          ],
+          "negative_traits": [
+            "Mood swings affecting financial focus",
+            "Restless pivoting before project completion"
+          ],
+          "recommended_careers": [
+            "Public Relations & Media",
+            "Dairy & Food Industry Trade",
+            "Advertising Copywriting",
+            "Travel Hospitality",
+            "Import/Export"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mercury (Budh) and Moon (Chandra). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "5_3": {
+        "driver": 5,
+        "conductor": 3,
+        "synergy_title": "5-3: The Strategic Economist & Wealth Counselor",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Four stars: Prince and Dev Guru; blends commercial agility with deep ethical counsel; top-tier for wealth management and corporate law.",
+          "guidance": "A highly respected intellectual-commercial combination. Success in financial consulting, corporate law, and wealth management.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Deep economic intelligence",
+            "High financial advisory ethics",
+            "Clear analytical teaching",
+            "Lucrative commercial publishing"
+          ],
+          "negative_traits": [
+            "Over-intellectualizing market trends",
+            "Hesitation to take aggressive speculative risks"
+          ],
+          "recommended_careers": [
+            "Wealth Management",
+            "Corporate Law & Compliance",
+            "Economic Journalism",
+            "Higher Commercial Education",
+            "Financial Planning"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mercury (Budh) and Jupiter (Guru). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "5_4": {
+        "driver": 5,
+        "conductor": 4,
+        "synergy_title": "5-4: The Algorithmic Trader & Tech Marketer",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Prince and Rahu: sharp digital strategist; highly successful in fintech, algorithmic marketing, e-commerce, and software trade.",
+          "guidance": "Sharp technical-commercial acumen. Avoid speculative gambling; channel into scalable digital marketing and SaaS.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Sharp digital marketing instincts",
+            "Fast algorithmic pattern recognition",
+            "Lucrative e-commerce strategy",
+            "High adaptability"
+          ],
+          "negative_traits": [
+            "Temptation toward speculative day-trading",
+            "Impatience with slow compliance protocols"
+          ],
+          "recommended_careers": [
+            "Algorithmic Trading & Fintech",
+            "Digital Performance Marketing",
+            "E-Commerce Enterprise",
+            "IT Systems Logistics",
+            "Software Sales"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mercury (Budh) and Rahu (North Node). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "5_5": {
+        "driver": 5,
+        "conductor": 5,
+        "synergy_title": "5-5: The Master Trader & Quicksilver Genius",
+        "relationship_type": "Friendly",
+        "star_rating": 4.5,
+        "depth_1_basic": {
+          "summary": "Four and a half stars: Double Mercury; natural mercantile genius; excels in large-scale trade, brokerage, and rapid commercial expansion.",
+          "guidance": "Numeros Vision analysis highlights 5: God-gifted natural talent for business. With double 5, commercial success compounds rapidly when focus is maintained on core priorities.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Supreme versatility and speed of thought",
+            "Unmatched commercial negotiation",
+            "Natural business magnetism",
+            "Rapid international trade"
+          ],
+          "negative_traits": [
+            "Extreme restlessness",
+            "Procrastination when routine sets in",
+            "Difficulty with long stillness"
+          ],
+          "recommended_careers": [
+            "International Commodity Brokerage",
+            "High-Volume Trade",
+            "Media Network Ownership",
+            "Venture Building",
+            "Commercial Brokerage"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mercury (Budh) and Mercury (Budh). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "5_6": {
+        "driver": 5,
+        "conductor": 6,
+        "synergy_title": "5-6: The Luxury Merchant & Media Magnate",
+        "relationship_type": "Friendly",
+        "star_rating": 4.5,
+        "depth_1_basic": {
+          "summary": "Four and a half stars: Prince and Venus; golden luxury alignment; supreme aptitude for high-end fashion, luxury hospitality, and media magnate roles.",
+          "guidance": "Mercury and Venus form a golden commercial-luxury pairing. Brings immense wealth through fashion, luxury retail, and media arts.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Effortless luxury brand attraction",
+            "High glamour and persuasive charm",
+            "Lucrative entertainment networking",
+            "Aesthetic commercial taste"
+          ],
+          "negative_traits": [
+            "Extravagance in lifestyle spending",
+            "Distraction by luxury indulgences"
+          ],
+          "recommended_careers": [
+            "Luxury Brand Ownership",
+            "Cinematic Media Production",
+            "High-End Fashion & Jewelry Trade",
+            "Boutique Hospitality",
+            "Cosmetic Real Estate"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mercury (Budh) and Venus (Shukra). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "5_7": {
+        "driver": 5,
+        "conductor": 7,
+        "synergy_title": "5-7: The Data Strategist & Occult Commercialist",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Prince and Ketu: analytical depth meets commercial wit; excels in market research intelligence, data science, and esoteric consulting.",
+          "guidance": "Combines commercial wit with Ketu's depth. Highly suitable for data analytics, market research, and specialized consultancy.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Deep analytical acumen",
+            "Occult commercialization",
+            "Keen investigative intelligence",
+            "Truth-seeking discernment"
+          ],
+          "negative_traits": [
+            "Skeptical hesitation",
+            "Over-analyzing simple financial opportunities"
+          ],
+          "recommended_careers": [
+            "Data Science & Analytics",
+            "Occult & Astrology Publishing",
+            "Market Research Intelligence",
+            "Forensic Auditing",
+            "Specialized Consulting"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mercury (Budh) and Ketu (South Node). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "5_8": {
+        "driver": 5,
+        "conductor": 8,
+        "synergy_title": "5-8: The Property Mogul & Pragmatic Trader",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Prince and Saturn: grounded commerce and land wealth; highly favored for real estate development, property brokerage, and agriculture.",
+          "guidance": "Numeros Vision analysis highlights 5-8 for property, land, real estate, and agriculture. Patience yields solid compounding wealth.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Grounded real estate acumen",
+            "Meticulous contractual negotiation",
+            "Long-term wealth compounding",
+            "Agricultural and land intelligence"
+          ],
+          "negative_traits": [
+            "Slow commercial turnaround initially",
+            "Over-cautious hesitation during market rallies"
+          ],
+          "recommended_careers": [
+            "Real Estate Development & Brokerage",
+            "Agricultural Commerce",
+            "Contractual Trade & Logistics",
+            "Property Valuation",
+            "Asset Management"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mercury (Budh) and Saturn (Shani). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "5_9": {
+        "driver": 5,
+        "conductor": 9,
+        "synergy_title": "5-9: The High-Speed Industrialist & Sports Marketer",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Four stars: Prince and Mars; high-speed dynamic enterprise; excels in manufacturing, athletic commerce, and industrial trade.",
+          "guidance": "Blends commercial speed with Martian fire. High success in manufacturing, athletic trade, and rapid enterprise scaling.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Decisive commercial action",
+            "High energetic drive",
+            "Sports and industrial trade acumen",
+            "Fearless market initiative"
+          ],
+          "negative_traits": [
+            "Impulsive business decisions",
+            "Occasional temper flares with partners"
+          ],
+          "recommended_careers": [
+            "Manufacturing & Heavy Equipment Trade",
+            "Sports Equipment & Apparel Commerce",
+            "Automotive Brokerage",
+            "Emergency Supply Logistics"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mercury (Budh) and Mars (Mangal). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "6_1": {
+        "driver": 6,
+        "conductor": 1,
+        "synergy_title": "6-1: The Sovereign of Aesthetics & Public Arts",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Venus backed by Sun: dignified aesthetic authority; excels in luxury real estate, fashion directorship, and cultural diplomacy.",
+          "guidance": "Luxury and Authority align. Great for public leadership in aesthetic, cultural, or luxury sectors.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Dignified public charm",
+            "High executive taste",
+            "Magnetic leadership in creative fields",
+            "Generous philanthropy"
+          ],
+          "negative_traits": [
+            "Ego battles in personal romance",
+            "Extravagant expenditures to maintain status"
+          ],
+          "recommended_careers": [
+            "Cultural & Heritage Administration",
+            "Luxury Real Estate",
+            "Public Diplomacy",
+            "High-End Media Production",
+            "Fashion Directorship"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Venus (Shukra) and Sun (Surya). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "6_2": {
+        "driver": 6,
+        "conductor": 2,
+        "synergy_title": "6-2: The Aesthetic Nurturer & Water-Luxury Master",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Venus and Moon: artistic elegance and domestic warmth; top success in fine dining, cosmetic luxury, dairy, and interior architecture.",
+          "guidance": "Numeros Vision analysis highlights 6-2 for water-related, dairy, cosmetics, and fine arts. Brings abundant creative wealth.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Exquisite aesthetic sensitivity",
+            "Warm domestic hospitality",
+            "Culinary and interior elegance",
+            "Refined artistic gifts"
+          ],
+          "negative_traits": [
+            "Emotional vulnerability in love",
+            "Susceptibility to flattering admirers",
+            "Difficulty enforcing tough commercial terms"
+          ],
+          "recommended_careers": [
+            "Fine Dining & Culinary Hospitality",
+            "Dairy & Water-Based Luxury Products",
+            "Cosmetic Design",
+            "Interior Architecture",
+            "Fine Arts"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Venus (Shukra) and Moon (Chandra). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "6_3": {
+        "driver": 6,
+        "conductor": 3,
+        "synergy_title": "6-3: The Dual Mentors Conflict (36 ka Aankda)",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Warning: Opposing Gurus conflict; triggers marital discord and health vulnerabilities; requires conscious emotional balance and Lo Shu remedies.",
+          "guidance": "CRITICAL OPPOSING GURUS WARNING: Venus leading Jupiter triggers 36 ka aankda. High friction in marriage and health. Regular Lo Shu remedies required.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "High creative and philosophical talent",
+            "Deep appreciation of cultural classics",
+            "Charismatic speaking"
+          ],
+          "negative_traits": [
+            "Marital and partnership friction",
+            "Health vulnerabilities (hormonal, liver, digestive)",
+            "Ego clashes between spiritual and material values"
+          ],
+          "recommended_careers": [
+            "Cultural Heritage Preservation",
+            "Art History Professorship",
+            "Fashion Ethics Advisory",
+            "Literary Review"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Venus (Shukra) and Jupiter (Guru). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "6_4": {
+        "driver": 6,
+        "conductor": 4,
+        "synergy_title": "6-4: The Cinematic Producer & Modern Stylist",
+        "relationship_type": "Friendly",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Venus and Rahu: amplified glamour and cinematic production; excels in cinema, modern fashion, visual arts, and event entertainment.",
+          "guidance": "Rahu amplifies Venusian desires. Brilliant for entertainment, cinema, and fashion; guard against complicated relational entanglements.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Disruptive modern aesthetic",
+            "Glamour and cinematic media instinct",
+            "Magnetic public presence",
+            "High commercial ambition"
+          ],
+          "negative_traits": [
+            "Hedonistic lifestyle temptations",
+            "Complicated romantic relationships",
+            "Financial over-expansion"
+          ],
+          "recommended_careers": [
+            "Cinema & Video Production",
+            "VFX & Digital Media Animation",
+            "Modern Fashion & Modeling",
+            "Nightclub & Event Hospitality"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Venus (Shukra) and Rahu (North Node). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "6_5": {
+        "driver": 6,
+        "conductor": 5,
+        "synergy_title": "6-5: The Sovereign Luxury Merchant",
+        "relationship_type": "Friendly",
+        "star_rating": 4.5,
+        "depth_1_basic": {
+          "summary": "Four and a half stars: Daitya Guru and Prince; golden commercial luxury pairing; exceptional for luxury retail, jewelry, and fine hospitality.",
+          "guidance": "Numeros Vision analysis highlights 6-5: Very rare to find an unsuccessful 6-5 individual. Sky is the limit in luxury commerce and hospitality.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Unrivaled commercial charm",
+            "Effortless luxury salesmanship",
+            "Lucrative international networking",
+            "Refined business elegance"
+          ],
+          "negative_traits": [
+            "Lavish lifestyle expenses",
+            "Impatience with dry administrative tasks"
+          ],
+          "recommended_careers": [
+            "Luxury Brand Directorship",
+            "Fine Jewelry & Gemstone Commerce",
+            "High-End Real Estate",
+            "Boutique Hospitality",
+            "Celebrity Management"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Venus (Shukra) and Mercury (Budh). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "6_6": {
+        "driver": 6,
+        "conductor": 6,
+        "synergy_title": "6-6: The Emperor of Luxury & Artistic Glory",
+        "relationship_type": "Friendly",
+        "star_rating": 5.0,
+        "depth_1_basic": {
+          "summary": "Super Success: Double Venus; five out of five stars; sky is the limit in entertainment, luxury hospitality, fashion, and lavish material wealth.",
+          "guidance": "SUPER SUCCESS COMBINATION: Classical analysis emphasizes: '6-6 is extremely rare to find unsuccessful. Sky is the limit!' Unprecedented wealth in luxury arts.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Supreme aesthetic and artistic genius",
+            "Effortless attraction of luxury and comfort",
+            "Magnetic romantic charisma",
+            "Lavish domestic abundance"
+          ],
+          "negative_traits": [
+            "Extreme love of comfort and luxury",
+            "Resistance to austerity or hardship",
+            "Vulnerability to romantic flattery"
+          ],
+          "recommended_careers": [
+            "High-End Entertainment & Cinema",
+            "Luxury Fashion Conglomerates",
+            "Super-Luxury Hospitality & Resorts",
+            "Fine Jewelry",
+            "Aesthetic Medicine"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Venus (Shukra) and Venus (Shukra). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "6_7": {
+        "driver": 6,
+        "conductor": 7,
+        "synergy_title": "6-7: The Sacred Artist & Esoteric Healer",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Venus and Ketu: sacred art and esoteric healing; excels in wellness resorts, crystal design, art therapy, and holistic aesthetics.",
+          "guidance": "Combines Venusian beauty with Ketu's spiritual detachment. Highly suited for sacred arts, holistic wellness, and healing.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Deep spiritual beauty",
+            "Occult and aesthetic healing",
+            "Refined artistic contemplation",
+            "Gentle empathetic counseling"
+          ],
+          "negative_traits": [
+            "Emotional detachment in close romance",
+            "Periods of dissatisfaction with material pleasures"
+          ],
+          "recommended_careers": [
+            "Sacred Arts & Temple Architecture",
+            "Holistic Spa & Healing Resorts",
+            "Jewelry & Crystal Consultation",
+            "Art Therapy",
+            "Herbal Wellness"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Venus (Shukra) and Ketu (South Node). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "6_8": {
+        "driver": 6,
+        "conductor": 8,
+        "synergy_title": "6-8: The Luxury Real Estate Developer & Estate Master",
+        "relationship_type": "Neutral",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Venus and Saturn: enduring luxury through hard work; highly favored for luxury real estate, architecture, and leather/textile enterprises.",
+          "guidance": "Brings delayed but solid luxury wealth through real estate, architecture, and leather/textile manufacturing.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Long-term asset creation",
+            "Patience with high-end architectural builds",
+            "Solid commercial endurance",
+            "Prudent financial management"
+          ],
+          "negative_traits": [
+            "Delayed material payoffs initially",
+            "Stern emotional boundaries in romance",
+            "Heavy workload burden"
+          ],
+          "recommended_careers": [
+            "Luxury Real Estate & Architecture",
+            "Leather Goods & Textile Manufacturing",
+            "Heavy Asset Management",
+            "Contractual Design Governance"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Venus (Shukra) and Saturn (Shani). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "6_9": {
+        "driver": 6,
+        "conductor": 9,
+        "synergy_title": "6-9: The Dynamic Creative & High-Energy Leader",
+        "relationship_type": "Enemy",
+        "star_rating": 2.0,
+        "depth_1_basic": {
+          "summary": "Venus-Mars dynamic vitality; channels high creative charisma into media, arts, and enterprise when grounded with emotional maturity.",
+          "guidance": "Venus harmony pairs with Mars energy. Channel intense creative passion into structured artistic, athletic, or business ventures with clear boundaries and emotional pacing.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Charismatic romantic passion",
+            "Artistic vitality and stage energy",
+            "Generous humanitarian giving"
+          ],
+          "negative_traits": [
+            "Emotional intensity requiring clear boundaries",
+            "Impulsive expenditures on creative passion projects"
+          ],
+          "recommended_careers": [
+            "Stage & Performing Arts",
+            "Athletic Fashion & Sports Media",
+            "Celebrity Public Relations",
+            "Cosmetic Surgery Support"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Venus (Shukra) and Mars (Mangal). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "7_1": {
+        "driver": 7,
+        "conductor": 1,
+        "synergy_title": "7-1: The Sovereign Research Advisor",
+        "relationship_type": "Neutral",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Ketu supported by Sun: sovereign research advisor; excels in government research institutes, strategic policy, and occult consultation.",
+          "guidance": "Ketu lacks a head; Sun provides sovereign direction. Avoid speculative business; focus on consultative and research governance.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Deep research intelligence",
+            "High administrative counsel",
+            "Objective analytical truth-seeking",
+            "Independent authority"
+          ],
+          "negative_traits": [
+            "Social isolation",
+            "Reluctance to engage in public politicking",
+            "Intellectual stubbornness"
+          ],
+          "recommended_careers": [
+            "Government Research Institutes",
+            "Higher Scientific Academia",
+            "Occult & Strategic Consulting",
+            "Policy Intelligence"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Ketu (South Node) and Sun (Surya). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "7_2": {
+        "driver": 7,
+        "conductor": 2,
+        "synergy_title": "7-2: The Intuitive Healer & Subconscious Guide",
+        "relationship_type": "Neutral",
+        "star_rating": 2.5,
+        "depth_1_basic": {
+          "summary": "Ketu and Moon: intense psychic empathy and healing grace; best suited for holistic healing, counseling, and subconscious psychology.",
+          "guidance": "Highly sensitive and psychic. Requires grounded emotional anchors; avoid commercial businesses with high financial risk.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Deep psychic empathy",
+            "Gentle holistic healing",
+            "Subconscious truth perception",
+            "Spiritual counseling"
+          ],
+          "negative_traits": [
+            "Vulnerability to mood swings and melancholy",
+            "Indecisiveness in commercial decisions",
+            "Extreme introversion"
+          ],
+          "recommended_careers": [
+            "Spiritual & Energy Healing",
+            "Tarot & Intuitive Reading",
+            "Subconscious Psychology",
+            "Water Therapy",
+            "Poetic Literature"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Ketu (South Node) and Moon (Chandra). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "7_3": {
+        "driver": 7,
+        "conductor": 3,
+        "synergy_title": "7-3: The Divine Scholar & Master Occultist",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Four stars: Ketu and Dev Guru; divine intellectual alignment; supreme aptitude for occult sciences, higher research, teaching, and spiritual authorship.",
+          "guidance": "Numeros Vision analysis highlights 7-3: Four stars for education, occult, healing, research, and divine connection. Super successful in knowledge fields.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Profound spiritual mastery",
+            "Higher academic research brilliance",
+            "Teaching and coaching genius",
+            "Divine intuitive connection"
+          ],
+          "negative_traits": [
+            "Detachment from worldly competition",
+            "Impatience with materialistic greed"
+          ],
+          "recommended_careers": [
+            "Vedic & Occult Astrology",
+            "Higher University Teaching",
+            "Spiritual Authorship",
+            "Alternative Medicine & Naturopathy",
+            "Theological Research"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Ketu (South Node) and Jupiter (Guru). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "7_4": {
+        "driver": 7,
+        "conductor": 4,
+        "synergy_title": "7-4: The Technical Forensics & Cyber Intelligence",
+        "relationship_type": "Neutral",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Ketu and Rahu: tactical forensics and cyber intelligence; thrives in technical investigation, cybersecurity, and foreign intelligence.",
+          "guidance": "Ketu (body) leading Rahu (head) has one star less than 4-7 because driver lacks the head. Excellent for technical forensics.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Acute investigative forensics",
+            "Cybersecurity and intelligence acumen",
+            "Deep technical research",
+            "Unconventional problem-solving"
+          ],
+          "negative_traits": [
+            "Feeling alienated or misunderstood",
+            "Sudden detachment from professional networks",
+            "Unorthodox lifestyle friction"
+          ],
+          "recommended_careers": [
+            "Cybersecurity Forensics",
+            "Data Intelligence & Surveillance",
+            "Alternative Science R&D",
+            "Forensic Accounting",
+            "Foreign Affairs Analysis"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Ketu (South Node) and Rahu (North Node). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "7_5": {
+        "driver": 7,
+        "conductor": 5,
+        "synergy_title": "7-5: The Data Strategist & Consultative Analyst",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Ketu backed by Prince: monetizes analytical research; highly successful in data science, quantitative market research, and consulting.",
+          "guidance": "Mercury provides the commercial head that Ketu lacks. Excellent for monetizing research, data strategy, and consulting.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Sharp analytical intelligence",
+            "Ability to monetize specialized research",
+            "Prudent commercial advice",
+            "Truth-seeking communication"
+          ],
+          "negative_traits": [
+            "Skeptical hesitation before launching deals",
+            "Tendency to isolate when overwhelmed"
+          ],
+          "recommended_careers": [
+            "Quantitative Market Research",
+            "Data Strategy & Analytics",
+            "Specialized Consulting",
+            "Esoteric Publishing",
+            "Technical Writing"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Ketu (South Node) and Mercury (Budh). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "7_6": {
+        "driver": 7,
+        "conductor": 6,
+        "synergy_title": "7-6: The Luxury Researcher & Aesthetic Healer",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Four stars: Ketu backed by Venus; luxury research and aesthetic healing; excels in antique curation, gemstone consulting, and luxury wellness.",
+          "guidance": "Venus provides resource power to Ketu. High success in luxury research, gemstone consulting, antique curation, and wellness resorts.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Sophisticated aesthetic research",
+            "Occult luxury and jewelry intelligence",
+            "Refined holistic healing",
+            "Subtle artistic elegance"
+          ],
+          "negative_traits": [
+            "Romantic detachment",
+            "Perfectionist dissatisfaction with superficial luxury"
+          ],
+          "recommended_careers": [
+            "Gemstone & Mineralogy Consultation",
+            "Luxury Spa & Healing Center Directorship",
+            "Fine Antique Appraisal",
+            "Sacred Architecture",
+            "Art Curating"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Ketu (South Node) and Venus (Shukra). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "7_7": {
+        "driver": 7,
+        "conductor": 7,
+        "synergy_title": "7-7: The Deep Strategist & Specialized Innovator",
+        "relationship_type": "Neutral",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Dual Number 7 brings monumental analytical acumen and specialized expertise; thrive in technology, research, and data systems; pair with strong commercial collaborators for business scale.",
+          "guidance": "Dual Number 7 excels through specialized technical and intellectual autonomy. When entering business or venture partnerships, ensure equity, governance, and daily operational responsibilities are backed by formal written contracts and balanced by strong commercial co-founders.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Exceptional investigative depth and analytical clarity",
+            "High intuition and immunity to superficial marketing hype",
+            "Profound mastery of complex systems and specialized domains",
+            "Uncompromising integrity and focus on product quality"
+          ],
+          "negative_traits": [
+            "Tendency to over-analyze before delegating operations",
+            "Reluctance to engage in aggressive or flashy sales pitches",
+            "Preference for independent autonomy over ambiguous partnerships"
+          ],
+          "recommended_careers": [
+            "Deep Technology & Data Systems",
+            "Fintech Architecture & Specialized Consulting",
+            "Advanced Scientific & Market Research",
+            "Strategic Intelligence & Forensic Auditing",
+            "System Architecture & Higher Education"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Ketu (South Node) and Ketu (South Node). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "7_8": {
+        "driver": 7,
+        "conductor": 8,
+        "synergy_title": "7-8: The Solitary Hermit & Karmic Burden",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Warning: Ketu-Saturn karmic isolation; brings delays and solitary burdens; requires conscious social connection and white crystal remedies.",
+          "guidance": "Brings heavy isolation and karmic delay. Do not isolate yourself; maintain steady daily connections and practical service.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Iron endurance in solitude",
+            "Deep historical and archaeological insight",
+            "Complete lack of fear of hardship"
+          ],
+          "negative_traits": [
+            "Severe career delays and feelings of loneliness",
+            "Pessimism and emotional detachment",
+            "Heavy karmic burdens"
+          ],
+          "recommended_careers": [
+            "Archaeological Research",
+            "Mining Geology",
+            "Historical Preservation",
+            "Ascetic Philosophy",
+            "Deep Earth Sciences"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Ketu (South Node) and Saturn (Shani). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "7_9": {
+        "driver": 7,
+        "conductor": 9,
+        "synergy_title": "7-9: The Focused Specialist & Strategic Initiator",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Dynamic intuition meets focused energy; excels in technical precision, strategic analysis, and crisis management.",
+          "guidance": "Ketu analytical intuition combines with Mars dynamic courage. Channel this focused energy into disciplined technical projects, physical training, and strategic leadership.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Deep strategic focus",
+            "High stamina and endurance",
+            "Passionate defense of quality and integrity",
+            "Surgical and technical precision"
+          ],
+          "negative_traits": [
+            "Impatience when outcomes are delayed",
+            "Need for deliberate emotional pacing"
+          ],
+          "recommended_careers": [
+            "Technical Systems & Engineering",
+            "Specialized Surgical or Medical Practice",
+            "Strategic Risk Analysis & Security",
+            "Sports Technology & Athletics",
+            "Emergency Services & Critical Response"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Ketu (South Node) and Mars (Mangal). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "8_1": {
+        "driver": 8,
+        "conductor": 1,
+        "synergy_title": "8-1: The Saturn-Sun Sovereign Clash",
+        "relationship_type": "Enemy",
+        "star_rating": 0.5,
+        "depth_1_basic": {
+          "summary": "Critical Warning: Bitter arch-enemies; brings massive rise and sudden fall; extreme marital friction; mandatory legal and planetary remedies.",
+          "guidance": "CRITICAL LIFETIME WARNING: Saturn and Sun are bitter arch-enemies. Takes native high then drops abruptly. High marriage and partnership friction. Mandatory daily remedies.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Titanic crisis stamina",
+            "Mastery of harsh legal and corporate governance",
+            "Iron endurance in adversity"
+          ],
+          "negative_traits": [
+            "Severe lifetime career struggle",
+            "High rise followed by catastrophic drop",
+            "Severe marital conflict and divorce risk",
+            "Father-son or legal litigation"
+          ],
+          "recommended_careers": [
+            "Corporate Litigation Law",
+            "Labor Dispute Governance",
+            "Heavy Metallurgy & Mining",
+            "Turnaround Restructuring"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Saturn (Shani) and Sun (Surya). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "8_2": {
+        "driver": 8,
+        "conductor": 2,
+        "synergy_title": "8-2: The Saturnian Vish Yoga & Emotional Crucible",
+        "relationship_type": "Enemy",
+        "star_rating": 1.0,
+        "depth_1_basic": {
+          "summary": "Warning: Vish Yoga; causes chronic health and emotional delays; business momentum disrupted by sudden setbacks; requires white crystal hygiene.",
+          "guidance": "Forms Vish Yoga. Classical analysis cautions: Business may go well initially then suddenly health or mental issues disrupt progress. White quartz essential.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Endurance through profound hardship",
+            "Patience with chronically distressed people",
+            "Realistic grounding"
+          ],
+          "negative_traits": [
+            "Chronic health challenges (joints, fluids, depression)",
+            "Sudden financial setbacks",
+            "Cold emotional atmosphere",
+            "Severe delays in business"
+          ],
+          "recommended_careers": [
+            "Geriatric Care Administration",
+            "Waste Water Management",
+            "Historical Archive Governance",
+            "Palliative Healthcare"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Saturn (Shani) and Moon (Chandra). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "8_3": {
+        "driver": 8,
+        "conductor": 3,
+        "synergy_title": "8-3: The Constitutional Arbiter & Corporate Judge",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Saturn and Dev Guru: judicial wisdom meets karmic justice; highly respected in corporate law, judiciary, and institutional compliance.",
+          "guidance": "Saturn and Jupiter align on justice and law. Slow initial progress matures into supreme judicial or institutional authority.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Monumental legal acumen",
+            "High judicial ethics",
+            "Prudent institutional management",
+            "Compounding wealth intelligence"
+          ],
+          "negative_traits": [
+            "Stern demeanor",
+            "Slow early career momentum",
+            "Difficulty expressing informal warmth"
+          ],
+          "recommended_careers": [
+            "Judiciary & Supreme Court Law",
+            "Corporate Regulatory Governance",
+            "Institutional Banking Oversight",
+            "Estate Trusts Administration"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Saturn (Shani) and Jupiter (Guru). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "8_4": {
+        "driver": 8,
+        "conductor": 4,
+        "synergy_title": "8-4: The Permanent Dark Crucible & Legal Obstacles",
+        "relationship_type": "Enemy",
+        "star_rating": 1.0,
+        "depth_1_basic": {
+          "summary": "Permanent Warning: Saturn-Rahu creates chronic delays and legal/structural struggle; requires strict ethical compliance and continuous remedies.",
+          "guidance": "CRITICAL PERMANENT WARNING: Saturn and Rahu together create heavy karmic delays and legal hurdles. Daily Panch Tattva hygiene essential.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Ironclad physical and mental endurance",
+            "Mastery of extreme industrial systems",
+            "Unshakeable persistence under adversity"
+          ],
+          "negative_traits": [
+            "Severe career delays and chronic struggle",
+            "Litigation and contractual disputes",
+            "Health strains",
+            "Pessimism and isolation"
+          ],
+          "recommended_careers": [
+            "Heavy Infrastructure & Mining",
+            "Industrial Demolition",
+            "Environmental Remediation",
+            "Criminal Law"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Saturn (Shani) and Rahu (North Node). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "8_5": {
+        "driver": 8,
+        "conductor": 5,
+        "synergy_title": "8-5: The Real Estate Mogul & Pragmatic Financier",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Four stars: Saturn and Prince; phenomenal real estate and land wealth; highly favored for property development, commerce, and finance.",
+          "guidance": "Numeros Vision analysis highlights 8-5: Outstanding for property, land, real estate, and finance. Mercury's speed balances Saturn's prudence.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Phenomenal property and land acumen",
+            "Meticulous contractual dealmaking",
+            "Steady compounding wealth",
+            "Solid commercial endurance"
+          ],
+          "negative_traits": [
+            "Over-calculating risk",
+            "Slow initial execution while verifying details"
+          ],
+          "recommended_careers": [
+            "Real Estate Development & Brokerage",
+            "Heavy Industrial Trading",
+            "Agricultural Commerce",
+            "Contractual Logistics",
+            "Asset Management"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Saturn (Shani) and Mercury (Budh). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "8_6": {
+        "driver": 8,
+        "conductor": 6,
+        "synergy_title": "8-6: The Architect of Luxury Estates & Fine Leather",
+        "relationship_type": "Friendly",
+        "star_rating": 3.5,
+        "depth_1_basic": {
+          "summary": "Saturn and Venus: enduring luxury through patience; excels in luxury real estate, architecture, fine leather goods, and manufacturing.",
+          "guidance": "Saturn and Venus are friendly. Delivers massive compounding wealth through luxury real estate, architecture, and fine manufacturing.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Exceptional architectural and design stamina",
+            "Luxury asset stewardship",
+            "Solid financial patience",
+            "Aesthetic material quality"
+          ],
+          "negative_traits": [
+            "Delayed gratification in romance",
+            "Stern domestic rules",
+            "Heavy workload burden"
+          ],
+          "recommended_careers": [
+            "Luxury Real Estate & Interior Architecture",
+            "High-End Leather & Metallurgy Goods",
+            "Commercial Asset Management",
+            "Textile Manufacturing"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Saturn (Shani) and Venus (Shukra). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "8_7": {
+        "driver": 8,
+        "conductor": 7,
+        "synergy_title": "8-7: The Ascetic Researcher & Historical Geologist",
+        "relationship_type": "Neutral",
+        "star_rating": 2.5,
+        "depth_1_basic": {
+          "summary": "Saturn and Ketu: ascetic researcher and deep earth scientist; excels in geological survey, archaeology, and historical research.",
+          "guidance": "Brings heavy isolation if disconnected from society. Maintain active social ties and avoid melancholy.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Profound research stamina",
+            "Deep detachment from shallow trends",
+            "Historical and geological intelligence",
+            "Philosophical endurance"
+          ],
+          "negative_traits": [
+            "Solitary isolation and gloominess",
+            "Slow material compounding",
+            "Emotional coldness toward peers"
+          ],
+          "recommended_careers": [
+            "Mining & Geological Survey",
+            "Historical Archaeology",
+            "Deep Philosophy & Theology",
+            "Forensic Data Preservation"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Saturn (Shani) and Ketu (South Node). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "8_8": {
+        "driver": 8,
+        "conductor": 8,
+        "synergy_title": "8-8: The Iron Sovereign of Hard Labor & Justice",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Warning: Double Saturn; monumental labor, struggle, and delayed payoffs; master of justice, law, metallurgy, and heavy enterprise.",
+          "guidance": "LIFETIME STRUGGLE WARNING: Double Saturn creates monumental labor and delayed success. Victory comes through sheer righteousness and unbending discipline.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Titanic endurance that outlasts all peers",
+            "Unbending devotion to justice and law",
+            "Ability to manage colossal physical systems",
+            "Compounding master"
+          ],
+          "negative_traits": [
+            "Prolonged severe struggle and delayed payoffs",
+            "Stern, unapproachable presence",
+            "Workaholism destroying personal health",
+            "Heavy karmic tests"
+          ],
+          "recommended_careers": [
+            "High Judiciary & Constitutional Law",
+            "Heavy Metallurgy & Steel Manufacturing",
+            "National Infrastructure & Mining",
+            "Labor Union Governance"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Saturn (Shani) and Saturn (Shani). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "8_9": {
+        "driver": 8,
+        "conductor": 9,
+        "synergy_title": "8-9: The Battle-Hardened Engineer & Armed Protector",
+        "relationship_type": "Neutral",
+        "star_rating": 2.5,
+        "depth_1_basic": {
+          "summary": "Saturn and Mars: battle-hardened industrial power; supreme aptitude for heavy machinery, defense production, trauma surgery, and metallurgy.",
+          "guidance": "Numeros Vision analysis highlights 8-9: Saturn and Mars require proper career alignment (heavy engineering, defense, surgery) to convert struggle into immense strength.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Immense physical and structural stamina",
+            "Fearless crisis management in industrial zones",
+            "Command over heavy engineering and defense"
+          ],
+          "negative_traits": [
+            "Internal friction between patience and impulsive action",
+            "Stubbornness",
+            "Risk of physical strain or injuries"
+          ],
+          "recommended_careers": [
+            "Heavy Machinery & Automotive Engineering",
+            "Armed Forces Logistics",
+            "Orthopedic & Trauma Surgery",
+            "Metallurgy & Defense Production"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Saturn (Shani) and Mars (Mangal). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "9_1": {
+        "driver": 9,
+        "conductor": 1,
+        "synergy_title": "9-1: The Commander-in-Chief & Valiant Sovereign",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Four stars: Commander leading with King's authority; supreme courage, decisive executive leadership, and administrative triumph.",
+          "guidance": "Classical analysis notes: 1-9 is 5 stars (King leading Senapati), while 9-1 is 4 stars because the King prefers being in front. Still a supreme executive combination.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Fierce executive drive",
+            "Decisive courage",
+            "Natural administrative authority",
+            "Heroic protection of subordinates"
+          ],
+          "negative_traits": [
+            "Fiery temper when questioned",
+            "Impatience with slow diplomatic protocols"
+          ],
+          "recommended_careers": [
+            "Armed Forces Directorship",
+            "IPS & Civil Police Command",
+            "Trauma & Surgical Directorship",
+            "Top Industrial Executive",
+            "Sports Governance"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mars (Mangal) and Sun (Surya). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "9_2": {
+        "driver": 9,
+        "conductor": 2,
+        "synergy_title": "9-2: The Fiery Heart & Emotional Clash",
+        "relationship_type": "Enemy",
+        "star_rating": 2.0,
+        "depth_1_basic": {
+          "summary": "Warning: Fire and Water conflict; causes emotional volatility and marital friction; requires cooling mindfulness and gentle communication.",
+          "guidance": "Mars (fire) and Moon (water) clash emotionally. Causes marital friction and relationship volatility. Cultivate calm communication.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Passionate defense of loved ones",
+            "High athletic stamina",
+            "Raw creative energy"
+          ],
+          "negative_traits": [
+            "Severe relationship and marital friction",
+            "Volcanic anger clashing with sensitivity",
+            "Impulsive decisions followed by regret"
+          ],
+          "recommended_careers": [
+            "Emergency Response & Paramedic Leadership",
+            "Culinary Fire Arts",
+            "Maritime Engineering",
+            "Sports Coaching"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mars (Mangal) and Moon (Chandra). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "9_3": {
+        "driver": 9,
+        "conductor": 3,
+        "synergy_title": "9-3: The Righteous Warrior & Medical Leader",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Four stars: Commander guided by Dev Guru; righteous courage; supreme aptitude for top surgeons, military command, and civil administration.",
+          "guidance": "Combines Martian courage with Jupiterian wisdom. Highly favored for top doctors, surgeons, army officers, and civil administrators.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "High administrative and moral courage",
+            "Inspirational leadership",
+            "Discipline in higher knowledge and physical arts",
+            "Noble humanitarian defense"
+          ],
+          "negative_traits": [
+            "Moral indignation leading to fiery confrontations",
+            "Impatience with bureaucratic corruption"
+          ],
+          "recommended_careers": [
+            "Surgical Medicine",
+            "Armed Forces Administration",
+            "University Directorship",
+            "Civil Services",
+            "Athletic Directorship"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mars (Mangal) and Jupiter (Guru). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "9_4": {
+        "driver": 9,
+        "conductor": 4,
+        "synergy_title": "9-4: The Angarak Crucible & Master Surgeon",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Warning / Dual Destiny: Mars-Rahu Angarak tension; brings accident and surgery risks, but creates world-class trauma surgeons and defense engineers.",
+          "guidance": "Numeros Vision analysis highlights 9-4: Mars and Rahu connection governs blood, surgery, and combat. Risk of accidents or surgery, but makes brilliant surgeons/doctors.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Fearless crisis intervention",
+            "Natural affinity for surgical instruments and blood medicine",
+            "Engineering brilliance under extreme pressure"
+          ],
+          "negative_traits": [
+            "High risk of physical accidents and surgeries",
+            "Volcanic rage when provoked",
+            "Fierce disputes with competitors"
+          ],
+          "recommended_careers": [
+            "General & Trauma Surgery",
+            "Emergency Medicine",
+            "Military Weapons Engineering",
+            "Forensic Investigation",
+            "Heavy Industrial Mechanics"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mars (Mangal) and Rahu (North Node). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "9_5": {
+        "driver": 9,
+        "conductor": 5,
+        "synergy_title": "9-5: The High-Speed Industrialist & Sports Marketer",
+        "relationship_type": "Friendly",
+        "star_rating": 4.0,
+        "depth_1_basic": {
+          "summary": "Four stars: Commander and Prince; high-speed dynamic enterprise; excels in manufacturing, athletic commerce, and industrial trade.",
+          "guidance": "Blends commercial speed with Martian fire. High success in manufacturing, athletic trade, and rapid enterprise scaling.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Decisive commercial action",
+            "High energetic drive",
+            "Sports and industrial trade acumen",
+            "Fearless market initiative"
+          ],
+          "negative_traits": [
+            "Impulsive business decisions",
+            "Occasional temper flares with partners"
+          ],
+          "recommended_careers": [
+            "Manufacturing & Heavy Equipment Trade",
+            "Sports Equipment & Apparel Commerce",
+            "Automotive Brokerage",
+            "Emergency Supply Logistics"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mars (Mangal) and Mercury (Budh). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "9_6": {
+        "driver": 9,
+        "conductor": 6,
+        "synergy_title": "9-6: The Dynamic Creative & High-Energy Leader",
+        "relationship_type": "Enemy",
+        "star_rating": 2.0,
+        "depth_1_basic": {
+          "summary": "Mars-Venus dynamic vitality; channels high creative charisma into media, arts, and enterprise when grounded with emotional maturity.",
+          "guidance": "Mars drive pairs with Venus aesthetic harmony. Channel intense energy into structured creative and commercial initiatives with disciplined follow-through.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Charismatic romantic passion",
+            "Artistic vitality and stage energy",
+            "Generous humanitarian giving"
+          ],
+          "negative_traits": [
+            "Emotional intensity requiring clear boundaries",
+            "Impulsive expenditures on creative passion projects"
+          ],
+          "recommended_careers": [
+            "Stage & Performing Arts",
+            "Athletic Fashion & Sports Media",
+            "Celebrity Public Relations",
+            "Cosmetic Surgery Support"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mars (Mangal) and Venus (Shukra). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "9_7": {
+        "driver": 9,
+        "conductor": 7,
+        "synergy_title": "9-7: The Righteous Protector & Occult Warrior",
+        "relationship_type": "Friendly",
+        "star_rating": 3.0,
+        "depth_1_basic": {
+          "summary": "Three stars: Mars and Ketu; occult warrior; excels in martial arts, defense intelligence, emergency rescue, and surgical technology.",
+          "guidance": "Numeros Vision analysis highlights 9-7 for occult, teaching, armed forces, and protective leadership. Channel into disciplined martial arts or surgery.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Fearless defense of justice",
+            "Spiritual and occult discipline",
+            "High physical and martial stamina",
+            "Intuitive protective reflexes"
+          ],
+          "negative_traits": [
+            "Sudden explosive outbursts",
+            "Impatience with deceit",
+            "Tendency to isolate after battles"
+          ],
+          "recommended_careers": [
+            "Martial Arts Instruction",
+            "Defense Intelligence",
+            "Occult & Tantric Protection",
+            "Emergency Rescue Leadership",
+            "Surgical Technology"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mars (Mangal) and Ketu (South Node). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      },
+      "9_8": {
+        "driver": 9,
+        "conductor": 8,
+        "synergy_title": "9-8: The Industrial Commander & Structural Builder",
+        "relationship_type": "Neutral",
+        "star_rating": 2.5,
+        "depth_1_basic": {
+          "summary": "Mars and Saturn: heavy industrial stamina; excels in automotive engineering, heavy metallurgy, civil infrastructure, and military logistics.",
+          "guidance": "Mars and Saturn require proper career alignment (heavy engineering, metallurgy, infrastructure) to convert friction into monumental achievement.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Immense physical and mechanical stamina",
+            "Fearless leadership in heavy industrial zones",
+            "Command over metallurgy and defense"
+          ],
+          "negative_traits": [
+            "Internal tension between hasty action and slow delay",
+            "Stubbornness",
+            "Risk of physical injury in heavy environments"
+          ],
+          "recommended_careers": [
+            "Heavy Metallurgy & Foundry",
+            "Automotive & Heavy Equipment",
+            "Civil Infrastructure Construction",
+            "Military Logistics"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mars (Mangal) and Saturn (Shani). Harmonizing Poorak Number: 5.",
+          "status": "DRAFT"
+        }
+      },
+      "9_9": {
+        "driver": 9,
+        "conductor": 9,
+        "synergy_title": "9-9: The Permanent Double Mars & Volcanic Fire",
+        "relationship_type": "Enemy",
+        "star_rating": 1.5,
+        "depth_1_basic": {
+          "summary": "Critical Warning: Permanent double Mars; volcanic temper, anger, and marital discord; must channel fire into rigorous sports and emergency surgery.",
+          "guidance": "CRITICAL TEMPER & MARITAL WARNING: Numeros Vision analysis highlights 9-9: Permanent relation of double Mars creates extreme temper, anger, fighting, and marital strife. Mandatory cooling exercises and red thread remedies.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "positive_traits": [
+            "Titanic physical courage and stamina",
+            "Heroic humanitarian protection",
+            "Fearless front-line leadership",
+            "Decisive crisis action"
+          ],
+          "negative_traits": [
+            "Volcanic explosive temper",
+            "Severe marital and relationship discord",
+            "Impulsive aggression risking physical injuries",
+            "Intolerance of dissent"
+          ],
+          "recommended_careers": [
+            "Special Armed Forces / Commando",
+            "Emergency Trauma Surgery",
+            "High-Risk Fire & Rescue",
+            "Competitive Professional Sports",
+            "Heavy Machinery"
+          ],
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "full_planetary_analysis": "Planetary synthesis of Mars (Mangal) and Mars (Mangal). Harmonizing Poorak Number: 1.",
+          "status": "DRAFT"
+        }
+      }
+    },
+    "planes": {
+      "mental": {
+        "name": "Mental Plane",
+        "numbers": [
+          4,
+          9,
+          2
+        ],
+        "focus": "Abstract thinking, intellectual retention, cognitive strategy",
+        "depth_1_basic": {
+          "complete_reading": "Complete plane indicates high natural proficiency and spontaneous flow in abstract thinking, intellectual retention, cognitive strategy.",
+          "partial_reading": "Partial plane highlights selective strength; missing digits require conscious behavioral reinforcement.",
+          "missing_reading": "Unoccupied plane indicates an area where conscious effort, habits, and environmental support must compensate for inborn absence.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "detail": "Detailed directional and planetary interaction across [4, 9, 2].",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "detail": "Complete multi-dasha activation and transit analysis for Mental Plane.",
+          "status": "DRAFT"
+        }
+      },
+      "emotional": {
+        "name": "Emotional Plane",
+        "numbers": [
+          3,
+          5,
+          7
+        ],
+        "focus": "Intuition, feeling discernment, spiritual empathy",
+        "depth_1_basic": {
+          "complete_reading": "Complete plane indicates high natural proficiency and spontaneous flow in intuition, feeling discernment, spiritual empathy.",
+          "partial_reading": "Partial plane highlights selective strength; missing digits require conscious behavioral reinforcement.",
+          "missing_reading": "Unoccupied plane indicates an area where conscious effort, habits, and environmental support must compensate for inborn absence.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "detail": "Detailed directional and planetary interaction across [3, 5, 7].",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "detail": "Complete multi-dasha activation and transit analysis for Emotional Plane.",
+          "status": "DRAFT"
+        }
+      },
+      "practical": {
+        "name": "Practical Plane",
+        "numbers": [
+          8,
+          1,
+          6
+        ],
+        "focus": "Material organization, tangible execution, commercial logic",
+        "depth_1_basic": {
+          "complete_reading": "Complete plane indicates high natural proficiency and spontaneous flow in material organization, tangible execution, commercial logic.",
+          "partial_reading": "Partial plane highlights selective strength; missing digits require conscious behavioral reinforcement.",
+          "missing_reading": "Unoccupied plane indicates an area where conscious effort, habits, and environmental support must compensate for inborn absence.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "detail": "Detailed directional and planetary interaction across [8, 1, 6].",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "detail": "Complete multi-dasha activation and transit analysis for Practical Plane.",
+          "status": "DRAFT"
+        }
+      },
+      "thought": {
+        "name": "Thought Plane",
+        "numbers": [
+          4,
+          3,
+          8
+        ],
+        "focus": "Planning, vision conceptualization, structured ideation",
+        "depth_1_basic": {
+          "complete_reading": "Complete plane indicates high natural proficiency and spontaneous flow in planning, vision conceptualization, structured ideation.",
+          "partial_reading": "Partial plane highlights selective strength; missing digits require conscious behavioral reinforcement.",
+          "missing_reading": "Unoccupied plane indicates an area where conscious effort, habits, and environmental support must compensate for inborn absence.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "detail": "Detailed directional and planetary interaction across [4, 3, 8].",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "detail": "Complete multi-dasha activation and transit analysis for Thought Plane.",
+          "status": "DRAFT"
+        }
+      },
+      "will": {
+        "name": "Willpower Plane",
+        "numbers": [
+          9,
+          5,
+          1
+        ],
+        "focus": "Persistence, determination under friction, sovereign drive",
+        "depth_1_basic": {
+          "complete_reading": "Complete plane indicates high natural proficiency and spontaneous flow in persistence, determination under friction, sovereign drive.",
+          "partial_reading": "Partial plane highlights selective strength; missing digits require conscious behavioral reinforcement.",
+          "missing_reading": "Unoccupied plane indicates an area where conscious effort, habits, and environmental support must compensate for inborn absence.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "detail": "Detailed directional and planetary interaction across [9, 5, 1].",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "detail": "Complete multi-dasha activation and transit analysis for Willpower Plane.",
+          "status": "DRAFT"
+        }
+      },
+      "action": {
+        "name": "Action Plane",
+        "numbers": [
+          2,
+          7,
+          6
+        ],
+        "focus": "Physical speed, tangible implementation, experiential learning",
+        "depth_1_basic": {
+          "complete_reading": "Complete plane indicates high natural proficiency and spontaneous flow in physical speed, tangible implementation, experiential learning.",
+          "partial_reading": "Partial plane highlights selective strength; missing digits require conscious behavioral reinforcement.",
+          "missing_reading": "Unoccupied plane indicates an area where conscious effort, habits, and environmental support must compensate for inborn absence.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "detail": "Detailed directional and planetary interaction across [2, 7, 6].",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "detail": "Complete multi-dasha activation and transit analysis for Action Plane.",
+          "status": "DRAFT"
+        }
+      },
+      "golden_raj_yoga": {
+        "name": "Golden Raj Yoga",
+        "numbers": [
+          4,
+          5,
+          6
+        ],
+        "focus": "Prosperity axis, intellectual balance, compounding wealth",
+        "depth_1_basic": {
+          "complete_reading": "Complete plane indicates high natural proficiency and spontaneous flow in prosperity axis, intellectual balance, compounding wealth.",
+          "partial_reading": "Partial plane highlights selective strength; missing digits require conscious behavioral reinforcement.",
+          "missing_reading": "Unoccupied plane indicates an area where conscious effort, habits, and environmental support must compensate for inborn absence.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "detail": "Detailed directional and planetary interaction across [4, 5, 6].",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "detail": "Complete multi-dasha activation and transit analysis for Golden Raj Yoga.",
+          "status": "DRAFT"
+        }
+      },
+      "silver_raj_yoga": {
+        "name": "Silver Raj Yoga",
+        "numbers": [
+          2,
+          5,
+          8
+        ],
+        "focus": "Real estate stability, grounded patience, durable physical assets",
+        "depth_1_basic": {
+          "complete_reading": "Complete plane indicates high natural proficiency and spontaneous flow in real estate stability, grounded patience, durable physical assets.",
+          "partial_reading": "Partial plane highlights selective strength; missing digits require conscious behavioral reinforcement.",
+          "missing_reading": "Unoccupied plane indicates an area where conscious effort, habits, and environmental support must compensate for inborn absence.",
+          "status": "DRAFT"
+        },
+        "depth_2_advanced": {
+          "detail": "Detailed directional and planetary interaction across [2, 5, 8].",
+          "status": "DRAFT"
+        },
+        "depth_3_premium": {
+          "detail": "Complete multi-dasha activation and transit analysis for Silver Raj Yoga.",
+          "status": "DRAFT"
+        }
+      }
+    },
+    "elements": {
+      "Wood": {
+        "planets": "Jupiter (3), Rahu (4)",
+        "governance": "Expansion, structured growth, cognitive ideation, forward vision",
+        "states": {
+          "missing": {
+            "remedy": "Cultivate structured learning habits, keep live indoor plants in the East vector, and avoid impulsive project abandonment.",
+            "status": "DRAFT"
+          },
+          "low": {
+            "remedy": "Gradually nurture long-range projects; prioritize systematic study over rushed conclusions.",
+            "status": "DRAFT"
+          },
+          "balanced": {
+            "remedy": "Optimal equilibrium between creative expansion and disciplined implementation.",
+            "status": "DRAFT"
+          },
+          "strong": {
+            "remedy": "High ideation volume; consciously ground excess mental expansion through tangible physical execution.",
+            "status": "DRAFT"
+          }
+        }
+      },
+      "Fire": {
+        "planets": "Mars (9)",
+        "governance": "Executive courage, finishing power, vitality, competitive drive",
+        "states": {
+          "missing": {
+            "remedy": "Engage regular cardiovascular exercise, sit facing South for critical tasks, and consciously commit to finishing started projects.",
+            "status": "DRAFT"
+          },
+          "low": {
+            "remedy": "Build daily physical momentum through morning exercise; celebrate definitive project completions.",
+            "status": "DRAFT"
+          },
+          "balanced": {
+            "remedy": "Sustained executive drive, decisive focus, and radiant leadership presence.",
+            "status": "DRAFT"
+          },
+          "strong": {
+            "remedy": "Fiery urgency is prominent; balance intense operational sprint cycles with quiet evening breathwork.",
+            "status": "DRAFT"
+          }
+        }
+      },
+      "Earth": {
+        "planets": "Moon (2), Mercury (5), Saturn (8)",
+        "governance": "Emotional stability, central equilibrium, material patience, real asset compounding",
+        "states": {
+          "missing": {
+            "remedy": "Anchor daily life with predictable routines, consume grounding nourishing meals, and use a dedicated organized work desk.",
+            "status": "DRAFT"
+          },
+          "low": {
+            "remedy": "Incorporate fixed calendar review periods; cultivate physical stability before making major transitions.",
+            "status": "DRAFT"
+          },
+          "balanced": {
+            "remedy": "Sturdy emotional equilibrium, commercial adaptability, and patient material foundation.",
+            "status": "DRAFT"
+          },
+          "strong": {
+            "remedy": "Exceptionally sturdy foundation; guard against excessive routine rigidity by staying open to innovative methods.",
+            "status": "DRAFT"
+          }
+        }
+      },
+      "Metal": {
+        "planets": "Venus (6), Ketu (7)",
+        "governance": "Analytical discernment, aesthetic refinement, quality standards, systematized order",
+        "states": {
+          "missing": {
+            "remedy": "Maintain strict physical workspace order, declutter digital files, and introduce metallic or brass functional accents on desk.",
+            "status": "DRAFT"
+          },
+          "low": {
+            "remedy": "Set clear standards for document clarity and process organization before executing.",
+            "status": "DRAFT"
+          },
+          "balanced": {
+            "remedy": "High discernment, aesthetic taste, and rigorous analytical quality control.",
+            "status": "DRAFT"
+          },
+          "strong": {
+            "remedy": "Meticulous standards; beware of perfectionist procrastination by setting firm 'good enough to ship' criteria.",
+            "status": "DRAFT"
+          }
+        }
+      },
+      "Water": {
+        "planets": "Sun (1)",
+        "governance": "Career flow, personal vitality, communicative clarity, adaptive direction",
+        "states": {
+          "missing": {
+            "remedy": "Maintain regular hydration, sit facing North during negotiations, and practice structured active listening.",
+            "status": "DRAFT"
+          },
+          "low": {
+            "remedy": "Focus on consistent communication clarity and regular daily routines.",
+            "status": "DRAFT"
+          },
+          "balanced": {
+            "remedy": "Fluid career adaptability, communicative confidence, and magnetic natural momentum.",
+            "status": "DRAFT"
+          },
+          "strong": {
+            "remedy": "Intense independent drive; align singular personal focus with collaborative team goals to prevent isolation.",
+            "status": "DRAFT"
+          }
+        }
+      }
+    },
+    "ninety_day_plan": {
+      "Wood": {
+        "gap_focus": "Wood Element Gap (Missing 3/4) · Expansion & Structural Vault",
+        "depth_1_basic": {
+          "days_1_30": "Foundational Order: Clear clutter in East/South-East sectors. Introduce structured morning reading blocks (20 mins).",
+          "days_31_60": "Habit Calibration: Establish a single project tracking system. Focus on completing 2 core strategic objectives.",
+          "days_61_90": "Consolidation & Growth: Review tangible structural milestones. Solidify long-term educational or asset roadmap.",
+          "status": "DRAFT"
+        }
+      },
+      "Fire": {
+        "gap_focus": "Fire Element Gap (Missing 9) · Finishing Drive & Decisive Action",
+        "depth_1_basic": {
+          "days_1_30": "Ignition: Establish a consistent morning physical activation routine. Align desk facing South during decisive work blocks.",
+          "days_31_60": "Execution Sprint: Dedicate 90-minute daily deep-work windows strictly to closing open loops and unfinished contracts.",
+          "days_61_90": "Harvest & Direction: Celebrate verified completions. Anchor bold professional initiatives with measured strategic timelines.",
+          "status": "DRAFT"
+        }
+      },
+      "Earth": {
+        "gap_focus": "Earth Element Gap (Missing 2/5/8) · Grounding & Asset Stability",
+        "depth_1_basic": {
+          "days_1_30": "Grounding: Establish fixed sleep and meal timings. Create a serene, clutter-free central workspace (Brahmasthan).",
+          "days_31_60": "Financial & Emotional Cadence: Audit recurring monthly expenses and commitments. Implement steady savings protocols.",
+          "days_61_90": "Physical Asset Anchoring: Consolidate physical property, contract stability, and long-range operational foundations.",
+          "status": "DRAFT"
+        }
+      },
+      "Metal": {
+        "gap_focus": "Metal Element Gap (Missing 6/7) · Analytical Discernment & Refinement",
+        "depth_1_basic": {
+          "days_1_30": "Workspace Purification: Clear West/North-West vectors. Standardize file naming and workflow documentation.",
+          "days_31_60": "Analytical Depth: Conduct thorough weekly reviews of metrics. Eliminate redundant communications and meetings.",
+          "days_61_90": "Aesthetic & Process Mastery: Institutionalize refined quality checklists across all personal and business deliverables.",
+          "status": "DRAFT"
+        }
+      },
+      "Water": {
+        "gap_focus": "Water Element Gap (Missing 1) · Career Direction & Flow",
+        "depth_1_basic": {
+          "days_1_30": "Flow Initiation: Ensure proper daily hydration. Position desk facing North. Clarify your 12-month professional headline.",
+          "days_31_60": "Voice & Outreach: Engage proactive communicative reach-outs. Speak with authority in meetings and collaborative forums.",
+          "days_61_90": "Momentum Review: Measure career trajectory gains. Anchor confident leadership habits into permanent daily practice.",
+          "status": "DRAFT"
+        }
+      },
+      "Balanced": {
+        "gap_focus": "All Elements In Equilibrium · Harmonized Multi-Vector Mastery",
+        "depth_1_basic": {
+          "days_1_30": "Center Alignment: Conduct a holistic life-audit across health, finance, and career. Optimize current strong axes.",
+          "days_31_60": "Compound Expansion: Channel stable energy into higher-leverage long-term investments and intellectual projects.",
+          "days_61_90": "Sustained Elevation: Mentor others, refine strategic partnerships, and prepare the next cycle of evolutionary expansion.",
+          "status": "DRAFT"
+        }
+      }
+    }
+  }
+}

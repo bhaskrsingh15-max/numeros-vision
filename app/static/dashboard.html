@@ -14,7 +14,7 @@
   <title>Your Numeros Dashboard | Numeros Vision</title>
   <meta name="description" content="View your personalized numerological profile, Classical Calculations, Lo Shu grid, and Charm AI consultation credits in your secure dashboard." />
   <link rel="canonical" href="https://numerosvision.com/dashboard/" />
-  <meta name="robots" content="noindex, follow" />
+  <meta name="robots" content="noindex, nofollow" />
   <meta name="referrer" content="no-referrer" />
 
   <link rel="manifest" href="/manifest.json" />
@@ -754,7 +754,7 @@
         id: 'report_advanced',
         name: 'Advanced Master Dossier',
         pages: 12,
-        priceInr: 510,
+        priceInr: 489,
         badge: 'RECOMMENDED',
         desc: '12-Page Master Synthesis PDF · All Basic calculations + Auspicious Windows, Enabled Numbers in Depth & Vedic Remedies.'
       },
@@ -1336,13 +1336,28 @@
       try {
         await fetch('/api/v1/auth/logout', { method: 'POST' });
       } catch (e) {}
+      try {
+        if ('serviceWorker' in navigator) {
+          if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ action: 'LOGOUT' });
+          }
+          const reg = await navigator.serviceWorker.getRegistration();
+          if (reg && reg.active) {
+            reg.active.postMessage({ action: 'LOGOUT' });
+          }
+        }
+        if ('caches' in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map((n) => caches.delete(n)));
+        }
+      } catch (swErr) {}
       if (window.nvConsent && typeof window.nvConsent.clearDevicePersonalData === 'function') {
         window.nvConsent.clearDevicePersonalData();
       } else {
         localStorage.clear();
         sessionStorage.clear();
       }
-      window.location.href = '/login.html';
+      window.location.href = '/login/';
     }
 
     // Single awaited render path on DOMContentLoaded

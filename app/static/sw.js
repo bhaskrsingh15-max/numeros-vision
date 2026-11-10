@@ -1,13 +1,13 @@
 // ============================================================
-// NUMEROS VISION — SERVICE WORKER v5.2.0-brand-uniform
-// Handles: Offline caching, push notifications, background sync
+// NUMEROS VISION — SERVICE WORKER
+// Single SW_VERSION used for headers, logs, and cache names
 // ============================================================
 
-const CACHE_NAME = 'numeros-static-v5.5.0-charm-logo-canonical';
-const STATIC_CACHE = 'numeros-static-v5.5.0-charm-logo-canonical';
-const API_CACHE = 'numeros-api-v5.5.0-charm-logo-canonical';
+const SW_VERSION = 'v6.3.0';
+const CACHE_NAME = `numeros-static-${SW_VERSION}`;
+const STATIC_CACHE = CACHE_NAME;
 
-// Assets to cache immediately on install (App Shell)
+// Assets to cache individually on install (App Shell) - only public clean 200 URLs
 const APP_SHELL = [
   '/',
   '/sample_roadmap/',
@@ -18,11 +18,13 @@ const APP_SHELL = [
   '/privacy/',
   '/terms/',
   '/refund-policy/',
-  '/practitioner/',
+  '/disclaimer/',
+  '/accessibility/',
+  '/methodology/',
   '/tools/life-path-calculator/',
   '/tools/lo-shu-grid/',
   '/tools/mobile-numerology/',
-  '/tools/lucky-number/',
+  '/tools/favourable-numbers/',
   '/tools/name-numerology/',
   '/tools/name-balancing/',
   '/tools/profession-calculator/',
@@ -32,43 +34,82 @@ const APP_SHELL = [
   '/tools/blessing-years/',
   '/tools/baby-naming/',
   '/tools/business-alignment/',
-  '/tools/logo-studio/',
+  '/tools/logo-intelligence/',
   '/manifest.json',
-  '/manifest.webmanifest',
-  '/static/css/theme.css?v=4.8.0',
-  '/static/css/roadmap_components.css?v=4.8.0',
+  '/static/css/theme.css?v=5.4.0',
+  '/static/css/roadmap_components.css?v=5.5.0',
   'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap',
 ];
 
+// Helper for fetch with real AbortController timeout
+async function fetchWithTimeout(resource, options = {}, timeoutMs = 5000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(resource, {
+      ...options,
+      signal: controller.signal
+    });
+    clearTimeout(id);
+    return response;
+  } catch (err) {
+    clearTimeout(id);
+    throw err;
+  }
+}
 
-
-// ── INSTALL: Cache app shell ──────────────────────────────────
+// ── INSTALL: Cache app shell individually so one failure does not empty shell
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing Numeros Vision Service Worker v5.2.0-brand-uniform');
+  console.log(`[SW ${SW_VERSION}] Installing Numeros Vision Service Worker`);
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => {
-      return cache.addAll(APP_SHELL).catch((err) => {
-        console.warn('[SW] Failed to cache some shell assets:', err);
-      });
+    caches.open(STATIC_CACHE).then(async (cache) => {
+      await Promise.allSettled(
+        APP_SHELL.map(async (url) => {
+          try {
+            const res = await fetch(url, { cache: 'no-cache' });
+            if (res.ok) {
+              await cache.put(url, res);
+            }
+          } catch (err) {
+            console.warn(`[SW ${SW_VERSION}] Failed to cache ${url}:`, err);
+          }
+        })
+      );
     }).then(() => self.skipWaiting())
   );
 });
 
-// ── ACTIVATE: Clean old caches ────────────────────────────────
+// ── ACTIVATE: Clean old caches on version bump
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating Numeros Vision Service Worker v5.0.0-clean');
+  console.log(`[SW ${SW_VERSION}] Activating Numeros Vision Service Worker`);
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
           .filter(name => name !== STATIC_CACHE)
           .map(name => {
-            console.log('[SW] Deleting old cache:', name);
+            console.log(`[SW ${SW_VERSION}] Deleting old cache:`, name);
             return caches.delete(name);
           })
       );
     }).then(() => self.clients.claim())
   );
+});
+
+// ── MESSAGE LISTENER: Clear cache on logout or client request
+self.addEventListener('message', (event) => {
+  if (event.data && (event.data.action === 'CLEAR_CACHE' || event.data.action === 'LOGOUT')) {
+    console.log(`[SW ${SW_VERSION}] Received ${event.data.action}: Purging all cached data`);
+    event.waitUntil(
+      caches.keys().then((cacheNames) => {
+        return Promise.all(cacheNames.map(name => caches.delete(name)));
+      }).then(() => {
+        if (event.ports && event.ports[0]) {
+          event.ports[0].postMessage({ success: true, version: SW_VERSION });
+        }
+      })
+    );
+  }
 });
 
 // ── FETCH: Routing strategy ───────────────────────────────────
@@ -80,37 +121,45 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
   if (url.protocol === 'chrome-extension:') return;
 
-  // 1. PRIVACY GUARD: Strictly NEVER cache API calls, report downloads, or PDFs
-  if (url.pathname.startsWith('/api/') || url.pathname.includes('/reports/download') || url.pathname.endsWith('.pdf')) {
+  // 1. PRIVACY & DATA INTEGRITY GUARD: Strictly NEVER cache API calls, auth, orders, checkout, reports, or downloads (Network Only)
+  if (
+    url.pathname.startsWith('/api/') ||
+    url.pathname.includes('/reports/download') ||
+    url.pathname.includes('/checkout') ||
+    url.pathname.endsWith('.pdf')
+  ) {
     event.respondWith(fetch(request));
     return;
   }
 
-  // 2. PRIVACY GUARD: Dashboard navigation is private to the session; NEVER cache on shared devices
-  if (url.pathname.startsWith('/dashboard')) {
+  // 2. PRIVACY GUARD: Dashboard and user session pages are private; NEVER cache on shared devices
+  if (
+    url.pathname.startsWith('/dashboard') ||
+    url.pathname.startsWith('/login') ||
+    url.pathname.startsWith('/signup')
+  ) {
     event.respondWith(fetch(request));
     return;
   }
 
-  // 3. Public Static HTML Navigation: Network-First
+  // 3. Public Static HTML Navigation: Network-First with AbortController timeout & offline fallback
   if (request.mode === 'navigate' || (request.headers.get('accept') && request.headers.get('accept').includes('text/html'))) {
     event.respondWith(networkFirstStrategy(request));
     return;
   }
 
-  // Google Fonts: Cache First (rarely changes)
-  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
+  // 4. External Fonts & CDNs: Cache First (rarely changes)
+  if (
+    url.hostname === 'fonts.googleapis.com' ||
+    url.hostname === 'fonts.gstatic.com' ||
+    url.hostname === 'unpkg.com' ||
+    url.hostname === 'cdn.tailwindcss.com'
+  ) {
     event.respondWith(cacheFirstStrategy(request, STATIC_CACHE));
     return;
   }
 
-  // External CDN (Lucide icons, etc.): Cache First
-  if (url.hostname === 'unpkg.com' || url.hostname === 'cdn.tailwindcss.com') {
-    event.respondWith(cacheFirstStrategy(request, STATIC_CACHE));
-    return;
-  }
-
-  // App pages & assets: Stale-while-revalidate
+  // 5. App static assets (CSS, JS, images): Stale-while-revalidate
   event.respondWith(staleWhileRevalidate(request));
 });
 
@@ -119,7 +168,7 @@ self.addEventListener('fetch', (event) => {
 async function networkFirstStrategy(request) {
   const cache = await caches.open(STATIC_CACHE);
   try {
-    const networkResponse = await fetch(request.clone(), { timeout: 5000 });
+    const networkResponse = await fetchWithTimeout(request.clone(), {}, 5000);
     if (networkResponse.ok) {
       cache.put(request, networkResponse.clone());
     }
@@ -127,10 +176,14 @@ async function networkFirstStrategy(request) {
   } catch (err) {
     const cached = await cache.match(request);
     if (cached) return cached;
-    return new Response(
-      JSON.stringify({ error: 'offline', message: 'You are offline. Please check your connection.' }),
-      { status: 503, headers: { 'Content-Type': 'application/json' } }
-    );
+    return new Response(getOfflineFallbackHTML(), {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'X-Numeros-Offline': 'true',
+        'X-SW-Version': SW_VERSION
+      }
+    });
   }
 }
 
@@ -176,14 +229,14 @@ async function staleWhileRevalidate(request) {
 
   return new Response(
     getOfflineFallbackHTML(),
-    { headers: { 'Content-Type': 'text/html' } }
+    { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'X-SW-Version': SW_VERSION } }
   );
 }
 
 // ── PUSH NOTIFICATIONS ────────────────────────────────────────
 self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {};
-  const title = data.title || '✦ Numeros Vision';
+  const title = data.title || '✦ NUMEROS VISION';
   const options = {
     body: data.body || 'Your daily celestial reading is ready.',
     icon: '/static/icons/icon-192.png',
@@ -214,51 +267,88 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-// ── BACKGROUND SYNC ───────────────────────────────────────────
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-booking') {
-    event.waitUntil(syncPendingBookings());
-  }
-  if (event.tag === 'sync-question') {
-    event.waitUntil(syncPendingQuestions());
-  }
-});
-
-async function syncPendingBookings() {
-  // Sync any bookings saved to IndexedDB while offline
-  console.log('[SW] Syncing pending bookings...');
-}
-
-async function syncPendingQuestions() {
-  console.log('[SW] Syncing pending Charm AI questions...');
-}
-
-// ── OFFLINE FALLBACK ──────────────────────────────────────────
+// ── OFFLINE FALLBACK PAGE ─────────────────────────────────────
 function getOfflineFallbackHTML() {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Numeros Vision — Offline</title>
+  <title>Offline · NUMEROS VISION</title>
   <style>
-    body { background: #06030f; color: #f0eaff; font-family: 'Inter', sans-serif;
-           display: flex; align-items: center; justify-content: center;
-           min-height: 100vh; margin: 0; text-align: center; padding: 24px; }
-    .icon { font-size: 4rem; margin-bottom: 20px; }
-    h1 { font-size: 1.5rem; margin-bottom: 12px; }
-    p { color: rgba(240,234,255,0.5); font-size: 0.9rem; line-height: 1.6; max-width: 340px; }
-    button { margin-top: 24px; padding: 14px 28px; border-radius: 14px;
-             background: linear-gradient(135deg,#d4a843,#c9973a); border: none;
-             color: #06030f; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+    :root {
+      --bg-cream: #FFFDF7;
+      --gold-dark: #8B6914;
+      --gold-main: #C9A227;
+      --ink: #523E28;
+      --text-muted: #7A654D;
+      --border-amber: rgba(201,162,39,0.3);
+    }
+    body {
+      background: var(--bg-cream);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .offline-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-amber);
+      border-radius: 16px;
+      padding: 40px 28px;
+      max-width: 440px;
+      box-shadow: 0 10px 30px rgba(82,62,40,0.06);
+    }
+    .icon {
+      font-size: 2.8rem;
+      color: var(--gold-main);
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+    h1 {
+      font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.45rem;
+      color: var(--gold-dark);
+      margin: 0 0 12px 0;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      margin: 0 0 24px 0;
+    }
+    button {
+      padding: 13px 30px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--gold-main), var(--gold-dark));
+      border: none;
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(201,162,39,0.25);
+      transition: opacity 0.2s ease, transform 0.1s ease;
+    }
+    button:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 <body>
-  <div>
+  <div class="offline-card">
     <div class="icon">✦</div>
-    <h1>You're Offline</h1>
-    <p>The stars are still aligned for you. Please check your internet connection and try again.</p>
-    <button onclick="location.reload()">Try Again</button>
+    <h1>You are Currently Offline</h1>
+    <p>You appear to have lost your internet connection. Saved readings will be accessible once connection is restored.</p>
+    <button onclick="window.location.reload()">Retry Connection</button>
   </div>
 </body>
 </html>`;

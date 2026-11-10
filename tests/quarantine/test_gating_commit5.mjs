@@ -4,7 +4,7 @@
  * 1. viewFor(user, subject, env) unlock matrix:
  *    - Free: Lo Shu grid with enabled digits; missing digits as locked marks ('🔒')
  *    - Basic (report_basic, ₹199, 3 pages): elementBalancing unlocked; rest locked
- *    - Advanced (report_advanced, ₹510, 12 pages): elementBalancing + enabledNumbersInDepth unlocked; rest locked
+ *    - Advanced (report_advanced, ₹489, 12 pages): elementBalancing + enabledNumbersInDepth unlocked; rest locked
  *    - Premium (report_premium, ₹1,050, 32 pages): 100% unlocked (missing numbers in depth, remedies, predictions)
  * 2. Entitlements from refunded orders are excluded from viewFor
  * 3. POST /api/v1/subjects requires session (401)
@@ -184,7 +184,7 @@ async function runTests() {
     if (view.sections.predictions.unlocked !== false) throw new Error('Expected predictions to be locked in basic tier');
   });
 
-  // 4. Test viewFor Advanced Tier (report_advanced, ₹510, 12 pages)
+  // 4. Test viewFor Advanced Tier (report_advanced, ₹489, 12 pages)
   await assertCase('viewFor Advanced Tier: elementBalancing + enabledNumbersInDepth unlocked (12 pages); rest locked', async () => {
     const createReq = new Request('https://numerosvision.com/api/v1/payments/create-order', {
       method: 'POST',
@@ -200,7 +200,7 @@ async function runTests() {
       event_id: 'evt_adv_' + Date.now(),
       payload: {
         order: { entity: { id: ordData.rzpOrderId } },
-        payment: { entity: { id: payId, amount: 51000, currency: 'INR', order_id: ordData.rzpOrderId } }
+        payment: { entity: { id: payId, amount: 48900, currency: 'INR', order_id: ordData.rzpOrderId } }
       }
     });
     const sig = crypto.createHmac('sha256', mockEnv.RAZORPAY_WEBHOOK_SECRET).update(payPayload).digest('hex');

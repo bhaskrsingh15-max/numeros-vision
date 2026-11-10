@@ -134,8 +134,7 @@ ROUTING_MAP = {
     "sample-roadmap": "sample_roadmap.html",
     "roadmap-preview": "sample_roadmap.html",
     "sample": "sample.html",
-    "sample-report": "sample.html",
-    "sample_report": "sample.html",
+    "year-2027": "year_2027.html",
     "sample2": "sample2.html",
 
     # Catalogue & Pricing
@@ -153,9 +152,7 @@ ROUTING_MAP = {
     "consultation": "consultation.html",
     "practitioner": "practitioner.html",
     "privacy": "privacy.html",
-    "privacy-policy": "privacy.html",
     "terms": "terms.html",
-    "refund": "refund.html",
     "refund-policy": "refund.html",
     "cancel": "cancel.html",
     "cancellation": "cancel.html",
@@ -185,7 +182,7 @@ ROUTING_MAP = {
     "tools/vehicle-numerology": "tools/vehicle-numerology.html",
     "tools/blessing-years": "tools/blessing-years.html",
     "tools/profession-calculator": "tools/profession-calculator.html",
-    "tools/lucky-number": "tools/lucky-number.html",
+    "tools/favourable-numbers": "tools/favourable-numbers.html",
     "tools/logo-intelligence": "tools/logo-intelligence.html",
     "tools/logo-studio": "tools/logo-intelligence.html",
 
@@ -203,6 +200,7 @@ ROUTING_MAP = {
     "calculators/birth-number": "birth_number_calculator.html",
     "calculators/lo-shu-grid": "tools/lo-shu-grid.html",
     "calculators/pythagorean": "pythagorean_calculator.html",
+    "calculators/chaldean": "tools/name-numerology.html",
     "calculators/personal-year": "tools/blessing-years.html",
     "calculators/life-path-number": "tools/life-path-calculator.html",
     "calculators/name-numerology": "tools/name-balancing.html",
@@ -218,17 +216,56 @@ ROUTING_MAP = {
     "local/dubai": "local_dubai.html",
 }
 
+# 3. Create physical directory/index.html for every canonical route (Clean trailing-slash architecture)
+# Eliminates conflicting .html files so Cloudflare Pages never enters a 308 redirect ping-pong loop
+consumed_root_html = set()
+
 for route_name, src_file in ROUTING_MAP.items():
-    source_path = os.path.join(DIST_DIR, src_file)
+    dist_candidate = os.path.join(DIST_DIR, src_file)
+    source_path = dist_candidate if os.path.exists(dist_candidate) else os.path.join(STATIC_SRC, src_file)
     if os.path.exists(source_path):
-        target_file = os.path.join(DIST_DIR, f"{route_name}.html")
-        if os.path.normpath(target_file) != os.path.normpath(source_path):
-            os.makedirs(os.path.dirname(target_file), exist_ok=True)
-            shutil.copy2(source_path, target_file)
         target_index = os.path.join(DIST_DIR, route_name, "index.html")
-        if os.path.normpath(target_index) != os.path.normpath(source_path):
-            os.makedirs(os.path.dirname(target_index), exist_ok=True)
-            shutil.copy2(source_path, target_index)
+        os.makedirs(os.path.dirname(target_index), exist_ok=True)
+        shutil.copy2(source_path, target_index)
+        
+        # Track root source file in DIST_DIR to clean up later
+        if "/" not in src_file and src_file != "index.html":
+            consumed_root_html.add(src_file)
+        
+        # Ensure conflicting .html file does NOT exist in DIST_DIR
+        conflicting_html = os.path.join(DIST_DIR, f"{route_name}.html")
+        if os.path.exists(conflicting_html) and os.path.normpath(conflicting_html) != os.path.normpath(target_index):
+            os.remove(conflicting_html)
+
+# Clean up consumed root html files that have directory versions
+for cr in consumed_root_html:
+    fp = os.path.join(DIST_DIR, cr)
+    if os.path.exists(fp):
+        os.remove(fp)
+
+# Clean up tools/*.html -> tools/*/index.html
+tools_dir = os.path.join(DIST_DIR, "tools")
+if os.path.exists(tools_dir):
+    for f in list(os.listdir(tools_dir)):
+        if f.endswith(".html") and f != "index.html":
+            slug = f[:-5]
+            src = os.path.join(tools_dir, f)
+            dest_dir = os.path.join(tools_dir, slug)
+            os.makedirs(dest_dir, exist_ok=True)
+            shutil.copy2(src, os.path.join(dest_dir, "index.html"))
+            os.remove(src)
+
+# Clean up blog/*.html -> blog/*/index.html
+blog_dir = os.path.join(DIST_DIR, "blog")
+if os.path.exists(blog_dir):
+    for f in list(os.listdir(blog_dir)):
+        if f.endswith(".html") and f != "index.html":
+            slug = f[:-5]
+            src = os.path.join(blog_dir, f)
+            dest_dir = os.path.join(blog_dir, slug)
+            os.makedirs(dest_dir, exist_ok=True)
+            shutil.copy2(src, os.path.join(dest_dir, "index.html"))
+            os.remove(src)
 
 # 4. Standard Cloudflare _headers file
 headers_content = """/*
@@ -270,10 +307,40 @@ src_redirects = os.path.join(STATIC_SRC, "_redirects")
 if os.path.exists(src_redirects):
     shutil.copy2(src_redirects, os.path.join(DIST_DIR, "_redirects"))
 
-# 5b. Cloudflare Pages _routes.json (limits Worker invocations to /api/* only)
+# 5b. Cloudflare Pages _routes.json (limits Worker invocations to /api/* and dynamic routes only)
 src_routes = os.path.join(STATIC_SRC, "_routes.json")
 if os.path.exists(src_routes):
     shutil.copy2(src_routes, os.path.join(DIST_DIR, "_routes.json"))
+
+# 5c. Automatically bump SW_VERSION in dist_cloudflare_pages/sw.js on every build
+import hashlib as _hashlib
+_build_hasher = _hashlib.sha256()
+for _r, _ds, _fs in os.walk(DIST_DIR):
+    _ds.sort()
+    for _fn in sorted(_fs):
+        if _fn == "sw.js":
+            continue
+        _fp = os.path.join(_r, _fn)
+        _build_hasher.update(_fn.encode("utf-8"))
+        try:
+            with open(_fp, "rb") as _bf:
+                _build_hasher.update(_bf.read(4096))
+        except Exception:
+            pass
+_sw_build_tag = f"v6.3.0-{_build_hasher.hexdigest()[:8]}"
+_dist_sw_path = os.path.join(DIST_DIR, "sw.js")
+if os.path.exists(_dist_sw_path):
+    with open(_dist_sw_path, "r", encoding="utf-8") as _swf:
+        _sw_txt = _swf.read()
+    _sw_txt = re.sub(
+        r"const\s+SW_VERSION\s*=\s*'[^']+';",
+        f"const SW_VERSION = '{_sw_build_tag}';",
+        _sw_txt,
+        count=1,
+    )
+    with open(_dist_sw_path, "w", encoding="utf-8") as _swf:
+        _swf.write(_sw_txt)
+    print(f"PASS: Auto-bumped SW_VERSION in dist_cloudflare_pages/sw.js -> {_sw_build_tag}")
 
 # 6. Synchronize isolated pdf_service directory
 try:

@@ -742,7 +742,7 @@ async function runTests() {
       id: secondOrderId,
       user_id: 'usr_other_999',
       pack_id: 'report_deep',
-      amount_paise: 51000,
+      amount_paise: 48900,
       email: 'other@example.com',
       created_at: Date.now()
     });

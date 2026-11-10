@@ -1,0 +1,131 @@
+{
+  "version": "1.1.0",
+  "status": "DRAFT",
+  "last_updated": "2026-11-11",
+  "editions": {
+    "india": {
+      "format": "{primary} ({secondary})",
+      "primary_lang": "Sanskrit/Vedic",
+      "secondary_lang": "English"
+    },
+    "international": {
+      "format": "{primary} ({secondary})",
+      "primary_lang": "English",
+      "secondary_lang": "Sanskrit/Vedic"
+    }
+  },
+  "terms": {
+    "driver": {
+      "india_primary": "Mulank",
+      "india_secondary": "Birth Day number",
+      "intl_primary": "Birth Day number",
+      "intl_secondary": "Mulank",
+      "glossary": "Calculated from the calendar day you were born (1 to 31 reduced to 1 to 9); reflects everyday personal style."
+    },
+    "conductor": {
+      "india_primary": "Bhagyank",
+      "india_secondary": "Life Path number",
+      "intl_primary": "Life Path number",
+      "intl_secondary": "Bhagyank",
+      "glossary": "Calculated from your full date of birth (day + month + year reduced); reflects long-term direction."
+    },
+    "calling_name": {
+      "india_primary": "Calling Name number",
+      "india_secondary": "Chaldean Name number",
+      "intl_primary": "Name number",
+      "intl_secondary": "Calling Name number",
+      "glossary": "Calculated from the letters of the name you use day to day using the Chaldean letter-value table."
+    },
+    "kua": {
+      "india_primary": "Kua number",
+      "india_secondary": "Vastu direction number",
+      "intl_primary": "Kua number",
+      "intl_secondary": "Feng Shui direction number",
+      "glossary": "Traditional directional group number derived from birth year and gender, used for desk and room orientation."
+    },
+    "loshu_grid": {
+      "india_primary": "Lo Shu Grid",
+      "india_secondary": "Lo Shu Square",
+      "intl_primary": "Lo Shu Square",
+      "intl_secondary": "Lo Shu Grid",
+      "glossary": "Traditional 3x3 square arranging the digits 1 to 9 from your birth date into three rows, three columns, and two diagonals."
+    },
+    "missing_numbers": {
+      "india_primary": "Missing numbers",
+      "india_secondary": "Open grid cells",
+      "intl_primary": "Missing numbers",
+      "intl_secondary": "Missing digits",
+      "glossary": "Digits from 1 to 9 that do not appear in your birth date and indicate areas for everyday habit balance."
+    },
+    "brahmasthan": {
+      "india_primary": "Brahmasthan",
+      "india_secondary": "Centre of the grid",
+      "intl_primary": "Centre of the grid",
+      "intl_secondary": "Brahmasthan",
+      "glossary": "Position 5 at the middle of the 3x3 square, linked with steadiness and practical balance."
+    },
+    "rahu": {
+      "india_primary": "Rahu",
+      "india_secondary": "North Node",
+      "intl_primary": "North Node",
+      "intl_secondary": "Rahu",
+      "glossary": "Traditional lunar node linked with number 4, associated with structure, systems, and unconventional thinking."
+    },
+    "ketu": {
+      "india_primary": "Ketu",
+      "india_secondary": "South Node",
+      "intl_primary": "South Node",
+      "intl_secondary": "Ketu",
+      "glossary": "Traditional lunar node linked with number 7, associated with reflection, study, and careful analysis."
+    },
+    "guru": {
+      "india_primary": "Guru",
+      "india_secondary": "Jupiter",
+      "intl_primary": "Jupiter",
+      "intl_secondary": "Guru",
+      "glossary": "Planet linked with number 3, associated with learning, teaching, and steady growth."
+    },
+    "shukra": {
+      "india_primary": "Shukra",
+      "india_secondary": "Venus",
+      "intl_primary": "Venus",
+      "intl_secondary": "Shukra",
+      "glossary": "Planet linked with number 6, associated with home harmony, care, and design appreciation."
+    },
+    "budh": {
+      "india_primary": "Budh",
+      "india_secondary": "Mercury",
+      "intl_primary": "Mercury",
+      "intl_secondary": "Budh",
+      "glossary": "Planet linked with number 5, associated with clear communication, adaptability, and practical coordination."
+    },
+    "vastu": {
+      "india_primary": "Vastu",
+      "india_secondary": "Spatial layout",
+      "intl_primary": "Feng Shui",
+      "intl_secondary": "Spatial layout",
+      "glossary": "Traditional principles for arranging workspace and home orientation cleanly and practically."
+    },
+    "golden_raj_yoga": {
+      "india_primary": "Golden Raj Yoga (4-5-6)",
+      "india_secondary": "complete diagonal 4-5-6 pattern",
+      "intl_primary": "Raj Yoga 4-5-6",
+      "intl_secondary": "traditional name for the 4-5-6 diagonal pattern",
+      "glossary": "Traditional name for having all three digits 4, 5, and 6 present along the primary diagonal of the Lo Shu Square."
+    },
+    "silver_raj_yoga": {
+      "india_primary": "Silver Raj Yoga (2-5-8)",
+      "india_secondary": "complete diagonal 2-5-8 pattern",
+      "intl_primary": "Raj Yoga 2-5-8",
+      "intl_secondary": "traditional name for the 2-5-8 diagonal pattern",
+      "glossary": "Traditional name for having all three digits 2, 5, and 8 present along the secondary Earth diagonal of the Lo Shu Square."
+    },
+    "personal_year": {
+      "india_primary": "Personal Year",
+      "india_secondary": "Varshik Anka",
+      "intl_primary": "Personal Year",
+      "intl_secondary": "9-year annual cycle",
+      "glossary": "Annual 1-to-9 cycle derived from your birth day, birth month, and the calendar year."
+    }
+  }
+}

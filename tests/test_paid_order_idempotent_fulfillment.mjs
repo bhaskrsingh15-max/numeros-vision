@@ -283,7 +283,7 @@ async function runTestSuite() {
       user_id: 'usr_test_002',
       subject_id: 'sbj_test_002',
       pack_id: 'report_master',
-      amount_paise: 51000,
+      amount_paise: 48900,
       currency: 'INR',
       rzp_order_id: rzpOrderId,
       status: 'CREATED',
@@ -303,7 +303,7 @@ async function runTestSuite() {
         order: {
           entity: {
             id: rzpOrderId,
-            amount_paid: 51000,
+            amount_paid: 48900,
             status: 'paid'
           }
         },
@@ -311,7 +311,7 @@ async function runTestSuite() {
           entity: {
             id: rzpPaymentId,
             order_id: rzpOrderId,
-            amount: 51000,
+            amount: 48900,
             currency: 'INR',
             status: 'captured',
             method: 'card'

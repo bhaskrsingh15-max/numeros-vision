@@ -761,8 +761,8 @@ const PACK_CATALOG = {
       pack_id: "report_advanced",
       name: "Advanced Master Dossier",
       pages: 12,
-      price_inr: 510,
-      amount_paise: 51000,
+      price_inr: 489,
+      amount_paise: 48900,
       status: "active"
     },
     report_premium: {
@@ -1238,7 +1238,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
  * Gated strictly to confirmed unlock matrix:
  * - Free: Lo Shu grid with enabled digits; missing digits shown only as locked marks ('🔒').
  * - Rs199 (report_basic, 3 pages): element balancing.
- * - Rs510 (report_advanced, 12 pages): element balancing + enabled numbers in depth.
+ * - Rs 489 (report_advanced, 12 pages): element balancing + enabled numbers in depth.
  * - Rs1050 (report_premium, 32 pages): everything: missing numbers in depth, remedies, predictions (dasha timelines, 10-year radar).
  */
 function parseDobParts(dobStr) {
@@ -1502,7 +1502,7 @@ async function viewFor(user, subject, env, targetPackId = null) {
     };
   }
 
-  // Section 4: Enabled Numbers in Depth (Advanced ₹510, 12 pages)
+  // Section 4: Enabled Numbers in Depth (Advanced ₹489, 12 pages)
   let enabledNumbersInDepthSection;
   if (hasAdvanced) {
     enabledNumbersInDepthSection = {
@@ -1528,7 +1528,7 @@ async function viewFor(user, subject, env, targetPackId = null) {
       lockReason: 'Enabled Numbers in Depth, repeating frequency calibrations, and archetype synergies are available in the Advanced (12 pages) and Premium (32 pages) reports.',
       upgradePack: 'report_advanced',
       minTier: 'advanced',
-      priceInr: 510
+      priceInr: 489
     };
   }
 
@@ -2241,7 +2241,38 @@ export default {
       }
     }
 
-    // 0. SECURITY GATE / WAF: Block access to private files, hidden dotfiles, backups, and server scripts
+    // 0. CANONICAL 301 REDIRECTS (Dead duplicates, trailing-slash normalization, and legacy aliases)
+    const canonicalRedirects = {
+      '/charm_ai.html': '/charm-ai/',
+      '/charm_ai': '/charm-ai/',
+      '/privacy-policy': '/privacy/',
+      '/privacy-policy/': '/privacy/',
+      '/refund-policy': '/refund/',
+      '/refund-policy/': '/refund/',
+      '/sample-report': '/sample_roadmap/',
+      '/sample-report/': '/sample_roadmap/',
+      '/sample_report': '/sample_roadmap/',
+      '/sample_report/': '/sample_roadmap/',
+      '/reports': '/reports_catalogue/',
+      '/reports/': '/reports_catalogue/',
+      '/tools/lucky-number': '/tools/favourable-numbers/',
+      '/tools/lucky-number/': '/tools/favourable-numbers/',
+      '/tools/lucky-number.html': '/tools/favourable-numbers/',
+      '/blog/gemstone-remedies': '/blog/vedic-gemstone-remedies/',
+      '/blog/gemstone-remedies/': '/blog/vedic-gemstone-remedies/',
+      '/blog/gemstone-remedies.html': '/blog/vedic-gemstone-remedies/'
+    };
+    if (canonicalRedirects[url.pathname]) {
+      return Response.redirect(new URL(canonicalRedirects[url.pathname], url.origin), 301);
+    }
+
+    // 0a. 301 Redirect for legacy .html blog URLs to clean trailing-slash format
+    if (url.pathname.startsWith('/blog/') && url.pathname.endsWith('.html')) {
+      const cleanBlogPath = url.pathname.replace(/\.html$/, '/');
+      return Response.redirect(new URL(cleanBlogPath + url.search, url.origin), 301);
+    }
+
+    // 0b. SECURITY GATE / WAF: Block access to private files, hidden dotfiles, backups, and server scripts
     const forbiddenPatterns = [
       /^\/\.env/i,
       /^\/\.git/i,
@@ -2249,7 +2280,7 @@ export default {
       /^\/app\//i,
       /^\/scripts\//i,
       /^\/pdf_service\//i,
-      /^\/reports\//i,
+      /^\/reports\/.+/i,
       /^\/static\/reports\//i,
       /\.py$/i,
       /\.env/i,
@@ -2261,21 +2292,6 @@ export default {
         status: 404,
         headers: { 'Content-Type': 'text/plain; charset=utf-8' }
       });
-    }
-
-    // 0. CANONICAL 301 REDIRECTS (Gap G14)
-    const canonicalRedirects = {
-      '/charm_ai.html': '/charm-ai/',
-      '/charm_ai': '/charm-ai/',
-      '/privacy-policy': '/privacy/',
-      '/privacy-policy/': '/privacy/',
-      '/refund-policy': '/refund/',
-      '/refund-policy/': '/refund/',
-      '/reports': '/reports_catalogue/',
-      '/reports/': '/reports_catalogue/'
-    };
-    if (canonicalRedirects[url.pathname]) {
-      return Response.redirect(new URL(canonicalRedirects[url.pathname], url.origin), 301);
     }
 
     // Dynamic Client Turnstile Configuration Script
@@ -6635,7 +6651,7 @@ export default {
         {
           sku: 'report_advanced',
           name: 'Advanced Master Dossier',
-          page_price_inr: 510,
+          page_price_inr: 489,
           catalog_price_inr: PACK_CATALOG.core_reports.report_advanced.price_inr,
           razorpay_amount_paise: PACK_CATALOG.core_reports.report_advanced.amount_paise,
           entitlement_type: 'report_entitlement'

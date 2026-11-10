@@ -1,7 +1,7 @@
 /**
  * TEST SUITE: Reports In-Page Buy Flow, Funnel Telemetry & Preview Test Console
  * Tests:
- * 1. Reports in-page tier picker (Basic 199, Advanced 510, Premium 1050 strictly from PACK_CATALOG)
+ * 1. Reports in-page tier picker (Basic 199, Advanced 489, Premium 1050 strictly from PACK_CATALOG)
  * 2. In-page prefill, OTP verification, and "Your purchase" screen 4-state lifecycle (generating, ready, failed, resume)
  * 3. After-calculator CTA cleanup (strictly ONE primary CTA by context and ONE quiet secondary link, zero other paid buttons)
  * 4. Zero /pricing detour (menu tabs, pricing comparison buttons enter product flow)
@@ -28,7 +28,7 @@ async function runSuite() {
   // ---------------------------------------------------------------------------
   console.log('[TEST 1] Testing Reports tier picker prices against PACK_CATALOG...');
   assert.equal(packsJson.core_reports.report_basic.price_inr, 199, 'Basic report must be 199');
-  assert.equal(packsJson.core_reports.report_advanced.price_inr, 510, 'Advanced report must be 510');
+  assert.equal(packsJson.core_reports.report_advanced.price_inr, 489, 'Advanced report must be 489');
   assert.equal(packsJson.core_reports.report_premium.price_inr, 1050, 'Premium report must be 1050');
 
   // Under Stage A, the 3 tiers exist with exact catalog prices on /your-reading/
@@ -36,9 +36,9 @@ async function runSuite() {
   assert.ok(yourReadingHtml.includes('card-report-advanced'), 'card-report-advanced must exist in your-reading.html');
   assert.ok(yourReadingHtml.includes('card-report-premium'), 'card-report-premium must exist in your-reading.html');
   assert.ok(yourReadingHtml.includes('₹199'), 'Basic price ₹199 must be in your-reading.html');
-  assert.ok(yourReadingHtml.includes('₹510'), 'Advanced price ₹510 must be in your-reading.html');
+  assert.ok(yourReadingHtml.includes('₹489'), 'Advanced price ₹489 must be in your-reading.html');
   assert.ok(yourReadingHtml.includes('₹1,050'), 'Premium price ₹1,050 must be in your-reading.html');
-  console.log('  ✓ Tier picker prices match PACK_CATALOG exactly (199, 510, 1050)');
+  console.log('  ✓ Tier picker prices match PACK_CATALOG exactly (199, 489, 1050)');
   passedCount++;
 
   // ---------------------------------------------------------------------------

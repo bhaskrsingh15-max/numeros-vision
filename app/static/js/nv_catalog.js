@@ -32,10 +32,10 @@
         name: 'Advanced Master Dossier',
         display_name: 'Advanced Master Dossier · Recommended',
         pages: 12,
-        price_inr: 510,
-        amount_paise: 51000,
+        price_inr: 489,
+        amount_paise: 48900,
         price_usd: 14,
-        digital_root: 6,
+        digital_root: 3,
         status: 'active'
       },
       report_premium: {
@@ -268,7 +268,7 @@
       if (isUsd) {
         return '$' + (item.price_usd || 14);
       }
-      const inr = item.price_inr !== undefined ? item.price_inr : 510;
+      const inr = item.price_inr !== undefined ? item.price_inr : 489;
       return '₹' + Number(inr).toLocaleString('en-IN');
     }
   };
