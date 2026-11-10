@@ -98,6 +98,8 @@ const BROWSER_GLOBALS = {
   jspdf: 'readonly',
   jsPDF: 'readonly',
   html2canvas: 'readonly',
+  self: 'readonly',
+  caches: 'readonly',
   NV_TURNSTILE_SITE_KEY: 'readonly',
   NV_TURNSTILE_TOKEN: 'readonly'
 };
@@ -163,9 +165,58 @@ for (const file of htmlFiles) {
   }
 }
 
+// ── Check standalone JS files in app/static/ (including _worker.js) ──
+function getJsFiles(dir) {
+  let results = [];
+  const list = fs.readdirSync(dir);
+  list.forEach(file => {
+    const fullPath = path.join(dir, file);
+    const stat = fs.statSync(fullPath);
+    if (stat && stat.isDirectory()) {
+      results = results.concat(getJsFiles(fullPath));
+    } else if (file.endsWith('.js') || file.endsWith('.mjs')) {
+      results.push(fullPath);
+    }
+  });
+  return results;
+}
+
+const jsFiles = getJsFiles(staticDir);
+for (const fullPath of jsFiles) {
+  const relFile = path.relative(staticDir, fullPath);
+  const code = fs.readFileSync(fullPath, 'utf8');
+  const isWorker = relFile === '_worker.js';
+  const isSw = relFile === 'sw.js';
+
+  const messages = linter.verify(code, {
+    rules: { 'no-undef': 'error' },
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: isWorker ? 'module' : 'script',
+      globals: {
+        ...BROWSER_GLOBALS,
+        ...(isSw ? { importScripts: 'readonly', clients: 'readonly' } : {})
+      }
+    }
+  });
+
+  if (messages.length > 0) {
+    errorsByFile[relFile] = errorsByFile[relFile] || [];
+    for (const m of messages) {
+      errorsByFile[relFile].push({
+        line: m.line,
+        column: m.column,
+        message: m.message,
+        ruleId: m.ruleId
+      });
+      totalErrors++;
+    }
+  }
+}
+
 if (totalErrors > 0) {
   console.error('FAIL: Undefined identifiers / syntax errors found in HTML scripts:', JSON.stringify(errorsByFile, null, 2));
   process.exit(1);
 }
 
-console.log(`PASS: test_inline_scripts_no_undef — ${htmlFiles.length} HTML files verified with 0 syntax or undefined-identifier errors.`);
+console.log(`PASS: test_inline_scripts_no_undef — ${htmlFiles.length} HTML files and ${jsFiles.length} JS files verified with 0 syntax or undefined-identifier errors.`);

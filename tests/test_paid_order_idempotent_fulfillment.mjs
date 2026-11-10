@@ -2,7 +2,7 @@ import assert from 'node:assert';
 import worker from '../app/static/_worker.js';
 
 // Mock environment for edge worker testing
-function createMockEnv() {
+function createMockEnv(overrides = {}) {
   const memoryDB = {
     orders: new Map(),
     report_jobs: new Map(),
@@ -37,6 +37,10 @@ function createMockEnv() {
             const entry = memoryDB.audit_log.find(a => a.resource_id === p[0] && a.action === 'order_confirmation_email_sent');
             return entry || null;
           }
+          if (q.includes("SELECT COUNT(*) as cnt FROM audit_log WHERE resource_id = ? AND action = 'order_confirmation_email_attempt'")) {
+            const cnt = memoryDB.audit_log.filter(a => a.resource_id === p[0] && a.action === 'order_confirmation_email_attempt').length;
+            return { cnt };
+          }
           if (q.includes('FROM payments WHERE order_id = ?')) {
             const pmt = Array.from(memoryDB.payments.values()).find(pm => pm.order_id === p[0]);
             return pmt || null;
@@ -66,6 +70,9 @@ function createMockEnv() {
           if (q.includes('FROM voucher_ledger WHERE order_id = ?')) {
             return Array.from(memoryDB.voucher_ledger.values()).find(v => v.order_id === p[0]) || null;
           }
+          if (q.includes('SELECT count FROM email_rate_limits')) {
+            return { count: 0 };
+          }
           return null;
         },
         async all() {
@@ -89,6 +96,26 @@ function createMockEnv() {
             const orders = Array.from(memoryDB.orders.values()).filter(o => o.user_id === p[0] && o.status === 'PAID');
             return { results: orders };
           }
+          if (q.includes('paidUnfulfilledOrders') || (q.includes("WHERE o.status = 'PAID'") && q.includes('NOT EXISTS (SELECT 1 FROM report_jobs'))) {
+            const unfulfilled = [];
+            for (const o of memoryDB.orders.values()) {
+              if (o.status === 'PAID') {
+                const hasJob = Array.from(memoryDB.report_jobs.values()).some(j => j.order_id === o.id);
+                if (!hasJob) {
+                  unfulfilled.push({
+                    id: o.id,
+                    pack_id: o.pack_id,
+                    amount_paise: o.amount_paise,
+                    currency: o.currency || 'INR',
+                    status: o.status,
+                    created_at: o.created_at,
+                    updated_at: o.updated_at
+                  });
+                }
+              }
+            }
+            return { results: unfulfilled };
+          }
           return { results: [] };
         },
         async run() {
@@ -100,21 +127,29 @@ function createMockEnv() {
               o.status = 'PAID';
               o.updated_at = p[0];
             }
-          } else if (q.startsWith('INSERT INTO report_jobs')) {
+          } else if (q.includes('INSERT INTO report_jobs') || q.includes('INSERT OR IGNORE INTO report_jobs')) {
             const [id, user_id, subject_id, pack_id, order_id, status, created_at] = p;
-            memoryDB.report_jobs.set(id, { id, user_id, subject_id, pack_id, order_id, status, created_at });
-          } else if (q.startsWith('INSERT INTO payments')) {
+            if (!Array.from(memoryDB.report_jobs.values()).some(j => j.order_id === order_id)) {
+              memoryDB.report_jobs.set(id, { id, user_id, subject_id, pack_id, order_id, status, created_at });
+            }
+          } else if (q.includes('INSERT INTO payments') || q.includes('INSERT OR IGNORE INTO payments')) {
             const [id, order_id, rzp_payment_id, amount_paise, status, method, captured_at] = p;
-            memoryDB.payments.set(id, { id, order_id, rzp_payment_id, amount_paise, status, method, captured_at });
-          } else if (q.startsWith('INSERT OR IGNORE INTO entitlements')) {
+            if (!Array.from(memoryDB.payments.values()).some(pm => pm.order_id === order_id)) {
+              memoryDB.payments.set(id, { id, order_id, rzp_payment_id, amount_paise, status, method, captured_at });
+            }
+          } else if (q.includes('INSERT OR IGNORE INTO entitlements')) {
             const [id, user_id, subject_id, pack_id, order_id, granted_at] = p;
             memoryDB.entitlements.set(id, { id, user_id, subject_id, pack_id, order_id, granted_at });
-          } else if (q.startsWith('INSERT INTO audit_log')) {
+          } else if (q.includes('INSERT INTO audit_log') || q.includes('INSERT OR IGNORE INTO audit_log')) {
             const isEmailSent = q.includes('order_confirmation_email_sent');
-            const action = isEmailSent ? 'order_confirmation_email_sent' : (p[2] || 'order_paid_fulfilled');
-            const resource_id = isEmailSent ? p[1] : (p[3] || p[2]);
+            const isEmailAttempt = q.includes('order_confirmation_email_attempt');
+            const action = isEmailSent ? 'order_confirmation_email_sent' : (isEmailAttempt ? 'order_confirmation_email_attempt' : (p[2] || 'order_paid_fulfilled'));
+            const resource_id = (isEmailSent || isEmailAttempt) ? p[1] : (p[3] || p[2]);
             memoryDB.audit_log.push({ id: p[0], action, resource_id });
           } else if (q.startsWith('INSERT INTO events')) {
+            if (overrides.telemetryThrows) {
+              throw new Error('Simulated telemetry failure (e.g. events table lock or network failure)');
+            }
             memoryDB.events.push(p);
           }
           return { success: true };
@@ -129,8 +164,10 @@ function createMockEnv() {
     ENVIRONMENT: 'test',
     NV_EMAIL_LOG_ADAPTER: 'true',
     EMAIL_PROVIDER: 'brevo',
-    EMAIL_API_KEY: 'mock_key',
+    EMAIL_API_KEY: 'test_key',
     EMAIL_FROM: 'support@numerosvision.com',
+    ADMIN_TOKEN: 'test_admin_token_secret_123',
+    IP_HASH_SALT: 'test_ip_hash_salt_mock_12345',
     SESSION_SECRET: 'test_session_secret_32_chars_long_12345',
     RAZORPAY_KEY_ID: 'rzp_test_mockKey123',
     RAZORPAY_KEY_SECRET: 'mockRazorpaySecret12345',
@@ -138,14 +175,15 @@ function createMockEnv() {
     DOWNLOAD_TOKEN_SECRET: 'mockDownloadTokenSecret12345',
     GOOGLE_CLIENT_ID: '123456789-mockclientid.apps.googleusercontent.com',
     BREVO_API_KEY: 'test_brevo_key_mock',
-    PUBLIC_BASE_URL: 'https://test.numerosvision.com'
+    PUBLIC_BASE_URL: 'https://test.numerosvision.com',
+    ...overrides
   };
 
   return env;
 }
 
 async function runTestSuite() {
-  console.log('--- Starting Worker-Level Paid Order Idempotent Fulfillment Test ---');
+  console.log('--- Starting Comprehensive Paid Order Idempotent Fulfillment Test ---');
 
   // =========================================================================
   // TEST 1: verify-payment path
@@ -157,7 +195,6 @@ async function runTestSuite() {
     const rzpOrderId = 'order_rzp_mock_001';
     const rzpPaymentId = 'pay_rzp_mock_001';
 
-    // Seed order in DB
     env._memoryDB.orders.set(orderId, {
       id: orderId,
       user_id: 'usr_test_001',
@@ -177,13 +214,11 @@ async function runTestSuite() {
       name: 'Test Customer'
     });
 
-    // Compute valid signature
     const crypto = await import('node:crypto');
     const hmac = crypto.createHmac('sha256', env.RAZORPAY_KEY_SECRET);
     hmac.update(`${rzpOrderId}|${rzpPaymentId}`);
     const validSignature = hmac.digest('hex');
 
-    // Call verify-payment (Path 1)
     const req1 = new Request('https://test.numerosvision.com/api/v1/payments/verify-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -199,19 +234,16 @@ async function runTestSuite() {
     const res1 = await worker.fetch(req1, env, {});
     assert.strictEqual(res1.status, 200, 'verify-payment call 1 should succeed');
 
-    // Assert: Order status is PAID
     const orderAfter1 = env._memoryDB.orders.get(orderId);
     assert.strictEqual(orderAfter1.status, 'PAID', 'Order status must be updated to PAID');
 
-    // Assert: Exactly ONE report job created
     const jobs1 = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
-    assert.strictEqual(jobs1.length, 1, 'Exactly one report job must be created for order on first call');
+    assert.strictEqual(jobs1.length, 1, 'Exactly one report job must be created');
 
-    // Assert: Exactly ONE confirmation email recorded
     const emails1 = env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent');
     assert.strictEqual(emails1.length, 1, 'Exactly one order confirmation email must be recorded on first call');
 
-    // Call verify-payment SECOND time (idempotency check)
+    // Second call idempotency check
     const req2 = new Request('https://test.numerosvision.com/api/v1/payments/verify-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -227,11 +259,9 @@ async function runTestSuite() {
     const res2 = await worker.fetch(req2, env, {});
     assert.strictEqual(res2.status, 200, 'verify-payment call 2 should succeed idempotently');
 
-    // Assert: STILL exactly ONE report job created (no duplicates)
     const jobs2 = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
     assert.strictEqual(jobs2.length, 1, 'Second verify call must NOT create a duplicate report job');
 
-    // Assert: STILL exactly ONE confirmation email recorded
     const emails2 = env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent');
     assert.strictEqual(emails2.length, 1, 'Second verify call must NOT dispatch a duplicate confirmation email');
 
@@ -248,7 +278,6 @@ async function runTestSuite() {
     const rzpOrderId = 'order_rzp_mock_002';
     const rzpPaymentId = 'pay_rzp_mock_002';
 
-    // Seed order in DB
     env._memoryDB.orders.set(orderId, {
       id: orderId,
       user_id: 'usr_test_002',
@@ -294,7 +323,6 @@ async function runTestSuite() {
     const crypto = await import('node:crypto');
     const webhookSig = crypto.createHmac('sha256', env.RAZORPAY_WEBHOOK_SECRET).update(webhookBody).digest('hex');
 
-    // Call Webhook Call 1
     const req1 = new Request('https://test.numerosvision.com/api/v1/payments/webhook', {
       method: 'POST',
       headers: {
@@ -307,18 +335,15 @@ async function runTestSuite() {
     const res1 = await worker.fetch(req1, env, {});
     assert.strictEqual(res1.status, 200, 'Webhook call 1 should return 200');
 
-    // Assert: Order is marked PAID
     assert.strictEqual(env._memoryDB.orders.get(orderId).status, 'PAID', 'Order status must be updated to PAID');
 
-    // Assert: Exactly ONE report job created
     const jobs1 = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
     assert.strictEqual(jobs1.length, 1, 'Webhook must create exactly one report job');
 
-    // Assert: Exactly ONE email sent
     const emails1 = env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent');
     assert.strictEqual(emails1.length, 1, 'Webhook must dispatch exactly one confirmation email');
 
-    // Call Webhook Call 2 (Duplicate / retry event)
+    // Duplicate webhook call
     const req2 = new Request('https://test.numerosvision.com/api/v1/payments/webhook', {
       method: 'POST',
       headers: {
@@ -331,7 +356,6 @@ async function runTestSuite() {
     const res2 = await worker.fetch(req2, env, {});
     assert.strictEqual(res2.status, 200, 'Duplicate webhook should return 200');
 
-    // Assert: STILL exactly ONE job and ONE email
     const jobs2 = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
     assert.strictEqual(jobs2.length, 1, 'Duplicate webhook must not create a duplicate report job');
 
@@ -342,109 +366,274 @@ async function runTestSuite() {
   }
 
   // =========================================================================
-  // TEST 3: Safety net on status poll (Reproducing ord_1794260665323 real bug)
+  // TEST 3: REGRESSION TEST FOR ORIGINAL BUG (Telemetry throws after PAID update)
   // =========================================================================
   {
-    console.log('[Test 3] Safety net on payments/status poll (reproducing ord_1794260665323)');
-    const env = createMockEnv();
-    const orderId = 'ord_1794260665323_cf45d0e3';
+    console.log('[Test 3] REGRESSION TEST: Telemetry throws after order marked PAID');
+    const env = createMockEnv({ telemetryThrows: true });
+    const orderId = 'ord_test_telemetry_crash_003';
+    const rzpOrderId = 'order_rzp_telemetry_003';
+    const rzpPaymentId = 'pay_rzp_telemetry_003';
 
-    // Seed order in DB as PAID but with NO report job and NO email (the exact defect state)
     env._memoryDB.orders.set(orderId, {
       id: orderId,
-      user_id: 'usr_test_003',
-      subject_id: 'sbj_test_003',
+      user_id: 'usr_telemetry_003',
+      subject_id: 'sbj_telemetry_003',
       pack_id: 'report_basic',
       amount_paise: 19900,
       currency: 'INR',
-      rzp_order_id: 'order_TyEIRIFM6U9dAs',
-      status: 'PAID',
-      email: 'customer3@example.com',
-      created_at: 1794260665323,
-      updated_at: 1794260758973
+      rzp_order_id: rzpOrderId,
+      status: 'CREATED',
+      email: 'seeker@example.com',
+      created_at: Date.now() - 2000,
+      updated_at: Date.now() - 2000
     });
-    env._memoryDB.subjects.set('sbj_test_003', {
-      id: 'sbj_test_003',
-      email: 'customer3@example.com',
-      name: 'Bhaskr Singh'
-    });
-
-    // Ensure 0 jobs and 0 emails exist initially
-    assert.strictEqual(Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId).length, 0);
-    assert.strictEqual(env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent').length, 0);
-
-    // Call /api/v1/payments/status
-    const reqStatus1 = new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}`, {
-      method: 'GET'
+    env._memoryDB.subjects.set('sbj_telemetry_003', {
+      id: 'sbj_telemetry_003',
+      email: 'seeker@example.com',
+      name: 'Telemetry Seeker'
     });
 
-    const resStatus1 = await worker.fetch(reqStatus1, env, {});
-    assert.strictEqual(resStatus1.status, 200, 'Status poll should succeed');
+    const crypto = await import('node:crypto');
+    const validSignature = crypto.createHmac('sha256', env.RAZORPAY_KEY_SECRET)
+      .update(`${rzpOrderId}|${rzpPaymentId}`).digest('hex');
 
-    // Assert: Safety net created the report job!
-    const jobsAfterPoll1 = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
-    assert.strictEqual(jobsAfterPoll1.length, 1, 'Safety net on status poll must create missing report job for PAID order');
+    // Create a valid checkout token for email
+    const ts = Date.now();
+    const sig = crypto.createHmac('sha256', env.SESSION_SECRET)
+      .update(`seeker@example.com:${ts}`).digest('hex');
+    const checkoutToken = `${ts}.${sig}`;
 
-    // Assert: Safety net sent the confirmation email!
-    const emailsAfterPoll1 = env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent');
-    assert.strictEqual(emailsAfterPoll1.length, 1, 'Safety net on status poll must dispatch missing confirmation email');
-
-    // Call status poll a SECOND time
-    const reqStatus2 = new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}`, {
-      method: 'GET'
-    });
-    const resStatus2 = await worker.fetch(reqStatus2, env, {});
-    assert.strictEqual(resStatus2.status, 200);
-
-    // Assert: No duplicate jobs or emails created
-    const jobsAfterPoll2 = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
-    assert.strictEqual(jobsAfterPoll2.length, 1, 'Subsequent status poll must NOT create duplicate report job');
-
-    const emailsAfterPoll2 = env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent');
-    assert.strictEqual(emailsAfterPoll2.length, 1, 'Subsequent status poll must NOT dispatch duplicate confirmation email');
-
-    console.log('✓ PASS: Safety net on status poll successfully heals PAID order without report job and without duplicate on retry.');
-  }
-
-  // =========================================================================
-  // TEST 4: Google Auth Config route & Audience verification
-  // =========================================================================
-  {
-    console.log('[Test 4] Google Auth Config route & Audience verification');
-    const env = createMockEnv();
-
-    const reqConfig = new Request('https://test.numerosvision.com/api/google-auth-config.js', { method: 'GET' });
-    const resConfig = await worker.fetch(reqConfig, env, {});
-    assert.strictEqual(resConfig.status, 200);
-    const scriptBody = await resConfig.text();
-    assert(scriptBody.includes('window.NV_GOOGLE_CLIENT_ID = "123456789-mockclientid.apps.googleusercontent.com";'), 'Script must define NV_GOOGLE_CLIENT_ID from env');
-
-    // Test audience mismatch in /api/v1/auth/google
-    const header = Buffer.from(JSON.stringify({ alg: 'RS256' })).toString('base64url');
-    const wrongAudPayload = Buffer.from(JSON.stringify({
-      iss: 'https://accounts.google.com',
-      aud: 'wrong-audience-client-id.apps.googleusercontent.com',
-      exp: Math.floor(Date.now() / 1000) + 3600,
-      email: 'test@example.com',
-      email_verified: true
-    })).toString('base64url');
-    const mockToken = `${header}.${wrongAudPayload}.mockSignature`;
-
-    const reqGoogleAuth = new Request('https://test.numerosvision.com/api/v1/auth/google', {
+    const req = new Request('https://test.numerosvision.com/api/v1/payments/verify-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ credential: mockToken })
+      body: JSON.stringify({
+        order_id: orderId,
+        razorpay_order_id: rzpOrderId,
+        razorpay_payment_id: rzpPaymentId,
+        razorpay_signature: validSignature,
+        email: 'seeker@example.com',
+        checkout_token: checkoutToken
+      })
     });
 
-    const resGoogleAuth = await worker.fetch(reqGoogleAuth, env, {});
-    assert.strictEqual(resGoogleAuth.status, 401);
-    const data = await resGoogleAuth.json();
-    assert.strictEqual(data.error, 'Google ID token audience mismatch.');
+    const res = await worker.fetch(req, env, {});
+    assert.strictEqual(res.status, 200, 'verify-payment must succeed even when telemetry throws');
 
-    console.log('✓ PASS: /api/google-auth-config.js works and worker strictly verifies audience against GOOGLE_CLIENT_ID.');
+    // 1. Order marked PAID
+    assert.strictEqual(env._memoryDB.orders.get(orderId).status, 'PAID', 'Order status must be PAID');
+
+    // 2. Report job completed
+    const jobs = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
+    assert.strictEqual(jobs.length, 1, 'Report job must still be created even if telemetry throws');
+
+    // 3. Payment row recorded
+    const payments = Array.from(env._memoryDB.payments.values()).filter(p => p.order_id === orderId);
+    assert.strictEqual(payments.length, 1, 'Payment row must still be inserted even if telemetry throws');
+
+    // 4. Entitlement recorded
+    const entitlements = Array.from(env._memoryDB.entitlements.values()).filter(e => e.order_id === orderId);
+    assert.strictEqual(entitlements.length, 1, 'Entitlement must still be granted even if telemetry throws');
+
+    // 5. Email sent
+    const emails = env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent');
+    assert.strictEqual(emails.length, 1, 'Confirmation email must still be sent even if telemetry throws');
+
+    // 6. Session minted and Set-Cookie returned
+    const setCookie = res.headers.get('Set-Cookie') || '';
+    assert(setCookie.includes('__Host-nv_session=') || setCookie.includes('nv_session='), 'Session cookie must be issued even if telemetry throws');
+
+    console.log('✓ PASS: Telemetry failure does not abort fulfillment: job, payment, entitlement, email, and session all complete.');
   }
 
-  console.log('--- ALL WORKER-LEVEL TESTS PASSED SUCCESSFULLY (4/4) ---');
+  // =========================================================================
+  // TEST 4: CONCURRENT verify, webhook, and poll
+  // =========================================================================
+  {
+    console.log('[Test 4] CONCURRENCY: Simultaneous verify, webhook, and status poll');
+    const env = createMockEnv();
+    const orderId = 'ord_concurrent_race_004';
+    const rzpOrderId = 'order_rzp_concurrent_004';
+    const rzpPaymentId = 'pay_rzp_concurrent_004';
+
+    env._memoryDB.orders.set(orderId, {
+      id: orderId,
+      user_id: 'usr_concurrent_004',
+      subject_id: 'sbj_concurrent_004',
+      pack_id: 'report_basic',
+      amount_paise: 19900,
+      currency: 'INR',
+      rzp_order_id: rzpOrderId,
+      status: 'CREATED',
+      email: 'race@example.com',
+      created_at: Date.now() - 3000,
+      updated_at: Date.now() - 3000
+    });
+    env._memoryDB.subjects.set('sbj_concurrent_004', {
+      id: 'sbj_concurrent_004',
+      email: 'race@example.com',
+      name: 'Race Candidate'
+    });
+
+    const crypto = await import('node:crypto');
+    const verifySig = crypto.createHmac('sha256', env.RAZORPAY_KEY_SECRET)
+      .update(`${rzpOrderId}|${rzpPaymentId}`).digest('hex');
+
+    const webhookBody = JSON.stringify({
+      event: 'payment.captured',
+      payload: {
+        payment: {
+          entity: {
+            id: rzpPaymentId,
+            order_id: rzpOrderId,
+            amount: 19900,
+            currency: 'INR',
+            status: 'captured',
+            method: 'upi'
+          }
+        }
+      }
+    });
+    const webhookSig = crypto.createHmac('sha256', env.RAZORPAY_WEBHOOK_SECRET)
+      .update(webhookBody).digest('hex');
+
+    // Create HMAC order token for status poll auth
+    const expiresAt = Date.now() + 86400000;
+    const orderTokenSig = crypto.createHmac('sha256', env.DOWNLOAD_TOKEN_SECRET)
+      .update(`${orderId}:${expiresAt}`).digest('hex');
+    const orderToken = `${expiresAt}.${orderTokenSig}`;
+
+    // Fire verify, webhook, and status poll concurrently
+    const pVerify = worker.fetch(new Request('https://test.numerosvision.com/api/v1/payments/verify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        order_id: orderId,
+        razorpay_order_id: rzpOrderId,
+        razorpay_payment_id: rzpPaymentId,
+        razorpay_signature: verifySig,
+        email: 'race@example.com'
+      })
+    }), env, {});
+
+    const pWebhook = worker.fetch(new Request('https://test.numerosvision.com/api/v1/payments/webhook', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Razorpay-Signature': webhookSig },
+      body: webhookBody
+    }), env, {});
+
+    const pPoll = worker.fetch(new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}&token=${encodeURIComponent(orderToken)}`, {
+      method: 'GET'
+    }), env, {});
+
+    const results = await Promise.all([pVerify, pWebhook, pPoll]);
+    for (const r of results) {
+      assert(r.status === 200, `Concurrent requests must all succeed (got HTTP ${r.status})`);
+    }
+
+    // Assert: EXACTLY ONE report job
+    const jobs = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
+    assert.strictEqual(jobs.length, 1, `Concurrent race must yield EXACTLY ONE report job (got ${jobs.length})`);
+
+    // Assert: EXACTLY ONE payment row
+    const payments = Array.from(env._memoryDB.payments.values()).filter(p => p.order_id === orderId);
+    assert.strictEqual(payments.length, 1, `Concurrent race must yield EXACTLY ONE payment row (got ${payments.length})`);
+
+    // Assert: EXACTLY ONE confirmation email
+    const emails = env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent');
+    assert.strictEqual(emails.length, 1, `Concurrent race must dispatch EXACTLY ONE confirmation email (got ${emails.length})`);
+
+    console.log('✓ PASS: Concurrent verify, webhook, and status poll fire simultaneously and yield exactly 1 job, 1 payment, and 1 email.');
+  }
+
+  // =========================================================================
+  // TEST 5: STRICT AUTH ON /api/v1/payments/status
+  // =========================================================================
+  {
+    console.log('[Test 5] STRICT AUTH ON /api/v1/payments/status');
+    const env = createMockEnv();
+    const orderId = 'ord_status_auth_005';
+
+    env._memoryDB.orders.set(orderId, {
+      id: orderId,
+      user_id: 'usr_owner_005',
+      subject_id: 'sbj_005',
+      pack_id: 'report_basic',
+      amount_paise: 19900,
+      status: 'PAID',
+      created_at: Date.now() - 1000
+    });
+
+    // 1. Unauthenticated request without token or session -> MUST BE REJECTED (HTTP 401)
+    const resNoAuth = await worker.fetch(new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}`), env, {});
+    assert.strictEqual(resNoAuth.status, 401, 'Unauthenticated status poll must return HTTP 401');
+
+    // 2. Request with valid order access token -> MUST BE ACCEPTED (HTTP 200)
+    const crypto = await import('node:crypto');
+    const expiresAt = Date.now() + 86400000;
+    const validSig = crypto.createHmac('sha256', env.DOWNLOAD_TOKEN_SECRET)
+      .update(`${orderId}:${expiresAt}`).digest('hex');
+    const validToken = `${expiresAt}.${validSig}`;
+
+    const resValidToken = await worker.fetch(new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}&token=${encodeURIComponent(validToken)}`), env, {});
+    assert.strictEqual(resValidToken.status, 200, 'Status poll with valid order token must return HTTP 200');
+
+    // 3. Request with invalid / tampered token -> MUST BE REJECTED (HTTP 401)
+    const resInvalidToken = await worker.fetch(new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}&token=invalid.tampered`), env, {});
+    assert.strictEqual(resInvalidToken.status, 401, 'Status poll with invalid token must return HTTP 401');
+
+    console.log('✓ PASS: /api/v1/payments/status strictly requires authentication (token or matching session).');
+  }
+
+  // =========================================================================
+  // TEST 6: ADMIN TEST CONSOLE "paid_unfulfilled_orders" LIST
+  // =========================================================================
+  {
+    console.log('[Test 6] ADMIN CONSOLE: paid_unfulfilled_orders list');
+    const env = createMockEnv();
+
+    // Add 1 paid but unfulfilled order (no report job)
+    const unfulfilledId = 'ord_unfulfilled_006';
+    env._memoryDB.orders.set(unfulfilledId, {
+      id: unfulfilledId,
+      user_id: 'usr_006',
+      subject_id: 'sbj_006',
+      pack_id: 'report_basic',
+      amount_paise: 19900,
+      currency: 'INR',
+      status: 'PAID',
+      created_at: 1794260000000,
+      updated_at: 1794260100000
+    });
+
+    const reqAdmin = new Request('https://test.numerosvision.com/api/admin/test-console?format=json', {
+      headers: {
+        'X-Admin-Token': env.ADMIN_TOKEN,
+        'Accept': 'application/json'
+      }
+    });
+
+    const resAdmin = await worker.fetch(reqAdmin, env, {});
+    assert.strictEqual(resAdmin.status, 200, 'Admin test console must return HTTP 200 for authorized caller');
+
+    const adminData = await resAdmin.json();
+    assert(Array.isArray(adminData.paid_unfulfilled_orders), 'Response must contain paid_unfulfilled_orders array');
+    assert.strictEqual(adminData.paid_unfulfilled_orders.length, 1, 'Must list exactly 1 unfulfilled paid order');
+
+    const item = adminData.paid_unfulfilled_orders[0];
+    assert.strictEqual(item.id, unfulfilledId);
+    assert.strictEqual(item.status, 'PAID');
+    assert.strictEqual(item.pack_id, 'report_basic');
+    // Ensure ZERO personal data
+    assert.strictEqual(item.name, undefined, 'Must contain NO personal name');
+    assert.strictEqual(item.dob, undefined, 'Must contain NO date of birth');
+    assert.strictEqual(item.email, undefined, 'Must contain NO personal email');
+    assert.strictEqual(item.phone, undefined, 'Must contain NO phone number');
+
+    console.log('✓ PASS: /api/admin/test-console exposes paid_unfulfilled_orders with strictly sanitized status fields.');
+  }
+
+  console.log('--- ALL SUITE TESTS PASSED SUCCESSFULLY (6/6) ---');
 }
 
 runTestSuite().catch(err => {

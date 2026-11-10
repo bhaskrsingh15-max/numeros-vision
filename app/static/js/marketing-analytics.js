@@ -172,7 +172,7 @@
 
   function detectDeviceType() {
     const ua = navigator.userAgent || '';
-    const width = window.innerWidth || screen.width;
+    const width = window.innerWidth || (window.screen ? window.screen.width : 0);
     if (/(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk)/i.test(ua) || (width >= 768 && width <= 1024)) return 'tablet';
     if (/(android.*mobile|iphone|ipod|blackberry|iemobile|opera mini)/i.test(ua) || width < 768) return 'mobile';
     return 'desktop';

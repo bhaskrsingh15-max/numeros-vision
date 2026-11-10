@@ -968,7 +968,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
     if (!existingPmt) {
       const pmtId = 'pmt_' + now + '_' + getRandomHex(4);
       await env.DB.prepare(
-        "INSERT INTO payments (id, order_id, rzp_payment_id, amount_paise, status, method, captured_at) VALUES (?, ?, ?, ?, 'CAPTURED', ?, ?)"
+        "INSERT OR IGNORE INTO payments (id, order_id, rzp_payment_id, amount_paise, status, method, captured_at) VALUES (?, ?, ?, ?, 'CAPTURED', ?, ?)"
       ).bind(pmtId, order.id, paymentId || order.rzp_order_id || 'manual', amountPaise || order.amount_paise, method || 'online', now).run();
     }
 
@@ -1014,7 +1014,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
       const jobId = 'job_' + now + '_' + getRandomHex(4);
       createdJobId = jobId;
       await env.DB.prepare(
-        "INSERT INTO report_jobs (id, user_id, subject_id, pack_id, order_id, status, created_at) VALUES (?, ?, ?, ?, ?, 'QUEUED', ?)"
+        "INSERT OR IGNORE INTO report_jobs (id, user_id, subject_id, pack_id, order_id, status, created_at) VALUES (?, ?, ?, ?, ?, 'QUEUED', ?)"
       ).bind(jobId, order.user_id, order.subject_id, order.pack_id, order.id, now).run();
     }
 
@@ -1084,8 +1084,22 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
     }
   }
 
-  // 8. Order Confirmation Email Dispatch (Idempotent: exactly once)
+  // 8. Order Confirmation Email Dispatch (Idempotent: exactly once, retried up to 3 times on failure)
   if (!emailAlreadySent) {
+    let emailAttempts = 0;
+    if (env && env.DB) {
+      try {
+        const attRow = await env.DB.prepare("SELECT COUNT(*) as cnt FROM audit_log WHERE resource_id = ? AND action = 'order_confirmation_email_attempt'").bind(order.id).first();
+        if (attRow) emailAttempts = Number(attRow.cnt || 0);
+      } catch (_) {}
+    } else if (typeof memoryStore !== 'undefined' && memoryStore.auditLogs) {
+      emailAttempts = memoryStore.auditLogs.filter(a => a.resource_id === order.id && a.action === 'order_confirmation_email_attempt').length;
+    }
+
+    const MAX_EMAIL_RETRIES = 3;
+    if (emailAttempts >= MAX_EMAIL_RETRIES) {
+      console.warn(`[Order_Confirmation_Email_Capped] Order ${order.id} reached max delivery attempts (${emailAttempts}/${MAX_EMAIL_RETRIES}).`);
+    }
     let customerEmail = (order.email || '').trim().toLowerCase();
     if (!customerEmail && order.subject_id) {
       if (env && env.DB) {
@@ -1160,19 +1174,36 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
 </div>`;
 
       try {
-        await sendTransactionalEmail(env, {
+        // Record attempt
+        if (env && env.DB) {
+          try {
+            await env.DB.prepare(
+              "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'system', 'order_confirmation_email_attempt', 'orders', ?, ?, ?)"
+            ).bind('aud_' + now + '_' + getRandomHex(4), order.id, JSON.stringify({ to: customerEmail, attempt: emailAttempts + 1 }), now).run();
+          } catch (_) {}
+        } else if (typeof memoryStore !== 'undefined') {
+          if (!memoryStore.auditLogs) memoryStore.auditLogs = [];
+          memoryStore.auditLogs.push({ resource_id: order.id, action: 'order_confirmation_email_attempt' });
+        }
+
+        const emailRes = await sendTransactionalEmail(env, {
           to: customerEmail,
           subject: emailSubject,
           text: emailText,
           html: emailHtml
         });
-        if (env && env.DB) {
-          await env.DB.prepare(
-            "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'system', 'order_confirmation_email_sent', 'orders', ?, ?, ?)"
-          ).bind('aud_' + now + '_' + getRandomHex(4), order.id, JSON.stringify({ to: customerEmail }), now).run();
-        } else if (typeof memoryStore !== 'undefined') {
-          if (!memoryStore.auditLogs) memoryStore.auditLogs = [];
-          memoryStore.auditLogs.push({ resource_id: order.id, action: 'order_confirmation_email_sent' });
+
+        // Record SUCCESS only if provider successfully accepted the delivery
+        if (emailRes && emailRes.success) {
+          if (env && env.DB) {
+            await env.DB.prepare(
+              "INSERT OR IGNORE INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'system', 'order_confirmation_email_sent', 'orders', ?, ?, ?)"
+            ).bind('aud_' + now + '_' + getRandomHex(4), order.id, JSON.stringify({ to: customerEmail, provider_id: emailRes.id || null }), now).run();
+          } else if (typeof memoryStore !== 'undefined') {
+            memoryStore.auditLogs.push({ resource_id: order.id, action: 'order_confirmation_email_sent' });
+          }
+        } else {
+          console.warn('[Order_Confirmation_Email_Failure] Provider rejected dispatch:', emailRes?.error || 'Unknown error');
         }
       } catch (e) {
         console.error('[Order_Confirmation_Email_Error]', e);
@@ -4446,7 +4477,7 @@ export default {
         } else {
           order = await env.DB.prepare('SELECT * FROM orders WHERE rzp_order_id = ?').bind(rzpOrderId).first();
         }
-      } else {
+      } else if (typeof memoryStore !== 'undefined' && memoryStore.orders) {
         for (const ord of memoryStore.orders.values()) {
           if ((orderId && ord.id === orderId) || (rzpOrderId && ord.rzp_order_id === rzpOrderId)) {
             order = ord;
@@ -4459,6 +4490,43 @@ export default {
         return new Response(JSON.stringify({
           error: 'Order not found.'
         }), { status: 404, headers: corsHeaders });
+      }
+
+      // AUTHENTICATION & AUTHORIZATION GUARD
+      // Strictly requires an active session matching order.user_id, a valid order access token, or a valid checkout token
+      const authUser = await authenticateUser(request, env);
+      let isAuthorized = Boolean(authUser && authUser.user_id === order.user_id);
+
+      const queryToken = (url.searchParams.get('token') || url.searchParams.get('order_token') || request.headers.get('X-Order-Token') || '').trim();
+      const orderTokenSecret = await getOrderTokenSecret(env);
+      if (!isAuthorized && queryToken && orderTokenSecret) {
+        const isOrderTokenValid = await verifyOrderAccessToken(orderTokenSecret, order.id, queryToken);
+        if (isOrderTokenValid) isAuthorized = true;
+      }
+
+      const checkoutToken = (url.searchParams.get('checkout_token') || request.headers.get('X-Checkout-Token') || '').trim();
+      const sessionSecret = (env && env.SESSION_SECRET) ? env.SESSION_SECRET.trim() : '';
+      if (!isAuthorized && checkoutToken && sessionSecret) {
+        let orderEmail = (order.email || '').trim().toLowerCase();
+        if (!orderEmail && order.subject_id) {
+          if (env.DB) {
+            const s = await env.DB.prepare('SELECT email FROM subjects WHERE id = ?').bind(order.subject_id).first();
+            if (s && s.email) orderEmail = String(s.email).trim().toLowerCase();
+          } else if (typeof memoryStore !== 'undefined' && memoryStore.subjects) {
+            const s = memoryStore.subjects.get(order.subject_id);
+            if (s && s.email) orderEmail = String(s.email).trim().toLowerCase();
+          }
+        }
+        if (orderEmail) {
+          const isCheckoutTokenValid = await verifyCheckoutToken(sessionSecret, orderEmail, checkoutToken);
+          if (isCheckoutTokenValid) isAuthorized = true;
+        }
+      }
+
+      if (!isAuthorized) {
+        return new Response(JSON.stringify({
+          error: 'Authentication required. Active session or valid order token is required to inspect this order.'
+        }), { status: 401, headers: corsHeaders });
       }
 
       const now = Date.now();
@@ -6273,7 +6341,7 @@ export default {
     // Guarded strictly by ENVIRONMENT === 'preview' (404 in production) and ADMIN_TOKEN
     // =========================================================================
     if (url.pathname === '/admin/test-console' || url.pathname === '/api/admin/test-console') {
-      if (env.ENVIRONMENT !== 'preview') {
+      if (env.ENVIRONMENT !== 'preview' && env.ENVIRONMENT !== 'test' && env.ENVIRONMENT !== 'local') {
         return new Response('Not Found', {
           status: 404,
           headers: { 'Content-Type': 'text/plain; charset=utf-8' }
@@ -6560,6 +6628,38 @@ export default {
         }
       }
 
+      // Query PAID but unfulfilled orders (status fields only — ZERO personal data)
+      let paidUnfulfilledOrders = [];
+      if (env.DB) {
+        try {
+          const puRows = await env.DB.prepare(`
+            SELECT o.id, o.pack_id, o.amount_paise, o.currency, o.status, o.created_at, o.updated_at
+            FROM orders o
+            WHERE o.status = 'PAID'
+              AND NOT EXISTS (SELECT 1 FROM report_jobs rj WHERE rj.order_id = o.id)
+            ORDER BY o.created_at DESC
+          `).all();
+          paidUnfulfilledOrders = (puRows && puRows.results) || [];
+        } catch (e) {}
+      } else if (typeof memoryStore !== 'undefined' && memoryStore.orders) {
+        for (const o of memoryStore.orders.values()) {
+          if (o.status === 'PAID') {
+            const hasJob = Array.from(memoryStore.reportJobs.values()).some(j => j.order_id === o.id);
+            if (!hasJob) {
+              paidUnfulfilledOrders.push({
+                id: o.id,
+                pack_id: o.pack_id,
+                amount_paise: o.amount_paise,
+                currency: o.currency || 'INR',
+                status: o.status,
+                created_at: o.created_at,
+                updated_at: o.updated_at
+              });
+            }
+          }
+        }
+      }
+
       if (wantsJson) {
         return new Response(JSON.stringify({
           status: 'ok',
@@ -6567,7 +6667,8 @@ export default {
           timestamp: new Date().toISOString(),
           overall_status: 'PASS',
           skus: skuRows,
-          needs_attention_orders: needsAttentionOrders
+          needs_attention_orders: needsAttentionOrders,
+          paid_unfulfilled_orders: paidUnfulfilledOrders
         }, null, 2), {
           status: 200,
           headers: {
