@@ -1,0 +1,38 @@
+services:
+  # =========================================================================
+  # PREVIEW SERVICE (Active target for Preview testing)
+  # =========================================================================
+  - type: web
+    name: numeros-pdf-preview
+    runtime: docker
+    dockerfilePath: ./pdf_service/Dockerfile
+    dockerContext: ./pdf_service
+    region: singapore
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: preview
+      - key: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW
+        value: "true"
+      - key: PDF_SERVICE_SECRET
+        sync: false
+
+  # =========================================================================
+  # PRODUCTION SERVICE (Prepared — do not create until instructed)
+  # =========================================================================
+  - type: web
+    name: numeros-pdf-prod
+    runtime: docker
+    dockerfilePath: ./pdf_service/Dockerfile
+    dockerContext: ./pdf_service
+    region: singapore
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW
+        value: "false"
+      - key: PDF_SERVICE_SECRET
+        sync: false

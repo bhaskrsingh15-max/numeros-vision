@@ -18,4 +18,4 @@ COPY data/ ./data/
 USER nvpdf
 EXPOSE 8080
 
-CMD ["uvicorn", "app.services.internal_pdf_worker_service:app", "--host", "0.0.0.0", "--port", "8080", "--limit-max-requests", "1000", "--timeout-keep-alive", "5"]
+CMD ["sh", "-c", "exec uvicorn app.services.internal_pdf_worker_service:app --host 0.0.0.0 --port ${PORT:-8080} --limit-max-requests 1000 --timeout-keep-alive 5"]
