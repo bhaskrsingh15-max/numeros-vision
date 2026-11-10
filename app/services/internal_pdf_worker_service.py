@@ -318,6 +318,7 @@ MAX_REQUEST_BODY_BYTES = 65536  # 64 KB hard request body limit
 app = FastAPI(title="Numeros Vision Private PDF Generator Service", docs_url=None, redoc_url=None)
 
 
+@app.get("/health")
 @app.get("/internal/v1/health")
 @app.get("/healthz")
 async def handle_health() -> Dict[str, Any]:

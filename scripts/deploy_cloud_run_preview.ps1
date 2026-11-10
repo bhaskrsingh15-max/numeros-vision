@@ -1,3 +1,5 @@
+# [DEPRECATED - 2026-11-10]: GCP Cloud Run hosting is deprecated due to closed GCP billing account.
+# PDF/Charm generation is transitioned to Render (see render.yaml). Kept for reference only.
 # Single-session Cloud Run deployment & Pages secret provisioning
 $ErrorActionPreference = "Stop"
 

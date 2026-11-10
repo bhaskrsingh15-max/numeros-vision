@@ -2151,7 +2151,9 @@ export default {
         url.pathname.endsWith('.pdf')
       ) {
         const newHeaders = new Headers(response.headers);
-        newHeaders.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+        if (!response.headers.has('Cache-Control')) {
+          newHeaders.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+        }
         newHeaders.set('Pragma', 'no-cache');
         newHeaders.set('Expires', '0');
         return new Response(response.body, {
@@ -5103,7 +5105,7 @@ export default {
           message,
           attempts,
           isDownloadable,
-          downloadUrl: isDownloadable ? `/samples/Numeros_Vision_Sample_Excerpt_Alexander_Vance.pdf` : null,
+          downloadUrl: null, // Minted at CLICK time via POST /api/v1/reports/download-token (session-bound 5-min TTL)
           createdAt: job.created_at,
           completedAt: job.completed_at
         };
@@ -7634,11 +7636,20 @@ export default {
         }
       }
 
+      const packNameMap = {
+        'report_basic': 'Basic_Report',
+        'report_advanced': 'Advanced_Report',
+        'report_premium': 'Premium_Report',
+        'year_2027_planner': 'Year_2027_Planner'
+      };
+      const cleanPackName = packNameMap[packId] || (packId.replace(/^report_/, '').replace(/[^a-zA-Z0-9_]/g, '_') + '_Report');
+      const downloadFilename = `Numeros_Vision_${cleanPackName}.pdf`;
+
       return new Response(pdfBytes, {
         status: 200,
         headers: {
           'Content-Type': 'application/pdf',
-          'Content-Disposition': `attachment; filename="Numeros_Vision_${packId}_${subjectId}.pdf"`,
+          'Content-Disposition': `attachment; filename="${downloadFilename}"`,
           'Cache-Control': 'private, no-store',
           'X-NV-Job-Status': 'DOWNLOADED',
           'Access-Control-Allow-Origin': getCorsOrigin(request, env),
