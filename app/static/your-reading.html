@@ -13,6 +13,9 @@
   
   <link rel="stylesheet" href="/static/css/theme.css?v=5.5.0" />
   <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
+  <script src="/static/js/nv_consent.js?v=5.5.0"></script>
+  <script src="/static/js/nv_kua.js?v=1.1.0"></script>
+  <script src="/static/js/nv_pricing_catalog.js?v=1.1.0"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="/api/turnstile-config.js"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -127,100 +130,50 @@
       margin-top: 4px;
     }
 
-        /* LO SHU CURIOSITY BLOCK */
+    /* LO SHU CURIOSITY BLOCK — MOCKUP A ("EDITORIAL SPLIT INSPECTOR") */
     .loshu-curiosity-card {
       background: #FFFFFF;
       border: 1.5px solid var(--border-gold);
       border-radius: 20px;
-      padding: clamp(20px, 3vw, 32px);
-      box-shadow: 0 6px 28px rgba(180, 155, 110, 0.08);
+      padding: clamp(18px, 3vw, 28px);
+      box-shadow: 0 8px 30px rgba(180, 155, 110, 0.10);
       margin-bottom: 36px;
+      box-sizing: border-box;
     }
-    .loshu-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 20px;
+    .loshu-mockup-a-split {
+      display: grid;
+      grid-template-columns: minmax(276px, 332px) minmax(0, 1fr);
+      gap: 24px;
+      align-items: stretch;
     }
-    .loshu-card-eyebrow {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--gold-dark);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 4px;
+    @media (max-width: 860px) {
+      .loshu-mockup-a-split {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .reading-container {
+        padding: 0 14px 72px;
+      }
+      .summary-card {
+        padding: 20px 16px;
+      }
     }
-    .loshu-card-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--ink);
-      margin: 0 0 6px;
-    }
-    .loshu-card-desc {
-      font-size: 0.86rem;
-      color: var(--ink-muted);
-      line-height: 1.5;
-      margin: 0;
-      max-width: 640px;
-    }
-    .loshu-ring-container {
-      position: relative;
-      width: 80px;
-      height: 80px;
-      flex-shrink: 0;
-    }
-    .loshu-ring-svg {
-      transform: rotate(-90deg);
-    }
-    .ring-bg {
-      fill: none;
-      stroke: #F0EADB;
-      stroke-width: 8;
-    }
-    .ring-fg {
-      fill: none;
-      stroke: var(--gold-primary);
-      stroke-width: 8;
-      stroke-linecap: round;
-      stroke-dasharray: 251.3;
-      stroke-dashoffset: 251.3;
-      transition: stroke-dashoffset 0.8s ease;
-    }
-    .ring-label-box {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    .loshu-grid-column {
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      text-align: center;
-    }
-    .ring-percent {
-      font-size: 0.86rem;
-      font-weight: 700;
-      color: var(--gold-dark);
-      font-family: 'Cinzel', serif;
-    }
-    .ring-sub {
-      font-size: 0.62rem;
-      color: var(--ink-muted);
-      text-transform: uppercase;
     }
     .loshu-interactive-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      max-width: 380px;
-      margin: 0 auto 20px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
     }
     .loshu-cell {
       aspect-ratio: 1 / 1;
-      min-height: 84px;
+      min-height: 88px;
       border-radius: 14px;
       display: flex;
       flex-direction: column;
@@ -231,20 +184,24 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
       background: #FFFFFF;
       border: 1.5px solid var(--border-gold);
-      padding: 6px;
+      padding: 6px 4px;
       box-sizing: border-box;
-      animation: revealCell 0.4s ease forwards;
+      font-family: inherit;
+      appearance: none;
+      -webkit-appearance: none;
+      animation: revealCell 0.35s ease forwards;
     }
     @keyframes revealCell {
-      from { opacity: 0; transform: scale(0.92); }
+      from { opacity: 0; transform: scale(0.94); }
       to { opacity: 1; transform: scale(1); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .loshu-cell { animation: none !important; }
     }
     .loshu-cell:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(201, 162, 39, 0.22);
+      box-shadow: 0 6px 18px rgba(201, 162, 39, 0.20);
+    }
+    .loshu-cell:focus-visible {
+      outline: 2px solid var(--gold-dark);
+      outline-offset: 2px;
     }
     .loshu-cell.present-cell {
       background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF7 100%);
@@ -252,137 +209,283 @@
     }
     .loshu-cell.gap-cell {
       background: #FAF6EE;
-      border: 1.5px dashed rgba(201, 162, 39, 0.45);
-      animation: pulseGapGlow 3.5s infinite ease-in-out;
-    }
-    @keyframes pulseGapGlow {
-      0%, 100% { box-shadow: 0 0 0 rgba(201, 162, 39, 0); }
-      50% { box-shadow: 0 0 12px rgba(201, 162, 39, 0.35); border-color: rgba(201, 162, 39, 0.7); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .loshu-cell.gap-cell { animation: none !important; }
+      border: 1.5px dashed rgba(201, 162, 39, 0.50);
     }
     .loshu-cell.selected-cell {
       border: 2px solid var(--gold-dark) !important;
-      box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.25) !important;
-      transform: scale(1.03);
+      box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.24) !important;
+      transform: scale(1.02);
+      background: #FFFDF7 !important;
     }
     .loshu-cell.plane-highlighted {
       border: 2px solid var(--gold-primary) !important;
-      box-shadow: 0 0 14px rgba(201, 162, 39, 0.4) !important;
+      box-shadow: 0 0 14px rgba(201, 162, 39, 0.36) !important;
       background: #FFFDF7 !important;
       opacity: 1 !important;
     }
     .loshu-cell.dimmed-cell {
-      opacity: 0.35;
-      filter: grayscale(40%);
+      opacity: 0.38;
+      filter: grayscale(35%);
     }
     .cell-top-tag {
       font-size: 0.62rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 2px;
+      letter-spacing: 0.05em;
+      margin-bottom: 3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
     }
-    .present-cell .cell-top-tag { color: var(--emerald); }
-    .gap-cell .cell-top-tag { color: #A61C1C; }
+    .present-cell .cell-top-tag {
+      color: var(--emerald);
+      background: rgba(22, 131, 91, 0.10);
+      padding: 1px 6px;
+      border-radius: 999px;
+    }
+    .gap-cell .cell-top-tag {
+      color: var(--gold-dark);
+    }
+    .cell-seal-icon {
+      width: 14px;
+      height: 14px;
+      object-fit: contain;
+      opacity: 0.85;
+      display: inline-block;
+    }
     .cell-num {
       font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
+      font-size: clamp(1.22rem, 3.2vw, 1.48rem);
       font-weight: 700;
-      line-height: 1;
+      line-height: 1.05;
       color: var(--ink);
+      word-break: break-all;
     }
-    .gap-cell .cell-num { color: #8C827A; }
-    .cell-dots {
-      font-size: 0.68rem;
-      color: var(--gold-dark);
-      margin-top: 2px;
-      letter-spacing: 2px;
+    .gap-cell .cell-num {
+      color: var(--ink-muted);
     }
     .cell-elem {
-      font-size: 0.62rem;
+      font-size: 0.66rem;
       color: var(--ink-muted);
-      margin-top: 2px;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .loshu-inspector-panel {
+      background-color: #FBF8F0;
+      background-image: linear-gradient(180deg, rgba(255, 253, 247, 0.90) 0%, rgba(247, 243, 234, 0.93) 100%), url('/static/assets/loshu/texture-pearl-gold.webp');
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(201, 162, 39, 0.32);
+      border-radius: 16px;
+      padding: clamp(16px, 2.5vw, 24px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+    .loshu-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .loshu-card-eyebrow {
+      font-size: 0.70rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    .loshu-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.45rem, 2.8vw, 1.75rem);
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0 0 4px;
+      line-height: 1.15;
+    }
+    .loshu-card-desc {
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .loshu-ring-container {
+      position: relative;
+      width: 74px;
+      height: 74px;
+      flex-shrink: 0;
+    }
+    .loshu-ring-svg {
+      transform: rotate(-90deg);
+      width: 74px;
+      height: 74px;
+    }
+    .ring-bg {
+      fill: #FFFFFF;
+      stroke: #ECE4D2;
+      stroke-width: 8;
+    }
+    .ring-fg {
+      fill: none;
+      stroke: var(--gold-primary);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 251.3;
+      stroke-dashoffset: 251.3;
+      transition: stroke-dashoffset 0.7s ease;
+    }
+    .ring-label-box {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .ring-percent {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+      font-family: 'Cinzel', serif;
+      line-height: 1.1;
+    }
+    .ring-sub {
+      font-size: 0.56rem;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.03em;
     }
     .loshu-teaser-box {
-      background: var(--sand-bg);
-      border: 1px solid var(--border-gold);
-      border-radius: 12px;
-      padding: 14px 18px;
-      min-height: 76px;
+      background: #FFFFFF;
+      border: 1px solid rgba(201, 162, 39, 0.38);
+      border-radius: 14px;
+      padding: 16px 18px;
+      min-height: 112px;
       box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 3px 14px rgba(139, 105, 20, 0.06);
     }
-    .teaser-icon {
-      font-size: 1.4rem;
-      color: var(--gold-primary);
+    @media (max-width: 640px) {
+      .loshu-teaser-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .teaser-medallion-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        width: 100%;
+      }
+      .teaser-cta-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+    .teaser-medallion-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+    .teaser-medallion-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(201, 162, 39, 0.35);
+      background: #FFFDF7;
       flex-shrink: 0;
     }
     .teaser-text-wrap {
       flex: 1;
+      min-width: 0;
+    }
+    .teaser-eyebrow {
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-dark);
+      margin-bottom: 3px;
     }
     .teaser-title {
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       font-weight: 700;
-      color: var(--gold-dark);
-      margin-bottom: 2px;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.3;
     }
     .teaser-desc {
-      font-size: 0.80rem;
-      color: var(--ink);
-      line-height: 1.45;
+      font-size: 0.81rem;
+      color: var(--ink-muted);
+      line-height: 1.48;
+    }
+    .teaser-unlock {
+      font-size: 0.74rem;
+      color: var(--gold-dark);
+      margin-top: 5px;
+      font-weight: 500;
+      line-height: 1.4;
     }
     .teaser-cta-btn {
-      background: #FFFFFF;
-      border: 1px solid var(--gold-primary);
+      background: #FFFDF7;
+      border: 1.5px solid var(--gold-primary);
       color: var(--gold-dark);
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 0.76rem;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.2s;
+      transition: background 0.2s ease, color 0.2s ease;
       flex-shrink: 0;
+      box-sizing: border-box;
     }
     .teaser-cta-btn:hover {
       background: var(--gold-primary);
       color: #FFFFFF;
     }
     .loshu-planes-section {
-      border-top: 1px solid rgba(201, 162, 39, 0.2);
-      padding-top: 14px;
+      border-top: 1px solid rgba(201, 162, 39, 0.22);
+      padding-top: 12px;
     }
     .planes-label {
-      font-size: 0.72rem;
+      font-size: 0.70rem;
       font-weight: 700;
-      color: var(--ink-muted);
+      color: var(--ink);
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      margin-bottom: 10px;
+      margin-bottom: 9px;
     }
     .loshu-planes-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 7px;
     }
     .plane-pill {
       background: #FFFFFF;
       border: 1px solid var(--border-gold);
       border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 0.75rem;
+      padding: 5px 11px;
+      font-size: 0.74rem;
+      font-family: inherit;
       color: var(--ink);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s ease;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
       user-select: none;
     }
     .plane-pill:hover {
@@ -390,20 +493,60 @@
       background: #FFFDF7;
     }
     .plane-pill.active-pill {
-      background: var(--gold-primary);
+      background: var(--gold-dark);
       color: #FFFFFF;
       border-color: var(--gold-dark);
     }
     .plane-badge {
-      font-size: 0.65rem;
+      font-size: 0.66rem;
       font-weight: 700;
       padding: 1px 6px;
-      border-radius: 4px;
+      border-radius: 999px;
     }
-    .plane-badge.badge-complete { background: var(--emerald-bg); color: var(--emerald); }
-    .plane-badge.badge-active { background: rgba(201,162,39,0.15); color: var(--gold-dark); }
+    .plane-badge.badge-complete { background: rgba(22, 131, 91, 0.12); color: var(--emerald); }
+    .plane-badge.badge-active { background: rgba(201, 162, 39, 0.16); color: var(--gold-dark); }
     .plane-badge.badge-dormant { background: #FAF6EE; color: var(--ink-muted); }
-    .plane-pill.active-pill .plane-badge { background: rgba(255,255,255,0.25); color: #FFFFFF; }
+    .plane-pill.active-pill .plane-badge { background: rgba(255, 255, 255, 0.22); color: #FFFFFF; }
+
+    /* Kua Summary Pill Helpers */
+    .kua-rule-note {
+      font-size: 0.69rem;
+      color: var(--ink-muted);
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+    .kua-gender-inline-select {
+      margin-top: 6px;
+      padding: 4px 8px;
+      font-size: 0.76rem;
+      border: 1px solid var(--border-gold);
+      border-radius: 6px;
+      background: #FFFFFF;
+      color: var(--ink);
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .loshu-cell,
+      .loshu-cell:hover,
+      .loshu-cell.selected-cell,
+      .tier-card:hover,
+      .btn-select-gold:hover {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+      }
+      .ring-fg {
+        transition: none !important;
+      }
+    }
 
     /* Sticky Mobile Bar */
     .nv-mobile-sticky-bar {
@@ -456,7 +599,7 @@
       box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3);
     }
 
-    /* TIERS SECTION */
+    /* TIERS SECTION — ONE THREE-CARD LADDER UNDER THE GRID */
     .tiers-header {
       text-align: center;
       margin: 40px auto 28px;
@@ -490,24 +633,21 @@
 
     .tiers-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 20px;
       margin-top: 24px;
       align-items: stretch;
     }
     @media (max-width: 860px) {
       .tiers-grid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 16px;
-        padding: 10px 4px 20px;
-        -webkit-overflow-scrolling: touch;
+        grid-template-columns: 1fr;
+        gap: 18px;
       }
       .tier-card {
-        flex: 0 0 84%;
-        max-width: 330px;
-        scroll-snap-align: center;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 24px 20px;
       }
     }
 
@@ -921,6 +1061,15 @@
         </div>
       </div>
 
+      <div>
+        <label for="inline-seeker-gender" style="display:block; font-size:0.78rem; font-weight:700; color:var(--gold-dark); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">Gender (Optional · Needed for Kua Number)</label>
+        <select id="inline-seeker-gender" style="width:100%; box-sizing:border-box; padding:12px 14px; border:1px solid #D5CAAF; border-radius:10px; font-size:0.95rem; font-family:inherit; background:#FFFDF7; color:var(--ink);">
+          <option value="">Prefer not to specify (Kua needs gender)</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
       <div id="inline-dob-error" style="display:none; color:#C0392B; font-size:0.82rem; font-weight:600; text-align:center;"></div>
 
       <button type="button" class="btn-select-tier btn-select-gold" onclick="submitInlineDob()" style="width:100%; padding:14px; margin-top:8px; cursor:pointer; font-size:1rem; font-weight:700; border:none; border-radius:999px; box-shadow:0 6px 20px rgba(201,162,39,0.25);">
@@ -977,6 +1126,17 @@
             <div class="num-val" id="summary-conductor" style="color:var(--emerald);">-</div>
             <div class="num-sub" id="summary-conductor-planet">Destiny Trajectory</div>
           </div>
+          <div class="num-pill" id="summary-kua-container">
+            <div class="num-label">Kua Number</div>
+            <div class="num-val" id="summary-kua" style="font-size:1.15rem; line-height:1.3; padding-top:4px;">Kua needs gender</div>
+            <div class="num-sub" id="summary-kua-meta">Directional Group</div>
+            <div class="kua-rule-note" id="summary-kua-rule">Calculated from your birth year and gender</div>
+            <select id="summary-kua-gender-select" class="kua-gender-inline-select" aria-label="Select gender for Kua calculation" onchange="onInlineKuaGenderChange(this.value)">
+              <option value="">Gender: Not set</option>
+              <option value="male">Gender: Male</option>
+              <option value="female">Gender: Female</option>
+            </select>
+          </div>
           <div class="num-pill" id="summary-py-container" style="display:none;">
             <div class="num-label">Personal Year</div>
             <div class="num-val" id="summary-personal-year" style="color:#C9A227;">-</div>
@@ -989,56 +1149,80 @@
         </div>
       </div>
 
-      <!-- ── INTERACTIVE LO SHU MATRIX & ELEMENTAL CURIOSITY BLOCK ── -->
-      <div class="loshu-curiosity-card" id="loshu-curiosity-card">
-        <div class="loshu-card-header">
-          <div>
-            <div class="loshu-card-eyebrow">✦ NATAL LO SHU MATRIX &amp; ELEMENTAL TOPOLOGY</div>
-            <h3 class="loshu-card-title">Your 3×3 Planetary Grid &amp; Elemental Planes</h3>
-            <p class="loshu-card-desc">
-              Classical Chinese Lo Shu magic square mapping your date of birth across mental, emotional, and practical planes. Tap any cell or plane to explore its vibrational resonance.
-            </p>
+      <!-- ── INTERACTIVE LO SHU MATRIX & ELEMENTAL CURIOSITY BLOCK (MOCKUP A: EDITORIAL SPLIT INSPECTOR) ── -->
+      <section class="loshu-curiosity-card" id="loshu-curiosity-card" aria-labelledby="loshu-card-heading">
+        <div class="loshu-mockup-a-split">
+          <!-- Left Column: Canonical 3x3 Birth-Date Grid (4-9-2 / 3-5-7 / 8-1-6) -->
+          <div class="loshu-grid-column">
+            <div class="loshu-interactive-grid" id="loshu-interactive-grid" role="group" aria-label="3 by 3 Lo Shu birth-date grid">
+              <!-- Rendered dynamically: cells 4, 9, 2, 3, 5, 7, 8, 1, 6 -->
+            </div>
           </div>
-          <!-- Completeness Ring -->
-          <div class="loshu-ring-container" title="Chart Completeness Ring">
-            <svg class="loshu-ring-svg" viewBox="0 0 100 100" width="80" height="80">
-              <circle cx="50" cy="50" r="40" class="ring-bg" />
-              <circle cx="50" cy="50" r="40" class="ring-fg" id="loshu-ring-circle" />
-            </svg>
-            <div class="ring-label-box">
-              <span class="ring-percent" id="loshu-ring-percent">--%</span>
-              <span class="ring-sub" id="loshu-ring-fraction">Active</span>
+
+          <!-- Right Column: Editorial Inspector Panel -->
+          <div class="loshu-inspector-panel">
+            <div>
+              <div class="loshu-card-header">
+                <div>
+                  <div class="loshu-card-eyebrow">✦ LO SHU SQUARE · BIRTH-DATE GRID</div>
+                  <h3 class="loshu-card-title" id="loshu-card-heading">Your 3×3 Planetary Grid</h3>
+                  <p class="loshu-card-desc" id="loshu-card-subtitle">
+                    Classical Lo Shu birth-date square · Tap any cell or pattern to inspect
+                  </p>
+                </div>
+                <!-- Completeness Ring -->
+                <div class="loshu-ring-container" title="Chart Completeness Ring">
+                  <svg class="loshu-ring-svg" viewBox="0 0 100 100" width="74" height="74" aria-hidden="true">
+                    <circle cx="50" cy="50" r="40" class="ring-bg" />
+                    <circle cx="50" cy="50" r="40" class="ring-fg" id="loshu-ring-circle" />
+                  </svg>
+                  <div class="ring-label-box">
+                    <span class="ring-percent" id="loshu-ring-percent">--%</span>
+                    <span class="ring-sub" id="loshu-ring-fraction">Active</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Neutral Content-Library Teaser Inspector (Zero Prices Inside Curiosity Block) -->
+              <div class="loshu-teaser-box" id="loshu-teaser-box" aria-live="polite">
+                <div class="teaser-medallion-row">
+                  <img
+                    src="/static/assets/loshu/emblem-seal-lock.webp"
+                    alt=""
+                    width="52"
+                    height="52"
+                    class="teaser-medallion-img"
+                    id="loshu-teaser-medallion"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div class="teaser-text-wrap">
+                    <div class="teaser-eyebrow" id="loshu-teaser-eyebrow">INTERACTIVE GRID READY</div>
+                    <div class="teaser-title" id="loshu-teaser-title">Select Any Cell or Pattern Axis</div>
+                    <div class="teaser-desc" id="loshu-teaser-desc">
+                      Tap any of the nine natal cells or Key Lo Shu Patterns below to inspect how active repetitions and open positions shape your natural communication, planning, and execution style.
+                    </div>
+                    <div class="teaser-unlock" id="loshu-teaser-unlock">
+                      Detailed multi-factor synthesis, repetition balancing, and your 90-day practical plan are compiled inside the personalised PDF editions below.
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="teaser-cta-btn" onclick="handleCompareReportTiersClick()">
+                  Compare Report Tiers &darr;
+                </button>
+              </div>
+            </div>
+
+            <!-- 8 Key Lo Shu Patterns Interactive Filter Pills -->
+            <div class="loshu-planes-section">
+              <div class="planes-label">Key Lo Shu Patterns:</div>
+              <div class="loshu-planes-row" id="loshu-planes-row" role="group" aria-label="Key Lo Shu Patterns">
+                <!-- Rendered dynamically -->
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- 3x3 Grid Matrix -->
-        <div class="loshu-interactive-grid" id="loshu-interactive-grid">
-          <!-- Rendered dynamically: cells 4, 9, 2, 3, 5, 7, 8, 1, 6 -->
-        </div>
-
-        <!-- Neutral Teaser Box (Zero Layout Shift via min-height) -->
-        <div class="loshu-teaser-box" id="loshu-teaser-box">
-          <div class="teaser-icon" id="loshu-teaser-icon">✦</div>
-          <div class="teaser-text-wrap">
-            <div class="teaser-title" id="loshu-teaser-title">Tap Any Cell or Plane Above</div>
-            <div class="teaser-desc" id="loshu-teaser-desc">
-              Select any enabled archetype or missing gap cell in the grid to view its elemental significance and remedial balancing bridge.
-            </div>
-          </div>
-          <button type="button" class="teaser-cta-btn" onclick="scrollToPricingCards()">
-            Explore Full Dossier &darr;
-          </button>
-        </div>
-
-        <!-- 8 Elemental Planes Interactive Filter Pills -->
-        <div class="loshu-planes-section">
-          <div class="planes-label">✦ 8 ELEMENTAL PLANES &amp; RAJ YOGAS (Tap to Highlight):</div>
-          <div class="loshu-planes-row" id="loshu-planes-row">
-            <!-- Rendered dynamically -->
-          </div>
-        </div>
-      </div>
+      </section>
 
       <!-- 2. REPORT SELECTION SECTION -->
       <div class="tiers-header">
@@ -1227,6 +1411,36 @@
     </div>
   </div>
 
+  <!-- FLAGGED "NOTIFY ME" WAITLIST MODAL FOR ADVANCED & PREMIUM (OFF BY DEFAULT) -->
+  <div id="notify-me-modal" class="checkout-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="notify-me-title">
+    <div class="checkout-modal-card" style="max-width:480px;">
+      <button type="button" class="checkout-modal-close" onclick="closeNotifyMeModal()" aria-label="Close Notify Me Dialog">&times;</button>
+      <div class="checkout-modal-header">
+        <div class="checkout-modal-tier-tag" id="notify-me-tier-tag">Priority Release Alert</div>
+        <h2 class="checkout-modal-title" id="notify-me-title">Get Notified When Ready</h2>
+        <div style="font-size:0.86rem; color:var(--ink-muted); line-height:1.5;">
+          Leave your email to receive a single release notification as soon as this expanded edition opens. Your 3-Page Basic Report (₹199) is available immediately today.
+        </div>
+      </div>
+      <form id="notify-me-form" onsubmit="event.preventDefault(); submitNotifyMeForm();">
+        <div style="margin-bottom:14px;">
+          <label class="checkout-field-label" for="notify-me-email">Email Address (Required)</label>
+          <input type="email" id="notify-me-email" class="checkout-input" placeholder="name@example.com" required />
+        </div>
+        <div class="checkout-consents" style="margin-bottom:16px;">
+          <label class="checkout-consent-item" for="notify-me-consent">
+            <input type="checkbox" id="notify-me-consent" autocomplete="off" required />
+            <span>I consent to receive a one-time availability email for this report edition in accordance with the Privacy Policy.</span>
+          </label>
+        </div>
+        <div id="notify-me-status" style="font-size:0.8rem; min-height:20px; margin-bottom:12px;"></div>
+        <button type="submit" id="btn-notify-me-submit" class="btn-checkout-pay">
+          <span>Notify Me at Launch</span> <span>✦</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- MASTER FOOTER -->
   <footer class="nv-footer">
     <div class="nv-footer-container">
@@ -1353,11 +1567,97 @@
       return dt.getUTCFullYear() === y && dt.getUTCMonth() === (m - 1) && dt.getUTCDate() === d;
     }
 
+    const LAUNCH_MRPS = {
+      'report_basic': 289,
+      'report_advanced': 699,
+      'report_premium': 1479
+    };
+
+    const ELEMENT_MEDALLIONS = {
+      'Wood': '/static/assets/loshu/elem-wood.webp',
+      'Fire': '/static/assets/loshu/elem-fire.webp',
+      'Earth': '/static/assets/loshu/elem-earth.webp',
+      'Metal': '/static/assets/loshu/elem-metal.webp',
+      'Water': '/static/assets/loshu/elem-water.webp'
+    };
+    const DEFAULT_MEDALLION = '/static/assets/loshu/emblem-seal-lock.webp';
+
+    // Public-only fallback matching app/static/data/loshu_public_teasers.json (zero paid prose)
+    let _loshuPublicTeasers = {
+      default_overview: {
+        eyebrow: 'INTERACTIVE LO SHU MATRIX',
+        title: 'Select Any Cell or Pattern Axis',
+        summary: 'Tap any of the nine natal cells or Key Lo Shu Patterns below to inspect how active repetitions and open positions shape your natural communication, planning, and execution style.',
+        unlock_note: 'Detailed multi-factor synthesis, repetition balancing, and your 90-day practical plan are compiled inside the personalised PDF editions below.'
+      },
+      digits: {
+        '1': { planet_india: 'Surya (Sun)', element: 'Water', domain: 'Career Voice & Initiative', present_single_teaser: 'Digit 1 appears once in your birth grid — a balanced Water indicator associated in classical Lo Shu study with clear self-direction and calm communication.', present_repeat_teaser: 'Digit 1 repeats ({count}×) in your birth grid — amplifying independent drive and verbal expression, where pacing and active listening keep momentum constructive.', missing_teaser: 'Digit 1 is an open position in your birth date — indicating that vocal self-advocacy and independent career framing develop consciously through deliberate practice.', unlock_note: 'See how Digit 1 interacts with your Driver, Conductor, and 5-Element balance in your full personalised dossier below.' },
+        '2': { planet_india: 'Chandra (Moon)', element: 'Earth', domain: 'Tact, Empathy & Partnership', present_single_teaser: 'Digit 2 appears once in your birth grid — an Earth indicator linked with perceptive listening, interpersonal tact, and steady cooperative judgement.', present_repeat_teaser: 'Digit 2 repeats ({count}×) in your birth grid — heightening emotional radar and relational nuance, benefiting from clear personal boundaries.', missing_teaser: 'Digit 2 is an open position in your birth date — pointing to a conscious growth theme around unhurried patience, partnership check-ins, and receptive listening.', unlock_note: 'Explore how your Earth sector shapes collaboration and household harmony in your personalised report below.' },
+        '3': { planet_india: 'Guru (Jupiter)', element: 'Wood', domain: 'Learning, Vision & Mentorship', present_single_teaser: 'Digit 3 appears once in your birth grid — a Wood indicator associated with curiosity, structured imagination, and clear knowledge sharing.', present_repeat_teaser: 'Digit 3 repeats ({count}×) in your birth grid — concentrating conceptual ideation and teaching instincts that thrive when anchored to single priorities.', missing_teaser: 'Digit 3 is an open position in your birth date — highlighting an opportunity to build visible mentorship habits and structured long-horizon learning.', unlock_note: 'Your report maps how Wood growth interacts with your Mental and Emotional planes.' },
+        '4': { planet_india: 'Rahu (North Node)', element: 'Wood', domain: 'Systems, Order & Asset Discipline', present_single_teaser: 'Digit 4 appears once in your birth grid — grounding Wood energy into process discipline, organised execution, and practical problem-solving.', present_repeat_teaser: 'Digit 4 repeats ({count}×) in your birth grid — intensifying technical precision and structural rigour, best balanced with flexible milestones.', missing_teaser: 'Digit 4 is an open position in your birth date — suggesting that external checklists, repeatable routines, and step-by-step scaffolding unlock steadier output.', unlock_note: 'Review your practical Wood balancing habits and 90-day structural cadence in the report options below.' },
+        '5': { planet_india: 'Budh (Mercury)', element: 'Earth', domain: 'Central Stability & Adaptability', present_single_teaser: 'Digit 5 anchors the centre of your birth grid — connecting all surrounding axes through adaptable communication, commercial poise, and emotional steadiness.', present_repeat_teaser: 'Digit 5 repeats ({count}×) at the centre of your grid — creating brisk mental versatility and momentum that benefit from deliberate focus blocks.', missing_teaser: 'Digit 5 is open at the centre of your birth grid — a classic Lo Shu signal to cultivate deliberate core routines and self-generated transition bridges across projects.', unlock_note: 'Discover how the central Earth pivot influences your Golden and Silver axes in your personalised report below.' },
+        '6': { planet_india: 'Shukra (Venus)', element: 'Metal', domain: 'Stewardship, Craft & Support Networks', present_single_teaser: 'Digit 6 appears once in your birth grid — a Metal indicator associated with design sensibility, reliable stewardship, and supportive alliances.', present_repeat_teaser: 'Digit 6 repeats ({count}×) in your birth grid — emphasizing high aesthetic standards and protective responsibility toward family or team commitments.', missing_teaser: 'Digit 6 is an open position in your birth date — inviting conscious cultivation of reciprocal support networks, workspace order, and restorative comfort.', unlock_note: 'See your Metal element calibration and relationship alignment notes inside your report below.' },
+        '7': { planet_india: 'Ketu (South Node)', element: 'Metal', domain: 'Research, Discernment & Inner Study', present_single_teaser: 'Digit 7 appears once in your birth grid — a Metal indicator tied in traditional Lo Shu reading to analytical depth, quiet observation, and independent research.', present_repeat_teaser: 'Digit 7 repeats ({count}×) in your birth grid — deepening specialist inquiry and introspection, paired best with transparent communication in partnerships.', missing_teaser: 'Digit 7 is an open position in your birth date — pointing toward intentional reflective pauses, documented lessons learned, and unhurried verification before action.', unlock_note: 'Explore how reflective Metal interacts with your Emotional and Action planes in your personalised dossier below.' },
+        '8': { planet_india: 'Shani (Saturn)', element: 'Earth', domain: 'Governance, Patience & Long-Term Value', present_single_teaser: 'Digit 8 appears once in your birth grid — an Earth indicator reflecting measured judgement, operational accountability, and patient long-horizon building.', present_repeat_teaser: 'Digit 8 repeats ({count}×) in your birth grid — reinforcing detail vigilance and high endurance, which flow best when delegation and rest are scheduled.', missing_teaser: 'Digit 8 is an open position in your birth date — highlighting the value of automated financial tracking, clear written milestones, and steady pacing.', unlock_note: 'Your report details how Earth governance pairs with your Personal Year cycle.' },
+        '9': { planet_india: 'Mangal (Mars)', element: 'Fire', domain: 'Conviction, Completion & Visibility', present_single_teaser: 'Digit 9 appears once in your birth grid — a Fire indicator associated with principled conviction, warm visibility, and the drive to bring work to completion.', present_repeat_teaser: 'Digit 9 repeats ({count}×) in your birth grid — concentrating high-output Fire energy and idealism that benefit from cool-headed prioritisation.', missing_teaser: 'Digit 9 is an open position in your birth date — indicating that structured finishing sprints and clear completion rituals help convert strong starts into closed outcomes.', unlock_note: 'Inspect your Fire element balance and 90-day execution rhythm in the report editions below.' }
+      },
+      planes: {
+        mental: { label: 'Mental Plane (4-9-2)', axis_type: 'Top Horizontal Row', active_teaser: 'All three top-row digits (4-9-2) are present — linking structured planning, clear conviction, and interpersonal awareness in how you evaluate ideas.', partial_teaser: 'Partially active ({present_count}/3 digits present) — you carry natural cognitive anchors here while open positions show where external frameworks sharpen decisions.', open_teaser: 'Open axis (0/3 digits in birth date) — your chart routes primary strength through other rows, inviting deliberate written frameworks for complex planning.' },
+        emotional: { label: 'Emotional Plane (3-5-7)', axis_type: 'Middle Horizontal Row', active_teaser: 'All three middle-row digits (3-5-7) are present — blending expressive warmth, central composure, and reflective depth in relationships.', partial_teaser: 'Partially active ({present_count}/3 digits present) — combining innate empathy with intentional communication habits across personal and team bonds.', open_teaser: 'Open axis (0/3 digits in birth date) — emotional steadiness develops through conscious dialogue, grounding routines, and unhurried reflection.' },
+        practical: { label: 'Practical Plane (8-1-6)', axis_type: 'Bottom Horizontal Row', active_teaser: 'All three foundational digits (8-1-6) are present — anchoring endurance, career initiative, and material stewardship into tangible follow-through.', partial_teaser: 'Partially active ({present_count}/3 digits present) — active cells ground your daily output while open cells show where repeatable systems add leverage.', open_teaser: 'Open axis (0/3 digits in birth date) — practical delivery strengthens when supported by explicit calendars, checklists, and shared accountability.' },
+        thought: { label: 'Thought Plane (4-3-8)', axis_type: 'Left Vertical Column', active_teaser: 'Complete Thought column (4-3-8) — uniting architectural logic, conceptual vision, and long-range strategic prudence.', partial_teaser: 'Partially active ({present_count}/3 digits present) — selective strategic strengths are active, complemented by structured review habits.', open_teaser: 'Open column (0/3 digits in birth date) — long-range planning benefits from externalised roadmaps and milestone reviews.' },
+        will: { label: 'Will Plane (9-5-1)', axis_type: 'Central Vertical Spine', active_teaser: 'Complete Will spine (9-5-1) — aligning decisive drive, central balance, and clear self-direction under pressure.', partial_teaser: 'Partially active ({present_count}/3 digits present) — steady personal resolve in present digits, supported by conscious pacing across open positions.', open_teaser: 'Open spine (0/3 digits in birth date) — sustained stamina grows through incremental daily commitments rather than sudden bursts.' },
+        action: { label: 'Action Plane (2-7-6)', axis_type: 'Right Vertical Column', active_teaser: 'Complete Action column (2-7-6) — translating tactful observation and specialist insight into reliable outward delivery.', partial_teaser: 'Partially active ({present_count}/3 digits present) — selective execution strengths are present alongside conscious follow-through habits.', open_teaser: 'Open column (0/3 digits in birth date) — converting ideas into finished deliverables thrives with time-boxed execution sprints.' },
+        golden_raj_yoga: { label: 'Golden Raj Yoga (4-5-6)', axis_type: 'Primary Diagonal (NW → SE)', active_teaser: 'Complete 4-5-6 diagonal — connecting methodical discipline, central adaptability, and refined stewardship across long-term endeavours.', partial_teaser: 'Partially active ({present_count}/3 digits present) — foundational pieces of the 4-5-6 diagonal are active, with open digits marking high-leverage habit zones.', open_teaser: 'Open diagonal (0/3 digits in birth date) — organisational rhythm and stewardship are built deliberately through structured workspace and routine design.' },
+        silver_raj_yoga: { label: 'Silver Raj Yoga (2-5-8)', axis_type: 'Secondary Diagonal (NE → SW)', active_teaser: 'Complete 2-5-8 Earth diagonal — uniting relational patience, central poise, and steady governance for durable long-horizon foundations.', partial_teaser: 'Partially active ({present_count}/3 digits present) — active Earth anchors provide grounding while open digits highlight areas for steady routine building.', open_teaser: 'Open diagonal (0/3 digits in birth date) — consistent grounding habits and structured financial cadence supply intentional Earth stability.' }
+      }
+    };
+
+    let _loshuCountsCache = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+    let _notifyMeTargetSku = 'report_advanced';
+
+    async function loadLoShuPublicTeasers() {
+      const candidateUrls = ['/static/data/loshu_public_teasers.json', '/data/loshu_public_teasers.json', '/api/v1/public/loshu-teasers'];
+      for (const url of candidateUrls) {
+        try {
+          const res = await fetch(url, { credentials: 'same-origin' });
+          if (res.ok) {
+            const payload = await res.json();
+            if (payload && payload.public_browser_safe === true && payload.digits && payload.planes) {
+              _loshuPublicTeasers = payload;
+              return;
+            }
+          }
+        } catch (_) {}
+      }
+    }
+
+    function hasAnalyticsConsent() {
+      try {
+        return Boolean(
+          window.nvConsent &&
+          typeof window.nvConsent.getStatus === 'function' &&
+          window.nvConsent.getStatus().analytics === true
+        );
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function prefersReducedMotion() {
+      try {
+        return Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      } catch (_) {
+        return false;
+      }
+    }
+
     function submitInlineDob() {
       const name = document.getElementById('inline-seeker-name')?.value?.trim() || 'Seeker';
       const d = parseInt(document.getElementById('inline-dob-day')?.value, 10);
       const m = parseInt(document.getElementById('inline-dob-month')?.value, 10);
       const y = parseInt(document.getElementById('inline-dob-year')?.value, 10);
+      const rawGender = (document.getElementById('inline-seeker-gender')?.value || '').trim().toLowerCase();
       const errDiv = document.getElementById('inline-dob-error');
 
       if (!isValidGregorianDate(d, m, y)) {
@@ -1383,6 +1683,9 @@
         driver: driver,
         conductor: conductor
       };
+      if (rawGender === 'male' || rawGender === 'female') {
+        readingData.gender = rawGender;
+      }
 
       sessionStorage.setItem('nv_reading_input', JSON.stringify(readingData));
       _activeReadingData = readingData;
@@ -1391,6 +1694,55 @@
       document.getElementById('missing-reading-state').style.display = 'none';
       document.getElementById('reading-content').style.display = 'block';
       renderSeekerSummary(readingData);
+    }
+
+    function renderKuaSummary(data) {
+      const kuaValEl = document.getElementById('summary-kua');
+      const kuaMetaEl = document.getElementById('summary-kua-meta');
+      const kuaRuleEl = document.getElementById('summary-kua-rule');
+      const kuaSelectEl = document.getElementById('summary-kua-gender-select');
+      if (!kuaValEl || !kuaMetaEl) return;
+
+      const birthYear = parseInt(data.year || (data.dob ? String(data.dob).split('-')[0] : ''), 10);
+      const gender = (data.gender || '').trim().toLowerCase();
+      if (kuaSelectEl) {
+        kuaSelectEl.value = (gender === 'male' || gender === 'female') ? gender : '';
+      }
+
+      const kuaRes = (window.NVKua && typeof window.NVKua.calculateKuaDetails === 'function')
+        ? window.NVKua.calculateKuaDetails(birthYear, gender || null)
+        : { status: 'NEEDS_GENDER', kuaNumber: null, kua_number: null, display: 'Kua needs gender', ruleNote: 'Calculated from your birth year and gender' };
+
+      if (kuaRuleEl) {
+        kuaRuleEl.textContent = kuaRes.ruleNote || kuaRes.rule_text || 'Calculated from your birth year and gender';
+      }
+
+      const resolvedKua = kuaRes.kuaNumber || kuaRes.kua_number;
+      if (kuaRes.status === 'OK' && resolvedKua) {
+        kuaValEl.textContent = String(resolvedKua);
+        kuaValEl.style.fontSize = '2.6rem';
+        kuaValEl.style.lineHeight = '1.1';
+        kuaValEl.style.paddingTop = '0';
+        kuaMetaEl.textContent = kuaRes.elementGroup || kuaRes.element_group_label || `${kuaRes.element} · ${kuaRes.group}`;
+      } else {
+        kuaValEl.textContent = 'Kua needs gender';
+        kuaValEl.style.fontSize = '1.08rem';
+        kuaValEl.style.lineHeight = '1.3';
+        kuaValEl.style.paddingTop = '6px';
+        kuaMetaEl.textContent = 'Select gender below (never guessed)';
+      }
+    }
+
+    function onInlineKuaGenderChange(selectedGender) {
+      if (!_activeReadingData) return;
+      const clean = (selectedGender || '').trim().toLowerCase();
+      if (clean === 'male' || clean === 'female') {
+        _activeReadingData.gender = clean;
+      } else {
+        delete _activeReadingData.gender;
+      }
+      sessionStorage.setItem('nv_reading_input', JSON.stringify(_activeReadingData));
+      renderKuaSummary(_activeReadingData);
     }
 
     function renderSeekerSummary(data) {
@@ -1408,44 +1760,66 @@
       document.getElementById('summary-conductor').textContent = conductor;
       document.getElementById('summary-conductor-planet').textContent = PLANET_NAMES[conductorNum] || 'Destiny Trajectory';
 
-      // Render Interactive Lo Shu Curiosity Block
+      renderKuaSummary(data);
+
+      // Render Interactive Lo Shu Curiosity Block (Mockup A)
       renderInteractiveLoShuCuriosity(data);
     }
 
-    // Scroll helper for mobile sticky bar and teaser CTA
+    // Scroll helper for mobile sticky bar and teaser CTA (reduced-motion safe)
     function scrollToPricingCards() {
       const el = document.getElementById('core-tiers-grid') || document.getElementById('tier-card-basic');
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
       }
     }
 
-    // Interactive Lo Shu Grid & Planes Engine
+    function handleCompareReportTiersClick() {
+      trackFunnelEvent('loshu_compare_tiers_click', { selected_plane: _activeSelectedPlane || null });
+      scrollToPricingCards();
+    }
+
+    // Interactive Lo Shu Grid & Patterns Engine (Mockup A)
     const LOSHU_CELL_ORDER = [4, 9, 2, 3, 5, 7, 8, 1, 6];
     const LOSHU_ELEMENT_MAP = {
-      1: { name: 'Water', planet: 'Sun · Vitality', desc: 'Directional career flow and professional initiation.' },
-      2: { name: 'Earth', planet: 'Moon · Intuition', desc: 'Relational harmony and reflective emotional pacing.' },
-      3: { name: 'Wood', planet: 'Jupiter · Wisdom', desc: 'Conceptual expansion, synthesis, and creative ideation.' },
-      4: { name: 'Wood', planet: 'Rahu · Strategy', desc: 'Strategic organization, wealth retention, and structural order.' },
-      5: { name: 'Earth', planet: 'Mercury · Center', desc: 'Core life equilibrium, grounding focus, and central balance.' },
-      6: { name: 'Metal', planet: 'Venus · Harmony', desc: 'Refined comfort manifestation and spatial balance.' },
-      7: { name: 'Metal', planet: 'Ketu · Discernment', desc: 'Analytical research depth, spiritual clarity, and insight.' },
-      8: { name: 'Earth', planet: 'Saturn · Structure', desc: 'Methodical perseverance, discipline, and physical endurance.' },
-      9: { name: 'Fire', planet: 'Mars · Courage', desc: 'Manifestation velocity, active courage, and project completion.' }
+      1: { name: 'Water', planet: 'Sun · Vitality' },
+      2: { name: 'Earth', planet: 'Moon · Intuition' },
+      3: { name: 'Wood', planet: 'Jupiter · Wisdom' },
+      4: { name: 'Wood', planet: 'Rahu · Strategy' },
+      5: { name: 'Earth', planet: 'Mercury · Center' },
+      6: { name: 'Metal', planet: 'Venus · Harmony' },
+      7: { name: 'Metal', planet: 'Ketu · Discernment' },
+      8: { name: 'Earth', planet: 'Saturn · Structure' },
+      9: { name: 'Fire', planet: 'Mars · Courage' }
     };
 
     const LOSHU_PLANES_DATA = [
-      { id: 'mental', name: 'Mental Plane', digits: [4, 9, 2] },
-      { id: 'emotional', name: 'Emotional Plane', digits: [3, 5, 7] },
-      { id: 'practical', name: 'Practical Plane', digits: [8, 1, 6] },
-      { id: 'thought', name: 'Thought Plane', digits: [4, 3, 8] },
-      { id: 'will', name: 'Will Plane', digits: [9, 5, 1] },
-      { id: 'action', name: 'Action Plane', digits: [2, 7, 6] },
-      { id: 'golden', name: 'Golden Raj Yoga', digits: [4, 5, 6] },
-      { id: 'silver', name: 'Silver Raj Yoga', digits: [2, 5, 8] }
+      { id: 'mental', name: 'Mental', digits: [4, 9, 2] },
+      { id: 'emotional', name: 'Emotional', digits: [3, 5, 7] },
+      { id: 'practical', name: 'Practical', digits: [8, 1, 6] },
+      { id: 'thought', name: 'Thought', digits: [4, 3, 8] },
+      { id: 'will', name: 'Will', digits: [9, 5, 1] },
+      { id: 'action', name: 'Action', digits: [2, 7, 6] },
+      { id: 'golden_raj_yoga', name: 'Golden Raj Yoga', digits: [4, 5, 6] },
+      { id: 'silver_raj_yoga', name: 'Silver Raj Yoga', digits: [2, 5, 8] }
     ];
 
     let _activeSelectedPlane = null;
+
+    function resetLoShuDefaultInspector(activeCount) {
+      const overview = (_loshuPublicTeasers && _loshuPublicTeasers.default_overview) || {};
+      const eyebrowEl = document.getElementById('loshu-teaser-eyebrow');
+      const titleEl = document.getElementById('loshu-teaser-title');
+      const descEl = document.getElementById('loshu-teaser-desc');
+      const unlockEl = document.getElementById('loshu-teaser-unlock');
+      const medEl = document.getElementById('loshu-teaser-medallion');
+
+      if (eyebrowEl) eyebrowEl.textContent = `INTERACTIVE GRID READY · ${activeCount} OF 9 CELLS ACTIVE`;
+      if (titleEl) titleEl.textContent = overview.title || 'Select Any Cell or Pattern Axis';
+      if (descEl) descEl.textContent = overview.summary || 'Tap any of the nine natal cells or Key Lo Shu Patterns below to inspect your birth-date grid.';
+      if (unlockEl) unlockEl.textContent = overview.unlock_note || '';
+      if (medEl) medEl.src = DEFAULT_MEDALLION;
+    }
 
     function renderInteractiveLoShuCuriosity(data) {
       const gridEl = document.getElementById('loshu-interactive-grid');
@@ -1453,118 +1827,161 @@
       const ringCircleEl = document.getElementById('loshu-ring-circle');
       const ringPercentEl = document.getElementById('loshu-ring-percent');
       const ringFractionEl = document.getElementById('loshu-ring-fraction');
+      const subtitleEl = document.getElementById('loshu-card-subtitle');
       if (!gridEl || !planesRowEl) return;
 
-      const d = parseInt(data.day, 10) || 1;
-      const m = parseInt(data.month, 10) || 1;
-      const y = parseInt(data.year, 10) || 1990;
+      let d = parseInt(data.day, 10);
+      let m = parseInt(data.month, 10);
+      let y = parseInt(data.year, 10);
+      if ((!d || !m || !y) && data.dob) {
+        const parts = String(data.dob).split('-');
+        if (parts.length === 3) {
+          y = parseInt(parts[0], 10);
+          m = parseInt(parts[1], 10);
+          d = parseInt(parts[2], 10);
+        }
+      }
+      d = d || 1; m = m || 1; y = y || 1990;
       const totalDobDigits = `${String(d).padStart(2, '0')}${String(m).padStart(2, '0')}${String(y).padStart(4, '0')}`;
 
       const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
       for (const ch of totalDobDigits) {
-        if (ch !== '0') counts[parseInt(ch, 10)]++;
+        if (ch >= '1' && ch <= '9') counts[parseInt(ch, 10)]++;
       }
+      _loshuCountsCache = counts;
 
       let activeCount = 0;
       for (let n = 1; n <= 9; n++) {
         if (counts[n] > 0) activeCount++;
       }
+      const openCount = 9 - activeCount;
       const activePercent = Math.round((activeCount / 9) * 100);
 
-      // Update Completeness Ring
+      if (subtitleEl) {
+        subtitleEl.textContent = `${activeCount} active digits · ${openCount} open cells · Tap any cell or pattern to inspect`;
+      }
       if (ringPercentEl) ringPercentEl.textContent = `${activePercent}%`;
-      if (ringFractionEl) ringFractionEl.textContent = `${activeCount}/9 Active`;
+      if (ringFractionEl) ringFractionEl.textContent = `${activeCount}/9 ACTIVE`;
       if (ringCircleEl) {
-        const circumference = 2 * Math.PI * 40; // ~251.32
+        const circumference = 2 * Math.PI * 40;
         const offset = circumference - (activePercent / 100) * circumference;
         ringCircleEl.style.strokeDashoffset = offset;
       }
 
-      // Render 9 Cells in 3x3 Grid
+      resetLoShuDefaultInspector(activeCount);
+
+      // Render 9 Semantic Button Cells in Canonical 3x3 Order (Zero prices on cells)
       gridEl.innerHTML = LOSHU_CELL_ORDER.map((num, idx) => {
         const cnt = counts[num];
         const isPresent = cnt > 0;
         const elemInfo = LOSHU_ELEMENT_MAP[num];
-        const delaySec = (idx * 0.04).toFixed(2);
+        const delaySec = prefersReducedMotion() ? '0' : (idx * 0.03).toFixed(2);
+        const topBadge = isPresent
+          ? `<span>&times;${cnt}</span>`
+          : `<img src="${DEFAULT_MEDALLION}" alt="" width="14" height="14" class="cell-seal-icon" loading="lazy" decoding="async" /><span>OPEN</span>`;
+        const ariaLabel = isPresent
+          ? `Digit ${num}, active ${cnt} time${cnt > 1 ? 's' : ''}, ${elemInfo.name} element`
+          : `Digit ${num}, open cell in birth date, ${elemInfo.name} element`;
 
         return `
-          <div class="loshu-cell ${isPresent ? 'present-cell' : 'gap-cell'}" 
-               id="lsc_${num}" 
-               onclick="handleLoShuCellClick(${num}, ${cnt})" 
-               style="animation-delay: ${delaySec}s;" 
-               title="${isPresent ? `Digit ${num} present ×${cnt}` : `Missing gap digit ${num} (${elemInfo.name})`}">
-            <div class="cell-top-tag">${isPresent ? `×${cnt}` : 'GAP'}</div>
-            <div class="cell-num">${isPresent ? String(num).repeat(cnt) : num}</div>
-            <div class="cell-dots">${isPresent ? '•'.repeat(cnt) : '○'}</div>
-            <div class="cell-elem">${elemInfo.name}</div>
-          </div>
-        `;
-      }).join('');
-
-      // Render 8 Planes
-      planesRowEl.innerHTML = LOSHU_PLANES_DATA.map(pl => {
-        const presentCount = pl.digits.filter(dig => counts[dig] > 0).length;
-        const status = presentCount === 3 ? 'COMPLETE' : presentCount >= 2 ? 'ACTIVE' : 'DORMANT';
-        const badgeClass = status === 'COMPLETE' ? 'badge-complete' : status === 'ACTIVE' ? 'badge-active' : 'badge-dormant';
-
-        return `
-          <button type="button" 
-                  class="plane-pill" 
-                  id="plane_pill_${pl.id}" 
-                  onclick="handleLoShuPlaneClick('${pl.id}', [${pl.digits.join(',')}])">
-            <span>${pl.name} (${pl.digits.join('-')})</span>
-            <span class="plane-badge ${badgeClass}">${status}</span>
+          <button type="button"
+                  class="loshu-cell ${isPresent ? 'present-cell' : 'gap-cell'}"
+                  id="lsc_${num}"
+                  data-digit="${num}"
+                  data-count="${cnt}"
+                  aria-pressed="false"
+                  aria-label="${ariaLabel}"
+                  onclick="handleLoShuCellClick(${num}, ${cnt})"
+                  style="animation-delay: ${delaySec}s;">
+            <span class="cell-top-tag">${topBadge}</span>
+            <span class="cell-num">${isPresent ? String(num).repeat(cnt) : num}</span>
+            <span class="cell-elem">${elemInfo.name}</span>
           </button>
         `;
       }).join('');
+
+      // Render 8 Key Lo Shu Pattern Pills
+      planesRowEl.innerHTML = LOSHU_PLANES_DATA.map(pl => {
+        const presentCount = pl.digits.filter(dig => counts[dig] > 0).length;
+        const badgeClass = presentCount === 3 ? 'badge-complete' : presentCount >= 2 ? 'badge-active' : 'badge-dormant';
+
+        return `
+          <button type="button"
+                  class="plane-pill"
+                  id="plane_pill_${pl.id}"
+                  aria-pressed="false"
+                  onclick="handleLoShuPlaneClick('${pl.id}', [${pl.digits.join(',')}])">
+            <span>${pl.name} (${pl.digits.join('-')})</span>
+            <span class="plane-badge ${badgeClass}">${presentCount}/3</span>
+          </button>
+        `;
+      }).join('');
+
+      trackFunnelEvent('loshu_grid_rendered', { active_cells: activeCount, open_cells: openCount });
     }
 
     function handleLoShuCellClick(num, cnt) {
-      // Clear plane highlight
       clearLoShuHighlights();
+      _activeSelectedPlane = null;
 
-      // Highlight selected cell
-      document.querySelectorAll('.loshu-cell').forEach(el => el.classList.remove('selected-cell'));
       const cellEl = document.getElementById(`lsc_${num}`);
-      if (cellEl) cellEl.classList.add('selected-cell');
+      if (cellEl) {
+        cellEl.classList.add('selected-cell');
+        cellEl.setAttribute('aria-pressed', 'true');
+      }
 
-      const info = LOSHU_ELEMENT_MAP[num];
+      const dEntry = (_loshuPublicTeasers && _loshuPublicTeasers.digits && _loshuPublicTeasers.digits[String(num)]) || {};
+      const elemName = dEntry.element || (LOSHU_ELEMENT_MAP[num] ? LOSHU_ELEMENT_MAP[num].name : 'Earth');
+      const planetLabel = dEntry.planet_india || (LOSHU_ELEMENT_MAP[num] ? LOSHU_ELEMENT_MAP[num].planet : '');
+      const domainLabel = dEntry.domain || '';
       const isPresent = cnt > 0;
+
+      const eyebrowEl = document.getElementById('loshu-teaser-eyebrow');
       const titleEl = document.getElementById('loshu-teaser-title');
       const descEl = document.getElementById('loshu-teaser-desc');
-      const iconEl = document.getElementById('loshu-teaser-icon');
+      const unlockEl = document.getElementById('loshu-teaser-unlock');
+      const medEl = document.getElementById('loshu-teaser-medallion');
 
-      if (titleEl && descEl) {
-        if (isPresent) {
-          titleEl.textContent = `Digit ${num} Active ×${cnt} · ${info.name} Element (${info.planet})`;
-          descEl.textContent = `${info.desc} Amplified vitality frequency in your personal chart. Harmonized in depth across all tiers.`;
-          if (iconEl) iconEl.textContent = '✦';
-        } else {
-          titleEl.textContent = `Missing Digit ${num} Void · ${info.name} Element (${info.planet})`;
-          descEl.textContent = `${info.desc} Safe planetary remedies and acoustic sound vibrations bridge this natal void in your report.`;
-          if (iconEl) iconEl.textContent = '○';
-        }
+      if (medEl) {
+        medEl.src = ELEMENT_MEDALLIONS[elemName] || DEFAULT_MEDALLION;
       }
+
+      if (isPresent) {
+        if (eyebrowEl) eyebrowEl.textContent = `TAPPED PRESENT CELL · ${elemName.toUpperCase()} ELEMENT`;
+        if (titleEl) titleEl.textContent = `Cell ${num} Active (×${cnt}) · ${planetLabel}${domainLabel ? ' — ' + domainLabel : ''}`;
+        const rawTeaser = cnt > 1 ? (dEntry.present_repeat_teaser || dEntry.present_single_teaser || '') : (dEntry.present_single_teaser || '');
+        if (descEl) descEl.textContent = rawTeaser.replace('{count}', String(cnt));
+      } else {
+        if (eyebrowEl) eyebrowEl.textContent = `TAPPED MISSING CELL · ${elemName.toUpperCase()} ELEMENT`;
+        if (titleEl) titleEl.textContent = `Cell ${num} Open in Birth Date · ${planetLabel}${domainLabel ? ' — ' + domainLabel : ''}`;
+        if (descEl) descEl.textContent = dEntry.missing_teaser || '';
+      }
+      if (unlockEl) unlockEl.textContent = dEntry.unlock_note || '';
+
+      trackFunnelEvent('loshu_cell_tap', { digit: num, count: cnt, state: isPresent ? 'present' : 'open' });
     }
 
     function handleLoShuPlaneClick(planeId, digits) {
       if (_activeSelectedPlane === planeId) {
         clearLoShuHighlights();
         _activeSelectedPlane = null;
+        let activeCount = 0;
+        for (let n = 1; n <= 9; n++) if (_loshuCountsCache[n] > 0) activeCount++;
+        resetLoShuDefaultInspector(activeCount);
         return;
       }
+      clearLoShuHighlights();
       _activeSelectedPlane = planeId;
 
-      // Update pill styling
-      document.querySelectorAll('.plane-pill').forEach(p => p.classList.remove('active-pill'));
       const pill = document.getElementById(`plane_pill_${planeId}`);
-      if (pill) pill.classList.add('active-pill');
+      if (pill) {
+        pill.classList.add('active-pill');
+        pill.setAttribute('aria-pressed', 'true');
+      }
 
-      // Highlight plane cells and dim others
       LOSHU_CELL_ORDER.forEach(num => {
         const cellEl = document.getElementById(`lsc_${num}`);
         if (!cellEl) return;
-        cellEl.classList.remove('selected-cell');
         if (digits.includes(num)) {
           cellEl.classList.add('plane-highlighted');
           cellEl.classList.remove('dimmed-cell');
@@ -1574,24 +1991,170 @@
         }
       });
 
-      const planeObj = LOSHU_PLANES_DATA.find(p => p.id === planeId);
+      const pEntry = (_loshuPublicTeasers && _loshuPublicTeasers.planes && _loshuPublicTeasers.planes[planeId]) || {};
+      const presentCount = digits.filter(dig => (_loshuCountsCache[dig] || 0) > 0).length;
+      const eyebrowEl = document.getElementById('loshu-teaser-eyebrow');
       const titleEl = document.getElementById('loshu-teaser-title');
       const descEl = document.getElementById('loshu-teaser-desc');
-      if (titleEl && descEl && planeObj) {
-        titleEl.textContent = `${planeObj.name} (${digits.join(' · ')}) Axis Selected`;
-        descEl.textContent = `Highlighted 3 constituent cells in your grid. Complete plane calibrations and balancing vectors are detailed in your analytical dossiers.`;
-      }
+      const unlockEl = document.getElementById('loshu-teaser-unlock');
+      const medEl = document.getElementById('loshu-teaser-medallion');
+
+      if (medEl) medEl.src = DEFAULT_MEDALLION;
+      if (eyebrowEl) eyebrowEl.textContent = `KEY LO SHU PATTERN · ${(pEntry.axis_type || 'AXIS').toUpperCase()} (${presentCount}/3 ACTIVE)`;
+      if (titleEl) titleEl.textContent = pEntry.label || `${planeId} (${digits.join('-')})`;
+      let planeCopy = pEntry.open_teaser || '';
+      if (presentCount === 3) planeCopy = pEntry.active_teaser || '';
+      else if (presentCount >= 1) planeCopy = (pEntry.partial_teaser || '').replace('{present_count}', String(presentCount));
+      if (descEl) descEl.textContent = planeCopy;
+      if (unlockEl) unlockEl.textContent = 'Full axis synthesis and balancing habits are detailed in the personalised report editions below.';
+
+      trackFunnelEvent('loshu_pattern_tap', { pattern_id: planeId, present_count: presentCount });
     }
 
     function clearLoShuHighlights() {
-      document.querySelectorAll('.plane-pill').forEach(p => p.classList.remove('active-pill'));
+      document.querySelectorAll('.plane-pill').forEach(p => {
+        p.classList.remove('active-pill');
+        p.setAttribute('aria-pressed', 'false');
+      });
       document.querySelectorAll('.loshu-cell').forEach(c => {
         c.classList.remove('plane-highlighted', 'dimmed-cell', 'selected-cell');
+        c.setAttribute('aria-pressed', 'false');
       });
     }
 
+    function isNotifyMeEnabledForSku(skuId) {
+      if (skuId !== 'report_advanced' && skuId !== 'report_premium') return false;
+      if (serverCatalog && serverCatalog.feature_flags && serverCatalog.feature_flags.notify_me_higher_tiers === true) {
+        return true;
+      }
+      if (window.NV_PRICING && typeof window.NV_PRICING.isNotifyMeTier === 'function') {
+        return window.NV_PRICING.isNotifyMeTier(skuId);
+      }
+      return false;
+    }
+
+    function applyNotifyMeTierMode() {
+      const notifyAdv = isNotifyMeEnabledForSku('report_advanced');
+      const notifyPrem = isNotifyMeEnabledForSku('report_premium');
+      if (!notifyAdv && !notifyPrem) return;
+
+      const basicCard = document.getElementById('tier-card-basic');
+      const basicBtn = document.getElementById('btn-select-report_basic');
+      const advCard = document.getElementById('tier-card-advanced');
+      const advBtn = document.getElementById('btn-select-report_advanced');
+      const premBtn = document.getElementById('btn-select-report_premium');
+
+      if (basicCard && basicBtn) {
+        basicCard.classList.add('highlighted');
+        basicBtn.className = 'btn-select-tier btn-select-gold';
+        basicBtn.innerHTML = '<span>Select Basic Report — ₹199</span> <span>✦</span>';
+      }
+      if (notifyAdv && advCard && advBtn) {
+        advCard.classList.remove('highlighted');
+        const badge = advCard.querySelector('.tier-badge');
+        if (badge) {
+          badge.textContent = 'WAITLIST · NOTIFY ME';
+          badge.style.background = 'var(--ink-muted)';
+        }
+        advBtn.className = 'btn-select-tier btn-select-outline';
+        advBtn.innerHTML = '<span>Notify Me When Ready</span> <span>✉</span>';
+        advBtn.setAttribute('onclick', "openNotifyMeModal('report_advanced')");
+      }
+      if (notifyPrem && premBtn) {
+        premBtn.className = 'btn-select-tier btn-select-outline';
+        premBtn.innerHTML = '<span>Notify Me When Ready</span> <span>✉</span>';
+        premBtn.setAttribute('onclick', "openNotifyMeModal('report_premium')");
+      }
+    }
+
+    function openNotifyMeModal(skuId) {
+      _notifyMeTargetSku = skuId || 'report_advanced';
+      const tierInfo = DEFAULT_TIERS[_notifyMeTargetSku] || { name: 'Expanded Dossier' };
+      const tagEl = document.getElementById('notify-me-tier-tag');
+      const titleEl = document.getElementById('notify-me-title');
+      const statusEl = document.getElementById('notify-me-status');
+      const consentEl = document.getElementById('notify-me-consent');
+      const modal = document.getElementById('notify-me-modal');
+      if (tagEl) tagEl.textContent = `Priority Release Alert · ${tierInfo.name}`;
+      if (titleEl) titleEl.textContent = `Notify Me · ${tierInfo.name}`;
+      if (statusEl) { statusEl.textContent = ''; statusEl.style.color = 'inherit'; }
+      if (consentEl) consentEl.checked = false;
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeNotifyMeModal() {
+      const modal = document.getElementById('notify-me-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    async function submitNotifyMeForm() {
+      const email = (document.getElementById('notify-me-email')?.value || '').trim().toLowerCase();
+      const consent = Boolean(document.getElementById('notify-me-consent')?.checked);
+      const statusEl = document.getElementById('notify-me-status');
+      const btn = document.getElementById('btn-notify-me-submit');
+
+      if (!email || !email.includes('@')) {
+        if (statusEl) { statusEl.textContent = 'Please enter a valid email address.'; statusEl.style.color = '#B91C1C'; }
+        return;
+      }
+      if (!consent) {
+        if (statusEl) { statusEl.textContent = 'Please tick the consent box to join the release alert list.'; statusEl.style.color = '#B91C1C'; }
+        return;
+      }
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Recording Request...'; }
+      try {
+        const res = await fetch('/api/v1/waitlist/notify-me', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            email: email,
+            pack_id: _notifyMeTargetSku,
+            sku_id: _notifyMeTargetSku,
+            consent: true,
+            source_page: 'your-reading'
+          })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && (data.success || data.status === 'registered' || data.status === 'recorded')) {
+          if (statusEl) {
+            statusEl.textContent = data.message || 'Thank you. We will email you once when this edition opens.';
+            statusEl.style.color = 'var(--emerald)';
+          }
+          trackFunnelEvent('notify_me_registered', { sku_id: _notifyMeTargetSku });
+        } else {
+          if (statusEl) {
+            statusEl.textContent = data.detail || data.error || 'Unable to record request right now. Please retry.';
+            statusEl.style.color = '#B91C1C';
+          }
+        }
+      } catch (_) {
+        if (statusEl) {
+          statusEl.textContent = 'Network error while submitting request.';
+          statusEl.style.color = '#B91C1C';
+        }
+      } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<span>Notify Me at Launch</span> <span>✦</span>'; }
+      }
+    }
+
+    function setTierPricePreservingMrp(elId, priceInr, mrpInr) {
+      const el = document.getElementById(elId);
+      if (!el || !priceInr) return;
+      const formattedPrice = Number(priceInr).toLocaleString('en-IN');
+      const formattedMrp = mrpInr ? Number(mrpInr).toLocaleString('en-IN') : '';
+      const mrpHtml = formattedMrp
+        ? ` <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹${formattedMrp}</span>`
+        : '';
+      el.innerHTML = `₹${formattedPrice}${mrpHtml}`;
+    }
+
     // Initialize Reading Page
-    function initReadingPage() {
+    async function initReadingPage() {
+      await loadLoShuPublicTeasers();
+      applyNotifyMeTierMode();
+
       const rawInput = sessionStorage.getItem('nv_reading_input');
       const urlParams = new URLSearchParams(window.location.search);
       const fromSlug = (urlParams.get('from') || 'home').trim().toLowerCase();
@@ -1601,7 +2164,7 @@
       if (returnLink) {
         if (fromSlug === 'personal-year' || fromSlug === 'blessing-years') {
           returnLink.href = '/calculators/personal-year/';
-        } else if (fromSlug === 'birth-number' || fromSlug === 'lucky-number') {
+        } else if (fromSlug === 'birth-number' || fromSlug === 'lucky-number' || fromSlug === 'favourable-numbers') {
           returnLink.href = '/calculators/birth-number/';
         } else if (fromSlug === 'life-path-number' || fromSlug === 'life-path-calculator') {
           returnLink.href = '/calculators/life-path-number/';
@@ -1664,7 +2227,7 @@
       fetchServerPricingCatalog();
     }
 
-    // Fetch Authoritative Server Pricing Catalog
+    // Fetch Authoritative Server Pricing Catalog (preserving approved Launch MRPs + checking Notify-Me flag)
     async function fetchServerPricingCatalog() {
       try {
         const res = await fetch('/api/v1/pricing-catalog');
@@ -1672,24 +2235,26 @@
           const catalog = await res.json();
           serverCatalog = catalog;
           if (catalog.core_reports) {
-            if (catalog.core_reports.report_basic && document.getElementById('price-report_basic')) {
-              document.getElementById('price-report_basic').textContent = `₹${catalog.core_reports.report_basic.price_inr}`;
+            if (catalog.core_reports.report_basic) {
+              setTierPricePreservingMrp('price-report_basic', catalog.core_reports.report_basic.price_inr, LAUNCH_MRPS.report_basic);
             }
-            if (catalog.core_reports.report_advanced && document.getElementById('price-report_advanced')) {
-              document.getElementById('price-report_advanced').textContent = `₹${catalog.core_reports.report_advanced.price_inr}`;
+            if (catalog.core_reports.report_advanced) {
+              setTierPricePreservingMrp('price-report_advanced', catalog.core_reports.report_advanced.price_inr, LAUNCH_MRPS.report_advanced);
             }
-            if (catalog.core_reports.report_premium && document.getElementById('price-report_premium')) {
-              document.getElementById('price-report_premium').textContent = `₹${catalog.core_reports.report_premium.price_inr}`;
+            if (catalog.core_reports.report_premium) {
+              setTierPricePreservingMrp('price-report_premium', catalog.core_reports.report_premium.price_inr, LAUNCH_MRPS.report_premium);
             }
           }
+          applyNotifyMeTierMode();
         }
       } catch (err) {
         console.warn('[Server_Catalog_Sync] Operating on cached schema authority.');
       }
     }
 
-    // Funnel Telemetry
+    // Consent-Gated Funnel Telemetry (Strictly requires nvConsent.getStatus().analytics === true)
     function trackFunnelEvent(eventName, data) {
+      if (!hasAnalyticsConsent()) return;
       try {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
@@ -1713,8 +2278,9 @@
     }
     window.trackFunnelEvent = trackFunnelEvent;
 
-    // Safe Worker Telemetry Event Logger (Non-blocking)
+    // Consent-Gated Worker Telemetry Event Logger
     function logWorkerEvent(eventName, data) {
+      if (!hasAnalyticsConsent()) return;
       try {
         fetch('/api/v1/events', {
           method: 'POST',
@@ -1726,8 +2292,12 @@
     }
     window.logWorkerEvent = logWorkerEvent;
 
-    // Stage B: Open Unified Checkout Screen
+    // Stage B: Open Unified Checkout Screen (or Notify-Me Modal if higher-tier waitlist flag is active)
     function selectTierAndProceed(tierId) {
+      if (isNotifyMeEnabledForSku(tierId)) {
+        openNotifyMeModal(tierId);
+        return;
+      }
       try {
         trackFunnelEvent('view_product', { tier: tierId });
         trackFunnelEvent('begin_checkout', { tier: tierId });
@@ -1742,7 +2312,7 @@
       if (!_activeReadingData || (!_activeReadingData.dob && (!_activeReadingData.day || !_activeReadingData.month || !_activeReadingData.year))) {
         document.getElementById('missing-reading-state').style.display = 'block';
         document.getElementById('reading-content').style.display = 'none';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
         return;
       }
 

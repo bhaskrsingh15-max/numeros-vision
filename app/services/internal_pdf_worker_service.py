@@ -30,6 +30,7 @@ from typing import Dict, Any, Tuple, Optional
 from fastapi import FastAPI, Request, Response, HTTPException
 
 from app.engine.core_matrix_engine import calculate_chaldean_name
+from app.engine.kua import KUA_NEEDS_GENDER_TEXT, KUA_RULE_TEXT, calculate_kua_details
 from app.engine.complementary_poorak_engine import calculate_complementary_poorak
 from app.engine.vedic_gharelu_remedies import get_gharelu_remedies_for_chart
 from app.engine.forecast_engine import generate_detailed_annual_matrix, calculate_blessing_years
@@ -210,10 +211,9 @@ def build_calculation_data_from_view(view: Dict[str, Any], pack_id: str, topic_i
             n = sum(int(d) for d in str(n))
         return n if n > 0 else 9
 
-    y_sum = _red(year)
-    kua = _red(11 - y_sum)
-    if kua == 5:
-        kua = 2
+    subject_gender = subj.get("gender") or calc.get("gender")
+    kua_details = calculate_kua_details(year, subject_gender)
+    kua = kua_details["kua_number"]
     # Determine purchase / current year dynamically from subject.created_at or datetime.now()
     subj_created = subj.get("created_at") or subj.get("createdAt")
     purchase_year = None
@@ -273,7 +273,14 @@ def build_calculation_data_from_view(view: Dict[str, Any], pack_id: str, topic_i
         "pythagorean_name_root": c_root,
         "pythagorean_name_planet": PLANET_FULL_NAMES.get(c_root, "Mercury (Budh)"),
         "kua_number": kua,
-        "kua_element": "Water · Kan (East Group)",
+        "kua_display": kua_details["display"],
+        "kua_element": kua_details["element_group"],
+        "kua_group": kua_details["group"] or KUA_NEEDS_GENDER_TEXT,
+        "kua_desk_direction": kua_details["desk_direction"],
+        "kua_rule_note": KUA_RULE_TEXT,
+        "kua_details": kua_details,
+        "gender": kua_details["gender"],
+        "edition": str(subj.get("edition") or view.get("edition") or "india"),
         "personal_year": personal_year,
         "personal_year_theme": "Foundation & Structural Infrastructure",
         "counts": counts,

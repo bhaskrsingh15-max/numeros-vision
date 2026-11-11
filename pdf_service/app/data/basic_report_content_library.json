@@ -3770,6 +3770,202 @@
           "status": "DRAFT"
         }
       }
+    },
+    "loshu_curiosity_teasers": {
+      "status": "DRAFT",
+      "public_browser_safe": true,
+      "governance_note": "Public browser-safe curiosity teasers only. Zero paid report paragraphs, zero remedy prescriptions, zero prices on cells or inspector.",
+      "default_overview": {
+        "eyebrow": "INTERACTIVE LO SHU MATRIX",
+        "title": "Select Any Cell or Pattern Axis",
+        "summary": "Tap any of the nine natal cells or Key Lo Shu Patterns below to inspect how active repetitions and open positions shape your natural communication, planning, and execution style.",
+        "unlock_note": "Detailed multi-factor synthesis, repetition balancing, and your 90-day practical plan are compiled inside the personalised PDF editions below.",
+        "status": "DRAFT"
+      },
+      "digits": {
+        "1": {
+          "planet_india": "Surya (Sun)",
+          "planet_international": "Sun",
+          "element": "Water",
+          "domain": "Career Voice & Initiative",
+          "archetype": "Independent Initiative & Articulate Clarity",
+          "present_single_teaser": "Digit 1 appears once in your birth grid — a balanced Water indicator associated in classical Lo Shu study with clear self-direction and calm communication.",
+          "present_repeat_teaser": "Digit 1 repeats ({count}×) in your birth grid — amplifying independent drive and verbal expression, where pacing and active listening keep momentum constructive.",
+          "missing_teaser": "Digit 1 is an open position in your birth date — indicating that vocal self-advocacy and independent career framing develop consciously through deliberate practice.",
+          "unlock_note": "See how Digit 1 interacts with your Driver, Conductor, and 5-Element balance in your full personalised dossier below.",
+          "status": "DRAFT"
+        },
+        "2": {
+          "planet_india": "Chandra (Moon)",
+          "planet_international": "Moon",
+          "element": "Earth",
+          "domain": "Tact, Empathy & Partnership",
+          "archetype": "Receptive Sensitivity & Relational Harmony",
+          "present_single_teaser": "Digit 2 appears once in your birth grid — an Earth indicator linked with perceptive listening, interpersonal tact, and steady cooperative judgement.",
+          "present_repeat_teaser": "Digit 2 repeats ({count}×) in your birth grid — heightening emotional radar and relational nuance, benefiting from clear personal boundaries.",
+          "missing_teaser": "Digit 2 is an open position in your birth date — pointing to a conscious growth theme around unhurried patience, partnership check-ins, and receptive listening.",
+          "unlock_note": "Explore how your Earth sector shapes collaboration and household harmony in your personalised report below.",
+          "status": "DRAFT"
+        },
+        "3": {
+          "planet_india": "Guru (Jupiter)",
+          "planet_international": "Jupiter",
+          "element": "Wood",
+          "domain": "Learning, Vision & Mentorship",
+          "archetype": "Conceptual Growth & Structured Counsel",
+          "present_single_teaser": "Digit 3 appears once in your birth grid — a Wood indicator associated with curiosity, structured imagination, and clear knowledge sharing.",
+          "present_repeat_teaser": "Digit 3 repeats ({count}×) in your birth grid — concentrating conceptual ideation and teaching instincts that thrive when anchored to single priorities.",
+          "missing_teaser": "Digit 3 is an open position in your birth date — highlighting an opportunity to build visible mentorship habits and structured long-horizon learning.",
+          "unlock_note": "Your report maps how Wood growth interacts with your Mental and Emotional planes.",
+          "status": "DRAFT"
+        },
+        "4": {
+          "planet_india": "Rahu (North Node)",
+          "planet_international": "Uranus / North Node",
+          "element": "Wood",
+          "domain": "Systems, Order & Asset Discipline",
+          "archetype": "Methodical Architecture & Practical Craft",
+          "present_single_teaser": "Digit 4 appears once in your birth grid — grounding Wood energy into process discipline, organised execution, and practical problem-solving.",
+          "present_repeat_teaser": "Digit 4 repeats ({count}×) in your birth grid — intensifying technical precision and structural rigour, best balanced with flexible milestones.",
+          "missing_teaser": "Digit 4 is an open position in your birth date — suggesting that external checklists, repeatable routines, and step-by-step scaffolding unlock steadier output.",
+          "unlock_note": "Review your practical Wood balancing habits and 90-day structural cadence in the report options below.",
+          "status": "DRAFT"
+        },
+        "5": {
+          "planet_india": "Budh (Mercury)",
+          "planet_international": "Mercury",
+          "element": "Earth",
+          "domain": "Central Stability & Adaptability",
+          "archetype": "Brahmasthan Equilibrium & Agile Synthesis",
+          "present_single_teaser": "Digit 5 anchors the centre of your birth grid — connecting all surrounding axes through adaptable communication, commercial poise, and emotional steadiness.",
+          "present_repeat_teaser": "Digit 5 repeats ({count}×) at the centre of your grid — creating brisk mental versatility and momentum that benefit from deliberate focus blocks.",
+          "missing_teaser": "Digit 5 is open at the centre of your birth grid — a classic Lo Shu signal to cultivate deliberate core routines and self-generated transition bridges across projects.",
+          "unlock_note": "Discover how the central Earth pivot influences your Golden and Silver axes in your personalised report below.",
+          "status": "DRAFT"
+        },
+        "6": {
+          "planet_india": "Shukra (Venus)",
+          "planet_international": "Venus",
+          "element": "Metal",
+          "domain": "Stewardship, Craft & Support Networks",
+          "archetype": "Aesthetic Refinement & Domestic Care",
+          "present_single_teaser": "Digit 6 appears once in your birth grid — a Metal indicator associated with design sensibility, reliable stewardship, and supportive alliances.",
+          "present_repeat_teaser": "Digit 6 repeats ({count}×) in your birth grid — emphasizing high aesthetic standards and protective responsibility toward family or team commitments.",
+          "missing_teaser": "Digit 6 is an open position in your birth date — inviting conscious cultivation of reciprocal support networks, workspace order, and restorative comfort.",
+          "unlock_note": "See your Metal element calibration and relationship alignment notes inside your report below.",
+          "status": "DRAFT"
+        },
+        "7": {
+          "planet_india": "Ketu (South Node)",
+          "planet_international": "Neptune / South Node",
+          "element": "Metal",
+          "domain": "Research, Discernment & Inner Study",
+          "archetype": "Reflective Inquiry & Specialist Depth",
+          "present_single_teaser": "Digit 7 appears once in your birth grid — a Metal indicator tied in traditional Lo Shu reading to analytical depth, quiet observation, and independent research.",
+          "present_repeat_teaser": "Digit 7 repeats ({count}×) in your birth grid — deepening specialist inquiry and introspection, paired best with transparent communication in partnerships.",
+          "missing_teaser": "Digit 7 is an open position in your birth date — pointing toward intentional reflective pauses, documented lessons learned, and unhurried verification before action.",
+          "unlock_note": "Explore how reflective Metal interacts with your Emotional and Action planes in your personalised dossier below.",
+          "status": "DRAFT"
+        },
+        "8": {
+          "planet_india": "Shani (Saturn)",
+          "planet_international": "Saturn",
+          "element": "Earth",
+          "domain": "Governance, Patience & Long-Term Value",
+          "archetype": "Enduring Structure & Financial Prudence",
+          "present_single_teaser": "Digit 8 appears once in your birth grid — an Earth indicator reflecting measured judgement, operational accountability, and patient long-horizon building.",
+          "present_repeat_teaser": "Digit 8 repeats ({count}×) in your birth grid — reinforcing detail vigilance and high endurance, which flow best when delegation and rest are scheduled.",
+          "missing_teaser": "Digit 8 is an open position in your birth date — highlighting the value of automated financial tracking, clear written milestones, and steady pacing.",
+          "unlock_note": "Your report details how Earth governance pairs with your Personal Year cycle.",
+          "status": "DRAFT"
+        },
+        "9": {
+          "planet_india": "Mangal (Mars)",
+          "planet_international": "Mars",
+          "element": "Fire",
+          "domain": "Conviction, Completion & Visibility",
+          "archetype": "Purposeful Drive & Decisive Closure",
+          "present_single_teaser": "Digit 9 appears once in your birth grid — a Fire indicator associated with principled conviction, warm visibility, and the drive to bring work to completion.",
+          "present_repeat_teaser": "Digit 9 repeats ({count}×) in your birth grid — concentrating high-output Fire energy and idealism that benefit from cool-headed prioritisation.",
+          "missing_teaser": "Digit 9 is an open position in your birth date — indicating that structured finishing sprints and clear completion rituals help convert strong starts into closed outcomes.",
+          "unlock_note": "Inspect your Fire element balance and 90-day execution rhythm in the report editions below.",
+          "status": "DRAFT"
+        }
+      },
+      "planes": {
+        "mental": {
+          "label": "Mental Plane (4-9-2)",
+          "digits": [4, 9, 2],
+          "axis_type": "Top Horizontal Row",
+          "active_teaser": "All three top-row digits (4-9-2) are present — linking structured planning, clear conviction, and interpersonal awareness in how you evaluate ideas.",
+          "partial_teaser": "Partially active ({present_count}/3 digits present) — you carry natural cognitive anchors here while open positions show where external frameworks sharpen decisions.",
+          "open_teaser": "Open axis (0/3 digits in birth date) — your chart routes primary strength through other rows, inviting deliberate written frameworks for complex planning.",
+          "status": "DRAFT"
+        },
+        "emotional": {
+          "label": "Emotional Plane (3-5-7)",
+          "digits": [3, 5, 7],
+          "axis_type": "Middle Horizontal Row",
+          "active_teaser": "All three middle-row digits (3-5-7) are present — blending expressive warmth, central composure, and reflective depth in relationships.",
+          "partial_teaser": "Partially active ({present_count}/3 digits present) — combining innate empathy with intentional communication habits across personal and team bonds.",
+          "open_teaser": "Open axis (0/3 digits in birth date) — emotional steadiness develops through conscious dialogue, grounding routines, and unhurried reflection.",
+          "status": "DRAFT"
+        },
+        "practical": {
+          "label": "Practical Plane (8-1-6)",
+          "digits": [8, 1, 6],
+          "axis_type": "Bottom Horizontal Row",
+          "active_teaser": "All three foundational digits (8-1-6) are present — anchoring endurance, career initiative, and material stewardship into tangible follow-through.",
+          "partial_teaser": "Partially active ({present_count}/3 digits present) — active cells ground your daily output while open cells show where repeatable systems add leverage.",
+          "open_teaser": "Open axis (0/3 digits in birth date) — practical delivery strengthens when supported by explicit calendars, checklists, and shared accountability.",
+          "status": "DRAFT"
+        },
+        "thought": {
+          "label": "Thought Plane (4-3-8)",
+          "digits": [4, 3, 8],
+          "axis_type": "Left Vertical Column",
+          "active_teaser": "Complete Thought column (4-3-8) — uniting architectural logic, conceptual vision, and long-range strategic prudence.",
+          "partial_teaser": "Partially active ({present_count}/3 digits present) — selective strategic strengths are active, complemented by structured review habits.",
+          "open_teaser": "Open column (0/3 digits in birth date) — long-range planning benefits from externalised roadmaps and milestone reviews.",
+          "status": "DRAFT"
+        },
+        "will": {
+          "label": "Will Plane (9-5-1)",
+          "digits": [9, 5, 1],
+          "axis_type": "Central Vertical Spine",
+          "active_teaser": "Complete Will spine (9-5-1) — aligning decisive drive, central balance, and clear self-direction under pressure.",
+          "partial_teaser": "Partially active ({present_count}/3 digits present) — steady personal resolve in present digits, supported by conscious pacing across open positions.",
+          "open_teaser": "Open spine (0/3 digits in birth date) — sustained stamina grows through incremental daily commitments rather than sudden bursts.",
+          "status": "DRAFT"
+        },
+        "action": {
+          "label": "Action Plane (2-7-6)",
+          "digits": [2, 7, 6],
+          "axis_type": "Right Vertical Column",
+          "active_teaser": "Complete Action column (2-7-6) — translating tactful observation and specialist insight into reliable outward delivery.",
+          "partial_teaser": "Partially active ({present_count}/3 digits present) — selective execution strengths are present alongside conscious follow-through habits.",
+          "open_teaser": "Open column (0/3 digits in birth date) — converting ideas into finished deliverables thrives with time-boxed execution sprints.",
+          "status": "DRAFT"
+        },
+        "golden_raj_yoga": {
+          "label": "Golden Axis (4-5-6)",
+          "digits": [4, 5, 6],
+          "axis_type": "Primary Diagonal (NW → SE)",
+          "active_teaser": "Complete 4-5-6 diagonal — connecting methodical discipline, central adaptability, and refined stewardship across long-term endeavours.",
+          "partial_teaser": "Partially active ({present_count}/3 digits present) — foundational pieces of the 4-5-6 diagonal are active, with open digits marking high-leverage habit zones.",
+          "open_teaser": "Open diagonal (0/3 digits in birth date) — organisational rhythm and stewardship are built deliberately through structured workspace and routine design.",
+          "status": "DRAFT"
+        },
+        "silver_raj_yoga": {
+          "label": "Silver Axis (2-5-8)",
+          "digits": [2, 5, 8],
+          "axis_type": "Secondary Diagonal (NE → SW)",
+          "active_teaser": "Complete 2-5-8 Earth diagonal — uniting relational patience, central poise, and steady governance for durable long-horizon foundations.",
+          "partial_teaser": "Partially active ({present_count}/3 digits present) — active Earth anchors provide grounding while open digits highlight areas for steady routine building.",
+          "open_teaser": "Open diagonal (0/3 digits in birth date) — consistent grounding habits and structured financial cadence supply intentional Earth stability.",
+          "status": "DRAFT"
+        }
+      }
     }
   }
 }

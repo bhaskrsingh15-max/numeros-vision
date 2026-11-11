@@ -1,6 +1,12 @@
 from typing import Dict, Any, List
 from app.engine.rag_retriever import rag_engine
 from app.engine.rule_governance import rule_governance, RuleStatus
+from app.engine.kua import (
+    KUA_NEEDS_GENDER_TEXT,
+    KUA_RULE_TEXT,
+    calculate_kua_details,
+    calculate_kua_number,
+)
 
 # Standard Lo Shu Grid positions
 LO_SHU_GRID_TEMPLATE = [

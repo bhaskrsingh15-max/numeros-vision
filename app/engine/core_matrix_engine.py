@@ -16,6 +16,14 @@ Comprehensive, deterministic engine providing:
 from typing import Dict, Any, List, Optional
 import datetime
 
+from app.engine.kua import (
+    KUA_METADATA,
+    KUA_NEEDS_GENDER_TEXT,
+    KUA_RULE_TEXT,
+    calculate_kua_details,
+    calculate_kua_number as _canonical_calculate_kua_number,
+)
+
 # ── 1. Planetary Rulers & Core Vibrations ───────────────────────────────────────
 PLANETARY_MATRIX = {
     1: {"planet": "Sun", "element": "Water", "color": "Gold, Orange, Copper", "direction": "North", "nature": "Executive leadership, self-reliance, vital force"},
@@ -100,15 +108,15 @@ def calculate_conductor_details(day: int, month: int, year: int) -> Dict[str, An
         "is_master": raw in MASTER_NUMBERS
     }
 
-def calculate_kua_number(year: int, gender: str = "male") -> int:
-    """Kua number based on solar birth year."""
-    last_two = year % 100
-    sum_last = reduce_to_single_digit(last_two)
-    if gender.lower() == "female":
-        kua = reduce_to_single_digit(sum_last + 5)
-    else:
-        kua = reduce_to_single_digit(10 - sum_last)
-    return 5 if kua == 0 else kua
+def calculate_kua_number(year: int, gender: Optional[str] = None) -> Optional[int]:
+    """
+    Canonical century-invariant Kua calculation:
+    x = single-digit sum of all 4 digits of calendar birth year.
+    Male: 11 - x -> single digit (5 -> 2).
+    Female: 4 + x -> single digit (5 -> 8).
+    Missing gender returns None (never guesses).
+    """
+    return _canonical_calculate_kua_number(year, gender)
 
 # ── Angelic Resonance Matrix (Vibrational Synchronicities) ─────────────────────
 ANGEL_NUMBERS_BY_ROOT = {
@@ -217,31 +225,63 @@ KUA_CHARACTERISTICS = {
     }
 }
 
-def get_kua_profile(year: int, gender: str = "male") -> Dict[str, Any]:
-    """Generates complete prosperous direction characteristics and energy group as per chart reading."""
-    kua = calculate_kua_number(year, gender)
+def get_kua_profile(year: int, gender: Optional[str] = None) -> Dict[str, Any]:
+    """Generates complete prosperous direction characteristics and energy group from canonical Kua."""
+    details = calculate_kua_details(year, gender)
+    kua = details["kua_number"]
+    if kua is None:
+        angel_info = ANGEL_NUMBERS_BY_ROOT[1]
+        return {
+            "status": "NEEDS_GENDER",
+            "kua_number": None,
+            "kua_display": KUA_NEEDS_GENDER_TEXT,
+            "energy_group": KUA_NEEDS_GENDER_TEXT,
+            "element": KUA_NEEDS_GENDER_TEXT,
+            "trigram": KUA_NEEDS_GENDER_TEXT,
+            "element_group": KUA_NEEDS_GENDER_TEXT,
+            "desk_direction": KUA_NEEDS_GENDER_TEXT,
+            "energy_archetype": KUA_NEEDS_GENDER_TEXT,
+            "wealth_direction": KUA_NEEDS_GENDER_TEXT,
+            "health_direction": KUA_NEEDS_GENDER_TEXT,
+            "relationship_direction": KUA_NEEDS_GENDER_TEXT,
+            "clarity_direction": KUA_NEEDS_GENDER_TEXT,
+            "core_traits": KUA_NEEDS_GENDER_TEXT,
+            "rule_note": KUA_RULE_TEXT,
+            "angel_number_resonance": {
+                "angel_sequence": angel_info["angel_sequence"],
+                "title": angel_info["title"],
+                "guidance": angel_info["message"]
+            },
+            "prosperous_orientation_summary": f"{KUA_NEEDS_GENDER_TEXT}. ({KUA_RULE_TEXT})"
+        }
+
     char = KUA_CHARACTERISTICS.get(kua, KUA_CHARACTERISTICS[1])
     angel_info = ANGEL_NUMBERS_BY_ROOT.get(kua, ANGEL_NUMBERS_BY_ROOT[1])
     return {
+        "status": "OK",
         "kua_number": kua,
-        "energy_group": char["group"],
-        "element": char["element"],
+        "kua_display": str(kua),
+        "energy_group": details["group"],
+        "element": details["element"],
+        "trigram": details["trigram"],
+        "element_group": details["element_group"],
+        "desk_direction": details["desk_direction"],
         "energy_archetype": char["energy_archetype"],
-        "trigram": char["energy_archetype"],  # Kept for backward compatibility
-        "wealth_direction": char["wealth_direction"],
-        "health_direction": char["health_direction"],
-        "relationship_direction": char["relationship_direction"],
-        "clarity_direction": char["clarity_direction"],
+        "wealth_direction": details["wealth_direction"],
+        "health_direction": details["health_direction"],
+        "relationship_direction": details["relationship_direction"],
+        "clarity_direction": details["clarity_direction"],
         "core_traits": char["traits"],
+        "rule_note": KUA_RULE_TEXT,
         "angel_number_resonance": {
             "angel_sequence": angel_info["angel_sequence"],
             "title": angel_info["title"],
             "guidance": angel_info["message"]
         },
         "prosperous_orientation_summary": (
-            f"As per your personal chart reading, your primary prosperous direction is {char['wealth_direction']}. "
-            f"Aligning your workstation facing this direction attracts rapid expansion and prosperity, "
-            f"while facing {char['health_direction']} accelerates vitality and cellular healing."
+            f"As per your personal chart reading ({KUA_RULE_TEXT.lower()}), your primary prosperous direction is {details['wealth_direction']}. "
+            f"Aligning your workstation facing this direction supports steady professional focus, "
+            f"while facing {details['health_direction']} supports restorative equilibrium."
         )
     }
 
@@ -584,7 +624,7 @@ def calculate_poorak_number(driver: int, conductor: int, missing_numbers: Option
 def calculate_speculative_lottery_numbers(
     driver: int, 
     conductor: int, 
-    kua: int, 
+    kua: Optional[int] = None, 
     missing_numbers: Optional[List[int]] = None
 ) -> Dict[str, Any]:
     """
@@ -615,7 +655,8 @@ def calculate_speculative_lottery_numbers(
         d_friends = PLANETARY_FRIENDSHIP.get(driver, {}).get("friends", [1, 5])
         c_friends = PLANETARY_FRIENDSHIP.get(conductor, {}).get("friends", [1, 5])
         shared = [n for n in d_friends if n in c_friends]
-        lottery_singles = sorted(list(set([driver, conductor, kua] + (shared[:2] if shared else [5]))))
+        seed_nums = [driver, conductor] + ([kua] if isinstance(kua, int) and 1 <= kua <= 9 else [])
+        lottery_singles = sorted(list(set(seed_nums + (shared[:2] if shared else [5]))))
 
     # Auspicious Compound Lottery Numbers corresponding to the missing/lottery numbers
     comp_pool = []
@@ -902,7 +943,7 @@ def generate_core_matrix_profile(
     year: int,
     mobile_number: str = "",
     current_age: Optional[int] = None,
-    gender: str = "male"
+    gender: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Unified Core Matrix Numerology generation.
@@ -966,6 +1007,8 @@ def generate_core_matrix_profile(
             "conductor_display": conductor_display,
             "conductor_planet": c_planet["planet"],
             "kua_number": kua,
+            "kua_display": kua_profile.get("kua_display", KUA_NEEDS_GENDER_TEXT),
+            "kua_rule_note": KUA_RULE_TEXT,
             "kua_profile": kua_profile,
             "name_number": name_calc.get("single_root"),
             "name_compound": name_calc.get("compound_sum")

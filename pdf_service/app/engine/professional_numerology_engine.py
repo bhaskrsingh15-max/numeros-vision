@@ -23,6 +23,12 @@ from typing import Dict, Any, List, Optional
 import datetime
 import re
 
+from app.engine.kua import (
+    KUA_NEEDS_GENDER_TEXT,
+    KUA_RULE_TEXT,
+    calculate_kua_details,
+)
+
 # ── Planetary Friends / Enemies (Topic 1) ────────────────────────────────────
 PLANETARY_RELATIONS = {
     1: {"planet": "Sun", "friends": [1, 2, 3, 5, 9], "enemies": [8], "neutrals": [4, 6, 7]},
@@ -164,25 +170,15 @@ def calculate_personal_cycles(day: int, month: int, target_date: Optional[dateti
     }
 
 # ── Kua Number & Numero-Vastu Directions (Topic 11, 36) ──────────────────────
-def calculate_kua(gender: str, birth_year: int) -> int:
-    """Calculate Kua number using standard post-2000 and pre-2000 formulas."""
-    yr_reduced = sum(int(d) for d in str(birth_year))
-    while yr_reduced > 9:
-        yr_reduced = sum(int(d) for d in str(yr_reduced))
-
-    gen = gender.strip().lower()
-    is_post_2000 = birth_year >= 2000
-
-    if gen == "male":
-        kua = (10 - yr_reduced) if is_post_2000 else (11 - yr_reduced)
-    else: # female
-        kua = (yr_reduced + 6) if is_post_2000 else (yr_reduced + 4)
-
-    while kua > 9:
-        kua = sum(int(d) for d in str(kua))
-    if kua == 5:
-        kua = 2 if gen == "male" else 8
-    return kua
+def calculate_kua(gender: Optional[str], birth_year: int) -> Optional[int]:
+    """
+    Calculate Kua number using canonical century-invariant 4-digit formula:
+      x = single-digit sum of all 4 digits of calendar birth_year.
+      Male: 11 - x -> single digit (5 -> 2).
+      Female: 4 + x -> single digit (5 -> 8).
+      Missing gender -> None (never guesses).
+    """
+    return calculate_kua_details(birth_year, gender)["kua_number"]
 
 KUA_DIRECTION_PROFILES = {
     1: {"group": "East", "success": "SE", "health": "E", "relationship": "S", "stability": "N", "avoid": ["W", "NW", "SW", "NE"]},
@@ -195,13 +191,41 @@ KUA_DIRECTION_PROFILES = {
     9: {"group": "East", "success": "E", "health": "SE", "relationship": "N", "stability": "S", "avoid": ["W", "NW", "SW", "NE"]}
 }
 
-def analyze_kua_and_directions(gender: str, birth_year: int) -> Dict[str, Any]:
-    """Retrieve Kua number and favorable prosperous Numero-Vastu directions as per chart reading."""
-    kua = calculate_kua(gender, birth_year)
-    prof = KUA_DIRECTION_PROFILES.get(kua, KUA_DIRECTION_PROFILES[1])
+def analyze_kua_and_directions(gender: Optional[str], birth_year: int) -> Dict[str, Any]:
+    """Retrieve Kua number and favorable Numero-Vastu directions using canonical Kua rules."""
+    details = calculate_kua_details(birth_year, gender)
+    kua = details["kua_number"]
+    if kua is None:
+        return {
+            "status": "NEEDS_GENDER",
+            "kua_number": None,
+            "kua_display": KUA_NEEDS_GENDER_TEXT,
+            "kua_group": KUA_NEEDS_GENDER_TEXT,
+            "kua_element": KUA_NEEDS_GENDER_TEXT,
+            "element_group": KUA_NEEDS_GENDER_TEXT,
+            "rule_note": KUA_RULE_TEXT,
+            "prosperous_direction_wealth": KUA_NEEDS_GENDER_TEXT,
+            "vitality_direction_health": KUA_NEEDS_GENDER_TEXT,
+            "relationship_direction_harmony": KUA_NEEDS_GENDER_TEXT,
+            "stability_direction_peace": KUA_NEEDS_GENDER_TEXT,
+            "success_direction_sheng_chi": KUA_NEEDS_GENDER_TEXT,
+            "health_direction_tien_yi": KUA_NEEDS_GENDER_TEXT,
+            "relationship_direction_nien_yen": KUA_NEEDS_GENDER_TEXT,
+            "stability_direction_fu_wei": KUA_NEEDS_GENDER_TEXT,
+            "unfavorable_directions_to_avoid": [],
+            "vastu_desk_alignment": f"{KUA_NEEDS_GENDER_TEXT}. ({KUA_RULE_TEXT})",
+            "angelic_alignment_note": KUA_RULE_TEXT,
+        }
+    prof = KUA_DIRECTION_PROFILES[kua]
     return {
+        "status": "OK",
         "kua_number": kua,
+        "kua_display": str(kua),
         "kua_group": prof["group"],
+        "kua_element": details["element"],
+        "kua_trigram": details["trigram"],
+        "element_group": details["element_group"],
+        "rule_note": KUA_RULE_TEXT,
         "prosperous_direction_wealth": prof["success"],
         "vitality_direction_health": prof["health"],
         "relationship_direction_harmony": prof["relationship"],
@@ -212,8 +236,8 @@ def analyze_kua_and_directions(gender: str, birth_year: int) -> Dict[str, Any]:
         "relationship_direction_nien_yen": prof["relationship"],
         "stability_direction_fu_wei": prof["stability"],
         "unfavorable_directions_to_avoid": prof["avoid"],
-        "vastu_desk_alignment": f"As per your personal chart reading, face {prof['success']} or {prof['health']} while working, creating, or making strategic decisions to maximize career flow, prosperity, and mental clarity.",
-        "angelic_alignment_note": "Your personal chart reading confirms that aligning your physical focus toward your prosperous direction magnetically harmonizes your energy field with angelic and cosmic abundance."
+        "vastu_desk_alignment": f"As per your personal chart reading ({KUA_RULE_TEXT.lower()}), face {prof['success']} or {prof['health']} while working, creating, or making strategic decisions to support career flow and mental clarity.",
+        "angelic_alignment_note": "Your personal chart reading aligns physical workspace orientation toward your favourable cardinal direction."
     }
 
 # ── Marriage & Business Partner Compatibility Scoring (Topic 21, 22, 28, 29) ─

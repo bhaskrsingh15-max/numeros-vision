@@ -104,14 +104,16 @@ METHODOLOGY_REGISTRY: Dict[str, Dict[str, Any]] = {
         "methodology_id": "METH-KUA-001",
         "name": "Numero-Vastu Directional Alignment",
         "school": "Cosmic Directional Science & Planetary Vastu",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "effective_date": "2026-01-01",
-        "reduction_convention": "Gender & solar year reduction formula with 2000 epoch shift",
-        "compound_handling": "Single digit Kua 1-9 (5 maps to 2 for male, 8 for female)",
-        "input_requirements": ["birth_year", "gender"],
+        "reduction_convention": "Century-invariant 4-digit calendar birth year single-digit reduction x; Male: 11 - x, Female: 4 + x",
+        "compound_handling": "Single digit Kua 1-9 (5 maps to 2 for male, 8 for female; missing gender returns Kua needs gender)",
+        "input_requirements": ["year"],
+        "optional_inputs": ["gender"],
         "output_schema": {
-            "kua_number": "int",
-            "group": "str (East / West)",
+            "kua_number": "Optional[int]",
+            "kua_display": "str",
+            "group": "str (East Group / West Group)",
             "element": "str",
             "favorable_directions": "Dict[str, str]"
         },
@@ -239,17 +241,22 @@ def execute_methodology(methodology_id: str, inputs: Dict[str, Any]) -> Dict[str
     
     fn = meta["fn"]
     
+    # Normalize birth_year -> year alias if caller provided birth_year
+    norm_inputs = dict(inputs)
+    if "year" not in norm_inputs and "birth_year" in norm_inputs:
+        norm_inputs["year"] = norm_inputs["birth_year"]
+
     # Map inputs according to requirements
     reqs = meta["input_requirements"]
-    missing = [r for r in reqs if r not in inputs]
+    missing = [r for r in reqs if r not in norm_inputs]
     if missing:
         raise ValueError(f"Methodology '{methodology_id}' requires missing inputs: {missing}")
     
-    call_args = [inputs[r] for r in reqs]
+    call_args = [norm_inputs[r] for r in reqs]
     opt_reqs = meta.get("optional_inputs", [])
     for opt in opt_reqs:
-        if opt in inputs:
-            call_args.append(inputs[opt])
+        if opt in norm_inputs:
+            call_args.append(norm_inputs[opt])
     output = fn(*call_args)
     
     return {

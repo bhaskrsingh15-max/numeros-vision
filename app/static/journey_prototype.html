@@ -703,7 +703,7 @@
           <div class="teaser-metric-card">
             <div class="teaser-number" id="txtKua">8</div>
             <div class="teaser-label">Kua Direction</div>
-            <div class="teaser-subtext">North-East Earth Anchor</div>
+            <div class="teaser-subtext" id="txtKuaSub">Earth · Gen (West Group) · Calculated from your birth year and gender</div>
           </div>
         </div>
 
@@ -1326,9 +1326,40 @@
       const totalDob = journeyState.day + journeyState.month + journeyState.year;
       journeyState.conductor = reduceDigit(totalDob);
 
+      // Canonical Kua calculation (4-digit birth year, century-invariant, never guess gender)
+      const gNorm = (journeyState.gender || '').trim().toLowerCase();
+      let kuaDisp = 'Kua needs gender';
+      let kuaSubDisp = 'Calculated from your birth year and gender';
+      if (gNorm === 'male' || gNorm === 'female') {
+        const ySum4 = String(journeyState.year).padStart(4, '0').split('').reduce((acc, ch) => acc + (parseInt(ch, 10) || 0), 0);
+        let x = ySum4;
+        while (x > 9) x = String(x).split('').reduce((acc, ch) => acc + parseInt(ch, 10), 0);
+        let rawK = gNorm === 'male' ? (11 - x) : (4 + x);
+        while (rawK > 9) rawK = String(rawK).split('').reduce((acc, ch) => acc + parseInt(ch, 10), 0);
+        const finalK = rawK === 5 ? (gNorm === 'male' ? 2 : 8) : rawK;
+        const kMap = {
+          1: 'Water · Kan (East Group)',
+          2: 'Earth · Kun (West Group)',
+          3: 'Wood · Zhen (East Group)',
+          4: 'Wood · Xun (East Group)',
+          6: 'Metal · Qian (West Group)',
+          7: 'Metal · Dui (West Group)',
+          8: 'Earth · Gen (West Group)',
+          9: 'Fire · Li (East Group)'
+        };
+        kuaDisp = String(finalK);
+        kuaSubDisp = `${kMap[finalK]} · Calculated from your birth year and gender`;
+        journeyState.kua = finalK;
+      } else {
+        journeyState.kua = null;
+      }
+
       // Update Teaser display
       document.getElementById('txtDriver').textContent = journeyState.driver;
       document.getElementById('txtConductor').textContent = journeyState.conductor;
+      document.getElementById('txtKua').textContent = kuaDisp;
+      const kuaSubEl = document.getElementById('txtKuaSub');
+      if (kuaSubEl) kuaSubEl.textContent = kuaSubDisp;
 
       // Advance to Stage 2: Discover
       switchStage(2);

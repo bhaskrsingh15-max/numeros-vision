@@ -1215,16 +1215,15 @@
     }
 
     function getKua(year, gender) {
-      const ySum = reduceToSingle(year.split('').reduce((a, b) => parseInt(a,10) + parseInt(b,10), 0));
-      const yNum = parseInt(year, 10);
-      let kua = 0;
-      if (gender === 'male') {
-        kua = yNum < 2000 ? 10 - ySum : 9 - ySum;
-      } else {
-        kua = yNum < 2000 ? ySum + 5 : ySum + 6;
+      const g = (gender || '').trim().toLowerCase();
+      if (g !== 'male' && g !== 'female' && g !== 'm' && g !== 'f') {
+        return 'Kua needs gender';
       }
-      kua = reduceToSingle(kua);
-      if (kua === 5) kua = (gender === 'male') ? 2 : 8;
+      const yStr = String(year).padStart(4, '0');
+      const sum4 = yStr.split('').reduce((a, b) => (b >= '0' && b <= '9' ? a + parseInt(b, 10) : a), 0);
+      const x = reduceToSingle(sum4);
+      let kua = (g === 'male' || g === 'm') ? reduceToSingle(11 - x) : reduceToSingle(4 + x);
+      if (kua === 5) kua = (g === 'male' || g === 'm') ? 2 : 8;
       return kua;
     }
 
@@ -1709,7 +1708,7 @@
       dobDigits.forEach(d => counts[d] = (counts[d] || 0) + 1);
       const missing = Object.keys(counts).filter(k => counts[k] === 0).map(Number);
       const planes = evaluatePlanes(counts);
-      const myVastu = vastuVectors[String(kua)] || vastuVectors[1];
+      const myVastu = vastuVectors[String(kua)] || { group: 'Kua needs gender', primary: 'Kua needs gender', secondary: 'Kua needs gender', sleeping: 'Kua needs gender', avoid: 'Kua needs gender' };
 
       const pages = [];
 
@@ -1921,7 +1920,7 @@
       const pyInfo = EMBEDDED_DATA.personalYears[String(driver)]?.[String(personalYear)] || { tag: "Transformative Milestone", text: "A pivotal year of new beginnings and structural expansion." };
 
       const myAngel = angelDataByDriver[String(driver)] || angelDataByDriver[1];
-      const myVastu = vastuVectors[String(kua)] || vastuVectors[1];
+      const myVastu = vastuVectors[String(kua)] || { group: 'Kua needs gender', primary: 'Kua needs gender', secondary: 'Kua needs gender', sleeping: 'Kua needs gender', avoid: 'Kua needs gender' };
 
       const pages = [];
 
@@ -2567,7 +2566,7 @@
       const pyInfo = EMBEDDED_DATA.personalYears[String(driver)]?.[String(personalYear)] || { tag: "Transformative Milestone", text: "A pivotal year of new beginnings and structural expansion." };
 
       const myAngel = angelDataByDriver[String(driver)] || angelDataByDriver[1];
-      const myVastu = vastuVectors[String(kua)] || vastuVectors[1];
+      const myVastu = vastuVectors[String(kua)] || { group: 'Kua needs gender', primary: 'Kua needs gender', secondary: 'Kua needs gender', sleeping: 'Kua needs gender', avoid: 'Kua needs gender' };
 
       function renderLoShuCell(num, label) {
         const cnt = counts[num] || 0;

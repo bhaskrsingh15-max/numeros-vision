@@ -5,6 +5,8 @@
   ],
   "exclude": [
     "/static/*",
+    "/assets/*",
+    "/data/*",
     "/css/*",
     "/js/*",
     "/icons/*",

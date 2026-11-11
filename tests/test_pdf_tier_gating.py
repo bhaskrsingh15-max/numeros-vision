@@ -74,11 +74,11 @@ class TestPdfTierGating(unittest.TestCase):
 
         # 1. Must include renamed Basic heading & canonical pack name "Basic Report"
         self.assertIn("ELEMENT BALANCING & FOUNDATIONAL BLUEPRINT", norm_text)
-        self.assertIn("Basic Report", norm_text)
+        self.assertIn("BASIC REPORT", norm_text.upper())
         self.assertIn("33/6", norm_text)
         self.assertIn("Lo Shu Grid", norm_text)
         self.assertIn("8 ELEMENTAL PLANES", norm_text)
-        self.assertIn("5-ELEMENT BALANCING ACTIONS", norm_text)
+        self.assertIn("5-ELEMENT ACTIONS & 90-DAY PLAN", norm_text)
 
         # 2. Must NEVER include locked section headings or forbidden teaser copy
         for kw in BASIC_FORBIDDEN_KEYWORDS:
@@ -113,15 +113,17 @@ class TestPdfTierGating(unittest.TestCase):
         page2_text = reader.pages[1].extract_text()
         norm_p2 = re.sub(r"\s+", " ", page2_text)
 
-        self.assertNotIn("COMPLETE", norm_p2, "No plane or Raj Yoga can be COMPLETE for DOB 10-08-1990!")
-        self.assertIn("Mental Plane 4 - 9 - 2 PARTIAL", norm_p2)
-        self.assertIn("Emotional Plane 3 - 5 - 7 INACTIVE", norm_p2)
-        self.assertIn("Practical Plane 8 - 1 - 6 PARTIAL", norm_p2)
-        self.assertIn("Thought Plane 4 - 3 - 8 PARTIAL", norm_p2)
-        self.assertIn("Will Plane 9 - 5 - 1 PARTIAL", norm_p2)
-        self.assertIn("Action Plane 2 - 7 - 6 INACTIVE", norm_p2)
-        self.assertIn("Golden Raj Yoga 4 - 5 - 6 INACTIVE", norm_p2)
-        self.assertIn("Silver Earth Yoga 2 - 5 - 8 PARTIAL", norm_p2)
+        self.assertNotIn("Complete (3/3)", norm_p2, "No plane or Raj Yoga can be Complete (3/3) for DOB 10-08-1990!")
+        self.assertIn("Mental Plane 4 - 9 - 2 Partial (1/3)", norm_p2)
+        self.assertIn("Emotional Plane 3 - 5 - 7 Open (0/3)", norm_p2)
+        self.assertIn("Practical Plane 8 - 1 - 6 Partial (2/3)", norm_p2)
+        self.assertIn("Thought Plane 4 - 3 - 8 Partial (1/3)", norm_p2)
+        self.assertIn("Willpower Plane 9 - 5 - 1 Partial (2/3)", norm_p2)
+        self.assertIn("Action Plane 2 - 7 - 6 Open (0/3)", norm_p2)
+        self.assertIn("Golden Raj Yoga (4-5-6)", norm_p2)
+        self.assertIn("4 - 5 - 6 Open (0/3)", norm_p2)
+        self.assertIn("Silver Raj Yoga (2-5-8)", norm_p2)
+        self.assertIn("2 - 5 - 8 Partial (1/3)", norm_p2)
 
     def test_advanced_tier_12_pages_and_zero_premium_leakage(self):
         pdf_bytes, meta = generate_customised_pdf_report(

@@ -18,6 +18,10 @@ with open(PACKS_JSON_PATH, "r", encoding="utf-8") as pf:
 if os.path.exists(LEGACY_ZIP):
     os.remove(LEGACY_ZIP)
 
+# 0b. Regenerate public-only Lo Shu curiosity teaser slice (strictly asserts zero paid report prose)
+from scripts.export_loshu_public_teasers import export_public_teasers
+export_public_teasers()
+
 # 1. Clean and re-populate DIST_DIR from app/static
 if os.path.exists(DIST_DIR):
     shutil.rmtree(DIST_DIR)
@@ -106,10 +110,10 @@ try:
 except Exception as e:
     print(f"Warning: could not inject build-time JSON-LD: {e}")
 
-# 2. Mirror essential static assets into dist/static/ (css, js, icons) for FastAPI path parity
+# 2. Mirror essential static assets into dist/static/ (css, js, icons, assets, data) for FastAPI path parity
 static_mirror = os.path.join(DIST_DIR, "static")
 os.makedirs(static_mirror, exist_ok=True)
-for item in ["css", "js", "icons"]:
+for item in ["css", "js", "icons", "assets", "data"]:
     src_item = os.path.join(DIST_DIR, item)
     if os.path.exists(src_item) and os.path.isdir(src_item):
         dest_item = os.path.join(static_mirror, item)
@@ -298,6 +302,12 @@ headers_content = """/*
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/data/*
+  Cache-Control: public, max-age=3600, must-revalidate
 """
 with open(os.path.join(DIST_DIR, "_headers"), "w", encoding="utf-8") as f:
     f.write(headers_content)

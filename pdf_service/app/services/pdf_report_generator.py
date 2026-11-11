@@ -131,6 +131,12 @@ def _init_theme_fonts():
 _init_theme_fonts()
 
 # Classical Accuracy Imports
+from app.engine.kua import (
+    KUA_METADATA,
+    KUA_NEEDS_GENDER_TEXT,
+    KUA_RULE_TEXT,
+    calculate_kua_details,
+)
 from app.engine.core_matrix_engine import (
     calculate_driver,
     calculate_conductor,
@@ -462,7 +468,7 @@ def run_deterministic_calculation(
     property_number: Optional[str] = None,
     purchase_date: Optional[Union[str, datetime.date, datetime.datetime]] = None,
     purchase_year: Optional[int] = None,
-    gender: Optional[str] = "male",
+    gender: Optional[str] = None,
     edition: str = "india"
 ) -> Dict[str, Any]:
     clean_name = name.strip() or "Seeker"
@@ -491,12 +497,9 @@ def run_deterministic_calculation(
         p_temp = sum(int(d) for d in str(p_temp))
     pyth_root = sum(int(d) for d in str(p_temp)) if p_temp > 9 else p_temp
 
-    # 4. Kua Number (Male 1981: 10 - sum(8+1=9) = 1)
-    y_sum = sum(int(d) for d in str(year)[-2:])
-    while y_sum > 9:
-        y_sum = sum(int(d) for d in str(y_sum))
-    kua = 10 - y_sum
-    if kua <= 0: kua += 9
+    # 4. Kua Number — Canonical century-invariant 4-digit formula (never guess missing gender)
+    kua_details = calculate_kua_details(year, gender)
+    kua = kua_details["kua_number"]
 
     # Resolve purchase / target year dynamically from purchase_date / purchase_year / datetime.now()
     if purchase_year:
@@ -606,7 +609,12 @@ def run_deterministic_calculation(
         "pythagorean_name_root": pyth_root,
         "pythagorean_name_planet": PLANETS.get(pyth_root, "Saturn"),
         "kua_number": kua,
-        "kua_element": "Water · Kan (East Group)",
+        "kua_display": kua_details["display"],
+        "kua_element": kua_details["element_group"],
+        "kua_group": kua_details["group"] or KUA_NEEDS_GENDER_TEXT,
+        "kua_desk_direction": kua_details["desk_direction"],
+        "kua_rule_note": KUA_RULE_TEXT,
+        "kua_details": kua_details,
         "personal_year": personal_year,
         "personal_year_theme": "Foundation & Structural Infrastructure",
         "counts": counts,
@@ -617,7 +625,7 @@ def run_deterministic_calculation(
         "gharelu_remedies": gharelu_remedies,
         "topic_id": topic_id,
         "tier": tier,
-        "gender": (gender or "male"),
+        "gender": kua_details["gender"],
         "edition": (edition or "india")
     }
 
@@ -707,6 +715,10 @@ class NumerosPdfReportBuilder:
             sec4 = "Section 4: Name Balancing, Acoustic Spelling & Poorak Numbers Activation"
             sec5 = "Section 5: Element Yogas Balancing — Golden Raj Yoga & Silver Earth Plane"
 
+        kua_num_val = self.data.get("kua_number")
+        kua_toc_long = f"Kua Number {kua_num_val}" if kua_num_val is not None else "Kua"
+        kua_toc_short = f"Kua {kua_num_val}" if kua_num_val is not None else "Kua"
+
         toc_12 = [
             ("Section 1: Executive Summary & Destiny Signature", "Page 3"),
             ("Section 2: Natal Lo Shu 3×3 Grid & 8 Elemental Planes", "Page 4"),
@@ -716,7 +728,7 @@ class NumerosPdfReportBuilder:
             ("Section 6: Interpersonal Synergy, Co-Founder Matching & Synastry", "Page 8"),
             ("Section 7: Auspicious Initiation Windows & Muhurat Timing", "Page 9"),
             ("Section 8: Vedic Gharelu Remedies Bank & 40-Day Aura Cleansing", "Page 10"),
-            ("Section 9: Spatial Feng Shui & Kua Number 1 Directional Blueprint", "Page 11"),
+            (f"Section 9: Spatial Feng Shui & {kua_toc_long} Directional Blueprint", "Page 11"),
             ("Section 10: Methodology, Authentic Standards & Ethical Guidance", "Page 12")
         ]
 
@@ -729,7 +741,7 @@ class NumerosPdfReportBuilder:
             ("Section 6: Interpersonal Synergy & Co-Founder Matching", "Page 8"),
             ("Section 7: Auspicious Initiation Windows & Muhurat Timing", "Page 9"),
             ("Section 8: Vedic Gharelu Remedies Bank & Aura Cleansing", "Page 10"),
-            ("Section 9: Spatial Feng Shui & Kua 1 Directional Blueprint", "Page 11"),
+            (f"Section 9: Spatial Feng Shui & {kua_toc_short} Directional Blueprint", "Page 11"),
             ("Section 10: Methodology & Authentic Standards", "Page 12"),
             ("Section 11: 81-Pair Archetype Matrix — Sun 1 + Rahu 4", "Page 13"),
             ("Section 12: Dual-System Synthesis — Chaldean vs Pythagorean", "Page 14"),
@@ -869,7 +881,7 @@ class NumerosPdfReportBuilder:
             [Paragraph("<b>Driver Vector (Mulank)</b>", s['MetaLabel']), Paragraph(f": <b>{d['driver_number']} · {d['driver_planet']}</b> (Solar Executive Will)", s['MetaValue'])],
             [Paragraph("<b>Conductor Vector (Bhagyank)</b>", s['MetaLabel']), Paragraph(f": <b>{d.get('conductor_display', d['conductor_number'])} · {d['conductor_planet']}</b> (Architectural Systems)", s['MetaValue'])],
             [Paragraph("<b>Acoustic Calling Name</b>", s['MetaLabel']), Paragraph(f": <b>{d['chaldean_name_compound']} → {d['chaldean_name_root']} · {d['chaldean_name_planet']}</b> (Star of the Lion)", s['MetaValue'])],
-            [Paragraph("<b>Kua Directional Vector</b>", s['MetaLabel']), Paragraph(f": <b>{d['kua_number']} · {d['kua_element']}</b>", s['MetaValue'])],
+            [Paragraph("<b>Kua Directional Vector</b>", s['MetaLabel']), Paragraph(f": <b>{d['kua_number']} · {d['kua_element']}</b> ({KUA_RULE_TEXT})" if d.get("kua_number") is not None else f": <b>{KUA_NEEDS_GENDER_TEXT}</b> ({KUA_RULE_TEXT})", s['MetaValue'])],
             [Paragraph("<b>Personal Year Transit</b>", s['MetaLabel']), Paragraph(f": <b>{d['personal_year']} · {d['personal_year_theme']}</b>", s['MetaValue'])],
             [Paragraph("<b>Report Verification ID</b>", s['MetaLabel']), Paragraph(f": {d['report_id']}", s['MetaValue'])],
             [Paragraph("<b>Verification Standard</b>", s['MetaLabel']), Paragraph(": Authentic Numerology Matrix · Verified & Confidential", s['MetaValue'])],
@@ -914,8 +926,9 @@ class NumerosPdfReportBuilder:
         conductor_root = d.get("conductor_root", 4)
         c_root = d.get("chaldean_name_root", 5)
         c_compound = d.get("chaldean_name_compound", 32)
-        kua = d.get("kua_number", 1)
-        gender = d.get("gender", "male")
+        kua_details = d.get("kua_details") or calculate_kua_details(d.get("year", 1990), d.get("gender"))
+        kua = kua_details["kua_number"]
+        gender = kua_details["gender"]
         edition = d.get("edition", "india")
         name = d.get("seeker_name", "Seeker").upper()
         dob = d.get("dob_formatted", "1981-11-28")
@@ -970,11 +983,16 @@ class NumerosPdfReportBuilder:
             return mapping.get(n, "Planetary Indicator")
 
         # 4 Metric Pills with Geo-Switching
+        kua_pill_val = (
+            f"<font size=9.5 color='#16835B'><b>{kua} ({kua_details['element']} · {kua_details['group_short']})</b></font>"
+            if kua is not None
+            else f"<font size=8.5 color='#8B6914'><b>{KUA_NEEDS_GENDER_TEXT}</b></font>"
+        )
         pills_data = [
             [
                 Paragraph(f"{get_geo_label('driver', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{driver} · {_planet_geo(driver)}</b></font>", s_pill_lbl),
                 Paragraph(f"{get_geo_label('conductor', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{d.get('conductor_display', conductor)} · {_planet_geo(conductor_root)}</b></font>", s_pill_lbl),
-                Paragraph(f"{get_geo_label('kua', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{kua} ({d.get('kua_element', 'East Group').split('·')[0].strip()})</b></font>", s_pill_lbl),
+                Paragraph(f"{get_geo_label('kua', edition).upper()}<br/>{kua_pill_val}", s_pill_lbl),
                 Paragraph(f"{get_geo_label('calling_name', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{c_root} ({c_compound})</b></font>", s_pill_lbl),
             ]
         ]
@@ -1196,24 +1214,25 @@ class NumerosPdfReportBuilder:
         self.story.append(Paragraph(f"{get_geo_label('vastu', edition)} Orientation · {get_geo_label('driver', edition)} {driver} &amp; {get_geo_label('conductor', edition)} {d.get('conductor_display', conductor)} · {edition.title()} Edition", s_sub))
         self.story.append(Spacer(1, 4))
 
-        # Kua & Personal Year Coordinates
-        kua_raw = d.get('kua_element', 'East Group')
-        kua_sector = kua_raw.split('(')[-1].rstrip(')').strip() if '(' in kua_raw else kua_raw
-        kua_desk = kua_sector.split('/')[0].strip()
+        # Kua & Personal Year Coordinates (prints exact Kua rule note)
+        kua_val_txt = f"{kua} ({kua_details['element']} · {kua_details['trigram']})" if kua is not None else KUA_NEEDS_GENDER_TEXT
+        kua_sector_txt = kua_details["group"] if kua is not None else KUA_NEEDS_GENDER_TEXT
+        kua_desk_txt = f"{kua_details['desk_direction']} Direction" if kua is not None else KUA_NEEDS_GENDER_TEXT
+        gender_lbl_txt = gender.title() if gender else "Gender Unspecified"
         kua_data = [
             [
-                Paragraph(f"<b>{get_geo_label('kua', edition)}:</b> {kua} ({kua_raw.split('·')[0].strip()})", s_card_txt),
-                Paragraph(f"<b>{get_geo_label('vastu', edition)} Group:</b> {kua_sector}", s_card_txt),
-                Paragraph(f"<b>Desk Orientation:</b> {kua_desk} Direction", s_card_txt),
+                Paragraph(f"<b>{get_geo_label('kua', edition)}:</b> {kua_val_txt}", s_card_txt),
+                Paragraph(f"<b>{get_geo_label('vastu', edition)} Group:</b> {kua_sector_txt}", s_card_txt),
+                Paragraph(f"<b>Desk Orientation:</b> {kua_desk_txt}", s_card_txt),
             ],
             [
-                Paragraph(f"<b>Profile Input:</b> {gender.title()} · Born {dob}", s_card_txt),
+                Paragraph(f"<b>Profile Input:</b> {gender_lbl_txt} · Born {dob}", s_card_txt),
                 Paragraph(f"<b>{get_geo_label('personal_year', edition)} {py}:</b> (Day {day_num} + Month {d.get('month', 11)} + {d.get('current_year', 2026)} → {py})", s_card_txt),
                 Paragraph(f"<b>Annual Focus:</b> {d.get('personal_year_theme', 'Steady Foundation')}", s_card_txt)
             ]
         ]
         t_kua_sec = Table(
-            [[Paragraph(f"<b>• {get_geo_label('kua', edition).upper()} &amp; {get_geo_label('vastu', edition).upper()} ORIENTATION</b>", s_card_h)],
+            [[Paragraph(f"<b>• {get_geo_label('kua', edition).upper()} &amp; {get_geo_label('vastu', edition).upper()} ORIENTATION</b> <font size=6.5 color='#7A654D'>— {KUA_RULE_TEXT}</font>", s_card_h)],
              [Table(kua_data, colWidths=[170, 175, 165])]],
             colWidths=[520]
         )
@@ -1285,7 +1304,7 @@ class NumerosPdfReportBuilder:
                 ('RIGHTPADDING', (0,0), (-1,-1), 5)
             ])],
             [Spacer(1, 3)],
-            [Paragraph(f"<font size=6.5 color='#7A654D'><b>Chart Reference ({d['seeker_name']} · {dob} · {edition.title()} Edition):</b> {get_geo_label('driver', edition)} = {driver} · {get_geo_label('conductor', edition)} = {d.get('conductor_display', conductor)} · {get_geo_label('calling_name', edition)} = {c_root} ({c_compound}) · {get_geo_label('kua', edition)} = {kua} · Open Digits = [{', '.join(str(n) for n in missing) or 'None'}].</font>", s_sub)]
+            [Paragraph(f"<font size=6.5 color='#7A654D'><b>Chart Reference ({d['seeker_name']} · {dob} · {edition.title()} Edition):</b> {get_geo_label('driver', edition)} = {driver} · {get_geo_label('conductor', edition)} = {d.get('conductor_display', conductor)} · {get_geo_label('calling_name', edition)} = {c_root} ({c_compound}) · {get_geo_label('kua', edition)} = {kua if kua is not None else KUA_NEEDS_GENDER_TEXT} · Open Digits = [{', '.join(str(n) for n in missing) or 'None'}].</font>", s_sub)]
         ]
         t_roadmap = Table(roadmap_card, colWidths=[520], hAlign='CENTER')
         t_roadmap.setStyle(TableStyle([
@@ -1387,12 +1406,25 @@ class NumerosPdfReportBuilder:
         ))
         self.story.append(Spacer(1, 6))
 
+        adv_kua_details = d.get("kua_details") or calculate_kua_details(d.get("year", 1990), d.get("gender"))
+        adv_kua_num = adv_kua_details["kua_number"]
+        adv_kua_val_cell = (
+            f"<b>{adv_kua_num} · {adv_kua_details['element']} ({adv_kua_details['group']})</b>"
+            if adv_kua_num is not None
+            else f"<b>{KUA_NEEDS_GENDER_TEXT}</b>"
+        )
+        adv_kua_desc_cell = (
+            f"{KUA_RULE_TEXT}. Aligns primary workspace facing {adv_kua_details['desk_direction']} for career momentum and {adv_kua_details['health']} for restorative focus."
+            if adv_kua_num is not None
+            else f"{KUA_NEEDS_GENDER_TEXT}. {KUA_RULE_TEXT}."
+        )
+
         p3_table = [
             [Paragraph("<b>Core Parameter</b>", s['TableHeader']), Paragraph("<b>Calculated Value</b>", s['TableHeader']), Paragraph("<b>Life Interpretation & Manifestation</b>", s['TableHeader'])],
             [Paragraph("Driver (Mulank)", s['TableCell']), Paragraph("<b>1 · Sun (Surya)</b>", s['TableCellCenter']), Paragraph("Governs your conscious ego, leadership drive, and instinct for autonomy. You naturally take charge and resist subordinate micromanagement.", s['TableCell'])],
             [Paragraph("Conductor (Bhagyank)", s['TableCell']), Paragraph("<b>4 · Rahu (North Node)</b>", s['TableCellCenter']), Paragraph("Governs your ultimate destiny path. Pulls you into complex, high-technology, analytical, and revolutionary systems where unconventional solutions prevail.", s['TableCell'])],
             [Paragraph("Calling Name Vibration", s['TableCell']), Paragraph("<b>32 → 5 · Mercury</b>", s['TableCellCenter']), Paragraph("'The Star of the Lion'. Bestows intellectual agility, commercial charisma, negotiation power, and rapid social/business mobility.", s['TableCell'])],
-            [Paragraph("Kua Directional Vector", s['TableCell']), Paragraph("<b>1 · Water (East Group)</b>", s['TableCellCenter']), Paragraph("Aligns with North for career acceleration and Southeast for sustained wealth accumulation.", s['TableCell'])],
+            [Paragraph("Kua Directional Vector", s['TableCell']), Paragraph(adv_kua_val_cell, s['TableCellCenter']), Paragraph(adv_kua_desc_cell, s['TableCell'])],
             [Paragraph(f"Personal Year {d.get('current_year', 2026)}", s['TableCell']), Paragraph(f"<b>{d.get('personal_year', 4)} · {d.get('personal_year_theme', 'Foundation Phase')}</b>", s['TableCellCenter']), Paragraph("A focused developmental cycle. Perfect for formalizing structures, scaling platforms, and locking in strategic agreements.", s['TableCell'])],
         ]
         t_p3 = Table(p3_table, colWidths=[120, 116, 280])
@@ -1531,22 +1563,43 @@ class NumerosPdfReportBuilder:
         self.story.append(t_gh)
         self.story.append(PageBreak())
 
-        # PAGE 11: Chapter 9 — Spatial Feng Shui & Kua Number 1 Matrix
-        self.story.append(Paragraph("Section 9: Spatial Alignment & Kua Number 1 Directional Blueprint", s['SectionH1']))
-        self.story.append(Paragraph(
-            "Based on your birth year (1981 Male), your Kua Number is <b>1</b>, corresponding to the <b>Water element</b> and the <b>Kan Trigram</b> (East Group). Your spatial directions govern focus, vitality, and wealth accumulation:",
-            s['ReportBody']
-        ))
-        self.story.append(Spacer(1, 6))
-
-        kua_rows = [
-            [Paragraph("<b>Direction</b>", s['TableHeader']), Paragraph("<b>Energy Sector (Trigram)</b>", s['TableHeader']), Paragraph("<b>Influence on Life</b>", s['TableHeader']), Paragraph("<b>Office & Home Optimization Protocol</b>", s['TableHeader'])],
-            [Paragraph("<b>North</b>", s['TableCell']), Paragraph("Sheng Chi (Prime Success)", s['TableCellCenter']), Paragraph("Career authority, executive advancement, high reputation", s['TableCell']), Paragraph("<b>Optimal desk facing direction.</b> Sit facing North during high-stakes presentations and strategic planning.", s['TableCell'])],
-            [Paragraph("<b>East</b>", s['TableCell']), Paragraph("Tien Yi (Celestial Health)", s['TableCellCenter']), Paragraph("Physical vitality, mental rejuvenation, longevity", s['TableCell']), Paragraph("Keep this sector clear and bright. Install a polished Brass Surya on East wall; ideal for morning contemplation.", s['TableCell'])],
-            [Paragraph("<b>Southeast</b>", s['TableCell']), Paragraph("Nien Yen (Relationship Harmony)", s['TableCellCenter']), Paragraph("Commercial partnerships, team loyalty, investor trust", s['TableCell']), Paragraph("Place client meeting chairs or partnership awards in this sector of your executive cabin.", s['TableCell'])],
-            [Paragraph("<b>South</b>", s['TableCell']), Paragraph("Fu Wei (Personal Stability)", s['TableCellCenter']), Paragraph("Emotional grounding, inner poise, clear judgment", s['TableCell']), Paragraph("Ideal for contemplative reflection, journal writing, and milestone reviews.", s['TableCell'])],
-            [Paragraph("<b>West / NW / SW</b>", s['TableCell']), Paragraph("West Group Sectors", s['TableCellCenter']), Paragraph("Frictional energy zones for Kua 1", s['TableCell']), Paragraph("Avoid positioning your main desk facing West or Southwest; ensure back is supported by a solid wall.", s['TableCell'])],
-        ]
+        # PAGE 11: Chapter 9 — Spatial Alignment & Dynamic Kua Directional Matrix
+        sec9_heading = (
+            f"Section 9: Spatial Alignment & Kua Number {adv_kua_num} Directional Blueprint"
+            if adv_kua_num is not None
+            else "Section 9: Spatial Alignment & Kua Directional Blueprint"
+        )
+        self.story.append(Paragraph(sec9_heading, s['SectionH1']))
+        if adv_kua_num is not None:
+            opp_group = "West Group Sectors" if adv_kua_details["group"] == "East Group" else "East Group Sectors"
+            avoid_str = " / ".join(adv_kua_details["avoid"])
+            self.story.append(Paragraph(
+                f"{KUA_RULE_TEXT} ({d.get('year', 1990)} {adv_kua_details['gender'].title()}): your Kua Number is <b>{adv_kua_num}</b>, corresponding to the <b>{adv_kua_details['element']} element</b> and the <b>{adv_kua_details['trigram']} Trigram</b> ({adv_kua_details['group']}). Your spatial directions govern focus, vitality, and steady momentum:",
+                s['ReportBody']
+            ))
+            self.story.append(Spacer(1, 6))
+            kua_rows = [
+                [Paragraph("<b>Direction</b>", s['TableHeader']), Paragraph("<b>Energy Sector (Trigram)</b>", s['TableHeader']), Paragraph("<b>Influence on Life</b>", s['TableHeader']), Paragraph("<b>Office & Home Optimization Protocol</b>", s['TableHeader'])],
+                [Paragraph(f"<b>{adv_kua_details['desk_direction']}</b>", s['TableCell']), Paragraph("Sheng Chi (Prime Success)", s['TableCellCenter']), Paragraph("Career authority, executive advancement, clear focus", s['TableCell']), Paragraph(f"<b>Optimal desk facing direction.</b> Sit facing {adv_kua_details['desk_direction']} during high-stakes presentations and strategic planning.", s['TableCell'])],
+                [Paragraph(f"<b>{adv_kua_details['health']}</b>", s['TableCell']), Paragraph("Tien Yi (Vitality Sector)", s['TableCellCenter']), Paragraph("Physical vitality, mental rejuvenation, restorative calm", s['TableCell']), Paragraph(f"Keep the {adv_kua_details['health']} sector clear, bright, and well-ventilated; ideal for morning contemplation.", s['TableCell'])],
+                [Paragraph(f"<b>{adv_kua_details['relationship']}</b>", s['TableCell']), Paragraph("Nien Yen (Relationship Harmony)", s['TableCellCenter']), Paragraph("Commercial partnerships, team cohesion, domestic warmth", s['TableCell']), Paragraph(f"Place collaborative seating or partnership notes cleanly in the {adv_kua_details['relationship']} zone.", s['TableCell'])],
+                [Paragraph(f"<b>{adv_kua_details['stability']}</b>", s['TableCell']), Paragraph("Fu Wei (Personal Stability)", s['TableCellCenter']), Paragraph("Emotional grounding, inner poise, clear judgment", s['TableCell']), Paragraph(f"Ideal direction ({adv_kua_details['stability']}) for contemplative reflection, journal writing, and milestone reviews.", s['TableCell'])],
+                [Paragraph(f"<b>{avoid_str}</b>", s['TableCell']), Paragraph(opp_group, s['TableCellCenter']), Paragraph(f"Frictional energy zones for Kua {adv_kua_num}", s['TableCell']), Paragraph("Avoid positioning your main desk facing frictional zones; ensure your chair is supported by a solid wall.", s['TableCell'])],
+            ]
+        else:
+            self.story.append(Paragraph(
+                f"<b>{KUA_NEEDS_GENDER_TEXT}.</b> {KUA_RULE_TEXT} — because gender was not provided for birth year {d.get('year', 1990)}, personal Kua number and East/West directional sectors are withheld rather than guessed.",
+                s['ReportBody']
+            ))
+            self.story.append(Spacer(1, 6))
+            kua_rows = [
+                [Paragraph("<b>Direction</b>", s['TableHeader']), Paragraph("<b>Energy Sector (Trigram)</b>", s['TableHeader']), Paragraph("<b>Influence on Life</b>", s['TableHeader']), Paragraph("<b>Office & Home Optimization Protocol</b>", s['TableHeader'])],
+                [Paragraph(f"<b>{KUA_NEEDS_GENDER_TEXT}</b>", s['TableCell']), Paragraph("Sheng Chi (Prime Success)", s['TableCellCenter']), Paragraph("Career authority and executive focus", s['TableCell']), Paragraph("Provide gender in your profile to calculate your exact Sheng Chi desk orientation.", s['TableCell'])],
+                [Paragraph(f"<b>{KUA_NEEDS_GENDER_TEXT}</b>", s['TableCell']), Paragraph("Tien Yi (Vitality Sector)", s['TableCellCenter']), Paragraph("Physical vitality and restorative calm", s['TableCell']), Paragraph("Keep primary work and sleep zones uncluttered and well-ventilated.", s['TableCell'])],
+                [Paragraph(f"<b>{KUA_NEEDS_GENDER_TEXT}</b>", s['TableCell']), Paragraph("Nien Yen (Relationship Harmony)", s['TableCellCenter']), Paragraph("Collaborative trust and domestic harmony", s['TableCell']), Paragraph("Maintain warm, balanced lighting in shared meeting and living spaces.", s['TableCell'])],
+                [Paragraph(f"<b>{KUA_NEEDS_GENDER_TEXT}</b>", s['TableCell']), Paragraph("Fu Wei (Personal Stability)", s['TableCellCenter']), Paragraph("Emotional grounding and clear judgment", s['TableCell']), Paragraph("Dedicate a quiet desk corner for weekly reflection and planning.", s['TableCell'])],
+                [Paragraph(f"<b>{KUA_NEEDS_GENDER_TEXT}</b>", s['TableCell']), Paragraph("Opposite Group Sectors", s['TableCellCenter']), Paragraph("Requires gender to classify East/West group", s['TableCell']), Paragraph(f"{KUA_RULE_TEXT}. Ensure your primary chair is backed by a solid wall.", s['TableCell'])],
+            ]
         t_kua = Table(kua_rows, colWidths=[80, 110, 136, 190])
         t_kua.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,-1), colors.white),
@@ -2071,7 +2124,7 @@ class NumerosPdfReportBuilder:
                  ("Angel Sequence 333 & 33", "Ascended Masters & Creative Truth: Indicates divine protection, mentorship support, and an urgent call to speak your authentic truth without fear"),
                  ("Angel Sequence 444 & 44", "Archangelic Shield & Practical Order: Indicates you are protected from chaos. Reinforce systems, audit agreements, and stay grounded in discipline"),
                  ("Angel Sequence 555 & 55", "Quantum Shift & Positive Evolution: Major life breakthroughs are unfolding. Release outdated emotional baggage and embrace bold adaptability"),
-                 ("Angel Sequence 777 & 888", "777 brings divine wisdom and spiritual luck; 888 confirms financial harvesting, karmic abundance, and commercial mastery"),
+                 ("Angel Sequence 777 & 888", "777 signals reflective insight and inner alignment; 888 reflects structured commercial momentum and financial stewardship."),
                  ("Action Protocol Upon Sighting", "Take three deep breaths, record the exact thought in your mind, and take one immediate constructive action toward that vision")
              ]),
 
@@ -2187,7 +2240,7 @@ class NumerosPdfReportBuilder:
 
             # Page 32
             ("Section 30: Your Favourable Directions, Spatial Harmony & Elemental Alignment",
-             f"In classical Lo Shu and Vedic spatial architecture, your natal birth matrix directly mirrors the energy flow of your physical living and working spaces. For <b>{d['seeker_name']}</b>, your Kua Number {d['kua_number']} and Lo Shu elemental matrix indicate distinct auspicious directions and spatial zones that activate vitality, peace, and abundance while shielding against environmental stagnation.",
+             f"In classical Lo Shu and Vedic spatial architecture, your natal birth matrix directly mirrors the energy flow of your physical living and working spaces. For <b>{d['seeker_name']}</b>, {'your Kua Number ' + str(d['kua_number']) + ' (' + KUA_RULE_TEXT.lower() + ')' if d.get('kua_number') is not None else KUA_NEEDS_GENDER_TEXT + ' (' + KUA_RULE_TEXT.lower() + ')'} and Lo Shu elemental matrix indicate distinct auspicious directions and spatial zones that activate vitality, peace, and abundance while shielding against environmental stagnation.",
              [
                  ("North (Sheng Chi / Success Direction)", "Governs career velocity, enterprise growth, and executive opportunities. Keep this sector open, clean, and activate with clear moving water or healthy green plants"),
                  ("East (Tien Yi / Vitality Direction)", "Governs physical health, restorative longevity, and institutional wisdom. Install an authentic polished Brass Surya on the East wall to welcome morning solar rays"),
@@ -2242,7 +2295,7 @@ def generate_customised_pdf_report(
     property_number: Optional[str] = None,
     purchase_date: Optional[Union[str, datetime.date, datetime.datetime]] = None,
     purchase_year: Optional[int] = None,
-    gender: Optional[str] = "male",
+    gender: Optional[str] = None,
     edition: str = "india"
 ) -> Tuple[bytes, Dict[str, Any]]:
     """

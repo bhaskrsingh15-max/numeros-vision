@@ -9,6 +9,10 @@
 
   const CATALOG = {
   "currency": "INR",
+  "feature_flags": {
+    "notify_me_higher_tiers": false,
+    "notify_me_tiers": ["report_advanced", "report_premium"]
+  },
   "report_tiers": {
     "basic": {
       "tier_id": "basic",
@@ -793,6 +797,26 @@
     isMvpActive(skuId) {
       const clean = (skuId || '').toLowerCase();
       return ['report_basic', 'report_advanced', 'report_premium', 'charm_single', 'charm_starter'].includes(clean);
+    },
+
+    isNotifyMeHigherTiersEnabled() {
+      if (typeof window !== 'undefined' && typeof window.__NV_NOTIFY_ME_HIGHER_TIERS === 'boolean') {
+        return window.__NV_NOTIFY_ME_HIGHER_TIERS;
+      }
+      if (typeof window !== 'undefined' && window.location) {
+        const host = window.location.hostname || '';
+        if (host === 'localhost' || host === '127.0.0.1') {
+          const sp = new URLSearchParams(window.location.search || '');
+          if (sp.get('nv_notify_me_preview') === '1') return true;
+        }
+      }
+      return Boolean(CATALOG.feature_flags && CATALOG.feature_flags.notify_me_higher_tiers);
+    },
+
+    isNotifyMeTier(skuId) {
+      if (!this.isNotifyMeHigherTiersEnabled()) return false;
+      const clean = (skuId || '').toLowerCase();
+      return ['advanced', 'report_advanced', 'report_master', 'premium', 'report_premium', 'report_divine'].includes(clean);
     }
   };
 

@@ -399,7 +399,7 @@
               <td style="padding:14px 16px; font-weight:800; color:#8B6914; font-size:1.15rem;">₹489 <span style="font-size:0.72rem; text-decoration:line-through; opacity:0.65; font-weight:400; margin-left:4px;">₹699</span></td>
               <td style="padding:14px 16px; color:#7A654D;">One-Time</td>
               <td style="padding:14px 16px; text-align:right;">
-                <a href="/?plan=report_advanced#reports" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px; font-weight:700;">
+                <a id="table-cta-report_advanced" href="/?plan=report_advanced#reports" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px; font-weight:700;">
                   Get Advanced Master Dossier (₹489)
                 </a>
               </td>
@@ -416,7 +416,7 @@
               <td style="padding:14px 16px; font-weight:800; color:#8B6914; font-size:1.15rem;">₹1,050 <span style="font-size:0.72rem; text-decoration:line-through; opacity:0.65; font-weight:400; margin-left:4px;">₹1,479</span></td>
               <td style="padding:14px 16px; color:#7A654D;">One-Time</td>
               <td style="padding:14px 16px; text-align:right;">
-                <a href="/?plan=report_premium#reports" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px;">
+                <a id="table-cta-report_premium" href="/?plan=report_premium#reports" class="btn-gold-action" style="padding:6px 16px; font-size:0.78rem; text-decoration:none; display:inline-block; border-radius:8px;">
                   Get Premium Sovereign Blueprint (₹1,050)
                 </a>
               </td>
@@ -650,8 +650,19 @@
       
   </script>
 
+  <script src="/static/js/nv_pricing_catalog.js?v=1.1.0"></script>
   <!-- Dynamic Pricing Controller Script -->
   <script>
+    let _pricingServerNotifyFlag = false;
+    function isPricingNotifyMeTier(skuId) {
+      if (skuId !== 'report_advanced' && skuId !== 'report_premium') return false;
+      if (_pricingServerNotifyFlag === true) return true;
+      if (window.NV_PRICING && typeof window.NV_PRICING.isNotifyMeTier === 'function') {
+        return window.NV_PRICING.isNotifyMeTier(skuId);
+      }
+      return false;
+    }
+
     // Locked to INR currency
     let activeDomain = 'core';   // 'core', 'union', 'commerce', 'authority', 'relocation', 'dharma', 'ai', 'vip'
 
@@ -938,13 +949,13 @@
           </ul>
           <div class="tier-actions">
             <a href="/sample?format=roadmap" target="_blank" class="btn-ghost-action">Preview Format (32 Pgs) →</a>
-            ${prices.sovereign.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/?plan=report_premium#reports" class="btn-gold-action">View Premium Report (${prices.sovereign.price})</a>`}
+            ${prices.sovereign.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : (isPricingNotifyMeTier('report_premium') ? `<button type="button" class="btn-ghost-action" style="cursor:pointer;" onclick="openPricingNotifyMeModal('report_premium')">Notify Me When Ready ✉</button>` : `<a href="/?plan=report_premium#reports" class="btn-gold-action">View Premium Report (${prices.sovereign.price})</a>`)}
           </div>
         </div>
 
         <!-- Tier 2: Center-Stage Highlight & Decoy Effect - Master Dual-System Dossier (Recommended) -->
         <div class="tier-card featured" style="border: 2px solid var(--gold); box-shadow: 0 8px 32px rgba(201, 162, 39, 0.22); transform: translateY(-4px);">
-          <div class="featured-badge" style="letter-spacing:0.06em;">✦ MOST POPULAR · RECOMMENDED BY MASTERS ✦</div>
+          <div class="featured-badge" style="letter-spacing:0.06em;">${isPricingNotifyMeTier('report_advanced') ? '✦ WAITLIST · NOTIFY ME AT LAUNCH ✦' : '✦ MOST POPULAR · RECOMMENDED BY MASTERS ✦'}</div>
           <div class="tier-badge-row">
             <span class="harmonic-root-badge" style="background:rgba(201,162,39,0.18);border-color:var(--gold);">${data.rootTag}</span>
           </div>
@@ -960,7 +971,7 @@
           </ul>
           <div class="tier-actions">
             <a href="/sample?format=master" target="_blank" class="btn-ghost-action">Preview Format (12 Pgs) →</a>
-            ${prices.master.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/?plan=report_advanced#reports" class="btn-gold-action" style="font-weight:700;">Explore Advanced Analysis (${prices.master.price}) →</a>`}
+            ${prices.master.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : (isPricingNotifyMeTier('report_advanced') ? `<button type="button" class="btn-ghost-action" style="cursor:pointer; font-weight:700;" onclick="openPricingNotifyMeModal('report_advanced')">Notify Me When Ready ✉</button>` : `<a href="/?plan=report_advanced#reports" class="btn-gold-action" style="font-weight:700;">Explore Advanced Analysis (${prices.master.price}) →</a>`)}
           </div>
         </div>
 
@@ -1001,9 +1012,102 @@
       }
     } catch(e) {}
 
-    // Initial render
+    function syncPricingTableNotifyMeMode() {
+      ['report_advanced', 'report_premium'].forEach(function(sku) {
+        if (!isPricingNotifyMeTier(sku)) return;
+        const el = document.getElementById('table-cta-' + sku);
+        if (el) {
+          el.href = '#plans';
+          el.className = 'btn-ghost-action';
+          el.style.padding = '6px 16px';
+          el.style.width = 'auto';
+          el.textContent = 'Notify Me When Ready ✉';
+          el.onclick = function(ev) { ev.preventDefault(); openPricingNotifyMeModal(sku); };
+        }
+      });
+    }
+
+    let _pricingNotifySku = 'report_advanced';
+    function openPricingNotifyMeModal(skuId) {
+      _pricingNotifySku = skuId || 'report_advanced';
+      const modal = document.getElementById('pricing-notify-me-modal');
+      const titleEl = document.getElementById('pricing-notify-title');
+      const statusEl = document.getElementById('pricing-notify-status');
+      const chkEl = document.getElementById('pricing-notify-consent');
+      if (titleEl) {
+        titleEl.textContent = _pricingNotifySku === 'report_premium'
+          ? 'Notify Me · Premium Sovereign Blueprint'
+          : 'Notify Me · Advanced Master Dossier';
+      }
+      if (statusEl) statusEl.textContent = '';
+      if (chkEl) chkEl.checked = false;
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closePricingNotifyMeModal() {
+      const modal = document.getElementById('pricing-notify-me-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    async function submitPricingNotifyMeForm() {
+      const email = (document.getElementById('pricing-notify-email')?.value || '').trim().toLowerCase();
+      const consent = Boolean(document.getElementById('pricing-notify-consent')?.checked);
+      const statusEl = document.getElementById('pricing-notify-status');
+      if (!email || !email.includes('@')) {
+        if (statusEl) { statusEl.textContent = 'Please enter a valid email address.'; statusEl.style.color = '#B91C1C'; }
+        return;
+      }
+      if (!consent) {
+        if (statusEl) { statusEl.textContent = 'Please tick the consent box first.'; statusEl.style.color = '#B91C1C'; }
+        return;
+      }
+      try {
+        const res = await fetch('/api/v1/waitlist/notify-me', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, pack_id: _pricingNotifySku, sku_id: _pricingNotifySku, consent: true, source_page: 'pricing' })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && (data.success || data.status === 'registered' || data.status === 'recorded')) {
+          if (statusEl) { statusEl.textContent = data.message || 'Recorded! We will email you once when ready.'; statusEl.style.color = '#16835B'; }
+        } else {
+          if (statusEl) { statusEl.textContent = data.detail || data.error || 'Unable to record request.'; statusEl.style.color = '#B91C1C'; }
+        }
+      } catch (_) {
+        if (statusEl) { statusEl.textContent = 'Network error. Please retry.'; statusEl.style.color = '#B91C1C'; }
+      }
+    }
+
+    // Initial render + check server catalog flag
     renderPricing();
+    syncPricingTableNotifyMeMode();
+    fetch('/api/v1/pricing-catalog').then(r => r.ok ? r.json() : null).then(cat => {
+      if (cat && cat.feature_flags && cat.feature_flags.notify_me_higher_tiers === true) {
+        _pricingServerNotifyFlag = true;
+        renderPricing();
+        syncPricingTableNotifyMeMode();
+      }
+    }).catch(() => {});
   </script>
+
+  <!-- Flagged Notify-Me Modal on Pricing Page (Off by Default) -->
+  <div id="pricing-notify-me-modal" role="dialog" aria-modal="true" aria-labelledby="pricing-notify-title" style="display:none; position:fixed; inset:0; background:rgba(82,62,40,0.68); z-index:99999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+    <div style="background:#FFFFFF; border:2px solid #C9A227; border-radius:16px; max-width:460px; width:100%; padding:28px 24px; position:relative; box-sizing:border-box;">
+      <button type="button" onclick="closePricingNotifyMeModal()" aria-label="Close" style="position:absolute; top:12px; right:14px; background:none; border:none; font-size:1.5rem; color:#7A654D; cursor:pointer;">&times;</button>
+      <div style="font-size:0.72rem; font-weight:700; color:#16835B; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px;">Priority Release Alert</div>
+      <h3 id="pricing-notify-title" style="font-family:'Cormorant Garamond',serif; font-size:1.55rem; color:#523E28; margin:0 0 8px;">Notify Me at Launch</h3>
+      <p style="font-size:0.84rem; color:#7A654D; line-height:1.5; margin:0 0 16px;">Enter your email for a single notification when this expanded edition opens. The 3-Page Basic Report (₹199) is available now.</p>
+      <form onsubmit="event.preventDefault(); submitPricingNotifyMeForm();">
+        <input type="email" id="pricing-notify-email" placeholder="name@example.com" required style="width:100%; height:42px; padding:8px 12px; border:1px solid rgba(201,162,39,0.45); border-radius:8px; background:#FFFDF7; color:#523E28; box-sizing:border-box; margin-bottom:12px;" />
+        <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.78rem; color:#523E28; line-height:1.4; margin-bottom:12px; cursor:pointer;">
+          <input type="checkbox" id="pricing-notify-consent" required style="margin-top:2px; accent-color:#8B6914;" />
+          <span>I consent to receive a one-time availability email for this report edition in accordance with the Privacy Policy.</span>
+        </label>
+        <div id="pricing-notify-status" style="font-size:0.8rem; min-height:18px; margin-bottom:10px;"></div>
+        <button type="submit" class="btn-gold-action" style="border:none; cursor:pointer;">Notify Me at Launch ✦</button>
+      </form>
+    </div>
+  </div>
   <script src="/static/js/marketing-analytics.js" defer></script>
   <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
   <nav class="nv-sticky-bottom-nav" aria-label="Mobile and Tablet Sticky Navigation">

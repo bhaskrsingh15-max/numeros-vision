@@ -1,7 +1,14 @@
 {
   "version": "2.1.0",
   "currency": "INR",
-  "updated_at": "2026-11-06T17:30:00Z",
+  "updated_at": "2026-11-11T02:30:00Z",
+  "feature_flags": {
+    "notify_me_higher_tiers": false,
+    "notify_me_tiers": [
+      "report_advanced",
+      "report_premium"
+    ]
+  },
   "core_reports": {
     "report_basic": {
       "pack_id": "report_basic",

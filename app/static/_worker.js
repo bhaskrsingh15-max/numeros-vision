@@ -748,6 +748,10 @@ async function canExportToCdp(env, userId) {
 const PACK_CATALOG = {
   version: "2.1.0",
   currency: "INR",
+  feature_flags: {
+    notify_me_higher_tiers: false,
+    notify_me_tiers: ["report_advanced", "report_premium"]
+  },
   core_reports: {
     report_basic: {
       pack_id: "report_basic",
@@ -832,6 +836,14 @@ const PACK_CATALOG = {
     }
   }
 };
+
+function isNotifyMeHigherTiersEnabled(env) {
+  if (env && env.NV_NOTIFY_ME_HIGHER_TIERS !== undefined && env.NV_NOTIFY_ME_HIGHER_TIERS !== null && String(env.NV_NOTIFY_ME_HIGHER_TIERS).trim() !== '') {
+    const v = String(env.NV_NOTIFY_ME_HIGHER_TIERS).trim().toLowerCase();
+    return v === 'true' || v === '1' || v === 'yes';
+  }
+  return Boolean(PACK_CATALOG.feature_flags && PACK_CATALOG.feature_flags.notify_me_higher_tiers);
+}
 
 function getPackById(packId) {
   if (!packId || typeof packId !== 'string') return null;
@@ -1275,6 +1287,87 @@ function parseDobParts(dobStr) {
   return { day, month, year, dob: formattedDob };
 }
 
+const KUA_RULE_TEXT = 'Calculated from your birth year and gender';
+const KUA_NEEDS_GENDER_TEXT = 'Kua needs gender';
+
+const KUA_METADATA = {
+  1: { element: 'Water', trigram: 'Kan', group: 'East Group', groupShort: 'East', elementGroup: 'Water · Kan (East Group)', directionSummary: 'Water · Kan (East Group · SE / E / S / N)', deskDirection: 'South-East' },
+  2: { element: 'Earth', trigram: 'Kun', group: 'West Group', groupShort: 'West', elementGroup: 'Earth · Kun (West Group)', directionSummary: 'Earth · Kun (West Group · NE / W / NW / SW)', deskDirection: 'North-East' },
+  3: { element: 'Wood', trigram: 'Zhen', group: 'East Group', groupShort: 'East', elementGroup: 'Wood · Zhen (East Group)', directionSummary: 'Wood · Zhen (East Group · S / N / SE / E)', deskDirection: 'South' },
+  4: { element: 'Wood', trigram: 'Xun', group: 'East Group', groupShort: 'East', elementGroup: 'Wood · Xun (East Group)', directionSummary: 'Wood · Xun (East Group · N / S / E / SE)', deskDirection: 'North' },
+  6: { element: 'Metal', trigram: 'Qian', group: 'West Group', groupShort: 'West', elementGroup: 'Metal · Qian (West Group)', directionSummary: 'Metal · Qian (West Group · W / NE / SW / NW)', deskDirection: 'West' },
+  7: { element: 'Metal', trigram: 'Dui', group: 'West Group', groupShort: 'West', elementGroup: 'Metal · Dui (West Group)', directionSummary: 'Metal · Dui (West Group · NW / W / NE / SW)', deskDirection: 'North-West' },
+  8: { element: 'Earth', trigram: 'Gen', group: 'West Group', groupShort: 'West', elementGroup: 'Earth · Gen (West Group)', directionSummary: 'Earth · Gen (West Group · SW / NW / W / NE)', deskDirection: 'South-West' },
+  9: { element: 'Fire', trigram: 'Li', group: 'East Group', groupShort: 'East', elementGroup: 'Fire · Li (East Group)', directionSummary: 'Fire · Li (East Group · E / SE / N / S)', deskDirection: 'East' }
+};
+
+function calculateCanonicalKuaDetails(birthYear, gender) {
+  function reduce1(num) {
+    let n = Math.abs(parseInt(num, 10) || 0);
+    while (n > 9) {
+      n = String(n).split('').reduce((acc, d) => acc + (parseInt(d, 10) || 0), 0);
+    }
+    return n;
+  }
+  const yr = parseInt(birthYear, 10);
+  const gRaw = (gender === null || gender === undefined) ? '' : String(gender).trim().toLowerCase();
+  const normGender = (gRaw === 'male' || gRaw === 'm') ? 'male' : ((gRaw === 'female' || gRaw === 'f') ? 'female' : null);
+
+  if (!yr || isNaN(yr) || !normGender) {
+    return {
+      status: 'NEEDS_GENDER',
+      kuaNumber: null,
+      kua_number: null,
+      rawKua: null,
+      raw_kua: null,
+      remappedFromFive: false,
+      gender: normGender,
+      display: KUA_NEEDS_GENDER_TEXT,
+      display_text: KUA_NEEDS_GENDER_TEXT,
+      element: null,
+      trigram: null,
+      group: null,
+      elementGroup: KUA_NEEDS_GENDER_TEXT,
+      element_group_label: KUA_NEEDS_GENDER_TEXT,
+      directionSummary: KUA_NEEDS_GENDER_TEXT,
+      deskDirection: KUA_NEEDS_GENDER_TEXT,
+      ruleNote: KUA_RULE_TEXT,
+      rule_text: KUA_RULE_TEXT
+    };
+  }
+
+  const yrStr = String(yr).padStart(4, '0');
+  const sum4 = yrStr.split('').reduce((acc, ch) => (ch >= '0' && ch <= '9' ? acc + parseInt(ch, 10) : acc), 0);
+  const x = reduce1(sum4);
+  const rawKua = normGender === 'male' ? reduce1(11 - x) : reduce1(4 + x);
+  const finalKua = rawKua === 5 ? (normGender === 'male' ? 2 : 8) : rawKua;
+  const meta = KUA_METADATA[finalKua];
+
+  return {
+    status: 'OK',
+    kuaNumber: finalKua,
+    kua_number: finalKua,
+    rawKua,
+    raw_kua: rawKua,
+    remappedFromFive: rawKua === 5,
+    yearDigitRoot: x,
+    year_digit_sum: x,
+    gender: normGender,
+    display: String(finalKua),
+    display_text: String(finalKua),
+    element: meta.element,
+    trigram: meta.trigram,
+    group: meta.group,
+    groupShort: meta.groupShort,
+    elementGroup: meta.elementGroup,
+    element_group_label: meta.elementGroup,
+    directionSummary: meta.directionSummary,
+    deskDirection: meta.deskDirection,
+    ruleNote: KUA_RULE_TEXT,
+    rule_text: KUA_RULE_TEXT
+  };
+}
+
 async function viewFor(user, subject, env, targetPackId = null) {
   if (!user || !subject) return null;
 
@@ -1407,30 +1500,10 @@ async function viewFor(user, subject, env, targetPackId = null) {
     elements[elName] = { count: cnt, present: cnt > 0, digits: elDigits };
   }
 
-  // Kua & Personal Year Calculation
-  const gender = (subject.gender || 'male').toLowerCase();
-  const ySum = reduceToSingle(parseInt(String(year).slice(-2), 10) || 1);
-  let kuaNum = 1;
-  if (gender === 'female') {
-    const k = reduceToSingle(ySum + 5);
-    kuaNum = (k === 5) ? 8 : k;
-  } else {
-    let k = 10 - ySum;
-    if (k <= 0) k += 9;
-    k = reduceToSingle(k);
-    kuaNum = (k === 5) ? 2 : k;
-  }
-  const KUA_DIRECTIONS = {
-    1: 'Water · East Group (SE / E / S / N)',
-    2: 'Earth · West Group (NE / W / NW / SW)',
-    3: 'Wood · East Group (S / N / SE / E)',
-    4: 'Wood · East Group (N / S / E / SE)',
-    5: 'Earth · West Group (NE / W / NW / SW)',
-    6: 'Metal · West Group (W / NE / SW / NW)',
-    7: 'Metal · West Group (NW / SW / NE / W)',
-    8: 'Earth · West Group (SW / NW / W / NE)',
-    9: 'Fire · East Group (E / SE / N / S)'
-  };
+  // Kua & Personal Year Calculation (Canonical century-invariant 4-digit formula; never guess missing gender)
+  const subjectGender = subject.gender || (user && user.gender) || null;
+  const kuaDetails = calculateCanonicalKuaDetails(year, subjectGender);
+  const kuaNum = kuaDetails.kuaNumber;
   const currentYear = new Date().getFullYear();
   const personalYear = reduceToSingle(driver + reduceToSingle(month) + reduceToSingle(currentYear));
 
@@ -1618,6 +1691,7 @@ async function viewFor(user, subject, env, targetPackId = null) {
       id: subject.id,
       name: subject.name,
       dob: formattedDob,
+      gender: kuaDetails.gender,
       created_at: subject.created_at
     },
     tier,
@@ -1632,7 +1706,11 @@ async function viewFor(user, subject, env, targetPackId = null) {
       conductorPlanet: PLANETS[conductor].name,
       conductorSanskrit: PLANETS[conductor].sanskrit,
       kua: kuaNum,
-      kuaDirection: KUA_DIRECTIONS[kuaNum] || 'East Group',
+      kuaDisplay: kuaDetails.display,
+      kuaElement: kuaDetails.elementGroup,
+      kuaDirection: kuaDetails.directionSummary,
+      kuaRule: KUA_RULE_TEXT,
+      gender: kuaDetails.gender,
       personalYear,
       counts,
       presentDigits,
@@ -4085,6 +4163,14 @@ export default {
         }), { status: 400, headers: corsHeaders });
       }
 
+      if (isNotifyMeHigherTiersEnabled(env) && (pack.pack_id === 'report_advanced' || pack.pack_id === 'report_premium')) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'TIER_WAITLIST_ONLY',
+          error: 'This report edition is currently in Notify Me launch mode. Basic Report (₹199) is open for immediate checkout.'
+        }), { status: 409, headers: corsHeaders });
+      }
+
       const amountPaise = pack.amount_paise;
       const currency = 'INR';
 
@@ -5572,7 +5658,49 @@ export default {
         'Access-Control-Allow-Origin': getCorsOrigin(request, env),
         'Vary': 'Origin'
       };
-      return new Response(JSON.stringify(PACK_CATALOG), { status: 200, headers: corsHeaders });
+      const catalogPayload = {
+        ...PACK_CATALOG,
+        feature_flags: {
+          ...PACK_CATALOG.feature_flags,
+          notify_me_higher_tiers: isNotifyMeHigherTiersEnabled(env)
+        }
+      };
+      return new Response(JSON.stringify(catalogPayload), { status: 200, headers: corsHeaders });
+    }
+
+    // 7g. ROUTE: NOTIFY ME WAITLIST (/api/v1/waitlist/notify-me & /api/v1/payments/waitlist/notify-me)
+    if ((url.pathname === '/api/v1/waitlist/notify-me' || url.pathname === '/api/v1/payments/waitlist/notify-me') && request.method === 'POST') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+      const body = await request.json().catch(() => ({}));
+      const emailClean = String(body.email || '').trim().toLowerCase();
+      const rawPack = String(body.pack_id || body.packId || body.sku_id || body.skuId || '').trim().toLowerCase();
+      const normPack = (rawPack === 'report_advanced' || rawPack === 'advanced') ? 'report_advanced'
+        : ((rawPack === 'report_premium' || rawPack === 'premium') ? 'report_premium' : null);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean)) {
+        return new Response(JSON.stringify({ success: false, error: 'Please enter a valid email address.' }), { status: 400, headers: corsHeaders });
+      }
+      if (!normPack) {
+        return new Response(JSON.stringify({ success: false, error: 'Waitlist notifications apply only to Advanced and Premium editions.' }), { status: 400, headers: corsHeaders });
+      }
+      if (body.consent !== true) {
+        return new Response(JSON.stringify({ success: false, error: 'Explicit notification consent is required under DPDP 2023.' }), { status: 400, headers: corsHeaders });
+      }
+      const emailHash = await sha256Hex(emailClean);
+      await logWorkerEvent(env, {
+        event_name: 'waitlist_notify_me_registered',
+        pack_id: normPack,
+        subject_hash: emailHash.slice(0, 16)
+      });
+      return new Response(JSON.stringify({
+        status: 'registered',
+        success: true,
+        pack_id: normPack,
+        message: 'You are on the priority launch list. We will notify you as soon as this edition opens.'
+      }), { status: 200, headers: corsHeaders });
     }
 
     // ── 8. ROUTE: 2027 YEAR AHEAD PLANNER API (/api/planner-2027/*) ──
@@ -7051,18 +7179,8 @@ export default {
       }
       const driver = red(d);
       const conductor = red(d + m + y);
-      let kua = 1;
-      const gender = (body.gender || 'male').toLowerCase();
-      const ySum = red(parseInt(String(y).slice(-2), 10) || 1);
-      if (gender === 'female') {
-        const k = red(ySum + 5);
-        kua = (k === 5) ? 8 : k;
-      } else {
-        let k = 10 - ySum;
-        if (k <= 0) k += 9;
-        k = red(k);
-        kua = (k === 5) ? 2 : k;
-      }
+      const signupKuaDetails = calculateCanonicalKuaDetails(y, body.gender || null);
+      const kua = signupKuaDetails.kuaNumber;
       const personalYear = red(driver + red(m) + red(new Date().getFullYear()));
 
       // Lo Shu Grid
@@ -7098,13 +7216,16 @@ export default {
           longitude: body.longitude || null,
           altitude: body.altitude || null,
           timezone: body.timezone || 'Asia/Kolkata',
-          gender: body.gender || 'male',
+          gender: signupKuaDetails.gender,
           driver: driver,
           driver_mulank: driver,
           conductor: conductor,
           conductor_bhagyank: conductor,
           kua: kua,
           kua_number: kua,
+          kua_display: signupKuaDetails.display,
+          kua_element: signupKuaDetails.elementGroup,
+          kua_rule_note: KUA_RULE_TEXT,
           personal_year: personalYear,
           active_mahadasha: 'Venus',
           lo_shu_counts: loShuCounts,
@@ -7814,3 +7935,5 @@ export default {
       return env.ASSETS.fetch(request);
   }
 };
+
+export { calculateCanonicalKuaDetails, KUA_RULE_TEXT, KUA_NEEDS_GENDER_TEXT };

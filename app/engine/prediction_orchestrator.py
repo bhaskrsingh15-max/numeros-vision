@@ -52,7 +52,7 @@ class PredictionOrchestrator:
         self,
         birth_date: str,  # "YYYY-MM-DD"
         full_name: str,
-        gender: str = "male",
+        gender: Optional[str] = None,
         domain: str = "career",
         question: Optional[str] = None,
         target_year: Optional[int] = None,
@@ -80,8 +80,8 @@ class PredictionOrchestrator:
         missing_numbers = grid_data["missing_numbers"]
         present_numbers = [n for n, c in grid_counts.items() if c > 0]
         
-        # 2. Kua Number
-        kua = calculate_kua_number(dt.year, gender.lower())
+        # 2. Kua Number (never guess gender if missing)
+        kua = calculate_kua_number(dt.year, gender)
         
         # 3. Name Calculation (Chaldean)
         name_eval = calculate_word_value(clean_name)

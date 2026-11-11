@@ -529,7 +529,7 @@ def get_all_product_skus() -> Dict[str, Dict[str, Any]]:
             "pages": tier["pages"],
             "amount_inr": tier["price_inr"],
             "amount_paise": tier["amount_paise"],
-            "original_price_inr": tier["original_price_inr"],
+            "original_price_inr": tier.get("original_price_inr", tier.get("mrp_inr", tier["price_inr"])),
             "currency": CURRENCY,
             "deliverables": tier["deliverables"]
         }
@@ -542,7 +542,7 @@ def get_all_product_skus() -> Dict[str, Dict[str, Any]]:
             "name": bundle["name"],
             "amount_inr": bundle["bundle_price_inr"],
             "amount_paise": bundle["amount_paise"],
-            "original_price_inr": bundle["standalone_total_inr"],
+            "original_price_inr": bundle.get("standalone_total_inr", bundle["bundle_price_inr"]),
             "currency": CURRENCY,
             "deliverables": bundle["deliverables"]
         }
@@ -569,7 +569,7 @@ def get_all_product_skus() -> Dict[str, Dict[str, Any]]:
             "name": consult["name"],
             "amount_inr": consult["price_inr"],
             "amount_paise": consult["amount_paise"],
-            "original_price_inr": consult["original_price_inr"],
+            "original_price_inr": consult.get("original_price_inr", consult["price_inr"]),
             "currency": CURRENCY,
             "deliverables": consult["deliverables"]
         }
@@ -631,10 +631,31 @@ def resolve_sku_price(sku_or_plan_id: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+def is_notify_me_higher_tiers_enabled() -> bool:
+    """
+    Returns True only when the Advanced/Premium 'Notify me' waitlist flag is enabled.
+    Defaults strictly to False ([PENDING LAUNCH DECISION]).
+    """
+    env_val = os.getenv("NV_NOTIFY_ME_HIGHER_TIERS")
+    if env_val is not None and env_val.strip() != "":
+        return env_val.strip().lower() in ("true", "1", "yes")
+    try:
+        packs_path = os.path.join(os.path.dirname(__file__), "packs.json")
+        with open(packs_path, "r", encoding="utf-8") as fh:
+            packs_data = json.load(fh)
+        return bool(packs_data.get("feature_flags", {}).get("notify_me_higher_tiers", False))
+    except Exception:
+        return False
+
+
 def export_pricing_catalog_json() -> str:
     """Exports full public catalog for frontend consumers and API responses."""
     catalog = {
         "currency": CURRENCY,
+        "feature_flags": {
+            "notify_me_higher_tiers": is_notify_me_higher_tiers_enabled(),
+            "notify_me_tiers": ["report_advanced", "report_premium"]
+        },
         "report_tiers": REPORT_TIERS,
         "supported_topics": SUPPORTED_REPORT_TOPICS,
         "bundles": BUNDLES,

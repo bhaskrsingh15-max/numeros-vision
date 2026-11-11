@@ -48,7 +48,7 @@ class TwinParadoxEngine:
         shared_grid = build_birth_date_grid(dt.day, dt.month, dt.year)
         driver = shared_grid["driver"]
         conductor = shared_grid["conductor"]
-        kua = calculate_kua_number(dt.year, gender_a.lower())
+        kua = calculate_kua_number(dt.year, gender_a)
         
         # Format grid counts for complementary evaluation
         grid_counts = shared_grid.get("digit_counts", {})

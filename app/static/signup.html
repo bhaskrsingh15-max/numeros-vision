@@ -1575,18 +1575,21 @@
 
     function calculateKua(year, gender) {
       if (!year || year < 1900) return '-';
-      let sum = 0;
-      String(year).slice(-2).split('').forEach(d => { sum += parseInt(d, 10); });
-      let r = reduceToSingleDigit(sum);
-      if (gender === 'female') {
-        let k = reduceToSingleDigit(r + 5);
-        return k === 5 ? 8 : k;
-      } else {
-        let k = 10 - r;
-        if (k <= 0) k += 9;
-        k = reduceToSingleDigit(k);
-        return k === 5 ? 2 : k;
+      const g = (gender || '').trim().toLowerCase();
+      if (g !== 'male' && g !== 'female' && g !== 'm' && g !== 'f') {
+        return 'Kua needs gender';
       }
+      let sum = 0;
+      String(year).padStart(4, '0').split('').forEach(d => {
+        if (d >= '0' && d <= '9') sum += parseInt(d, 10);
+      });
+      const x = reduceToSingleDigit(sum);
+      if (g === 'female' || g === 'f') {
+        const k = reduceToSingleDigit(4 + x);
+        return k === 5 ? 8 : k;
+      }
+      const k = reduceToSingleDigit(11 - x);
+      return k === 5 ? 2 : k;
     }
 
     function calculatePersonalYear(day, month, targetYear) {

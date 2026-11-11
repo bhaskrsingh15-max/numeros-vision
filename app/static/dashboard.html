@@ -535,6 +535,7 @@
           <div class="vector-label">Kua Number</div>
           <div class="vector-val" id="dashKuaVal">--</div>
           <div class="vector-sub" id="dashKuaDirection">--</div>
+          <div class="vector-sub" id="dashKuaRule" style="font-size:0.68rem;opacity:0.86;margin-top:2px;">Calculated from your birth year and gender</div>
         </div>
         <div class="vector-box">
           <div class="vector-label">Personal Year</div>
@@ -1006,8 +1007,10 @@
       if (cValEl) cValEl.textContent = cVal;
       if (dPlanetEl) dPlanetEl.textContent = dPlanet;
       if (cPlanetEl) cPlanetEl.textContent = cPlanet;
-      if (kuaValEl) kuaValEl.textContent = calc.kua || '—';
-      if (kuaDirEl) kuaDirEl.textContent = calc.kuaDirection || '—';
+      if (kuaValEl) kuaValEl.textContent = calc.kuaDisplay || (calc.kua != null ? String(calc.kua) : 'Kua needs gender');
+      if (kuaDirEl) kuaDirEl.textContent = calc.kuaDirection || 'Kua needs gender';
+      const kuaRuleEl = document.getElementById('dashKuaRule');
+      if (kuaRuleEl) kuaRuleEl.textContent = calc.kuaRule || 'Calculated from your birth year and gender';
       if (pyValEl) pyValEl.textContent = calc.personalYear || '—';
 
       // 3x3 Grid Cells
