@@ -1265,12 +1265,13 @@
         
         <!-- Basic Report (₹199) -->
         <div class="tier-card card-report-basic" id="tier-card-basic">
+          <div class="tier-badge" id="tier-badge-basic" style="display:none;">RECOMMENDED</div>
           <div>
             <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Foundation · 3 Pages</div>
             <h3 class="tier-name">Basic Report</h3>
             <div class="tier-meta">Core Numbers &amp; Elemental Distribution</div>
             <div class="tier-price" id="price-report_basic">₹199 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹289</span></div>
-            <div class="tier-price-sub">Launch offer valid until 31 Jan 2027 · GST included</div>
+            <div class="tier-price-sub">Launch offer valid until 31 Jan 2027</div>
             <ul class="tier-features" id="features-report_basic">
               <li>3-Page Personalised Executive PDF</li>
               <li>Deterministic Mulank &amp; Bhagyank Calculations</li>
@@ -1286,13 +1287,13 @@
 
         <!-- Advanced Report (₹489) - HIGHLIGHTED DEFAULT -->
         <div class="tier-card highlighted card-report-advanced" id="tier-card-advanced">
-          <div class="tier-badge">RECOMMENDED</div>
+          <div class="tier-badge" id="tier-badge-advanced">RECOMMENDED</div>
           <div>
             <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Synthesis · 12 Pages</div>
             <h3 class="tier-name">Advanced Master Dossier</h3>
             <div class="tier-meta">5-Year Dasha Timing &amp; Remedy Protocols</div>
             <div class="tier-price" id="price-report_advanced">₹489 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹699</span></div>
-            <div class="tier-price-sub">Launch offer valid until 31 Jan 2027 · GST included</div>
+            <div class="tier-price-sub">Launch offer valid until 31 Jan 2027</div>
             <ul class="tier-features" id="features-report_advanced">
               <li>12-Page Master Synthesis PDF Dossier</li>
               <li>Includes all Basic calculations + 5-Year Dasha Timing</li>
@@ -1308,12 +1309,13 @@
 
         <!-- Premium Dossier (₹1,050) -->
         <div class="tier-card card-report-premium" id="tier-card-premium">
+          <div class="tier-badge" id="tier-badge-premium" style="display:none;">RECOMMENDED</div>
           <div>
             <div style="font-size:0.72rem; color:var(--emerald); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Sovereign · 32 Pages</div>
             <h3 class="tier-name">Premium Sovereign Blueprint</h3>
             <div class="tier-meta">10-Year Timing Radar &amp; Dual Synastry</div>
             <div class="tier-price" id="price-report_premium">₹1,050 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹1,479</span></div>
-            <div class="tier-price-sub">Launch offer valid until 31 Jan 2027 · GST included</div>
+            <div class="tier-price-sub">Launch offer valid until 31 Jan 2027</div>
             <ul class="tier-features" id="features-report_premium">
               <li>32-Page Sovereign Executive Master Blueprint PDF</li>
               <li>Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)</li>
@@ -1413,13 +1415,13 @@
 
   <!-- FLAGGED "NOTIFY ME" WAITLIST MODAL FOR ADVANCED & PREMIUM (OFF BY DEFAULT) -->
   <div id="notify-me-modal" class="checkout-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="notify-me-title">
-    <div class="checkout-modal-card" style="max-width:480px;">
+    <div class="checkout-modal-card" style="max-width:500px;">
       <button type="button" class="checkout-modal-close" onclick="closeNotifyMeModal()" aria-label="Close Notify Me Dialog">&times;</button>
       <div class="checkout-modal-header">
         <div class="checkout-modal-tier-tag" id="notify-me-tier-tag">Priority Release Alert</div>
         <h2 class="checkout-modal-title" id="notify-me-title">Get Notified When Ready</h2>
-        <div style="font-size:0.86rem; color:var(--ink-muted); line-height:1.5;">
-          Leave your email to receive a single release notification as soon as this expanded edition opens. Your 3-Page Basic Report (₹199) is available immediately today.
+        <div style="font-size:0.85rem; color:var(--ink-muted); line-height:1.5;">
+          Purpose: <strong>&ldquo;tell me when this report is available&rdquo;</strong>. Your email is encrypted at rest (AES-256-GCM), retained for at most <strong>12 months</strong>, and can be permanently deleted on request below. Your 3-Page Basic Report (₹199) is available immediately today.
         </div>
       </div>
       <form id="notify-me-form" onsubmit="event.preventDefault(); submitNotifyMeForm();">
@@ -1430,13 +1432,18 @@
         <div class="checkout-consents" style="margin-bottom:16px;">
           <label class="checkout-consent-item" for="notify-me-consent">
             <input type="checkbox" id="notify-me-consent" autocomplete="off" required />
-            <span>I consent to receive a one-time availability email for this report edition in accordance with the Privacy Policy.</span>
+            <span id="notify-me-consent-label">I consent to Numeros Vision storing my encrypted email address for 12 months solely for the purpose: &ldquo;tell me when this report is available&rdquo;, with the right to delete my email record on request at any time under the DPDP Act 2023.</span>
           </label>
         </div>
         <div id="notify-me-status" style="font-size:0.8rem; min-height:20px; margin-bottom:12px;"></div>
         <button type="submit" id="btn-notify-me-submit" class="btn-checkout-pay">
           <span>Notify Me at Launch</span> <span>✦</span>
         </button>
+        <div style="margin-top:10px; text-align:center;">
+          <button type="button" id="btn-notify-me-delete" onclick="deleteNotifyMeRequest()" style="background:none; border:none; color:var(--ink-muted); font-size:0.78rem; text-decoration:underline; cursor:pointer; padding:4px 8px;">
+            Delete my waitlist email record (DPDP Right to Erasure)
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -1614,7 +1621,11 @@
     };
 
     let _loshuCountsCache = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+    let _currentLoShuGapCount = null;
     let _notifyMeTargetSku = 'report_advanced';
+    const WAITLIST_PURPOSE = 'tell me when this report is available';
+    const WAITLIST_DPDP_CONSENT_TEXT =
+      'I consent to Numeros Vision storing my encrypted email address for 12 months solely for the purpose: "tell me when this report is available", with the right to delete my email record on request at any time under the DPDP Act 2023.';
 
     async function loadLoShuPublicTeasers() {
       const candidateUrls = ['/static/data/loshu_public_teasers.json', '/data/loshu_public_teasers.json', '/api/v1/public/loshu-teasers'];
@@ -1855,6 +1866,7 @@
         if (counts[n] > 0) activeCount++;
       }
       const openCount = 9 - activeCount;
+      _currentLoShuGapCount = openCount;
       const activePercent = Math.round((activeCount / 9) * 100);
 
       if (subtitleEl) {
@@ -1917,6 +1929,7 @@
         `;
       }).join('');
 
+      applyLadderRecommendation();
       trackFunnelEvent('loshu_grid_rendered', { active_cells: activeCount, open_cells: openCount });
     }
 
@@ -2033,39 +2046,95 @@
       return false;
     }
 
-    function applyNotifyMeTierMode() {
+    function recommendLadderTierByGaps(gapCount, notifyActive) {
+      if (notifyActive === true) return 'report_basic';
+      if (gapCount === null || gapCount === undefined || Number.isNaN(Number(gapCount))) {
+        return 'report_advanced';
+      }
+      const gaps = Math.max(0, Math.min(9, Math.trunc(Number(gapCount))));
+      if (gaps <= 2) return 'report_basic';
+      if (gaps <= 5) return 'report_advanced';
+      return 'report_premium';
+    }
+    window.recommendLadderTierByGaps = recommendLadderTierByGaps;
+
+    function applyLadderRecommendation() {
       const notifyAdv = isNotifyMeEnabledForSku('report_advanced');
       const notifyPrem = isNotifyMeEnabledForSku('report_premium');
-      if (!notifyAdv && !notifyPrem) return;
+      const notifyActive = notifyAdv || notifyPrem;
+      const plannerContainer = document.getElementById('planner-feature-container');
+      const plannerFeatured = Boolean(plannerContainer && plannerContainer.style.display === 'block');
 
-      const basicCard = document.getElementById('tier-card-basic');
-      const basicBtn = document.getElementById('btn-select-report_basic');
-      const advCard = document.getElementById('tier-card-advanced');
-      const advBtn = document.getElementById('btn-select-report_advanced');
-      const premBtn = document.getElementById('btn-select-report_premium');
-
-      if (basicCard && basicBtn) {
-        basicCard.classList.add('highlighted');
-        basicBtn.className = 'btn-select-tier btn-select-gold';
-        basicBtn.innerHTML = '<span>Select Basic Report — ₹199</span> <span>✦</span>';
-      }
-      if (notifyAdv && advCard && advBtn) {
-        advCard.classList.remove('highlighted');
-        const badge = advCard.querySelector('.tier-badge');
-        if (badge) {
-          badge.textContent = 'WAITLIST · NOTIFY ME';
-          badge.style.background = 'var(--ink-muted)';
+      const recommendedSku = recommendLadderTierByGaps(_currentLoShuGapCount, notifyActive);
+      const tierDefs = [
+        {
+          sku: 'report_basic',
+          card: document.getElementById('tier-card-basic'),
+          badge: document.getElementById('tier-badge-basic'),
+          btn: document.getElementById('btn-select-report_basic'),
+          normalLabel: 'Select Basic Report',
+          goldLabel: notifyActive ? 'Select Basic Report — ₹199' : 'Select Basic Report',
+          waitlist: false
+        },
+        {
+          sku: 'report_advanced',
+          card: document.getElementById('tier-card-advanced'),
+          badge: document.getElementById('tier-badge-advanced'),
+          btn: document.getElementById('btn-select-report_advanced'),
+          normalLabel: 'Select Advanced Dossier',
+          goldLabel: 'Select Advanced Dossier',
+          waitlist: notifyAdv
+        },
+        {
+          sku: 'report_premium',
+          card: document.getElementById('tier-card-premium'),
+          badge: document.getElementById('tier-badge-premium'),
+          btn: document.getElementById('btn-select-report_premium'),
+          normalLabel: 'Select Premium Blueprint',
+          goldLabel: 'Select Premium Blueprint',
+          waitlist: notifyPrem
         }
-        advBtn.className = 'btn-select-tier btn-select-outline';
-        advBtn.innerHTML = '<span>Notify Me When Ready</span> <span>✉</span>';
-        advBtn.setAttribute('onclick', "openNotifyMeModal('report_advanced')");
-      }
-      if (notifyPrem && premBtn) {
-        premBtn.className = 'btn-select-tier btn-select-outline';
-        premBtn.innerHTML = '<span>Notify Me When Ready</span> <span>✉</span>';
-        premBtn.setAttribute('onclick', "openNotifyMeModal('report_premium')");
-      }
+      ];
+
+      tierDefs.forEach(t => {
+        if (!t.card || !t.btn) return;
+
+        if (t.waitlist) {
+          // Never recommend a waitlist tier
+          t.card.classList.remove('highlighted');
+          if (t.badge) {
+            t.badge.textContent = 'WAITLIST · NOTIFY ME';
+            t.badge.style.background = 'var(--ink-muted)';
+            t.badge.style.display = 'block';
+          }
+          t.btn.className = 'btn-select-tier btn-select-outline';
+          t.btn.innerHTML = '<span>Notify Me When Ready</span> <span>✉</span>';
+          t.btn.setAttribute('onclick', `openNotifyMeModal('${t.sku}')`);
+          return;
+        }
+
+        t.btn.setAttribute('onclick', `selectTierAndProceed('${t.sku}')`);
+        const isRec = (t.sku === recommendedSku) && (notifyActive || !plannerFeatured);
+        if (isRec) {
+          t.card.classList.add('highlighted');
+          if (t.badge) {
+            t.badge.textContent = 'RECOMMENDED';
+            t.badge.style.background = '';
+            t.badge.style.display = 'block';
+          }
+          t.btn.className = 'btn-select-tier btn-select-gold';
+          t.btn.innerHTML = `<span>${t.goldLabel}</span> <span>✦</span>`;
+        } else {
+          t.card.classList.remove('highlighted');
+          if (t.badge) {
+            t.badge.style.display = 'none';
+          }
+          t.btn.className = 'btn-select-tier btn-select-outline';
+          t.btn.innerHTML = `<span>${t.normalLabel}</span> <span>&rarr;</span>`;
+        }
+      });
     }
+    const applyNotifyMeTierMode = applyLadderRecommendation;
 
     function openNotifyMeModal(skuId) {
       _notifyMeTargetSku = skuId || 'report_advanced';
@@ -2098,11 +2167,11 @@
         return;
       }
       if (!consent) {
-        if (statusEl) { statusEl.textContent = 'Please tick the consent box to join the release alert list.'; statusEl.style.color = '#B91C1C'; }
+        if (statusEl) { statusEl.textContent = 'Please tick the DPDP consent box to join the release alert list.'; statusEl.style.color = '#B91C1C'; }
         return;
       }
 
-      if (btn) { btn.disabled = true; btn.textContent = 'Recording Request...'; }
+      if (btn) { btn.disabled = true; btn.textContent = 'Encrypting & Recording...'; }
       try {
         const res = await fetch('/api/v1/waitlist/notify-me', {
           method: 'POST',
@@ -2113,13 +2182,15 @@
             pack_id: _notifyMeTargetSku,
             sku_id: _notifyMeTargetSku,
             consent: true,
+            purpose: WAITLIST_PURPOSE,
+            consent_text: WAITLIST_DPDP_CONSENT_TEXT,
             source_page: 'your-reading'
           })
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && (data.success || data.status === 'registered' || data.status === 'recorded')) {
           if (statusEl) {
-            statusEl.textContent = data.message || 'Thank you. We will email you once when this edition opens.';
+            statusEl.textContent = data.message || 'Recorded. Your encrypted email will be retained for up to 12 months solely to tell you when this report is available.';
             statusEl.style.color = 'var(--emerald)';
           }
           trackFunnelEvent('notify_me_registered', { sku_id: _notifyMeTargetSku });
@@ -2138,6 +2209,48 @@
         if (btn) { btn.disabled = false; btn.innerHTML = '<span>Notify Me at Launch</span> <span>✦</span>'; }
       }
     }
+
+    async function deleteNotifyMeRequest() {
+      const email = (document.getElementById('notify-me-email')?.value || '').trim().toLowerCase();
+      const statusEl = document.getElementById('notify-me-status');
+      const delBtn = document.getElementById('btn-notify-me-delete');
+      if (!email || !email.includes('@')) {
+        if (statusEl) {
+          statusEl.textContent = 'Enter your email address above first so we can locate and erase your waitlist record.';
+          statusEl.style.color = '#B91C1C';
+        }
+        return;
+      }
+      if (delBtn) delBtn.disabled = true;
+      try {
+        const res = await fetch('/api/v1/waitlist/notify-me/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ email: email })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && (data.success || data.status === 'deleted')) {
+          if (statusEl) {
+            statusEl.textContent = data.message || 'Your encrypted email has been permanently deleted from the waitlist.';
+            statusEl.style.color = 'var(--emerald)';
+          }
+        } else {
+          if (statusEl) {
+            statusEl.textContent = data.detail || data.error || 'Unable to delete waitlist record right now.';
+            statusEl.style.color = '#B91C1C';
+          }
+        }
+      } catch (_) {
+        if (statusEl) {
+          statusEl.textContent = 'Network error while deleting waitlist record.';
+          statusEl.style.color = '#B91C1C';
+        }
+      } finally {
+        if (delBtn) delBtn.disabled = false;
+      }
+    }
+    window.deleteNotifyMeRequest = deleteNotifyMeRequest;
 
     function setTierPricePreservingMrp(elId, priceInr, mrpInr) {
       const el = document.getElementById(elId);
@@ -2213,15 +2326,7 @@
         document.getElementById('summary-py-container').style.display = 'block';
         document.getElementById('summary-personal-year').textContent = data.personalYear || 'Cycle Active';
         document.getElementById('planner-feature-container').style.display = 'block';
-
-        const advCard = document.getElementById('tier-card-advanced');
-        if (advCard) {
-          advCard.classList.remove('highlighted');
-          const badge = advCard.querySelector('.tier-badge');
-          if (badge) badge.style.display = 'none';
-          const btn = document.getElementById('btn-select-report_advanced');
-          if (btn) { btn.className = 'btn-select-tier btn-select-outline'; btn.innerHTML = '<span>Select Advanced Dossier</span> <span>&rarr;</span>'; }
-        }
+        applyLadderRecommendation();
       }
 
       fetchServerPricingCatalog();
@@ -2592,6 +2697,14 @@
         }
       } catch (e) {
         console.warn('Verification request error:', e);
+      }
+    }
+
+    function showCheckoutInlineError(msg) {
+      const statusEl = document.getElementById('checkout-otp-status');
+      if (statusEl) {
+        statusEl.textContent = msg || 'Unable to process checkout request.';
+        statusEl.style.color = '#B91C1C';
       }
     }
 

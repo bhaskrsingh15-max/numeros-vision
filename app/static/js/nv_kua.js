@@ -12,12 +12,12 @@
  * 5. Missing or unrecognized gender returns display='Kua needs gender' — never guesses.
  */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) {
-    module.exports = factory();
-  } else {
-    root.NVKua = factory();
+  var api = factory();
+  root.NVKua = api;
+  if (typeof window === 'undefined' && root) {
+    Object.keys(api).forEach(function (k) { root[k] = api[k]; });
   }
-})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+})(typeof window !== 'undefined' ? window : this, function () {
   'use strict';
 
   var KUA_RULE_TEXT = 'Calculated from your birth year and gender';

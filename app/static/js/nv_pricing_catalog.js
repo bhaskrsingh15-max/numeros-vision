@@ -817,6 +817,20 @@
       if (!this.isNotifyMeHigherTiersEnabled()) return false;
       const clean = (skuId || '').toLowerCase();
       return ['advanced', 'report_advanced', 'report_master', 'premium', 'report_premium', 'report_divine'].includes(clean);
+    },
+
+    recommendLadderTier(gapCount, notifyOverride) {
+      const notifyActive = typeof notifyOverride === 'boolean'
+        ? notifyOverride
+        : this.isNotifyMeHigherTiersEnabled();
+      if (notifyActive) return 'report_basic';
+      if (gapCount === null || gapCount === undefined || Number.isNaN(Number(gapCount))) {
+        return 'report_advanced';
+      }
+      const gaps = Math.max(0, Math.min(9, Math.trunc(Number(gapCount))));
+      if (gaps <= 2) return 'report_basic';
+      if (gaps <= 5) return 'report_advanced';
+      return 'report_premium';
     }
   };
 

@@ -267,6 +267,7 @@ const memoryStore = {
   emailOtpChallenges: new Map(),
   emailRateLimits: new Map(),
   userConsents: new Map(),
+  waitlistNotifyMe: new Map(),
   sentEmails: []
 };
 
@@ -843,6 +844,317 @@ function isNotifyMeHigherTiersEnabled(env) {
     return v === 'true' || v === '1' || v === 'yes';
   }
   return Boolean(PACK_CATALOG.feature_flags && PACK_CATALOG.feature_flags.notify_me_higher_tiers);
+}
+
+function recommendLadderTier(gapCount = null, notifyMeActive = false) {
+  if (notifyMeActive === true) return 'report_basic';
+  if (gapCount === null || gapCount === undefined || Number.isNaN(Number(gapCount))) {
+    return 'report_advanced';
+  }
+  const gaps = Math.max(0, Math.min(9, Math.trunc(Number(gapCount))));
+  if (gaps <= 2) return 'report_basic';
+  if (gaps <= 5) return 'report_advanced';
+  return 'report_premium';
+}
+
+const WAITLIST_PURPOSE = 'tell me when this report is available';
+const WAITLIST_RETENTION_MONTHS = 12;
+const WAITLIST_RETENTION_SECONDS = 365 * 86400;
+const WAITLIST_CONSENT_VERSION = 'dpdp_waitlist_v1.0';
+const WAITLIST_DPDP_CONSENT_TEXT =
+  'I consent to Numeros Vision storing my encrypted email address for 12 months solely for the purpose: "tell me when this report is available", with the right to delete my email record on request at any time under the DPDP Act 2023.';
+const _WAITLIST_LOCAL_DEV_KEY = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
+
+function normalizeWaitlistPackId(rawPack) {
+  const clean = String(rawPack || '').trim().toLowerCase();
+  if (clean === 'report_advanced' || clean === 'advanced' || clean === 'report_master' || clean === 'master') {
+    return 'report_advanced';
+  }
+  if (clean === 'report_premium' || clean === 'premium' || clean === 'report_divine' || clean === 'divine') {
+    return 'report_premium';
+  }
+  return null;
+}
+
+function getWaitlistEncryptionKey(env) {
+  const configured = env && typeof env.DATA_ENCRYPTION_KEY === 'string' ? env.DATA_ENCRYPTION_KEY.trim() : '';
+  if (configured) {
+    parse32ByteKey(configured);
+    return configured;
+  }
+  const mode = ((env && env.ENVIRONMENT) || 'production').toString().trim().toLowerCase();
+  if (mode === 'local' || mode === 'test') {
+    return _WAITLIST_LOCAL_DEV_KEY;
+  }
+  return requireSecret(env || {}, 'DATA_ENCRYPTION_KEY');
+}
+
+async function ensureWaitlistTable(db) {
+  if (!db) return;
+  await db.prepare(`
+    CREATE TABLE IF NOT EXISTS waitlist_notify_me (
+      id TEXT PRIMARY KEY,
+      email_sha256 TEXT NOT NULL,
+      email_enc TEXT NOT NULL,
+      pack_id TEXT NOT NULL,
+      purpose TEXT NOT NULL DEFAULT 'tell me when this report is available',
+      consent_dpdp INTEGER NOT NULL DEFAULT 1,
+      consent_text TEXT NOT NULL,
+      consent_version TEXT NOT NULL DEFAULT 'dpdp_waitlist_v1.0',
+      retention_months INTEGER NOT NULL DEFAULT 12,
+      source_page TEXT,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      expires_at INTEGER NOT NULL,
+      UNIQUE(email_sha256, pack_id)
+    )
+  `).run();
+}
+
+async function registerWaitlistNotifyMe(env, body = {}, nowOverrideSec = null) {
+  const emailClean = String(body.email || '').trim().toLowerCase();
+  const normPack = normalizeWaitlistPackId(body.pack_id || body.packId || body.sku_id || body.skuId);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean)) {
+    return { status: 400, payload: { success: false, error: 'Please enter a valid email address.' } };
+  }
+  if (!normPack) {
+    return { status: 400, payload: { success: false, error: 'Waitlist notifications apply only to Advanced and Premium editions.' } };
+  }
+  if (body.consent !== true) {
+    return { status: 400, payload: { success: false, error: 'Explicit notification consent is required under DPDP 2023.' } };
+  }
+  const purpose = String(body.purpose || WAITLIST_PURPOSE).trim();
+  if (purpose !== WAITLIST_PURPOSE) {
+    return { status: 400, payload: { success: false, error: `Invalid waitlist purpose; expected "${WAITLIST_PURPOSE}".` } };
+  }
+  const consentText = String(body.consent_text || body.consentText || WAITLIST_DPDP_CONSENT_TEXT).trim() || WAITLIST_DPDP_CONSENT_TEXT;
+  const sourcePage = String(body.source_page || body.sourcePage || 'your_reading').slice(0, 64);
+
+  const nowSec = nowOverrideSec !== null ? Math.trunc(nowOverrideSec) : Math.floor(Date.now() / 1000);
+  const expiresAt = nowSec + WAITLIST_RETENTION_SECONDS;
+  const emailHash = await sha256Hex(emailClean);
+  const dataEncKey = getWaitlistEncryptionKey(env);
+  const emailEnc = await encryptField(emailClean, dataEncKey);
+
+  let recordId = 'wl_' + nowSec + '_' + getRandomHex(4);
+  let deduplicated = false;
+
+  if (env && env.DB) {
+    await ensureWaitlistTable(env.DB);
+    await env.DB.prepare('DELETE FROM waitlist_notify_me WHERE expires_at <= ?').bind(nowSec).run();
+    const existing = await env.DB.prepare(
+      'SELECT id, created_at FROM waitlist_notify_me WHERE email_sha256 = ? AND pack_id = ?'
+    ).bind(emailHash, normPack).first();
+    if (existing) {
+      deduplicated = true;
+      recordId = existing.id;
+      await env.DB.prepare(`
+        UPDATE waitlist_notify_me
+        SET email_enc = ?, purpose = ?, consent_dpdp = 1, consent_text = ?, consent_version = ?, retention_months = ?, source_page = ?, updated_at = ?, expires_at = ?
+        WHERE email_sha256 = ? AND pack_id = ?
+      `).bind(emailEnc, WAITLIST_PURPOSE, consentText, WAITLIST_CONSENT_VERSION, WAITLIST_RETENTION_MONTHS, sourcePage, nowSec, expiresAt, emailHash, normPack).run();
+    } else {
+      await env.DB.prepare(`
+        INSERT INTO waitlist_notify_me (
+          id, email_sha256, email_enc, pack_id, purpose, consent_dpdp, consent_text,
+          consent_version, retention_months, source_page, created_at, updated_at, expires_at
+        ) VALUES (?, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        recordId, emailHash, emailEnc, normPack, WAITLIST_PURPOSE, consentText,
+        WAITLIST_CONSENT_VERSION, WAITLIST_RETENTION_MONTHS, sourcePage, nowSec, nowSec, expiresAt
+      ).run();
+    }
+  } else {
+    memoryStore.waitlistNotifyMe = memoryStore.waitlistNotifyMe || new Map();
+    for (const [k, rec] of memoryStore.waitlistNotifyMe.entries()) {
+      if (!rec || Number(rec.expires_at || 0) <= nowSec) {
+        memoryStore.waitlistNotifyMe.delete(k);
+      }
+    }
+    const dedupeKey = `${emailHash}_${normPack}`;
+    const prev = memoryStore.waitlistNotifyMe.get(dedupeKey);
+    if (prev) {
+      deduplicated = true;
+      recordId = prev.id;
+    }
+    memoryStore.waitlistNotifyMe.set(dedupeKey, {
+      id: recordId,
+      email_sha256: emailHash,
+      email_enc: emailEnc,
+      pack_id: normPack,
+      purpose: WAITLIST_PURPOSE,
+      consent_dpdp: true,
+      consent_text: consentText,
+      consent_version: WAITLIST_CONSENT_VERSION,
+      retention_months: WAITLIST_RETENTION_MONTHS,
+      source_page: sourcePage,
+      created_at: prev ? prev.created_at : nowSec,
+      updated_at: nowSec,
+      expires_at: expiresAt
+    });
+  }
+
+  await logWorkerEvent(env, {
+    event_name: 'waitlist_notify_me_registered',
+    pack_id: normPack,
+    subject_hash: emailHash.slice(0, 16)
+  });
+
+  return {
+    status: 200,
+    payload: {
+      status: 'registered',
+      success: true,
+      id: recordId,
+      pack_id: normPack,
+      deduplicated,
+      purpose: WAITLIST_PURPOSE,
+      retention_months: WAITLIST_RETENTION_MONTHS,
+      expires_at: expiresAt,
+      consent_version: WAITLIST_CONSENT_VERSION,
+      message: 'You are on the priority launch list. Your encrypted email is stored for up to 12 months solely to tell you when this report is available, and can be deleted at any time.'
+    }
+  };
+}
+
+async function deleteWaitlistNotifyMe(env, body = {}) {
+  const emailClean = String(body.email || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean)) {
+    return { status: 400, payload: { success: false, error: 'Please enter a valid email address.' } };
+  }
+  const rawPack = String(body.pack_id || body.packId || body.sku_id || body.skuId || '').trim();
+  const normPack = rawPack ? normalizeWaitlistPackId(rawPack) : null;
+  if (rawPack && !normPack) {
+    return { status: 400, payload: { success: false, error: 'Invalid pack_id; expected report_advanced or report_premium.' } };
+  }
+
+  const emailHash = await sha256Hex(emailClean);
+  let deletedCount = 0;
+
+  if (env && env.DB) {
+    await ensureWaitlistTable(env.DB);
+    if (normPack) {
+      const res = await env.DB.prepare('DELETE FROM waitlist_notify_me WHERE email_sha256 = ? AND pack_id = ?').bind(emailHash, normPack).run();
+      deletedCount = (res && res.meta && typeof res.meta.changes === 'number') ? res.meta.changes : 0;
+    } else {
+      const res = await env.DB.prepare('DELETE FROM waitlist_notify_me WHERE email_sha256 = ?').bind(emailHash).run();
+      deletedCount = (res && res.meta && typeof res.meta.changes === 'number') ? res.meta.changes : 0;
+    }
+  } else if (memoryStore.waitlistNotifyMe) {
+    for (const [k, rec] of memoryStore.waitlistNotifyMe.entries()) {
+      if (rec && rec.email_sha256 === emailHash && (!normPack || rec.pack_id === normPack)) {
+        memoryStore.waitlistNotifyMe.delete(k);
+        deletedCount++;
+      }
+    }
+  }
+
+  await logWorkerEvent(env, {
+    event_name: 'waitlist_notify_me_deleted',
+    pack_id: normPack || 'all',
+    subject_hash: emailHash.slice(0, 16)
+  });
+
+  return {
+    status: 200,
+    payload: {
+      status: 'deleted',
+      success: true,
+      deleted_count: deletedCount,
+      pack_id: normPack,
+      message: deletedCount > 0
+        ? 'Your encrypted email has been permanently deleted from the waitlist.'
+        : 'No matching waitlist record was found for that email address.'
+    }
+  };
+}
+
+async function buildWaitlistNotificationEmail(record, dataEncKey, nowOverrideSec = null) {
+  if (!record || typeof record !== 'object') {
+    throw new Error('Waitlist record is required.');
+  }
+  if (record.deleted_at) {
+    throw new Error('Cannot produce notification email for a deleted waitlist record.');
+  }
+  const consented = record.consent_dpdp === true || record.consent_dpdp === 1;
+  if (!consented) {
+    throw new Error('Cannot produce notification email without explicit DPDP consent.');
+  }
+  if (record.purpose !== WAITLIST_PURPOSE) {
+    throw new Error(`Waitlist record purpose mismatch: expected "${WAITLIST_PURPOSE}".`);
+  }
+  const nowSec = nowOverrideSec !== null ? Math.trunc(nowOverrideSec) : Math.floor(Date.now() / 1000);
+  if (Number(record.expires_at || 0) <= nowSec) {
+    throw new Error('Waitlist record has expired beyond its 12-month retention window.');
+  }
+  const normPack = normalizeWaitlistPackId(record.pack_id);
+  if (!normPack) {
+    throw new Error('Unsupported waitlist pack_id.');
+  }
+  if (!record.email_enc) {
+    throw new Error('Waitlist record is missing encrypted email (email_enc).');
+  }
+  const toEmail = await decryptField(record.email_enc, dataEncKey);
+  if (!toEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(toEmail)) {
+    throw new Error('Decrypted waitlist recipient email is invalid.');
+  }
+
+  const packTitle = normPack === 'report_premium'
+    ? 'Premium Sovereign Blueprint (32 Pages)'
+    : 'Advanced Master Dossier (12 Pages)';
+  const subject = `${packTitle} Is Now Available | NUMEROS VISION`;
+  const text =
+    `Namaste,\n\n` +
+    `You asked us to tell you when ${packTitle} becomes available on NUMEROS VISION.\n\n` +
+    `This edition is now open at https://numerosvision.com/pricing.html\n\n` +
+    `Why you received this email: You provided explicit DPDP 2023 consent for the single purpose "${WAITLIST_PURPOSE}" (12-month maximum retention).\n` +
+    `To delete your waitlist record at any time, use the Delete Waitlist Email option or contact privacy@numerosvision.com.\n\n` +
+    `NUMEROS VISION · ANVIEL EVERY CHARM`;
+  const html =
+    `<div style="font-family:Inter,Arial,sans-serif;background:#FFFDF7;color:#523E28;padding:24px;border:1px solid #C9A227;border-radius:12px;max-width:560px;">` +
+    `<div style="font-size:12px;letter-spacing:0.12em;color:#8B6914;font-weight:700;">NUMEROS VISION · ANVIEL EVERY CHARM</div>` +
+    `<h2 style="color:#523E28;margin:10px 0 8px;">${packTitle} Is Now Available</h2>` +
+    `<p>You asked us to tell you when <strong>${packTitle}</strong> opens.</p>` +
+    `<p><a href="https://numerosvision.com/pricing.html" style="display:inline-block;padding:10px 18px;background:#8B6914;color:#FFFDF7;text-decoration:none;border-radius:8px;font-weight:600;">View Available Report</a></p>` +
+    `<p style="font-size:12px;color:#7A654D;margin-top:18px;">Sent strictly under your DPDP 2023 consent for purpose: "${WAITLIST_PURPOSE}" (12-month retention).</p>` +
+    `</div>`;
+
+  return {
+    to: toEmail,
+    subject,
+    purpose: WAITLIST_PURPOSE,
+    pack_id: normPack,
+    text,
+    html
+  };
+}
+
+async function dispatchWaitlistNotificationsForPack(env, packId, nowOverrideSec = null) {
+  const normPack = normalizeWaitlistPackId(packId);
+  if (!normPack) throw new Error('Unsupported waitlist pack_id.');
+  const nowSec = nowOverrideSec !== null ? Math.trunc(nowOverrideSec) : Math.floor(Date.now() / 1000);
+  const dataEncKey = getWaitlistEncryptionKey(env);
+  let rows = [];
+  if (env && env.DB) {
+    await ensureWaitlistTable(env.DB);
+    const res = await env.DB.prepare(
+      'SELECT * FROM waitlist_notify_me WHERE pack_id = ? AND expires_at > ?'
+    ).bind(normPack, nowSec).all();
+    rows = (res && res.results) ? res.results : [];
+  } else if (memoryStore.waitlistNotifyMe) {
+    for (const rec of memoryStore.waitlistNotifyMe.values()) {
+      if (rec && rec.pack_id === normPack && Number(rec.expires_at || 0) > nowSec) {
+        rows.push(rec);
+      }
+    }
+  }
+  const produced = [];
+  for (const row of rows) {
+    const emailMsg = await buildWaitlistNotificationEmail(row, dataEncKey, nowSec);
+    const dispatchRes = await sendTransactionalEmail(env, emailMsg);
+    produced.push({ email: emailMsg, dispatch: dispatchRes });
+  }
+  return produced;
 }
 
 function getPackById(packId) {
@@ -2246,6 +2558,14 @@ export {
   signOrderAccessToken,
   verifyOrderAccessToken,
   verifyTurnstileToken,
+  WAITLIST_PURPOSE,
+  WAITLIST_RETENTION_MONTHS,
+  WAITLIST_DPDP_CONSENT_TEXT,
+  recommendLadderTier,
+  registerWaitlistNotifyMe,
+  deleteWaitlistNotifyMe,
+  buildWaitlistNotificationEmail,
+  dispatchWaitlistNotificationsForPack,
   memoryStore
 };
 export default {
@@ -5658,49 +5978,58 @@ export default {
         'Access-Control-Allow-Origin': getCorsOrigin(request, env),
         'Vary': 'Origin'
       };
+      const notifyFlag = isNotifyMeHigherTiersEnabled(env);
       const catalogPayload = {
         ...PACK_CATALOG,
         feature_flags: {
           ...PACK_CATALOG.feature_flags,
-          notify_me_higher_tiers: isNotifyMeHigherTiersEnabled(env)
+          notify_me_higher_tiers: notifyFlag
+        },
+        ladder_recommendation_rule: {
+          when_notify_me_true: 'report_basic',
+          when_notify_me_false: {
+            '0_to_2_gaps': 'report_basic',
+            '3_to_5_gaps': 'report_advanced',
+            '6_to_9_gaps': 'report_premium',
+            'unknown_gaps_default': 'report_advanced'
+          },
+          default_recommended_tier: recommendLadderTier(null, notifyFlag)
         }
       };
       return new Response(JSON.stringify(catalogPayload), { status: 200, headers: corsHeaders });
     }
 
-    // 7g. ROUTE: NOTIFY ME WAITLIST (/api/v1/waitlist/notify-me & /api/v1/payments/waitlist/notify-me)
-    if ((url.pathname === '/api/v1/waitlist/notify-me' || url.pathname === '/api/v1/payments/waitlist/notify-me') && request.method === 'POST') {
+    // 7g. ROUTE: NOTIFY ME WAITLIST (/api/v1/waitlist/notify-me & delete-on-request)
+    if (
+      (url.pathname === '/api/v1/waitlist/notify-me/delete' || url.pathname === '/api/v1/payments/waitlist/notify-me/delete') &&
+      request.method === 'POST'
+    ) {
       const corsHeaders = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': getCorsOrigin(request, env),
         'Vary': 'Origin'
       };
       const body = await request.json().catch(() => ({}));
-      const emailClean = String(body.email || '').trim().toLowerCase();
-      const rawPack = String(body.pack_id || body.packId || body.sku_id || body.skuId || '').trim().toLowerCase();
-      const normPack = (rawPack === 'report_advanced' || rawPack === 'advanced') ? 'report_advanced'
-        : ((rawPack === 'report_premium' || rawPack === 'premium') ? 'report_premium' : null);
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean)) {
-        return new Response(JSON.stringify({ success: false, error: 'Please enter a valid email address.' }), { status: 400, headers: corsHeaders });
+      const result = await deleteWaitlistNotifyMe(env, body);
+      return new Response(JSON.stringify(result.payload), { status: result.status, headers: corsHeaders });
+    }
+
+    if (url.pathname === '/api/v1/waitlist/notify-me' || url.pathname === '/api/v1/payments/waitlist/notify-me') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+      if (request.method === 'DELETE') {
+        const body = await request.json().catch(() => ({}));
+        const result = await deleteWaitlistNotifyMe(env, body);
+        return new Response(JSON.stringify(result.payload), { status: result.status, headers: corsHeaders });
       }
-      if (!normPack) {
-        return new Response(JSON.stringify({ success: false, error: 'Waitlist notifications apply only to Advanced and Premium editions.' }), { status: 400, headers: corsHeaders });
+      if (request.method === 'POST') {
+        const body = await request.json().catch(() => ({}));
+        const result = await registerWaitlistNotifyMe(env, body);
+        return new Response(JSON.stringify(result.payload), { status: result.status, headers: corsHeaders });
       }
-      if (body.consent !== true) {
-        return new Response(JSON.stringify({ success: false, error: 'Explicit notification consent is required under DPDP 2023.' }), { status: 400, headers: corsHeaders });
-      }
-      const emailHash = await sha256Hex(emailClean);
-      await logWorkerEvent(env, {
-        event_name: 'waitlist_notify_me_registered',
-        pack_id: normPack,
-        subject_hash: emailHash.slice(0, 16)
-      });
-      return new Response(JSON.stringify({
-        status: 'registered',
-        success: true,
-        pack_id: normPack,
-        message: 'You are on the priority launch list. We will notify you as soon as this edition opens.'
-      }), { status: 200, headers: corsHeaders });
     }
 
     // ── 8. ROUTE: 2027 YEAR AHEAD PLANNER API (/api/planner-2027/*) ──

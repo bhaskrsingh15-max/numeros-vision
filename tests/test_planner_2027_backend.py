@@ -285,7 +285,7 @@ class TestPlanner2027Backend(unittest.TestCase):
         self.assertTrue(140 <= len(desc) <= 160, f"Description length {len(desc)} not in [140, 160]: '{desc}'")
 
         # Canonical
-        self.assertIn('<link rel="canonical" href="https://numerosvision.com/year_2027.html" />', html)
+        self.assertIn('<link rel="canonical" href="https://numerosvision.com/year-2027/" />', html)
 
         # OG and Twitter
         self.assertIn('<meta property="og:title"', html)

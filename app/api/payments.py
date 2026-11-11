@@ -1806,58 +1806,70 @@ class NotifyMeWaitlistRequest(BaseModel):
     pack_id: Optional[str] = None
     sku_id: Optional[str] = None
     consent: bool = False
+    purpose: Optional[str] = None
+    consent_text: Optional[str] = None
     source_page: Optional[str] = "your_reading"
 
 
+class NotifyMeDeleteRequest(BaseModel):
+    email: str
+    pack_id: Optional[str] = None
+    sku_id: Optional[str] = None
+
+
 def _normalize_notify_pack(pack_id: str) -> Optional[str]:
-    clean = (pack_id or "").strip().lower()
-    if clean in ("report_advanced", "advanced", "report_master", "master"):
-        return "report_advanced"
-    if clean in ("report_premium", "premium", "report_divine", "divine"):
-        return "report_premium"
-    return None
+    from app.services.waitlist_service import normalize_waitlist_pack_id
+    return normalize_waitlist_pack_id(pack_id)
 
 
 @router.post("/waitlist/notify-me")
 @api_router.post("/v1/waitlist/notify-me")
 def register_notify_me_waitlist(req: NotifyMeWaitlistRequest):
     """
-    Captures DPDP-consented launch notification requests for Advanced/Premium tiers
-    when the flagged 'Notify me' variant is active (or previewed).
-    Stores SHA-256 email hash only (zero raw PII persisted to log).
+    Captures DPDP-consented launch notification requests for Advanced/Premium tiers.
+    Stores email encrypted with AES-256-GCM (`ivHex:cipherHex`), explicit DPDP consent
+    text, stated purpose ("tell me when this report is available"), and 12-month retention.
+    Uses `email_sha256` strictly for de-duplication.
     """
-    import re
-    email_clean = (req.email or "").strip().lower()
-    if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email_clean):
-        raise HTTPException(status_code=400, detail="Please enter a valid email address.")
-    norm_pack = _normalize_notify_pack(req.pack_id or req.sku_id or "")
-    if not norm_pack:
-        raise HTTPException(status_code=400, detail="Waitlist notifications apply only to Advanced and Premium editions.")
-    if not req.consent:
-        raise HTTPException(status_code=400, detail="Explicit notification consent is required under DPDP 2023.")
+    from app.services.waitlist_service import upsert_waitlist_record
 
-    email_hash = hashlib.sha256(email_clean.encode("utf-8")).hexdigest()
     os.makedirs(DATA_DIR, exist_ok=True)
     waitlist_file = os.path.join(DATA_DIR, "waitlist_notify_me.jsonl")
-    record = {
-        "email_sha256": email_hash,
-        "pack_id": norm_pack,
-        "consent_dpdp": True,
-        "source_page": (req.source_page or "your_reading")[:64],
-        "created_at": int(time.time()),
-    }
     try:
-        with open(waitlist_file, "a", encoding="utf-8") as fh:
-            fh.write(json.dumps(record) + "\n")
-    except Exception:
-        pass
+        return upsert_waitlist_record(
+            email=req.email,
+            pack_id=req.pack_id or req.sku_id or "",
+            consent=req.consent,
+            purpose=req.purpose,
+            consent_text=req.consent_text,
+            source_page=req.source_page or "your_reading",
+            storage_path=waitlist_file,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
-    return {
-        "status": "registered",
-        "success": True,
-        "pack_id": norm_pack,
-        "message": "You are on the priority launch list. We will notify you as soon as this edition opens."
-    }
+
+@router.post("/waitlist/notify-me/delete")
+@api_router.post("/v1/waitlist/notify-me/delete")
+@router.delete("/waitlist/notify-me")
+@api_router.delete("/v1/waitlist/notify-me")
+def delete_notify_me_waitlist(req: NotifyMeDeleteRequest):
+    """
+    DPDP 2023 delete-on-request path: permanently erases stored encrypted email records
+    matching the requester's email address (optionally scoped to a specific pack_id).
+    """
+    from app.services.waitlist_service import delete_waitlist_records
+
+    os.makedirs(DATA_DIR, exist_ok=True)
+    waitlist_file = os.path.join(DATA_DIR, "waitlist_notify_me.jsonl")
+    try:
+        return delete_waitlist_records(
+            email=req.email,
+            pack_id=req.pack_id or req.sku_id,
+            storage_path=waitlist_file,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
 
 @api_router.get("/v1/public/loshu-teasers")

@@ -371,11 +371,11 @@
           </thead>
           <tbody>
             <!-- Product 1: Basic Report -->
-            <tr style="border-bottom:1px solid rgba(180,155,110,0.2);">
+            <tr id="table-row-report_basic" style="border-bottom:1px solid rgba(180,155,110,0.2);">
               <td style="padding:14px 16px; font-weight:700; color:#2C2214;">
                 <div style="display:flex; align-items:center; gap:8px;">
                   <span style="color:#C9A227;">✦</span> Basic Report
-                  <span style="font-size:0.65rem; background:rgba(201,162,39,0.15); color:#8B6914; padding:2px 6px; border-radius:4px; font-weight:700; text-transform:uppercase;">Entry</span>
+                  <span id="table-badge-report_basic" style="font-size:0.65rem; background:rgba(201,162,39,0.15); color:#8B6914; padding:2px 6px; border-radius:4px; font-weight:700; text-transform:uppercase;">Entry</span>
                 </div>
               </td>
               <td style="padding:14px 16px; color:#523E28;">3-Page Personalised PDF · Mulank, Bhagyank &amp; Lo Shu Grid Matrix</td>
@@ -387,12 +387,12 @@
                 </a>
               </td>
             </tr>
-            <!-- Product 2: Advanced Report (Recommended) -->
-            <tr style="border-bottom:1px solid rgba(180,155,110,0.2); background:rgba(201,162,39,0.04);">
+            <!-- Product 2: Advanced Report (Recommended when notify_me_higher_tiers is false) -->
+            <tr id="table-row-report_advanced" style="border-bottom:1px solid rgba(180,155,110,0.2); background:rgba(201,162,39,0.04);">
               <td style="padding:14px 16px; font-weight:700; color:#2C2214;">
                 <div style="display:flex; align-items:center; gap:8px;">
                   <span style="color:#C9A227;">✦</span> Advanced Master Dossier
-                  <span style="font-size:0.65rem; background:#C9A227; color:#FFFFFF; padding:2px 6px; border-radius:4px; font-weight:700; text-transform:uppercase;">Recommended</span>
+                  <span id="table-badge-report_advanced" style="font-size:0.65rem; background:#C9A227; color:#FFFFFF; padding:2px 6px; border-radius:4px; font-weight:700; text-transform:uppercase;">Recommended</span>
                 </div>
               </td>
               <td style="padding:14px 16px; color:#523E28;">12-Page Master PDF · Enabled Numbers in Depth, Auspicious Initiation Windows &amp; Remedies</td>
@@ -929,11 +929,23 @@
       if (b2bEl) b2bEl.innerHTML = 'Coming soon';
       if (sessionEl) sessionEl.innerHTML = 'Coming soon';
 
-      // High-to-Low Behavioral Economics Layout:
-      // Left Anchor (Sovereign) -> Center Stage Highlight (Master Dossier) -> Right Entry (Diagnostic Brief)
+      const notifyAdv = isPricingNotifyMeTier('report_advanced');
+      const notifyPrem = isPricingNotifyMeTier('report_premium');
+      const notifyHigher = notifyAdv || notifyPrem;
+      const advFeaturedClass = notifyHigher ? 'tier-card' : 'tier-card featured';
+      const advFeaturedStyle = notifyHigher
+        ? 'box-shadow: 0 4px 20px rgba(180, 155, 110, 0.08);'
+        : 'border: 2px solid var(--gold); box-shadow: 0 8px 32px rgba(201, 162, 39, 0.22); transform: translateY(-4px);';
+      const basicFeaturedClass = notifyHigher ? 'tier-card featured' : 'tier-card';
+      const basicFeaturedStyle = notifyHigher
+        ? 'border: 2px solid var(--gold); box-shadow: 0 8px 32px rgba(201, 162, 39, 0.22); transform: translateY(-4px);'
+        : 'box-shadow: 0 4px 18px rgba(180, 155, 110, 0.06);';
+
+      // High-to-Low Behavioral Economics Layout (when notify_me_higher_tiers is true, Basic is strictly recommended — never a waitlist tier)
       grid.innerHTML = `
-        <!-- Tier 1: Anchor Tier - Sovereign Full Life Roadmap (High-to-Low Anchoring) -->
+        <!-- Tier 1: Anchor Tier - Sovereign Full Life Roadmap -->
         <div class="tier-card" style="box-shadow: 0 4px 20px rgba(180, 155, 110, 0.08);">
+          ${notifyPrem ? '<div class="featured-badge" style="letter-spacing:0.06em; background:#7A654D;">WAITLIST · NOTIFY ME AT LAUNCH</div>' : ''}
           <div class="tier-badge-row">
             <span class="harmonic-root-badge" style="color:#16835B;border-color:rgba(22,131,91,0.25);background:rgba(22,131,91,0.08);">${data.rootTag}</span>
           </div>
@@ -949,13 +961,13 @@
           </ul>
           <div class="tier-actions">
             <a href="/sample?format=roadmap" target="_blank" class="btn-ghost-action">Preview Format (32 Pgs) →</a>
-            ${prices.sovereign.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : (isPricingNotifyMeTier('report_premium') ? `<button type="button" class="btn-ghost-action" style="cursor:pointer;" onclick="openPricingNotifyMeModal('report_premium')">Notify Me When Ready ✉</button>` : `<a href="/?plan=report_premium#reports" class="btn-gold-action">View Premium Report (${prices.sovereign.price})</a>`)}
+            ${prices.sovereign.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : (notifyPrem ? `<button type="button" class="btn-ghost-action" style="cursor:pointer;" onclick="openPricingNotifyMeModal('report_premium')">Notify Me When Ready ✉</button>` : `<a href="/?plan=report_premium#reports" class="btn-gold-action">View Premium Report (${prices.sovereign.price})</a>`)}
           </div>
         </div>
 
-        <!-- Tier 2: Center-Stage Highlight & Decoy Effect - Master Dual-System Dossier (Recommended) -->
-        <div class="tier-card featured" style="border: 2px solid var(--gold); box-shadow: 0 8px 32px rgba(201, 162, 39, 0.22); transform: translateY(-4px);">
-          <div class="featured-badge" style="letter-spacing:0.06em;">${isPricingNotifyMeTier('report_advanced') ? '✦ WAITLIST · NOTIFY ME AT LAUNCH ✦' : '✦ MOST POPULAR · RECOMMENDED BY MASTERS ✦'}</div>
+        <!-- Tier 2: Master Dual-System Dossier (Recommended only when notify_me_higher_tiers is false) -->
+        <div class="${advFeaturedClass}" style="${advFeaturedStyle}">
+          <div class="featured-badge" style="letter-spacing:0.06em; ${notifyAdv ? 'background:#7A654D;' : ''}">${notifyAdv ? 'WAITLIST · NOTIFY ME AT LAUNCH' : '✦ MOST POPULAR · RECOMMENDED BY MASTERS ✦'}</div>
           <div class="tier-badge-row">
             <span class="harmonic-root-badge" style="background:rgba(201,162,39,0.18);border-color:var(--gold);">${data.rootTag}</span>
           </div>
@@ -971,12 +983,13 @@
           </ul>
           <div class="tier-actions">
             <a href="/sample?format=master" target="_blank" class="btn-ghost-action">Preview Format (12 Pgs) →</a>
-            ${prices.master.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : (isPricingNotifyMeTier('report_advanced') ? `<button type="button" class="btn-ghost-action" style="cursor:pointer; font-weight:700;" onclick="openPricingNotifyMeModal('report_advanced')">Notify Me When Ready ✉</button>` : `<a href="/?plan=report_advanced#reports" class="btn-gold-action" style="font-weight:700;">Explore Advanced Analysis (${prices.master.price}) →</a>`)}
+            ${prices.master.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : (notifyAdv ? `<button type="button" class="btn-ghost-action" style="cursor:pointer; font-weight:700;" onclick="openPricingNotifyMeModal('report_advanced')">Notify Me When Ready ✉</button>` : `<a href="/?plan=report_advanced#reports" class="btn-gold-action" style="font-weight:700;">Explore Advanced Analysis (${prices.master.price}) →</a>`)}
           </div>
         </div>
 
-        <!-- Tier 3: Rapid Diagnostic Action Plan (Right Side Value Comparison) -->
-        <div class="tier-card" style="box-shadow: 0 4px 18px rgba(180, 155, 110, 0.06);">
+        <!-- Tier 3: Basic Report (Strictly Recommended when notify_me_higher_tiers is true) -->
+        <div class="${basicFeaturedClass}" style="${basicFeaturedStyle}">
+          ${notifyHigher ? '<div class="featured-badge" style="letter-spacing:0.06em;">✦ RECOMMENDED · AVAILABLE IMMEDIATELY ✦</div>' : ''}
           <div class="tier-badge-row">
             <span class="harmonic-root-badge">${data.rootTag}</span>
           </div>
@@ -992,7 +1005,7 @@
           </ul>
           <div class="tier-actions">
             <a href="/sample?format=brief" target="_blank" class="btn-ghost-action">Preview Format (3 Pgs) →</a>
-            ${prices.tripwire.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/?plan=report_basic#reports" class="btn-gold-action">View Basic Report (${prices.tripwire.price})</a>`}
+            ${prices.tripwire.price === "Coming soon" ? '<span class="btn-ghost-action" style="opacity:0.75;cursor:default;">Coming soon</span>' : `<a href="/?plan=report_basic#reports" class="btn-gold-action" style="${notifyHigher ? 'font-weight:700;' : ''}">View Basic Report (${prices.tripwire.price})</a>`}
           </div>
         </div>
       `;
@@ -1012,7 +1025,33 @@
       }
     } catch(e) {}
 
+    const PRICING_WAITLIST_PURPOSE = 'tell me when this report is available';
+    const PRICING_WAITLIST_CONSENT_TEXT =
+      'I consent to Numeros Vision storing my encrypted email address for 12 months solely for the purpose: "tell me when this report is available", with the right to delete my email record on request at any time under the DPDP Act 2023.';
+
     function syncPricingTableNotifyMeMode() {
+      const notifyHigher = isPricingNotifyMeTier('report_advanced') || isPricingNotifyMeTier('report_premium');
+      const basicRow = document.getElementById('table-row-report_basic');
+      const basicBadge = document.getElementById('table-badge-report_basic');
+      const advRow = document.getElementById('table-row-report_advanced');
+      const advBadge = document.getElementById('table-badge-report_advanced');
+
+      if (notifyHigher) {
+        // Recommend Basic — never recommend a waitlist tier
+        if (basicRow) basicRow.style.background = 'rgba(201,162,39,0.06)';
+        if (basicBadge) {
+          basicBadge.textContent = 'Recommended';
+          basicBadge.style.background = '#C9A227';
+          basicBadge.style.color = '#FFFFFF';
+        }
+        if (advRow) advRow.style.background = 'transparent';
+        if (advBadge) {
+          advBadge.textContent = 'Waitlist';
+          advBadge.style.background = '#7A654D';
+          advBadge.style.color = '#FFFFFF';
+        }
+      }
+
       ['report_advanced', 'report_premium'].forEach(function(sku) {
         if (!isPricingNotifyMeTier(sku)) return;
         const el = document.getElementById('table-cta-' + sku);
@@ -1058,18 +1097,26 @@
         return;
       }
       if (!consent) {
-        if (statusEl) { statusEl.textContent = 'Please tick the consent box first.'; statusEl.style.color = '#B91C1C'; }
+        if (statusEl) { statusEl.textContent = 'Please tick the DPDP consent box first.'; statusEl.style.color = '#B91C1C'; }
         return;
       }
       try {
         const res = await fetch('/api/v1/waitlist/notify-me', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email, pack_id: _pricingNotifySku, sku_id: _pricingNotifySku, consent: true, source_page: 'pricing' })
+          body: JSON.stringify({
+            email: email,
+            pack_id: _pricingNotifySku,
+            sku_id: _pricingNotifySku,
+            consent: true,
+            purpose: PRICING_WAITLIST_PURPOSE,
+            consent_text: PRICING_WAITLIST_CONSENT_TEXT,
+            source_page: 'pricing'
+          })
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && (data.success || data.status === 'registered' || data.status === 'recorded')) {
-          if (statusEl) { statusEl.textContent = data.message || 'Recorded! We will email you once when ready.'; statusEl.style.color = '#16835B'; }
+          if (statusEl) { statusEl.textContent = data.message || 'Recorded! Encrypted email stored for up to 12 months solely to tell you when ready.'; statusEl.style.color = '#16835B'; }
         } else {
           if (statusEl) { statusEl.textContent = data.detail || data.error || 'Unable to record request.'; statusEl.style.color = '#B91C1C'; }
         }
@@ -1077,6 +1124,31 @@
         if (statusEl) { statusEl.textContent = 'Network error. Please retry.'; statusEl.style.color = '#B91C1C'; }
       }
     }
+
+    async function deletePricingNotifyMeForm() {
+      const email = (document.getElementById('pricing-notify-email')?.value || '').trim().toLowerCase();
+      const statusEl = document.getElementById('pricing-notify-status');
+      if (!email || !email.includes('@')) {
+        if (statusEl) { statusEl.textContent = 'Enter your email address above first so we can delete your waitlist record.'; statusEl.style.color = '#B91C1C'; }
+        return;
+      }
+      try {
+        const res = await fetch('/api/v1/waitlist/notify-me/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && (data.success || data.status === 'deleted')) {
+          if (statusEl) { statusEl.textContent = data.message || 'Your encrypted waitlist email has been permanently deleted.'; statusEl.style.color = '#16835B'; }
+        } else {
+          if (statusEl) { statusEl.textContent = data.detail || data.error || 'Unable to delete waitlist record.'; statusEl.style.color = '#B91C1C'; }
+        }
+      } catch (_) {
+        if (statusEl) { statusEl.textContent = 'Network error while deleting record.'; statusEl.style.color = '#B91C1C'; }
+      }
+    }
+    window.deletePricingNotifyMeForm = deletePricingNotifyMeForm;
 
     // Initial render + check server catalog flag
     renderPricing();
@@ -1092,19 +1164,24 @@
 
   <!-- Flagged Notify-Me Modal on Pricing Page (Off by Default) -->
   <div id="pricing-notify-me-modal" role="dialog" aria-modal="true" aria-labelledby="pricing-notify-title" style="display:none; position:fixed; inset:0; background:rgba(82,62,40,0.68); z-index:99999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
-    <div style="background:#FFFFFF; border:2px solid #C9A227; border-radius:16px; max-width:460px; width:100%; padding:28px 24px; position:relative; box-sizing:border-box;">
+    <div style="background:#FFFFFF; border:2px solid #C9A227; border-radius:16px; max-width:480px; width:100%; padding:28px 24px; position:relative; box-sizing:border-box;">
       <button type="button" onclick="closePricingNotifyMeModal()" aria-label="Close" style="position:absolute; top:12px; right:14px; background:none; border:none; font-size:1.5rem; color:#7A654D; cursor:pointer;">&times;</button>
       <div style="font-size:0.72rem; font-weight:700; color:#16835B; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px;">Priority Release Alert</div>
       <h3 id="pricing-notify-title" style="font-family:'Cormorant Garamond',serif; font-size:1.55rem; color:#523E28; margin:0 0 8px;">Notify Me at Launch</h3>
-      <p style="font-size:0.84rem; color:#7A654D; line-height:1.5; margin:0 0 16px;">Enter your email for a single notification when this expanded edition opens. The 3-Page Basic Report (₹199) is available now.</p>
+      <p style="font-size:0.83rem; color:#7A654D; line-height:1.5; margin:0 0 16px;">Purpose: <strong>&ldquo;tell me when this report is available&rdquo;</strong>. Stored encrypted (AES-256-GCM) for up to <strong>12 months</strong>, with delete-on-request below. The 3-Page Basic Report (₹199) is available now.</p>
       <form onsubmit="event.preventDefault(); submitPricingNotifyMeForm();">
         <input type="email" id="pricing-notify-email" placeholder="name@example.com" required style="width:100%; height:42px; padding:8px 12px; border:1px solid rgba(201,162,39,0.45); border-radius:8px; background:#FFFDF7; color:#523E28; box-sizing:border-box; margin-bottom:12px;" />
         <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.78rem; color:#523E28; line-height:1.4; margin-bottom:12px; cursor:pointer;">
           <input type="checkbox" id="pricing-notify-consent" required style="margin-top:2px; accent-color:#8B6914;" />
-          <span>I consent to receive a one-time availability email for this report edition in accordance with the Privacy Policy.</span>
+          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely for the purpose: &ldquo;tell me when this report is available&rdquo;, with the right to delete my email record on request at any time under the DPDP Act 2023.</span>
         </label>
         <div id="pricing-notify-status" style="font-size:0.8rem; min-height:18px; margin-bottom:10px;"></div>
         <button type="submit" class="btn-gold-action" style="border:none; cursor:pointer;">Notify Me at Launch ✦</button>
+        <div style="margin-top:10px; text-align:center;">
+          <button type="button" onclick="deletePricingNotifyMeForm()" style="background:none; border:none; color:#7A654D; font-size:0.76rem; text-decoration:underline; cursor:pointer; padding:4px 8px;">
+            Delete my waitlist email record (DPDP Right to Erasure)
+          </button>
+        </div>
       </form>
     </div>
   </div>

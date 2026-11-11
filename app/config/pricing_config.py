@@ -648,13 +648,56 @@ def is_notify_me_higher_tiers_enabled() -> bool:
         return False
 
 
+def recommend_ladder_tier(
+    gap_count: Optional[int] = None,
+    notify_me_higher_tiers: Optional[bool] = None,
+) -> str:
+    """
+    Deterministic 3-card report ladder recommendation rule:
+    - When `notify_me_higher_tiers` is True: strictly recommends `report_basic`
+      (never recommends a waitlist tier).
+    - When `notify_me_higher_tiers` is False: recommends by Lo Shu birth-date gap count
+      (`gap_count` = missing digits out of 1..9):
+        * 0–2 open cells -> `report_basic`
+        * 3–5 open cells -> `report_advanced`
+        * 6–9 open cells -> `report_premium`
+      (Defaults to `report_advanced` when `gap_count` is not yet known.)
+    """
+    notify_active = (
+        is_notify_me_higher_tiers_enabled()
+        if notify_me_higher_tiers is None
+        else bool(notify_me_higher_tiers)
+    )
+    if notify_active:
+        return "report_basic"
+    if gap_count is None:
+        return "report_advanced"
+    gaps = max(0, min(9, int(gap_count)))
+    if gaps <= 2:
+        return "report_basic"
+    if gaps <= 5:
+        return "report_advanced"
+    return "report_premium"
+
+
 def export_pricing_catalog_json() -> str:
     """Exports full public catalog for frontend consumers and API responses."""
+    notify_active = is_notify_me_higher_tiers_enabled()
     catalog = {
         "currency": CURRENCY,
         "feature_flags": {
-            "notify_me_higher_tiers": is_notify_me_higher_tiers_enabled(),
+            "notify_me_higher_tiers": notify_active,
             "notify_me_tiers": ["report_advanced", "report_premium"]
+        },
+        "ladder_recommendation_rule": {
+            "when_notify_me_true": "report_basic",
+            "when_notify_me_false": {
+                "0_to_2_gaps": "report_basic",
+                "3_to_5_gaps": "report_advanced",
+                "6_to_9_gaps": "report_premium",
+                "unknown_gaps_default": "report_advanced",
+            },
+            "default_recommended_tier": recommend_ladder_tier(None, notify_active),
         },
         "report_tiers": REPORT_TIERS,
         "supported_topics": SUPPORTED_REPORT_TOPICS,

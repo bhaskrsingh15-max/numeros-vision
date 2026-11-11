@@ -21,7 +21,6 @@
       "mrp_inr": 289,
       "mrp_paise": 28900,
       "launch_offer_ends_at": "2027-01-31T23:59:59+05:30",
-      "price_includes_gst": true,
       "digital_root": 1,
       "status": "active",
       "deliverables": [
@@ -44,7 +43,6 @@
       "mrp_inr": 699,
       "mrp_paise": 69900,
       "launch_offer_ends_at": "2027-01-31T23:59:59+05:30",
-      "price_includes_gst": true,
       "digital_root": 3,
       "status": "active",
       "deliverables": [
@@ -68,7 +66,6 @@
       "mrp_inr": 1479,
       "mrp_paise": 147900,
       "launch_offer_ends_at": "2027-01-31T23:59:59+05:30",
-      "price_includes_gst": true,
       "digital_root": 6,
       "status": "active",
       "deliverables": [
@@ -223,7 +220,6 @@
       "offer_price_inr": 1499,
       "offer_price_paise": 149900,
       "offer_ends_at": "2027-01-31T23:59:59+05:30",
-      "price_includes_gst": true,
       "currency": "INR",
       "status": "active",
       "deliverables": [

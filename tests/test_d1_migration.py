@@ -15,6 +15,11 @@ def test_migration_syntax_and_tables():
     with open(mig2, "r", encoding="utf-8") as f:
         conn.executescript(f.read())
 
+    # 2b. Run Migration 0011 (DPDP Encrypted Waitlist)
+    mig11 = os.path.join("migrations", "0011_waitlist_notify_me.sql")
+    with open(mig11, "r", encoding="utf-8") as f:
+        conn.executescript(f.read())
+
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = set([r[0] for r in cursor.fetchall()])
