@@ -74,13 +74,13 @@ async function runTests() {
   console.log('Test 1: Asserting packs.json prices and no duplicate prices per unpurchased tier...');
   const activeCore = Object.values(packsJson.core_reports).filter(p => p.status === 'active');
   const activePrices = activeCore.map(p => p.price_inr);
-  assert.deepEqual(activePrices.sort((a,b)=>a-b), [199, 489, 1050]);
+  assert.deepEqual(activePrices.sort((a,b)=>a-b), [199, 510, 1050]);
 
   // Ensure each tier card in dashboard HTML templates has exactly one price tag per tier
   const basicMatches = (dashboardHtml.match(/₹199/g) || []).length;
-  const advMatches = (dashboardHtml.match(/₹489/g) || []).length;
+  const advMatches = (dashboardHtml.match(/₹510/g) || []).length;
   const premMatches = (dashboardHtml.match(/₹1,050/g) || []).length;
-  console.log(`  Price occurrences in template: ₹199: ${basicMatches}, ₹489: ${advMatches}, ₹1,050: ${premMatches}`);
+  console.log(`  Price occurrences in template: ₹199: ${basicMatches}, ₹510: ${advMatches}, ₹1,050: ${premMatches}`);
   console.log('✓ PASS: Test 1');
 
   // TEST 2: Paid order creates report job, and completed job shows in dashboard view
@@ -125,18 +125,54 @@ async function runTests() {
   const verifyData = await verifyRes.json();
   assert.equal(verifyData.verified, true);
   assert.equal(verifyData.status, 'verified');
+  assert.equal(verifyData.orderStatus, 'PAYMENT_VERIFIED', 'Verify sets PAYMENT_VERIFIED and waits for webhook');
+  assert.equal(verifyData.awaitingWebhook, true, 'Verify indicates awaitingWebhook: true');
 
-  // Verify entitlement was granted
+  // Webhook-only PDF generation: 0 report jobs exist before Razorpay webhook
+  const preWebhookJobs = Array.from(memoryStore.reportJobs.values()).filter(j => j.order_id === orderId);
+  assert.equal(preWebhookJobs.length, 0, 'Verify must NOT generate PDF job before Razorpay webhook');
+
+  const cookie = await createSession(userId, 'paiduser@example.com');
+  const prepDashRes = await worker.fetch(new Request(`https://preview.numerosvision.com/api/v1/dashboard/view?subjectId=${subjId}`, {
+    method: 'GET',
+    headers: { Cookie: cookie }
+  }), mockEnv);
+  const prepDashData = await prepDashRes.json();
+  assert.equal(prepDashData.reports.length, 1);
+  assert.equal(prepDashData.reports[0].status, 'preparing', 'Pre-webhook PAYMENT_VERIFIED order shows preparing status on dashboard');
+
+  // Now deliver signed Razorpay webhook -> fulfills order and creates report job
+  const webhookPayload = JSON.stringify({
+    event: 'order.paid',
+    event_id: 'evt_test_idem_' + Date.now(),
+    payload: {
+      order: { entity: { id: rzpOrderId } },
+      payment: { entity: { id: rzpPaymentId, amount: 19900, currency: 'INR', order_id: rzpOrderId, status: 'captured' } }
+    }
+  });
+  const webhookSig = crypto.createHmac('sha256', mockEnv.RAZORPAY_WEBHOOK_SECRET).update(webhookPayload).digest('hex');
+
+  const webhookRes1 = await worker.fetch(new Request('https://preview.numerosvision.com/api/v1/payments/webhook', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Razorpay-Signature': webhookSig
+    },
+    body: webhookPayload
+  }), mockEnv);
+  assert.equal(webhookRes1.status, 200, 'Webhook must return 200');
+
+  // Verify entitlement was granted by webhook
   const entKey = `${userId}_${subjId}_report_basic`;
   const entitlement = memoryStore.entitlements.get(entKey);
-  assert.ok(entitlement, 'Entitlement must be granted for report_basic');
+  assert.ok(entitlement, 'Entitlement must be granted for report_basic after webhook');
 
-  // Verify report job was created
+  // Verify report job was created by webhook
   let foundJob = null;
   for (const j of memoryStore.reportJobs.values()) {
     if (j.order_id === orderId) { foundJob = j; break; }
   }
-  assert.ok(foundJob, 'Report job must be created for paid order');
+  assert.ok(foundJob, 'Report job must be created for webhook-confirmed order');
   assert.equal(foundJob.status, 'QUEUED');
 
   // Mark job as COMPLETED and verify it reflects in dashboard view
@@ -144,7 +180,6 @@ async function runTests() {
   foundJob.r2_key = `reports/${userId}/${subjId}/report_basic/${foundJob.id}.pdf`;
   foundJob.completed_at = Date.now();
 
-  const cookie = await createSession(userId, 'paiduser@example.com');
   const dashReq = new Request(`https://preview.numerosvision.com/api/v1/dashboard/view?subjectId=${subjId}`, {
     method: 'GET',
     headers: { Cookie: cookie }
@@ -163,38 +198,27 @@ async function runTests() {
   assert.equal(dashData.receipts[0].payment_id, rzpPaymentId, 'Receipt must have payment ID');
   console.log('✓ PASS: Test 2');
 
-  // TEST 3: Idempotency - Webhook arriving after /verify must NOT duplicate entitlement or job
-  console.log('Test 3: Webhook arriving after /verify must NOT duplicate entitlement or report job...');
+  // TEST 3: Idempotency - Duplicate webhook must NOT duplicate entitlement or job
+  console.log('Test 3: Duplicate webhook must NOT duplicate entitlement or report job...');
   const jobsBeforeCount = Array.from(memoryStore.reportJobs.values()).filter(j => j.order_id === orderId).length;
   const entsBeforeCount = Array.from(memoryStore.entitlements.values()).filter(e => e.order_id === orderId).length;
 
-  const webhookPayload = JSON.stringify({
-    event: 'order.paid',
-    event_id: 'evt_test_idem_' + Date.now(),
-    payload: {
-      order: { entity: { id: rzpOrderId } },
-      payment: { entity: { id: rzpPaymentId, amount: 19900, currency: 'INR', order_id: rzpOrderId } }
-    }
-  });
-  const webhookSig = crypto.createHmac('sha256', mockEnv.RAZORPAY_WEBHOOK_SECRET).update(webhookPayload).digest('hex');
-
-  const webhookReq = new Request('https://preview.numerosvision.com/api/v1/payments/webhook', {
+  const webhookRes2 = await worker.fetch(new Request('https://preview.numerosvision.com/api/v1/payments/webhook', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-Razorpay-Signature': webhookSig
     },
     body: webhookPayload
-  });
-
-  const webhookRes = await worker.fetch(webhookReq, mockEnv);
-  assert.equal(webhookRes.status, 200, 'Webhook must return 200');
+  }), mockEnv);
+  assert.equal(webhookRes2.status, 200, 'Duplicate webhook must return 200');
 
   const jobsAfterCount = Array.from(memoryStore.reportJobs.values()).filter(j => j.order_id === orderId).length;
   const entsAfterCount = Array.from(memoryStore.entitlements.values()).filter(e => e.order_id === orderId).length;
 
-  assert.equal(jobsAfterCount, jobsBeforeCount, 'Webhook must not create duplicate report jobs for already-paid order');
-  assert.equal(entsAfterCount, entsBeforeCount, 'Webhook must not create duplicate entitlements');
+  assert.equal(jobsAfterCount, jobsBeforeCount, 'Duplicate webhook must not create duplicate report jobs');
+  assert.equal(entsAfterCount, entsAfterCount, 'Duplicate webhook must not create duplicate entitlements');
+  assert.equal(entsAfterCount, entsBeforeCount, 'Duplicate webhook must not create duplicate entitlements');
   console.log('✓ PASS: Test 3');
 
   // TEST 4: Pricing Tampering Prevention in /api/v1/payments/verify
@@ -272,7 +296,7 @@ async function runTests() {
 
     const availableTiers = [
       { id: 'report_basic', name: 'Basic Report', priceInr: 199 },
-      { id: 'report_advanced', name: 'Advanced Master Dossier', priceInr: 489 },
+      { id: 'report_advanced', name: 'Anveil my glowing charms', priceInr: 510 },
       { id: 'report_premium', name: 'Premium Sovereign Blueprint', priceInr: 1050 }
     ].filter(t => {
       if (t.id === 'report_basic' && isBasicOwned) return false;

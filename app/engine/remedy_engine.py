@@ -248,7 +248,7 @@ def generate_comprehensive_predictions_and_remedies(
     }
 
 if __name__ == "__main__":
-    report = generate_comprehensive_predictions_and_remedies("Bhaskar Singh", 15, 8, 1995, mobile_number="9876543210")
+    report = generate_comprehensive_predictions_and_remedies("Bhaskr Singh", 15, 8, 1995, mobile_number="9876543210")
     print("=== UNIFIED 8-LAYER PREDICTION & CRYSTAL REMEDY REPORT ===")
     print("User:", report["user_name"], "| DOB:", report["dob"])
     print("Driver/Conductor:", report["predictions_summary"]["driver_mulank"], "/", report["predictions_summary"]["conductor_bhagyank"])

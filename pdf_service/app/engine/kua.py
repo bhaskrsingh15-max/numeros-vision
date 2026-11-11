@@ -3,11 +3,11 @@ NUMEROS VISION — CANONICAL KUA CALCULATION & DIRECTIONAL DERIVATION ENGINE
 ===========================================================================
 Approved Formula (Deterministic Engine Authority):
 1. Sum all four digits of the calendar birth year, reduce to a single digit = x.
-   [Calendar birth year used — PENDING USER CONFIRMATION on early-year births.]
+   [Calendar birth year (1 Jan – 31 Dec) — CONFIRMED.]
 2. Male: 11 - x, then reduce to a single digit.
    Female: 4 + x, then reduce to a single digit.
    Same rule across every century; zero pre/post-2000 branching.
-3. Kua 5 maps to 2 for male and 8 for female [PENDING USER CONFIRMATION].
+3. Kua 5 maps to 2 for male and 8 for female [CONFIRMED].
 4. Derive Element, Trigram, East/West Group, and Directional Sectors strictly
    from the final Kua number (never hardcode "Water · Kan (East Group)").
 5. Missing or unrecognized gender returns status="NEEDS_GENDER" and
@@ -235,8 +235,8 @@ def calculate_kua_details(birth_year: int, gender: Optional[str] = None) -> Dict
             "element_group_clean": KUA_NEEDS_GENDER_TEXT,
             "desk_direction": KUA_NEEDS_GENDER_TEXT,
             "rule_note": KUA_RULE_TEXT,
-            "five_mapping_status": "PENDING_CONFIRMATION",
-            "year_boundary_status": "CALENDAR_YEAR_PENDING_CONFIRMATION",
+            "five_mapping_status": "CONFIRMED_2_MALE_8_FEMALE",
+            "year_boundary_status": "CALENDAR_YEAR_CONFIRMED",
         }
 
     if norm_gender == "male":
@@ -274,8 +274,8 @@ def calculate_kua_details(birth_year: int, gender: Optional[str] = None) -> Dict
         "energy_archetype": meta["energy_archetype"],
         "traits": meta["traits"],
         "rule_note": KUA_RULE_TEXT,
-        "five_mapping_status": "PENDING_CONFIRMATION",
-        "year_boundary_status": "CALENDAR_YEAR_PENDING_CONFIRMATION",
+        "five_mapping_status": "CONFIRMED_2_MALE_8_FEMALE",
+        "year_boundary_status": "CALENDAR_YEAR_CONFIRMED",
     }
 
 

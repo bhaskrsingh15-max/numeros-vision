@@ -65,7 +65,7 @@ SESSIONS_FILE = os.path.join(DATA_DIR, "verified_sessions.json")
 PLANS = {
     # ── UNIFIED STANDALONE REPORT TIERS ──────────────────────────────────────
     "report_basic": {
-        "name": "Basic Report",
+        "name": "Anveil my alignments",
         "amount_inr": 199,
         "original_price_inr": 399,
         "amount_paise": 19900,
@@ -78,9 +78,9 @@ PLANS = {
     },
     "report_advanced": {
         "name": "Advanced Report",
-        "amount_inr": 489,
+        "amount_inr": 510,
         "original_price_inr": 999,
-        "amount_paise": 48900,
+        "amount_paise": 51000,
         "period": "12-Page Master PDF",
         "questions_count": 0,
         "has_remedies": True,
@@ -103,11 +103,11 @@ PLANS = {
     },
     # ── UNIFIED MULTI-REPORT BUNDLES ─────────────────────────────────────────
     "starter_bundle": {
-        "name": "Starter Bundle — 2 Basic Reports",
+        "name": "Starter Bundle — 2 Anveil my alignmentss",
         "amount_inr": 349,
         "original_price_inr": 398,
         "amount_paise": 34900,
-        "period": "2 Basic Reports",
+        "period": "2 Anveil my alignmentss",
         "questions_count": 0,
         "has_remedies": True,
         "category": "bundle",
@@ -115,11 +115,11 @@ PLANS = {
         "features": ["2 Complete Basic 3-Page Reports", "Save ₹49 (12% off standalone)", "Independent deterministic calculation traces", "Instant PDF downloads"]
     },
     "discovery_bundle": {
-        "name": "Discovery Bundle — 3 Basic Reports",
+        "name": "Discovery Bundle — 3 Anveil my alignmentss",
         "amount_inr": 499,
         "original_price_inr": 597,
         "amount_paise": 49900,
-        "period": "3 Basic Reports",
+        "period": "3 Anveil my alignmentss",
         "questions_count": 0,
         "has_remedies": True,
         "popular": True,
@@ -137,7 +137,7 @@ PLANS = {
         "has_remedies": True,
         "category": "bundle",
         "description": "Two 12-page Advanced reports plus one 3-page Basic report for major life pivots.",
-        "features": ["2 Complete 12-Page Advanced Reports (24 pages)", "1 Complete 3-Page Basic Report (3 pages)", "Save ₹220 (18% off standalone)", "Full Dasha timelines & 7-layer remedies"]
+        "features": ["2 Complete 12-Page Advanced Reports (24 pages)", "1 Complete 3-Page Anveil my alignments (3 pages)", "Save ₹220 (18% off standalone)", "Full Dasha timelines & 7-layer remedies"]
     },
     # ── UNIFIED CHARM AI PACKAGES ────────────────────────────────────────────
     "charm_single": {
@@ -244,7 +244,7 @@ PLANS = {
     },
     # ── 1. NUMEROLOGY REPORT PACKAGES (3 TIERS) ─────────────────────────────
     "report_essential": {
-        "name":        "Basic Numerology Report",
+        "name":        "Anveil my alignments",
         "amount_inr":  199,
         "original_price_inr": 399,
         "amount_paise": 19900,
@@ -262,10 +262,10 @@ PLANS = {
         ]
     },
     "report_master": {
-        "name":        "Advanced Numerology Report",
-        "amount_inr":  489,
-        "original_price_inr": 999,
-        "amount_paise": 48900,
+        "name":        "Anveil my glowing charms",
+        "amount_inr":  510,
+        "original_price_inr": 1020,
+        "amount_paise": 51000,
         "period":      "Instant Download",
         "questions_count": 0,
         "has_remedies": True,
@@ -280,9 +280,9 @@ PLANS = {
         ]
     },
     "report_divine": {
-        "name":        "Premium Numerology Report",
+        "name":        "Anveil every charm",
         "amount_inr":  1050,
-        "original_price_inr": 1999,
+        "original_price_inr": 2100,
         "amount_paise": 105000,
         "period":      "Instant Download",
         "questions_count": 0,
@@ -380,7 +380,7 @@ PLANS = {
             "365 Days of Personalized Planetary Transit Alerts",
             "12 Monthly Auspicious Muhurat Action Calendars",
             "150 Charm AI Question Credits",
-            "Complimentary Master Synthesis PDF Report (₹489 value)",
+            "Complimentary Master Synthesis PDF Report (₹510 value)",
             "Priority VIP customer support"
         ]
     },
@@ -640,9 +640,9 @@ PLANS = {
     },
     "report_union_master": {
         "name": "Sacred Union & Luxury Dossier",
-        "amount_inr": 489,
+        "amount_inr": 510,
         "original_price_inr": 1500,
-        "amount_paise": 48900,
+        "amount_paise": 51000,
         "period": "Instant Download",
         "questions_count": 0,
         "has_remedies": True,
@@ -796,9 +796,9 @@ PLANS = {
     },
     "report_relocation_master": {
         "name": "Global Settlement Dossier",
-        "amount_inr": 489,
+        "amount_inr": 510,
         "original_price_inr": 1500,
-        "amount_paise": 48900,
+        "amount_paise": 51000,
         "period": "Instant Download",
         "questions_count": 0,
         "has_remedies": True,
@@ -1981,7 +1981,7 @@ async def create_order(req: CreateOrderRequest):
             content={
                 "success": False,
                 "code": "TIER_WAITLIST_ONLY",
-                "detail": "This report edition is currently in Notify Me launch mode. Basic Report (₹199) is open for immediate checkout."
+                "detail": "This report edition is currently in Notify Me launch mode. Anveil my alignments (₹199) is open for immediate checkout."
             }
         )
 
@@ -2001,8 +2001,8 @@ async def create_order(req: CreateOrderRequest):
     MVP_PRICES = {
         "report_basic": 199,
         "report_essential": 199,
-        "report_advanced": 489,
-        "report_master": 489,
+        "report_advanced": 510,
+        "report_master": 510,
         "report_premium": 1050,
         "report_divine": 1050,
         "charm_single": 199,
@@ -2019,8 +2019,8 @@ async def create_order(req: CreateOrderRequest):
         plan_amount_paise = plan.get("amount_paise", plan_amount_inr * 100)
         plan_name = plan["name"]
     else:
-        plan_amount_inr = 489
-        plan_amount_paise = 48900
+        plan_amount_inr = 510
+        plan_amount_paise = 51000
 
     if plan_amount_paise < 100:
         raise HTTPException(status_code=400, detail="Amount must be at least 100 paise (₹1.00)")

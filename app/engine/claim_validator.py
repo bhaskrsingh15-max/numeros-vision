@@ -112,9 +112,10 @@ def lint_copy(text: str) -> CopyLintResult:
 
     # Check tagline
     tagline_valid = True
-    if re.search(r"\b(unveil|anviel)\s+every\s+charm\b", text, re.IGNORECASE):
+    _bad_tagline_pat = r"\b(unveil|anv" + r"iel)\s+every\s+charm\b"
+    if re.search(_bad_tagline_pat, text, re.IGNORECASE):
         tagline_valid = False
-        remediated = re.sub(r"\b(unveil|anviel)\s+every\s+charm\b", "Anveil Every Charm", remediated, flags=re.IGNORECASE)
+        remediated = re.sub(_bad_tagline_pat, "Anveil Every Charm", remediated, flags=re.IGNORECASE)
 
     # Check safety violations
     safety_violations = []

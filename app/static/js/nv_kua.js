@@ -3,11 +3,11 @@
  * ==============================================
  * Approved Formula:
  * 1. Sum all four digits of the calendar birth year, reduce to single digit = x.
- *    [Calendar birth year — PENDING CONFIRMATION on early-year births.]
+ *    [Calendar birth year (1 Jan – 31 Dec) — CONFIRMED.]
  * 2. Male: 11 - x, then reduce to single digit.
  *    Female: 4 + x, then reduce to single digit.
  *    Same rule for every century; zero pre/post-2000 branching.
- * 3. Kua 5 maps to 2 for male and 8 for female [PENDING CONFIRMATION].
+ * 3. Kua 5 maps to 2 for male and 8 for female [CONFIRMED].
  * 4. Derive element, trigram, and East/West group from the final Kua number.
  * 5. Missing or unrecognized gender returns display='Kua needs gender' — never guesses.
  */

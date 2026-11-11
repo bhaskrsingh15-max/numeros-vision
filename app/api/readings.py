@@ -396,7 +396,7 @@ def ask_question(req: OpenEndedQuestionRequest, request: Request = None):
                 {
                     "id": "complete_report",
                     "name": "Complete Life Dossier (12-Page Master PDF)",
-                    "amount_inr": 489,
+                    "amount_inr": 510,
                     "original_price_inr": 999,
                     "questions_count": 15,
                     "has_remedies": True,

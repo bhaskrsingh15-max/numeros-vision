@@ -92,8 +92,12 @@ function createMockEnv(overrides = {}) {
             const jobs = Array.from(memoryDB.report_jobs.values()).filter(j => j.user_id === p[0]);
             return { results: jobs };
           }
+          if (q.includes("FROM orders WHERE user_id = ? AND status IN ('CREATED', 'PAYMENT_VERIFIED')")) {
+            const pending = Array.from(memoryDB.orders.values()).filter(o => o.user_id === p[0] && (o.status === 'CREATED' || o.status === 'PAYMENT_VERIFIED'));
+            return { results: pending };
+          }
           if (q.includes('FROM orders o') && q.includes('WHERE o.user_id = ?')) {
-            const orders = Array.from(memoryDB.orders.values()).filter(o => o.user_id === p[0] && o.status === 'PAID');
+            const orders = Array.from(memoryDB.orders.values()).filter(o => o.user_id === p[0] && (o.status === 'PAID' || o.status === 'PAYMENT_VERIFIED'));
             return { results: orders };
           }
           if (q.includes('paidUnfulfilledOrders') || (q.includes("WHERE o.status = 'PAID'") && q.includes('NOT EXISTS (SELECT 1 FROM report_jobs'))) {
@@ -125,6 +129,12 @@ function createMockEnv(overrides = {}) {
             const o = memoryDB.orders.get(p[1]);
             if (o) {
               o.status = 'PAID';
+              o.updated_at = p[0];
+            }
+          } else if (q.startsWith("UPDATE orders SET status = 'PAYMENT_VERIFIED'")) {
+            const o = memoryDB.orders.get(p[1]);
+            if (o && o.status !== 'PAID') {
+              o.status = 'PAYMENT_VERIFIED';
               o.updated_at = p[0];
             }
           } else if (q.includes('INSERT INTO report_jobs') || q.includes('INSERT OR IGNORE INTO report_jobs')) {
@@ -233,15 +243,19 @@ async function runTestSuite() {
 
     const res1 = await worker.fetch(req1, env, {});
     assert.strictEqual(res1.status, 200, 'verify-payment call 1 should succeed');
+    const body1 = await res1.json();
+    assert.strictEqual(body1.status, 'verified', 'verify-payment must return status: verified');
+    assert.strictEqual(body1.orderStatus, 'PAYMENT_VERIFIED', 'verify-payment must return orderStatus: PAYMENT_VERIFIED');
+    assert.strictEqual(body1.awaitingWebhook, true, 'verify-payment must indicate awaitingWebhook: true');
 
     const orderAfter1 = env._memoryDB.orders.get(orderId);
-    assert.strictEqual(orderAfter1.status, 'PAID', 'Order status must be updated to PAID');
+    assert.strictEqual(orderAfter1.status, 'PAYMENT_VERIFIED', 'Order status must be PAYMENT_VERIFIED (webhook-only PDF generation)');
 
     const jobs1 = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
-    assert.strictEqual(jobs1.length, 1, 'Exactly one report job must be created');
+    assert.strictEqual(jobs1.length, 0, 'verify-payment must NOT create report job before webhook');
 
     const emails1 = env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent');
-    assert.strictEqual(emails1.length, 1, 'Exactly one order confirmation email must be recorded on first call');
+    assert.strictEqual(emails1.length, 0, 'verify-payment must NOT send fulfillment email before webhook');
 
     // Second call idempotency check
     const req2 = new Request('https://test.numerosvision.com/api/v1/payments/verify-payment', {
@@ -260,12 +274,9 @@ async function runTestSuite() {
     assert.strictEqual(res2.status, 200, 'verify-payment call 2 should succeed idempotently');
 
     const jobs2 = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
-    assert.strictEqual(jobs2.length, 1, 'Second verify call must NOT create a duplicate report job');
+    assert.strictEqual(jobs2.length, 0, 'Second verify call must still wait for webhook');
 
-    const emails2 = env._memoryDB.audit_log.filter(a => a.resource_id === orderId && a.action === 'order_confirmation_email_sent');
-    assert.strictEqual(emails2.length, 1, 'Second verify call must NOT dispatch a duplicate confirmation email');
-
-    console.log('✓ PASS: verify-payment creates exactly one job and one email; second call creates none.');
+    console.log('✓ PASS: verify-payment sets PAYMENT_VERIFIED without premature PDF generation.');
   }
 
   // =========================================================================
@@ -283,7 +294,7 @@ async function runTestSuite() {
       user_id: 'usr_test_002',
       subject_id: 'sbj_test_002',
       pack_id: 'report_master',
-      amount_paise: 48900,
+      amount_paise: 51000,
       currency: 'INR',
       rzp_order_id: rzpOrderId,
       status: 'CREATED',
@@ -303,7 +314,7 @@ async function runTestSuite() {
         order: {
           entity: {
             id: rzpOrderId,
-            amount_paid: 48900,
+            amount_paid: 51000,
             status: 'paid'
           }
         },
@@ -311,7 +322,7 @@ async function runTestSuite() {
           entity: {
             id: rzpPaymentId,
             order_id: rzpOrderId,
-            amount: 48900,
+            amount: 51000,
             currency: 'INR',
             status: 'captured',
             method: 'card'
@@ -419,6 +430,23 @@ async function runTestSuite() {
 
     const res = await worker.fetch(req, env, {});
     assert.strictEqual(res.status, 200, 'verify-payment must succeed even when telemetry throws');
+    assert.strictEqual(env._memoryDB.orders.get(orderId).status, 'PAYMENT_VERIFIED', 'Order status must be PAYMENT_VERIFIED after verify');
+
+    // Deliver webhook under telemetryThrows: true as well
+    const whBody = JSON.stringify({
+      event: 'order.paid',
+      payload: {
+        order: { entity: { id: rzpOrderId, amount_paid: 19900, status: 'paid' } },
+        payment: { entity: { id: rzpPaymentId, order_id: rzpOrderId, amount: 19900, currency: 'INR', status: 'captured', method: 'upi' } }
+      }
+    });
+    const whSig = crypto.createHmac('sha256', env.RAZORPAY_WEBHOOK_SECRET).update(whBody).digest('hex');
+    const whRes = await worker.fetch(new Request('https://test.numerosvision.com/api/v1/payments/webhook', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Razorpay-Signature': whSig },
+      body: whBody
+    }), env, {});
+    assert.strictEqual(whRes.status, 200, 'webhook must succeed even when telemetry throws');
 
     // 1. Order marked PAID
     assert.strictEqual(env._memoryDB.orders.get(orderId).status, 'PAID', 'Order status must be PAID');
@@ -638,7 +666,138 @@ async function runTestSuite() {
     console.log('✓ PASS: /api/admin/test-console exposes paid_unfulfilled_orders and read-only gateway_check.');
   }
 
-  console.log('--- ALL SUITE TESTS PASSED SUCCESSFULLY (6/6) ---');
+  // =========================================================================
+  // TEST 7: 10-MINUTE RAZORPAY FALLBACK WHEN WEBHOOK IS DELAYED
+  // =========================================================================
+  {
+    console.log('[Test 7] 10-Minute Razorpay REST API Fallback on Stale Unwebhooked Order');
+    const env = createMockEnv();
+    const orderId = 'ord_fallback_10min_007';
+    const rzpOrderId = 'order_rzp_fallback_007';
+    const crypto = await import('node:crypto');
+
+    // Seed order created 5 minutes ago (< 10-min threshold)
+    env._memoryDB.orders.set(orderId, {
+      id: orderId,
+      user_id: 'usr_fallback_007',
+      subject_id: 'sbj_fallback_007',
+      pack_id: 'report_basic',
+      amount_paise: 19900,
+      currency: 'INR',
+      rzp_order_id: rzpOrderId,
+      status: 'PAYMENT_VERIFIED',
+      email: 'fallback@example.com',
+      created_at: Date.now() - (5 * 60 * 1000),
+      updated_at: Date.now() - (5 * 60 * 1000)
+    });
+    env._memoryDB.subjects.set('sbj_fallback_007', {
+      id: 'sbj_fallback_007',
+      email: 'fallback@example.com',
+      name: 'Fallback Seeker'
+    });
+
+    const expiresAt = Date.now() + 86400000;
+    const validSig = crypto.createHmac('sha256', env.DOWNLOAD_TOKEN_SECRET)
+      .update(`${orderId}:${expiresAt}`).digest('hex');
+    const validToken = `${expiresAt}.${validSig}`;
+
+    let rzpCalls = 0;
+    const origFetch = globalThis.fetch;
+    globalThis.fetch = async (input, init) => {
+      const u = typeof input === 'string' ? input : input.url;
+      if (u === `https://api.razorpay.com/v1/orders/${encodeURIComponent(rzpOrderId)}/payments`) {
+        rzpCalls++;
+        return new Response(JSON.stringify({
+          items: [
+            {
+              id: 'pay_fallback_captured_007',
+              order_id: rzpOrderId,
+              amount: 19900,
+              currency: 'INR',
+              status: 'captured',
+              method: 'upi'
+            }
+          ]
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      return origFetch(input, init);
+    };
+
+    try {
+      // 7a. Poll at 5 minutes (< 10 minutes): must NOT call Razorpay API yet
+      const resEarly = await worker.fetch(
+        new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}&token=${encodeURIComponent(validToken)}`),
+        env,
+        {}
+      );
+      assert.strictEqual(resEarly.status, 200);
+      const dataEarly = await resEarly.json();
+      assert.strictEqual(rzpCalls, 0, 'Must not query Razorpay API before 10-minute window');
+      assert.strictEqual(dataEarly.status, 'payment_verified');
+
+      // 7b. Age order to 11 minutes (>= 10 minutes) and poll again -> fallback triggers!
+      env._memoryDB.orders.get(orderId).created_at = Date.now() - (11 * 60 * 1000);
+      const resLate = await worker.fetch(
+        new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}&token=${encodeURIComponent(validToken)}`),
+        env,
+        {}
+      );
+      assert.strictEqual(resLate.status, 200);
+      const dataLate = await resLate.json();
+      assert.strictEqual(rzpCalls, 1, 'Must query Razorpay /orders/{id}/payments once after 10 minutes');
+      assert.strictEqual(env._memoryDB.orders.get(orderId).status, 'PAID', 'Fallback must transition order to PAID');
+      assert.strictEqual(dataLate.status, 'paid');
+      const jobsAfterFallback = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === orderId);
+      assert.strictEqual(jobsAfterFallback.length, 1, 'Fallback must create exactly 1 report job');
+
+      // 7c. Subsequent poll must NOT query Razorpay again or duplicate job
+      await worker.fetch(
+        new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}&token=${encodeURIComponent(validToken)}`),
+        env,
+        {}
+      );
+      assert.strictEqual(rzpCalls, 1, 'Already-PAID order must not re-query Razorpay');
+    } finally {
+      globalThis.fetch = origFetch;
+    }
+    console.log('✓ PASS: 10-minute Razorpay fallback reconciles stale orders idempotently.');
+  }
+
+  // =========================================================================
+  // TEST 8: PHASE 1 EDGE REDIRECTS, WAF & CANONICAL LINK HEADER
+  // =========================================================================
+  {
+    console.log('[Test 8] Phase 1 single-hop www + /tools/ 301s, /reports/*.pdf WAF, and Link canonical header');
+    const env = createMockEnv({
+      ASSETS: {
+        fetch: async () => new Response('<!DOCTYPE html><html><body>Pricing</body></html>', {
+          status: 200,
+          headers: { 'Content-Type': 'text/html; charset=utf-8' }
+        })
+      }
+    });
+
+    // 8a. www + legacy /tools/lo-shu-grid -> single-hop 301 to https://numerosvision.com/calculators/lo-shu-grid/
+    const resWwwTool = await worker.fetch(new Request('https://www.numerosvision.com/tools/lo-shu-grid?utm_source=ig'), env, {});
+    assert.strictEqual(resWwwTool.status, 301);
+    assert.strictEqual(resWwwTool.headers.get('Location'), 'https://numerosvision.com/calculators/lo-shu-grid/?utm_source=ig');
+
+    // 8b. /reports/secret.pdf -> 404 blocked, while /reports/ -> 301 /reports_catalogue/
+    const resPdfBlock = await worker.fetch(new Request('https://numerosvision.com/reports/customer_123.pdf'), env, {});
+    assert.strictEqual(resPdfBlock.status, 404);
+    const resReportsDir = await worker.fetch(new Request('https://numerosvision.com/reports/'), env, {});
+    assert.strictEqual(resReportsDir.status, 301);
+    assert.ok(resReportsDir.headers.get('Location').endsWith('/reports_catalogue/'));
+
+    // 8c. Parameterized public HTML response includes HTTP Link rel="canonical"
+    const resParamHtml = await worker.fetch(new Request('https://numerosvision.com/pricing/?utm_campaign=launch'), env, {});
+    assert.strictEqual(resParamHtml.status, 200);
+    assert.strictEqual(resParamHtml.headers.get('Link'), '<https://numerosvision.com/pricing/>; rel="canonical"');
+
+    console.log('✓ PASS: Single-hop www/tool 301s, /reports/*.pdf WAF, and Link rel="canonical" verified.');
+  }
+
+  console.log('--- ALL SUITE TESTS PASSED SUCCESSFULLY (8/8) ---');
 }
 
 runTestSuite().catch(err => {

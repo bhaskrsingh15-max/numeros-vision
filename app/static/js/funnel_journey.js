@@ -1,6 +1,6 @@
 /**
  * NUMEROS VISION — UNIFIED MARKETING FUNNEL & CONVERSION FRAMEWORK (v2.1.0)
- * Brand Tagline: ANVIEL EVERY CHARM
+ * Brand Tagline: ANVEIL EVERY CHARM
  *
  * Synced with app/config/packs.json.
  * Enforces:
@@ -19,11 +19,11 @@
       name: 'Birth Number Analysis',
       curiosity_hook: 'Want to Explore Your Number Further?',
       value_bridge: 'Your free calculation provides your foundational Driver (Mulank) frequency. Explore the complete dossier to understand planetary harmonics, career resonance, and personal year cycles.',
-      primary_cta: 'View Basic Report →',
+      primary_cta: 'View Anveil my alignments →',
       secondary_cta: 'Compare Report Packages',
       tertiary_link: 'Preview a Sample Report',
       plan_id: 'report_basic',
-      plan_name: 'Basic Report',
+      plan_name: 'Anveil my alignments',
       price_inr: 199,
       root: 1,
       deliverables: [
@@ -39,12 +39,12 @@
       name: 'Life Path Calculator',
       curiosity_hook: 'Explore the Wider Life Path Picture',
       value_bridge: 'Pure calculation frequency reduces your birth epoch to your core Life Path. Explore the next layer to review element balancing and enabled numbers in depth.',
-      primary_cta: 'Explore Advanced Master Dossier →',
+      primary_cta: 'Explore Anveil my glowing charms →',
       secondary_cta: 'Compare Report Packages',
       tertiary_link: 'Preview Sample Dossier',
       plan_id: 'report_advanced',
-      plan_name: 'Advanced Master Dossier',
-      price_inr: 489,
+      plan_name: 'Anveil my glowing charms',
+      price_inr: 510,
       root: 3,
       deliverables: [
         '12-Page Master Synthesis PDF Dossier',
@@ -59,11 +59,11 @@
       name: 'Name Numerology',
       curiosity_hook: 'Review the Additional Number Breakdown',
       value_bridge: 'Your free result shows your single-digit expression number. The complete analysis evaluates full vs calling name harmony, compound number meaning, and element balancing.',
-      primary_cta: 'View Basic Report →',
+      primary_cta: 'View Anveil my alignments →',
       secondary_cta: 'Compare Report Packages',
       tertiary_link: 'How Name Balancing Works',
       plan_id: 'report_basic',
-      plan_name: 'Basic Report',
+      plan_name: 'Anveil my alignments',
       price_inr: 199,
       root: 1,
       deliverables: [
@@ -78,12 +78,12 @@
       name: 'Chaldean Name Numerology',
       curiosity_hook: 'Discover the Ancient Sound Frequencies',
       value_bridge: 'Chaldean numerology focuses on compound vibrations. Explore how your compound number interacts with your enabled chart numbers.',
-      primary_cta: 'Explore Advanced Master Dossier →',
+      primary_cta: 'Explore Anveil my glowing charms →',
       secondary_cta: 'Compare Report Packages',
       tertiary_link: 'View Chaldean Methodology',
       plan_id: 'report_advanced',
-      plan_name: 'Advanced Master Dossier',
-      price_inr: 489,
+      plan_name: 'Anveil my glowing charms',
+      price_inr: 510,
       root: 3,
       deliverables: [
         '12-Page Master Synthesis PDF Dossier',
@@ -97,12 +97,12 @@
       name: 'Lo Shu 3x3 Grid',
       curiosity_hook: 'Address Incomplete Energy Planes',
       value_bridge: 'Your free grid identifies present and missing numbers. The master report maps all 8 planes, element balancing, and enabled numbers in depth.',
-      primary_cta: 'Explore Advanced Master Dossier →',
+      primary_cta: 'Explore Anveil my glowing charms →',
       secondary_cta: 'Preview the Detailed Grid Report',
       tertiary_link: 'Explore Plane Meanings',
       plan_id: 'report_advanced',
-      plan_name: 'Advanced Master Dossier',
-      price_inr: 489,
+      plan_name: 'Anveil my glowing charms',
+      price_inr: 510,
       root: 3,
       deliverables: [
         '12-Page Master Synthesis PDF Dossier',
@@ -116,12 +116,12 @@
       name: 'Mobile Number Numerology',
       curiosity_hook: 'Uncover Paired Digit Harmonics',
       value_bridge: 'Every mobile contact number emits repetitive frequencies. The full report audits all 9 adjacent pairs and evaluates alignment with your birth numbers.',
-      primary_cta: 'Explore Advanced Master Dossier →',
+      primary_cta: 'Explore Anveil my glowing charms →',
       secondary_cta: 'View My Report Options',
       tertiary_link: 'Privacy & Data Masking Policy',
       plan_id: 'report_advanced',
-      plan_name: 'Advanced Master Dossier',
-      price_inr: 489,
+      plan_name: 'Anveil my glowing charms',
+      price_inr: 510,
       root: 3,
       deliverables: [
         '12-Page Master Synthesis PDF Dossier',
@@ -135,11 +135,11 @@
       name: 'Personal Year & Transit Engine',
       curiosity_hook: 'Map Your Foundational Alignment',
       value_bridge: 'Knowing your Personal Year number is step one. Explore your foundational Driver, Conductor, Lo Shu grid, and element balancing.',
-      primary_cta: 'View Basic Report →',
+      primary_cta: 'View Anveil my alignments →',
       secondary_cta: 'Compare Report Packages',
       tertiary_link: 'Review Forecast Methodology',
       plan_id: 'report_basic',
-      plan_name: 'Basic Report',
+      plan_name: 'Anveil my alignments',
       price_inr: 199,
       root: 1,
       deliverables: [
@@ -154,12 +154,12 @@
       name: 'Numerology Compatibility',
       curiosity_hook: 'Deepen Relational Synergy',
       value_bridge: 'Our free tool assesses Driver-Conductor natural harmony. The full relationship dossier explores elemental compatibility and constructive communication alignment.',
-      primary_cta: 'Explore Advanced Master Dossier →',
+      primary_cta: 'Explore Anveil my glowing charms →',
       secondary_cta: 'Compare Report Packages',
       tertiary_link: 'View Synastry Principles',
       plan_id: 'report_advanced',
-      plan_name: 'Advanced Master Dossier',
-      price_inr: 489,
+      plan_name: 'Anveil my glowing charms',
+      price_inr: 510,
       root: 3,
       deliverables: [
         '12-Page Master Synthesis PDF Dossier',
@@ -173,11 +173,11 @@
       name: 'Business Direction & Entity Matrix',
       curiosity_hook: 'Align Corporate Brand with Market Timing',
       value_bridge: 'A business entity holds its own vibrational signature. Our sovereign blueprint validates trade name vibrations, founder synastry, and timing windows.',
-      primary_cta: 'Explore Premium Sovereign Blueprint →',
+      primary_cta: 'Explore Anveil every charm →',
       secondary_cta: 'Compare Business Options',
       tertiary_link: 'Corporate Confidentiality Terms',
       plan_id: 'report_premium',
-      plan_name: 'Premium Sovereign Blueprint',
+      plan_name: 'Anveil every charm',
       price_inr: 1050,
       root: 6,
       deliverables: [
@@ -275,7 +275,7 @@
             🔒
           </div>
           <div style="font-family:'Cinzel', serif;font-size:0.70rem;letter-spacing:0.16em;text-transform:uppercase;color:#8B6914;font-weight:700;margin-bottom:4px;">
-            NUMEROS VISION · ANVIEL EVERY CHARM
+            NUMEROS VISION · ANVEIL EVERY CHARM
           </div>
           <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:#523E28;margin:0 0 8px 0;font-weight:700;">
             Explore ${prod.plan_name}

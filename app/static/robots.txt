@@ -1,107 +1,204 @@
 # ══════════════════════════════════════════════════════════════
-# NUMEROS VISION — SEARCH ENGINE CRAWLER DIRECTIVES
+# NUMEROS VISION — SEARCH & ANSWER ENGINE CRAWLER DIRECTIVES
 # ══════════════════════════════════════════════════════════════
 
-# ── Google Search Crawlers ────────────────────────────────────
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
 Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
+Disallow: /data/
+Disallow: /admin/
+Disallow: /reports/*.pdf
 Disallow: /docs
 Disallow: /redoc
-Disallow: /data/
-Disallow: /admin/
 Disallow: /demo
-
-User-agent: Googlebot-Mobile
-Allow: /
-Disallow: /api/
-Disallow: /data/
-Disallow: /admin/
+Disallow: /logo-preview
+Disallow: /sample2
 
 User-agent: Googlebot-Image
-Allow: /static/logos/
-Allow: /static/icons/
-Allow: /static/screenshots/
+Allow: /assets/brand/
+Allow: /logos/
+Allow: /icons/
 Disallow: /api/
 Disallow: /data/
+Disallow: /reports/*.pdf
 
-User-agent: Storebot-Google
-Allow: /
-Disallow: /api/
-Disallow: /data/
-
-# Google-Extended (Google AI Overviews & SGE Discovery)
 User-agent: Google-Extended
 Allow: /
 Disallow: /api/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
 Disallow: /data/
 Disallow: /admin/
+Disallow: /reports/*.pdf
+Disallow: /docs
+Disallow: /redoc
+Disallow: /demo
+Disallow: /logo-preview
+Disallow: /sample2
 
-# ── Generative & Answer Engine Optimization (AEO / GEO Crawlers) ─
 User-agent: GPTBot
 Allow: /
 Disallow: /api/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
 Disallow: /data/
 Disallow: /admin/
+Disallow: /reports/*.pdf
+Disallow: /docs
+Disallow: /redoc
+Disallow: /demo
+Disallow: /logo-preview
+Disallow: /sample2
 
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /api/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
 Disallow: /data/
 Disallow: /admin/
+Disallow: /reports/*.pdf
+Disallow: /docs
+Disallow: /redoc
+Disallow: /demo
+Disallow: /logo-preview
+Disallow: /sample2
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
+Disallow: /data/
+Disallow: /admin/
+Disallow: /reports/*.pdf
+Disallow: /docs
+Disallow: /redoc
+Disallow: /demo
+Disallow: /logo-preview
+Disallow: /sample2
 
 User-agent: PerplexityBot
 Allow: /
 Disallow: /api/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
 Disallow: /data/
 Disallow: /admin/
+Disallow: /reports/*.pdf
+Disallow: /docs
+Disallow: /redoc
+Disallow: /demo
+Disallow: /logo-preview
+Disallow: /sample2
 
 User-agent: ClaudeBot
 Allow: /
 Disallow: /api/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
 Disallow: /data/
 Disallow: /admin/
+Disallow: /reports/*.pdf
+Disallow: /docs
+Disallow: /redoc
+Disallow: /demo
+Disallow: /logo-preview
+Disallow: /sample2
 
 User-agent: Applebot-Extended
 Allow: /
 Disallow: /api/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
 Disallow: /data/
 Disallow: /admin/
+Disallow: /reports/*.pdf
+Disallow: /docs
+Disallow: /redoc
+Disallow: /demo
+Disallow: /logo-preview
+Disallow: /sample2
 
-User-agent: Bytespider
-Allow: /
-Disallow: /api/
-Disallow: /data/
-Disallow: /admin/
-
-User-agent: CCBot
-Allow: /
-Disallow: /api/
-Disallow: /data/
-Disallow: /admin/
-
-User-agent: Diffbot
-Allow: /
-Disallow: /api/
-Disallow: /data/
-Disallow: /admin/
-
-User-agent: cohere-ai
-Allow: /
-Disallow: /api/
-Disallow: /data/
-Disallow: /admin/
-
-# ── Microsoft Bing Crawlers ───────────────────────────────────
 User-agent: Bingbot
 Allow: /
 Disallow: /api/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
 Disallow: /data/
 Disallow: /admin/
+Disallow: /reports/*.pdf
+Disallow: /docs
+Disallow: /redoc
 Disallow: /demo
+Disallow: /logo-preview
+Disallow: /sample2
 
-# ── Default Policy for All Verified Crawlers ──────────────────
 User-agent: *
 Allow: /
 Allow: /llms.txt
@@ -109,14 +206,23 @@ Allow: /llms-full.txt
 Allow: /BingSiteAuth.xml
 Allow: /49bf97a1d74343ce951918a3a0e676d4.txt
 Allow: /sitemap.xml
-Disallow: /dashboard/
 Disallow: /api/
-Disallow: /docs
-Disallow: /redoc
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /free-report/
+Disallow: /your-reading/
+Disallow: /package/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /charm-ai/chat/
+Disallow: /practitioner/
 Disallow: /data/
 Disallow: /admin/
+Disallow: /reports/*.pdf
+Disallow: /docs
+Disallow: /redoc
 Disallow: /demo
+Disallow: /logo-preview
+Disallow: /sample2
 
-# Crawl Speed & Sitemap
-Crawl-delay: 1
 Sitemap: https://numerosvision.com/sitemap.xml

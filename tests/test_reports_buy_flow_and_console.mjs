@@ -28,7 +28,7 @@ async function runSuite() {
   // ---------------------------------------------------------------------------
   console.log('[TEST 1] Testing Reports tier picker prices against PACK_CATALOG...');
   assert.equal(packsJson.core_reports.report_basic.price_inr, 199, 'Basic report must be 199');
-  assert.equal(packsJson.core_reports.report_advanced.price_inr, 489, 'Advanced report must be 489');
+  assert.equal(packsJson.core_reports.report_advanced.price_inr, 510, 'Advanced report must be 510');
   assert.equal(packsJson.core_reports.report_premium.price_inr, 1050, 'Premium report must be 1050');
 
   // Under Stage A, the 3 tiers exist with exact catalog prices on /your-reading/
@@ -36,9 +36,9 @@ async function runSuite() {
   assert.ok(yourReadingHtml.includes('card-report-advanced'), 'card-report-advanced must exist in your-reading.html');
   assert.ok(yourReadingHtml.includes('card-report-premium'), 'card-report-premium must exist in your-reading.html');
   assert.ok(yourReadingHtml.includes('₹199'), 'Basic price ₹199 must be in your-reading.html');
-  assert.ok(yourReadingHtml.includes('₹489'), 'Advanced price ₹489 must be in your-reading.html');
+  assert.ok(yourReadingHtml.includes('₹510'), 'Advanced price ₹510 must be in your-reading.html');
   assert.ok(yourReadingHtml.includes('₹1,050'), 'Premium price ₹1,050 must be in your-reading.html');
-  console.log('  ✓ Tier picker prices match PACK_CATALOG exactly (199, 489, 1050)');
+  console.log('  ✓ Tier picker prices match PACK_CATALOG exactly (199, 510, 1050)');
   passedCount++;
 
   // ---------------------------------------------------------------------------
@@ -103,7 +103,7 @@ async function runSuite() {
   assert.ok(pricingHtml.includes('/?plan=report_basic#reports'), 'Pricing table Basic button must enter /?plan=report_basic#reports');
   assert.ok(pricingHtml.includes('/?plan=report_advanced#reports'), 'Pricing table Advanced button must enter /?plan=report_advanced#reports');
   assert.ok(pricingHtml.includes('/?plan=report_premium#reports'), 'Pricing table Premium button must enter /?plan=report_premium#reports');
-  assert.ok(pricingHtml.includes('/charm_ai.html#pass'), 'Pricing table Charm AI button must enter /charm_ai.html#pass');
+  assert.ok(pricingHtml.includes('/charm-ai/chat/#pass'), 'Pricing table Charm AI button must enter /charm-ai/chat/#pass');
   assert.ok(pricingHtml.includes('window.location.href = \'/?plan=\' + encodeURIComponent(targetPlan) + \'#reports\';'), 'startCheckout on pricing.html must redirect to in-page flow');
   console.log('  ✓ Menu tabs and pricing comparison buttons enter product flow directly with zero /pricing detour');
   passedCount++;
@@ -234,7 +234,7 @@ async function runSuite() {
   assert.ok(yourReadingHtml.includes("'purchase_complete'"), 'purchase_complete funnel event must be wired in your-reading.html');
 
   // Verify the exact trust line on the single checkout surface
-  assert.ok(yourReadingHtml.includes('🔒 100% Secure 256-bit Encrypted Payment via Razorpay · <a href="/refund.html"'), 'Mandatory trust line must exist in your-reading.html');
+  assert.ok(yourReadingHtml.includes('🔒 100% Secure 256-bit Encrypted Payment via Razorpay · <a href="/refund-policy/"'), 'Mandatory trust line must exist in your-reading.html');
   console.log('  ✓ Funnel events (view_product, begin_checkout, otp_verified, purchase_complete) & trust line verified on /your-reading/');
   passedCount++;
 

@@ -9,71 +9,36 @@
 
   const CATALOG = {
   "currency": "INR",
+  "ladder_order": ["report_premium", "report_advanced", "report_basic"],
   "feature_flags": {
-    "notify_me_higher_tiers": false,
+    "notify_me_higher_tiers": true,
     "notify_me_tiers": ["report_advanced", "report_premium"]
   },
+  "launch_offer": {
+    "enabled": true,
+    "duration_days": 7,
+    "started_at": null,
+    "ends_at": null,
+    "prelaunch_label": "1-week launch offer \u00b7 valid for 7 days from launch"
+  },
   "report_tiers": {
-    "basic": {
-      "tier_id": "basic",
-      "name": "Basic Report",
-      "display_name": "Basic Report \u00b7 Entry",
-      "pages": 3,
-      "page_target": "3-page PDF",
-      "price_inr": 199,
-      "amount_paise": 19900,
-      "digital_root": 1,
-      "purpose": "A focused answer to one core question with essential calculations and initial findings.",
-      "deliverables": [
-        "3-Page Personalised Executive PDF",
-        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
-        "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
-        "Chaldean Single Root & Compound Letter Breakdown",
-        "Methodology Note & Interpretive Limitations Summary"
-      ],
-      "depth_level": "Focused",
-      "comparisons": "Essential",
-      "methodology": "Included",
-      "guidance": "Key takeaways & reflection points",
-      "active": true
-    },
-    "advanced": {
-      "tier_id": "advanced",
-      "name": "Advanced Master Dossier",
-      "display_name": "Advanced Master Dossier \u00b7 Recommended",
-      "pages": 12,
-      "page_target": "12-page PDF",
-      "price_inr": 489,
-      "amount_paise": 48900,
-      "digital_root": 3,
-      "popular": true,
-      "purpose": "Expanded analysis, supporting calculations, comparisons, and structured guidance.",
-      "deliverables": [
-        "12-Page Master Synthesis PDF Dossier",
-        "All Basic calculations + 3-Year Numerology Dasha Timing Radar + 12 Personal Months",
-        "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
-        "Chaldean Sound Frequency & Name Harmony Matrix",
-        "7-Layer Safe Planetary Remedy Protocols",
-        "Structured Cross-Factor Comparisons & Practical Guidance"
-      ],
-      "depth_level": "Expanded",
-      "comparisons": "Multiple, where supported",
-      "methodology": "Expanded with calculation steps",
-      "guidance": "Structured guidance & auspicious windows",
-      "active": true
-    },
     "premium": {
       "tier_id": "premium",
-      "name": "Premium Sovereign Blueprint",
-      "display_name": "Premium Sovereign Blueprint \u00b7 Comprehensive",
+      "name": "Anveil every charm",
+      "display_name": "Anveil every charm \u00b7 Best value",
       "pages": 32,
       "page_target": "32-page PDF",
       "price_inr": 1050,
       "amount_paise": 105000,
+      "mrp_inr": 2100,
+      "mrp_paise": 210000,
+      "per_page_inr": 33,
       "digital_root": 6,
-      "purpose": "The broadest supported analysis with integrated multi-engine findings and consolidated reference.",
+      "mrp_digital_root": 3,
+      "best_value": true,
+      "purpose": "The complete 32-page roadmap covering every glowing and veiled charm, multi-engine synthesis, remedies, and timing.",
       "deliverables": [
-        "32-Page Sovereign Executive Master Blueprint PDF",
+        "32-Page Complete Roadmap PDF (all 9 glowing & veiled charms)",
         "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
         "10-Year Macro Planetary Timing Radar (Quarter Breakdown), 12 Personal Months & 90-Day Execution Windows",
         "Multi-Generational Synastry & Compatibility Analysis",
@@ -86,6 +51,62 @@
       "guidance": "Consolidated lifetime reference & strategic roadmap",
       "active": true,
       "charm_credits_included": 5
+    },
+    "advanced": {
+      "tier_id": "advanced",
+      "name": "Anveil my glowing charms",
+      "display_name": "Anveil my glowing charms",
+      "pages": 12,
+      "page_target": "12-page PDF",
+      "price_inr": 510,
+      "amount_paise": 51000,
+      "mrp_inr": 1020,
+      "mrp_paise": 102000,
+      "per_page_inr": 43,
+      "digital_root": 6,
+      "mrp_digital_root": 3,
+      "popular": true,
+      "purpose": "Expanded 12-page analysis of your glowing charms, supporting calculations, comparisons, and structured guidance.",
+      "deliverables": [
+        "12-Page Glowing Charms Synthesis PDF",
+        "All Alignment calculations + 3-Year Numerology Dasha Timing Radar + 12 Personal Months",
+        "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
+        "Chaldean Sound Frequency & Name Harmony Matrix",
+        "7-Layer Safe Planetary Remedy Protocols",
+        "Structured Cross-Factor Comparisons & Practical Guidance"
+      ],
+      "depth_level": "Expanded",
+      "comparisons": "Multiple, where supported",
+      "methodology": "Expanded with calculation steps",
+      "guidance": "Structured guidance & auspicious windows",
+      "active": true
+    },
+    "basic": {
+      "tier_id": "basic",
+      "name": "Anveil my alignments",
+      "display_name": "Anveil my alignments",
+      "pages": 3,
+      "page_target": "3-page PDF",
+      "price_inr": 199,
+      "amount_paise": 19900,
+      "mrp_inr": 399,
+      "mrp_paise": 39900,
+      "per_page_inr": 66,
+      "digital_root": 1,
+      "mrp_digital_root": 3,
+      "purpose": "A focused 3-page reading of your core alignments with essential calculations and initial findings.",
+      "deliverables": [
+        "3-Page Personalised Alignments PDF",
+        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
+        "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
+        "Chaldean Single Root & Compound Letter Breakdown",
+        "Methodology Note & Interpretive Limitations Summary"
+      ],
+      "depth_level": "Focused",
+      "comparisons": "Essential",
+      "methodology": "Included",
+      "guidance": "Key takeaways & reflection points",
+      "active": true
     }
   },
   "supported_topics": {
@@ -432,7 +453,7 @@
         "45-Minute Private 1-on-1 Consultation Session",
         "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
         "Comprehensive personal strategy & custom remedial protocols",
-        "Complimentary 12-Page Advanced PDF Dossier (\u20b9489 value)",
+        "Complimentary 12-Page Advanced PDF Dossier (\u20b9510 value)",
         "Audio recording and written consultation summary",
         "Free 1-time rescheduling up to 24 hours prior"
       ]
@@ -442,7 +463,7 @@
     "report_basic": {
       "sku_id": "report_basic",
       "family": "standalone_report",
-      "name": "Basic Report",
+      "name": "Anveil my alignments",
       "tier": "basic",
       "pages": 3,
       "amount_inr": 199,
@@ -459,11 +480,11 @@
     "report_advanced": {
       "sku_id": "report_advanced",
       "family": "standalone_report",
-      "name": "Advanced Master Dossier",
+      "name": "Anveil my glowing charms",
       "tier": "advanced",
       "pages": 12,
-      "amount_inr": 489,
-      "amount_paise": 48900,
+      "amount_inr": 510,
+      "amount_paise": 51000,
       "currency": "INR",
       "deliverables": [
         "12-Page Master Synthesis PDF Dossier",
@@ -477,7 +498,7 @@
     "report_premium": {
       "sku_id": "report_premium",
       "family": "standalone_report",
-      "name": "Premium Sovereign Blueprint",
+      "name": "Anveil every charm",
       "tier": "premium",
       "pages": 32,
       "amount_inr": 1050,
@@ -606,7 +627,7 @@
         "45-Minute Private 1-on-1 Consultation Session",
         "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
         "Comprehensive personal strategy & custom remedial protocols",
-        "Complimentary 12-Page Advanced PDF Dossier (\u20b9489 value)",
+        "Complimentary 12-Page Advanced PDF Dossier (\u20b9510 value)",
         "Audio recording and written consultation summary",
         "Free 1-time rescheduling up to 24 hours prior"
       ]
@@ -741,7 +762,7 @@
       },
       "ADVANCED_REPORT": {
         "sku": "report_advanced",
-        "price_inr": 489,
+        "price_inr": 510,
         "pages": 12
       },
       "PREMIUM_REPORT": {
@@ -780,14 +801,22 @@
 
     getPrice(skuId) {
       const clean = (skuId || '').toLowerCase();
-      if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential') return 199;
-      if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master') return 489;
-      if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine') return 1050;
+      if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential' || clean === 'alignments') return 199;
+      if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master' || clean === 'glowing') return 510;
+      if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine' || clean === 'every_charm') return 1050;
       if (clean === 'charm_single' || clean === 'charm_starter' || clean === 'starter_5q') return 199;
 
       // Fallback
       if (CATALOG.report_tiers[clean]) return CATALOG.report_tiers[clean].price_inr;
-      return 489;
+      return 510;
+    },
+
+    getMrp(skuId) {
+      const clean = (skuId || '').toLowerCase();
+      if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential' || clean === 'alignments') return 399;
+      if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master' || clean === 'glowing') return 1020;
+      if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine' || clean === 'every_charm') return 2100;
+      return null;
     },
 
     formatPrice(skuId) {
@@ -808,6 +837,7 @@
         if (host === 'localhost' || host === '127.0.0.1') {
           const sp = new URLSearchParams(window.location.search || '');
           if (sp.get('nv_notify_me_preview') === '1') return true;
+          if (sp.get('nv_notify_me_preview') === '0') return false;
         }
       }
       return Boolean(CATALOG.feature_flags && CATALOG.feature_flags.notify_me_higher_tiers);
@@ -819,11 +849,60 @@
       return ['advanced', 'report_advanced', 'report_master', 'premium', 'report_premium', 'report_divine'].includes(clean);
     },
 
-    recommendLadderTier(gapCount, notifyOverride) {
+    resolveLaunchOfferState(nowMs, startedAtOverride) {
+      const lo = CATALOG.launch_offer || {};
+      if (lo.enabled === false) {
+        return { active: false, durationDays: 7, startedAt: null, endsAt: null, label: '' };
+      }
+      const rawStart = startedAtOverride !== undefined
+        ? startedAtOverride
+        : ((typeof window !== 'undefined' && window.__NV_LAUNCH_STARTED_AT) || lo.started_at || null);
+      const durationDays = Number(lo.duration_days || 7);
+      if (!rawStart) {
+        return {
+          active: true,
+          durationDays,
+          startedAt: null,
+          endsAt: null,
+          label: lo.prelaunch_label || '1-week launch offer · valid for 7 days from launch'
+        };
+      }
+      const startMs = Date.parse(rawStart);
+      if (Number.isNaN(startMs)) {
+        return {
+          active: true,
+          durationDays,
+          startedAt: null,
+          endsAt: null,
+          label: lo.prelaunch_label || '1-week launch offer · valid for 7 days from launch'
+        };
+      }
+      const endMs = startMs + durationDays * 86400 * 1000;
+      const currentMs = typeof nowMs === 'number' ? nowMs : Date.now();
+      const active = currentMs <= endMs;
+      const endDate = new Date(endMs);
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const dateStr = endDate.getUTCDate() + ' ' + months[endDate.getUTCMonth()] + ' ' + endDate.getUTCFullYear();
+      return {
+        active,
+        durationDays,
+        startedAt: new Date(startMs).toISOString(),
+        endsAt: endDate.toISOString(),
+        label: active ? ('Launch offer valid until ' + dateStr) : ''
+      };
+    },
+
+    recommendLadderTier(gapCount, notifyOverride, tappedContext) {
       const notifyActive = typeof notifyOverride === 'boolean'
         ? notifyOverride
         : this.isNotifyMeHigherTiersEnabled();
       if (notifyActive) return 'report_basic';
+      if (tappedContext) {
+        const ctx = String(tappedContext).trim().toLowerCase();
+        if (ctx === 'veiled' || ctx === 'missing' || ctx === 'every') return 'report_premium';
+        if (ctx === 'glowing' || ctx === 'present' || ctx === 'radiant') return 'report_advanced';
+        if (ctx === 'alignment' || ctx === 'align' || ctx === 'plane') return 'report_basic';
+      }
       if (gapCount === null || gapCount === undefined || Number.isNaN(Number(gapCount))) {
         return 'report_advanced';
       }

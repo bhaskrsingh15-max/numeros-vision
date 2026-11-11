@@ -14,7 +14,7 @@
   <title>Free Name Numerology Calculator | Numeros Vision</title>
   <meta name="description" content="Calculate your name numerology free. Find your Expression Number, Soul Urge, and Personality Number using both Chaldean and Pythagorean systems." />
   <meta name="keywords" content="name numerology calculator, chaldean numerology, pythagorean numerology, expression number, soul urge number, name number calculator free" />
-  <link rel="canonical" href="https://numerosvision.com/tools/name-numerology/" />
+  <link rel="canonical" href="https://numerosvision.com/calculators/name-numerology/" />
   <!-- Search Engine Crawl & Indexing Directives -->
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
@@ -26,16 +26,16 @@
   <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
   <meta property="og:site_name" content="Numeros Vision" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://numerosvision.com/tools/name-numerology" />
+  <meta property="og:url" content="https://numerosvision.com/calculators/name-numerology/" />
   <meta property="og:title" content="Free Name Numerology Calculator — Chaldean & Pythagorean — Numeros Vision" />
   <meta property="og:description" content="Calculate your name numerology free. Find your Expression Number, Soul Urge, and Personality Number using both Chaldean and Pythagorean systems. Discover if your name vibration supports your destiny." />
-  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+  <meta property="og:image" content="https://numerosvision.com/assets/brand/og-default-1200x630.png" />
 
   <!-- Twitter Card Directives -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Free Name Numerology Calculator — Chaldean & Pythagorean — Numeros Vision" />
   <meta name="twitter:description" content="Calculate your name numerology free. Find your Expression Number, Soul Urge, and Personality Number using both Chaldean and Pythagorean systems. Discover if your name vibration supports your destiny." />
-  <meta name="twitter:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+  <meta name="twitter:image" content="https://numerosvision.com/assets/brand/og-default-1200x630.png" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" />
   <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
 
@@ -790,10 +790,22 @@ function doRenderName(rawName, d, m, y) {
     }
   } catch (e) {}
 
-  // Update Charm AI Link if present
+  // Update Charm AI Link using sessionStorage (strictly zero PII in URL query string)
   const charmBtn = document.getElementById('btn-charm-name');
   if (charmBtn) {
-    charmBtn.href = `/charm-ai/?name=${encodeURIComponent(rawName)}&day=${d||15}&month=${m||8}&year=${y||1990}&q=How+does+my+Name+Vibration+harmonize+with+my+destiny+and+career%3F&auto=true`;
+    charmBtn.href = '/charm-ai/chat/';
+    charmBtn.onclick = function () {
+      try {
+        sessionStorage.setItem('nv_charm_prefill', JSON.stringify({
+          name: rawName,
+          day: d || 15,
+          month: m || 8,
+          year: y || 1990,
+          q: 'How does my Name Vibration harmonize with my destiny and career?',
+          auto: true
+        }));
+      } catch (e) {}
+    };
   }
 
   // Letter grid

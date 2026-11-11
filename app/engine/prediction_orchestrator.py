@@ -3,7 +3,7 @@
 PREDICTION ORCHESTRATOR & CANONICAL INTELLIGENCE LAYER
 Numeros Vision — Master Knowledge Engine (Section 19 Architecture)
 Orchestrates the 7 cooperating engines to produce a single, immutable CanonicalAnalysisResult.
-Guarantees zero mathematical divergence between Basic Reports, Premium Dossiers, and Charm AI.
+Guarantees zero mathematical divergence between Anveil my alignmentss, Premium Dossiers, and Charm AI.
 In strict compliance with Master AGENTS.md.
 """
 

@@ -112,14 +112,17 @@ class TestLoShuCuriosityAndNotifyMeFlag(unittest.TestCase):
         self.assertIsNotNone(m, "Could not locate #loshu-curiosity-card section")
         curiosity_markup = m.group(0)
         self.assertNotIn("₹", curiosity_markup)
-        for price_tok in ("199", "289", "489", "699", "1,050", "1050", "1,479", "1479"):
+        for price_tok in ("199", "399", "510", "1,020", "1020", "1,050", "1050", "2,100", "2100"):
             self.assertNotIn(price_tok, curiosity_markup)
 
-        # Verify one three-card ladder with approved prices (199, 489, 1,050) and launch MRPs (289, 699, 1,479)
-        self.assertIn('id="price-report_basic">₹199', html)
-        self.assertIn('id="price-report_advanced">₹489', html)
+        # Verify high-to-low three-card ladder with approved prices (1,050, 510, 199), MRPs (2,100, 1,020, 399), and 1-week dynamic launch offer
         self.assertIn('id="price-report_premium">₹1,050', html)
-        self.assertIn("Launch offer valid until 31 Jan 2027</div>", html)
+        self.assertIn('id="price-report_advanced">₹510', html)
+        self.assertIn('id="price-report_basic">₹199', html)
+        self.assertLess(html.index('id="tier-card-premium"'), html.index('id="tier-card-advanced"'))
+        self.assertLess(html.index('id="tier-card-advanced"'), html.index('id="tier-card-basic"'))
+        self.assertIn("1-week launch offer · valid for 7 days from launch", html)
+        self.assertNotIn("31 Jan 2027", html)
 
         # Verify explicit DPDP consent text, purpose, 12-month retention, and delete-on-request UI in both pages
         for page_txt in (html, pricing_html):
@@ -255,7 +258,7 @@ class TestLoShuCuriosityAndNotifyMeFlag(unittest.TestCase):
             self.assertEqual(len(outbox), 1)
             msg = outbox[0]
             self.assertEqual(msg["to"], "seeker@example.com")
-            self.assertIn("Advanced Master Dossier", msg["subject"])
+            self.assertIn("Anveil my glowing charms", msg["subject"])
             self.assertEqual(msg["purpose"], "tell me when this report is available")
             self.assertIn("tell you when", msg["text"])
             self.assertIn("https://numerosvision.com/pricing.html", msg["html"])
@@ -396,16 +399,29 @@ console.log(JSON.stringify({{ workerCipher, ruleMatrix }}));
             else:
                 self.assertEqual(py_false, "report_premium")
 
-    def test_06_notify_me_flag_off_by_default_and_api_endpoints(self):
+    def test_06_notify_me_flag_launch_default_true_and_api_endpoints(self):
         with patch.dict(os.environ, {}, clear=False):
             os.environ.pop("NV_NOTIFY_ME_HIGHER_TIERS", None)
-            self.assertFalse(is_notify_me_higher_tiers_enabled())
+            self.assertTrue(is_notify_me_higher_tiers_enabled())
             cat_default = get_pricing_catalog()
-            self.assertFalse(cat_default["feature_flags"]["notify_me_higher_tiers"])
+            self.assertTrue(cat_default["feature_flags"]["notify_me_higher_tiers"])
             self.assertEqual(
                 cat_default["ladder_recommendation_rule"]["default_recommended_tier"],
+                "report_basic",
+            )
+
+        with patch.dict(os.environ, {"NV_NOTIFY_ME_HIGHER_TIERS": "false"}):
+            self.assertFalse(is_notify_me_higher_tiers_enabled())
+            cat_off = get_pricing_catalog()
+            self.assertFalse(cat_off["feature_flags"]["notify_me_higher_tiers"])
+            self.assertEqual(
+                cat_off["ladder_recommendation_rule"]["default_recommended_tier"],
                 "report_advanced",
             )
+            self.assertEqual(recommend_ladder_tier(1, notify_me_higher_tiers=False, tapped_context="veiled"), "report_premium")
+            self.assertEqual(recommend_ladder_tier(7, notify_me_higher_tiers=False, tapped_context="glowing"), "report_advanced")
+            self.assertEqual(recommend_ladder_tier(7, notify_me_higher_tiers=False, tapped_context="alignment"), "report_basic")
+            self.assertEqual(recommend_ladder_tier(7, notify_me_higher_tiers=True, tapped_context="veiled"), "report_basic")
 
         teasers = get_public_loshu_teasers()
         self.assertTrue(teasers.get("public_browser_safe"))

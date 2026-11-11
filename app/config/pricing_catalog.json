@@ -1,43 +1,84 @@
 {
   "currency": "INR",
+  "ladder_order": [
+    "report_premium",
+    "report_advanced",
+    "report_basic"
+  ],
+  "feature_flags": {
+    "notify_me_higher_tiers": true,
+    "notify_me_tiers": [
+      "report_advanced",
+      "report_premium"
+    ]
+  },
+  "launch_offer": {
+    "active": true,
+    "duration_days": 7,
+    "started_at": null,
+    "ends_at": null,
+    "label": "1-week launch offer \u00b7 valid for 7 days from launch"
+  },
+  "ladder_recommendation_rule": {
+    "when_notify_me_true": "report_basic",
+    "when_notify_me_false": {
+      "tapped_veiled": "report_premium",
+      "tapped_glowing": "report_advanced",
+      "tapped_alignment": "report_basic",
+      "0_to_2_gaps": "report_basic",
+      "3_to_5_gaps": "report_advanced",
+      "6_to_9_gaps": "report_premium",
+      "unknown_gaps_default": "report_advanced"
+    },
+    "default_recommended_tier": "report_basic"
+  },
   "report_tiers": {
-    "basic": {
-      "tier_id": "basic",
-      "name": "Basic Report",
-      "display_name": "Basic Report \u00b7 Entry",
-      "pages": 3,
-      "page_target": "3-page PDF",
-      "price_inr": 199,
-      "amount_paise": 19900,
-      "digital_root": 1,
-      "purpose": "A focused answer to one core question with essential calculations and initial findings.",
+    "premium": {
+      "tier_id": "premium",
+      "name": "Anveil every charm",
+      "display_name": "Anveil every charm \u00b7 Best value",
+      "pages": 32,
+      "page_target": "32-page PDF",
+      "price_inr": 1050,
+      "amount_paise": 105000,
+      "mrp_inr": 2100,
+      "mrp_paise": 210000,
+      "per_page_inr": 33,
+      "digital_root": 6,
+      "mrp_digital_root": 3,
+      "best_value": true,
+      "purpose": "The complete 32-page roadmap covering every glowing and veiled charm, multi-engine synthesis, remedies, and timing.",
       "deliverables": [
-        "3-Page Personalised Executive PDF",
-        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
-        "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
-        "Chaldean Single Root & Compound Letter Breakdown",
-        "Methodology Note & Interpretive Limitations Summary"
+        "32-Page Complete Roadmap PDF (all 9 glowing & veiled charms)",
+        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
+        "10-Year Macro Planetary Timing Radar & Acute Execution Windows",
+        "Multi-Generational Synastry & Compatibility Analysis",
+        "Commercial & Professional Resonance Vectors",
+        "Complete Technical Appendix: Formulas, Engine Versions & Assumptions"
       ],
-      "depth_level": "Focused",
-      "comparisons": "Essential",
-      "methodology": "Included",
-      "guidance": "Key takeaways & reflection points",
-      "active": true
+      "depth_level": "Comprehensive",
+      "comparisons": "Integrated across all supported modules",
+      "methodology": "Detailed mathematical proofs & engine version trace",
+      "guidance": "Consolidated lifetime reference & strategic roadmap"
     },
     "advanced": {
       "tier_id": "advanced",
-      "name": "Advanced Master Dossier",
-      "display_name": "Advanced Master Dossier \u00b7 Recommended",
+      "name": "Anveil my glowing charms",
+      "display_name": "Anveil my glowing charms",
       "pages": 12,
       "page_target": "12-page PDF",
-      "price_inr": 489,
-      "amount_paise": 48900,
-      "digital_root": 3,
+      "price_inr": 510,
+      "amount_paise": 51000,
+      "mrp_inr": 1020,
+      "mrp_paise": 102000,
+      "per_page_inr": 43,
+      "digital_root": 6,
+      "mrp_digital_root": 3,
       "popular": true,
-      "purpose": "Expanded analysis, supporting calculations, comparisons, and structured guidance.",
+      "purpose": "Expanded 12-page analysis of your glowing charms, supporting calculations, comparisons, and structured guidance.",
       "deliverables": [
-        "12-Page Master Synthesis PDF Dossier",
-        "All Basic calculations + 3-Year Numerology Dasha Timing Radar + 12 Personal Months",
+        "12-Page Glowing Charms Synthesis PDF",
+        "All Alignment calculations + 5-Year Numerology Dasha Timing Timeline",
         "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
         "Chaldean Sound Frequency & Name Harmony Matrix",
         "7-Layer Safe Planetary Remedy Protocols",
@@ -46,33 +87,33 @@
       "depth_level": "Expanded",
       "comparisons": "Multiple, where supported",
       "methodology": "Expanded with calculation steps",
-      "guidance": "Structured guidance & auspicious windows",
-      "active": true
+      "guidance": "Structured guidance & auspicious windows"
     },
-    "premium": {
-      "tier_id": "premium",
-      "name": "Premium Sovereign Blueprint",
-      "display_name": "Premium Sovereign Blueprint \u00b7 Comprehensive",
-      "pages": 32,
-      "page_target": "32-page PDF",
-      "price_inr": 1050,
-      "amount_paise": 105000,
-      "digital_root": 6,
-      "purpose": "The broadest supported analysis with integrated multi-engine findings and consolidated reference.",
+    "basic": {
+      "tier_id": "basic",
+      "name": "Anveil my alignments",
+      "display_name": "Anveil my alignments",
+      "pages": 3,
+      "page_target": "3-page PDF",
+      "price_inr": 199,
+      "amount_paise": 19900,
+      "mrp_inr": 399,
+      "mrp_paise": 39900,
+      "per_page_inr": 66,
+      "digital_root": 1,
+      "mrp_digital_root": 3,
+      "purpose": "A focused 3-page reading of your core alignments with essential calculations and initial findings.",
       "deliverables": [
-        "32-Page Sovereign Executive Master Blueprint PDF",
-        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
-        "10-Year Macro Planetary Timing Radar (Quarter Breakdown), 12 Personal Months & 90-Day Execution Windows",
-        "Multi-Generational Synastry & Compatibility Analysis",
-        "Commercial & Professional Resonance Vectors",
-        "Complete Technical Appendix: Formulas, Engine Versions & Assumptions"
+        "3-Page Personalised Alignments PDF",
+        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
+        "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
+        "Chaldean Single Root & Compound Letter Breakdown",
+        "Methodology Note & Interpretive Limitations Summary"
       ],
-      "depth_level": "Comprehensive",
-      "comparisons": "Integrated across all supported modules",
-      "methodology": "Detailed mathematical proofs & engine version trace",
-      "guidance": "Consolidated lifetime reference & strategic roadmap",
-      "active": true,
-      "charm_credits_included": 5
+      "depth_level": "Focused",
+      "comparisons": "Essential",
+      "methodology": "Included",
+      "guidance": "Key takeaways & reflection points"
     }
   },
   "supported_topics": {
@@ -257,6 +298,175 @@
         "Transit"
       ],
       "recommended_tier": "advanced"
+    },
+    "vedic_destiny": {
+      "id": "vedic_destiny",
+      "category": "Self and Growth",
+      "title": "Vedic Destiny & Karmic Life Path",
+      "icon": "\ud83d\udd49\ufe0f",
+      "purpose": "Deterministic Driver & Conductor synthesis, Dasha timing, and karmic life roadmap.",
+      "tags": [
+        "Vedic",
+        "Destiny",
+        "Driver-Conductor"
+      ],
+      "recommended_tier": "advanced"
+    },
+    "career_wealth_forecast": {
+      "id": "career_wealth_forecast",
+      "category": "Work & Wealth",
+      "title": "Career & Wealth Timing Forecast",
+      "icon": "\ud83d\udcbc",
+      "purpose": "Comprehensive vocational mapping, business expansion windows, and wealth accumulation vectors.",
+      "tags": [
+        "Career",
+        "Wealth",
+        "Timing"
+      ],
+      "recommended_tier": "advanced"
+    },
+    "name_balancing": {
+      "id": "name_balancing",
+      "category": "Self and Growth",
+      "title": "Name Balancing & Acoustic Resonance",
+      "icon": "\u270d\ufe0f",
+      "purpose": "Chaldean vibrational harmony analysis to optimize personal or legal calling name.",
+      "tags": [
+        "Name Balancing",
+        "Chaldean",
+        "Acoustics"
+      ],
+      "recommended_tier": "advanced"
+    },
+    "lo_shu_grid": {
+      "id": "lo_shu_grid",
+      "category": "Self and Growth",
+      "title": "Lo Shu Magic Grid & Elemental Matrix",
+      "icon": "\ud83d\udd22",
+      "purpose": "3x3 Chinese Sacred Square analysis, 8 Planes of Expression, and missing number remedies.",
+      "tags": [
+        "Lo Shu",
+        "Planes",
+        "Elements"
+      ],
+      "recommended_tier": "advanced"
+    },
+    "business_brand_alignment": {
+      "id": "business_brand_alignment",
+      "category": "Business",
+      "title": "Business & Brand Name Alignment",
+      "icon": "\ud83c\udfe2",
+      "purpose": "Commercial archetype resonance, legal entity name scoring, and brand color harmony.",
+      "tags": [
+        "Business",
+        "Brand",
+        "Commercial"
+      ],
+      "recommended_tier": "premium"
+    },
+    "mobile_numerology": {
+      "id": "mobile_numerology",
+      "category": "Practical",
+      "title": "Mobile Number Vibrational Audit",
+      "icon": "\ud83d\udcf1",
+      "purpose": "Analysis of paired combinations, root sums, and planetary resonance of your phone number.",
+      "tags": [
+        "Mobile",
+        "Pairs",
+        "Communication"
+      ],
+      "recommended_tier": "basic"
+    },
+    "relationship_compatibility": {
+      "id": "relationship_compatibility",
+      "category": "Love and Marriage",
+      "title": "Relationship Compatibility & Synastry",
+      "icon": "\u2764\ufe0f",
+      "purpose": "In-depth dual chart comparison across Vedic numbers, Lo Shu planes, and acoustic harmony.",
+      "tags": [
+        "Compatibility",
+        "Synastry",
+        "Marriage"
+      ],
+      "recommended_tier": "advanced"
+    },
+    "baby_naming": {
+      "id": "baby_naming",
+      "category": "Family",
+      "title": "Auspicious Baby Naming Blueprint",
+      "icon": "\ud83d\udc76",
+      "purpose": "Auspicious starting sounds (Nakshatra / acoustic) and compound number optimization for newborns.",
+      "tags": [
+        "Baby Naming",
+        "Auspicious",
+        "Family"
+      ],
+      "recommended_tier": "advanced"
+    },
+    "property_numerology": {
+      "id": "property_numerology",
+      "category": "Real Estate",
+      "title": "Property & Address Numerology",
+      "icon": "\ud83c\udfe0",
+      "purpose": "House and flat number vibrational resonance with personal Driver and Conductor energies.",
+      "tags": [
+        "Property",
+        "Real Estate",
+        "Silver Rajyog"
+      ],
+      "recommended_tier": "basic"
+    },
+    "vehicle_numerology": {
+      "id": "vehicle_numerology",
+      "category": "Practical",
+      "title": "Vehicle & License Plate Alignment",
+      "icon": "\ud83d\ude97",
+      "purpose": "License plate digit reduction and planetary harmony check for safety and auspicious travel.",
+      "tags": [
+        "Vehicle",
+        "Travel",
+        "Safety"
+      ],
+      "recommended_tier": "basic"
+    },
+    "bundle_starter": {
+      "id": "bundle_starter",
+      "category": "Bundles",
+      "title": "Starter Duo Report Pack",
+      "icon": "\ud83d\udce6",
+      "purpose": "Two focused Basic reports covering foundational core life areas.",
+      "tags": [
+        "Bundle",
+        "Starter",
+        "Savings"
+      ],
+      "recommended_tier": "basic"
+    },
+    "bundle_discovery": {
+      "id": "bundle_discovery",
+      "category": "Bundles",
+      "title": "Discovery Trio Report Pack",
+      "icon": "\ud83d\udce6",
+      "purpose": "Three multi-system reports synthesizing career, love, and personal timing.",
+      "tags": [
+        "Bundle",
+        "Discovery",
+        "Trio"
+      ],
+      "recommended_tier": "advanced"
+    },
+    "bundle_comprehensive": {
+      "id": "bundle_comprehensive",
+      "category": "Bundles",
+      "title": "Comprehensive Sovereign Master Bundle",
+      "icon": "\ud83d\udc51",
+      "purpose": "All-inclusive complete lifetime numerological dossier covering every supported domain.",
+      "tags": [
+        "Bundle",
+        "Master",
+        "Sovereign"
+      ],
+      "recommended_tier": "premium"
     }
   },
   "bundles": {
@@ -271,64 +481,61 @@
       "standalone_total_inr": 398,
       "bundle_price_inr": 339,
       "amount_paise": 33900,
-      "savings_inr": 49,
-      "savings_percent": 12,
+      "savings_inr": 59,
+      "savings_percent": 15,
+      "digital_root": 6,
       "purpose": "Ideal for exploring two connected life domains (e.g. Love Style + Career Direction).",
       "deliverables": [
         "2 Complete 3-Page Basic PDF Reports",
         "Choose any two topics across Love, Money, Work, or Growth",
-        "Full calculation breakdown and method explanations",
-        "Ready within minutes in your account dashboard"
-      ],
-      "active": false,
-      "status": "paused_for_mvp"
+        "Full calculation breakdown and practical remedies",
+        "Ready within minutes in your account dashboard with archival PDF download"
+      ]
     },
     "discovery_bundle": {
       "bundle_id": "discovery_bundle",
       "name": "Discovery Bundle",
       "display_name": "Discovery Bundle \u00b7 3 Advanced Reports",
-      "included_reports_description": "Three Basic reports of your choice",
-      "basic_report_count": 3,
-      "advanced_report_count": 0,
+      "included_reports_description": "Three Advanced reports of your choice",
+      "basic_report_count": 0,
+      "advanced_report_count": 3,
       "premium_report_count": 0,
-      "standalone_total_inr": 597,
+      "standalone_total_inr": 1530,
       "bundle_price_inr": 1299,
       "amount_paise": 129900,
-      "savings_inr": 98,
-      "savings_percent": 16,
+      "savings_inr": 231,
+      "savings_percent": 15,
+      "digital_root": 3,
       "popular": true,
       "purpose": "Broad 3-domain diagnostic covering Relationships, Career, and Wealth foundations.",
       "deliverables": [
         "3 Complete 12-Page Advanced Master Reports",
         "Choose any three topics from the entire catalogue",
-        "Independent deterministic calculation traces for each topic",
-        "Unified dashboard access with download library"
-      ],
-      "active": false,
-      "status": "paused_for_mvp"
+        "Enabled Numbers in Depth & Auspicious Initiation Windows for each topic",
+        "7-Layer safe planetary remedy protocols for selected domains"
+      ]
     },
     "comprehensive_bundle": {
       "bundle_id": "comprehensive_bundle",
       "name": "Comprehensive Bundle",
       "display_name": "Comprehensive Bundle \u00b7 5 Advanced Reports",
       "included_reports_description": "Five 12-page Advanced reports across major life pillars",
-      "basic_report_count": 1,
-      "advanced_report_count": 2,
+      "basic_report_count": 0,
+      "advanced_report_count": 5,
       "premium_report_count": 0,
-      "standalone_total_inr": 1219,
+      "standalone_total_inr": 2550,
       "bundle_price_inr": 1999,
       "amount_paise": 199900,
-      "savings_inr": 220,
-      "savings_percent": 18,
+      "savings_inr": 551,
+      "savings_percent": 22,
+      "digital_root": 1,
       "purpose": "Deep exploration for seekers making major life decisions across multiple domains.",
       "deliverables": [
         "5 Complete 12-Page Advanced Master Reports",
-        "1 Complete 3-Page Basic Report",
-        "5-Year Numerology Dasha & Numerology Dasha timing included",
-        "7-Layer safe planetary remedy protocols for selected domains"
-      ],
-      "active": false,
-      "status": "paused_for_mvp"
+        "Complete multi-domain lifetime clarity across Love, Career, Wealth & Family",
+        "Enabled Numbers in Depth & Auspicious Initiation Windows for each domain",
+        "7-Layer safe planetary remedy protocols & auspicious timing windows"
+      ]
     }
   },
   "charm_ai": {
@@ -338,31 +545,31 @@
       "display_name": "Charm AI \u00b7 Free Preview",
       "price_inr": 0,
       "amount_paise": 0,
-      "questions_count": 1,
+      "questions_count": 3,
       "has_remedies": false,
-      "purpose": "Experience conversational Charm AI intelligence with one free inquiry.",
+      "purpose": "Experience conversational Charm AI intelligence with 3 free exploratory inquiries daily.",
       "deliverables": [
-        "1 Targeted Question Prediction",
+        "3 Free Exploratory Inquiries Daily per Account",
         "Instant Driver / Conductor token verification",
         "24/7 web access"
       ]
     },
     "charm_single": {
       "pack_id": "charm_single",
-      "name": "Charm AI Starter Pass",
-      "display_name": "Charm AI \u00b7 Starter Pass (5 Questions)",
+      "name": "Charm AI Starter Pack",
+      "display_name": "Charm AI \u00b7 Starter Pack",
       "price_inr": 199,
       "amount_paise": 19900,
       "questions_count": 5,
       "has_remedies": true,
+      "digital_root": 1,
       "purpose": "Focused query resolution for immediate decision crossroads.",
       "deliverables": [
-        "3 In-Depth Question Predictions",
+        "5 In-Depth Consultation Inquiries across any life area",
         "Acute execution timing windows (Hora & transit)",
         "Grounded non-fatalistic practical guidance",
         "Credits valid for 6 months"
-      ],
-      "active": true
+      ]
     },
     "charm_multi": {
       "pack_id": "charm_multi",
@@ -380,9 +587,7 @@
         "Auspicious date selection & Muhurat guidance",
         "Priority engine response queue",
         "Credits valid for 12 months"
-      ],
-      "active": false,
-      "status": "paused_for_mvp"
+      ]
     },
     "charm_extended": {
       "pack_id": "charm_extended",
@@ -399,9 +604,7 @@
         "Multi-profile synastry consultation capability",
         "Downloadable consultation transcript",
         "Credits valid for 12 months with rollover"
-      ],
-      "active": false,
-      "status": "paused_for_mvp"
+      ]
     }
   },
   "consultation": {
@@ -419,64 +622,76 @@
         "45-Minute Private 1-on-1 Consultation Session",
         "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
         "Comprehensive personal strategy & custom remedial protocols",
-        "Complimentary 12-Page Advanced PDF Dossier (\u20b9489 value)",
+        "Complimentary 12-Page Anveil my glowing charms PDF Dossier (\u20b9510 value)",
         "Audio recording and written consultation summary",
         "Free 1-time rescheduling up to 24 hours prior"
       ]
     }
   },
   "all_skus": {
-    "report_basic": {
-      "sku_id": "report_basic",
+    "report_premium": {
+      "sku_id": "report_premium",
       "family": "standalone_report",
-      "name": "Basic Report",
-      "tier": "basic",
-      "pages": 3,
-      "amount_inr": 199,
-      "amount_paise": 19900,
+      "name": "Anveil every charm",
+      "tier": "premium",
+      "pages": 32,
+      "amount_inr": 1050,
+      "amount_paise": 105000,
+      "mrp_inr": 2100,
+      "mrp_paise": 210000,
+      "per_page_inr": 33,
+      "original_price_inr": 2100,
       "currency": "INR",
       "deliverables": [
-        "3-Page Personalised Executive PDF",
-        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
-        "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
-        "Chaldean Single Root & Compound Letter Breakdown",
-        "Methodology Note & Interpretive Limitations Summary"
+        "32-Page Complete Roadmap PDF (all 9 glowing & veiled charms)",
+        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
+        "10-Year Macro Planetary Timing Radar & Acute Execution Windows",
+        "Multi-Generational Synastry & Compatibility Analysis",
+        "Commercial & Professional Resonance Vectors",
+        "Complete Technical Appendix: Formulas, Engine Versions & Assumptions"
       ]
     },
     "report_advanced": {
       "sku_id": "report_advanced",
       "family": "standalone_report",
-      "name": "Advanced Master Dossier",
+      "name": "Anveil my glowing charms",
       "tier": "advanced",
       "pages": 12,
-      "amount_inr": 489,
-      "amount_paise": 48900,
+      "amount_inr": 510,
+      "amount_paise": 51000,
+      "mrp_inr": 1020,
+      "mrp_paise": 102000,
+      "per_page_inr": 43,
+      "original_price_inr": 1020,
       "currency": "INR",
       "deliverables": [
-        "12-Page Master Synthesis PDF Dossier",
-        "All Basic calculations + 3-Year Numerology Dasha Timing Radar + 12 Personal Months",
+        "12-Page Glowing Charms Synthesis PDF",
+        "All Alignment calculations + 5-Year Numerology Dasha Timing Timeline",
         "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
         "Chaldean Sound Frequency & Name Harmony Matrix",
         "7-Layer Safe Planetary Remedy Protocols",
         "Structured Cross-Factor Comparisons & Practical Guidance"
       ]
     },
-    "report_premium": {
-      "sku_id": "report_premium",
+    "report_basic": {
+      "sku_id": "report_basic",
       "family": "standalone_report",
-      "name": "Premium Sovereign Blueprint",
-      "tier": "premium",
-      "pages": 32,
-      "amount_inr": 1050,
-      "amount_paise": 105000,
+      "name": "Anveil my alignments",
+      "tier": "basic",
+      "pages": 3,
+      "amount_inr": 199,
+      "amount_paise": 19900,
+      "mrp_inr": 399,
+      "mrp_paise": 39900,
+      "per_page_inr": 66,
+      "original_price_inr": 399,
       "currency": "INR",
       "deliverables": [
-        "32-Page Sovereign Executive Master Blueprint PDF",
-        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
-        "10-Year Macro Planetary Timing Radar & Acute Execution Windows",
-        "Multi-Generational Synastry & Compatibility Analysis",
-        "Commercial & Professional Resonance Vectors",
-        "Complete Technical Appendix: Formulas, Engine Versions & Assumptions"
+        "3-Page Personalised Alignments PDF",
+        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
+        "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
+        "Chaldean Single Root & Compound Letter Breakdown",
+        "Methodology Note & Interpretive Limitations Summary"
       ]
     },
     "starter_bundle": {
@@ -485,12 +700,13 @@
       "name": "Starter Bundle",
       "amount_inr": 339,
       "amount_paise": 33900,
+      "original_price_inr": 398,
       "currency": "INR",
       "deliverables": [
         "2 Complete 3-Page Basic PDF Reports",
         "Choose any two topics across Love, Money, Work, or Growth",
-        "Full calculation breakdown and method explanations",
-        "Ready within minutes in your account dashboard"
+        "Full calculation breakdown and practical remedies",
+        "Ready within minutes in your account dashboard with archival PDF download"
       ]
     },
     "discovery_bundle": {
@@ -499,12 +715,13 @@
       "name": "Discovery Bundle",
       "amount_inr": 1299,
       "amount_paise": 129900,
+      "original_price_inr": 1530,
       "currency": "INR",
       "deliverables": [
         "3 Complete 12-Page Advanced Master Reports",
         "Choose any three topics from the entire catalogue",
-        "Independent deterministic calculation traces for each topic",
-        "Unified dashboard access with download library"
+        "Enabled Numbers in Depth & Auspicious Initiation Windows for each topic",
+        "7-Layer safe planetary remedy protocols for selected domains"
       ]
     },
     "comprehensive_bundle": {
@@ -513,24 +730,26 @@
       "name": "Comprehensive Bundle",
       "amount_inr": 1999,
       "amount_paise": 199900,
+      "original_price_inr": 2550,
       "currency": "INR",
       "deliverables": [
         "5 Complete 12-Page Advanced Master Reports",
-        "1 Complete 3-Page Basic Report",
-        "5-Year Numerology Dasha & Numerology Dasha timing included",
-        "7-Layer safe planetary remedy protocols for selected domains"
+        "Complete multi-domain lifetime clarity across Love, Career, Wealth & Family",
+        "Enabled Numbers in Depth & Auspicious Initiation Windows for each domain",
+        "7-Layer safe planetary remedy protocols & auspicious timing windows"
       ]
     },
     "charm_free": {
       "sku_id": "charm_free",
       "family": "charm_ai",
       "name": "Free Preview",
-      "questions_count": 1,
+      "questions_count": 3,
       "amount_inr": 0,
       "amount_paise": 0,
+      "original_price_inr": 0,
       "currency": "INR",
       "deliverables": [
-        "1 Targeted Question Prediction",
+        "3 Free Exploratory Inquiries Daily per Account",
         "Instant Driver / Conductor token verification",
         "24/7 web access"
       ]
@@ -538,13 +757,14 @@
     "charm_single": {
       "sku_id": "charm_single",
       "family": "charm_ai",
-      "name": "Single Paid Reading",
-      "questions_count": 3,
+      "name": "Charm AI Starter Pack",
+      "questions_count": 5,
       "amount_inr": 199,
       "amount_paise": 19900,
+      "original_price_inr": 199,
       "currency": "INR",
       "deliverables": [
-        "3 In-Depth Question Predictions",
+        "5 In-Depth Consultation Inquiries across any life area",
         "Acute execution timing windows (Hora & transit)",
         "Grounded non-fatalistic practical guidance",
         "Credits valid for 6 months"
@@ -557,6 +777,7 @@
       "questions_count": 10,
       "amount_inr": 399,
       "amount_paise": 39900,
+      "original_price_inr": 399,
       "currency": "INR",
       "deliverables": [
         "10 Detailed Question Predictions",
@@ -573,6 +794,7 @@
       "questions_count": 25,
       "amount_inr": 699,
       "amount_paise": 69900,
+      "original_price_inr": 699,
       "currency": "INR",
       "deliverables": [
         "25 Deep In-Depth Predictions",
@@ -588,160 +810,16 @@
       "name": "1-on-1 Expert Consultation",
       "amount_inr": 1050,
       "amount_paise": 105000,
+      "original_price_inr": 1050,
       "currency": "INR",
       "deliverables": [
         "45-Minute Private 1-on-1 Consultation Session",
         "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
         "Comprehensive personal strategy & custom remedial protocols",
-        "Complimentary 12-Page Advanced PDF Dossier (\u20b9489 value)",
+        "Complimentary 12-Page Anveil my glowing charms PDF Dossier (\u20b9510 value)",
         "Audio recording and written consultation summary",
         "Free 1-time rescheduling up to 24 hours prior"
       ]
-    }
-  },
-  "starter_bundle": {
-    "sku_id": "starter_bundle",
-    "family": "bundle",
-    "name": "Starter Bundle",
-    "amount_inr": 339,
-    "amount_paise": 33900,
-    "currency": "INR",
-    "savings_inr": 59,
-    "savings_percent": 15,
-    "digital_root": 6,
-    "deliverables": [
-      "2 Complete 3-Page Basic PDF Reports",
-      "Choose any two topics across Love, Money, Work, or Growth",
-      "Full calculation breakdown and practical remedies",
-      "Ready within minutes in your account dashboard with archival PDF download"
-    ]
-  },
-  "discovery_bundle": {
-    "sku_id": "discovery_bundle",
-    "family": "bundle",
-    "name": "Discovery Bundle",
-    "amount_inr": 1299,
-    "amount_paise": 129900,
-    "currency": "INR",
-    "savings_inr": 231,
-    "savings_percent": 15,
-    "digital_root": 3,
-    "deliverables": [
-      "3 Complete 12-Page Advanced Master Reports",
-      "Choose any three topics from the entire catalogue",
-      "Enabled Numbers in Depth & Auspicious Initiation Windows for each topic",
-      "7-Layer safe planetary remedy protocols for selected domains"
-    ]
-  },
-  "comprehensive_bundle": {
-    "sku_id": "comprehensive_bundle",
-    "family": "bundle",
-    "name": "Comprehensive Bundle",
-    "amount_inr": 1999,
-    "amount_paise": 199900,
-    "currency": "INR",
-    "savings_inr": 551,
-    "savings_percent": 22,
-    "digital_root": 1,
-    "deliverables": [
-      "5 Complete 12-Page Advanced Master Reports",
-      "Complete multi-domain lifetime clarity across Love, Career, Wealth & Family",
-      "Enabled Numbers in Depth & Auspicious Initiation Windows for each domain",
-      "7-Layer safe planetary remedy protocols & auspicious timing windows"
-    ]
-  },
-  "charm_free": {
-    "sku_id": "charm_free",
-    "family": "charm_ai",
-    "name": "Free Preview",
-    "questions_count": 3,
-    "amount_inr": 0,
-    "amount_paise": 0,
-    "currency": "INR",
-    "deliverables": [
-      "3 Free Exploratory Inquiries Daily per Account",
-      "Instant Driver / Conductor token verification",
-      "24/7 web access"
-    ]
-  },
-  "charm_single": {
-    "sku_id": "charm_single",
-    "family": "charm_ai",
-    "name": "Charm AI Starter Pack",
-    "questions_count": 5,
-    "amount_inr": 199,
-    "amount_paise": 19900,
-    "currency": "INR",
-    "digital_root": 1,
-    "deliverables": [
-      "5 Targeted Consultation Inquiries across any life area",
-      "Acute execution timing windows (Hora & transit)",
-      "Grounded non-fatalistic practical guidance",
-      "Credits valid for 6 months"
-    ]
-  },
-  "charm_multi": {
-    "sku_id": "charm_multi",
-    "family": "charm_ai",
-    "name": "Charm AI Growth Pack",
-    "questions_count": 10,
-    "amount_inr": 399,
-    "amount_paise": 39900,
-    "currency": "INR",
-    "digital_root": 3,
-    "deliverables": [
-      "10 Detailed Consultation Inquiries",
-      "Customised 7-Layer safe remedies for all queries",
-      "Auspicious date selection & Muhurat guidance",
-      "Priority engine response queue \u00b7 Credits valid for 12 months"
-    ]
-  },
-  "charm_extended": {
-    "sku_id": "charm_extended",
-    "family": "charm_ai",
-    "name": "Charm AI Extended Pack",
-    "questions_count": 25,
-    "amount_inr": 699,
-    "amount_paise": 69900,
-    "currency": "INR",
-    "digital_root": 6,
-    "deliverables": [
-      "25 Deep Consultation Inquiries",
-      "Interactive chart companion with transit radar",
-      "Multi-profile synastry consultation capability",
-      "Downloadable consultation transcript \u00b7 Credits valid for 12 months with rollover"
-    ]
-  },
-  "mvp_scope": {
-    "version": "1.0.0",
-    "active_skus": [
-      "report_basic",
-      "report_advanced",
-      "report_premium",
-      "charm_single"
-    ],
-    "products": {
-      "BASIC_REPORT": {
-        "sku": "report_basic",
-        "price_inr": 199,
-        "pages": 3
-      },
-      "ADVANCED_REPORT": {
-        "sku": "report_advanced",
-        "price_inr": 489,
-        "pages": 12
-      },
-      "PREMIUM_REPORT": {
-        "sku": "report_premium",
-        "price_inr": 1050,
-        "pages": 32,
-        "charm_credits": 5
-      },
-      "CHARM_AI_STARTER": {
-        "sku": "charm_single",
-        "price_inr": 199,
-        "questions": 5
-      }
     }
   }
 }

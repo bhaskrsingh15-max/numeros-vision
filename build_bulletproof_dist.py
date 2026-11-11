@@ -124,8 +124,9 @@ for item in ["css", "js", "icons", "assets", "data"]:
 # Also mirror favicon, manifest, sitemap, llms, and verification files into static/
 for fname in [
     "favicon.ico", "apple-touch-icon.png", "manifest.json", "manifest.webmanifest",
-    "sitemap.xml", "robots.txt", "BingSiteAuth.xml", "llms.txt", "llms-full.txt",
-    "49bf97a1d74343ce951918a3a0e676d4.txt", "sitemap.html"
+    "sitemap.xml", "sitemap-calculators.xml", "sitemap-numbers.xml", "sitemap-2027.xml",
+    "sitemap-reports.xml", "sitemap-blog.xml", "robots.txt", "BingSiteAuth.xml",
+    "llms.txt", "llms-full.txt", "49bf97a1d74343ce951918a3a0e676d4.txt", "sitemap.html"
 ]:
     fsrc = os.path.join(DIST_DIR, fname)
     if os.path.exists(fsrc):
@@ -135,19 +136,16 @@ for fname in [
 ROUTING_MAP = {
     # Roadmap & Sample Reports
     "sample_roadmap": "sample_roadmap.html",
-    "sample-roadmap": "sample_roadmap.html",
-    "roadmap-preview": "sample_roadmap.html",
     "sample": "sample.html",
     "year-2027": "year_2027.html",
     "sample2": "sample2.html",
 
-    # Catalogue & Pricing
+    # Catalogue & Pricing (200 OK directories — zero 308 loop)
     "reports_catalogue": "reports_catalogue.html",
     "pricing": "pricing.html",
 
-    # Calculators Hub
+    # Calculators & Insights Hubs
     "calculators": "calculator_hub.html",
-    "numerology-calculators": "calculator_hub.html",
     "insights": "insights_hub.html",
 
     # Company & Legal
@@ -159,58 +157,45 @@ ROUTING_MAP = {
     "terms": "terms.html",
     "refund-policy": "refund.html",
     "cancel": "cancel.html",
-    "cancellation": "cancel.html",
     "disclaimer": "disclaimer.html",
     "accessibility": "accessibility.html",
-    "cookie_policy": "cookie_policy.html",
     "cookie-policy": "cookie_policy.html",
 
-    # App & Tools
+    # App, Auth & Charm AI (Public Overview + Noindex Chat)
     "login": "login.html",
     "signup": "signup.html",
-    "register": "signup.html",
     "dashboard": "dashboard.html",
     "charm-ai": "charm_ai.html",
+    "charm-ai/chat": "charm_ai_chat.html",
 
-    # Dedicated Tools
-    "tools/lo-shu-grid": "tools/lo-shu-grid.html",
-    "tools/name-numerology": "tools/name-numerology.html",
-    "tools/name-balancing": "tools/name-balancing.html",
-    "tools/mobile-numerology": "tools/mobile-numerology.html",
-    "tools/life-path-calculator": "tools/life-path-calculator.html",
-    "tools/compatibility-calculator": "tools/compatibility-calculator.html",
+    # Unique Dedicated Tools (not duplicated under /calculators/)
     "tools/business-alignment": "tools/business-alignment.html",
-    "tools/business-numerology": "tools/business-alignment.html",
     "tools/baby-naming": "tools/baby-naming.html",
     "tools/property-numerology": "tools/property-numerology.html",
     "tools/vehicle-numerology": "tools/vehicle-numerology.html",
-    "tools/blessing-years": "tools/blessing-years.html",
     "tools/profession-calculator": "tools/profession-calculator.html",
     "tools/favourable-numbers": "tools/favourable-numbers.html",
     "tools/logo-intelligence": "tools/logo-intelligence.html",
-    "tools/logo-studio": "tools/logo-intelligence.html",
 
     # Knowledge, Methodology & Sitemap
     "your-reading": "your-reading.html",
     "sitemap": "sitemap.html",
     "methodology": "methodology.html",
-    "numerology_overview": "numerology_overview.html",
     "numerology-overview": "numerology_overview.html",
     "faq": "faq.html",
     "compare": "compare_hub.html",
     "learn": "learn.html",
 
-    # Specialised Calculator Directories
+    # Canonical /calculators/<slug>/ Directories (single 200 OK home per calculator)
     "calculators/birth-number": "birth_number_calculator.html",
     "calculators/lo-shu-grid": "tools/lo-shu-grid.html",
     "calculators/pythagorean": "pythagorean_calculator.html",
-    "calculators/chaldean": "tools/name-numerology.html",
     "calculators/personal-year": "tools/blessing-years.html",
-    "calculators/life-path-number": "tools/life-path-calculator.html",
-    "calculators/name-numerology": "tools/name-balancing.html",
-    "calculators/chaldean-name-numerology": "tools/name-balancing.html",
-    "calculators/mobile-number-numerology": "tools/mobile-numerology.html",
-    "calculators/numerology-compatibility": "tools/compatibility-calculator.html",
+    "calculators/life-path": "tools/life-path-calculator.html",
+    "calculators/name-numerology": "tools/name-numerology.html",
+    "calculators/name-balancing": "tools/name-balancing.html",
+    "calculators/mobile-number": "tools/mobile-numerology.html",
+    "calculators/compatibility": "tools/compatibility-calculator.html",
 
     # Regional City Hubs
     "local": "local_hub.html",
@@ -218,6 +203,16 @@ ROUTING_MAP = {
     "local/mumbai": "local_mumbai.html",
     "local/bangalore": "local_bangalore.html",
     "local/dubai": "local_dubai.html",
+}
+
+REDIRECTED_TOOL_SLUGS = {
+    "lo-shu-grid",
+    "name-numerology",
+    "name-balancing",
+    "mobile-numerology",
+    "life-path-calculator",
+    "compatibility-calculator",
+    "blessing-years",
 }
 
 # 3. Create physical directory/index.html for every canonical route (Clean trailing-slash architecture)
@@ -231,11 +226,27 @@ for route_name, src_file in ROUTING_MAP.items():
         target_index = os.path.join(DIST_DIR, route_name, "index.html")
         os.makedirs(os.path.dirname(target_index), exist_ok=True)
         shutil.copy2(source_path, target_index)
-        
+
+        # Ensure canonical & og:url inside calculators/<slug>/index.html match https://numerosvision.com/calculators/<slug>/
+        if route_name.startswith("calculators/"):
+            canon_url = f"https://numerosvision.com/{route_name}/"
+            c_txt = open(target_index, "r", encoding="utf-8", errors="ignore").read()
+            c_txt = re.sub(
+                r"""<link\s+rel=["']canonical["']\s+href=["'][^"']+["']\s*/?>""",
+                f'<link rel="canonical" href="{canon_url}" />',
+                c_txt,
+            )
+            c_txt = re.sub(
+                r"""<meta\s+property=["']og:url["']\s+content=["'][^"']+["']\s*/?>""",
+                f'<meta property="og:url" content="{canon_url}" />',
+                c_txt,
+            )
+            open(target_index, "w", encoding="utf-8").write(c_txt)
+
         # Track root source file in DIST_DIR to clean up later
         if "/" not in src_file and src_file != "index.html":
             consumed_root_html.add(src_file)
-        
+
         # Ensure conflicting .html file does NOT exist in DIST_DIR
         conflicting_html = os.path.join(DIST_DIR, f"{route_name}.html")
         if os.path.exists(conflicting_html) and os.path.normpath(conflicting_html) != os.path.normpath(target_index):
@@ -247,17 +258,23 @@ for cr in consumed_root_html:
     if os.path.exists(fp):
         os.remove(fp)
 
-# Clean up tools/*.html -> tools/*/index.html
+# Clean up tools/*.html -> tools/*/index.html ONLY for unique tools (skipping 301-redirected duplicates)
 tools_dir = os.path.join(DIST_DIR, "tools")
 if os.path.exists(tools_dir):
     for f in list(os.listdir(tools_dir)):
         if f.endswith(".html") and f != "index.html":
             slug = f[:-5]
             src = os.path.join(tools_dir, f)
-            dest_dir = os.path.join(tools_dir, slug)
-            os.makedirs(dest_dir, exist_ok=True)
-            shutil.copy2(src, os.path.join(dest_dir, "index.html"))
-            os.remove(src)
+            if slug in REDIRECTED_TOOL_SLUGS:
+                os.remove(src)
+                dup_dir = os.path.join(tools_dir, slug)
+                if os.path.exists(dup_dir):
+                    shutil.rmtree(dup_dir)
+            else:
+                dest_dir = os.path.join(tools_dir, slug)
+                os.makedirs(dest_dir, exist_ok=True)
+                shutil.copy2(src, os.path.join(dest_dir, "index.html"))
+                os.remove(src)
 
 # Clean up blog/*.html -> blog/*/index.html
 blog_dir = os.path.join(DIST_DIR, "blog")
@@ -337,7 +354,7 @@ for _r, _ds, _fs in os.walk(DIST_DIR):
                 _build_hasher.update(_bf.read(4096))
         except Exception:
             pass
-_sw_build_tag = f"v6.3.0-{_build_hasher.hexdigest()[:8]}"
+_sw_build_tag = f"v6.4.0-{_build_hasher.hexdigest()[:8]}"
 _dist_sw_path = os.path.join(DIST_DIR, "sw.js")
 if os.path.exists(_dist_sw_path):
     with open(_dist_sw_path, "r", encoding="utf-8") as _swf:

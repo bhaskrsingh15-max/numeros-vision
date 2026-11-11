@@ -43,8 +43,8 @@ _HEX_24_RE = re.compile(r"^[0-9a-fA-F]{24}$")
 _HEX_ANY_RE = re.compile(r"^[0-9a-fA-F]+$")
 
 _PACK_TITLES = {
-    "report_advanced": "Advanced Master Dossier (12 Pages)",
-    "report_premium": "Premium Sovereign Blueprint (32 Pages)",
+    "report_advanced": "Anveil my glowing charms (12 Pages)",
+    "report_premium": "Anveil every charm (32 Pages)",
 }
 
 
@@ -359,13 +359,13 @@ def build_waitlist_notification_email(
         f'"{WAITLIST_PURPOSE}" (12-month maximum retention).\n'
         f"To delete your waitlist record at any time, use the Delete Waitlist Email option on our "
         f"Notify Me dialog or contact privacy@numerosvision.com.\n\n"
-        f"NUMEROS VISION · ANVIEL EVERY CHARM"
+        f"NUMEROS VISION · ANVEIL EVERY CHARM"
     )
     html_body = (
         f'<div style="font-family:Inter,Arial,sans-serif;background:#FFFDF7;color:#523E28;'
         f'padding:24px;border:1px solid #C9A227;border-radius:12px;max-width:560px;">'
         f'<div style="font-size:12px;letter-spacing:0.12em;color:#8B6914;font-weight:700;">'
-        f"NUMEROS VISION · ANVIEL EVERY CHARM</div>"
+        f"NUMEROS VISION · ANVEIL EVERY CHARM</div>"
         f'<h2 style="color:#523E28;margin:10px 0 8px;">{pack_title} Is Now Available</h2>'
         f"<p>You asked us to tell you when <strong>{pack_title}</strong> opens.</p>"
         f'<p><a href="https://numerosvision.com/pricing.html" '

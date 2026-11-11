@@ -1,27 +1,82 @@
 # Cloudflare Pages Redirects & Clean URL Rewrites
-# Dead duplicates & legacy paths -> canonical clean trailing-slash URLs (301)
+# Legacy & duplicate paths -> single-hop canonical trailing-slash URLs (301)
 /charm_ai.html                      /charm-ai/                          301
 /charm_ai                           /charm-ai/                          301
+/charm_ai/                          /charm-ai/                          301
 /privacy-policy                     /privacy/                           301
 /privacy-policy/                    /privacy/                           301
+/refund                             /refund-policy/                     301
+/refund/                            /refund-policy/                     301
+/cancellation                       /cancel/                            301
+/cancellation/                      /cancel/                            301
+/cookie_policy                      /cookie-policy/                     301
+/cookie_policy/                     /cookie-policy/                     301
+/numerology_overview                /numerology-overview/               301
+/numerology_overview/               /numerology-overview/               301
+/numerology-calculators             /calculators/                       301
+/numerology-calculators/            /calculators/                       301
+/register                           /signup/                            301
+/register/                          /signup/                            301
 /sample-report                      /sample_roadmap/                    301
 /sample-report/                     /sample_roadmap/                    301
 /sample_report                      /sample_roadmap/                    301
 /sample_report/                     /sample_roadmap/                    301
+/sample-roadmap                     /sample_roadmap/                    301
+/sample-roadmap/                    /sample_roadmap/                    301
+/roadmap-preview                    /sample_roadmap/                    301
+/roadmap-preview/                   /sample_roadmap/                    301
 /reports                            /reports_catalogue/                 301
 /reports/                           /reports_catalogue/                 301
-
-/refund                             /refund-policy/                     301
-
-/refund/                            /refund-policy/                     301
-
 /year_2027.html                     /year-2027/                         301
-
 /year_2027                          /year-2027/                         301
-
 /year_2027/                         /year-2027/                         301
 
-# Approved tool rename & blog consolidation (301)
+# Duplicate /tools/<slug> -> canonical /calculators/<slug>/ (301)
+/tools/lo-shu-grid                  /calculators/lo-shu-grid/           301
+/tools/lo-shu-grid/                 /calculators/lo-shu-grid/           301
+/tools/lo-shu-grid.html             /calculators/lo-shu-grid/           301
+/tools/name-numerology              /calculators/name-numerology/       301
+/tools/name-numerology/             /calculators/name-numerology/       301
+/tools/name-numerology.html         /calculators/name-numerology/       301
+/tools/name-balancing               /calculators/name-balancing/        301
+/tools/name-balancing/              /calculators/name-balancing/        301
+/tools/name-balancing.html          /calculators/name-balancing/        301
+/tools/mobile-numerology            /calculators/mobile-number/         301
+/tools/mobile-numerology/           /calculators/mobile-number/         301
+/tools/mobile-numerology.html       /calculators/mobile-number/         301
+/tools/life-path-calculator         /calculators/life-path/             301
+/tools/life-path-calculator/        /calculators/life-path/             301
+/tools/life-path-calculator.html    /calculators/life-path/             301
+/tools/compatibility-calculator     /calculators/compatibility/         301
+/tools/compatibility-calculator/    /calculators/compatibility/         301
+/tools/compatibility-calculator.html /calculators/compatibility/        301
+/tools/blessing-years               /calculators/personal-year/         301
+/tools/blessing-years/              /calculators/personal-year/         301
+/tools/blessing-years.html          /calculators/personal-year/         301
+
+# Legacy /calculators/<old-slug> -> canonical /calculators/<slug>/ (301)
+/calculators/chaldean               /calculators/name-numerology/       301
+/calculators/chaldean/              /calculators/name-numerology/       301
+/calculators/chaldean-name-numerology  /calculators/name-balancing/     301
+/calculators/chaldean-name-numerology/ /calculators/name-balancing/     301
+/calculators/life-path-number       /calculators/life-path/             301
+/calculators/life-path-number/      /calculators/life-path/             301
+/calculators/mobile-number-numerology  /calculators/mobile-number/      301
+/calculators/mobile-number-numerology/ /calculators/mobile-number/      301
+/calculators/numerology-compatibility  /calculators/compatibility/      301
+/calculators/numerology-compatibility/ /calculators/compatibility/      301
+/calculators/pythagorean-numerology    /calculators/pythagorean/        301
+/calculators/pythagorean-numerology/   /calculators/pythagorean/        301
+/calculators/personal-year-numerology  /calculators/personal-year/      301
+/calculators/personal-year-numerology/ /calculators/personal-year/      301
+/calculators/business-name-numerology  /tools/business-alignment/       301
+/calculators/business-name-numerology/ /tools/business-alignment/       301
+
+# Approved tool renames & blog consolidation (301)
+/tools/business-numerology          /tools/business-alignment/          301
+/tools/business-numerology/         /tools/business-alignment/          301
+/tools/logo-studio                  /tools/logo-intelligence/           301
+/tools/logo-studio/                 /tools/logo-intelligence/           301
 /tools/lucky-number                 /tools/favourable-numbers/          301
 /tools/lucky-number/                /tools/favourable-numbers/          301
 /tools/lucky-number.html            /tools/favourable-numbers/          301

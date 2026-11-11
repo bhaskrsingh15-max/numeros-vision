@@ -747,35 +747,57 @@ async function canExportToCdp(env, userId) {
 }
 
 const PACK_CATALOG = {
-  version: "2.1.0",
+  version: "2.2.0",
   currency: "INR",
+  ladder_order: ["report_premium", "report_advanced", "report_basic"],
+  launch_offer: {
+    duration_days: 7,
+    started_at: null,
+    prelaunch_label: "1-week launch offer · valid for 7 days from launch"
+  },
   feature_flags: {
-    notify_me_higher_tiers: false,
+    notify_me_higher_tiers: true,
     notify_me_tiers: ["report_advanced", "report_premium"]
   },
   core_reports: {
     report_basic: {
       pack_id: "report_basic",
-      name: "Basic Report",
+      tier_id: "basic",
+      name: "Anveil my alignments",
       pages: 3,
       price_inr: 199,
+      mrp_inr: 399,
+      per_page_inr: 66,
       amount_paise: 19900,
+      digital_root: 1,
+      mrp_digital_root: 3,
       status: "active"
     },
     report_advanced: {
       pack_id: "report_advanced",
-      name: "Advanced Master Dossier",
+      tier_id: "advanced",
+      name: "Anveil my glowing charms",
       pages: 12,
-      price_inr: 489,
-      amount_paise: 48900,
+      price_inr: 510,
+      mrp_inr: 1020,
+      per_page_inr: 43,
+      amount_paise: 51000,
+      digital_root: 6,
+      mrp_digital_root: 3,
       status: "active"
     },
     report_premium: {
       pack_id: "report_premium",
-      name: "Premium Sovereign Blueprint",
+      tier_id: "premium",
+      name: "Anveil every charm",
       pages: 32,
       price_inr: 1050,
+      mrp_inr: 2100,
+      per_page_inr: 33,
       amount_paise: 105000,
+      digital_root: 6,
+      mrp_digital_root: 3,
+      badge: "Best value",
       status: "active"
     }
   },
@@ -819,24 +841,46 @@ const PACK_CATALOG = {
       name: "Starter Bundle",
       price_inr: 339,
       amount_paise: 33900,
-      status: "inactive"
+      status: "coming_soon"
     },
     discovery_bundle: {
       pack_id: "discovery_bundle",
       name: "Discovery Bundle",
       price_inr: 1299,
       amount_paise: 129900,
-      status: "inactive"
+      status: "coming_soon"
     },
     comprehensive_bundle: {
       pack_id: "comprehensive_bundle",
       name: "Comprehensive Bundle",
       price_inr: 1999,
       amount_paise: 199900,
-      status: "inactive"
+      status: "coming_soon"
     }
   }
 };
+
+function getPackById(packId) {
+  if (!packId || typeof packId !== 'string') return null;
+  const p = packId.trim().toLowerCase();
+  if (PACK_CATALOG.core_reports[p]) return PACK_CATALOG.core_reports[p];
+  if (PACK_CATALOG.charm_ai[p]) return PACK_CATALOG.charm_ai[p];
+  if (PACK_CATALOG.bundles[p]) return PACK_CATALOG.bundles[p];
+  const aliases = {
+    'basic': 'report_basic',
+    'report_essential': 'report_basic',
+    'advanced': 'report_advanced',
+    'report_master': 'report_advanced',
+    'premium': 'report_premium',
+    'report_divine': 'report_premium',
+    'starter_5q': 'charm_single'
+  };
+  const resolved = aliases[p];
+  if (resolved) {
+    return PACK_CATALOG.core_reports[resolved] || PACK_CATALOG.charm_ai[resolved] || PACK_CATALOG.bundles[resolved];
+  }
+  return null;
+}
 
 function isNotifyMeHigherTiersEnabled(env) {
   if (env && env.NV_NOTIFY_ME_HIGHER_TIERS !== undefined && env.NV_NOTIFY_ME_HIGHER_TIERS !== null && String(env.NV_NOTIFY_ME_HIGHER_TIERS).trim() !== '') {
@@ -846,8 +890,14 @@ function isNotifyMeHigherTiersEnabled(env) {
   return Boolean(PACK_CATALOG.feature_flags && PACK_CATALOG.feature_flags.notify_me_higher_tiers);
 }
 
-function recommendLadderTier(gapCount = null, notifyMeActive = false) {
+function recommendLadderTier(gapCount = null, notifyMeActive = false, tappedContext = null) {
   if (notifyMeActive === true) return 'report_basic';
+  if (tappedContext) {
+    const ctxKey = String(tappedContext).trim().toLowerCase();
+    if (ctxKey === 'veiled' || ctxKey === 'missing') return 'report_premium';
+    if (ctxKey === 'glowing' || ctxKey === 'present') return 'report_advanced';
+    if (ctxKey === 'alignment' || ctxKey === 'plane') return 'report_basic';
+  }
   if (gapCount === null || gapCount === undefined || Number.isNaN(Number(gapCount))) {
     return 'report_advanced';
   }
@@ -1100,8 +1150,8 @@ async function buildWaitlistNotificationEmail(record, dataEncKey, nowOverrideSec
   }
 
   const packTitle = normPack === 'report_premium'
-    ? 'Premium Sovereign Blueprint (32 Pages)'
-    : 'Advanced Master Dossier (12 Pages)';
+    ? 'Anveil every charm (32 Pages)'
+    : 'Anveil my glowing charms (12 Pages)';
   const subject = `${packTitle} Is Now Available | NUMEROS VISION`;
   const text =
     `Namaste,\n\n` +
@@ -1109,10 +1159,10 @@ async function buildWaitlistNotificationEmail(record, dataEncKey, nowOverrideSec
     `This edition is now open at https://numerosvision.com/pricing.html\n\n` +
     `Why you received this email: You provided explicit DPDP 2023 consent for the single purpose "${WAITLIST_PURPOSE}" (12-month maximum retention).\n` +
     `To delete your waitlist record at any time, use the Delete Waitlist Email option or contact privacy@numerosvision.com.\n\n` +
-    `NUMEROS VISION · ANVIEL EVERY CHARM`;
+    `NUMEROS VISION · ANVEIL EVERY CHARM`;
   const html =
     `<div style="font-family:Inter,Arial,sans-serif;background:#FFFDF7;color:#523E28;padding:24px;border:1px solid #C9A227;border-radius:12px;max-width:560px;">` +
-    `<div style="font-size:12px;letter-spacing:0.12em;color:#8B6914;font-weight:700;">NUMEROS VISION · ANVIEL EVERY CHARM</div>` +
+    `<div style="font-size:12px;letter-spacing:0.12em;color:#8B6914;font-weight:700;">NUMEROS VISION · ANVEIL EVERY CHARM</div>` +
     `<h2 style="color:#523E28;margin:10px 0 8px;">${packTitle} Is Now Available</h2>` +
     `<p>You asked us to tell you when <strong>${packTitle}</strong> opens.</p>` +
     `<p><a href="https://numerosvision.com/pricing.html" style="display:inline-block;padding:10px 18px;background:#8B6914;color:#FFFDF7;text-decoration:none;border-radius:8px;font-weight:600;">View Available Report</a></p>` +
@@ -1156,29 +1206,6 @@ async function dispatchWaitlistNotificationsForPack(env, packId, nowOverrideSec 
   }
   return produced;
 }
-
-function getPackById(packId) {
-  if (!packId || typeof packId !== 'string') return null;
-  const p = packId.trim().toLowerCase();
-  if (PACK_CATALOG.core_reports[p]) return PACK_CATALOG.core_reports[p];
-  if (PACK_CATALOG.charm_ai[p]) return PACK_CATALOG.charm_ai[p];
-  if (PACK_CATALOG.bundles[p]) return PACK_CATALOG.bundles[p];
-  const aliases = {
-    'basic': 'report_basic',
-    'report_essential': 'report_basic',
-    'advanced': 'report_advanced',
-    'report_master': 'report_advanced',
-    'premium': 'report_premium',
-    'report_divine': 'report_premium',
-    'starter_5q': 'charm_single'
-  };
-  const resolved = aliases[p];
-  if (resolved) {
-    return PACK_CATALOG.core_reports[resolved] || PACK_CATALOG.charm_ai[resolved] || PACK_CATALOG.bundles[resolved];
-  }
-  return null;
-}
-
 
 // Server-side operational telemetry logger (events table - strictly ZERO PII)
 async function logWorkerEvent(env, eventData) {
@@ -1227,9 +1254,82 @@ async function logWorkerEvent(env, eventData) {
 }
 
 
+const WEBHOOK_FALLBACK_WINDOW_MS = 10 * 60 * 1000;
+
+/**
+ * 10-MINUTE RAZORPAY ORDER-STATUS FALLBACK
+ * Webhook-only primary architecture: if no Razorpay webhook arrives within 10 minutes
+ * of signature verification (or order creation), poll Razorpay's Orders Payments API
+ * and fulfill idempotently ONLY if Razorpay confirms a 'captured' payment matching
+ * the authoritative INR amount_paise.
+ */
+async function reconcileStaleOrderWithRazorpay(order, env, now, request, ctx) {
+  if (!order || order.status === 'PAID' || !order.rzp_order_id) {
+    return { reconciled: false, reason: 'not_eligible' };
+  }
+  if (order.status !== 'PAYMENT_VERIFIED' && order.status !== 'CREATED' && order.status !== 'pending') {
+    return { reconciled: false, reason: 'terminal_status' };
+  }
+  const refTs = Number(order.created_at || order.updated_at || 0);
+  if (!refTs || (now - refTs) < WEBHOOK_FALLBACK_WINDOW_MS) {
+    return { reconciled: false, reason: 'within_webhook_window' };
+  }
+  const rzpKeyId = (env && env.RAZORPAY_KEY_ID ? String(env.RAZORPAY_KEY_ID).trim() : '');
+  const rzpSecret = (env && env.RAZORPAY_KEY_SECRET ? String(env.RAZORPAY_KEY_SECRET).trim() : '');
+  if (!rzpKeyId || !rzpSecret) {
+    return { reconciled: false, reason: 'missing_credentials' };
+  }
+  try {
+    const authHeader = 'Basic ' + btoa(`${rzpKeyId}:${rzpSecret}`);
+    const rzpResp = await fetch(
+      `https://api.razorpay.com/v1/orders/${encodeURIComponent(order.rzp_order_id)}/payments`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': authHeader,
+          'Accept': 'application/json'
+        }
+      }
+    );
+    if (!rzpResp.ok) {
+      return { reconciled: false, reason: `razorpay_http_${rzpResp.status}` };
+    }
+    const data = await rzpResp.json().catch(() => ({}));
+    const items = Array.isArray(data && data.items) ? data.items : [];
+    const captured = items.find(item =>
+      item &&
+      String(item.status || '').toLowerCase() === 'captured' &&
+      Number(item.amount) === Number(order.amount_paise) &&
+      String(item.currency || 'INR').toUpperCase() === 'INR'
+    );
+    if (!captured) {
+      return { reconciled: false, reason: 'no_captured_payment' };
+    }
+    const fulfillRes = await fulfillPaidOrder(
+      order,
+      captured.id || order.rzp_payment_id || 'rzp_fallback_payment',
+      captured.amount,
+      captured.method || 'razorpay_fallback',
+      env,
+      now,
+      'razorpay_10min_fallback',
+      request
+    );
+    if (fulfillRes && fulfillRes.jobId && ctx && typeof ctx.waitUntil === 'function') {
+      ctx.waitUntil(
+        dispatchReportJob(fulfillRes.jobId, env).catch(err => console.error('[Fallback_WaitUntil_Dispatch_Error]', err))
+      );
+    }
+    return { reconciled: true, fulfillRes };
+  } catch (err) {
+    console.warn('[Razorpay_10Min_Fallback_Error]', err);
+    return { reconciled: false, reason: 'fetch_error' };
+  }
+}
+
 /**
  * SHARED IDEMPOTENT ORDER FULFILLMENT
- * Used by /api/v1/payments/verify, /api/v1/payments/webhook, and safety net recovery.
+ * Used by /api/v1/payments/webhook, 10-minute Razorpay fallback, and safety net recovery.
  * Reads pack and subject strictly from D1 order. Fulfills even if status is EXPIRED (late UPI).
  * Idempotency guarantee: exactly one report job and exactly one confirmation email per order.
  */
@@ -1562,7 +1662,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
  * Gated strictly to confirmed unlock matrix:
  * - Free: Lo Shu grid with enabled digits; missing digits shown only as locked marks ('🔒').
  * - Rs199 (report_basic, 3 pages): element balancing.
- * - Rs 489 (report_advanced, 12 pages): element balancing + enabled numbers in depth.
+ * - Rs 510 (report_advanced, 12 pages): element balancing + enabled numbers in depth.
  * - Rs1050 (report_premium, 32 pages): everything: missing numbers in depth, remedies, predictions (dasha timelines, 10-year radar).
  */
 function parseDobParts(dobStr) {
@@ -1887,7 +1987,7 @@ async function viewFor(user, subject, env, targetPackId = null) {
     };
   }
 
-  // Section 4: Enabled Numbers in Depth (Advanced ₹489, 12 pages)
+  // Section 4: Enabled Numbers in Depth (Advanced ₹510, 12 pages)
   let enabledNumbersInDepthSection;
   if (hasAdvanced) {
     enabledNumbersInDepthSection = {
@@ -1913,7 +2013,7 @@ async function viewFor(user, subject, env, targetPackId = null) {
       lockReason: 'Enabled Numbers in Depth, repeating frequency calibrations, and archetype synergies are available in the Advanced (12 pages) and Premium (32 pages) reports.',
       upgradePack: 'report_advanced',
       minTier: 'advanced',
-      priceInr: 489
+      priceInr: 510
     };
   }
 
@@ -1935,7 +2035,7 @@ async function viewFor(user, subject, env, targetPackId = null) {
     missingNumbersInDepthSection = {
       unlocked: false,
       pageCount: 32,
-      lockReason: 'In-depth missing number karmic void activations are available in the Premium Sovereign Blueprint (32 pages).',
+      lockReason: 'In-depth missing number karmic void activations are available in the Anveil every charm (32 pages).',
       upgradePack: 'report_premium',
       minTier: 'premium',
       priceInr: 1050
@@ -1958,7 +2058,7 @@ async function viewFor(user, subject, env, targetPackId = null) {
     remediesSection = {
       unlocked: false,
       pageCount: 32,
-      lockReason: 'Authentic 7-layer remedial protocols and directional spatial alignment are available in the Premium Sovereign Blueprint (32 pages).',
+      lockReason: 'Authentic 7-layer remedial protocols and directional spatial alignment are available in the Anveil every charm (32 pages).',
       upgradePack: 'report_premium',
       minTier: 'premium',
       priceInr: 1050
@@ -1986,7 +2086,7 @@ async function viewFor(user, subject, env, targetPackId = null) {
     predictionsSection = {
       unlocked: false,
       pageCount: 32,
-      lockReason: '10-Year Mahadasha timelines, Personal Year cycles, and 4-stage pinnacle radar are available in the Premium Sovereign Blueprint (32 pages).',
+      lockReason: '10-Year Mahadasha timelines, Personal Year cycles, and 4-stage pinnacle radar are available in the Anveil every charm (32 pages).',
       upgradePack: 'report_premium',
       minTier: 'premium',
       priceInr: 1050
@@ -2639,20 +2739,89 @@ export default {
       }
     }
 
-    // 0. CANONICAL 301 REDIRECTS (Dead duplicates, trailing-slash normalization, and legacy aliases)
+    // 0. CANONICAL 301 REDIRECTS & SINGLE-HOP WWW -> APEX NORMALIZATION
     const canonicalRedirects = {
       '/charm_ai.html': '/charm-ai/',
       '/charm_ai': '/charm-ai/',
+      '/charm_ai/': '/charm-ai/',
       '/privacy-policy': '/privacy/',
       '/privacy-policy/': '/privacy/',
-      '/refund-policy': '/refund/',
-      '/refund-policy/': '/refund/',
+      '/privacy.html': '/privacy/',
+      '/refund': '/refund-policy/',
+      '/refund/': '/refund-policy/',
+      '/refund.html': '/refund-policy/',
+      '/cancellation': '/cancel/',
+      '/cancellation/': '/cancel/',
+      '/cancel.html': '/cancel/',
+      '/cookie_policy': '/cookie-policy/',
+      '/cookie_policy/': '/cookie-policy/',
+      '/cookie_policy.html': '/cookie-policy/',
+      '/numerology_overview': '/numerology-overview/',
+      '/numerology_overview/': '/numerology-overview/',
+      '/numerology_overview.html': '/numerology-overview/',
+      '/numerology-calculators': '/calculators/',
+      '/numerology-calculators/': '/calculators/',
+      '/register': '/signup/',
+      '/register/': '/signup/',
+      '/login.html': '/login/',
+      '/signup.html': '/signup/',
+      '/year_2027': '/year-2027/',
+      '/year_2027/': '/year-2027/',
+      '/year_2027.html': '/year-2027/',
       '/sample-report': '/sample_roadmap/',
       '/sample-report/': '/sample_roadmap/',
       '/sample_report': '/sample_roadmap/',
       '/sample_report/': '/sample_roadmap/',
+      '/sample-roadmap': '/sample_roadmap/',
+      '/sample-roadmap/': '/sample_roadmap/',
+      '/roadmap-preview': '/sample_roadmap/',
+      '/roadmap-preview/': '/sample_roadmap/',
       '/reports': '/reports_catalogue/',
       '/reports/': '/reports_catalogue/',
+      // Duplicate /tools/<slug> -> canonical /calculators/<slug>/
+      '/tools/lo-shu-grid': '/calculators/lo-shu-grid/',
+      '/tools/lo-shu-grid/': '/calculators/lo-shu-grid/',
+      '/tools/lo-shu-grid.html': '/calculators/lo-shu-grid/',
+      '/tools/name-numerology': '/calculators/name-numerology/',
+      '/tools/name-numerology/': '/calculators/name-numerology/',
+      '/tools/name-numerology.html': '/calculators/name-numerology/',
+      '/tools/name-balancing': '/calculators/name-balancing/',
+      '/tools/name-balancing/': '/calculators/name-balancing/',
+      '/tools/name-balancing.html': '/calculators/name-balancing/',
+      '/tools/mobile-numerology': '/calculators/mobile-number/',
+      '/tools/mobile-numerology/': '/calculators/mobile-number/',
+      '/tools/mobile-numerology.html': '/calculators/mobile-number/',
+      '/tools/life-path-calculator': '/calculators/life-path/',
+      '/tools/life-path-calculator/': '/calculators/life-path/',
+      '/tools/life-path-calculator.html': '/calculators/life-path/',
+      '/tools/compatibility-calculator': '/calculators/compatibility/',
+      '/tools/compatibility-calculator/': '/calculators/compatibility/',
+      '/tools/compatibility-calculator.html': '/calculators/compatibility/',
+      '/tools/blessing-years': '/calculators/personal-year/',
+      '/tools/blessing-years/': '/calculators/personal-year/',
+      '/tools/blessing-years.html': '/calculators/personal-year/',
+      // Legacy /calculators/<old-slug> -> canonical /calculators/<slug>/
+      '/calculators/chaldean': '/calculators/name-numerology/',
+      '/calculators/chaldean/': '/calculators/name-numerology/',
+      '/calculators/chaldean-name-numerology': '/calculators/name-balancing/',
+      '/calculators/chaldean-name-numerology/': '/calculators/name-balancing/',
+      '/calculators/life-path-number': '/calculators/life-path/',
+      '/calculators/life-path-number/': '/calculators/life-path/',
+      '/calculators/mobile-number-numerology': '/calculators/mobile-number/',
+      '/calculators/mobile-number-numerology/': '/calculators/mobile-number/',
+      '/calculators/numerology-compatibility': '/calculators/compatibility/',
+      '/calculators/numerology-compatibility/': '/calculators/compatibility/',
+      '/calculators/pythagorean-numerology': '/calculators/pythagorean/',
+      '/calculators/pythagorean-numerology/': '/calculators/pythagorean/',
+      '/calculators/personal-year-numerology': '/calculators/personal-year/',
+      '/calculators/personal-year-numerology/': '/calculators/personal-year/',
+      '/calculators/business-name-numerology': '/tools/business-alignment/',
+      '/calculators/business-name-numerology/': '/tools/business-alignment/',
+      // Tool & blog renames
+      '/tools/business-numerology': '/tools/business-alignment/',
+      '/tools/business-numerology/': '/tools/business-alignment/',
+      '/tools/logo-studio': '/tools/logo-intelligence/',
+      '/tools/logo-studio/': '/tools/logo-intelligence/',
       '/tools/lucky-number': '/tools/favourable-numbers/',
       '/tools/lucky-number/': '/tools/favourable-numbers/',
       '/tools/lucky-number.html': '/tools/favourable-numbers/',
@@ -2660,14 +2829,16 @@ export default {
       '/blog/gemstone-remedies/': '/blog/vedic-gemstone-remedies/',
       '/blog/gemstone-remedies.html': '/blog/vedic-gemstone-remedies/'
     };
-    if (canonicalRedirects[url.pathname]) {
-      return Response.redirect(new URL(canonicalRedirects[url.pathname], url.origin), 301);
+    let resolvedRedirectPath = canonicalRedirects[url.pathname] || null;
+    if (!resolvedRedirectPath && url.pathname.startsWith('/blog/') && url.pathname.endsWith('.html')) {
+      resolvedRedirectPath = url.pathname.replace(/\.html$/, '/');
     }
-
-    // 0a. 301 Redirect for legacy .html blog URLs to clean trailing-slash format
-    if (url.pathname.startsWith('/blog/') && url.pathname.endsWith('.html')) {
-      const cleanBlogPath = url.pathname.replace(/\.html$/, '/');
-      return Response.redirect(new URL(cleanBlogPath + url.search, url.origin), 301);
+    if (url.hostname === 'www.numerosvision.com') {
+      const destPath = resolvedRedirectPath || url.pathname;
+      return Response.redirect('https://numerosvision.com' + destPath + url.search, 301);
+    }
+    if (resolvedRedirectPath) {
+      return Response.redirect(new URL(resolvedRedirectPath + url.search, url.origin), 301);
     }
 
     // 0b. SECURITY GATE / WAF: Block access to private files, hidden dotfiles, backups, and server scripts
@@ -2678,7 +2849,7 @@ export default {
       /^\/app\//i,
       /^\/scripts\//i,
       /^\/pdf_service\//i,
-      /^\/reports\/.+/i,
+      /^\/reports\/.*\.pdf$/i,
       /^\/static\/reports\//i,
       /\.py$/i,
       /\.env/i,
@@ -4487,7 +4658,7 @@ export default {
         return new Response(JSON.stringify({
           success: false,
           code: 'TIER_WAITLIST_ONLY',
-          error: 'This report edition is currently in Notify Me launch mode. Basic Report (₹199) is open for immediate checkout.'
+          error: 'This report edition is currently in Notify Me launch mode. Anveil my alignments (₹199) is open for immediate checkout.'
         }), { status: 409, headers: corsHeaders });
       }
 
@@ -4870,11 +5041,44 @@ export default {
         }), { status: 400, headers: corsHeaders });
       }
 
-      let fulfillRes = await fulfillPaidOrder(order, rzpPaymentId, order.amount_paise, 'online', env, now, 'checkout_verify', request);
-      if (fulfillRes && fulfillRes.jobId && ctx && typeof ctx.waitUntil === 'function') {
-        ctx.waitUntil(
-          dispatchReportJob(fulfillRes.jobId, env).catch(err => console.error('[Verify_WaitUntil_Dispatch_Error]', err))
-        );
+      // WEBHOOK-ONLY PDF GENERATION:
+      // /verify validates the Razorpay HMAC signature, records PAYMENT_VERIFIED, and mints nv_session
+      // when checkout_token matches, while deferring PDF generation & entitlements to the signed
+      // Razorpay webhook (with automatic 10-minute Razorpay Orders API fallback).
+      let existingJobId = null;
+      if (order.status === 'PAID') {
+        if (env.DB) {
+          const exJob = await env.DB.prepare('SELECT id FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(order.id).first();
+          if (exJob) existingJobId = exJob.id;
+        } else if (typeof memoryStore !== 'undefined' && memoryStore.reportJobs) {
+          for (const j of memoryStore.reportJobs.values()) {
+            if (j.order_id === order.id) { existingJobId = j.id; break; }
+          }
+        }
+      } else {
+        order.status = 'PAYMENT_VERIFIED';
+        order.updated_at = now;
+        order.rzp_payment_id = rzpPaymentId;
+        if (env.DB) {
+          await env.DB.prepare("UPDATE orders SET status = 'PAYMENT_VERIFIED', updated_at = ? WHERE id = ?").bind(now, order.id).run();
+          await env.DB.prepare(
+            "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, 'checkout_verify', 'payment_signature_verified', 'orders', ?, ?, ?)"
+          ).bind('aud_' + now + '_' + getRandomHex(4), order.id, JSON.stringify({ rzpOrderId, rzpPaymentId, amountPaise: order.amount_paise }), now).run();
+          try {
+            await logWorkerEvent(env, {
+              event_name: 'payment_signature_verified',
+              product_id: order.pack_id,
+              value_inr: order.amount_paise / 100,
+              currency: order.currency || 'INR'
+            });
+          } catch (_) {}
+        } else if (typeof memoryStore !== 'undefined' && memoryStore.auditLogs) {
+          memoryStore.auditLogs.push({
+            id: 'aud_' + now + '_' + getRandomHex(4),
+            action: 'payment_signature_verified',
+            resource_id: order.id
+          });
+        }
       }
 
       // Condition 1: Session issuance ONLY if email was verified in the SAME checkout flow via checkout_token
@@ -4946,13 +5150,15 @@ export default {
 
       return new Response(JSON.stringify({
         status: 'verified',
+        orderStatus: order ? order.status : null,
         verified: true,
         success: true,
         orderId: order ? order.id : null,
         packId: order ? order.pack_id : null,
         subjectId: order ? order.subject_id : null,
-        jobId: fulfillRes ? fulfillRes.jobId : null,
+        jobId: existingJobId,
         reportStatus: 'preparing',
+        awaitingWebhook: order ? order.status !== 'PAID' : false,
         session_issued: Boolean(sessionCookieHeader),
         message: 'Your payment has been verified. Your personalized report is being prepared. It will be ready within a few minutes.'
       }), { status: 200, headers: verifyResponseHeaders });
@@ -5039,6 +5245,10 @@ export default {
       const now = Date.now();
       const THIRTY_MINUTES_MS = 30 * 60 * 1000;
 
+      if (order.status !== 'PAID') {
+        await reconcileStaleOrderWithRazorpay(order, env, now, request, ctx);
+      }
+
       if (order.status === 'PAID') {
         let jobStatus = REPORT_JOB_STATUS.QUEUED;
         let jobId = null;
@@ -5076,6 +5286,20 @@ export default {
           jobStatus,
           reportStatus: normalizedReportStatus,
           message: 'Your personalized report is being prepared. It will be ready within a few minutes.'
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      if (order.status === 'PAYMENT_VERIFIED') {
+        return new Response(JSON.stringify({
+          orderId: order.id,
+          rzpOrderId: order.rzp_order_id,
+          status: 'payment_verified',
+          packId: order.pack_id,
+          subjectId: order.subject_id,
+          jobId: null,
+          reportStatus: 'preparing',
+          awaitingWebhook: true,
+          message: 'Your payment has been verified. Confirming settlement and preparing your personalized report.'
         }), { status: 200, headers: corsHeaders });
       }
 
@@ -5417,6 +5641,9 @@ export default {
       }
 
       if (tokenOrder) {
+        if (tokenOrder.status !== 'PAID') {
+          await reconcileStaleOrderWithRazorpay(tokenOrder, env, Date.now(), request, ctx);
+        }
         let job = null;
         if (env.DB) {
           job = await env.DB.prepare('SELECT id, status, r2_key, download_url, attempts, created_at, updated_at FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(tokenOrder.id).first();
@@ -5534,6 +5761,27 @@ export default {
       }
       if (charmCredits === null) charmCredits = 3;
 
+      // 10-MINUTE FALLBACK RECONCILIATION: Check any stale PAYMENT_VERIFIED / CREATED orders >= 10m with Razorpay
+      let userOrdersPrecheck = [];
+      try {
+        if (env.DB) {
+          const preRows = await env.DB.prepare('SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC').bind(user.user_id).all();
+          userOrdersPrecheck = (preRows && preRows.results) || [];
+        } else if (typeof memoryStore !== 'undefined' && memoryStore.orders) {
+          for (const ord of memoryStore.orders.values()) {
+            if (ord.user_id === user.user_id) userOrdersPrecheck.push(ord);
+          }
+        }
+        const dashNow = Date.now();
+        for (const candOrd of userOrdersPrecheck) {
+          if (candOrd && candOrd.status !== 'PAID') {
+            await reconcileStaleOrderWithRazorpay(candOrd, env, dashNow, request, ctx);
+          }
+        }
+      } catch (reconcileErr) {
+        console.warn('[DASHBOARD_10MIN_FALLBACK_WARN]', reconcileErr);
+      }
+
       // SAFETY NET: If user has any PAID orders with missing report jobs, fulfill them now idempotently
       try {
         let unfulfilledOrders = [];
@@ -5644,6 +5892,39 @@ export default {
           completedAt: job.completed_at
         };
       });
+
+      // Surface any PAYMENT_VERIFIED orders awaiting Razorpay webhook settlement as 'preparing'
+      for (const pvOrd of userOrdersPrecheck) {
+        if (pvOrd && pvOrd.status === 'PAYMENT_VERIFIED') {
+          const alreadyListed = formattedReports.some(
+            r => r.orderId === pvOrd.id || (r.subjectId === pvOrd.subject_id && r.packId === pvOrd.pack_id)
+          );
+          if (!alreadyListed) {
+            const pvPack = getPackById(pvOrd.pack_id);
+            if (!pvPack || !pvPack.pages) continue;
+            const pvSubj = subjects.find(s => s.id === pvOrd.subject_id) || activeSubject || { name: 'Member', dob: '' };
+            formattedReports.unshift({
+              id: 'pending_' + pvOrd.id,
+              orderId: pvOrd.id,
+              packId: pvOrd.pack_id,
+              tier: pvPack.tier_id || pvOrd.pack_id.replace('report_', ''),
+              title: pvPack.name,
+              pages: pvPack.pages,
+              subjectId: pvOrd.subject_id,
+              subjectName: pvSubj.name,
+              subjectDob: pvSubj.dob,
+              status: 'preparing',
+              statusBadge: 'Preparing',
+              message: 'Your payment is verified. Confirming settlement and preparing your personalized report.',
+              attempts: 0,
+              isDownloadable: false,
+              downloadUrl: null,
+              createdAt: pvOrd.created_at,
+              completedAt: null
+            });
+          }
+        }
+      }
 
       // 2. User Receipts (Built strictly from paid orders & payments table, not empty invoices)
       let receipts = [];
@@ -7099,7 +7380,7 @@ export default {
       const skuDefinitions = [
         {
           sku: 'report_basic',
-          name: 'Basic Report',
+          name: 'Anveil my alignments',
           page_price_inr: 199,
           catalog_price_inr: PACK_CATALOG.core_reports.report_basic.price_inr,
           razorpay_amount_paise: PACK_CATALOG.core_reports.report_basic.amount_paise,
@@ -7107,15 +7388,15 @@ export default {
         },
         {
           sku: 'report_advanced',
-          name: 'Advanced Master Dossier',
-          page_price_inr: 489,
+          name: 'Anveil my glowing charms',
+          page_price_inr: 510,
           catalog_price_inr: PACK_CATALOG.core_reports.report_advanced.price_inr,
           razorpay_amount_paise: PACK_CATALOG.core_reports.report_advanced.amount_paise,
           entitlement_type: 'report_entitlement'
         },
         {
           sku: 'report_premium',
-          name: 'Premium Sovereign Blueprint',
+          name: 'Anveil every charm',
           page_price_inr: 1050,
           catalog_price_inr: PACK_CATALOG.core_reports.report_premium.price_inr,
           razorpay_amount_paise: PACK_CATALOG.core_reports.report_premium.amount_paise,
@@ -7150,7 +7431,8 @@ export default {
         let bannedWordsCleanAll = true;
         let nameDobMatchAll = true;
 
-        for (const seeker of sampleSeekers) {
+        for (let sIdx = 0; sIdx < sampleSeekers.length; sIdx++) {
+          const seeker = sampleSeekers[sIdx];
           const generatedText = generateDeterministicReportText(item.sku, seeker.name, seeker.day, seeker.month, seeker.year);
           const hasBanned = hasBannedTerms(generatedText);
           if (hasBanned) bannedWordsCleanAll = false;
@@ -7163,7 +7445,7 @@ export default {
             name: seeker.name,
             banned_words_detected: hasBanned ? 1 : 0,
             name_dob_match: nameMatch && dobMatch,
-            report_url: `/api/v1/reports/sample/${item.sku}?dob=${seeker.dob}`
+            report_url: `/api/v1/reports/sample/${item.sku}?sample=${sIdx + 1}`
           });
         }
 
@@ -7429,7 +7711,9 @@ export default {
         return new Response('Not Found', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
       }
       const sku = url.pathname.replace('/api/v1/reports/sample/', '').trim();
-      const dob = (url.searchParams.get('dob') || '1981-11-28').trim();
+      const sampleIdxMap = { '1': '1981-11-28', '2': '1990-01-01', '3': '1988-08-18' };
+      const sampleKey = (url.searchParams.get('sample') || '').trim();
+      const dob = (url.searchParams.get('dob') || sampleIdxMap[sampleKey] || '1981-11-28').trim();
       const parts = dob.split('-');
       const y = parseInt(parts[0], 10) || 1981;
       const m = parseInt(parts[1], 10) || 11;
@@ -8261,8 +8545,24 @@ export default {
           headers
         });
       }
-      return env.ASSETS.fetch(request);
+      const assetResp = await env.ASSETS.fetch(request);
+      if (url.search && assetResp && assetResp.status === 200) {
+        const ct = (assetResp.headers.get('Content-Type') || '').toLowerCase();
+        const noindexPrefixes = ['/dashboard', '/login', '/signup', '/your-reading', '/charm-ai/chat', '/practitioner', '/admin', '/demo', '/logo-preview', '/sample2'];
+        const isNoindexRoute = noindexPrefixes.some(p => url.pathname === p || url.pathname.startsWith(p + '/'));
+        if (ct.includes('text/html') && !isNoindexRoute) {
+          const cleanCanonPath = url.pathname === '/' ? '/' : (url.pathname.endsWith('/') ? url.pathname : url.pathname + '/');
+          const headers = new Headers(assetResp.headers);
+          headers.set('Link', `<https://numerosvision.com${cleanCanonPath}>; rel="canonical"`);
+          return new Response(assetResp.body, {
+            status: assetResp.status,
+            statusText: assetResp.statusText,
+            headers
+          });
+        }
+      }
+      return assetResp;
   }
 };
 
-export { calculateCanonicalKuaDetails, KUA_RULE_TEXT, KUA_NEEDS_GENDER_TEXT };
+export { calculateCanonicalKuaDetails, KUA_RULE_TEXT, KUA_NEEDS_GENDER_TEXT, WEBHOOK_FALLBACK_WINDOW_MS, reconcileStaleOrderWithRazorpay, isNotifyMeHigherTiersEnabled };

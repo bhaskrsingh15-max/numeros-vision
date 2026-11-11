@@ -472,7 +472,7 @@ def generate_consensus_reading(
 
 
 if __name__ == "__main__":
-    report = generate_consensus_reading("Bhaskar Singh", 15, 8, 1995)
+    report = generate_consensus_reading("Bhaskr Singh", 15, 8, 1995)
     print("=== NUMEROS VISION ENRICHED CONSENSUS REPORT ===")
     print(f"User: {report['user_name']} | DOB: {report['dob']}")
     print(f"Driver/Conductor: {report['vedic_numerology']['driver_number']}/{report['vedic_numerology']['conductor_number']}")

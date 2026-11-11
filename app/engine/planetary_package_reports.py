@@ -3,10 +3,10 @@ PLANETARY & HARMONIC DOMAIN REPORT GENERATOR
 Numeros Vision — ANVEIL EVERY CHARM
 
 Generates tailored, publication-ready problem-based solution reports for all 5 Planetary Domains:
-1. Venus (Shukra) · Harmonic Root 6: Sacred Union & Spousal Bond (₹105 → ₹489 → ₹5,100)
+1. Venus (Shukra) · Harmonic Root 6: Sacred Union & Spousal Bond (₹105 → ₹510 → ₹5,100)
 2. Mercury (Budh) · Harmonic Root 5: Commercial Velocity & Market Flow (₹149 → ₹599 → ₹5,999)
 3. Sun (Surya) · Harmonic Root 1: Executive Authority & Sovereignty (₹199 → ₹550 → ₹5,500)
-4. Mercury/Venus · Harmonic Root 5 & 6: Global Horizon & Relocation (₹149 → ₹489 → ₹5,100)
+4. Mercury/Venus · Harmonic Root 5 & 6: Global Horizon & Relocation (₹149 → ₹510 → ₹5,100)
 5. Jupiter (Guru) · Harmonic Root 3: Higher Calling & Mentorship (₹120 → ₹570 → ₹4,800)
 
 Strict Quality Standards:
@@ -181,7 +181,7 @@ def _generate_union_report(level: str, name: str, day: int, month: int, year: in
             "domain": "Love, Marriage & Spousal Harmony",
             "planet": "Venus (Shukra)",
             "harmonic_root": 6,
-            "price_inr": 489,
+            "price_inr": 510,
             "price_usd": 24.00,
             "profile": profile,
             "page_target": "12 Pages",
@@ -554,7 +554,7 @@ def _generate_relocation_report(level: str, name: str, day: int, month: int, yea
             "domain": "Foreign Settlement, Visa & Travel",
             "planet": "Mercury & Rahu",
             "harmonic_root": 6,
-            "price_inr": 489,
+            "price_inr": 510,
             "price_usd": 24.00,
             "profile": profile,
             "page_target": "12 Pages",

@@ -125,7 +125,7 @@ def api_seo_ranking_scan():
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 if os.path.exists(STATIC_DIR):
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-    for subdir in ["logos", "icons", "images", "screenshots", "reports"]:
+    for subdir in ["logos", "icons", "images", "screenshots"]:
         sub_path = os.path.join(STATIC_DIR, subdir)
         if os.path.exists(sub_path):
             app.mount(f"/{subdir}", StaticFiles(directory=sub_path), name=subdir)
@@ -513,10 +513,12 @@ def page_charm_ai():
     path = os.path.join(STATIC_DIR, "charm_ai.html")
     return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
 
+@app.get("/charm-ai/chat", include_in_schema=False)
+@app.get("/charm-ai/chat/", include_in_schema=False)
 @app.get("/chat", include_in_schema=False)
 @app.get("/chat/", include_in_schema=False)
 def page_chat():
-    path = os.path.join(STATIC_DIR, "charm_ai.html")
+    path = os.path.join(STATIC_DIR, "charm_ai_chat.html")
     return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
 
 @app.get("/reading", include_in_schema=False)
@@ -674,6 +676,8 @@ def calc_alias_birth_number():
 
 @app.get("/life-path-number-calculator", include_in_schema=False)
 @app.get("/life-path-number-calculator/", include_in_schema=False)
+@app.get("/calculators/life-path", include_in_schema=False)
+@app.get("/calculators/life-path/", include_in_schema=False)
 @app.get("/calculators/life-path-number", include_in_schema=False)
 @app.get("/calculators/life-path-number/", include_in_schema=False)
 def calc_alias_life_path():
@@ -690,6 +694,8 @@ def calc_alias_name():
 
 @app.get("/chaldean-numerology", include_in_schema=False)
 @app.get("/chaldean-numerology/", include_in_schema=False)
+@app.get("/calculators/name-balancing", include_in_schema=False)
+@app.get("/calculators/name-balancing/", include_in_schema=False)
 @app.get("/calculators/chaldean-name-numerology", include_in_schema=False)
 @app.get("/calculators/chaldean-name-numerology/", include_in_schema=False)
 def calc_alias_chaldean():
@@ -706,6 +712,8 @@ def calc_alias_lo_shu():
 
 @app.get("/mobile-number-numerology", include_in_schema=False)
 @app.get("/mobile-number-numerology/", include_in_schema=False)
+@app.get("/calculators/mobile-number", include_in_schema=False)
+@app.get("/calculators/mobile-number/", include_in_schema=False)
 @app.get("/calculators/mobile-number-numerology", include_in_schema=False)
 @app.get("/calculators/mobile-number-numerology/", include_in_schema=False)
 def calc_alias_mobile():
@@ -732,12 +740,16 @@ def calc_alias_business_name():
 
 @app.get("/numerology-compatibility-calculator", include_in_schema=False)
 @app.get("/numerology-compatibility-calculator/", include_in_schema=False)
+@app.get("/calculators/compatibility", include_in_schema=False)
+@app.get("/calculators/compatibility/", include_in_schema=False)
 @app.get("/calculators/numerology-compatibility", include_in_schema=False)
 @app.get("/calculators/numerology-compatibility/", include_in_schema=False)
 def calc_alias_compatibility():
     path = os.path.join(STATIC_DIR, "tools", "compatibility-calculator.html")
     return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
 
+@app.get("/calculators/pythagorean", include_in_schema=False)
+@app.get("/calculators/pythagorean/", include_in_schema=False)
 @app.get("/calculators/pythagorean-numerology", include_in_schema=False)
 @app.get("/calculators/pythagorean-numerology/", include_in_schema=False)
 def calc_alias_pythagorean():
@@ -1632,6 +1644,7 @@ def static_page_fallback(page: str):
     ]
     for cand in candidates:
         if os.path.exists(cand) and os.path.isfile(cand):
-            return FileResponse(cand, media_type="text/html")
+            status_code = 404 if clean == "404" else 200
+            return FileResponse(cand, status_code=status_code, media_type="text/html")
     path_404 = os.path.join(STATIC_DIR, "404.html")
     return FileResponse(path_404, status_code=404, media_type="text/html") if os.path.exists(path_404) else root()

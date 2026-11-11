@@ -17,7 +17,7 @@ PURPOSE:
 3. Credit Tracking & Upselling Pathways:
    - Monitors Charm AI question credits (Starter 5Q, Growth 10Q/15Q, Power 35Q).
    - Generates tailored recharge and upscaling hooks when credits reach zero.
-   - Provides upgrade paths from tripwires (₹95, ₹105, ₹199) to Master (₹489) and Sovereign (₹1,050).
+   - Provides upgrade paths from tripwires (₹95, ₹105, ₹199) to Master (₹510) and Sovereign (₹1,050).
 
 4. Staging Replica Testing Mode:
    - Detects staging environment or bypass tokens to grant full test access for QA/QC.
@@ -232,10 +232,10 @@ def analyze_user_alignment_and_gaps(
         "subheadline": f"Harmonize your Driver {d}-Conductor {c} polarity and activate your personalized Lucky Charm & dual-system remedies.",
         "recommended_plan": "report_master",
         "recommended_plan_name": "Master Dual-System Synthesis Dossier",
-        "amount_inr": 489,
+        "amount_inr": 510,
         "original_price_inr": 999,
         "discount_percent": "49% OFF",
-        "button_text": "ANVEIL EVERY CHARM ✦ Activate Lucky Charm Dossier (₹489)",
+        "button_text": "ANVEIL EVERY CHARM ✦ Activate Lucky Charm Dossier (₹510)",
         "button_url": "/checkout/?plan=report_master",
         "starter_alternative": {
             "plan": "starter_5q",
@@ -266,8 +266,8 @@ def analyze_user_alignment_and_gaps(
                 {
                     "plan": "report_master",
                     "name": "Master Dual-System Synthesis Dossier (35 Pages)",
-                    "amount_inr": 489,
-                    "button_text": "Upgrade to Master Dossier (₹489) ✦"
+                    "amount_inr": 510,
+                    "button_text": "Upgrade to Master Dossier (₹510) ✦"
                 }
             ]
         }
@@ -279,8 +279,8 @@ def analyze_user_alignment_and_gaps(
             "message": "You have unlocked your foundational numbers, but your 5-Year Dasha Timeline and 7-Layer Consecrated Remedies remain veiled.",
             "tagline_cta": "ANVEIL EVERY CHARM ✦ Upgrade to Master Synthesis Dossier",
             "upgrade_plan": "report_master",
-            "amount_inr": 489,
-            "button_text": "ANVEIL EVERY CHARM ✦ Upgrade to Master (₹489)"
+            "amount_inr": 510,
+            "button_text": "ANVEIL EVERY CHARM ✦ Upgrade to Master (₹510)"
         }
 
     return {
@@ -351,7 +351,7 @@ TOOL_MONETIZATION_CONFIG: Dict[str, Dict[str, Any]] = {
         "recommended_plan": "report_master",
         "plan_name": "Executive Business Alignment Blueprint",
         "anchor_price_inr": 999,
-        "entry_price_inr": 489,
+        "entry_price_inr": 510,
         "discount_badge": "SAVE 49% · INSTANT Explore"
     },
     "logo_studio": {
@@ -372,7 +372,7 @@ TOOL_MONETIZATION_CONFIG: Dict[str, Dict[str, Any]] = {
         "recommended_plan": "report_master",
         "plan_name": "Production Vector Identity Kit",
         "anchor_price_inr": 1499,
-        "entry_price_inr": 489,
+        "entry_price_inr": 510,
         "discount_badge": "SAVE 66% · INSTANT Explore"
     },
     "charm_ai": {
@@ -393,7 +393,7 @@ TOOL_MONETIZATION_CONFIG: Dict[str, Dict[str, Any]] = {
         "recommended_plan": "report_master",
         "plan_name": "Complete Life Dossier (12-Page Master Dossier & Full Remedies)",
         "anchor_price_inr": 999,
-        "entry_price_inr": 489,
+        "entry_price_inr": 510,
         "discount_badge": "SAVE 50% · INSTANT Explore"
     },
     "life_path": {
@@ -414,7 +414,7 @@ TOOL_MONETIZATION_CONFIG: Dict[str, Dict[str, Any]] = {
         "recommended_plan": "report_master",
         "plan_name": "Master Dual-System Synthesis Dossier",
         "anchor_price_inr": 999,
-        "entry_price_inr": 489,
+        "entry_price_inr": 510,
         "discount_badge": "SAVE 49% · INSTANT Explore"
     },
     "birth_number": {
@@ -456,7 +456,7 @@ TOOL_MONETIZATION_CONFIG: Dict[str, Dict[str, Any]] = {
         "recommended_plan": "report_master",
         "plan_name": "Master Dual-System Synthesis Dossier",
         "anchor_price_inr": 999,
-        "entry_price_inr": 489,
+        "entry_price_inr": 510,
         "discount_badge": "SAVE 49% · INSTANT Explore"
     },
     "name_numerology": {
@@ -477,7 +477,7 @@ TOOL_MONETIZATION_CONFIG: Dict[str, Dict[str, Any]] = {
         "recommended_plan": "report_master",
         "plan_name": "Master Dual-System Synthesis Dossier",
         "anchor_price_inr": 999,
-        "entry_price_inr": 489,
+        "entry_price_inr": 510,
         "discount_badge": "SAVE 49% · INSTANT Explore"
     }
 }

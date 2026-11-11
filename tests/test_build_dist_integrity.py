@@ -71,22 +71,30 @@ def test_built_site_prices_and_page_counts_match_packs_json():
     allowed_prices = set()
     allowed_mrps = set()
     allowed_pages = set()
+    allowed_per_page = set()
+    top_launch_days = packs.get("launch_offer", {}).get("duration_days")
     for pack in packs.get("core_reports", {}).values():
         if pack.get("status") == "active":
             allowed_prices.add(int(pack["price_inr"]))
-            if pack.get("mrp_inr") and pack.get("launch_offer_ends_at"):
+            if pack.get("mrp_inr") and (
+                pack.get("launch_offer_ends_at")
+                or pack.get("launch_offer_window_days")
+                or pack.get("launch_offer_duration_days")
+                or top_launch_days
+            ):
                 allowed_mrps.add(int(pack["mrp_inr"]))
             allowed_pages.add(int(pack["pages"]))
+            allowed_per_page.add(int(pack.get("per_page_inr") or int(int(pack["price_inr"]) / int(pack["pages"]) + 0.5)))
     for pack in packs.get("charm_ai", {}).values():
         if pack.get("status") == "active":
             allowed_prices.add(int(pack["price_inr"]))
 
-    assert allowed_prices == {0, 199, 489, 1050}, f"Unexpected active prices in packs.json: {allowed_prices}"
-    assert allowed_mrps == {289, 699, 1479}, f"Unexpected launch MRPs in packs.json: {allowed_mrps}"
+    assert allowed_prices == {0, 199, 510, 1050}, f"Unexpected active prices in packs.json: {allowed_prices}"
+    assert allowed_mrps == {399, 1020, 2100}, f"Unexpected launch MRPs in packs.json: {allowed_mrps}"
     assert allowed_pages == {3, 12, 32}, f"Unexpected active page counts in packs.json: {allowed_pages}"
     allowed_per_day = {round(p / 365, 2) for p in allowed_prices if p > 0}
 
-    re_rupee = re.compile(r"(?:₹|&#8377;|\\u20b9|\bRs\.?\s*)([\d,]+(?:\.\d+)?)(\s*/\s*day)?", re.IGNORECASE)
+    re_rupee = re.compile(r"(?:₹|&#8377;|\\u20b9|\bRs\.?\s*)([\d,]+(?:\.\d+)?)(\s*/\s*(?:day|page))?", re.IGNORECASE)
     re_pages = re.compile(r"\b(\d+)\+?\s*[-–]?\s*[Pp]ages?\b")
     re_forbidden = re.compile(r"\b210\b|1,500|45\+|\b9\s*[-–]?\s*[Pp]ages?\b|\b21\s*[-–]?\s*[Pp]ages?\b|\{\{PACK_")
 
@@ -100,21 +108,26 @@ def test_built_site_prices_and_page_counts_match_packs_json():
             text = open(full_path, "r", encoding="utf-8", errors="ignore").read()
 
             base_allowed_prices = allowed_prices | allowed_mrps | {339, 399, 699, 1299, 1999}
-            file_allowed_prices = base_allowed_prices | {1499, 1949, 289, 561, 851} if ("2027" in rel_path or "your-reading" in rel_path or rel_path == "_worker.js") else base_allowed_prices
+            file_allowed_prices = base_allowed_prices | {1499, 1949, 311, 537, 851} if ("2027" in rel_path or "your-reading" in rel_path or rel_path == "_worker.js" or "nv_pricing_catalog" in rel_path or "nv_catalog" in rel_path) else base_allowed_prices
             file_allowed_pages = allowed_pages | {24} if ("2027" in rel_path or "your-reading" in rel_path or rel_path == "_worker.js") else allowed_pages
 
             for line_no, line in enumerate(text.splitlines(), 1):
                 for m in re_rupee.finditer(line):
                     raw_val = m.group(1).replace(",", "")
-                    is_per_day = bool(m.group(2))
+                    unit_suffix = (m.group(2) or "").lower()
                     try:
                         val = float(raw_val)
                     except ValueError:
                         continue
-                    if is_per_day:
+                    if "day" in unit_suffix:
                         if round(val, 2) not in allowed_per_day:
                             violations.append(
                                 f"{rel_path}:{line_no}: Per-day rupee amount '{m.group(0)}' not in packs.json/365 {sorted(allowed_per_day)}"
+                            )
+                    elif "page" in unit_suffix:
+                        if round(val) not in allowed_per_page:
+                            violations.append(
+                                f"{rel_path}:{line_no}: Per-page rupee amount '{m.group(0)}' not in packs.json/pages {sorted(allowed_per_page)}"
                             )
                     elif val not in file_allowed_prices:
                         violations.append(f"{rel_path}:{line_no}: Rupee amount '{m.group(0)}' not in active packs.json {sorted(allowed_prices)}")
@@ -135,7 +148,7 @@ def test_built_site_prices_and_page_counts_match_packs_json():
     if not os.path.exists(pricing_built_path):
         pricing_built_path = os.path.join(DIST_DIR, "pricing.html")
     pricing_built = open(pricing_built_path, "r", encoding="utf-8").read()
-    assert "₹199" in pricing_built and "₹489" in pricing_built and "₹1,050" in pricing_built, (
+    assert "₹199" in pricing_built and "₹510" in pricing_built and "₹1,050" in pricing_built, (
         "pricing/index.html in dist_cloudflare_pages is missing canonical report prices"
     )
     print(

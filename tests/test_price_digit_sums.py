@@ -62,8 +62,8 @@ class TestPriceDigitSums(unittest.TestCase):
     def test_bundle_and_upgrades(self):
         items = [
             ("Bundle (Premium + Planner)", 1949),
-            ("Upgrade Basic -> Advanced", 289),
-            ("Upgrade Advanced -> Premium", 561),
+            ("Upgrade Basic -> Advanced", 311),
+            ("Upgrade Advanced -> Premium", 537),
             ("Upgrade Basic -> Premium", 851)
         ]
         for name, price in items:

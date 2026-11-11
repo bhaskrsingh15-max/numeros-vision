@@ -21,13 +21,13 @@ NAV_SCRIPT = """  <script>
 MASTER_HEADER = """  <!-- Master Unified Site Header -->
   <header class="nv-header">
     <div class="nv-nav-container">
-      <a href="/" class="nv-brand-link" title="Numeros Vision — Anviel Every Charm">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — Anveil Every Charm">
         <div class="nv-brand-seal">
           <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
         </div>
         <div class="nv-brand-text">
           <span class="nv-brand-title">NUMEROS VISION</span>
-          <span class="nv-brand-tagline">ANVIEL EVERY CHARM</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
         </div>
       </a>
 
@@ -54,13 +54,13 @@ MASTER_HEADER = """  <!-- Master Unified Site Header -->
 PRACTITIONER_HEADER = """  <!-- Master Unified Site Header -->
   <header class="nv-header">
     <div class="nv-nav-container">
-      <a href="/" class="nv-brand-link" title="Numeros Vision — Anviel Every Charm">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — Anveil Every Charm">
         <div class="nv-brand-seal">
           <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
         </div>
         <div class="nv-brand-text">
           <span class="nv-brand-title">NUMEROS VISION</span>
-          <span class="nv-brand-tagline">ANVIEL EVERY CHARM</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
         </div>
       </a>
 
@@ -88,13 +88,13 @@ PRACTITIONER_HEADER = """  <!-- Master Unified Site Header -->
 SAMPLE_HEADER = """  <!-- Master Unified Site Header -->
   <header class="nv-header">
     <div class="nv-nav-container">
-      <a href="/" class="nv-brand-link" title="Numeros Vision — Anviel Every Charm">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — Anveil Every Charm">
         <div class="nv-brand-seal">
           <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
         </div>
         <div class="nv-brand-text">
           <span class="nv-brand-title">NUMEROS VISION</span>
-          <span class="nv-brand-tagline">ANVIEL EVERY CHARM</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
         </div>
       </a>
 
@@ -131,7 +131,7 @@ MASTER_FOOTER = """  <!-- Master Unified Site Footer -->
             </div>
             <div class="nv-brand-text">
               <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
-              <span class="nv-brand-tagline">ANVIEL EVERY CHARM</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
             </div>
           </a>
           <p>
@@ -189,7 +189,7 @@ MASTER_FOOTER = """  <!-- Master Unified Site Footer -->
 
       <!-- Bottom Bar -->
       <div class="nv-footer-bottom">
-        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: Anviel Every Charm.</div>
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: Anveil Every Charm.</div>
         <div class="nv-footer-legal-inline">
           <a href="/privacy-policy/">Privacy Policy</a>
           <a href="/terms/">Terms</a>

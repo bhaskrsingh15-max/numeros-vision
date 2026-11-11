@@ -13,7 +13,6 @@
 
   <title>Create Your Golden Profile | Numeros Vision</title>
   <meta name="description" content="Create your verified Numeros Vision account to save your celestial birth chart, sync classical Lo Shu grids, track personal year transits, and unlock." />
-  <link rel="canonical" href="https://numerosvision.com/signup/" />
   <meta name="robots" content="noindex, nofollow" />
 
   <link rel="manifest" href="/manifest.json" />
@@ -776,37 +775,12 @@
 </style>
 
   <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Create Your Golden Profile | Numeros Vision · ANVEIL EVERY CHARM",
-    "headline": "Create Your Golden Profile | Numeros Vision · ANVEIL EVERY CHARM",
-    "description": "Create your verified Numeros Vision account in a seamless 2-step process to save your celestial birth chart, sync classical Lo Shu grids, track personal year transits, and consult Charm AI under DPDP consent.",
-    "url": "https://numerosvision.com/signup/",
-    "image": "https://numerosvision.com/static/logos/anveil-charm-hero.png",
-    "author": {
-      "@type": "Organization",
-      "name": "Numeros Vision",
-      "url": "https://numerosvision.com"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Numeros Vision",
-      "url": "https://numerosvision.com",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://numerosvision.com/static/logos/anveil-charm-hero.png"
-      }
-    }
-  }
-  </script>
   <meta property="og:site_name" content="Numeros Vision" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://numerosvision.com/signup/" />
   <meta property="og:title" content="Create Your Account | Numeros Vision" />
   <meta property="og:description" content="Join Numeros Vision to access deterministic AI numerology calculations, personal roadmaps, and consultation records." />
-  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+  <meta property="og:image" content="https://numerosvision.com/assets/brand/og-default-1200x630.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <script>
     // ── RETURNING CUSTOMER RECOGNITION ──
@@ -874,7 +848,7 @@
 
           <!-- 4. Charm AI -->
           <li class="nv-nav-item nv-nav-charm-highlight">
-            <a href="/charm_ai.html" class="nv-nav-link" title="Charm AI" style="display:inline-flex; align-items:center; gap:8px;">
+            <a href="/charm-ai/" class="nv-nav-link" title="Charm AI" style="display:inline-flex; align-items:center; gap:8px;">
               <span class="nv-charm-medallion-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#FFFFFF" stroke-width="2.4" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></span> <span style="font-weight:700;">Charm AI</span>
             </a>
           </li>
@@ -1961,15 +1935,19 @@
     // ── INITIALIZATION & PREFILL ON LOAD ──
     function initSignupPrefill() {
       try {
-        const params = new URLSearchParams(window.location.search);
-        let name = params.get('name') || '';
-        let day = parseInt(params.get('day'), 10) || null;
-        let month = parseInt(params.get('month'), 10) || null;
-        let year = parseInt(params.get('year'), 10) || null;
-        let email = params.get('email') || '';
-        let phone = params.get('phone') || '';
-        let place = params.get('place') || '';
-        let country = params.get('country') || '';
+        let sess = null;
+        try {
+          const sRaw = sessionStorage.getItem('nv_reading_input');
+          if (sRaw) sess = JSON.parse(sRaw);
+        } catch (e) {}
+        let name = (sess && sess.name) || '';
+        let day = (sess && parseInt(sess.day, 10)) || null;
+        let month = (sess && parseInt(sess.month, 10)) || null;
+        let year = (sess && parseInt(sess.year, 10)) || null;
+        let email = '';
+        let phone = '';
+        let place = '';
+        let country = '';
 
         // If not in URL params, check recent calculator run in localStorage
         if (!name || !day) {

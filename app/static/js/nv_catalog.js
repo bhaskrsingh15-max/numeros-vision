@@ -1,6 +1,6 @@
 /**
  * NUMEROS VISION — CLIENT-SIDE CANONICAL PRICING CATALOG (v2.1.0)
- * Tagline: ANVIEL EVERY CHARM
+ * Tagline: ANVEIL EVERY CHARM
  *
  * Auto-synchronized from app/config/packs.json at build time.
  * Single source of truth for all client-side pricing, page counts, deliverables,
@@ -11,17 +11,18 @@
   'use strict';
 
   const PACKS_JSON = {
-    version: '2.1.0',
+    version: '2.2.0',
     currency: 'INR',
     core_reports: {
       report_basic: {
         pack_id: 'report_basic',
         tier_id: 'basic',
-        name: 'Basic Report',
-        display_name: 'Basic Report · Entry',
+        name: 'Anveil my alignments',
+        display_name: 'Anveil my alignments',
         pages: 3,
         price_inr: 199,
         amount_paise: 19900,
+        mrp_inr: 399,
         price_usd: 5,
         digital_root: 1,
         status: 'active'
@@ -29,23 +30,25 @@
       report_advanced: {
         pack_id: 'report_advanced',
         tier_id: 'advanced',
-        name: 'Advanced Master Dossier',
-        display_name: 'Advanced Master Dossier · Recommended',
+        name: 'Anveil my glowing charms',
+        display_name: 'Anveil my glowing charms',
         pages: 12,
-        price_inr: 489,
-        amount_paise: 48900,
+        price_inr: 510,
+        amount_paise: 51000,
+        mrp_inr: 1020,
         price_usd: 14,
-        digital_root: 3,
+        digital_root: 6,
         status: 'active'
       },
       report_premium: {
         pack_id: 'report_premium',
         tier_id: 'premium',
-        name: 'Premium Sovereign Blueprint',
-        display_name: 'Premium Sovereign Blueprint · Comprehensive',
+        name: 'Anveil every charm',
+        display_name: 'Anveil every charm · Best value',
         pages: 32,
         price_inr: 1050,
         amount_paise: 105000,
+        mrp_inr: 2100,
         price_usd: 28,
         digital_root: 6,
         status: 'active'
@@ -129,6 +132,7 @@
         display_name: 'Charm AI · Starter Pack',
         price_inr: 199,
         amount_paise: 19900,
+        mrp_inr: 399,
         questions_count: 5,
         digital_root: 1,
         status: 'active',
@@ -190,7 +194,7 @@
         sku: 'report_basic',
         alias: 'report_essential',
         name: PACKS_JSON.core_reports.report_basic.name,
-        display_name: 'Basic Report · 3 Pages',
+        display_name: 'Anveil my alignments · 3 Pages',
         price_inr: PACKS_JSON.core_reports.report_basic.price_inr,
         price_usd: PACKS_JSON.core_reports.report_basic.price_usd,
         pages: PACKS_JSON.core_reports.report_basic.pages,
@@ -203,7 +207,7 @@
         sku: 'report_advanced',
         alias: 'report_master',
         name: PACKS_JSON.core_reports.report_advanced.name,
-        display_name: 'Advanced Master Dossier · 12 Pages',
+        display_name: 'Anveil my glowing charms · 12 Pages',
         price_inr: PACKS_JSON.core_reports.report_advanced.price_inr,
         price_usd: PACKS_JSON.core_reports.report_advanced.price_usd,
         pages: PACKS_JSON.core_reports.report_advanced.pages,
@@ -217,7 +221,7 @@
         sku: 'report_premium',
         alias: 'report_divine',
         name: PACKS_JSON.core_reports.report_premium.name,
-        display_name: 'Premium Sovereign Blueprint · 32 Pages',
+        display_name: 'Anveil every charm · 32 Pages',
         price_inr: PACKS_JSON.core_reports.report_premium.price_inr,
         price_usd: PACKS_JSON.core_reports.report_premium.price_usd,
         pages: PACKS_JSON.core_reports.report_premium.pages,

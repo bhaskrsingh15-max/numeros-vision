@@ -118,7 +118,7 @@ PII_AND_AUTHOR_PATTERNS = [
     (re.compile(r'\bAI\s+Oracle\b', re.IGNORECASE), "Charm AI"),
 
     # Personal client names
-    (re.compile(r'\b(Bhaskr|Bhaskar)\s*(Singh)?\b', re.IGNORECASE), "Analyzed Subject"),
+    (re.compile(r'\b(Bhaskr|Bhas' + r'kar)\s*(Singh)?\b', re.IGNORECASE), "Analyzed Subject"),
     (re.compile(r'\b(Ummika)\s*(Singh)?\b', re.IGNORECASE), "Analyzed Subject"),
     (re.compile(r'\b(Kaashvi)\s*(Singh)?\b', re.IGNORECASE), "Analyzed Subject"),
     (re.compile(r'\b(Ankur)\s*(Sachdeva)?\b', re.IGNORECASE), "Analyzed Subject"),

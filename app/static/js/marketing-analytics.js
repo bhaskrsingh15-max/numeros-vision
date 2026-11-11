@@ -26,7 +26,8 @@
     'value', 'currency', 'transaction_id', 'content_name', 'items', 'item_name', 'price', 'quantity',
     'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
     'gclid', 'fbclid', 'wbraid', 'gbraid', 'ttclid', 'msclkid',
-    'device_id', 'device_type', 'is_pwa', 'app_platform'
+    'device_id', 'device_type', 'is_pwa', 'app_platform',
+    'calculator', 'n', 'veiled', 'svc', 'tier', 'event_id'
   ]);
 
   function sanitizeTelemetryPayload(obj) {

@@ -264,6 +264,143 @@
     .gap-cell .cell-num {
       color: var(--ink-muted);
     }
+    .loshu-view-toggle {
+      display: inline-flex;
+      background: #F7F3EA;
+      border: 1px solid var(--border-gold);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 4px;
+      margin: 0 auto 12px;
+    }
+    .loshu-grid-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .loshu-view-btn {
+      border: none;
+      background: transparent;
+      color: var(--ink-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .loshu-view-btn.active {
+      background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(139, 105, 20, 0.22);
+    }
+    .loshu-cell {
+      overflow: hidden;
+    }
+    .loshu-cell.gap-cell {
+      background: linear-gradient(145deg, #FBF6E8 0%, #F3E7C8 100%);
+      border: 1.5px solid rgba(201, 162, 39, 0.58);
+      padding: 0;
+    }
+    .cell-shutter-cover {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 4px;
+      background: linear-gradient(145deg, #FCF8EC 0%, #F2E4BE 100%);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease;
+      z-index: 2;
+      box-sizing: border-box;
+    }
+    .loshu-cell.gap-cell.is-open .cell-shutter-cover {
+      transform: translateY(-105%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .cell-shutter-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      margin-top: 4px;
+      text-align: center;
+    }
+    .cell-shutter-reveal {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 4px;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      background: #FFFDF7;
+      box-sizing: border-box;
+    }
+    .loshu-cell.gap-cell.is-open .cell-shutter-reveal {
+      display: flex;
+    }
+    .cell-reveal-eyebrow {
+      font-size: 0.58rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-muted);
+      line-height: 1.15;
+    }
+    .cell-reveal-price {
+      font-family: 'Cinzel', serif;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--gold-dark);
+      margin: 2px 0;
+      line-height: 1.1;
+    }
+    .cell-reveal-cta {
+      font-size: 0.60rem;
+      font-weight: 700;
+      color: var(--emerald);
+      line-height: 1.15;
+    }
+    .cell-glowing-strip {
+      display: none;
+      margin-top: 3px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(201, 162, 39, 0.16);
+      color: var(--gold-dark);
+      font-size: 0.57rem;
+      font-weight: 700;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .loshu-cell.present-cell.is-open .cell-elem {
+      display: none;
+    }
+    .loshu-cell.present-cell.is-open .cell-glowing-strip {
+      display: inline-block;
+    }
+    .tier-card.dimmed-tier {
+      opacity: 0.78;
+    }
+    .tier-scope-note {
+      display: none;
+      margin: -8px 0 14px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #F7F3EA;
+      border: 1px solid rgba(201, 162, 39, 0.28);
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      line-height: 1.35;
+    }
     .cell-elem {
       font-size: 0.66rem;
       color: var(--ink-muted);
@@ -543,8 +680,12 @@
         transition: none !important;
         transform: none !important;
       }
-      .ring-fg {
+      .ring-fg,
+      .cell-shutter-cover {
         transition: none !important;
+      }
+      .loshu-cell.gap-cell.is-open .cell-shutter-cover {
+        display: none !important;
       }
     }
 
@@ -1029,7 +1170,7 @@
       <nav class="nv-nav-menu" id="nvNavMenu">
         <a href="/" class="nv-nav-item">Home</a>
         <a href="/pricing/" class="nv-nav-item">Pricing</a>
-        <a href="/charm_ai.html" class="nv-nav-item">Charm AI</a>
+        <a href="/charm-ai/" class="nv-nav-item">Charm AI</a>
         <a href="/contact/" class="nv-nav-item">Contact</a>
         <a href="/dashboard/" class="nv-nav-item">My Dashboard</a>
       </nav>
@@ -1154,6 +1295,10 @@
         <div class="loshu-mockup-a-split">
           <!-- Left Column: Canonical 3x3 Birth-Date Grid (4-9-2 / 3-5-7 / 8-1-6) -->
           <div class="loshu-grid-column">
+            <div class="loshu-view-toggle" id="loshu-view-toggle" role="group" aria-label="Lo Shu grid view mode">
+              <button type="button" class="loshu-view-btn active" id="btn-view-charms" aria-pressed="true" onclick="setLoShuViewMode('charms')">Charms</button>
+              <button type="button" class="loshu-view-btn" id="btn-view-alignments" aria-pressed="false" onclick="setLoShuViewMode('alignments')">Charm Alignments</button>
+            </div>
             <div class="loshu-interactive-grid" id="loshu-interactive-grid" role="group" aria-label="3 by 3 Lo Shu birth-date grid">
               <!-- Rendered dynamically: cells 4, 9, 2, 3, 5, 7, 8, 1, 6 -->
             </div>
@@ -1260,72 +1405,73 @@
         </div>
       </div>
 
-      <!-- CORE REPORT TIERS (Basic, Advanced, Premium) -->
+      <!-- CORE REPORT TIERS (High-to-Low: ₹1,050 Anveil every charm -> ₹510 Anveil my glowing charms -> ₹199 Anveil my alignments) -->
       <div class="tiers-grid" id="core-tiers-grid">
-        
-        <!-- Basic Report (₹199) -->
-        <div class="tier-card card-report-basic" id="tier-card-basic">
-          <div class="tier-badge" id="tier-badge-basic" style="display:none;">RECOMMENDED</div>
-          <div>
-            <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Foundation · 3 Pages</div>
-            <h3 class="tier-name">Basic Report</h3>
-            <div class="tier-meta">Core Numbers &amp; Elemental Distribution</div>
-            <div class="tier-price" id="price-report_basic">₹199 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹289</span></div>
-            <div class="tier-price-sub">Launch offer valid until 31 Jan 2027</div>
-            <ul class="tier-features" id="features-report_basic">
-              <li>3-Page Personalised Executive PDF</li>
-              <li>Deterministic Mulank &amp; Bhagyank Calculations</li>
-              <li>Lo Shu 3×3 Grid Matrix &amp; Elemental Breakdown</li>
-              <li>Chaldean Single Root &amp; Compound Letter Analysis</li>
-              <li>Methodology Summary &amp; Practical Notes</li>
-            </ul>
-          </div>
-          <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_basic" onclick="selectTierAndProceed('report_basic')">
-            <span>Select Basic Report</span> <span>&rarr;</span>
-          </button>
-        </div>
 
-        <!-- Advanced Report (₹489) - HIGHLIGHTED DEFAULT -->
-        <div class="tier-card highlighted card-report-advanced" id="tier-card-advanced">
-          <div class="tier-badge" id="tier-badge-advanced">RECOMMENDED</div>
-          <div>
-            <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Synthesis · 12 Pages</div>
-            <h3 class="tier-name">Advanced Master Dossier</h3>
-            <div class="tier-meta">5-Year Dasha Timing &amp; Remedy Protocols</div>
-            <div class="tier-price" id="price-report_advanced">₹489 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹699</span></div>
-            <div class="tier-price-sub">Launch offer valid until 31 Jan 2027</div>
-            <ul class="tier-features" id="features-report_advanced">
-              <li>12-Page Master Synthesis PDF Dossier</li>
-              <li>Includes all Basic calculations + 5-Year Dasha Timing</li>
-              <li>Complete Lo Shu Plane Analysis (Thought, Will, Action)</li>
-              <li>Chaldean Sound Frequency &amp; Name Harmony Matrix</li>
-              <li>7-Layer Safe Planetary Remedy Protocols</li>
-            </ul>
-          </div>
-          <button type="button" class="btn-select-tier btn-select-gold" id="btn-select-report_advanced" onclick="selectTierAndProceed('report_advanced')">
-            <span>Select Advanced Dossier</span> <span>✦</span>
-          </button>
-        </div>
-
-        <!-- Premium Dossier (₹1,050) -->
+        <!-- 1. Anveil every charm (₹1,050 · Best value) -->
         <div class="tier-card card-report-premium" id="tier-card-premium">
-          <div class="tier-badge" id="tier-badge-premium" style="display:none;">RECOMMENDED</div>
+          <div class="tier-badge" id="tier-badge-premium">BEST VALUE</div>
           <div>
-            <div style="font-size:0.72rem; color:var(--emerald); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Sovereign · 32 Pages</div>
-            <h3 class="tier-name">Premium Sovereign Blueprint</h3>
-            <div class="tier-meta">10-Year Timing Radar &amp; Dual Synastry</div>
-            <div class="tier-price" id="price-report_premium">₹1,050 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹1,479</span></div>
-            <div class="tier-price-sub">Launch offer valid until 31 Jan 2027</div>
+            <div style="font-size:0.72rem; color:var(--emerald); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Sovereign · 32 Pages · ~₹33/page</div>
+            <h3 class="tier-name">Anveil every charm</h3>
+            <div class="tier-meta">Every Glowing &amp; Veiled Charm · 10-Year Timing Radar</div>
+            <div class="tier-price" id="price-report_premium">₹1,050 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹2,100</span></div>
+            <div class="tier-price-sub" id="launch-sub-report_premium">1-week launch offer · valid for 7 days from launch</div>
             <ul class="tier-features" id="features-report_premium">
-              <li>32-Page Sovereign Executive Master Blueprint PDF</li>
-              <li>Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)</li>
-              <li>10-Year Macro Planetary Timing Radar &amp; Execution Windows</li>
-              <li>Multi-Generational Synastry &amp; Spatial Alignment</li>
+              <li>32-Page Complete Sovereign PDF Blueprint</li>
+              <li>Unveils Every Glowing &amp; Veiled Charm in Your Grid</li>
+              <li>Dual-System Synthesis (Chaldean + Pythagorean)</li>
+              <li>10-Year Planetary Timing Radar &amp; Execution Windows</li>
               <li>Complete Technical Appendix with Mathematical Proofs</li>
             </ul>
           </div>
           <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_premium" onclick="selectTierAndProceed('report_premium')">
-            <span>Select Premium Blueprint</span> <span>&rarr;</span>
+            <span>Anveil every charm</span> <span>&rarr;</span>
+          </button>
+        </div>
+
+        <!-- 2. Anveil my glowing charms (₹510) -->
+        <div class="tier-card card-report-advanced" id="tier-card-advanced">
+          <div class="tier-badge" id="tier-badge-advanced" style="display:none;">RECOMMENDED</div>
+          <div>
+            <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Synthesis · 12 Pages · ~₹43/page</div>
+            <h3 class="tier-name">Anveil my glowing charms</h3>
+            <div class="tier-meta">Active Repetitions, 5-Year Dasha &amp; Remedy Protocols</div>
+            <div class="tier-price" id="price-report_advanced">₹510 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹1,020</span></div>
+            <div class="tier-price-sub" id="launch-sub-report_advanced">1-week launch offer · valid for 7 days from launch</div>
+            <div class="tier-scope-note" id="scope-note-report_advanced">Covers your glowing charms only, not this veiled one.</div>
+            <ul class="tier-features" id="features-report_advanced">
+              <li>12-Page Glowing Charms Synthesis PDF Dossier</li>
+              <li>Deep Analysis of Every Present &amp; Repeated Digit</li>
+              <li>Complete Lo Shu Plane Analysis (Thought, Will, Action)</li>
+              <li>Chaldean Sound Frequency &amp; Name Harmony Matrix</li>
+              <li>7-Layer Safe Planetary Lifestyle Protocols</li>
+            </ul>
+          </div>
+          <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_advanced" onclick="selectTierAndProceed('report_advanced')">
+            <span>Anveil my glowing charms</span> <span>&rarr;</span>
+          </button>
+        </div>
+
+        <!-- 3. Anveil my alignments (₹199 · Live at launch) -->
+        <div class="tier-card highlighted card-report-basic" id="tier-card-basic">
+          <div class="tier-badge" id="tier-badge-basic">RECOMMENDED</div>
+          <div>
+            <div style="font-size:0.72rem; color:var(--gold-dark); font-weight:700; text-transform:uppercase; letter-spacing:0.08em;">Foundation · 3 Pages · ~₹66/page</div>
+            <h3 class="tier-name">Anveil my alignments</h3>
+            <div class="tier-meta">Core Numbers, Charm Alignments &amp; Elemental Balance</div>
+            <div class="tier-price" id="price-report_basic">₹199 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹399</span></div>
+            <div class="tier-price-sub" id="launch-sub-report_basic">1-week launch offer · valid for 7 days from launch</div>
+            <ul class="tier-features" id="features-report_basic">
+              <li>3-Page Personalised Executive Alignment PDF</li>
+              <li>Deterministic Mulank, Bhagyank &amp; Kua Calculations</li>
+              <li>Lo Shu 3×3 Grid Planes &amp; 5-Element Breakdown</li>
+              <li>Chaldean Single Root &amp; Compound Name Analysis</li>
+              <li>90-Day Practical Habit &amp; Alignment Plan</li>
+            </ul>
+          </div>
+          <button type="button" class="btn-select-tier btn-select-gold" id="btn-select-report_basic" onclick="selectTierAndProceed('report_basic')">
+            <span>Select Anveil my alignments — ₹199</span> <span>✦</span>
           </button>
         </div>
 
@@ -1407,7 +1553,7 @@
         </button>
 
         <div class="checkout-security-notes">
-          🔒 100% Secure 256-bit Encrypted Payment via Razorpay · <a href="/refund.html" target="_blank" style="color:#8B6914; text-decoration:underline;">Refund Policy</a>
+          🔒 100% Secure 256-bit Encrypted Payment via Razorpay · <a href="/refund-policy/" target="_blank" style="color:#8B6914; text-decoration:underline;">Refund Policy</a>
         </div>
       </form>
     </div>
@@ -1421,7 +1567,7 @@
         <div class="checkout-modal-tier-tag" id="notify-me-tier-tag">Priority Release Alert</div>
         <h2 class="checkout-modal-title" id="notify-me-title">Get Notified When Ready</h2>
         <div style="font-size:0.85rem; color:var(--ink-muted); line-height:1.5;">
-          Purpose: <strong>&ldquo;tell me when this report is available&rdquo;</strong>. Your email is encrypted at rest (AES-256-GCM), retained for at most <strong>12 months</strong>, and can be permanently deleted on request below. Your 3-Page Basic Report (₹199) is available immediately today.
+          Purpose: <strong>&ldquo;tell me when this report is available&rdquo;</strong>. Your email is encrypted at rest (AES-256-GCM), retained for at most <strong>12 months</strong>, and can be permanently deleted on request below. Your 3-Page Anveil my alignments (₹199) is available immediately today.
         </div>
       </div>
       <form id="notify-me-form" onsubmit="event.preventDefault(); submitNotifyMeForm();">
@@ -1469,33 +1615,33 @@
         <div class="nv-footer-col">
           <h4>Calculators</h4>
           <ul class="nv-footer-links">
-            <li><a href="/tools/birth-number">Birth Number (Mulank)</a></li>
-            <li><a href="/tools/life-path-calculator">Life Path (Bhagyank)</a></li>
-            <li><a href="/tools/name-numerology">Name Balancing</a></li>
-            <li><a href="/tools/lo-shu-grid">Lo Shu 3×3 Grid</a></li>
-            <li><a href="/tools/mobile-numerology">Mobile Numerology</a></li>
-            <li><a href="/tools/blessing-years">Personal Year Calculator</a></li>
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/calculators/mobile-number/">Mobile Numerology</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year Calculator</a></li>
           </ul>
         </div>
         <div class="nv-footer-col">
           <h4>Intelligence &amp; Plans</h4>
           <ul class="nv-footer-links">
-            <li><a href="/charm_ai.html">Charm AI Assistant</a></li>
-            <li><a href="/reports_catalogue.html">Reports Catalogue</a></li>
-            <li><a href="/sample.html">Sample Dossier</a></li>
-            <li><a href="/pricing.html">Plans &amp; Pricing</a></li>
-            <li><a href="/consultation.html">1-on-1 Consultation</a></li>
+            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
+            <li><a href="/reports_catalogue/">Reports Catalogue</a></li>
+            <li><a href="/sample/">Sample Dossier</a></li>
+            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation/">1-on-1 Consultation</a></li>
           </ul>
         </div>
         <div class="nv-footer-col">
           <h4>Wisdom &amp; Legal</h4>
           <ul class="nv-footer-links">
-            <li><a href="/insights_hub.html">Insights Learning Hub</a></li>
-            <li><a href="/about.html">About Numeros Vision</a></li>
-            <li><a href="/contact.html">Contact Support</a></li>
-            <li><a href="/privacy.html">Privacy Policy</a></li>
-            <li><a href="/disclaimer.html">Disclaimer</a></li>
-            <li><a href="/terms.html">Terms of Service</a></li>
+            <li><a href="/insights/">Insights Learning Hub</a></li>
+            <li><a href="/about/">About Numeros Vision</a></li>
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/disclaimer/">Disclaimer</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
           </ul>
         </div>
       </div>
@@ -1505,9 +1651,9 @@
       <div class="nv-footer-bottom">
         <div>&copy; 2026 Numeros Vision. All rights reserved. Master Brand: NUMEROS VISION · Tagline: ANVEIL EVERY CHARM.</div>
         <div class="nv-footer-legal-inline">
-          <a href="/privacy.html">Privacy Policy</a>
-          <a href="/terms.html">Terms</a>
-          <a href="/refund.html">Refund Policy</a>
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/refund-policy/">Refund Policy</a>
         </div>
       </div>
     </div>
@@ -1527,9 +1673,9 @@
     };
 
     const DEFAULT_TIERS = {
-      'report_basic': { name: 'Basic Classical Report', price: 199, meta: 'Foundational Analysis · 3 Pages' },
-      'report_advanced': { name: 'Advanced Dossier', price: 489, meta: 'Mahadasha Cycles & Full Remedies · 12 Pages' },
-      'report_premium': { name: 'Premium Sovereign Blueprint', price: 1050, meta: '10-Year Timing Radar & Dual Synastry · 32 Pages' },
+      'report_basic': { name: 'Anveil my alignments', price: 199, meta: 'Core Numbers & Charm Alignments · 3 Pages' },
+      'report_advanced': { name: 'Anveil my glowing charms', price: 510, meta: 'Active Repetitions & Remedy Protocols · 12 Pages' },
+      'report_premium': { name: 'Anveil every charm', price: 1050, meta: 'Every Glowing & Veiled Charm · 32 Pages' },
       'planner_2027': { name: 'Numeros 2027 Executive Planner', price: 1499, meta: '365-Day High-Precision Auspicious Execution' }
     };
 
@@ -1575,9 +1721,9 @@
     }
 
     const LAUNCH_MRPS = {
-      'report_basic': 289,
-      'report_advanced': 699,
-      'report_premium': 1479
+      'report_basic': 399,
+      'report_advanced': 1020,
+      'report_premium': 2100
     };
 
     const ELEMENT_MEDALLIONS = {
@@ -1816,6 +1962,62 @@
     ];
 
     let _activeSelectedPlane = null;
+    let _loshuViewMode = 'charms';
+    let _openLoShuDigit = null;
+    let _activeTappedContext = null;
+
+    function resolveCurrentLaunchOffer() {
+      if (serverCatalog && serverCatalog.launch_offer && window.NV_PRICING && typeof window.NV_PRICING.resolveLaunchOfferState === 'function') {
+        if (serverCatalog.launch_offer.started_at && !window.NV_LAUNCH_STARTED_AT) {
+          window.NV_LAUNCH_STARTED_AT = serverCatalog.launch_offer.started_at;
+        }
+      }
+      if (window.NV_PRICING && typeof window.NV_PRICING.resolveLaunchOfferState === 'function') {
+        return window.NV_PRICING.resolveLaunchOfferState();
+      }
+      return { active: true, label: '1-week launch offer · valid for 7 days from launch' };
+    }
+
+    function syncDynamicLaunchOfferLabels() {
+      const offerState = resolveCurrentLaunchOffer();
+      ['report_premium', 'report_advanced', 'report_basic'].forEach(sku => {
+        const subEl = document.getElementById(`launch-sub-${sku}`);
+        if (subEl) {
+          subEl.textContent = offerState.label || '';
+          subEl.style.display = offerState.active && offerState.label ? 'block' : 'none';
+        }
+        const priceEl = document.getElementById(`price-${sku}`);
+        if (priceEl) {
+          const mrpSpan = priceEl.querySelector('.tier-mrp');
+          if (mrpSpan) {
+            mrpSpan.style.display = offerState.active ? 'inline' : 'none';
+          }
+        }
+      });
+    }
+
+    function setLoShuViewMode(mode) {
+      _loshuViewMode = mode === 'alignments' ? 'alignments' : 'charms';
+      _openLoShuDigit = null;
+      _activeTappedContext = _loshuViewMode === 'alignments' ? 'alignment' : null;
+      const btnCharms = document.getElementById('btn-view-charms');
+      const btnAlign = document.getElementById('btn-view-alignments');
+      if (btnCharms) {
+        btnCharms.classList.toggle('active', _loshuViewMode === 'charms');
+        btnCharms.setAttribute('aria-pressed', _loshuViewMode === 'charms' ? 'true' : 'false');
+      }
+      if (btnAlign) {
+        btnAlign.classList.toggle('active', _loshuViewMode === 'alignments');
+        btnAlign.setAttribute('aria-pressed', _loshuViewMode === 'alignments' ? 'true' : 'false');
+      }
+      if (_activeReadingData) {
+        renderInteractiveLoShuCuriosity(_activeReadingData);
+      } else {
+        applyLadderRecommendation();
+      }
+      trackFunnelEvent('loshu_view_toggle', { view_mode: _loshuViewMode });
+    }
+    window.setLoShuViewMode = setLoShuViewMode;
 
     function resetLoShuDefaultInspector(activeCount) {
       const overview = (_loshuPublicTeasers && _loshuPublicTeasers.default_overview) || {};
@@ -1825,9 +2027,11 @@
       const unlockEl = document.getElementById('loshu-teaser-unlock');
       const medEl = document.getElementById('loshu-teaser-medallion');
 
-      if (eyebrowEl) eyebrowEl.textContent = `INTERACTIVE GRID READY · ${activeCount} OF 9 CELLS ACTIVE`;
-      if (titleEl) titleEl.textContent = overview.title || 'Select Any Cell or Pattern Axis';
-      if (descEl) descEl.textContent = overview.summary || 'Tap any of the nine natal cells or Key Lo Shu Patterns below to inspect your birth-date grid.';
+      if (eyebrowEl) eyebrowEl.textContent = `INTERACTIVE GRID READY · ${activeCount} OF 9 CHARMS GLOWING`;
+      if (titleEl) titleEl.textContent = _loshuViewMode === 'alignments'
+        ? 'Inspect Your 8 Charm Alignment Planes'
+        : (overview.title || 'Tap Any Glowing or Veiled Tile to Inspect');
+      if (descEl) descEl.textContent = overview.summary || 'Tap any of the nine natal tiles or Key Lo Shu Patterns below to inspect your birth-date grid.';
       if (unlockEl) unlockEl.textContent = overview.unlock_note || '';
       if (medEl) medEl.src = DEFAULT_MEDALLION;
     }
@@ -1867,10 +2071,11 @@
       }
       const openCount = 9 - activeCount;
       _currentLoShuGapCount = openCount;
+      _openLoShuDigit = null;
       const activePercent = Math.round((activeCount / 9) * 100);
 
       if (subtitleEl) {
-        subtitleEl.textContent = `${activeCount} active digits · ${openCount} open cells · Tap any cell or pattern to inspect`;
+        subtitleEl.textContent = `${activeCount} glowing charms · ${openCount} veiled positions · Tap any tile or pattern to inspect`;
       }
       if (ringPercentEl) ringPercentEl.textContent = `${activePercent}%`;
       if (ringFractionEl) ringFractionEl.textContent = `${activeCount}/9 ACTIVE`;
@@ -1882,32 +2087,51 @@
 
       resetLoShuDefaultInspector(activeCount);
 
-      // Render 9 Semantic Button Cells in Canonical 3x3 Order (Zero prices on cells)
+      // Render 9 Semantic Button Cells in Canonical 3x3 Order (4-9-2 / 3-5-7 / 8-1-6)
+      // Veiled cells NEVER display the missing digit on the shutter; initial state contains zero prices.
       gridEl.innerHTML = LOSHU_CELL_ORDER.map((num, idx) => {
         const cnt = counts[num];
         const isPresent = cnt > 0;
         const elemInfo = LOSHU_ELEMENT_MAP[num];
         const delaySec = prefersReducedMotion() ? '0' : (idx * 0.03).toFixed(2);
-        const topBadge = isPresent
-          ? `<span>&times;${cnt}</span>`
-          : `<img src="${DEFAULT_MEDALLION}" alt="" width="14" height="14" class="cell-seal-icon" loading="lazy" decoding="async" /><span>OPEN</span>`;
-        const ariaLabel = isPresent
-          ? `Digit ${num}, active ${cnt} time${cnt > 1 ? 's' : ''}, ${elemInfo.name} element`
-          : `Digit ${num}, open cell in birth date, ${elemInfo.name} element`;
 
+        if (isPresent) {
+          const ariaLabel = `Digit ${num}, glowing ${cnt} time${cnt > 1 ? 's' : ''}, ${elemInfo.name} element`;
+          return `
+            <button type="button"
+                    class="loshu-cell present-cell"
+                    id="lsc_${num}"
+                    data-digit="${num}"
+                    data-count="${cnt}"
+                    aria-pressed="false"
+                    aria-label="${ariaLabel}"
+                    onclick="handleLoShuCellClick(${num}, ${cnt})"
+                    style="animation-delay: ${delaySec}s;">
+              <span class="cell-top-tag"><span>&times;${cnt}</span></span>
+              <span class="cell-num">${String(num).repeat(cnt)}</span>
+              <span class="cell-elem">${elemInfo.name}</span>
+              <span class="cell-glowing-strip" id="lsc_strip_${num}"></span>
+            </button>
+          `;
+        }
+
+        const ariaLabel = `Veiled charm tile, ${elemInfo.name} element — tap to anveil`;
         return `
           <button type="button"
-                  class="loshu-cell ${isPresent ? 'present-cell' : 'gap-cell'}"
+                  class="loshu-cell gap-cell"
                   id="lsc_${num}"
                   data-digit="${num}"
-                  data-count="${cnt}"
+                  data-count="0"
                   aria-pressed="false"
                   aria-label="${ariaLabel}"
-                  onclick="handleLoShuCellClick(${num}, ${cnt})"
+                  onclick="handleLoShuCellClick(${num}, 0)"
                   style="animation-delay: ${delaySec}s;">
-            <span class="cell-top-tag">${topBadge}</span>
-            <span class="cell-num">${isPresent ? String(num).repeat(cnt) : num}</span>
-            <span class="cell-elem">${elemInfo.name}</span>
+            <span class="cell-shutter-cover">
+              <img src="${DEFAULT_MEDALLION}" alt="" width="16" height="16" class="cell-seal-icon" loading="lazy" decoding="async" />
+              <span class="cell-shutter-label">Tap to Anveil</span>
+              <span class="cell-elem">${elemInfo.name}</span>
+            </span>
+            <span class="cell-shutter-reveal" id="lsc_reveal_${num}"></span>
           </button>
         `;
       }).join('');
@@ -1930,16 +2154,52 @@
       }).join('');
 
       applyLadderRecommendation();
-      trackFunnelEvent('loshu_grid_rendered', { active_cells: activeCount, open_cells: openCount });
+      trackFunnelEvent('loshu_grid_rendered', { active_cells: activeCount, open_cells: openCount, veiled: openCount });
+    }
+
+    function populateOpenTilePrompt(num, isPresent) {
+      const isAlignMode = _loshuViewMode === 'alignments';
+      if (isPresent) {
+        const stripEl = document.getElementById(`lsc_strip_${num}`);
+        if (stripEl) {
+          stripEl.innerHTML = isAlignMode ? 'Alignment · ₹199 &rarr;' : 'Go deeper · ₹510 &rarr;';
+        }
+      } else {
+        const revEl = document.getElementById(`lsc_reveal_${num}`);
+        if (revEl) {
+          if (isAlignMode) {
+            revEl.innerHTML = '<span class="cell-reveal-eyebrow">Your alignment</span><span class="cell-reveal-price">₹199</span><span class="cell-reveal-cta">Anveil now &rarr;</span>';
+          } else {
+            revEl.innerHTML = '<span class="cell-reveal-eyebrow">Every charm</span><span class="cell-reveal-price">₹1,050</span><span class="cell-reveal-cta">Anveil now &rarr;</span>';
+          }
+        }
+      }
     }
 
     function handleLoShuCellClick(num, cnt) {
+      const isPresent = cnt > 0;
+      const targetSku = _loshuViewMode === 'alignments'
+        ? 'report_basic'
+        : (isPresent ? 'report_advanced' : 'report_premium');
+
+      // 2nd tap on an already-open tile triggers checkout (or Notify-Me waitlist modal while notify_me_higher_tiers === true)
+      if (_openLoShuDigit === num) {
+        trackFunnelEvent('loshu_tile_cta_click', { tier: targetSku, state: isPresent ? 'present' : 'veiled' });
+        selectTierAndProceed(targetSku);
+        return;
+      }
+
       clearLoShuHighlights();
       _activeSelectedPlane = null;
+      _openLoShuDigit = num;
+      _activeTappedContext = _loshuViewMode === 'alignments'
+        ? 'alignment'
+        : (isPresent ? 'glowing' : 'veiled');
 
       const cellEl = document.getElementById(`lsc_${num}`);
       if (cellEl) {
-        cellEl.classList.add('selected-cell');
+        populateOpenTilePrompt(num, isPresent);
+        cellEl.classList.add('selected-cell', 'is-open');
         cellEl.setAttribute('aria-pressed', 'true');
       }
 
@@ -1947,7 +2207,6 @@
       const elemName = dEntry.element || (LOSHU_ELEMENT_MAP[num] ? LOSHU_ELEMENT_MAP[num].name : 'Earth');
       const planetLabel = dEntry.planet_india || (LOSHU_ELEMENT_MAP[num] ? LOSHU_ELEMENT_MAP[num].planet : '');
       const domainLabel = dEntry.domain || '';
-      const isPresent = cnt > 0;
 
       const eyebrowEl = document.getElementById('loshu-teaser-eyebrow');
       const titleEl = document.getElementById('loshu-teaser-title');
@@ -1959,32 +2218,41 @@
         medEl.src = ELEMENT_MEDALLIONS[elemName] || DEFAULT_MEDALLION;
       }
 
+      // Inspector stays 100% price-free and never leaks the missing digit number for veiled cells
       if (isPresent) {
-        if (eyebrowEl) eyebrowEl.textContent = `TAPPED PRESENT CELL · ${elemName.toUpperCase()} ELEMENT`;
-        if (titleEl) titleEl.textContent = `Cell ${num} Active (×${cnt}) · ${planetLabel}${domainLabel ? ' — ' + domainLabel : ''}`;
+        if (eyebrowEl) eyebrowEl.textContent = `TAPPED GLOWING CHARM · ${elemName.toUpperCase()} ELEMENT`;
+        if (titleEl) titleEl.textContent = `Charm ${num} Glowing (×${cnt}) · ${planetLabel}${domainLabel ? ' — ' + domainLabel : ''}`;
         const rawTeaser = cnt > 1 ? (dEntry.present_repeat_teaser || dEntry.present_single_teaser || '') : (dEntry.present_single_teaser || '');
         if (descEl) descEl.textContent = rawTeaser.replace('{count}', String(cnt));
+        if (unlockEl) unlockEl.textContent = dEntry.unlock_note || '';
       } else {
-        if (eyebrowEl) eyebrowEl.textContent = `TAPPED MISSING CELL · ${elemName.toUpperCase()} ELEMENT`;
-        if (titleEl) titleEl.textContent = `Cell ${num} Open in Birth Date · ${planetLabel}${domainLabel ? ' — ' + domainLabel : ''}`;
-        if (descEl) descEl.textContent = dEntry.missing_teaser || '';
+        if (eyebrowEl) eyebrowEl.textContent = `TAPPED VEILED CHARM · ${elemName.toUpperCase()} ELEMENT`;
+        if (titleEl) titleEl.textContent = `Veiled Position in Birth Grid${domainLabel ? ' — ' + domainLabel : ''}`;
+        const sanitizedMissing = String(dEntry.missing_teaser || '')
+          .replace(/^Digit\s+\d+\s+is\s+an\s+open\s+position/i, 'This veiled tile marks an open position')
+          .replace(/^Digit\s+\d+\s+is\s+open/i, 'This veiled tile is open');
+        if (descEl) descEl.textContent = sanitizedMissing;
+        if (unlockEl) unlockEl.textContent = 'Tap the open tile again or choose a personalised edition below to explore your full 9-charm synthesis.';
       }
-      if (unlockEl) unlockEl.textContent = dEntry.unlock_note || '';
 
-      trackFunnelEvent('loshu_cell_tap', { digit: num, count: cnt, state: isPresent ? 'present' : 'open' });
+      applyLadderRecommendation();
+      trackFunnelEvent('loshu_cell_tap', { count: cnt, state: isPresent ? 'present' : 'open', tier: targetSku });
     }
 
     function handleLoShuPlaneClick(planeId, digits) {
       if (_activeSelectedPlane === planeId) {
         clearLoShuHighlights();
         _activeSelectedPlane = null;
+        _activeTappedContext = null;
         let activeCount = 0;
         for (let n = 1; n <= 9; n++) if (_loshuCountsCache[n] > 0) activeCount++;
         resetLoShuDefaultInspector(activeCount);
+        applyLadderRecommendation();
         return;
       }
       clearLoShuHighlights();
       _activeSelectedPlane = planeId;
+      _activeTappedContext = 'alignment';
 
       const pill = document.getElementById(`plane_pill_${planeId}`);
       if (pill) {
@@ -2021,33 +2289,49 @@
       if (descEl) descEl.textContent = planeCopy;
       if (unlockEl) unlockEl.textContent = 'Full axis synthesis and balancing habits are detailed in the personalised report editions below.';
 
+      applyLadderRecommendation();
       trackFunnelEvent('loshu_pattern_tap', { pattern_id: planeId, present_count: presentCount });
     }
 
     function clearLoShuHighlights() {
+      _openLoShuDigit = null;
       document.querySelectorAll('.plane-pill').forEach(p => {
         p.classList.remove('active-pill');
         p.setAttribute('aria-pressed', 'false');
       });
       document.querySelectorAll('.loshu-cell').forEach(c => {
-        c.classList.remove('plane-highlighted', 'dimmed-cell', 'selected-cell');
+        c.classList.remove('plane-highlighted', 'dimmed-cell', 'selected-cell', 'is-open');
         c.setAttribute('aria-pressed', 'false');
       });
+      document.querySelectorAll('.cell-shutter-reveal').forEach(el => { el.innerHTML = ''; });
+      document.querySelectorAll('.cell-glowing-strip').forEach(el => { el.innerHTML = ''; });
     }
 
     function isNotifyMeEnabledForSku(skuId) {
       if (skuId !== 'report_advanced' && skuId !== 'report_premium') return false;
-      if (serverCatalog && serverCatalog.feature_flags && serverCatalog.feature_flags.notify_me_higher_tiers === true) {
-        return true;
+      if (window.NV_PRICING && typeof window.NV_PRICING.isNotifyMeTier === 'function') {
+        const localOverride = new URLSearchParams(window.location.search || '').get('nv_notify_me_preview');
+        if ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && (localOverride === '0' || localOverride === '1')) {
+          return window.NV_PRICING.isNotifyMeTier(skuId);
+        }
+      }
+      if (serverCatalog && serverCatalog.feature_flags && typeof serverCatalog.feature_flags.notify_me_higher_tiers === 'boolean') {
+        return serverCatalog.feature_flags.notify_me_higher_tiers;
       }
       if (window.NV_PRICING && typeof window.NV_PRICING.isNotifyMeTier === 'function') {
         return window.NV_PRICING.isNotifyMeTier(skuId);
       }
-      return false;
+      return true;
     }
 
-    function recommendLadderTierByGaps(gapCount, notifyActive) {
+    function recommendLadderTierByGaps(gapCount, notifyActive, tappedContext = null) {
+      if (window.NV_PRICING && typeof window.NV_PRICING.recommendLadderTier === 'function') {
+        return window.NV_PRICING.recommendLadderTier(gapCount, notifyActive, tappedContext);
+      }
       if (notifyActive === true) return 'report_basic';
+      if (tappedContext === 'veiled') return 'report_premium';
+      if (tappedContext === 'glowing') return 'report_advanced';
+      if (tappedContext === 'alignment') return 'report_basic';
       if (gapCount === null || gapCount === undefined || Number.isNaN(Number(gapCount))) {
         return 'report_advanced';
       }
@@ -2059,58 +2343,72 @@
     window.recommendLadderTierByGaps = recommendLadderTierByGaps;
 
     function applyLadderRecommendation() {
+      syncDynamicLaunchOfferLabels();
       const notifyAdv = isNotifyMeEnabledForSku('report_advanced');
       const notifyPrem = isNotifyMeEnabledForSku('report_premium');
       const notifyActive = notifyAdv || notifyPrem;
       const plannerContainer = document.getElementById('planner-feature-container');
       const plannerFeatured = Boolean(plannerContainer && plannerContainer.style.display === 'block');
 
-      const recommendedSku = recommendLadderTierByGaps(_currentLoShuGapCount, notifyActive);
+      const recommendedSku = recommendLadderTierByGaps(_currentLoShuGapCount, notifyActive, _activeTappedContext);
+      const advScopeNote = document.getElementById('scope-note-report_advanced');
+      if (advScopeNote) {
+        advScopeNote.style.display = (!notifyActive && _activeTappedContext === 'veiled') ? 'block' : 'none';
+      }
+
       const tierDefs = [
         {
-          sku: 'report_basic',
-          card: document.getElementById('tier-card-basic'),
-          badge: document.getElementById('tier-badge-basic'),
-          btn: document.getElementById('btn-select-report_basic'),
-          normalLabel: 'Select Basic Report',
-          goldLabel: notifyActive ? 'Select Basic Report — ₹199' : 'Select Basic Report',
-          waitlist: false
+          sku: 'report_premium',
+          card: document.getElementById('tier-card-premium'),
+          badge: document.getElementById('tier-badge-premium'),
+          btn: document.getElementById('btn-select-report_premium'),
+          normalLabel: 'Anveil every charm — ₹1,050',
+          goldLabel: 'Anveil every charm — ₹1,050',
+          defaultBadge: 'BEST VALUE',
+          waitlist: notifyPrem
         },
         {
           sku: 'report_advanced',
           card: document.getElementById('tier-card-advanced'),
           badge: document.getElementById('tier-badge-advanced'),
           btn: document.getElementById('btn-select-report_advanced'),
-          normalLabel: 'Select Advanced Dossier',
-          goldLabel: 'Select Advanced Dossier',
+          normalLabel: 'Anveil my glowing charms — ₹510',
+          goldLabel: 'Anveil my glowing charms — ₹510',
+          defaultBadge: '',
           waitlist: notifyAdv
         },
         {
-          sku: 'report_premium',
-          card: document.getElementById('tier-card-premium'),
-          badge: document.getElementById('tier-badge-premium'),
-          btn: document.getElementById('btn-select-report_premium'),
-          normalLabel: 'Select Premium Blueprint',
-          goldLabel: 'Select Premium Blueprint',
-          waitlist: notifyPrem
+          sku: 'report_basic',
+          card: document.getElementById('tier-card-basic'),
+          badge: document.getElementById('tier-badge-basic'),
+          btn: document.getElementById('btn-select-report_basic'),
+          normalLabel: 'Anveil my alignments — ₹199',
+          goldLabel: 'Select Anveil my alignments — ₹199',
+          defaultBadge: '',
+          waitlist: false
         }
       ];
 
       tierDefs.forEach(t => {
         if (!t.card || !t.btn) return;
+        t.card.classList.remove('dimmed-tier');
 
         if (t.waitlist) {
           // Never recommend a waitlist tier
           t.card.classList.remove('highlighted');
           if (t.badge) {
-            t.badge.textContent = 'WAITLIST · NOTIFY ME';
+            t.badge.textContent = t.sku === 'report_premium' ? 'BEST VALUE · NOTIFY ME' : 'WAITLIST · NOTIFY ME';
             t.badge.style.background = 'var(--ink-muted)';
             t.badge.style.display = 'block';
           }
           t.btn.className = 'btn-select-tier btn-select-outline';
-          t.btn.innerHTML = '<span>Notify Me When Ready</span> <span>✉</span>';
+          t.btn.innerHTML = '<span>Notify me when ready</span> <span>✉</span>';
           t.btn.setAttribute('onclick', `openNotifyMeModal('${t.sku}')`);
           return;
+        }
+
+        if (!notifyActive && _activeTappedContext === 'veiled' && t.sku === 'report_advanced') {
+          t.card.classList.add('dimmed-tier');
         }
 
         t.btn.setAttribute('onclick', `selectTierAndProceed('${t.sku}')`);
@@ -2118,7 +2416,9 @@
         if (isRec) {
           t.card.classList.add('highlighted');
           if (t.badge) {
-            t.badge.textContent = 'RECOMMENDED';
+            t.badge.textContent = (!notifyActive && _activeTappedContext)
+              ? 'MATCHES TAPPED CHARM'
+              : 'RECOMMENDED';
             t.badge.style.background = '';
             t.badge.style.display = 'block';
           }
@@ -2127,7 +2427,13 @@
         } else {
           t.card.classList.remove('highlighted');
           if (t.badge) {
-            t.badge.style.display = 'none';
+            if (t.defaultBadge) {
+              t.badge.textContent = t.defaultBadge;
+              t.badge.style.background = 'var(--emerald)';
+              t.badge.style.display = 'block';
+            } else {
+              t.badge.style.display = 'none';
+            }
           }
           t.btn.className = 'btn-select-tier btn-select-outline';
           t.btn.innerHTML = `<span>${t.normalLabel}</span> <span>&rarr;</span>`;
@@ -2280,7 +2586,7 @@
         } else if (fromSlug === 'birth-number' || fromSlug === 'lucky-number' || fromSlug === 'favourable-numbers') {
           returnLink.href = '/calculators/birth-number/';
         } else if (fromSlug === 'life-path-number' || fromSlug === 'life-path-calculator') {
-          returnLink.href = '/calculators/life-path-number/';
+          returnLink.href = '/calculators/life-path/';
         } else if (fromSlug === 'lo-shu-grid') {
           returnLink.href = '/calculators/lo-shu-grid/';
         } else if (fromSlug === 'name-numerology') {

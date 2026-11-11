@@ -3,42 +3,18 @@
 // Single SW_VERSION used for headers, logs, and cache names
 // ============================================================
 
-const SW_VERSION = 'v6.3.0';
+const SW_VERSION = 'v6.4.0';
 const CACHE_NAME = `numeros-static-${SW_VERSION}`;
 const STATIC_CACHE = CACHE_NAME;
 
-// Assets to cache individually on install (App Shell) - only public clean 200 URLs
+// Versioned static assets ONLY — HTML shells are strictly never cached in Service Worker
 const APP_SHELL = [
-  '/',
-  '/sample_roadmap/',
-  '/reports_catalogue/',
-  '/pricing/',
-  '/about/',
-  '/contact/',
-  '/privacy/',
-  '/terms/',
-  '/refund-policy/',
-  '/disclaimer/',
-  '/accessibility/',
-  '/methodology/',
-  '/tools/life-path-calculator/',
-  '/tools/lo-shu-grid/',
-  '/tools/mobile-numerology/',
-  '/tools/favourable-numbers/',
-  '/tools/name-numerology/',
-  '/tools/name-balancing/',
-  '/tools/profession-calculator/',
-  '/tools/property-numerology/',
-  '/tools/vehicle-numerology/',
-  '/tools/compatibility-calculator/',
-  '/tools/blessing-years/',
-  '/tools/baby-naming/',
-  '/tools/business-alignment/',
-  '/tools/logo-intelligence/',
   '/manifest.json',
   '/static/css/theme.css?v=5.4.0',
   '/static/css/roadmap_components.css?v=5.5.0',
-  'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap',
+  '/assets/nv-anveil/nv-anveil.css',
+  '/assets/nv-anveil/nv-anveil.js',
+  '/logos/nv-logo-mark.svg',
 ];
 
 // Helper for fetch with real AbortController timeout
@@ -148,34 +124,29 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 4. External Fonts & CDNs: Cache First (rarely changes)
+  // 4. External Fonts: Cache First (rarely changes). Never intercept other cross-origin scripts (Google GSI, Turnstile, Razorpay).
   if (
     url.hostname === 'fonts.googleapis.com' ||
-    url.hostname === 'fonts.gstatic.com' ||
-    url.hostname === 'unpkg.com' ||
-    url.hostname === 'cdn.tailwindcss.com'
+    url.hostname === 'fonts.gstatic.com'
   ) {
     event.respondWith(cacheFirstStrategy(request, STATIC_CACHE));
     return;
   }
+  if (url.origin !== self.location.origin) {
+    return;
+  }
 
-  // 5. App static assets (CSS, JS, images): Stale-while-revalidate
+  // 5. Same-origin app static assets (CSS, JS, images): Stale-while-revalidate
   event.respondWith(staleWhileRevalidate(request));
 });
 
 // ── STRATEGIES ────────────────────────────────────────────────
 
 async function networkFirstStrategy(request) {
-  const cache = await caches.open(STATIC_CACHE);
   try {
-    const networkResponse = await fetchWithTimeout(request.clone(), {}, 5000);
-    if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
-    }
+    const networkResponse = await fetchWithTimeout(request.clone(), { cache: 'no-cache' }, 5000);
     return networkResponse;
   } catch (err) {
-    const cached = await cache.match(request);
-    if (cached) return cached;
     return new Response(getOfflineFallbackHTML(), {
       status: 200,
       headers: {
@@ -202,9 +173,9 @@ async function cacheFirstStrategy(request, cacheName) {
 
 async function staleWhileRevalidate(request) {
   const url = new URL(request.url);
-  const isStylesheet = url.pathname.endsWith('.css');
-  const isScript = url.pathname.endsWith('.js');
-  const isImage = url.pathname.endsWith('.png') || url.pathname.endsWith('.jpg') || url.pathname.endsWith('.svg') || url.pathname.endsWith('.ico');
+  const isStylesheet = request.destination === 'style' || url.pathname.endsWith('.css');
+  const isScript = request.destination === 'script' || url.pathname.endsWith('.js');
+  const isImage = request.destination === 'image' || /\.(png|jpe?g|webp|svg|ico)$/i.test(url.pathname);
 
   const cache = await caches.open(STATIC_CACHE);
   const cached = await cache.match(request);
@@ -218,19 +189,16 @@ async function staleWhileRevalidate(request) {
   if (netRes) return netRes;
 
   if (isStylesheet) {
-    return new Response('', { status: 200, headers: { 'Content-Type': 'text/css' } });
+    return new Response('', { status: 503, headers: { 'Content-Type': 'text/css' } });
   }
   if (isScript) {
-    return new Response('', { status: 200, headers: { 'Content-Type': 'application/javascript' } });
+    return new Response('', { status: 503, headers: { 'Content-Type': 'application/javascript' } });
   }
   if (isImage) {
     return new Response('', { status: 404 });
   }
 
-  return new Response(
-    getOfflineFallbackHTML(),
-    { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'X-SW-Version': SW_VERSION } }
-  );
+  return new Response('', { status: 503, headers: { 'X-SW-Version': SW_VERSION } });
 }
 
 // ── PUSH NOTIFICATIONS ────────────────────────────────────────

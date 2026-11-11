@@ -1,5 +1,5 @@
 """
-NUMEROS VISION — CENTRAL AUTHORITATIVE PRICING ARCHITECTURE (v2.0.0)
+NUMEROS VISION — CENTRAL AUTHORITATIVE PRICING ARCHITECTURE (v2.2.0)
 Tagline: ANVEIL EVERY CHARM
 
 Single server-side source of truth for all pricing across the website, app,
@@ -7,7 +7,7 @@ calculators, checkout, payment webhooks, and PDF report delivery.
 
 Enforces:
 1. Four Distinct Product Families:
-   - Standalone Reports (Basic ₹199 / Advanced ₹489 / Premium ₹1,050)
+   - Standalone Reports (Anveil every charm ₹1,050 / Anveil my glowing charms ₹510 / Anveil my alignments ₹199)
    - Multi-Report Bundles (Starter / Discovery / Comprehensive · Coming soon)
    - Charm AI Access (Free ₹0 / Starter ₹199)
    - Human Consultation (Standard 1-on-1 Session ₹1,050)
@@ -16,76 +16,41 @@ Enforces:
 3. Server-Side Validation:
    - Client prices are strictly rejected; the server resolves payable amounts from this catalog.
 4. Deterministic Digit Root Verification:
-   - 199 (root 1), 489 (root 3), 1050 (root 6), 399 (root 3), 699 (root 6), 1050 (root 6).
+   - Offer prices: 1050 (root 6), 510 (root 6), 199 (root 1).
+   - Launch MRPs: 2100 (root 3), 1020 (root 3), 399 (root 3).
+   - Charm AI: 199 (root 1), 399 (root 3), 699 (root 6).
 """
 
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta, timezone
 import json
 import os
 
 CURRENCY = "INR"
+LADDER_ORDER: List[str] = ["report_premium", "report_advanced", "report_basic"]
+LAUNCH_OFFER_DURATION_DAYS: int = 7
+LAUNCH_OFFER_PRELAUNCH_LABEL: str = "1-week launch offer · valid for 7 days from launch"
 
 # ── 1. PRODUCT FAMILY A: STANDALONE REPORTS (3 UNIFIED TIERS) ────────────────
 REPORT_TIERS: Dict[str, Dict[str, Any]] = {
-    "basic": {
-        "tier_id": "basic",
-        "name": "Basic Report",
-        "display_name": "Basic Report · Entry",
-        "pages": 3,
-        "page_target": "3-page PDF",
-        "price_inr": 199,
-        "amount_paise": 19900,
-        "digital_root": 1,  # 1+9+9=19 -> 1+0=1 (Sun / Leadership)
-        "purpose": "A focused answer to one core question with essential calculations and initial findings.",
-        "deliverables": [
-            "3-Page Personalised Executive PDF",
-            "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
-            "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
-            "Chaldean Single Root & Compound Letter Breakdown",
-            "Methodology Note & Interpretive Limitations Summary"
-        ],
-        "depth_level": "Focused",
-        "comparisons": "Essential",
-        "methodology": "Included",
-        "guidance": "Key takeaways & reflection points"
-    },
-    "advanced": {
-        "tier_id": "advanced",
-        "name": "Advanced Master Dossier",
-        "display_name": "Advanced Master Dossier · Recommended",
-        "pages": 12,
-        "page_target": "12-page PDF",
-        "price_inr": 489,
-        "amount_paise": 48900,
-        "digital_root": 3,  # 4+8+9=21 -> 3 (Jupiter / Wisdom)
-        "popular": True,
-        "purpose": "Expanded analysis, supporting calculations, comparisons, and structured guidance.",
-        "deliverables": [
-            "12-Page Master Synthesis PDF Dossier",
-            "All Basic calculations + 5-Year Numerology Dasha Timing Timeline",
-            "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
-            "Chaldean Sound Frequency & Name Harmony Matrix",
-            "7-Layer Safe Planetary Remedy Protocols",
-            "Structured Cross-Factor Comparisons & Practical Guidance"
-        ],
-        "depth_level": "Expanded",
-        "comparisons": "Multiple, where supported",
-        "methodology": "Expanded with calculation steps",
-        "guidance": "Structured guidance & auspicious windows"
-    },
     "premium": {
         "tier_id": "premium",
-        "name": "Premium Sovereign Blueprint",
-        "display_name": "Premium Sovereign Blueprint · Comprehensive",
+        "name": "Anveil every charm",
+        "display_name": "Anveil every charm · Best value",
         "pages": 32,
         "page_target": "32-page PDF",
         "price_inr": 1050,
         "amount_paise": 105000,
+        "mrp_inr": 2100,
+        "mrp_paise": 210000,
+        "per_page_inr": 33,
         "digital_root": 6,  # 1+0+5+0=6 (Venus / Harmony)
-        "purpose": "The broadest supported analysis with integrated multi-engine findings and consolidated reference.",
+        "mrp_digital_root": 3,  # 2+1+0+0=3 (Jupiter / Wisdom)
+        "best_value": True,
+        "purpose": "The complete 32-page roadmap covering every glowing and veiled charm, multi-engine synthesis, remedies, and timing.",
         "deliverables": [
-            "32-Page Sovereign Executive Master Blueprint PDF",
+            "32-Page Complete Roadmap PDF (all 9 glowing & veiled charms)",
             "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
             "10-Year Macro Planetary Timing Radar & Acute Execution Windows",
             "Multi-Generational Synastry & Compatibility Analysis",
@@ -96,6 +61,60 @@ REPORT_TIERS: Dict[str, Dict[str, Any]] = {
         "comparisons": "Integrated across all supported modules",
         "methodology": "Detailed mathematical proofs & engine version trace",
         "guidance": "Consolidated lifetime reference & strategic roadmap"
+    },
+    "advanced": {
+        "tier_id": "advanced",
+        "name": "Anveil my glowing charms",
+        "display_name": "Anveil my glowing charms",
+        "pages": 12,
+        "page_target": "12-page PDF",
+        "price_inr": 510,
+        "amount_paise": 51000,
+        "mrp_inr": 1020,
+        "mrp_paise": 102000,
+        "per_page_inr": 43,
+        "digital_root": 6,  # 5+1+0=6 (Venus / Harmony)
+        "mrp_digital_root": 3,  # 1+0+2+0=3 (Jupiter / Wisdom)
+        "popular": True,
+        "purpose": "Expanded 12-page analysis of your glowing charms, supporting calculations, comparisons, and structured guidance.",
+        "deliverables": [
+            "12-Page Glowing Charms Synthesis PDF",
+            "All Alignment calculations + 5-Year Numerology Dasha Timing Timeline",
+            "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
+            "Chaldean Sound Frequency & Name Harmony Matrix",
+            "7-Layer Safe Planetary Remedy Protocols",
+            "Structured Cross-Factor Comparisons & Practical Guidance"
+        ],
+        "depth_level": "Expanded",
+        "comparisons": "Multiple, where supported",
+        "methodology": "Expanded with calculation steps",
+        "guidance": "Structured guidance & auspicious windows"
+    },
+    "basic": {
+        "tier_id": "basic",
+        "name": "Anveil my alignments",
+        "display_name": "Anveil my alignments",
+        "pages": 3,
+        "page_target": "3-page PDF",
+        "price_inr": 199,
+        "amount_paise": 19900,
+        "mrp_inr": 399,
+        "mrp_paise": 39900,
+        "per_page_inr": 66,
+        "digital_root": 1,  # 1+9+9=19 -> 1+0=1 (Sun / Leadership)
+        "mrp_digital_root": 3,  # 3+9+9=21 -> 3 (Jupiter / Wisdom)
+        "purpose": "A focused 3-page reading of your core alignments with essential calculations and initial findings.",
+        "deliverables": [
+            "3-Page Personalised Alignments PDF",
+            "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
+            "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
+            "Chaldean Single Root & Compound Letter Breakdown",
+            "Methodology Note & Interpretive Limitations Summary"
+        ],
+        "depth_level": "Focused",
+        "comparisons": "Essential",
+        "methodology": "Included",
+        "guidance": "Key takeaways & reflection points"
     }
 }
 
@@ -504,7 +523,7 @@ CONSULTATION_PACKS: Dict[str, Dict[str, Any]] = {
             "45-Minute Private 1-on-1 Consultation Session",
             "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
             "Comprehensive personal strategy & custom remedial protocols",
-            "Complimentary 12-Page Advanced PDF Dossier (₹489 value)",
+            "Complimentary 12-Page Anveil my glowing charms PDF Dossier (₹510 value)",
             "Audio recording and written consultation summary",
             "Free 1-time rescheduling up to 24 hours prior"
         ]
@@ -529,6 +548,9 @@ def get_all_product_skus() -> Dict[str, Dict[str, Any]]:
             "pages": tier["pages"],
             "amount_inr": tier["price_inr"],
             "amount_paise": tier["amount_paise"],
+            "mrp_inr": tier.get("mrp_inr", tier["price_inr"]),
+            "mrp_paise": tier.get("mrp_paise", tier["amount_paise"]),
+            "per_page_inr": tier.get("per_page_inr"),
             "original_price_inr": tier.get("original_price_inr", tier.get("mrp_inr", tier["price_inr"])),
             "currency": CURRENCY,
             "deliverables": tier["deliverables"]
@@ -594,13 +616,16 @@ def resolve_sku_price(sku_or_plan_id: str) -> Optional[Dict[str, Any]]:
         "basic": "report_basic",
         "starter": "report_basic",
         "report_essential": "report_basic",
+        "alignments": "report_basic",
         "advanced": "report_advanced",
         "growth": "report_advanced",
         "report_master": "report_advanced",
+        "glowing": "report_advanced",
         "premium": "report_premium",
         "complete": "report_premium",
         "report_divine": "report_premium",
         "complete_report": "report_premium",
+        "every_charm": "report_premium",
 
         # Charm AI aliases
         "starter_5q": "charm_single",
@@ -633,8 +658,8 @@ def resolve_sku_price(sku_or_plan_id: str) -> Optional[Dict[str, Any]]:
 
 def is_notify_me_higher_tiers_enabled() -> bool:
     """
-    Returns True only when the Advanced/Premium 'Notify me' waitlist flag is enabled.
-    Defaults strictly to False ([PENDING LAUNCH DECISION]).
+    Returns True when the Advanced/Premium 'Notify me' waitlist flag is enabled.
+    Defaults to True in packs.json until the 12- and 32-page editions are migrated and approved.
     """
     env_val = os.getenv("NV_NOTIFY_ME_HIGHER_TIERS")
     if env_val is not None and env_val.strip() != "":
@@ -643,25 +668,94 @@ def is_notify_me_higher_tiers_enabled() -> bool:
         packs_path = os.path.join(os.path.dirname(__file__), "packs.json")
         with open(packs_path, "r", encoding="utf-8") as fh:
             packs_data = json.load(fh)
-        return bool(packs_data.get("feature_flags", {}).get("notify_me_higher_tiers", False))
+        return bool(packs_data.get("feature_flags", {}).get("notify_me_higher_tiers", True))
     except Exception:
-        return False
+        return True
+
+
+def resolve_launch_offer_state(
+    now_iso: Optional[str] = None,
+    started_at_override: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Resolves the dynamic 1-week (7-day) launch offer window:
+    - Before `started_at` (or `NV_LAUNCH_STARTED_AT`) is stamped:
+      returns active=True with label '1-week launch offer · valid for 7 days from launch'
+      (no hardcoded end date, no ticking countdown timer).
+    - Once `started_at` is set: computes `ends_at = started_at + 7 days` and returns
+      'Launch offer valid until <D Mon YYYY>' while active, or active=False once expired.
+    """
+    started_raw = started_at_override
+    if started_raw is None:
+        env_started = os.getenv("NV_LAUNCH_STARTED_AT")
+        if env_started and env_started.strip():
+            started_raw = env_started.strip()
+        else:
+            try:
+                packs_path = os.path.join(os.path.dirname(__file__), "packs.json")
+                with open(packs_path, "r", encoding="utf-8") as fh:
+                    packs_data = json.load(fh)
+                lo = packs_data.get("launch_offer", {})
+                if not lo.get("enabled", True):
+                    return {
+                        "active": False,
+                        "duration_days": int(lo.get("duration_days", LAUNCH_OFFER_DURATION_DAYS)),
+                        "started_at": None,
+                        "ends_at": None,
+                        "label": "",
+                    }
+                started_raw = lo.get("started_at")
+            except Exception:
+                started_raw = None
+
+    if not started_raw:
+        return {
+            "active": True,
+            "duration_days": LAUNCH_OFFER_DURATION_DAYS,
+            "started_at": None,
+            "ends_at": None,
+            "label": LAUNCH_OFFER_PRELAUNCH_LABEL,
+        }
+
+    def _parse_iso(ts: str) -> datetime:
+        cleaned = ts.strip().replace("Z", "+00:00")
+        dt = datetime.fromisoformat(cleaned)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
+
+    started_dt = _parse_iso(str(started_raw))
+    ends_dt = started_dt + timedelta(days=LAUNCH_OFFER_DURATION_DAYS)
+    now_dt = _parse_iso(now_iso) if now_iso else datetime.now(timezone.utc)
+    is_active = now_dt <= ends_dt
+    day_str = str(ends_dt.day) + ends_dt.strftime(" %b %Y")
+    return {
+        "active": is_active,
+        "duration_days": LAUNCH_OFFER_DURATION_DAYS,
+        "started_at": started_dt.isoformat(),
+        "ends_at": ends_dt.isoformat(),
+        "label": f"Launch offer valid until {day_str}" if is_active else "",
+    }
 
 
 def recommend_ladder_tier(
     gap_count: Optional[int] = None,
     notify_me_higher_tiers: Optional[bool] = None,
+    tapped_context: Optional[str] = None,
 ) -> str:
     """
-    Deterministic 3-card report ladder recommendation rule:
+    Combined deterministic 3-card report ladder recommendation rule:
     - When `notify_me_higher_tiers` is True: strictly recommends `report_basic`
-      (never recommends a waitlist tier).
-    - When `notify_me_higher_tiers` is False: recommends by Lo Shu birth-date gap count
-      (`gap_count` = missing digits out of 1..9):
-        * 0–2 open cells -> `report_basic`
-        * 3–5 open cells -> `report_advanced`
-        * 6–9 open cells -> `report_premium`
-      (Defaults to `report_advanced` when `gap_count` is not yet known.)
+      (Anveil my alignments · ₹199) and never recommends a waitlist tier.
+    - When `notify_me_higher_tiers` is False:
+      1. After tapping a tile (`tapped_context` provided):
+         * 'veiled' / 'missing'   -> `report_premium` (Anveil every charm · ₹1,050)
+         * 'glowing' / 'present'  -> `report_advanced` (Anveil my glowing charms · ₹510)
+         * 'alignment' / 'plane'  -> `report_basic` (Anveil my alignments · ₹199)
+      2. Before first tap: recommends by Lo Shu birth-date gap count (`0..9`):
+         * 0–2 veiled cells -> `report_basic`
+         * 3–5 veiled cells (or unknown) -> `report_advanced`
+         * 6–9 veiled cells -> `report_premium`
     """
     notify_active = (
         is_notify_me_higher_tiers_enabled()
@@ -670,6 +764,16 @@ def recommend_ladder_tier(
     )
     if notify_active:
         return "report_basic"
+
+    if tapped_context:
+        ctx = str(tapped_context).strip().lower()
+        if ctx in ("veiled", "missing", "every"):
+            return "report_premium"
+        if ctx in ("glowing", "present", "radiant"):
+            return "report_advanced"
+        if ctx in ("alignment", "align", "plane"):
+            return "report_basic"
+
     if gap_count is None:
         return "report_advanced"
     gaps = max(0, min(9, int(gap_count)))
@@ -683,15 +787,21 @@ def recommend_ladder_tier(
 def export_pricing_catalog_json() -> str:
     """Exports full public catalog for frontend consumers and API responses."""
     notify_active = is_notify_me_higher_tiers_enabled()
+    launch_offer = resolve_launch_offer_state()
     catalog = {
         "currency": CURRENCY,
+        "ladder_order": LADDER_ORDER,
         "feature_flags": {
             "notify_me_higher_tiers": notify_active,
             "notify_me_tiers": ["report_advanced", "report_premium"]
         },
+        "launch_offer": launch_offer,
         "ladder_recommendation_rule": {
             "when_notify_me_true": "report_basic",
             "when_notify_me_false": {
+                "tapped_veiled": "report_premium",
+                "tapped_glowing": "report_advanced",
+                "tapped_alignment": "report_basic",
                 "0_to_2_gaps": "report_basic",
                 "3_to_5_gaps": "report_advanced",
                 "6_to_9_gaps": "report_premium",

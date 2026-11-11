@@ -9,8 +9,8 @@ Architecture:
    - Zero LLM arithmetic or hallucinated formulas.
 2. Layer B: Governed Interpretation & Dynamic Package-Based Assembly
    - Three standard tiers:
-     * Basic Report (Target: 3 Pages · ₹199)
-     * Advanced Report (Target: 12 Pages · ₹489 / Active Charm Present Numbers)
+     * Anveil my alignments (Target: 3 Pages · ₹199)
+     * Advanced Report (Target: 12 Pages · ₹510 / Active Charm Present Numbers)
      * Premium Dossier (Target: 32 Pages · ₹1,050 / Anveil Charm Missing Numbers)
    - Dynamic Topic Prioritization:
      * Lo Shu Grid & Life Path foundational basics always come first (Pages 1-4).
@@ -662,9 +662,9 @@ class NumerosPdfReportBuilder:
         elif any(k in t for k in ("health", "vitality", "ayurved")):
             return "health_vitality"
         elif is_advanced_only:
-            # In the 12-page Advanced Master Dossier (Rs 489), Enabled/Present Numbers in Depth
+            # In the 12-page Anveil my glowing charms (Rs 510), Enabled/Present Numbers in Depth
             # is the default analytical focus; Missing Numbers in Depth and Full Name Balancing
-            # are exclusively in the 32-page Premium Sovereign Blueprint (Rs 1,050).
+            # are exclusively in the 32-page Anveil every charm (Rs 1,050).
             return "present_numbers"
         elif any(k in t for k in ("name", "spelling", "acoustic")):
             return "name_balancing"
@@ -681,21 +681,21 @@ class NumerosPdfReportBuilder:
         if t == "present_numbers":
             title = "ACTIVE CHARM PRESENT NUMBERS REPORT"
             subtitle = "12-Page Present Numbers Master Dossier · Benefic vs Malefic & Inborn Career Mastery" if not is_premium else "32-Page Sovereign Roadmap · Complete Natal Numbers Compendium"
-            badge = "ADVANCED MASTER DOSSIER · 12-PAGE PRESENT NUMBERS DOSSIER · ₹489" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · 32-PAGE SOVEREIGN ROADMAP · ₹1,050"
+            badge = "ANVEIL MY GLOWING CHARMS · 12-PAGE PRESENT NUMBERS DOSSIER · ₹510" if not is_premium else "ANVEIL EVERY CHARM · 32-PAGE SOVEREIGN ROADMAP · ₹1,050"
             sec3 = "Section 3: Natal Present Numbers Deep Audit & Frequency Analysis"
             sec4 = "Section 4: Present Numbers Benefic vs Malefic Planetary Operating Matrix"
             sec5 = "Section 5: Inborn Career Fruitfulness & High-Yield Vocations"
         elif t == "love_relationship":
             title = "LOVE, RELATIONSHIP & COMPANIONSHIP DOSSIER"
             subtitle = "Romantic Synastry, Marriage Timing Windows & Domestic Harmony Blueprint"
-            badge = "ADVANCED MASTER DOSSIER · LOVE & COMPANIONSHIP (12 PAGES · ₹489)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · LIFETIME UNION ROADMAP (32 PAGES · ₹1,050)"
+            badge = "ANVEIL MY GLOWING CHARMS · LOVE & COMPANIONSHIP (12 PAGES · ₹510)" if not is_premium else "ANVEIL EVERY CHARM · LIFETIME UNION ROADMAP (32 PAGES · ₹1,050)"
             sec3 = "Section 3: Love Style, Romantic Resonance & Spousal Temperament"
             sec4 = "Section 4: Ideal Partner Compatibility & Vedic Synastry Matrix (1 to 9)"
             sec5 = "Section 5: Marriage Timing Windows, Numerology Dasha & Domestic Harmony"
         elif t == "career_wealth":
             title = "CAREER, ENTERPRISE & FINANCIAL DIRECTION DOSSIER"
             subtitle = "High-Growth Vocations, Commercial Timing & Wealth Compounding Radar"
-            badge = "ADVANCED MASTER DOSSIER · CAREER & WEALTH (12 PAGES · ₹489)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · ENTERPRISE ROADMAP (32 PAGES · ₹1,050)"
+            badge = "ANVEIL MY GLOWING CHARMS · CAREER & WEALTH (12 PAGES · ₹510)" if not is_premium else "ANVEIL EVERY CHARM · ENTERPRISE ROADMAP (32 PAGES · ₹1,050)"
             sec3 = "Section 3: High-Growth Enterprise Vocations & Programmatic Scale"
             sec4 = f"Section 4: Commercial Timing Corridors & 5-Year Numerology Dasha Radar ({self.data.get('current_year', datetime.datetime.now().year)}–{self.data.get('current_year', datetime.datetime.now().year)+4})"
         
@@ -703,14 +703,14 @@ class NumerosPdfReportBuilder:
         elif t == "health_vitality":
             title = "HEALTH, VITALITY & AYURVEDIC CHRONOBIOLOGY DOSSIER"
             subtitle = "Pitta-Vata Balancing, Circadian Peak Hours & Non-Invasive Lifestyle Cures"
-            badge = "ADVANCED MASTER DOSSIER · HEALTH & VITALITY (12 PAGES · ₹489)" if not is_premium else "PREMIUM SOVEREIGN BLUEPRINT · VITALITY COMPENDIUM (32 PAGES · ₹1,050)"
+            badge = "ANVEIL MY GLOWING CHARMS · HEALTH & VITALITY (12 PAGES · ₹510)" if not is_premium else "ANVEIL EVERY CHARM · VITALITY COMPENDIUM (32 PAGES · ₹1,050)"
             sec3 = "Section 3: Ayurvedic Chronobiology & Pitta-Vata Dosha Balancing"
             sec4 = "Section 4: Circadian Peak Performance Windows & Hydration Protocols"
             sec5 = "Section 5: Cognitive Decompression, Sleep Restoration & Vitality Cures"
         else: # missing_numbers_vastu & core_blueprint
             title = "ANVEIL CHARM MISSING NUMBERS SOVEREIGN ROADMAP"
             subtitle = "32-Page Sovereign Lifetime Architecture & Missing Number Rectification Compendium" if is_premium else "12-Page Master Synthesis Dossier & Missing Numbers Rectification"
-            badge = "PREMIUM SOVEREIGN BLUEPRINT · 32-PAGE SOVEREIGN ROADMAP · ₹1,050" if is_premium else "ADVANCED MASTER DOSSIER · 12-PAGE MASTER DOSSIER · ₹489"
+            badge = "ANVEIL EVERY CHARM · 32-PAGE SOVEREIGN ROADMAP · ₹1,050" if is_premium else "ANVEIL MY GLOWING CHARMS · 12-PAGE MASTER DOSSIER · ₹510"
             sec3 = "Section 3: Missing Numbers Deep Void Diagnosis & Elemental Gaps"
             sec4 = "Section 4: Name Balancing, Acoustic Spelling & Poorak Numbers Activation"
             sec5 = "Section 5: Element Yogas Balancing — Golden Raj Yoga & Silver Earth Plane"
@@ -914,7 +914,7 @@ class NumerosPdfReportBuilder:
         ]))
         self.story.append(t_callout)
 
-    # ── BASIC REPORT: EXACTLY 3 PAGES ─────────────────────────────────────────
+    # ── ANVEIL MY ALIGNMENTS: EXACTLY 3 PAGES ─────────────────────────────────────────
     def _assemble_basic_3_pages(self):
 
         s = self.styles
@@ -948,7 +948,7 @@ class NumerosPdfReportBuilder:
         s_alert = ParagraphStyle('Alert', parent=s['ReportBody'], fontName=FONT_SERIF_BOLD, fontSize=7, leading=9.5, textColor=COLOR_RED_ALERT)
 
         # ── PAGE 1: Foundational Profile, Readings & Lo Shu Grid ──
-        self.story.append(Paragraph("BASIC REPORT · ELEMENT BALANCING &amp; FOUNDATIONAL BLUEPRINT", s_top_star))
+        self.story.append(Paragraph("ANVEIL MY ALIGNMENTS · ELEMENT BALANCING &amp; FOUNDATIONAL BLUEPRINT", s_top_star))
         self.story.append(Spacer(1, 1))
         self.story.append(Paragraph(name, s_name))
         self.story.append(Spacer(1, 1))
@@ -2010,7 +2010,7 @@ class NumerosPdfReportBuilder:
             ))
             self.story.append(PageBreak())
 
-    # ── PREMIUM SOVEREIGN BLUEPRINT: EXACTLY 32 PAGES ────────────────────────
+    # ── ANVEIL EVERY CHARM: EXACTLY 32 PAGES ────────────────────────
     def _assemble_premium_32_pages(self):
         # Pages 1 to 12 reuse the complete Advanced 12-page chapters
         self._assemble_advanced_12_pages()

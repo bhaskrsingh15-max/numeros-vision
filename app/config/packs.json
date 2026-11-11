@@ -1,89 +1,110 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "currency": "INR",
-  "updated_at": "2026-11-11T02:30:00Z",
+  "updated_at": "2026-11-12T00:55:00Z",
   "feature_flags": {
-    "notify_me_higher_tiers": false,
+    "notify_me_higher_tiers": true,
     "notify_me_tiers": [
       "report_advanced",
       "report_premium"
     ]
   },
+  "launch_offer": {
+    "enabled": true,
+    "duration_days": 7,
+    "started_at": null,
+    "ends_at": null,
+    "prelaunch_label": "1-week launch offer \u00b7 valid for 7 days from launch"
+  },
+  "ladder_order": [
+    "report_premium",
+    "report_advanced",
+    "report_basic"
+  ],
   "core_reports": {
+    "report_premium": {
+      "pack_id": "report_premium",
+      "tier_id": "premium",
+      "name": "Anveil every charm",
+      "display_name": "Anveil every charm \u00b7 Best value",
+      "pages": 32,
+      "price_inr": 1050,
+      "amount_paise": 105000,
+      "mrp_inr": 2100,
+      "mrp_paise": 210000,
+      "per_page_inr": 33,
+      "launch_offer_duration_days": 7,
+      "launch_offer_started_at": null,
+      "digital_root": 6,
+      "mrp_digital_root": 3,
+      "status": "active",
+      "deliverables": [
+        "32-Page Complete Roadmap PDF (all 9 glowing & veiled charms)",
+        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
+        "Full Name Balancing, Acoustic Spelling & Poorak Numbers Protocol",
+        "10-Year Macro Planetary Timing Radar & Month-by-Month Auspicious Windows",
+        "Veiled Charms Deep Diagnosis, 81-Pair Matrix & 4-Stage Pinnacle Cycles",
+        "Multi-Generational Synastry, Commercial Vectors & Methodology Appendix"
+      ],
+      "progressive_unlock": "includes_basic"
+    },
+    "report_advanced": {
+      "pack_id": "report_advanced",
+      "tier_id": "advanced",
+      "name": "Anveil my glowing charms",
+      "display_name": "Anveil my glowing charms",
+      "pages": 12,
+      "price_inr": 510,
+      "amount_paise": 51000,
+      "mrp_inr": 1020,
+      "mrp_paise": 102000,
+      "per_page_inr": 43,
+      "launch_offer_duration_days": 7,
+      "launch_offer_started_at": null,
+      "digital_root": 6,
+      "mrp_digital_root": 3,
+      "status": "active",
+      "deliverables": [
+        "12-Page Glowing Charms Reading PDF",
+        "All Alignment calculations + Auspicious Initiation Windows & Personal Year Cycles",
+        "Complete 8 Elemental Planes & Lo Shu Grid Analysis",
+        "Glowing Numbers in Depth & Benefic vs Malefic Operating Matrix",
+        "Vedic Gharelu Remedies Bank & 40-Day Aura Cleansing",
+        "Interpersonal Synergy, Co-Founder Matching & Kua Directional Blueprint"
+      ],
+      "progressive_unlock": "includes_basic"
+    },
     "report_basic": {
       "pack_id": "report_basic",
       "tier_id": "basic",
-      "name": "Basic Report",
-      "display_name": "Basic Report \u00b7 Entry",
+      "name": "Anveil my alignments",
+      "display_name": "Anveil my alignments",
       "pages": 3,
       "price_inr": 199,
       "amount_paise": 19900,
-      "mrp_inr": 289,
-      "mrp_paise": 28900,
-      "launch_offer_ends_at": "2027-01-31T23:59:59+05:30",
+      "mrp_inr": 399,
+      "mrp_paise": 39900,
+      "per_page_inr": 66,
+      "launch_offer_duration_days": 7,
+      "launch_offer_started_at": null,
       "digital_root": 1,
+      "mrp_digital_root": 3,
       "status": "active",
       "deliverables": [
-        "3-Page Personalised Executive PDF",
+        "3-Page Personalised Alignments PDF",
         "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
         "Lo Shu 3x3 Grid Matrix & 8 Elemental Planes Audit",
         "Chaldean Calling Name Compound & Root Summary",
         "5-Element Balancing Actions & 90-Day Roadmap"
       ],
       "progressive_unlock": "entry"
-    },
-    "report_advanced": {
-      "pack_id": "report_advanced",
-      "tier_id": "advanced",
-      "name": "Advanced Master Dossier",
-      "display_name": "Advanced Master Dossier \u00b7 Recommended",
-      "pages": 12,
-      "price_inr": 489,
-      "amount_paise": 48900,
-      "mrp_inr": 699,
-      "mrp_paise": 69900,
-      "launch_offer_ends_at": "2027-01-31T23:59:59+05:30",
-      "digital_root": 3,
-      "status": "active",
-      "deliverables": [
-        "12-Page Master Synthesis PDF Dossier",
-        "All Basic calculations + Auspicious Initiation Windows & Personal Year Cycles",
-        "Complete 8 Elemental Planes & Lo Shu Grid Analysis",
-        "Enabled Numbers in Depth & Benefic vs Malefic Operating Matrix",
-        "Vedic Gharelu Remedies Bank & 40-Day Aura Cleansing",
-        "Interpersonal Synergy, Co-Founder Matching & Kua Directional Blueprint"
-      ],
-      "progressive_unlock": "includes_basic"
-    },
-    "report_premium": {
-      "pack_id": "report_premium",
-      "tier_id": "premium",
-      "name": "Premium Sovereign Blueprint",
-      "display_name": "Premium Sovereign Blueprint \u00b7 Comprehensive",
-      "pages": 32,
-      "price_inr": 1050,
-      "amount_paise": 105000,
-      "mrp_inr": 1479,
-      "mrp_paise": 147900,
-      "launch_offer_ends_at": "2027-01-31T23:59:59+05:30",
-      "digital_root": 6,
-      "status": "active",
-      "deliverables": [
-        "32-Page Sovereign Executive Master Blueprint PDF",
-        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
-        "Full Name Balancing, Acoustic Spelling & Poorak Numbers Protocol",
-        "10-Year Macro Planetary Timing Radar & Month-by-Month Auspicious Windows",
-        "Missing Numbers Deep Void Diagnosis, 81-Pair Matrix & 4-Stage Pinnacle Cycles",
-        "Multi-Generational Synastry, Commercial Vectors & Methodology Appendix"
-      ],
-      "progressive_unlock": "includes_basic"
     }
   },
   "bundles": {
     "starter_bundle": {
       "pack_id": "starter_bundle",
       "name": "Starter Bundle",
-      "display_name": "Starter Bundle \u00b7 2 Basic Reports",
+      "display_name": "Starter Bundle \u00b7 2 Alignment Reports",
       "price_inr": 339,
       "amount_paise": 33900,
       "digital_root": 6,
@@ -94,7 +115,7 @@
         "premium_vouchers": 0
       },
       "deliverables": [
-        "2 Complete 3-Page Basic PDF Reports",
+        "2 Complete 3-Page Alignment PDF Reports",
         "Choose any two topics across Love, Money, Work, or Growth",
         "Full calculation breakdown and practical remedies",
         "Ready within minutes in your account dashboard with archival PDF download"
@@ -103,7 +124,7 @@
     "discovery_bundle": {
       "pack_id": "discovery_bundle",
       "name": "Discovery Bundle",
-      "display_name": "Discovery Bundle \u00b7 3 Advanced Reports",
+      "display_name": "Discovery Bundle \u00b7 3 Glowing Charm Reports",
       "price_inr": 1299,
       "amount_paise": 129900,
       "digital_root": 3,
@@ -114,16 +135,16 @@
         "premium_vouchers": 0
       },
       "deliverables": [
-        "3 Complete 12-Page Advanced Master Reports",
+        "3 Complete 12-Page Glowing Charm Reports",
         "Choose any three topics from the entire catalogue",
-        "Enabled Numbers in Depth & Auspicious Initiation Windows for each topic",
+        "Glowing Numbers in Depth & Auspicious Initiation Windows for each topic",
         "Vedic Gharelu remedies & Kua directional protocols for selected domains"
       ]
     },
     "comprehensive_bundle": {
       "pack_id": "comprehensive_bundle",
       "name": "Comprehensive Bundle",
-      "display_name": "Comprehensive Bundle \u00b7 5 Advanced Reports",
+      "display_name": "Comprehensive Bundle \u00b7 5 Glowing Charm Reports",
       "price_inr": 1999,
       "amount_paise": 199900,
       "digital_root": 1,
@@ -134,9 +155,9 @@
         "premium_vouchers": 0
       },
       "deliverables": [
-        "5 Complete 12-Page Advanced Master Reports",
+        "5 Complete 12-Page Glowing Charm Reports",
         "Complete multi-domain clarity across Love, Career, Wealth & Family",
-        "Enabled Numbers in Depth & Auspicious Initiation Windows for each domain",
+        "Glowing Numbers in Depth & Auspicious Initiation Windows for each domain",
         "Vedic Gharelu remedies & Kua directional protocols"
       ]
     }
@@ -180,7 +201,7 @@
       "price_inr": 399,
       "amount_paise": 39900,
       "questions_count": 10,
-      "digital_root": 0,
+      "digital_root": 3,
       "status": "inactive",
       "deliverables": [
         "10 Detailed Question Predictions",
@@ -197,7 +218,7 @@
       "price_inr": 699,
       "amount_paise": 69900,
       "questions_count": 25,
-      "digital_root": 0,
+      "digital_root": 6,
       "status": "inactive",
       "deliverables": [
         "25 Deep In-Depth Predictions",

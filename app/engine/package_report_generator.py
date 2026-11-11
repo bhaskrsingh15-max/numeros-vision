@@ -312,7 +312,7 @@ def generate_package_report(
     
 
     # ──────────────────────────────────────────────────────────────────────────
-    # TIER: ADVANCED NUMEROLOGY REPORT (12 PAGES · ₹489 / $39)
+    # TIER: ADVANCED NUMEROLOGY REPORT (12 PAGES · ₹510 / $39)
     # Standard 13-Section English-Only Report Structure
     # ──────────────────────────────────────────────────────────────────────────
     elif clean_tier in ["report_master", "master", "advanced", "advanced_report"]:
@@ -409,7 +409,7 @@ def generate_package_report(
         return _finalize_report_envelope({
             "tier": "report_master",
             "tier_display": "Advanced Numerology Report",
-            "price_inr": 489,
+            "price_inr": 510,
             "profile": profile_summary,
             "pages_count": 12,
             "report_markdown": sanitize_text("\n\n".join(report_sections))
@@ -505,7 +505,7 @@ def generate_package_report(
                 f"Your bespoke Lucky Charm activation protocol, consecrated planetary metal alloy, sacred beej mantra frequencies, "
                 f"and 2026–2030 favorable transit roadmap to neutralize Gap [ {', '.join(map(str, missing_nums)) if missing_nums else 'All'} ] are compiled in your **Master Synthesis Dossier**.\n\n"
                 f"**NUMEROS VISION · ANVEIL EVERY CHARM**\n\n"
-                f"[ANVEIL EVERY CHARM ✦ Activate Lucky Charm Dossier (₹489)](/checkout/?plan=report_master)"
+                f"[ANVEIL EVERY CHARM ✦ Activate Lucky Charm Dossier (₹510)](/checkout/?plan=report_master)"
             )
         ]
         

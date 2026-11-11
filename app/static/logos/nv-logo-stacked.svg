@@ -40,6 +40,6 @@
   <rect x="65" y="142.8" width="190" height="2.2" rx="0.5" fill="url(#sunYellowLineStack)"/>
 
   <!-- Taglines in Mercury Emerald & Gold - NO BLACK! -->
-  <text x="160" y="162" font-family="'Inter', -apple-system, sans-serif" font-size="10.5" font-weight="700" fill="url(#emeraldGradStack)" text-anchor="middle" letter-spacing="3.4">ANVIEL EVERY CHARM</text>
+  <text x="160" y="162" font-family="'Inter', -apple-system, sans-serif" font-size="10.5" font-weight="700" fill="url(#emeraldGradStack)" text-anchor="middle" letter-spacing="3.4">ANVEIL EVERY CHARM</text>
   <text x="160" y="180" font-family="'Inter', -apple-system, sans-serif" font-size="8" font-weight="600" fill="#9E7B15" text-anchor="middle" letter-spacing="2.2">SCIENTIFIC NUMEROLOGY · AI PRECISION</text>
 </svg>

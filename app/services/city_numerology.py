@@ -1162,7 +1162,7 @@ def render_city_html(city: Dict[str, Any]) -> str:
       <div class="prod-grid">
         <article class="prod-card">
           <span class="prod-badge hot">32-Page Sovereign Pack</span>
-          <h3>Premium Sovereign Blueprint</h3>
+          <h3>Anveil every charm</h3>
           <p>Includes full Chaldean &amp; Pythagorean name balancing to harmonize with {name}'s {math['planet']} current, signature baseline, mobile vibration, and 10-year timing radar.</p>
           <div class="prod-foot">
             <span class="prod-price">{city['price_name']}</span>
@@ -1438,7 +1438,7 @@ def render_city_html(city: Dict[str, Any]) -> str:
           </div>
         </div>
         <a href="/pricing" style="display:inline-block; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; padding:9px 18px; border-radius:6px; text-decoration:none; font-weight:700; font-size:0.84rem;">
-          ANVEIL EVERY CHARM ✦ Get Premium Sovereign Blueprint ({city['price_name']}) →
+          ANVEIL EVERY CHARM ✦ Get Anveil every charm ({city['price_name']}) →
         </a>
       `;
     }}
