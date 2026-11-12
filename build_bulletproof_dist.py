@@ -58,18 +58,21 @@ shutil.copy2(PACKS_JSON_PATH, os.path.join(config_dest_dir, "packs.json"))
 basic_pack = PACKS_DATA["core_reports"]["report_basic"]
 adv_pack = PACKS_DATA["core_reports"]["report_advanced"]
 prem_pack = PACKS_DATA["core_reports"]["report_premium"]
+notify_waitlist = bool(PACKS_DATA.get("feature_flags", {}).get("notify_me_higher_tiers", True))
+from app.config.pricing_config import resolve_sku_price as _resolve_sku_price
+basic_resolved_inr = int(_resolve_sku_price("report_basic").get("amount_inr") or basic_pack.get("mrp_inr") or 399)
 BUILD_TOKENS = {
     "{{PACK_BASIC_NAME}}": str(basic_pack["name"]),
-    "{{PACK_BASIC_PRICE_INR}}": f"{int(basic_pack['price_inr']):,}",
-    "{{PACK_BASIC_PER_DAY_INR}}": f"{int(basic_pack['price_inr']) / 365:.2f}",
+    "{{PACK_BASIC_PRICE_INR}}": f"{basic_resolved_inr:,}",
+    "{{PACK_BASIC_PER_DAY_INR}}": f"{basic_resolved_inr / 365:.2f}",
     "{{PACK_BASIC_PAGES}}": str(basic_pack["pages"]),
     "{{PACK_ADVANCED_NAME}}": str(adv_pack["name"]),
-    "{{PACK_ADVANCED_PRICE_INR}}": f"{int(adv_pack['price_inr']):,}",
-    "{{PACK_ADVANCED_PER_DAY_INR}}": f"{int(adv_pack['price_inr']) / 365:.2f}",
+    "{{PACK_ADVANCED_PRICE_INR}}": "Coming soon, notify me" if notify_waitlist else f"{int(adv_pack['price_inr']):,}",
+    "{{PACK_ADVANCED_PER_DAY_INR}}": "—" if notify_waitlist else f"{int(adv_pack['price_inr']) / 365:.2f}",
     "{{PACK_ADVANCED_PAGES}}": str(adv_pack["pages"]),
     "{{PACK_PREMIUM_NAME}}": str(prem_pack["name"]),
-    "{{PACK_PREMIUM_PRICE_INR}}": f"{int(prem_pack['price_inr']):,}",
-    "{{PACK_PREMIUM_PER_DAY_INR}}": f"{int(prem_pack['price_inr']) / 365:.2f}",
+    "{{PACK_PREMIUM_PRICE_INR}}": "Coming soon, notify me" if notify_waitlist else f"{int(prem_pack['price_inr']):,}",
+    "{{PACK_PREMIUM_PER_DAY_INR}}": "—" if notify_waitlist else f"{int(prem_pack['price_inr']) / 365:.2f}",
     "{{PACK_PREMIUM_PAGES}}": str(prem_pack["pages"]),
 }
 for root, _, files in os.walk(DIST_DIR):
@@ -121,10 +124,15 @@ for item in ["css", "js", "icons", "assets", "data"]:
             shutil.rmtree(dest_item)
         shutil.copytree(src_item, dest_item)
 
+# Exclude sitemap-2027.xml from active dist until the Planner disclaimer is approved
+_dist_s2027 = os.path.join(DIST_DIR, "sitemap-2027.xml")
+if os.path.exists(_dist_s2027):
+    os.remove(_dist_s2027)
+
 # Also mirror favicon, manifest, sitemap, llms, and verification files into static/
 for fname in [
     "favicon.ico", "apple-touch-icon.png", "manifest.json", "manifest.webmanifest",
-    "sitemap.xml", "sitemap-calculators.xml", "sitemap-numbers.xml", "sitemap-2027.xml",
+    "sitemap.xml", "sitemap-calculators.xml", "sitemap-numbers.xml",
     "sitemap-reports.xml", "sitemap-blog.xml", "robots.txt", "BingSiteAuth.xml",
     "llms.txt", "llms-full.txt", "49bf97a1d74343ce951918a3a0e676d4.txt", "sitemap.html"
 ]:
@@ -140,8 +148,8 @@ ROUTING_MAP = {
     "year-2027": "year_2027.html",
     "sample2": "sample2.html",
 
-    # Catalogue & Pricing (200 OK directories — zero 308 loop)
-    "reports_catalogue": "reports_catalogue.html",
+    # Canonical /reports/ Hub & Pricing (200 OK directories — /reports_catalogue/ 301-redirects to /reports/)
+    "reports": "reports_catalogue.html",
     "pricing": "pricing.html",
 
     # Calculators & Insights Hubs
@@ -263,6 +271,16 @@ for cr in consumed_root_html:
     fp = os.path.join(DIST_DIR, cr)
     if os.path.exists(fp):
         os.remove(fp)
+
+# Ensure legacy /reports_catalogue* never serves a static file (must hit 1-hop 301 -> /reports/)
+for legacy_rep in ["reports_catalogue.html", "reports.html", "reports-catalogue.html"]:
+    lfp = os.path.join(DIST_DIR, legacy_rep)
+    if os.path.exists(lfp):
+        os.remove(lfp)
+for legacy_rep_dir in ["reports_catalogue", "reports-catalogue"]:
+    ldp = os.path.join(DIST_DIR, legacy_rep_dir)
+    if os.path.exists(ldp):
+        shutil.rmtree(ldp)
 
 # Clean up tools/*.html -> tools/*/index.html ONLY for unique tools (skipping 301-redirected duplicates)
 tools_dir = os.path.join(DIST_DIR, "tools")
@@ -414,7 +432,69 @@ def verify_production_html_no_placeholders(dist_dir: str) -> None:
         )
 
 
+def validate_production_launch_window(environ=None, now_utc=None) -> dict:
+    """
+    Production launch-window guard:
+    - Reads strictly from NV_LAUNCH_STARTS_AT (or NV_LAUNCH_STARTED_AT) and NV_LAUNCH_ENDS_AT.
+    - Fails if unset or invalid ISO-8601 timestamp.
+    - Fails if NV_LAUNCH_ENDS_AT is in the past or under 7 days (7 * 24h) away from now_utc.
+    - Fails if (NV_LAUNCH_ENDS_AT - NV_LAUNCH_STARTS_AT) != exact 7 * 24h (604,800 seconds).
+    """
+    env_map = os.environ if environ is None else environ
+    raw_start = (env_map.get("NV_LAUNCH_STARTS_AT") or env_map.get("NV_LAUNCH_STARTED_AT") or "").strip()
+    raw_end = (env_map.get("NV_LAUNCH_ENDS_AT") or "").strip()
+    if not raw_start or not raw_end:
+        raise RuntimeError(
+            "PRODUCTION BUILD BLOCKED: NV_LAUNCH_STARTS_AT and NV_LAUNCH_ENDS_AT must both be set at go-live."
+        )
+    try:
+        s_norm = raw_start[:-1] + "+00:00" if raw_start.endswith("Z") else raw_start
+        e_norm = raw_end[:-1] + "+00:00" if raw_end.endswith("Z") else raw_end
+        starts_dt = datetime.datetime.fromisoformat(s_norm)
+        ends_dt = datetime.datetime.fromisoformat(e_norm)
+        if starts_dt.tzinfo is None:
+            starts_dt = starts_dt.replace(tzinfo=datetime.timezone.utc)
+        if ends_dt.tzinfo is None:
+            ends_dt = ends_dt.replace(tzinfo=datetime.timezone.utc)
+        starts_utc = starts_dt.astimezone(datetime.timezone.utc)
+        ends_utc = ends_dt.astimezone(datetime.timezone.utc)
+    except Exception as exc:
+        raise RuntimeError(
+            f"PRODUCTION BUILD BLOCKED: Invalid ISO-8601 launch window timestamp ({exc})."
+        ) from exc
+
+    ref_now = now_utc or datetime.datetime.now(datetime.timezone.utc)
+    if ref_now.tzinfo is None:
+        ref_now = ref_now.replace(tzinfo=datetime.timezone.utc)
+    else:
+        ref_now = ref_now.astimezone(datetime.timezone.utc)
+
+    if ends_utc <= ref_now:
+        raise RuntimeError(
+            f"PRODUCTION BUILD BLOCKED: NV_LAUNCH_ENDS_AT ({raw_end}) is in the past."
+        )
+    remaining = ends_utc - ref_now
+    if remaining < datetime.timedelta(days=7):
+        raise RuntimeError(
+            f"PRODUCTION BUILD BLOCKED: NV_LAUNCH_ENDS_AT ({raw_end}) is under 7 days away "
+            f"({remaining.total_seconds() / 86400:.2f} days remaining)."
+        )
+    duration_sec = (ends_utc - starts_utc).total_seconds()
+    if abs(duration_sec - (7 * 86400)) > 1:
+        raise RuntimeError(
+            f"PRODUCTION BUILD BLOCKED: Launch window duration must be exact 7×24h (604800s), "
+            f"got {duration_sec:.0f}s ({raw_start} -> {raw_end})."
+        )
+    return {
+        "starts_at": raw_start,
+        "ends_at": raw_end,
+        "duration_seconds": int(round(duration_sec)),
+    }
+
+
 if os.environ.get("ENVIRONMENT") == "production" or os.environ.get("BUILD_ENV") == "production":
+    validate_production_launch_window()
+    print("PASS: Production 7×24h launch window verified.")
     verify_production_html_no_placeholders(DIST_DIR)
     print("PASS: Production HTML verified with 0 unrendered {{...}} placeholders.")
 
@@ -448,5 +528,7 @@ if __name__ == "__main__":
             verify_wrangler_no_placeholders(wf.read())
         print("PASS: wrangler.toml verified with real non-placeholder D1 database_ids.")
     if "--verify-production" in sys.argv:
+        validate_production_launch_window()
+        print("PASS: Production 7×24h launch window verified.")
         verify_production_html_no_placeholders(DIST_DIR)
         print("PASS: Production HTML verified with 0 unrendered {{...}} placeholders.")

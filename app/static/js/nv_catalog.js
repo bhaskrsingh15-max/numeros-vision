@@ -271,11 +271,22 @@
       if (item && item.status === 'coming_soon') {
         return 'Coming soon';
       }
+      const skuId = (item && (item.id || item.sku)) || key;
+      if (typeof window !== 'undefined' && window.NV_PRICING) {
+        if (window.NV_PRICING.isNotifyMeTier(skuId)) {
+          return window.NV_PRICING.getWaitlistLabel();
+        }
+        if (currency !== 'USD' && ['report_basic', 'report_advanced', 'report_premium', 'charm_single'].includes(skuId)) {
+          return window.NV_PRICING.formatPrice(skuId);
+        }
+      } else if (skuId === 'report_advanced' || skuId === 'report_premium') {
+        return 'Coming soon, notify me';
+      }
       const isUsd = currency === 'USD';
       if (isUsd) {
         return '$' + (item.price_usd || 14);
       }
-      const inr = item.price_inr !== undefined ? item.price_inr : 489;
+      const inr = item.price_inr !== undefined ? item.price_inr : 399;
       return '₹' + Number(inr).toLocaleString('en-IN');
     }
   };

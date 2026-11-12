@@ -472,8 +472,15 @@ def redirect_refund_html():
     return RedirectResponse(url="/refund-policy", status_code=301)
 
 @app.get("/reports_catalogue.html", include_in_schema=False)
+@app.get("/reports-catalogue.html", include_in_schema=False)
+@app.get("/reports.html", include_in_schema=False)
+@app.get("/reports_catalogue", include_in_schema=False)
+@app.get("/reports_catalogue/", include_in_schema=False)
+@app.get("/reports-catalogue", include_in_schema=False)
+@app.get("/reports-catalogue/", include_in_schema=False)
+@app.get("/reports", include_in_schema=False)
 def redirect_reports_cat():
-    return RedirectResponse(url="/reports_catalogue", status_code=301)
+    return RedirectResponse(url="/reports/", status_code=301)
 
 @app.get("/numerology", include_in_schema=False)
 @app.get("/numerology/", include_in_schema=False)
@@ -545,10 +552,7 @@ def page_cart():
     path = os.path.join(STATIC_DIR, "pricing.html")
     return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
 
-@app.get("/reports", include_in_schema=False)
 @app.get("/reports/", include_in_schema=False)
-@app.get("/reports_catalogue", include_in_schema=False)
-@app.get("/reports_catalogue/", include_in_schema=False)
 @app.get("/report", include_in_schema=False)
 @app.get("/report/", include_in_schema=False)
 def page_reports_catalogue():
@@ -1125,14 +1129,6 @@ def page_practitioner():
 @app.get("/cookie_policy.html", include_in_schema=False)
 def page_cookie_policy():
     path = os.path.join(STATIC_DIR, "cookie_policy.html")
-    return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
-
-@app.get("/reports", include_in_schema=False)
-@app.get("/reports/", include_in_schema=False)
-@app.get("/reports-catalogue", include_in_schema=False)
-@app.get("/reports-catalogue/", include_in_schema=False)
-def page_reports_catalogue():
-    path = os.path.join(STATIC_DIR, "reports_catalogue.html")
     return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
 
 @app.get("/faq", include_in_schema=False)

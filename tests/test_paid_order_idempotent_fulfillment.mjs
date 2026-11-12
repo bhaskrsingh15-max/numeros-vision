@@ -234,6 +234,8 @@ function createMockEnv(overrides = {}) {
     GOOGLE_CLIENT_ID: '123456789-mockclientid.apps.googleusercontent.com',
     BREVO_API_KEY: 'test_brevo_key_mock',
     PUBLIC_BASE_URL: 'https://test.numerosvision.com',
+    NV_LAUNCH_STARTS_AT: new Date(Date.now() - 86400000).toISOString(),
+    NV_LAUNCH_ENDS_AT: new Date(Date.now() + 6 * 86400000).toISOString(),
     ...overrides
   };
 
@@ -831,12 +833,31 @@ async function runTestSuite() {
     assert.strictEqual(resWwwTool.status, 301);
     assert.strictEqual(resWwwTool.headers.get('Location'), 'https://numerosvision.com/calculators/lo-shu-grid/?utm_source=ig');
 
-    // 8b. /reports/secret.pdf -> 404 blocked, while /reports/ -> 301 /reports_catalogue/
+    // 8b. /reports/secret.pdf -> 404 blocked, /reports/ -> 200 canonical hub, /reports_catalogue/ -> 301 /reports/
     const resPdfBlock = await worker.fetch(new Request('https://numerosvision.com/reports/customer_123.pdf'), env, {});
     assert.strictEqual(resPdfBlock.status, 404);
     const resReportsDir = await worker.fetch(new Request('https://numerosvision.com/reports/'), env, {});
-    assert.strictEqual(resReportsDir.status, 301);
-    assert.ok(resReportsDir.headers.get('Location').endsWith('/reports_catalogue/'));
+    assert.strictEqual(resReportsDir.status, 200);
+    assert.strictEqual(resReportsDir.headers.get('X-Robots-Tag'), null);
+    const resCatalogueLegacy = await worker.fetch(new Request('https://numerosvision.com/reports_catalogue/'), env, {});
+    assert.strictEqual(resCatalogueLegacy.status, 301);
+    assert.ok(resCatalogueLegacy.headers.get('Location').endsWith('/reports/'));
+
+    // 8b-preview. Preview responses send X-Robots-Tag: noindex on HTML, 301s, and APIs
+    const previewEnv = createMockEnv({
+      ENVIRONMENT: 'preview',
+      NV_LAUNCH_STARTS_AT: '2026-11-12T16:25:00+05:30',
+      NV_LAUNCH_ENDS_AT: '2026-11-12T16:50:00+05:30',
+      ASSETS: env.ASSETS
+    });
+    const resPreviewHtml = await worker.fetch(new Request('https://preview.numeros-vision.pages.dev/reports/'), previewEnv, {});
+    assert.strictEqual(resPreviewHtml.status, 200);
+    assert.strictEqual(resPreviewHtml.headers.get('X-Robots-Tag'), 'noindex');
+    const previewBody = await resPreviewHtml.text();
+    assert.ok(previewBody.includes('id="nv-preview-launch-banner"'));
+    const resPreview301 = await worker.fetch(new Request('https://preview.numeros-vision.pages.dev/reports_catalogue/'), previewEnv, {});
+    assert.strictEqual(resPreview301.status, 301);
+    assert.strictEqual(resPreview301.headers.get('X-Robots-Tag'), 'noindex');
 
     // 8c. Parameterized public HTML response includes HTTP Link rel="canonical"
     const resParamHtml = await worker.fetch(new Request('https://numerosvision.com/pricing/?utm_campaign=launch'), env, {});
@@ -969,6 +990,7 @@ async function runTestSuite() {
       const neverReceipt = dashBody2.receipts.find(rc => rc.order_id === neverOrderId);
       assert.ok(neverReceipt, 'Paid receipt must be emitted in dashboard');
       assert.strictEqual(neverReceipt.supplier_legal_name, 'Bhaskar Kumar Singh');
+      assert.strictEqual(neverReceipt.document_type, 'Payment receipt');
 
       // Repeat dashboard poll must NOT re-call Razorpay or duplicate jobs
       await worker.fetch(new Request('https://test.numerosvision.com/api/v1/dashboard/view', {
@@ -982,30 +1004,58 @@ async function runTestSuite() {
   }
 
   // =========================================================================
-  // TEST 10: SERVER FIXED LAUNCH-OFFER EXPIRY PRICE SWITCH
+  // TEST 10: ENV-ONLY LAUNCH WINDOW SWITCH + WAITLIST MASKING + AUTO-CAPTURE
   // =========================================================================
   {
-    console.log('[Test 10] Server launch-offer fixed timestamp price switch (before vs after 2026-11-19T23:59:59+05:30)');
-    const env = createMockEnv();
-    const beforeMs = Date.parse('2026-11-15T12:00:00+05:30');
-    const afterMs = Date.parse('2026-11-20T00:00:01+05:30');
+    console.log('[Test 10] Env-only launch-offer switch (unset vs active 7x24h vs expired) + waitlist masking + Razorpay payment_capture: 1');
+    // 1. Unset env -> Basic is regular 39900, waitlist tiers masked with "Coming soon, notify me"
+    const unsetEnv = createMockEnv({ NV_LAUNCH_STARTS_AT: '', NV_LAUNCH_ENDS_AT: '' });
+    const stUnset = resolveServerLaunchOfferState(unsetEnv, Date.now());
+    assert.strictEqual(stUnset.configured, false);
+    assert.strictEqual(stUnset.active, false);
+    assert.strictEqual(getPackById('report_basic', unsetEnv).amount_paise, 39900);
+    assert.strictEqual(getPackById('report_basic', unsetEnv).struck_mrp_inr, null);
+    for (const wl of ['report_advanced', 'report_premium']) {
+      const pWl = getPackById(wl, unsetEnv);
+      assert.strictEqual(pWl.waitlist_only, true);
+      assert.strictEqual(pWl.display_price_label, 'Coming soon, notify me');
+      assert.strictEqual(pWl.struck_mrp_inr, null);
+      assert.strictEqual(pWl.launch_offer_copy, '');
+    }
 
-    assert.strictEqual(resolveServerLaunchOfferState(env, beforeMs).active, true);
-    assert.strictEqual(resolveServerLaunchOfferState(env, afterMs).active, false);
+    // 2. Active 7x24h window via NV_LAUNCH_STARTS_AT & NV_LAUNCH_ENDS_AT
+    const envWin = createMockEnv({
+      NV_LAUNCH_STARTS_AT: '2027-01-10T00:00:00+05:30',
+      NV_LAUNCH_ENDS_AT: '2027-01-17T00:00:00+05:30'
+    });
+    const beforeMs = Date.parse('2027-01-12T12:00:00+05:30');
+    const afterMs = Date.parse('2027-01-17T00:00:01+05:30');
+    assert.strictEqual(resolveServerLaunchOfferState(envWin, beforeMs).active, true);
+    assert.strictEqual(resolveServerLaunchOfferState(envWin, afterMs).active, false);
+    assert.strictEqual(getPackById('report_basic', envWin, beforeMs).amount_paise, 19900);
+    assert.strictEqual(getPackById('report_basic', envWin, beforeMs).struck_mrp_inr, 399);
+    assert.strictEqual(getPackById('report_basic', envWin, afterMs).amount_paise, 39900);
+    assert.strictEqual(getPackById('report_basic', envWin, afterMs).struck_mrp_inr, null);
+    // Waitlist tiers still show "Coming soon, notify me" while NV_NOTIFY_ME_HIGHER_TIERS=true
+    assert.strictEqual(getPackById('report_advanced', envWin, beforeMs).display_price_label, 'Coming soon, notify me');
+    assert.strictEqual(getPackById('report_premium', envWin, beforeMs).display_price_label, 'Coming soon, notify me');
 
-    assert.strictEqual(getPackById('report_basic', env, beforeMs).amount_paise, 19900);
-    assert.strictEqual(getPackById('report_basic', env, beforeMs).struck_mrp_inr, 399);
-    assert.strictEqual(getPackById('report_basic', env, afterMs).amount_paise, 39900);
-    assert.strictEqual(getPackById('report_basic', env, afterMs).struck_mrp_inr, null);
+    // 3. When NV_NOTIFY_ME_HIGHER_TIERS=false, all 3 tiers switch between launch (1050/510/199) and regular (2100/1020/399)
+    const envUnlocked = createMockEnv({
+      NV_NOTIFY_ME_HIGHER_TIERS: 'false',
+      NV_LAUNCH_STARTS_AT: '2027-01-10T00:00:00+05:30',
+      NV_LAUNCH_ENDS_AT: '2027-01-17T00:00:00+05:30'
+    });
+    assert.strictEqual(getPackById('report_advanced', envUnlocked, beforeMs).amount_paise, 51000);
+    assert.strictEqual(getPackById('report_advanced', envUnlocked, afterMs).amount_paise, 102000);
+    assert.strictEqual(getPackById('report_premium', envUnlocked, beforeMs).amount_paise, 105000);
+    assert.strictEqual(getPackById('report_premium', envUnlocked, afterMs).amount_paise, 210000);
 
-    assert.strictEqual(getPackById('report_advanced', env, beforeMs).amount_paise, 51000);
-    assert.strictEqual(getPackById('report_advanced', env, afterMs).amount_paise, 102000);
-    assert.strictEqual(getPackById('report_advanced', env, afterMs).struck_mrp_inr, null);
-
-    assert.strictEqual(getPackById('report_premium', env, beforeMs).amount_paise, 105000);
-    assert.strictEqual(getPackById('report_premium', env, afterMs).amount_paise, 210000);
-    assert.strictEqual(getPackById('report_premium', env, afterMs).struck_mrp_inr, null);
-    console.log('✓ PASS: Server price switches automatically from 1050/510/199 to 2100/1020/399 after fixed ends_at.');
+    // 4. Verify Razorpay order creation sends payment_capture: 1 (auto-capture enabled)
+    const workerSrc = fs.readFileSync(path.resolve(process.cwd(), 'app/static/_worker.js'), 'utf8');
+    const autoCaptureMatches = workerSrc.match(/payment_capture:\s*1/g) || [];
+    assert(autoCaptureMatches.length >= 2, `Expected payment_capture: 1 on both Razorpay order endpoints in _worker.js, found ${autoCaptureMatches.length}`);
+    console.log('✓ PASS: Env-only launch window, waitlist masking ("Coming soon, notify me"), and Razorpay payment_capture: 1 verified.');
   }
 
   // =========================================================================
@@ -1050,7 +1100,11 @@ async function runTestSuite() {
       ['https://numerosvision.com/tools/profession-calculator/', 'https://numerosvision.com/calculators/profession-calculator/'],
       ['https://numerosvision.com/tools/logo-intelligence/', 'https://numerosvision.com/calculators/logo-intelligence/'],
       ['https://numerosvision.com/tools/logo-studio/', 'https://numerosvision.com/calculators/logo-intelligence/'],
-      ['https://numerosvision.com/reports/', 'https://numerosvision.com/reports_catalogue/'],
+      ['https://numerosvision.com/reports_catalogue/', 'https://numerosvision.com/reports/'],
+      ['https://numerosvision.com/reports_catalogue', 'https://numerosvision.com/reports/'],
+      ['https://numerosvision.com/reports_catalogue.html', 'https://numerosvision.com/reports/'],
+      ['https://numerosvision.com/reports', 'https://numerosvision.com/reports/'],
+      ['https://numerosvision.com/reports.html', 'https://numerosvision.com/reports/'],
       ['https://numerosvision.com/charm_ai.html', 'https://numerosvision.com/charm-ai/'],
       ['https://numerosvision.com/privacy-policy/', 'https://numerosvision.com/privacy/'],
       ['https://numerosvision.com/sample-report/', 'https://numerosvision.com/sample_roadmap/'],
@@ -1070,10 +1124,46 @@ async function runTestSuite() {
       const r2 = await worker.fetch(new Request(loc), env, {});
       assert.strictEqual(r2.status, 200, `Expected final 200 OK at ${loc} (1 hop from ${srcUrl}), got ${r2.status}`);
     }
-    console.log(`✓ PASS: All ${redirectCases.length} redirect routes verified as 301 in exactly 1 hop -> 200 OK.`);
+    const pdfBlockRes = await worker.fetch(new Request('https://numerosvision.com/reports/private_customer.pdf'), env, {});
+    assert.strictEqual(pdfBlockRes.status, 404, 'Direct /reports/*.pdf requests must still be blocked with HTTP 404');
+    console.log(`✓ PASS: All ${redirectCases.length} redirect routes verified as 301 in exactly 1 hop -> 200 OK (and /reports/*.pdf blocked 404).`);
   }
 
-  console.log('--- ALL SUITE TESTS PASSED SUCCESSFULLY (11/11) ---');
+  // =========================================================================
+  // TEST 12: PREVIEW X-ROBOTS-TAG: NOINDEX & ACTIVE LAUNCH WINDOW BANNER
+  // =========================================================================
+  {
+    console.log('[Test 12] Preview responses send X-Robots-Tag: noindex and render active launch-window banner');
+    const previewEnv = createMockEnv({
+      ENVIRONMENT: 'preview',
+      NV_LAUNCH_STARTS_AT: new Date(Date.now() - 60000).toISOString(),
+      NV_LAUNCH_ENDS_AT: new Date(Date.now() + 1800000).toISOString(),
+      ASSETS: {
+        fetch: async () => new Response('<!DOCTYPE html><html><head><title>Preview</title></head><body><h1>Main</h1></body></html>', {
+          status: 200,
+          headers: { 'Content-Type': 'text/html; charset=utf-8' }
+        })
+      }
+    });
+
+    const prevHtmlRes = await worker.fetch(new Request('https://preview.numeros-vision.pages.dev/pricing/'), previewEnv, {});
+    assert.strictEqual(prevHtmlRes.status, 200);
+    assert(prevHtmlRes.headers.get('X-Robots-Tag')?.includes('noindex'), 'Preview HTML response must send X-Robots-Tag: noindex');
+    const prevHtmlBody = await prevHtmlRes.text();
+    assert(prevHtmlBody.includes('id="nv-preview-launch-banner"'), 'Preview HTML response must inject active launch-window banner');
+    assert(prevHtmlBody.includes('window.__NV_LAUNCH_ENDS_AT'), 'Preview HTML response must inject server launch window config');
+
+    const prevRedirRes = await worker.fetch(new Request('https://preview.numeros-vision.pages.dev/reports_catalogue/'), previewEnv, {});
+    assert.strictEqual(prevRedirRes.status, 301);
+    assert(prevRedirRes.headers.get('X-Robots-Tag')?.includes('noindex'), 'Preview 301 redirect response must also send X-Robots-Tag: noindex');
+
+    const prevApiRes = await worker.fetch(new Request('https://preview.numeros-vision.pages.dev/api/v1/pricing-catalog'), previewEnv, {});
+    assert.strictEqual(prevApiRes.status, 200);
+    assert(prevApiRes.headers.get('X-Robots-Tag')?.includes('noindex'), 'Preview API response must also send X-Robots-Tag: noindex');
+    console.log('✓ PASS: Preview HTML, 301 redirects, and API responses all send X-Robots-Tag: noindex and render preview window banner.');
+  }
+
+  console.log('--- ALL SUITE TESTS PASSED SUCCESSFULLY (12/12) ---');
 }
 
 runTestSuite().catch(err => {

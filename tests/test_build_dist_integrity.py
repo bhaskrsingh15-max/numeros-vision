@@ -32,10 +32,12 @@ def test_single_build_path_and_pdf_exclusion():
     # 2. Verify legacy zip does not exist
     assert not os.path.exists(LEGACY_ZIP), f"Legacy {LEGACY_ZIP} must be deleted"
 
-    # 3. Verify dist_cloudflare_pages exists and dist_cloudflare_pages/reports does not
+    # 3. Verify dist_cloudflare_pages exists, /reports/index.html is the canonical hub, and /reports_catalogue* is absent
     assert os.path.isdir(DIST_DIR), "dist_cloudflare_pages directory does not exist"
-    reports_dir = os.path.join(DIST_DIR, "reports")
-    assert not os.path.exists(reports_dir), f"Forbidden directory exists: {reports_dir}"
+    reports_index = os.path.join(DIST_DIR, "reports", "index.html")
+    assert os.path.isfile(reports_index), f"Canonical /reports/ hub missing: {reports_index}"
+    assert not os.path.exists(os.path.join(DIST_DIR, "reports_catalogue")), "Legacy dist_cloudflare_pages/reports_catalogue must not exist"
+    assert not os.path.exists(os.path.join(DIST_DIR, "reports_catalogue.html")), "Legacy dist_cloudflare_pages/reports_catalogue.html must not exist"
 
     # 4. Walk dist_cloudflare_pages and fail if any PDF outside samples/* exists
     found_pdfs = []
@@ -72,16 +74,10 @@ def test_built_site_prices_and_page_counts_match_packs_json():
     allowed_mrps = set()
     allowed_pages = set()
     allowed_per_page = set()
-    top_launch_days = packs.get("launch_offer", {}).get("duration_days")
     for pack in packs.get("core_reports", {}).values():
         if pack.get("status") == "active":
             allowed_prices.add(int(pack["price_inr"]))
-            if pack.get("mrp_inr") and (
-                pack.get("launch_offer_ends_at")
-                or pack.get("launch_offer_window_days")
-                or pack.get("launch_offer_duration_days")
-                or top_launch_days
-            ):
+            if pack.get("mrp_inr"):
                 allowed_mrps.add(int(pack["mrp_inr"]))
             allowed_pages.add(int(pack["pages"]))
             allowed_per_page.add(int(pack.get("per_page_inr") or int(int(pack["price_inr"]) / int(pack["pages"]) + 0.5)))
@@ -148,9 +144,19 @@ def test_built_site_prices_and_page_counts_match_packs_json():
     if not os.path.exists(pricing_built_path):
         pricing_built_path = os.path.join(DIST_DIR, "pricing.html")
     pricing_built = open(pricing_built_path, "r", encoding="utf-8").read()
-    assert "₹199" in pricing_built and "₹510" in pricing_built and "₹1,050" in pricing_built, (
-        "pricing/index.html in dist_cloudflare_pages is missing canonical report prices"
-    )
+    notify_waitlist = bool(packs.get("feature_flags", {}).get("notify_me_higher_tiers", True))
+    if notify_waitlist:
+        assert "₹399" in pricing_built and "Coming soon, notify me" in pricing_built, (
+            "pricing/index.html must show ₹399 for Basic (when launch window unset) and 'Coming soon, notify me' for waitlist tiers"
+        )
+        for forbidden_wl in ("₹510", "₹1,050", "₹1,020", "₹2,100"):
+            assert forbidden_wl not in pricing_built, (
+                f"pricing/index.html must not expose waitlist price '{forbidden_wl}' while notify_me_higher_tiers is true"
+            )
+    else:
+        assert "₹199" in pricing_built and "₹510" in pricing_built and "₹1,050" in pricing_built, (
+            "pricing/index.html in dist_cloudflare_pages is missing canonical report prices"
+        )
     print(
         f"PASS: All built HTML/JS files in dist_cloudflare_pages strictly match packs.json "
         f"(prices={sorted(allowed_prices)}, per_day={sorted(allowed_per_day)}, pages={sorted(allowed_pages)})."
@@ -219,8 +225,60 @@ def test_production_html_placeholder_guard():
         shutil.rmtree(temp_dir)
 
 
+def test_production_launch_window_guard():
+    import datetime
+    sys.path.insert(0, ROOT)
+    from build_bulletproof_dist import validate_production_launch_window
+
+    ref_now = datetime.datetime(2026, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
+
+    # 1. Unset -> must fail
+    for bad_env, label in [
+        ({}, "unset"),
+        (
+            {
+                "NV_LAUNCH_STARTS_AT": "2026-11-20T00:00:00+00:00",
+                "NV_LAUNCH_ENDS_AT": "2026-11-27T00:00:00+00:00",
+            },
+            "in the past",
+        ),
+        (
+            {
+                "NV_LAUNCH_STARTS_AT": "2026-11-27T10:00:00+00:00",
+                "NV_LAUNCH_ENDS_AT": "2026-12-04T10:00:00+00:00",
+            },
+            "under 7 days away",
+        ),
+        (
+            {
+                "NV_LAUNCH_STARTS_AT": "2026-12-01T12:00:00+00:00",
+                "NV_LAUNCH_ENDS_AT": "2026-12-10T12:00:00+00:00",
+            },
+            "duration != 7x24h",
+        ),
+    ]:
+        failed = False
+        try:
+            validate_production_launch_window(bad_env, now_utc=ref_now)
+        except RuntimeError as exc:
+            failed = "PRODUCTION BUILD BLOCKED" in str(exc)
+        assert failed, f"validate_production_launch_window must fail when {label}"
+
+    # 2. Exact 7x24h window starting in +2h -> ends in +7d2h (>= 7 days away) -> must pass
+    ok_res = validate_production_launch_window(
+        {
+            "NV_LAUNCH_STARTS_AT": "2026-12-01T12:00:00+00:00",
+            "NV_LAUNCH_ENDS_AT": "2026-12-08T12:00:00+00:00",
+        },
+        now_utc=ref_now,
+    )
+    assert ok_res["duration_seconds"] == 7 * 86400
+    print("PASS: Production launch-window guard verified (blocks unset, past, <7d remaining, and !=7x24h; allows valid 7x24h window).")
+
+
 if __name__ == "__main__":
     test_single_build_path_and_pdf_exclusion()
     test_built_site_prices_and_page_counts_match_packs_json()
     test_wrangler_placeholder_deploy_guard()
     test_production_html_placeholder_guard()
+    test_production_launch_window_guard()

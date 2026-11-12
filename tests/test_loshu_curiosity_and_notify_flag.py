@@ -115,14 +115,16 @@ class TestLoShuCuriosityAndNotifyMeFlag(unittest.TestCase):
         for price_tok in ("199", "399", "510", "1,020", "1020", "1,050", "1050", "2,100", "2100"):
             self.assertNotIn(price_tok, curiosity_markup)
 
-        # Verify high-to-low three-card ladder with approved prices (1,050, 510, 199), MRPs (2,100, 1,020, 399), and fixed launch offer copy
-        self.assertIn('id="price-report_premium">₹1,050', html)
-        self.assertIn('id="price-report_advanced">₹510', html)
-        self.assertIn('id="price-report_basic">₹199', html)
+        # Verify high-to-low three-card ladder with waitlist labels on Advanced/Premium and unset regular ₹399 on Basic
+        self.assertIn('id="price-report_premium" style="font-size:1.35rem;">Coming soon, notify me', html)
+        self.assertIn('id="price-report_advanced" style="font-size:1.35rem;">Coming soon, notify me', html)
+        self.assertIn('id="price-report_basic">₹399', html)
         self.assertLess(html.index('id="tier-card-premium"'), html.index('id="tier-card-advanced"'))
         self.assertLess(html.index('id="tier-card-advanced"'), html.index('id="tier-card-basic"'))
-        self.assertIn("Launch price until 19 Nov 2026. Regular price ₹2,100 from 20 Nov 2026.", html)
+        self.assertNotIn("19 Nov 2026", html)
+        self.assertNotIn("20 Nov 2026", html)
         self.assertNotIn("31 Jan 2027", html)
+        self.assertNotIn("Waitlist members get the launch price for 7 days when it opens", html)
 
         # Verify explicit DPDP consent text, purpose, 12-month retention, and delete-on-request UI in both pages
         for page_txt in (html, pricing_html):

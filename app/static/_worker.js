@@ -753,15 +753,16 @@ const PACK_CATALOG = {
   launch_offer: {
     enabled: true,
     duration_days: 7,
-    started_at: "2026-11-12T00:00:00+05:30",
-    ends_at: "2026-11-19T23:59:59+05:30",
-    until_date_label: "19 Nov 2026",
-    regular_from_date_label: "20 Nov 2026",
+    started_at: null,
+    ends_at: null,
+    until_date_label: null,
+    regular_from_date_label: null,
     copy_template: "Launch price until {until_date}. Regular price ₹{mrp_formatted} from {from_date}."
   },
   feature_flags: {
     notify_me_higher_tiers: true,
-    notify_me_tiers: ["report_advanced", "report_premium"]
+    notify_me_tiers: ["report_advanced", "report_premium"],
+    waitlist_display_label: "Coming soon, notify me"
   },
   core_reports: {
     report_basic: {
@@ -872,30 +873,45 @@ const PACK_CATALOG = {
 function resolveServerLaunchOfferState(env = null, nowMs = null) {
   const lo = PACK_CATALOG.launch_offer || {};
   if (lo.enabled === false) {
-    return { active: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
+    return { active: false, configured: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
   }
+  const rawStarts = (env && env.NV_LAUNCH_STARTS_AT && String(env.NV_LAUNCH_STARTS_AT).trim())
+    ? String(env.NV_LAUNCH_STARTS_AT).trim()
+    : ((env && env.NV_LAUNCH_STARTED_AT && String(env.NV_LAUNCH_STARTED_AT).trim())
+      ? String(env.NV_LAUNCH_STARTED_AT).trim()
+      : '');
   const rawEnds = (env && env.NV_LAUNCH_ENDS_AT && String(env.NV_LAUNCH_ENDS_AT).trim())
     ? String(env.NV_LAUNCH_ENDS_AT).trim()
-    : (lo.ends_at || '2026-11-19T23:59:59+05:30');
-  const rawStarted = (env && env.NV_LAUNCH_STARTED_AT && String(env.NV_LAUNCH_STARTED_AT).trim())
-    ? String(env.NV_LAUNCH_STARTED_AT).trim()
-    : (lo.started_at || '2026-11-12T00:00:00+05:30');
-  const endMs = rawEnds ? Date.parse(rawEnds) : NaN;
-  if (Number.isNaN(endMs)) {
-    return { active: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
+    : '';
+  if (!rawStarts || !rawEnds) {
+    return { active: false, configured: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
+  }
+  const startMs = Date.parse(rawStarts);
+  const endMs = Date.parse(rawEnds);
+  if (Number.isNaN(startMs) || Number.isNaN(endMs) || endMs <= startMs) {
+    return { active: false, configured: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
   }
   const currentMs = typeof nowMs === 'number' ? nowMs : Date.now();
-  const active = currentMs <= endMs;
+  const active = currentMs >= startMs && currentMs <= endMs;
   const IST_OFFSET_MS = 5.5 * 3600 * 1000;
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const uIst = new Date(endMs + IST_OFFSET_MS);
   const fIst = new Date(endMs + 1000 + IST_OFFSET_MS);
-  const untilDate = uIst.getUTCDate() + ' ' + months[uIst.getUTCMonth()] + ' ' + uIst.getUTCFullYear();
-  const fromDate = fIst.getUTCDate() + ' ' + months[fIst.getUTCMonth()] + ' ' + fIst.getUTCFullYear();
+  const isShortWindow = (endMs - startMs) < (24 * 3600 * 1000);
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const untilDate = isShortWindow
+    ? `${uIst.getUTCDate()} ${months[uIst.getUTCMonth()]} ${uIst.getUTCFullYear()}, ${pad2(uIst.getUTCHours())}:${pad2(uIst.getUTCMinutes())} IST`
+    : `${uIst.getUTCDate()} ${months[uIst.getUTCMonth()]} ${uIst.getUTCFullYear()}`;
+  const fromDate = isShortWindow
+    ? `${fIst.getUTCDate()} ${months[fIst.getUTCMonth()]} ${fIst.getUTCFullYear()}, ${pad2(fIst.getUTCHours())}:${pad2(fIst.getUTCMinutes())} IST`
+    : `${fIst.getUTCDate()} ${months[fIst.getUTCMonth()]} ${fIst.getUTCFullYear()}`;
   return {
     active,
-    startedAt: rawStarted,
+    configured: true,
+    startedAt: new Date(startMs).toISOString(),
     endsAt: new Date(endMs).toISOString(),
+    rawStartsAt: rawStarts,
+    rawEndsAt: rawEnds,
     untilDate,
     fromDate
   };
@@ -916,23 +932,42 @@ function getPackById(packId, env = null, nowMs = null) {
   const key = aliases[p] || p;
   const base = PACK_CATALOG.core_reports[key] || PACK_CATALOG.charm_ai[key] || PACK_CATALOG.bundles[key] || null;
   if (!base) return null;
+  const waitlistLabel = (PACK_CATALOG.feature_flags && PACK_CATALOG.feature_flags.waitlist_display_label) || 'Coming soon, notify me';
+  if (isNotifyMeHigherTiersEnabled(env) && (key === 'report_advanced' || key === 'report_premium')) {
+    return Object.assign({}, base, {
+      waitlist_only: true,
+      display_price_label: waitlistLabel,
+      struck_mrp_inr: null,
+      launch_offer_active: false,
+      launch_offer_copy: ''
+    });
+  }
   if (PACK_CATALOG.core_reports[key] && base.mrp_inr) {
     const launchState = resolveServerLaunchOfferState(env, nowMs);
     if (!launchState.active) {
       return Object.assign({}, base, {
+        waitlist_only: false,
         launch_price_inr: base.price_inr,
         launch_amount_paise: base.amount_paise,
         price_inr: base.mrp_inr,
         amount_paise: base.mrp_paise || (base.mrp_inr * 100),
         struck_mrp_inr: null,
-        launch_offer_active: false
+        launch_offer_active: false,
+        launch_offer_copy: ''
       });
     }
+    const copyTpl = (PACK_CATALOG.launch_offer && PACK_CATALOG.launch_offer.copy_template) || 'Launch price until {until_date}. Regular price ₹{mrp_formatted} from {from_date}.';
+    const launchCopy = copyTpl
+      .replace('{until_date}', launchState.untilDate)
+      .replace('{mrp_formatted}', Number(base.mrp_inr).toLocaleString('en-IN'))
+      .replace('{from_date}', launchState.fromDate);
     return Object.assign({}, base, {
+      waitlist_only: false,
       launch_price_inr: base.price_inr,
       launch_amount_paise: base.amount_paise,
       struck_mrp_inr: base.mrp_inr,
-      launch_offer_active: true
+      launch_offer_active: true,
+      launch_offer_copy: launchCopy
     });
   }
   return base;
@@ -2727,55 +2762,141 @@ export {
   dispatchWaitlistNotificationsForPack,
   memoryStore
 };
+function isPreviewRequest(request, env) {
+  const envMode = String((env && env.ENVIRONMENT) || '').trim().toLowerCase();
+  if (envMode === 'preview') return true;
+  try {
+    const u = new URL(request.url);
+    const h = (u.hostname || '').toLowerCase();
+    if (h.endsWith('.pages.dev') || h.startsWith('preview.')) return true;
+  } catch (_) {}
+  return false;
+}
+
+function escapeHtmlAttr(val) {
+  return String(val == null ? '' : val)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function buildPreviewLaunchBannerHtml(launchState, basicPack) {
+  const configured = Boolean(launchState && launchState.configured);
+  const active = Boolean(launchState && launchState.active);
+  const startsRaw = configured ? (launchState.rawStartsAt || launchState.startedAt) : 'unset';
+  const endsRaw = configured ? (launchState.rawEndsAt || launchState.endsAt) : 'unset';
+  const currentPriceLabel = active
+    ? `Launch price active: ₹${basicPack.price_inr} (regular ₹${basicPack.struck_mrp_inr || basicPack.mrp_inr})`
+    : `Regular price active: ₹${basicPack.price_inr}`;
+  return `<div id="nv-preview-launch-banner" role="region" aria-label="Preview launch window status" data-launch-configured="${configured ? 'true' : 'false'}" data-launch-active="${active ? 'true' : 'false'}" data-starts-at="${escapeHtmlAttr(startsRaw)}" data-ends-at="${escapeHtmlAttr(endsRaw)}" style="background:#FFFDF7;border-bottom:2px solid #C9A227;color:#523E28;padding:8px 16px;font-family:Inter,system-ui,sans-serif;font-size:12.5px;line-height:1.45;text-align:center;position:relative;z-index:9999;">` +
+    `<strong style="color:#8B6914;letter-spacing:0.06em;text-transform:uppercase;">Preview Window</strong> &middot; ` +
+    `<span>NV_LAUNCH_STARTS_AT: <code>${escapeHtmlAttr(startsRaw)}</code></span> &middot; ` +
+    `<span>NV_LAUNCH_ENDS_AT: <code>${escapeHtmlAttr(endsRaw)}</code></span> &middot; ` +
+    `<strong id="nv-preview-launch-state" style="color:${active ? '#16835B' : '#8B6914'};">${escapeHtmlAttr(currentPriceLabel)}</strong>` +
+    `<span id="nv-preview-launch-countdown" style="margin-left:6px;color:#7A654D;"></span>` +
+    `<script>(function(){var elCnt=document.getElementById('nv-preview-launch-countdown');var elSt=document.getElementById('nv-preview-launch-state');var sRaw=${JSON.stringify(configured ? (launchState.startedAt || '') : '')};var eRaw=${JSON.stringify(configured ? (launchState.endsAt || '') : '')};if(!sRaw||!eRaw||!elCnt)return;var sMs=Date.parse(sRaw),eMs=Date.parse(eRaw);if(isNaN(sMs)||isNaN(eMs))return;var wasActive=(Date.now()>=sMs&&Date.now()<=eMs);function tick(){var now=Date.now();var isAct=(now>=sMs&&now<=eMs);if(isAct){var rem=Math.max(0,Math.ceil((eMs-now)/1000));var m=Math.floor(rem/60),s=rem%60;elCnt.textContent='(switches to regular ₹399 in '+m+'m '+String(s).padStart(2,'0')+'s)';}else if(now<sMs){var wait=Math.max(0,Math.ceil((sMs-now)/1000));elCnt.textContent='(starts in '+wait+'s)';}else{elCnt.textContent='(window ended — regular price ₹399 active)';}if(isAct!==wasActive){wasActive=isAct;if(elSt){elSt.textContent=isAct?'Launch price active: ₹199 (regular ₹399)':'Regular price active: ₹399';elSt.style.color=isAct?'#16835B':'#8B6914';}try{window.dispatchEvent(new CustomEvent('nv:launch-window-changed',{detail:{active:isAct}}));}catch(_){}}}tick();setInterval(tick,1000);})();</script>` +
+    `</div>`;
+}
+
 export default {
   memoryStore,
   async fetch(request, env, ctx) {
-    try {
-      const response = await this._handleRequest(request, env, ctx);
-      const url = new URL(request.url);
-      if (
-        url.pathname.startsWith('/api/') ||
-        url.pathname.startsWith('/dashboard') ||
-        url.pathname.includes('/reports/download') ||
-        url.pathname.endsWith('.pdf')
-      ) {
-        const newHeaders = new Headers(response.headers);
-        if (!response.headers.has('Cache-Control')) {
+    const isPreview = isPreviewRequest(request, env);
+    const finalizeResponse = (resp, forceNoCache = false) => {
+      if (!isPreview && !forceNoCache) return resp;
+      const newHeaders = new Headers(resp.headers);
+      if (isPreview) {
+        newHeaders.set('X-Robots-Tag', 'noindex');
+      }
+      if (forceNoCache) {
+        if (!resp.headers.has('Cache-Control')) {
           newHeaders.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
         }
         newHeaders.set('Pragma', 'no-cache');
         newHeaders.set('Expires', '0');
-        return new Response(response.body, {
+      }
+      const isRedirect = resp.status >= 300 && resp.status < 400;
+      return new Response(isRedirect ? null : resp.body, {
+        status: resp.status,
+        statusText: resp.statusText,
+        headers: newHeaders
+      });
+    };
+    try {
+      const response = await this._handleRequest(request, env, ctx);
+      const url = new URL(request.url);
+      const forceNoCache = (
+        url.pathname.startsWith('/api/') ||
+        url.pathname.startsWith('/dashboard') ||
+        url.pathname.includes('/reports/download') ||
+        url.pathname.endsWith('.pdf')
+      );
+      const ct = (response.headers.get('Content-Type') || '').toLowerCase();
+      if (request.method === 'GET' && response.status === 200 && ct.includes('text/html')) {
+        const rawHtml = await response.text();
+        const launchState = resolveServerLaunchOfferState(env);
+        const notifyFlag = isNotifyMeHigherTiersEnabled(env);
+        const basicPack = getPackById('report_basic', env);
+        const cfgScript = `<script id="nv-server-launch-config">window.__NV_LAUNCH_STARTS_AT=${JSON.stringify(launchState.configured ? launchState.rawStartsAt : null)};window.__NV_LAUNCH_ENDS_AT=${JSON.stringify(launchState.configured ? launchState.rawEndsAt : null)};window.__NV_NOTIFY_ME_HIGHER_TIERS=${JSON.stringify(notifyFlag)};window.__NV_IS_PREVIEW=${JSON.stringify(isPreview)};</script>`;
+        let modifiedHtml = rawHtml;
+        if (!modifiedHtml.includes('id="nv-server-launch-config"')) {
+          if (/<\/head>/i.test(modifiedHtml)) {
+            modifiedHtml = modifiedHtml.replace(/<\/head>/i, cfgScript + '</head>');
+          } else {
+            modifiedHtml = cfgScript + modifiedHtml;
+          }
+        }
+        if (isPreview && !modifiedHtml.includes('id="nv-preview-launch-banner"')) {
+          const bannerHtml = buildPreviewLaunchBannerHtml(launchState, basicPack);
+          if (/<body[^>]*>/i.test(modifiedHtml)) {
+            modifiedHtml = modifiedHtml.replace(/<body[^>]*>/i, (match) => match + bannerHtml);
+          } else {
+            modifiedHtml = bannerHtml + modifiedHtml;
+          }
+        }
+        const htmlHeaders = new Headers(response.headers);
+        htmlHeaders.delete('Content-Length');
+        if (isPreview) {
+          htmlHeaders.set('X-Robots-Tag', 'noindex');
+          htmlHeaders.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        }
+        const htmlResp = new Response(modifiedHtml, {
           status: response.status,
           statusText: response.statusText,
-          headers: newHeaders
+          headers: htmlHeaders
         });
+        return finalizeResponse(htmlResp, forceNoCache);
       }
-      return response;
+      return finalizeResponse(response, forceNoCache);
     } catch (err) {
       if (err && err.code === 'MISSING_SECRET') {
+        const errHeaders = {
+          'Content-Type': 'application/json',
+          ...getCorsHeaders(request, env)
+        };
+        if (isPreview) errHeaders['X-Robots-Tag'] = 'noindex';
         return new Response(JSON.stringify({
           success: false,
           error: err.message,
           missing_secret: err.secretName
         }), {
           status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-            ...getCorsHeaders(request, env)
-          }
+          headers: errHeaders
         });
       }
       console.error('[Unhandled_Worker_Error]', err);
+      const errHeaders = {
+        'Content-Type': 'application/json',
+        ...getCorsHeaders(request, env)
+      };
+      if (isPreview) errHeaders['X-Robots-Tag'] = 'noindex';
       return new Response(JSON.stringify({
         success: false,
         error: err && err.message ? err.message : 'Internal server error'
       }), {
         status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          ...getCorsHeaders(request, env)
-        }
+        headers: errHeaders
       });
     }
   },
@@ -2843,8 +2964,11 @@ export default {
       '/sample-roadmap/': '/sample_roadmap/',
       '/roadmap-preview': '/sample_roadmap/',
       '/roadmap-preview/': '/sample_roadmap/',
-      '/reports': '/reports_catalogue/',
-      '/reports/': '/reports_catalogue/',
+      '/reports': '/reports/',
+      '/reports.html': '/reports/',
+      '/reports_catalogue': '/reports/',
+      '/reports_catalogue/': '/reports/',
+      '/reports_catalogue.html': '/reports/',
       // Every /tools/<slug> -> single-hop 301 to canonical /calculators/<slug>/
       '/tools/lo-shu-grid': '/calculators/lo-shu-grid/',
       '/tools/lo-shu-grid/': '/calculators/lo-shu-grid/',
@@ -4774,7 +4898,7 @@ export default {
         return new Response(JSON.stringify({
           success: false,
           code: 'TIER_WAITLIST_ONLY',
-          error: 'This report edition is currently in Notify Me launch mode. Anveil my alignments (₹199) is open for immediate checkout.'
+          error: 'Coming soon, notify me. This report edition is currently waitlist-only; Anveil my alignments is open for immediate checkout.'
         }), { status: 409, headers: corsHeaders });
       }
 
@@ -4965,6 +5089,7 @@ export default {
             body: JSON.stringify({
               amount: amountPaise,
               currency: 'INR',
+              payment_capture: 1,
               receipt: `nv_rcpt_${internalOrderId}`,
               notes: {
                 pack_id: pack.pack_id,
@@ -6078,6 +6203,7 @@ export default {
       const formattedReceipts = receipts.map(r => {
         const packInfo = getPackById(r.pack_id, env, Number(r.created_at || Date.now()));
         return {
+          document_type: 'Payment receipt',
           order_id: r.order_id,
           payment_id: r.rzp_payment_id || r.rzp_order_id || 'N/A',
           pack_id: r.pack_id,
@@ -6381,11 +6507,52 @@ export default {
         'Vary': 'Origin'
       };
       const notifyFlag = isNotifyMeHigherTiersEnabled(env);
+      const launchState = resolveServerLaunchOfferState(env);
+      const basicResolved = getPackById('report_basic', env);
+      const waitlistLabel = (PACK_CATALOG.feature_flags && PACK_CATALOG.feature_flags.waitlist_display_label) || 'Coming soon, notify me';
+      const resolvedCoreReports = {};
+      for (const [rk, rv] of Object.entries(PACK_CATALOG.core_reports || {})) {
+        if (notifyFlag && (rk === 'report_advanced' || rk === 'report_premium')) {
+          resolvedCoreReports[rk] = {
+            pack_id: rv.pack_id,
+            tier_id: rv.tier_id,
+            name: rv.name,
+            descriptor: rv.descriptor,
+            pages: rv.pages,
+            waitlist_only: true,
+            display_price_label: waitlistLabel,
+            price_inr: null,
+            amount_paise: null,
+            mrp_inr: null,
+            mrp_paise: null,
+            struck_mrp_inr: null,
+            launch_offer_active: false,
+            launch_offer_copy: '',
+            badge: rv.badge || null,
+            status: 'waitlist'
+          };
+        } else if (rk === 'report_basic' && basicResolved) {
+          resolvedCoreReports[rk] = basicResolved;
+        } else {
+          resolvedCoreReports[rk] = getPackById(rk, env);
+        }
+      }
       const catalogPayload = {
         ...PACK_CATALOG,
+        launch_offer: {
+          ...PACK_CATALOG.launch_offer,
+          configured: launchState.configured,
+          active: launchState.active,
+          started_at: launchState.startedAt,
+          ends_at: launchState.endsAt,
+          until_date_label: launchState.untilDate || null,
+          regular_from_date_label: launchState.fromDate || null
+        },
+        core_reports: resolvedCoreReports,
         feature_flags: {
           ...PACK_CATALOG.feature_flags,
-          notify_me_higher_tiers: notifyFlag
+          notify_me_higher_tiers: notifyFlag,
+          waitlist_display_label: waitlistLabel
         },
         ladder_recommendation_rule: {
           when_notify_me_true: 'report_basic',
@@ -6553,6 +6720,7 @@ export default {
             body: JSON.stringify({
               amount: amountPaise,
               currency: 'INR',
+              payment_capture: 1,
               receipt: `rcpt_${orderId}`,
               notes: {
                 product_id: 'planner_2027',
@@ -8669,7 +8837,7 @@ export default {
       const assetResp = await env.ASSETS.fetch(request);
       if (url.search && assetResp && assetResp.status === 200) {
         const ct = (assetResp.headers.get('Content-Type') || '').toLowerCase();
-        const noindexPrefixes = ['/dashboard', '/login', '/signup', '/your-reading', '/charm-ai/chat', '/practitioner', '/admin', '/demo', '/logo-preview', '/sample2'];
+        const noindexPrefixes = ['/dashboard', '/login', '/signup', '/your-reading', '/charm-ai/chat', '/practitioner', '/admin', '/demo', '/logo-preview', '/sample2', '/cancel', '/year-2027'];
         const isNoindexRoute = noindexPrefixes.some(p => url.pathname === p || url.pathname.startsWith(p + '/'));
         if (ct.includes('text/html') && !isNoindexRoute) {
           const cleanCanonPath = url.pathname === '/' ? '/' : (url.pathname.endsWith('/') ? url.pathname : url.pathname + '/');

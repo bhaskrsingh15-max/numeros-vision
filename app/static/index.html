@@ -1701,7 +1701,7 @@
               <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
             </button>
             <ul class="nv-submenu">
-              <li><a href="/reports_catalogue/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/reports/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
               <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
               <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
             </ul>
@@ -1764,7 +1764,7 @@
           <span>Start Free Calculation</span>
           <span>✦</span>
         </a>
-        <a href="/reports_catalogue/" class="btn-secondary-pearl">
+        <a href="/reports/" class="btn-secondary-pearl">
           <span>Explore Personalised Reports</span>
           <span>→</span>
         </a>
@@ -2063,7 +2063,7 @@
               Start with your <strong>Birth Number (Mulank)</strong> and <strong>Life Path</strong> to understand your foundational mind and trajectory. When ready for comprehensive multi-year dasha forecasts, explore our personalised dossiers.
             </p>
           </div>
-          <a href="/reports_catalogue/" class="btn-primary-gold" style="font-size:0.84rem; padding:10px 20px; white-space:nowrap; text-decoration:none;">
+          <a href="/reports/" class="btn-primary-gold" style="font-size:0.84rem; padding:10px 20px; white-space:nowrap; text-decoration:none;">
             <span>Browse Personalised Reports →</span>
           </a>
         </div>
@@ -2398,7 +2398,7 @@
           <a href="/consultation/" class="btn-primary-gold" style="justify-content:center; padding:14px 24px; font-weight:700; text-decoration:none; text-align:center;">
             Express My Interest ✦
           </a>
-          <a href="/reports_catalogue/" class="btn-secondary-pearl" style="justify-content:center; font-size:0.82rem; padding:8px 16px; text-decoration:none; text-align:center;">
+          <a href="/reports/" class="btn-secondary-pearl" style="justify-content:center; font-size:0.82rem; padding:8px 16px; text-decoration:none; text-align:center;">
             View Standalone Reports Catalogue →
           </a>
         </div>
@@ -2850,7 +2850,7 @@
             <li><a href="/calculators/logo-intelligence/">Logo Intelligence Studio</a></li>
             <li><a href="/charm-ai/">Charm AI Assistant</a></li>
 
-            <li><a href="/reports_catalogue/">Reports Catalogue</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
 
             <li><a href="/sample">Sample Dossier</a></li>
 
@@ -3135,6 +3135,7 @@
 
   <!-- ─────────────────── CLIENT LOGIC SCRIPTS ─────────────────── -->
 
+  <script src="/static/js/nv_pricing_catalog.js?v=1.2.0"></script>
   <script>
 
     function openModal(id) {
@@ -3511,10 +3512,12 @@
       if (presEl) presEl.textContent = presentDigits.join(', ') || 'None';
       if (missEl) missEl.textContent = missingDigits.join(', ') || 'None';
 
-      // Standard Lo Shu 9 Cells Mapping (time-resolved via NVPricingCatalog when available)
-      const _idxCat = window.NVPricingCatalog || null;
-      const _idxPremFmt = _idxCat ? _idxCat.getFormattedPrice('report_premium') : '₹1,050';
-      const _idxAdvFmt = _idxCat ? _idxCat.getFormattedPrice('report_advanced') : '₹510';
+      // Standard Lo Shu 9 Cells Mapping (time-resolved via NV_PRICING when available)
+      const _idxPr = window.NV_PRICING || null;
+      const _idxPremWaitlist = _idxPr && typeof _idxPr.isNotifyMeTier === 'function' ? _idxPr.isNotifyMeTier('report_premium') : true;
+      const _idxAdvWaitlist = _idxPr && typeof _idxPr.isNotifyMeTier === 'function' ? _idxPr.isNotifyMeTier('report_advanced') : true;
+      const _idxPremFmt = _idxPremWaitlist ? 'Coming soon, notify me' : ((_idxPr && _idxPr.formatPrice) ? _idxPr.formatPrice('report_premium') : 'Coming soon, notify me');
+      const _idxAdvFmt = _idxAdvWaitlist ? 'Coming soon, notify me' : ((_idxPr && _idxPr.formatPrice) ? _idxPr.formatPrice('report_advanced') : 'Coming soon, notify me');
       const cellDefs = [
         { num: 4, label: 'Wood · SE', unsealPrice: _idxPremFmt, explorePrice: _idxAdvFmt },
         { num: 9, label: 'Fire · S', unsealPrice: _idxPremFmt, explorePrice: _idxAdvFmt },
@@ -3608,18 +3611,24 @@
       const presentList = (_idxLastCalculatedData.present && _idxLastCalculatedData.present.length > 0) ? _idxLastCalculatedData.present.join(', ') : 'None';
       const yogaPct = _idxLastCalculatedData.yogaPct || 25;
 
-      const _cat = window.NVPricingCatalog || null;
-      const _premAmt = _cat ? _cat.getPrice('report_premium') : 1050;
-      const _advAmt = _cat ? _cat.getPrice('report_advanced') : 510;
-      const _basAmt = _cat ? _cat.getPrice('report_basic') : 199;
-      const _premStr = _cat ? _cat.getFormattedPrice('report_premium') : '₹1,050';
-      const _advStr = _cat ? _cat.getFormattedPrice('report_advanced') : '₹510';
-      const _basStr = _cat ? _cat.getFormattedPrice('report_basic') : '₹199';
+      const _pr = window.NV_PRICING || null;
+      const _premWait = _pr && typeof _pr.isNotifyMeTier === 'function' ? _pr.isNotifyMeTier('report_premium') : true;
+      const _advWait = _pr && typeof _pr.isNotifyMeTier === 'function' ? _pr.isNotifyMeTier('report_advanced') : true;
+      const _premAmt = (!_premWait && _pr && _pr.getPrice) ? (_pr.getPrice('report_premium') || 0) : 0;
+      const _advAmt = (!_advWait && _pr && _pr.getPrice) ? (_pr.getPrice('report_advanced') || 0) : 0;
+      const _basAmt = (_pr && _pr.getPrice) ? (_pr.getPrice('report_basic') || 399) : 399;
+      const _premStr = _premWait ? 'Coming soon, notify me' : ((_pr && _pr.formatPrice) ? _pr.formatPrice('report_premium') : 'Coming soon, notify me');
+      const _advStr = _advWait ? 'Coming soon, notify me' : ((_pr && _pr.formatPrice) ? _pr.formatPrice('report_advanced') : 'Coming soon, notify me');
+      const _basStr = (_pr && _pr.formatPrice) ? _pr.formatPrice('report_basic') : '₹399';
+      const _basStruck = (_pr && _pr.getStruckMrp) ? _pr.getStruckMrp('report_basic') : null;
+      const _basPriceHtml = _basStruck ? `${_basStr} <s style="font-size:0.65em; opacity:0.65; font-weight:500;">₹${Number(_basStruck).toLocaleString('en-IN')}</s>` : _basStr;
 
       if (offerType === 'missing') {
         const numText = specificNum ? `(Number ${specificNum} Karma Void)` : `[${missingList}]`;
+        const premCtaLabel = _premWait ? 'COMING SOON, NOTIFY ME &rarr;' : `ANVEIL EVERY CHARM (${_premStr}) &rarr;`;
+        const premSubNote = _premWait ? '✉ Join the waitlist on the next step · Or start immediately with Anveil my alignments (3 pages)' : '🔒 Ready Within Minutes · Private &amp; Secure · Authentic Guidance';
         pitchCard.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:8px;">
             <div>
               <div style="font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#8B6914;">
                 🔒 ANVEIL EVERY CHARM · COMPLETE NUMEROLOGY REPORT, 32 PAGES
@@ -3629,8 +3638,8 @@
               </div>
             </div>
             <div style="text-align:right;">
-              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#8B6914;">${_premStr}</span>
-              </div>
+              <span style="font-family:'Cinzel',serif; font-size:${_premWait ? '0.92rem' : '1.6rem'}; font-weight:800; color:#8B6914;">${_premStr}</span>
+            </div>
           </div>
 
           <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
@@ -3654,16 +3663,18 @@
           </div>
 
           <button type="button" onclick="launchIndexOfferCheckout('report_premium', ${_premAmt}, 'Anveil every charm · Complete Numerology Report, 32 pages')" style="width:100%; padding:14px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(201,162,39,0.35); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-            ANVEIL EVERY CHARM (${_premStr}) &rarr;
+            ${premCtaLabel}
           </button>
           <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
-            🔒 Ready Within Minutes · Private &amp; Secure · Authentic Guidance
+            ${premSubNote}
           </div>
         `;
       } else if (offerType === 'present') {
         const numText = specificNum ? `(Number ${specificNum})` : `[${presentList}]`;
+        const advCtaLabel = _advWait ? 'COMING SOON, NOTIFY ME &rarr;' : `ANVEIL MY GLOWING CHARMS (${_advStr}) &rarr;`;
+        const advSubNote = _advWait ? '✉ Join the waitlist on the next step · Or start immediately with Anveil my alignments (3 pages)' : '🔒 Ready Within Minutes · Private &amp; Secure · Authentic Guidance';
         pitchCard.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:8px;">
             <div>
               <div style="font-size:0.68rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:#16835B;">
                 ✦ ANVEIL MY GLOWING CHARMS · ADVANCED NUMEROLOGY REPORT, 12 PAGES
@@ -3673,8 +3684,8 @@
               </div>
             </div>
             <div style="text-align:right;">
-              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#8B6914;">${_advStr}</span>
-              </div>
+              <span style="font-family:'Cinzel',serif; font-size:${_advWait ? '0.92rem' : '1.6rem'}; font-weight:800; color:#8B6914;">${_advStr}</span>
+            </div>
           </div>
 
           <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
@@ -3697,10 +3708,10 @@
           </div>
 
           <button type="button" onclick="launchIndexOfferCheckout('report_advanced', ${_advAmt}, 'Anveil my glowing charms · Advanced Numerology Report, 12 pages')" style="width:100%; padding:14px; background:linear-gradient(135deg, #16835B 0%, #0F5C3E 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(22,131,91,0.3); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-            ANVEIL MY GLOWING CHARMS (${_advStr}) &rarr;
+            ${advCtaLabel}
           </button>
           <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
-            🔒 Ready Within Minutes · Private &amp; Secure · Authentic Guidance
+            ${advSubNote}
           </div>
         `;
       } else if (offerType === 'yogas') {
@@ -3715,7 +3726,7 @@
               </div>
             </div>
             <div style="text-align:right;">
-              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#8B6914;">${_basStr}</span>
+              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#8B6914;">${_basPriceHtml}</span>
               </div>
           </div>
 
@@ -3747,6 +3758,13 @@
         `;
       }
     }
+    window.addEventListener('nv:launch-window-changed', function () {
+      try {
+        if (document.getElementById('idxPillYogas') && document.getElementById('idxPillYogas').classList.contains('active')) {
+          selectIndexConversionOffer('yogas');
+        }
+      } catch (_) {}
+    });
 
     function launchIndexOfferCheckout(planId, amountInr, planName) {
       const fDay = document.getElementById('f-day');

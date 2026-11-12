@@ -47,9 +47,9 @@ PLAN_DISPLAY_NAMES = {
     "starter_5q": ("Charm AI — Starter 5-Question Query Pack", 199, "/charm-ai/"),
     "growth_10q": ("Charm AI — Growth 10-Question Query Pack", 399, "/charm-ai/"),
     "pro_25q": ("Charm AI — Professional 25-Question Query Pack", 799, "/charm-ai/"),
-    "starter_bundle": ("Starter Twin Bundle (2 Anveil my alignmentss)", 349, "/reports_catalogue/"),
-    "discovery_bundle": ("Discovery Trio Bundle (3 Comprehensive Reports)", 499, "/reports_catalogue/"),
-    "comprehensive_bundle": ("Master Astro-Numerology Suite (Advanced + Remedies)", 999, "/reports_catalogue/"),
+    "starter_bundle": ("Starter Bundle · 2 Alignment Reports", 339, "/reports/"),
+    "discovery_bundle": ("Discovery Bundle · 3 Glowing Charm Reports", 1299, "/reports/"),
+    "comprehensive_bundle": ("Comprehensive Bundle · 5 Glowing Charm Reports", 1999, "/reports/"),
 }
 
 
@@ -95,8 +95,7 @@ def _seed_initial_invoices():
             "service_category": "Digital Dossier",
             "amount_inr": 1050,
             "currency": "INR",
-            "tax_amount": 0,
-            "tax_note": "Exempt under Sec 22, CGST Act 2017 (Individual Supplier — No GST Charged)",
+            "document_type": "Payment receipt",
             "total_paid": 1050,
             "status": "PAID",
             "payment_method": "UPI (Instant)",
@@ -117,8 +116,7 @@ def _seed_initial_invoices():
             "service_category": "Consultation",
             "amount_inr": 1050,
             "currency": "INR",
-            "tax_amount": 0,
-            "tax_note": "Exempt under Sec 22, CGST Act 2017 (Individual Supplier — No GST Charged)",
+            "document_type": "Payment receipt",
             "total_paid": 1050,
             "status": "PAID",
             "payment_method": "Netbanking",
@@ -139,8 +137,7 @@ def _seed_initial_invoices():
             "service_category": "Charm AI Credits",
             "amount_inr": 399,
             "currency": "INR",
-            "tax_amount": 0,
-            "tax_note": "Exempt under Sec 22, CGST Act 2017 (Individual Supplier — No GST Charged)",
+            "document_type": "Payment receipt",
             "total_paid": 399,
             "status": "PAID",
             "payment_method": "UPI (GPay)",
@@ -194,12 +191,12 @@ def create_invoice_record(req: InvoiceCreateRequest) -> Dict[str, Any]:
         resolved = resolve_sku_price(req.plan_id)
         if resolved:
             service_name = resolved.get("name", req.plan_id)
-            default_amount = resolved.get("amount_inr", 999)
-            report_url = "/reports_catalogue/"
+            default_amount = resolved.get("amount_inr") or 399
+            report_url = "/reports/"
         else:
             service_name = req.plan_id.replace("_", " ").title()
-            default_amount = 999
-            report_url = "/reports_catalogue/"
+            default_amount = 399
+            report_url = "/reports/"
 
     final_amount = req.amount_inr if req.amount_inr is not None and req.amount_inr > 0 else default_amount
     ts_iso = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -208,6 +205,8 @@ def create_invoice_record(req: InvoiceCreateRequest) -> Dict[str, Any]:
 
     invoice_data = {
         "invoice_id": invoice_id,
+        "receipt_id": invoice_id,
+        "document_type": "Payment receipt",
         "order_id": req.order_id,
         "payment_id": req.payment_id,
         "gateway": req.gateway or "Razorpay",
@@ -221,14 +220,12 @@ def create_invoice_record(req: InvoiceCreateRequest) -> Dict[str, Any]:
         "service_category": category,
         "amount_inr": final_amount,
         "currency": "INR",
-        "tax_amount": 0,
-        "tax_note": "Exempt under Sec 22, CGST Act 2017 (Individual Supplier — No GST Charged)",
         "total_paid": final_amount,
         "status": "PAID",
         "payment_method": req.payment_method or "UPI / Online Payment",
         "created_at": ts_iso,
         "report_url": report_url,
-        "notes": req.notes or f"Instant confirmation for {service_name}"
+        "notes": req.notes or f"Payment receipt for {service_name}"
     }
 
     # Persist in memory & primary file
@@ -264,10 +261,11 @@ def dispatch_invoice_notification(invoice: Dict[str, Any]):
     subject = f"✦ New Payment Received [{inv_id}]: ₹{amount} from {cust_name}"
     
     formatted_body = (
-        f"NUMEROS VISION — OFFICIAL PAYMENT & INVOICE RECEIPT\n"
+        f"NUMEROS VISION — PAYMENT RECEIPT\n"
         f"--------------------------------------------------\n"
         f"Issued By            : {SUPPLIER_ENTITY}\n"
-        f"Receipt / Invoice No : {inv_id}\n"
+        f"Receipt No           : {inv_id}\n"
+        f"Document Type        : Payment receipt\n"
         f"Transaction Status   : SUCCESS / PAID\n"
         f"Timestamp (UTC)      : {created_at}\n\n"
         f"CLIENT DETAILS:\n"
@@ -276,15 +274,13 @@ def dispatch_invoice_notification(invoice: Dict[str, Any]):
         f"• Phone / WhatsApp   : {cust_phone}\n\n"
         f"PAYMENT BREAKDOWN:\n"
         f"• Service / Package  : {service_name}\n"
-        f"• Net Amount         : ₹{amount}\n"
-        f"• Taxes (GST)        : ₹0.00 (Exempt under Sec 22, CGST Act 2017)\n"
-        f"• Total Paid         : ₹{amount} (All-Inclusive)\n"
+        f"• Amount Paid        : ₹{amount}\n"
         f"• Gateway Payment ID : {payment_id}\n"
         f"• Order Reference    : {order_id}\n\n"
         f"DELIVERY & ACCESS:\n"
         f"• Access Link        : https://numerosvision.com{report_url}\n"
         f"--------------------------------------------------\n"
-        f"Notice: This invoice is generated on an individual consultancy basis without GST levy.\n"
+        f"Notice: Payment receipt issued by {SUPPLIER_ENTITY}.\n"
     )
 
     # 1. Dispatch via Web3Forms
@@ -404,7 +400,7 @@ def get_billing_stats():
             "consultations": consultations_count,
             "charm_ai_credits": charm_count
         },
-        "statutory_note": "Individual consultancy operation under Section 22 CGST Act 2017 exemption threshold"
+        "document_type": "Payment receipt"
     }
 
 

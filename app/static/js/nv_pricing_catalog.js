@@ -12,15 +12,16 @@
   "ladder_order": ["report_premium", "report_advanced", "report_basic"],
   "feature_flags": {
     "notify_me_higher_tiers": true,
-    "notify_me_tiers": ["report_advanced", "report_premium"]
+    "notify_me_tiers": ["report_advanced", "report_premium"],
+    "waitlist_display_label": "Coming soon, notify me"
   },
   "launch_offer": {
     "enabled": true,
     "duration_days": 7,
-    "started_at": "2026-11-12T00:00:00+05:30",
-    "ends_at": "2026-11-19T23:59:59+05:30",
-    "until_date_label": "19 Nov 2026",
-    "regular_from_date_label": "20 Nov 2026",
+    "started_at": null,
+    "ends_at": null,
+    "until_date_label": null,
+    "regular_from_date_label": null,
     "copy_template": "Launch price until {until_date}. Regular price \u20b9{mrp_formatted} from {from_date}."
   },
   "report_tiers": {
@@ -801,21 +802,27 @@
       return CATALOG.charm_ai.charm_single;
     },
 
+    getWaitlistLabel() {
+      return (CATALOG.feature_flags && CATALOG.feature_flags.waitlist_display_label) || 'Coming soon, notify me';
+    },
+
     getLaunchPrice(skuId) {
       const clean = (skuId || '').toLowerCase();
+      if (this.isNotifyMeTier(clean)) return null;
       if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential' || clean === 'alignments') return 199;
       if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master' || clean === 'glowing') return 510;
       if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine' || clean === 'every_charm') return 1050;
       if (clean === 'charm_single' || clean === 'charm_starter' || clean === 'starter_5q') return 199;
       if (CATALOG.report_tiers[clean]) return CATALOG.report_tiers[clean].price_inr;
-      return 510;
+      return 199;
     },
 
-    getPrice(skuId, nowMs, endsAtOverride) {
+    getPrice(skuId, nowMs, endsAtOverride, startsAtOverride) {
       const clean = (skuId || '').toLowerCase();
+      if (this.isNotifyMeTier(clean)) return null;
       const mrp = this.getMrp(clean);
       if (mrp !== null) {
-        const state = this.resolveLaunchOfferState(nowMs, endsAtOverride);
+        const state = this.resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride);
         if (!state.active) {
           return mrp;
         }
@@ -825,16 +832,18 @@
 
     getMrp(skuId) {
       const clean = (skuId || '').toLowerCase();
+      if (this.isNotifyMeTier(clean)) return null;
       if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential' || clean === 'alignments') return 399;
       if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master' || clean === 'glowing') return 1020;
       if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine' || clean === 'every_charm') return 2100;
       return null;
     },
 
-    getStruckMrp(skuId, nowMs, endsAtOverride) {
+    getStruckMrp(skuId, nowMs, endsAtOverride, startsAtOverride) {
+      if (this.isNotifyMeTier(skuId)) return null;
       const mrp = this.getMrp(skuId);
       if (mrp === null) return null;
-      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride);
+      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride);
       return state.active ? mrp : null;
     },
 
@@ -847,8 +856,11 @@
       return '';
     },
 
-    formatPrice(skuId, nowMs, endsAtOverride) {
-      return '₹' + this.getPrice(skuId, nowMs, endsAtOverride).toLocaleString('en-IN');
+    formatPrice(skuId, nowMs, endsAtOverride, startsAtOverride) {
+      if (this.isNotifyMeTier(skuId)) return this.getWaitlistLabel();
+      const price = this.getPrice(skuId, nowMs, endsAtOverride, startsAtOverride);
+      if (price === null || price === undefined) return this.getWaitlistLabel();
+      return '₹' + Number(price).toLocaleString('en-IN');
     },
 
     isMvpActive(skuId) {
@@ -874,51 +886,50 @@
     isNotifyMeTier(skuId) {
       if (!this.isNotifyMeHigherTiersEnabled()) return false;
       const clean = (skuId || '').toLowerCase();
-      return ['advanced', 'report_advanced', 'report_master', 'premium', 'report_premium', 'report_divine'].includes(clean);
+      return ['advanced', 'report_advanced', 'report_master', 'glowing', 'premium', 'report_premium', 'report_divine', 'every_charm'].includes(clean);
     },
 
-    resolveLaunchOfferState(nowMs, endsAtOverride) {
+    resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride) {
       const lo = CATALOG.launch_offer || {};
+      const durationDays = Number(lo.duration_days || 7);
       if (lo.enabled === false) {
-        return { active: false, durationDays: 7, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
-      }
-      let localPreviewEndsAt = undefined;
-      let localPreviewNowMs = undefined;
-      if (typeof window !== 'undefined' && window.location) {
-        const host = window.location.hostname || '';
-        if (host === 'localhost' || host === '127.0.0.1') {
-          const sp = new URLSearchParams(window.location.search || '');
-          if (sp.get('nv_launch_preview') === 'expired') {
-            localPreviewNowMs = Date.parse('2026-11-21T12:00:00+05:30');
-          }
-        }
+        return { active: false, configured: false, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
       }
       const rawEnd = endsAtOverride !== undefined
         ? endsAtOverride
-        : ((typeof window !== 'undefined' && window.__NV_LAUNCH_ENDS_AT) || localPreviewEndsAt || lo.ends_at || '2026-11-19T23:59:59+05:30');
-      const rawStart = (typeof window !== 'undefined' && window.__NV_LAUNCH_STARTED_AT) || lo.started_at || '2026-11-12T00:00:00+05:30';
-      const durationDays = Number(lo.duration_days || 7);
-      const endMs = rawEnd ? Date.parse(rawEnd) : NaN;
-      if (Number.isNaN(endMs)) {
-        return { active: false, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
+        : ((typeof window !== 'undefined' && (window.__NV_LAUNCH_ENDS_AT || window.NV_LAUNCH_ENDS_AT)) || '');
+      const rawStart = startsAtOverride !== undefined
+        ? startsAtOverride
+        : ((typeof window !== 'undefined' && (window.__NV_LAUNCH_STARTS_AT || window.NV_LAUNCH_STARTS_AT || window.__NV_LAUNCH_STARTED_AT)) || '');
+      if (!rawEnd || (!rawStart && endsAtOverride === undefined)) {
+        return { active: false, configured: false, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
       }
+      const endMs = Date.parse(rawEnd);
       const startMs = rawStart ? Date.parse(rawStart) : (endMs - durationDays * 86400 * 1000);
+      if (Number.isNaN(endMs) || Number.isNaN(startMs) || endMs <= startMs) {
+        return { active: false, configured: false, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
+      }
       const currentMs = typeof nowMs === 'number'
         ? nowMs
-        : (typeof localPreviewNowMs === 'number'
-          ? localPreviewNowMs
-          : ((typeof window !== 'undefined' && typeof window.__NV_NOW_MS === 'number') ? window.__NV_NOW_MS : Date.now()));
-      const active = currentMs <= endMs;
+        : ((typeof window !== 'undefined' && typeof window.__NV_NOW_MS === 'number') ? window.__NV_NOW_MS : Date.now());
+      const active = currentMs >= startMs && currentMs <= endMs;
       const IST_OFFSET_MS = 5.5 * 3600 * 1000;
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const untilIst = new Date(endMs + IST_OFFSET_MS);
       const fromIst = new Date(endMs + 1000 + IST_OFFSET_MS);
-      const untilDate = untilIst.getUTCDate() + ' ' + months[untilIst.getUTCMonth()] + ' ' + untilIst.getUTCFullYear();
-      const fromDate = fromIst.getUTCDate() + ' ' + months[fromIst.getUTCMonth()] + ' ' + fromIst.getUTCFullYear();
+      const isShortWindow = (endMs - startMs) < (24 * 3600 * 1000);
+      const pad2 = (n) => String(n).padStart(2, '0');
+      const untilDate = isShortWindow
+        ? (untilIst.getUTCDate() + ' ' + months[untilIst.getUTCMonth()] + ' ' + untilIst.getUTCFullYear() + ', ' + pad2(untilIst.getUTCHours()) + ':' + pad2(untilIst.getUTCMinutes()) + ' IST')
+        : (untilIst.getUTCDate() + ' ' + months[untilIst.getUTCMonth()] + ' ' + untilIst.getUTCFullYear());
+      const fromDate = isShortWindow
+        ? (fromIst.getUTCDate() + ' ' + months[fromIst.getUTCMonth()] + ' ' + fromIst.getUTCFullYear() + ', ' + pad2(fromIst.getUTCHours()) + ':' + pad2(fromIst.getUTCMinutes()) + ' IST')
+        : (fromIst.getUTCDate() + ' ' + months[fromIst.getUTCMonth()] + ' ' + fromIst.getUTCFullYear());
       return {
         active,
+        configured: true,
         durationDays,
-        startedAt: Number.isNaN(startMs) ? null : new Date(startMs).toISOString(),
+        startedAt: new Date(startMs).toISOString(),
         endsAt: new Date(endMs).toISOString(),
         untilDate,
         fromDate,
@@ -928,18 +939,17 @@
       };
     },
 
-    formatLaunchOfferCopy(skuId, nowMs, endsAtOverride) {
+    formatLaunchOfferCopy(skuId, nowMs, endsAtOverride, startsAtOverride) {
+      if (this.isNotifyMeTier(skuId)) return '';
       const mrp = this.getMrp(skuId);
       if (mrp === null) return '';
-      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride);
+      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride);
+      if (!state.configured) return '';
       const mrpFormatted = mrp.toLocaleString('en-IN');
       if (state.active) {
         return 'Launch price until ' + state.untilDate + '. Regular price ₹' + mrpFormatted + ' from ' + state.fromDate + '.';
       }
-      if (state.fromDate) {
-        return 'Regular price ₹' + mrpFormatted + ' (effective ' + state.fromDate + ').';
-      }
-      return 'Regular price ₹' + mrpFormatted + '.';
+      return 'Regular price ₹' + mrpFormatted + ' (effective ' + state.fromDate + ').';
     },
 
     recommendLadderTier(gapCount, notifyOverride, tappedContext) {

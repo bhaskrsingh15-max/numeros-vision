@@ -1981,7 +1981,7 @@ async def create_order(req: CreateOrderRequest):
             content={
                 "success": False,
                 "code": "TIER_WAITLIST_ONLY",
-                "detail": "This report edition is currently in Notify Me launch mode. Anveil my alignments (₹199) is open for immediate checkout."
+                "detail": "Coming soon, notify me. This report edition is currently waitlist-only; Anveil my alignments is open for immediate checkout."
             }
         )
 
@@ -1997,30 +1997,20 @@ async def create_order(req: CreateOrderRequest):
     plan_amount_paise = None
     plan_amount_inr = None
 
-    # Authoritative Server-Side Product Pricing (Phase 1: Never trust frontend amounts)
-    MVP_PRICES = {
-        "report_basic": 199,
-        "report_essential": 199,
-        "report_advanced": 510,
-        "report_master": 510,
-        "report_premium": 1050,
-        "report_divine": 1050,
-        "charm_single": 199,
-        "charm_starter": 199,
-        "starter_5q": 199
-    }
-    if plan_key in MVP_PRICES:
-        plan_amount_inr = MVP_PRICES[plan_key]
-        plan_amount_paise = plan_amount_inr * 100
-        plan_name = PLANS.get(plan_key, {}).get("name", plan_key)
+    # Authoritative Server-Side Product Pricing (never trust frontend amounts; resolves launch vs regular via env window)
+    resolved_sku = resolve_sku_price(plan_key)
+    if resolved_sku and resolved_sku.get("amount_inr") is not None:
+        plan_amount_inr = int(resolved_sku["amount_inr"])
+        plan_amount_paise = int(resolved_sku.get("amount_paise") or (plan_amount_inr * 100))
+        plan_name = resolved_sku.get("name", plan_key)
     elif plan_key in PLANS:
         plan = PLANS[plan_key]
         plan_amount_inr = plan["amount_inr"]
         plan_amount_paise = plan.get("amount_paise", plan_amount_inr * 100)
         plan_name = plan["name"]
     else:
-        plan_amount_inr = 510
-        plan_amount_paise = 51000
+        plan_amount_inr = 399
+        plan_amount_paise = 39900
 
     if plan_amount_paise < 100:
         raise HTTPException(status_code=400, detail="Amount must be at least 100 paise (₹1.00)")
@@ -2037,9 +2027,10 @@ async def create_order(req: CreateOrderRequest):
         import razorpay.errors
         client = razorpay.Client(auth=(key_id, key_secret))
         order = client.order.create({
-            "amount":   plan_amount_paise,
-            "currency": currency,
-            "receipt":  receipt,
+            "amount":          plan_amount_paise,
+            "currency":        currency,
+            "receipt":         receipt,
+            "payment_capture": 1,
             "notes": {
                 "plan":   plan_key,
                 "name":   customer_name,

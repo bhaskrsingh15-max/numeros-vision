@@ -29,10 +29,10 @@ Numeros Vision synthesizes classical numerological traditions—Chaldean, Pythag
 - [Calculator Hub](https://numerosvision.com/calculators/): Complete directory of calculators and tools.
 
 ## Personalised PDF Reports & Charm AI
-- [Reports Catalogue](https://numerosvision.com/reports_catalogue/):
-  1. **Anveil every charm** (Complete Numerology Report, 32 pages · ₹1,050 launch price until 19 Nov 2026; regular price ₹2,100 from 20 Nov 2026): Complete multi-tradition blueprint covering all 9 charms, veiled-digit habits, name analysis, Kua directions, and multi-year timing.
-  2. **Anveil my glowing charms** (Advanced Numerology Report, 12 pages · ₹510 launch price until 19 Nov 2026; regular price ₹1,020 from 20 Nov 2026): Repeated-digit strengths, active planes, name resonance, and annual timing.
-  3. **Anveil my alignments** (Basic Numerology Report, 3 pages · ₹199 launch price until 19 Nov 2026; regular price ₹399 from 20 Nov 2026): Essential Mulank, Bhagyank, canonical Kua number, and Lo Shu alignment snapshot.
+- [Reports Catalogue](https://numerosvision.com/reports/):
+  1. **Anveil every charm** (Complete Numerology Report, 32 pages · Coming soon, notify me): Complete multi-tradition blueprint covering all 9 charms, veiled-digit habits, name analysis, Kua directions, and multi-year timing.
+  2. **Anveil my glowing charms** (Advanced Numerology Report, 12 pages · Coming soon, notify me): Repeated-digit strengths, active planes, name resonance, and annual timing.
+  3. **Anveil my alignments** (Basic Numerology Report, 3 pages · ₹399 regular): Essential Mulank, Bhagyank, canonical Kua number, and Lo Shu alignment snapshot.
 - [Charm AI Overview](https://numerosvision.com/charm-ai/): Explains deterministic calculations using a transparent 7-tier clarity structure (Free Exploratory Numerology Q&A, 3 questions after verified sign-up; Guided Numerology Q&A Pack, 5 questions for ₹199).
 - [Methodology](https://numerosvision.com/methodology/) · [About Numerologist Bhaskr Singh](https://numerosvision.com/about/) · [FAQs](https://numerosvision.com/faq/)
 - [Plans & Pricing](https://numerosvision.com/pricing/): Transparent one-time INR pricing with zero recurring subscriptions.

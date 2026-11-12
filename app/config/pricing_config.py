@@ -30,8 +30,10 @@ import os
 CURRENCY = "INR"
 LADDER_ORDER: List[str] = ["report_premium", "report_advanced", "report_basic"]
 LAUNCH_OFFER_DURATION_DAYS: int = 7
-LAUNCH_OFFER_STARTED_AT_DEFAULT: str = "2026-11-12T00:00:00+05:30"
-LAUNCH_OFFER_ENDS_AT_DEFAULT: str = "2026-11-19T23:59:59+05:30"
+LAUNCH_OFFER_DURATION_SECONDS: int = 7 * 24 * 3600
+LAUNCH_OFFER_STARTED_AT_DEFAULT: Optional[str] = None
+LAUNCH_OFFER_ENDS_AT_DEFAULT: Optional[str] = None
+WAITLIST_DISPLAY_LABEL: str = "Coming soon, notify me"
 IST_TZ = timezone(timedelta(hours=5, minutes=30))
 
 # ── 1. PRODUCT FAMILY A: STANDALONE REPORTS (3 UNIFIED TIERS) ────────────────
@@ -543,65 +545,67 @@ def _parse_iso_dt(ts: str) -> datetime:
     return dt
 
 
-def _format_ist_date(dt: datetime) -> str:
+def _format_ist_date(dt: datetime, include_time: bool = False) -> str:
     ist_dt = dt.astimezone(IST_TZ)
-    return f"{ist_dt.day} {ist_dt.strftime('%b %Y')}"
+    base = f"{ist_dt.day} {ist_dt.strftime('%b %Y')}"
+    if include_time:
+        return f"{base}, {ist_dt.strftime('%H:%M')} IST"
+    return base
 
 
 def resolve_launch_offer_state(
     now_iso: Optional[str] = None,
     ends_at_override: Optional[str] = None,
+    starts_at_override: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
-    Resolves the single fixed server-configured launch offer window:
-    - Fixed `ends_at` set once in server config (`packs.json` or `NV_LAUNCH_ENDS_AT`) —
-      never per visitor and never resets.
-    - Before/at `ends_at`: `active=True`, launch prices (`1050`/`510`/`199`) apply with struck regular MRP.
-    - After `ends_at`: `active=False`, regular prices (`2100`/`1020`/`399`) become the displayed AND charged prices,
-      and the strike-through disappears.
+    Resolves the single server-configured launch offer window strictly from
+    `NV_LAUNCH_STARTS_AT` (alias `NV_LAUNCH_STARTED_AT`) and `NV_LAUNCH_ENDS_AT`.
+    - Left unset until go-live (`configured=False`, `active=False` -> regular prices apply with zero strike-through).
+    - Within `[starts_at, ends_at]`: `active=True`, launch price applies on purchasable tiers with struck regular MRP.
+    - Outside `[starts_at, ends_at]`: `active=False`, regular price (`mrp_inr`) applies with no strike-through.
     """
-    started_raw: Optional[str] = LAUNCH_OFFER_STARTED_AT_DEFAULT
-    ends_raw: Optional[str] = ends_at_override
-    enabled: bool = True
+    env_starts = (os.getenv("NV_LAUNCH_STARTS_AT") or os.getenv("NV_LAUNCH_STARTED_AT") or "").strip()
+    env_ends = (os.getenv("NV_LAUNCH_ENDS_AT") or "").strip()
 
-    if ends_raw is None:
-        env_ends = os.getenv("NV_LAUNCH_ENDS_AT")
-        if env_ends and env_ends.strip():
-            ends_raw = env_ends.strip()
-        else:
-            try:
-                packs_path = os.path.join(os.path.dirname(__file__), "packs.json")
-                with open(packs_path, "r", encoding="utf-8") as fh:
-                    packs_data = json.load(fh)
-                lo = packs_data.get("launch_offer", {})
-                enabled = bool(lo.get("enabled", True))
-                started_raw = lo.get("started_at") or LAUNCH_OFFER_STARTED_AT_DEFAULT
-                ends_raw = lo.get("ends_at") or LAUNCH_OFFER_ENDS_AT_DEFAULT
-            except Exception:
-                ends_raw = LAUNCH_OFFER_ENDS_AT_DEFAULT
+    started_raw: Optional[str] = (
+        starts_at_override.strip()
+        if isinstance(starts_at_override, str) and starts_at_override.strip()
+        else (env_starts or None)
+    )
+    ends_raw: Optional[str] = (
+        ends_at_override.strip()
+        if isinstance(ends_at_override, str) and ends_at_override.strip()
+        else (env_ends or None)
+    )
 
-    if not enabled or not ends_raw:
+    if not ends_raw:
         return {
             "active": False,
+            "configured": False,
             "duration_days": LAUNCH_OFFER_DURATION_DAYS,
-            "started_at": started_raw,
-            "ends_at": ends_raw,
+            "duration_hours": LAUNCH_OFFER_DURATION_DAYS * 24,
+            "started_at": None,
+            "ends_at": None,
             "until_date": "",
             "from_date": "",
             "label": "",
         }
 
-    started_dt = _parse_iso_dt(started_raw) if started_raw else None
     ends_dt = _parse_iso_dt(ends_raw)
+    started_dt = _parse_iso_dt(started_raw) if started_raw else (ends_dt - timedelta(days=LAUNCH_OFFER_DURATION_DAYS))
     from_dt = ends_dt + timedelta(seconds=1)
     now_dt = _parse_iso_dt(now_iso) if now_iso else datetime.now(timezone.utc)
-    is_active = now_dt <= ends_dt
-    until_str = _format_ist_date(ends_dt)
-    from_str = _format_ist_date(from_dt)
+    is_active = started_dt <= now_dt <= ends_dt
+    short_window = (ends_dt - started_dt) < timedelta(days=1)
+    until_str = _format_ist_date(ends_dt, include_time=short_window)
+    from_str = _format_ist_date(from_dt, include_time=short_window)
     return {
         "active": is_active,
+        "configured": True,
         "duration_days": LAUNCH_OFFER_DURATION_DAYS,
-        "started_at": started_dt.isoformat() if started_dt else None,
+        "duration_hours": LAUNCH_OFFER_DURATION_DAYS * 24,
+        "started_at": started_dt.isoformat(),
         "ends_at": ends_dt.isoformat(),
         "until_date": until_str,
         "from_date": from_str,
@@ -617,11 +621,15 @@ def format_launch_offer_copy(
     sku_or_tier_id: str,
     now_iso: Optional[str] = None,
     ends_at_override: Optional[str] = None,
+    starts_at_override: Optional[str] = None,
+    notify_me_higher_tiers: Optional[bool] = None,
 ) -> str:
     """
-    Returns exact launch/regular price notice for a report SKU:
-    - Before `ends_at`: 'Launch price until <date>. Regular price ₹X from <date>.'
-    - After `ends_at`:  'Regular price ₹X (effective <date>).'
+    Returns launch/regular price notice ONLY for purchasable report SKUs:
+    - Waitlist tiers (`advanced`, `premium` while `notify_me_higher_tiers=True`): returns `""` (no launch-window copy).
+    - Unset launch window (`configured=False`): returns `""`.
+    - Active window: 'Launch price until <date>. Regular price ₹X from <date>.'
+    - Post-window:   'Regular price ₹X (effective <date>).'
     """
     tier_key = str(sku_or_tier_id or "").strip().lower().replace("report_", "")
     alias = {"essential": "basic", "alignments": "basic", "master": "advanced", "glowing": "advanced", "divine": "premium", "every_charm": "premium"}
@@ -629,8 +637,21 @@ def format_launch_offer_copy(
     tier = REPORT_TIERS.get(tier_key)
     if not tier:
         return ""
+    notify_active = (
+        is_notify_me_higher_tiers_enabled()
+        if notify_me_higher_tiers is None
+        else bool(notify_me_higher_tiers)
+    )
+    if notify_active and tier_key in ("advanced", "premium"):
+        return ""
     mrp_inr = int(tier["mrp_inr"])
-    state = resolve_launch_offer_state(now_iso=now_iso, ends_at_override=ends_at_override)
+    state = resolve_launch_offer_state(
+        now_iso=now_iso,
+        ends_at_override=ends_at_override,
+        starts_at_override=starts_at_override,
+    )
+    if not state.get("configured"):
+        return ""
     if state["active"]:
         return f"Launch price until {state['until_date']}. Regular price ₹{mrp_inr:,} from {state['from_date']}."
     if state.get("from_date"):
@@ -641,19 +662,61 @@ def format_launch_offer_copy(
 def get_all_product_skus(
     now_iso: Optional[str] = None,
     ends_at_override: Optional[str] = None,
+    starts_at_override: Optional[str] = None,
+    notify_me_higher_tiers: Optional[bool] = None,
 ) -> Dict[str, Dict[str, Any]]:
     """
     Returns a unified flat lookup dictionary of all purchasable SKUs with
     authoritative time-resolved price and metadata.
+    Waitlist tiers (`advanced`, `premium` while `notify_me_higher_tiers=True`) carry zero
+    launch-window logic/copy and display `'Coming soon, notify me'`.
     """
     skus: Dict[str, Dict[str, Any]] = {}
-    launch_state = resolve_launch_offer_state(now_iso=now_iso, ends_at_override=ends_at_override)
+    notify_active = (
+        is_notify_me_higher_tiers_enabled()
+        if notify_me_higher_tiers is None
+        else bool(notify_me_higher_tiers)
+    )
+    launch_state = resolve_launch_offer_state(
+        now_iso=now_iso,
+        ends_at_override=ends_at_override,
+        starts_at_override=starts_at_override,
+    )
     launch_active = bool(launch_state.get("active"))
 
-    # Standalone report tiers (automatically switch to regular mrp_inr after fixed ends_at)
+    # Standalone report tiers
     for tier_id, tier in REPORT_TIERS.items():
+        is_waitlist = notify_active and tier_id in ("advanced", "premium")
         mrp_inr = int(tier.get("mrp_inr", tier["price_inr"]))
         mrp_paise = int(tier.get("mrp_paise", mrp_inr * 100))
+        if is_waitlist:
+            skus[f"report_{tier_id}"] = {
+                "sku_id": f"report_{tier_id}",
+                "family": "standalone_report",
+                "name": tier["name"],
+                "descriptor": tier.get("descriptor", ""),
+                "display_name": tier.get("display_name", tier["name"]),
+                "tier": tier_id,
+                "pages": tier["pages"],
+                "waitlist_only": True,
+                "status": "waitlist",
+                "display_price_label": WAITLIST_DISPLAY_LABEL,
+                "launch_price_inr": None,
+                "launch_amount_paise": None,
+                "amount_inr": None,
+                "amount_paise": None,
+                "mrp_inr": None,
+                "mrp_paise": None,
+                "struck_mrp_inr": None,
+                "show_strike_through": False,
+                "launch_offer_active": False,
+                "launch_offer_copy": "",
+                "original_price_inr": None,
+                "currency": CURRENCY,
+                "deliverables": tier["deliverables"],
+            }
+            continue
+
         active_inr = int(tier["price_inr"]) if launch_active else mrp_inr
         active_paise = int(tier["amount_paise"]) if launch_active else mrp_paise
         skus[f"report_{tier_id}"] = {
@@ -664,6 +727,9 @@ def get_all_product_skus(
             "display_name": tier.get("display_name", tier["name"]),
             "tier": tier_id,
             "pages": tier["pages"],
+            "waitlist_only": False,
+            "status": "active",
+            "display_price_label": f"₹{active_inr:,}",
             "launch_price_inr": int(tier["price_inr"]),
             "launch_amount_paise": int(tier["amount_paise"]),
             "amount_inr": active_inr,
@@ -673,7 +739,13 @@ def get_all_product_skus(
             "struck_mrp_inr": mrp_inr if launch_active else None,
             "show_strike_through": launch_active,
             "launch_offer_active": launch_active,
-            "launch_offer_copy": format_launch_offer_copy(tier_id, now_iso=now_iso, ends_at_override=ends_at_override),
+            "launch_offer_copy": format_launch_offer_copy(
+                tier_id,
+                now_iso=now_iso,
+                ends_at_override=ends_at_override,
+                starts_at_override=starts_at_override,
+                notify_me_higher_tiers=notify_active,
+            ),
             "original_price_inr": mrp_inr,
             "currency": CURRENCY,
             "deliverables": tier["deliverables"]
@@ -729,13 +801,20 @@ def resolve_sku_price(
     sku_or_plan_id: str,
     now_iso: Optional[str] = None,
     ends_at_override: Optional[str] = None,
+    starts_at_override: Optional[str] = None,
+    notify_me_higher_tiers: Optional[bool] = None,
 ) -> Optional[Dict[str, Any]]:
     """
     Given a SKU ID or legacy plan ID, safely resolves the authoritative server price.
     Never trusts client input. Switches core reports to regular price (`mrp_inr`) after `ends_at`.
     """
     clean_id = sku_or_plan_id.lower().strip()
-    skus = get_all_product_skus(now_iso=now_iso, ends_at_override=ends_at_override)
+    skus = get_all_product_skus(
+        now_iso=now_iso,
+        ends_at_override=ends_at_override,
+        starts_at_override=starts_at_override,
+        notify_me_higher_tiers=notify_me_higher_tiers,
+    )
 
     if clean_id in skus:
         return skus[clean_id]
@@ -853,12 +932,27 @@ def export_pricing_catalog_json() -> str:
     """Exports full public catalog for frontend consumers and API responses."""
     notify_active = is_notify_me_higher_tiers_enabled()
     launch_offer = resolve_launch_offer_state()
+    public_tiers: Dict[str, Dict[str, Any]] = {}
+    for tid, tval in REPORT_TIERS.items():
+        if notify_active and tid in ("advanced", "premium"):
+            t_copy = dict(tval)
+            t_copy["waitlist_only"] = True
+            t_copy["status_label"] = WAITLIST_DISPLAY_LABEL
+            t_copy["price_inr"] = None
+            t_copy["amount_paise"] = None
+            t_copy["mrp_inr"] = None
+            t_copy["mrp_paise"] = None
+            public_tiers[tid] = t_copy
+        else:
+            public_tiers[tid] = dict(tval)
+
     catalog = {
         "currency": CURRENCY,
         "ladder_order": LADDER_ORDER,
         "feature_flags": {
             "notify_me_higher_tiers": notify_active,
-            "notify_me_tiers": ["report_advanced", "report_premium"]
+            "notify_me_tiers": ["report_advanced", "report_premium"],
+            "waitlist_display_label": WAITLIST_DISPLAY_LABEL,
         },
         "launch_offer": launch_offer,
         "ladder_recommendation_rule": {
@@ -874,11 +968,11 @@ def export_pricing_catalog_json() -> str:
             },
             "default_recommended_tier": recommend_ladder_tier(None, notify_active),
         },
-        "report_tiers": REPORT_TIERS,
+        "report_tiers": public_tiers,
         "supported_topics": SUPPORTED_REPORT_TOPICS,
         "bundles": BUNDLES,
         "charm_ai": CHARM_AI_PACKS,
         "consultation": CONSULTATION_PACKS,
-        "all_skus": get_all_product_skus()
+        "all_skus": get_all_product_skus(notify_me_higher_tiers=notify_active)
     }
     return json.dumps(catalog, indent=2)

@@ -741,15 +741,14 @@
     let _dashboardState = null;
     let _activeSubjectId = null;
 
-    // Canonical active pack catalog from packs.json
+    // Canonical active pack catalog from packs.json (prices resolved dynamically via NV_PRICING)
     const PACK_TIERS = [
       {
         id: 'report_basic',
         name: 'Anveil my alignments',
         descriptor: 'Basic Numerology Report, 3 pages',
         pages: 3,
-        priceInr: (window.NV_PRICING && window.NV_PRICING.getPrice) ? window.NV_PRICING.getPrice('report_basic') : 199,
-        badge: 'ENTRY TIER',
+        badge: 'RECOMMENDED',
         desc: 'Basic Numerology Report, 3 pages · Deterministic Mulank & Bhagyank, Lo Shu 3×3 Grid Matrix & 5-Element Balancing Actions.'
       },
       {
@@ -757,8 +756,7 @@
         name: 'Anveil my glowing charms',
         descriptor: 'Advanced Numerology Report, 12 pages',
         pages: 12,
-        priceInr: (window.NV_PRICING && window.NV_PRICING.getPrice) ? window.NV_PRICING.getPrice('report_advanced') : 510,
-        badge: 'RECOMMENDED',
+        badge: 'COMING SOON',
         desc: 'Advanced Numerology Report, 12 pages · All Basic calculations + Auspicious Windows, Glowing Charms in Depth & Vedic Remedies.'
       },
       {
@@ -766,7 +764,6 @@
         name: 'Anveil every charm',
         descriptor: 'Complete Numerology Report, 32 pages',
         pages: 32,
-        priceInr: (window.NV_PRICING && window.NV_PRICING.getPrice) ? window.NV_PRICING.getPrice('report_premium') : 1050,
         badge: 'BEST VALUE',
         desc: 'Complete Numerology Report, 32 pages · 10-Year Macro Timing Radar, Acoustic Name Balancing & Complete Veiled Charm Synthesis.'
       }
@@ -1085,7 +1082,19 @@
       const isPremiumOwned = userTier === 'premium' || entitlements.includes('report_premium');
 
       container.innerHTML = PACK_TIERS.map(t => {
-        const priceStr = `₹${t.priceInr.toLocaleString('en-IN')}`;
+        const isWaitlist = (window.NV_PRICING && typeof window.NV_PRICING.isNotifyMeTier === 'function')
+          ? window.NV_PRICING.isNotifyMeTier(t.id)
+          : (t.id !== 'report_basic');
+        const resolvedAmt = (!isWaitlist && window.NV_PRICING && window.NV_PRICING.getPrice)
+          ? (window.NV_PRICING.getPrice(t.id) || 399)
+          : 0;
+        const resolvedStruck = (!isWaitlist && window.NV_PRICING && window.NV_PRICING.getStruckMrp)
+          ? window.NV_PRICING.getStruckMrp(t.id)
+          : null;
+        const priceStr = isWaitlist ? 'Coming soon, notify me' : `₹${Number(resolvedAmt).toLocaleString('en-IN')}`;
+        const priceHtml = isWaitlist
+          ? 'Coming soon, notify me'
+          : (resolvedStruck ? `${priceStr} <s style="font-size:0.75em; opacity:0.65; font-weight:500;">₹${Number(resolvedStruck).toLocaleString('en-IN')}</s>` : priceStr);
         const isOwned = (t.id === 'report_basic' && isBasicOwned) ||
                         (t.id === 'report_advanced' && isAdvancedOwned) ||
                         (t.id === 'report_premium' && isPremiumOwned);
@@ -1115,9 +1124,15 @@
               ✓ Purchased · View Status Above
             </button>
           `;
+        } else if (isWaitlist) {
+          buttonHtml = `
+            <a href="/your-reading/?from=dashboard" class="tier-btn" style="text-decoration:none; display:block; text-align:center;">
+              Coming soon, notify me ✉
+            </a>
+          `;
         } else {
           buttonHtml = `
-            <button type="button" onclick="triggerTierCheckout('${t.id}', '${t.name}', ${t.priceInr})" class="tier-btn">
+            <button type="button" onclick="triggerTierCheckout('${t.id}', '${t.name}', ${resolvedAmt})" class="tier-btn">
               Unlock ${t.name.split(' ')[0]} (${priceStr}) 🔒
             </button>
           `;
@@ -1127,10 +1142,10 @@
           <div class="tier-card" id="tierCard_${t.id}" style="${isOwned ? 'border-color:var(--emerald); background:rgba(22,131,91,0.03);' : ''}">
             <div>
               <span class="tier-badge" style="${isOwned ? 'background:var(--emerald-bg); color:var(--emerald); border:1px solid var(--emerald);' : 'background:rgba(201,162,39,0.12); color:var(--gold-dark); border:1px solid rgba(201,162,39,0.3);'}">
-                ${isOwned ? 'PURCHASED ✓' : t.badge}
+                ${isOwned ? 'PURCHASED ✓' : (isWaitlist ? 'WAITLIST' : t.badge)}
               </span>
               <h3 class="tier-title">${t.name}</h3>
-              <div class="tier-price" style="${isOwned ? 'color:var(--emerald);' : ''}">${isOwned ? 'Active Profile Entitlement' : priceStr}</div>
+              <div class="tier-price" style="${isOwned ? 'color:var(--emerald);' : ''}">${isOwned ? 'Active Profile Entitlement' : priceHtml}</div>
               <p class="tier-desc">${t.desc}</p>
             </div>
             ${buttonHtml}
@@ -1138,6 +1153,11 @@
         `;
       }).join('');
     }
+    window.addEventListener('nv:launch-window-changed', function () {
+      try {
+        if (_dashboardState) renderUpgradeTiers(_dashboardState.view || {}, _dashboardState.reports || []);
+      } catch (_) {}
+    });
 
     function renderReceipts(receipts) {
       const tbody = document.getElementById('dashReceiptsTableBody');
@@ -1257,7 +1277,7 @@
           skip_dob_modal: true
         });
       } else {
-        window.location.href = `/reports-catalogue.html?tier=${encodeURIComponent(packId)}`;
+        window.location.href = `/reports/?tier=${encodeURIComponent(packId)}`;
       }
     }
 

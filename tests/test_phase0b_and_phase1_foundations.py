@@ -26,10 +26,13 @@ class TestPhase0BAndPhase1Foundations(unittest.TestCase):
             [
                 "https://numerosvision.com/sitemap-calculators.xml",
                 "https://numerosvision.com/sitemap-numbers.xml",
-                "https://numerosvision.com/sitemap-2027.xml",
                 "https://numerosvision.com/sitemap-reports.xml",
                 "https://numerosvision.com/sitemap-blog.xml",
             ],
+        )
+        self.assertFalse(
+            os.path.exists(os.path.join(DIST_DIR, "sitemap-2027.xml")),
+            "sitemap-2027.xml must remain excluded from dist until Planner disclaimer is approved",
         )
 
         seen_urls = set()
@@ -53,6 +56,39 @@ class TestPhase0BAndPhase1Foundations(unittest.TestCase):
                     re.search(r'<meta\s+name=["\']robots["\']\s+content=["\'][^"\']*noindex', html, re.I),
                     f"Sitemap URL {u} points to a noindex page!",
                 )
+
+        # Verify canonical /reports/ is in sitemap, while /cancel/, /year-2027/, and /reports_catalogue/ are excluded
+        self.assertIn("https://numerosvision.com/reports/", seen_urls)
+        self.assertNotIn("https://numerosvision.com/reports_catalogue/", seen_urls)
+        self.assertNotIn("https://numerosvision.com/cancel/", seen_urls)
+        self.assertNotIn("https://numerosvision.com/year-2027/", seen_urls)
+
+        # Verify /cancel/ and /year-2027/ carry noindex meta directives
+        for noidx_rel in ("cancel/index.html", "year-2027/index.html"):
+            with open(os.path.join(DIST_DIR, *noidx_rel.split("/")), "r", encoding="utf-8") as f:
+                nhtml = f.read()
+            self.assertRegex(
+                nhtml,
+                r'<meta\s+name=["\']robots["\']\s+content=["\'][^"\']*noindex',
+                f"Expected noindex meta tag on {noidx_rel}",
+            )
+
+        # Verify /dashboard/, /login/, /signup/ keep noindex meta tags AND have NO robots.txt Disallow
+        with open(os.path.join(DIST_DIR, "robots.txt"), "r", encoding="utf-8") as f:
+            robots_txt = f.read()
+        for dropped_path, page_rel in [
+            ("/dashboard/", "dashboard/index.html"),
+            ("/login/", "login/index.html"),
+            ("/signup/", "signup/index.html"),
+        ]:
+            self.assertNotIn(
+                f"Disallow: {dropped_path}",
+                robots_txt,
+                f"robots.txt must not Disallow {dropped_path} until Search Console drops it",
+            )
+            with open(os.path.join(DIST_DIR, *page_rel.split("/")), "r", encoding="utf-8") as f:
+                ahtml = f.read()
+            self.assertIn('<meta name="robots" content="noindex, nofollow" />', ahtml)
 
     def test_02_charm_ai_public_overview_vs_noindex_chat_split(self):
         ov_path = os.path.join(DIST_DIR, "charm-ai", "index.html")
@@ -183,63 +219,87 @@ class TestPhase0BAndPhase1Foundations(unittest.TestCase):
                             f"Dangling reference to stitch prototype in {fp}",
                         )
 
-        for page_rel in ("your-reading/index.html", "pricing/index.html", "reports_catalogue/index.html"):
+        for page_rel in ("your-reading/index.html", "pricing/index.html", "reports/index.html"):
             with open(os.path.join(DIST_DIR, *page_rel.split("/")), "r", encoding="utf-8") as f:
                 txt = f.read()
-            self.assertIn("Anveil every charm", txt)
-            self.assertIn("Anveil my glowing charms", txt)
-            self.assertIn("Anveil my alignments", txt)
+            body_txt = txt[txt.index("<body"):]
+            self.assertIn("Anveil every charm", body_txt)
+            self.assertIn("Anveil my glowing charms", body_txt)
+            self.assertIn("Anveil my alignments", body_txt)
+            self.assertIn("Coming soon, notify me", body_txt)
+            self.assertNotIn("Waitlist members get the launch price for 7 days when it opens", txt)
             self.assertLess(
-                txt.index("Anveil every charm"),
-                txt.index("Anveil my glowing charms"),
-                f"Expected High-to-Low order (1050 before 510) in {page_rel}",
+                body_txt.index("Anveil every charm"),
+                body_txt.index("Anveil my glowing charms"),
+                f"Expected High-to-Low order (32p before 12p) in {page_rel}",
             )
             self.assertLess(
-                txt.index("Anveil my glowing charms"),
-                txt.index("Anveil my alignments"),
-                f"Expected High-to-Low order (510 before 199) in {page_rel}",
+                body_txt.index("Anveil my glowing charms"),
+                body_txt.index("Anveil my alignments"),
+                f"Expected High-to-Low order (12p before 3p) in {page_rel}",
             )
 
-    def test_06_launch_offer_fixed_end_timestamp_and_before_after_copy_and_price_switch(self):
+    def test_06_launch_offer_env_only_single_source_and_waitlist_masking(self):
+        from unittest.mock import patch
         from app.config.pricing_config import (
             LAUNCH_OFFER_ENDS_AT_DEFAULT,
             LAUNCH_OFFER_STARTED_AT_DEFAULT,
+            WAITLIST_DISPLAY_LABEL,
             format_launch_offer_copy,
             resolve_launch_offer_state,
             resolve_sku_price,
         )
 
-        self.assertEqual(LAUNCH_OFFER_STARTED_AT_DEFAULT, "2026-11-12T00:00:00+05:30")
-        self.assertEqual(LAUNCH_OFFER_ENDS_AT_DEFAULT, "2026-11-19T23:59:59+05:30")
+        self.assertIsNone(LAUNCH_OFFER_STARTED_AT_DEFAULT)
+        self.assertIsNone(LAUNCH_OFFER_ENDS_AT_DEFAULT)
+        self.assertEqual(WAITLIST_DISPLAY_LABEL, "Coming soon, notify me")
 
-        before_iso = "2026-11-15T12:00:00+05:30"
-        after_iso = "2026-11-20T00:00:01+05:30"
+        # 1. When unset in env, launch offer is inactive/unconfigured and Basic shows regular ₹399
+        with patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("NV_LAUNCH_STARTS_AT", None)
+            os.environ.pop("NV_LAUNCH_STARTED_AT", None)
+            os.environ.pop("NV_LAUNCH_ENDS_AT", None)
+            st_unset = resolve_launch_offer_state()
+            self.assertFalse(st_unset["configured"])
+            self.assertFalse(st_unset["active"])
+            b_unset = resolve_sku_price("report_basic")
+            self.assertEqual(b_unset["amount_inr"], 399)
+            self.assertIsNone(b_unset["struck_mrp_inr"])
+            self.assertEqual(format_launch_offer_copy("report_basic"), "")
+            for wl_sku in ("report_advanced", "report_premium"):
+                w_info = resolve_sku_price(wl_sku)
+                self.assertTrue(w_info["waitlist_only"])
+                self.assertIsNone(w_info["amount_inr"])
+                self.assertIsNone(w_info["struck_mrp_inr"])
+                self.assertEqual(w_info["display_price_label"], "Coming soon, notify me")
+                self.assertEqual(format_launch_offer_copy(wl_sku), "")
 
-        state_before = resolve_launch_offer_state(now_iso=before_iso)
-        state_after = resolve_launch_offer_state(now_iso=after_iso)
-        self.assertTrue(state_before["active"])
-        self.assertFalse(state_after["active"])
+        # 2. When 7x24h window is set via NV_LAUNCH_STARTS_AT & NV_LAUNCH_ENDS_AT:
+        win_env = {
+            "NV_LAUNCH_STARTS_AT": "2027-01-10T00:00:00+05:30",
+            "NV_LAUNCH_ENDS_AT": "2027-01-17T00:00:00+05:30",
+        }
+        before_iso = "2027-01-12T12:00:00+05:30"
+        after_iso = "2027-01-17T00:00:01+05:30"
+        with patch.dict(os.environ, win_env, clear=False):
+            self.assertTrue(resolve_launch_offer_state(now_iso=before_iso)["active"])
+            self.assertFalse(resolve_launch_offer_state(now_iso=after_iso)["active"])
+            b_act = resolve_sku_price("report_basic", now_iso=before_iso)
+            b_exp = resolve_sku_price("report_basic", now_iso=after_iso)
+            self.assertEqual(b_act["amount_inr"], 199)
+            self.assertEqual(b_act["struck_mrp_inr"], 399)
+            self.assertEqual(b_exp["amount_inr"], 399)
+            self.assertIsNone(b_exp["struck_mrp_inr"])
+            # Waitlist tiers STILL have zero launch price, struck price, or offer copy while notify_me_higher_tiers=true
+            for wl_sku in ("report_advanced", "report_premium"):
+                w_act = resolve_sku_price(wl_sku, now_iso=before_iso)
+                self.assertIsNone(w_act["amount_inr"])
+                self.assertIsNone(w_act["struck_mrp_inr"])
+                self.assertEqual(w_act["display_price_label"], "Coming soon, notify me")
+                self.assertEqual(format_launch_offer_copy(wl_sku, now_iso=before_iso), "")
 
-        expected = [
-            ("report_premium", 1050, 2100, "Launch price until 19 Nov 2026. Regular price ₹2,100 from 20 Nov 2026.", "Regular price ₹2,100 (effective 20 Nov 2026)."),
-            ("report_advanced", 510, 1020, "Launch price until 19 Nov 2026. Regular price ₹1,020 from 20 Nov 2026.", "Regular price ₹1,020 (effective 20 Nov 2026)."),
-            ("report_basic", 199, 399, "Launch price until 19 Nov 2026. Regular price ₹399 from 20 Nov 2026.", "Regular price ₹399 (effective 20 Nov 2026)."),
-        ]
-        for sku_id, launch_inr, reg_inr, exp_before_copy, exp_after_copy in expected:
-            sku_b = resolve_sku_price(sku_id, now_iso=before_iso)
-            sku_a = resolve_sku_price(sku_id, now_iso=after_iso)
-            self.assertEqual(sku_b["amount_inr"], launch_inr)
-            self.assertEqual(sku_b["struck_mrp_inr"], reg_inr)
-            self.assertTrue(sku_b["show_strike_through"])
-            self.assertEqual(format_launch_offer_copy(sku_id, now_iso=before_iso), exp_before_copy)
-
-            self.assertEqual(sku_a["amount_inr"], reg_inr)
-            self.assertIsNone(sku_a["struck_mrp_inr"])
-            self.assertFalse(sku_a["show_strike_through"])
-            self.assertEqual(format_launch_offer_copy(sku_id, now_iso=after_iso), exp_after_copy)
-
-    def test_07_plain_product_descriptors_and_zero_per_page_lines(self):
-        for page_rel in ("your-reading/index.html", "pricing/index.html", "reports_catalogue/index.html"):
+    def test_07_plain_product_descriptors_zero_per_page_zero_tax_invoice_and_zero_hardcoded_nov_dates(self):
+        for page_rel in ("your-reading/index.html", "pricing/index.html", "reports/index.html"):
             with open(os.path.join(DIST_DIR, *page_rel.split("/")), "r", encoding="utf-8") as f:
                 txt = f.read()
             self.assertIn("Complete Numerology Report, 32 pages", txt, f"Missing 32-page plain descriptor in {page_rel}")
@@ -249,7 +309,7 @@ class TestPhase0BAndPhase1Foundations(unittest.TestCase):
         for scan_dir in (os.path.join(ROOT, "app"), DIST_DIR):
             for dp, _, fns in os.walk(scan_dir):
                 for fn in fns:
-                    if fn.lower().endswith((".html", ".js", ".py", ".json", ".ts")):
+                    if fn.lower().endswith((".html", ".js", ".py", ".json", ".ts", ".txt")):
                         fp = os.path.join(dp, fn)
                         with open(fp, "r", encoding="utf-8", errors="ignore") as f:
                             txt = f.read()
@@ -258,6 +318,9 @@ class TestPhase0BAndPhase1Foundations(unittest.TestCase):
                             f"Found forbidden per-page price line in {fp}",
                         )
                         self.assertNotIn("per_page_inr", txt, f"Found legacy per_page_inr key in {fp}")
+                        self.assertNotIn("tax invoice", txt.lower(), f"Found forbidden 'tax invoice' in {fp}")
+                        self.assertNotIn("19 nov 2026", txt.lower(), f"Found hardcoded '19 Nov 2026' in {fp}")
+                        self.assertNotIn("20 nov 2026", txt.lower(), f"Found hardcoded '20 Nov 2026' in {fp}")
 
     def test_08_homepage_menu_footer_and_llms_txt_link_straight_to_canonical_calculators(self):
         for check_path in (

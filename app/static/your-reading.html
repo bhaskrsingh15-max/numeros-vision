@@ -1405,18 +1405,18 @@
         </div>
       </div>
 
-      <!-- CORE REPORT TIERS (High-to-Low: ₹1,050 Anveil every charm -> ₹510 Anveil my glowing charms -> ₹199 Anveil my alignments) -->
+      <!-- CORE REPORT TIERS (High-to-Low: Anveil every charm -> Anveil my glowing charms -> Anveil my alignments) -->
       <div class="tiers-grid" id="core-tiers-grid">
 
-        <!-- 1. Anveil every charm (₹1,050 · Best value) -->
+        <!-- 1. Anveil every charm (Waitlist until purchasable) -->
         <div class="tier-card card-report-premium" id="tier-card-premium">
-          <div class="tier-badge" id="tier-badge-premium">BEST VALUE</div>
+          <div class="tier-badge" id="tier-badge-premium">BEST VALUE · NOTIFY ME</div>
           <div>
             <div style="font-size:0.76rem; color:var(--emerald); font-weight:700; letter-spacing:0.02em;">Complete Numerology Report, 32 pages</div>
             <h3 class="tier-name">Anveil every charm</h3>
             <div class="tier-meta">Every Glowing &amp; Veiled Charm · 10-Year Timing Radar</div>
-            <div class="tier-price" id="price-report_premium">₹1,050 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹2,100</span></div>
-            <div class="tier-price-sub" id="launch-sub-report_premium">Launch price until 19 Nov 2026. Regular price ₹2,100 from 20 Nov 2026.</div>
+            <div class="tier-price" id="price-report_premium" style="font-size:1.35rem;">Coming soon, notify me</div>
+            <div class="tier-price-sub" id="launch-sub-report_premium" style="display:none;"></div>
             <ul class="tier-features" id="features-report_premium">
               <li>32-Page Complete Sovereign PDF Blueprint</li>
               <li>Unveils Every Glowing &amp; Veiled Charm in Your Grid</li>
@@ -1425,20 +1425,20 @@
               <li>Complete Technical Appendix with Mathematical Proofs</li>
             </ul>
           </div>
-          <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_premium" onclick="selectTierAndProceed('report_premium')">
-            <span>Anveil every charm</span> <span>&rarr;</span>
+          <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_premium" onclick="openNotifyMeModal('report_premium')">
+            <span>Coming soon, notify me</span> <span>✉</span>
           </button>
         </div>
 
-        <!-- 2. Anveil my glowing charms (₹510) -->
+        <!-- 2. Anveil my glowing charms (Waitlist until purchasable) -->
         <div class="tier-card card-report-advanced" id="tier-card-advanced">
-          <div class="tier-badge" id="tier-badge-advanced" style="display:none;">RECOMMENDED</div>
+          <div class="tier-badge" id="tier-badge-advanced" style="background:var(--ink-muted);">WAITLIST · NOTIFY ME</div>
           <div>
             <div style="font-size:0.76rem; color:var(--gold-dark); font-weight:700; letter-spacing:0.02em;">Advanced Numerology Report, 12 pages</div>
             <h3 class="tier-name">Anveil my glowing charms</h3>
             <div class="tier-meta">Active Repetitions, 5-Year Dasha &amp; Remedy Protocols</div>
-            <div class="tier-price" id="price-report_advanced">₹510 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹1,020</span></div>
-            <div class="tier-price-sub" id="launch-sub-report_advanced">Launch price until 19 Nov 2026. Regular price ₹1,020 from 20 Nov 2026.</div>
+            <div class="tier-price" id="price-report_advanced" style="font-size:1.35rem;">Coming soon, notify me</div>
+            <div class="tier-price-sub" id="launch-sub-report_advanced" style="display:none;"></div>
             <div class="tier-scope-note" id="scope-note-report_advanced">Covers your glowing charms only, not this veiled one.</div>
             <ul class="tier-features" id="features-report_advanced">
               <li>12-Page Glowing Charms Synthesis PDF Dossier</li>
@@ -1448,20 +1448,20 @@
               <li>7-Layer Safe Planetary Lifestyle Protocols</li>
             </ul>
           </div>
-          <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_advanced" onclick="selectTierAndProceed('report_advanced')">
-            <span>Anveil my glowing charms</span> <span>&rarr;</span>
+          <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_advanced" onclick="openNotifyMeModal('report_advanced')">
+            <span>Coming soon, notify me</span> <span>✉</span>
           </button>
         </div>
 
-        <!-- 3. Anveil my alignments (₹199 · Live at launch) -->
+        <!-- 3. Anveil my alignments (Live at launch) -->
         <div class="tier-card highlighted card-report-basic" id="tier-card-basic">
           <div class="tier-badge" id="tier-badge-basic">RECOMMENDED</div>
           <div>
             <div style="font-size:0.76rem; color:var(--gold-dark); font-weight:700; letter-spacing:0.02em;">Basic Numerology Report, 3 pages</div>
             <h3 class="tier-name">Anveil my alignments</h3>
             <div class="tier-meta">Core Numbers, Charm Alignments &amp; Elemental Balance</div>
-            <div class="tier-price" id="price-report_basic">₹199 <span class="tier-mrp" style="font-size:0.56em; text-decoration:line-through; opacity:0.65; font-weight:400; vertical-align:middle; margin-left:4px;">₹399</span></div>
-            <div class="tier-price-sub" id="launch-sub-report_basic">Launch price until 19 Nov 2026. Regular price ₹399 from 20 Nov 2026.</div>
+            <div class="tier-price" id="price-report_basic">₹399</div>
+            <div class="tier-price-sub" id="launch-sub-report_basic" style="display:none;"></div>
             <ul class="tier-features" id="features-report_basic">
               <li>3-Page Personalised Executive Alignment PDF</li>
               <li>Deterministic Mulank, Bhagyank &amp; Kua Calculations</li>
@@ -1471,7 +1471,7 @@
             </ul>
           </div>
           <button type="button" class="btn-select-tier btn-select-gold" id="btn-select-report_basic" onclick="selectTierAndProceed('report_basic')">
-            <span>Select Anveil my alignments — ₹199</span> <span>✦</span>
+            <span>Select Anveil my alignments — ₹399</span> <span>✦</span>
           </button>
         </div>
 
@@ -1627,7 +1627,7 @@
           <h4>Intelligence &amp; Plans</h4>
           <ul class="nv-footer-links">
             <li><a href="/charm-ai/">Charm AI Assistant</a></li>
-            <li><a href="/reports_catalogue/">Reports Catalogue</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
             <li><a href="/sample/">Sample Dossier</a></li>
             <li><a href="/pricing/">Plans &amp; Pricing</a></li>
             <li><a href="/consultation/">1-on-1 Consultation</a></li>
@@ -1967,6 +1967,7 @@
     let _activeTappedContext = null;
 
     function resolveActivePriceForSku(sku) {
+      if (isNotifyMeEnabledForSku(sku)) return null;
       if (window.NV_PRICING && typeof window.NV_PRICING.getPrice === 'function') {
         const resolved = window.NV_PRICING.getPrice(sku);
         if (resolved) return resolved;
@@ -1978,40 +1979,52 @@
 
     function resolveCurrentLaunchOffer() {
       if (serverCatalog && serverCatalog.launch_offer && window.NV_PRICING && typeof window.NV_PRICING.resolveLaunchOfferState === 'function') {
-        if (serverCatalog.launch_offer.started_at && !window.NV_LAUNCH_STARTED_AT) {
-          window.NV_LAUNCH_STARTED_AT = serverCatalog.launch_offer.started_at;
+        if (serverCatalog.launch_offer.started_at && !window.__NV_LAUNCH_STARTS_AT) {
+          window.__NV_LAUNCH_STARTS_AT = serverCatalog.launch_offer.started_at;
         }
-        if (serverCatalog.launch_offer.ends_at && !window.NV_LAUNCH_ENDS_AT) {
-          window.NV_LAUNCH_ENDS_AT = serverCatalog.launch_offer.ends_at;
+        if (serverCatalog.launch_offer.ends_at && !window.__NV_LAUNCH_ENDS_AT) {
+          window.__NV_LAUNCH_ENDS_AT = serverCatalog.launch_offer.ends_at;
         }
       }
       if (window.NV_PRICING && typeof window.NV_PRICING.resolveLaunchOfferState === 'function') {
         return window.NV_PRICING.resolveLaunchOfferState();
       }
       return {
-        active: true,
-        untilDateLabel: '19 Nov 2026',
-        regularFromDateLabel: '20 Nov 2026',
-        label: 'Launch price until 19 Nov 2026.'
+        active: false,
+        configured: false,
+        untilDate: '',
+        fromDate: '',
+        label: ''
       };
     }
 
     function syncDynamicLaunchOfferLabels() {
       const offerState = resolveCurrentLaunchOffer();
       ['report_premium', 'report_advanced', 'report_basic'].forEach(sku => {
+        const priceEl = document.getElementById(`price-${sku}`);
+        const subEl = document.getElementById(`launch-sub-${sku}`);
+        if (isNotifyMeEnabledForSku(sku)) {
+          if (priceEl) {
+            priceEl.style.fontSize = '1.35rem';
+            priceEl.textContent = 'Coming soon, notify me';
+          }
+          if (subEl) {
+            subEl.textContent = '';
+            subEl.style.display = 'none';
+          }
+          return;
+        }
+        if (priceEl) priceEl.style.fontSize = '';
         const activePrice = resolveActivePriceForSku(sku);
         const mrpVal = (window.NV_PRICING && typeof window.NV_PRICING.getStruckMrp === 'function')
           ? window.NV_PRICING.getStruckMrp(sku)
           : (offerState.active ? LAUNCH_MRPS[sku] : null);
         setTierPricePreservingMrp(`price-${sku}`, activePrice, mrpVal);
 
-        const subEl = document.getElementById(`launch-sub-${sku}`);
         if (subEl) {
           const copyText = (window.NV_PRICING && typeof window.NV_PRICING.formatLaunchOfferCopy === 'function')
             ? window.NV_PRICING.formatLaunchOfferCopy(sku)
-            : (offerState.active
-                ? `Launch price until 19 Nov 2026. Regular price ₹${Number(LAUNCH_MRPS[sku]).toLocaleString('en-IN')} from 20 Nov 2026.`
-                : `Regular price ₹${Number(LAUNCH_MRPS[sku]).toLocaleString('en-IN')} (effective 20 Nov 2026).`);
+            : '';
           subEl.textContent = copyText;
           subEl.style.display = copyText ? 'block' : 'none';
         }
@@ -2181,19 +2194,26 @@
 
     function populateOpenTilePrompt(num, isPresent) {
       const isAlignMode = _loshuViewMode === 'alignments';
-      const fmtBasic = `₹${resolveActivePriceForSku('report_basic').toLocaleString('en-IN')}`;
-      const fmtAdv = `₹${resolveActivePriceForSku('report_advanced').toLocaleString('en-IN')}`;
-      const fmtPrem = `₹${resolveActivePriceForSku('report_premium').toLocaleString('en-IN')}`;
+      const basicVal = resolveActivePriceForSku('report_basic') || 399;
+      const fmtBasic = `₹${Number(basicVal).toLocaleString('en-IN')}`;
+      const advWaitlist = isNotifyMeEnabledForSku('report_advanced');
+      const premWaitlist = isNotifyMeEnabledForSku('report_premium');
+      const fmtAdv = advWaitlist ? 'Coming soon, notify me' : `₹${Number(resolveActivePriceForSku('report_advanced') || 1020).toLocaleString('en-IN')}`;
+      const fmtPrem = premWaitlist ? 'Coming soon, notify me' : `₹${Number(resolveActivePriceForSku('report_premium') || 2100).toLocaleString('en-IN')}`;
       if (isPresent) {
         const stripEl = document.getElementById(`lsc_strip_${num}`);
         if (stripEl) {
-          stripEl.innerHTML = isAlignMode ? `Alignment · ${fmtBasic} &rarr;` : `Go deeper · ${fmtAdv} &rarr;`;
+          stripEl.innerHTML = isAlignMode
+            ? `Alignment · ${fmtBasic} &rarr;`
+            : (advWaitlist ? `${fmtAdv} &rarr;` : `Go deeper · ${fmtAdv} &rarr;`);
         }
       } else {
         const revEl = document.getElementById(`lsc_reveal_${num}`);
         if (revEl) {
           if (isAlignMode) {
             revEl.innerHTML = `<span class="cell-reveal-eyebrow">Your alignment</span><span class="cell-reveal-price">${fmtBasic}</span><span class="cell-reveal-cta">Anveil now &rarr;</span>`;
+          } else if (premWaitlist) {
+            revEl.innerHTML = `<span class="cell-reveal-eyebrow">Every charm</span><span class="cell-reveal-price" style="font-size:0.78rem;line-height:1.25;">${fmtPrem}</span><span class="cell-reveal-cta">Join waitlist &rarr;</span>`;
           } else {
             revEl.innerHTML = `<span class="cell-reveal-eyebrow">Every charm</span><span class="cell-reveal-price">${fmtPrem}</span><span class="cell-reveal-cta">Anveil now &rarr;</span>`;
           }
@@ -2381,9 +2401,12 @@
         advScopeNote.style.display = (!notifyActive && _activeTappedContext === 'veiled') ? 'block' : 'none';
       }
 
-      const fmtPrem = `₹${resolveActivePriceForSku('report_premium').toLocaleString('en-IN')}`;
-      const fmtAdv = `₹${resolveActivePriceForSku('report_advanced').toLocaleString('en-IN')}`;
-      const fmtBasic = `₹${resolveActivePriceForSku('report_basic').toLocaleString('en-IN')}`;
+      const premVal = resolveActivePriceForSku('report_premium');
+      const advVal = resolveActivePriceForSku('report_advanced');
+      const basicVal = resolveActivePriceForSku('report_basic') || 399;
+      const fmtPrem = premVal ? `₹${Number(premVal).toLocaleString('en-IN')}` : 'Coming soon, notify me';
+      const fmtAdv = advVal ? `₹${Number(advVal).toLocaleString('en-IN')}` : 'Coming soon, notify me';
+      const fmtBasic = `₹${Number(basicVal).toLocaleString('en-IN')}`;
 
       const tierDefs = [
         {
@@ -2391,8 +2414,8 @@
           card: document.getElementById('tier-card-premium'),
           badge: document.getElementById('tier-badge-premium'),
           btn: document.getElementById('btn-select-report_premium'),
-          normalLabel: `Anveil every charm — ${fmtPrem}`,
-          goldLabel: `Anveil every charm — ${fmtPrem}`,
+          normalLabel: notifyPrem ? 'Coming soon, notify me' : `Anveil every charm — ${fmtPrem}`,
+          goldLabel: notifyPrem ? 'Coming soon, notify me' : `Anveil every charm — ${fmtPrem}`,
           defaultBadge: 'BEST VALUE',
           waitlist: notifyPrem
         },
@@ -2401,8 +2424,8 @@
           card: document.getElementById('tier-card-advanced'),
           badge: document.getElementById('tier-badge-advanced'),
           btn: document.getElementById('btn-select-report_advanced'),
-          normalLabel: `Anveil my glowing charms — ${fmtAdv}`,
-          goldLabel: `Anveil my glowing charms — ${fmtAdv}`,
+          normalLabel: notifyAdv ? 'Coming soon, notify me' : `Anveil my glowing charms — ${fmtAdv}`,
+          goldLabel: notifyAdv ? 'Coming soon, notify me' : `Anveil my glowing charms — ${fmtAdv}`,
           defaultBadge: '',
           waitlist: notifyAdv
         },
@@ -2423,7 +2446,7 @@
         t.card.classList.remove('dimmed-tier');
 
         if (t.waitlist) {
-          // Never recommend a waitlist tier
+          // Never recommend a waitlist tier; show "Coming soon, notify me"
           t.card.classList.remove('highlighted');
           if (t.badge) {
             t.badge.textContent = t.sku === 'report_premium' ? 'BEST VALUE · NOTIFY ME' : 'WAITLIST · NOTIFY ME';
@@ -2431,7 +2454,7 @@
             t.badge.style.display = 'block';
           }
           t.btn.className = 'btn-select-tier btn-select-outline';
-          t.btn.innerHTML = '<span>Notify me when ready</span> <span>✉</span>';
+          t.btn.innerHTML = '<span>Coming soon, notify me</span> <span>✉</span>';
           t.btn.setAttribute('onclick', `openNotifyMeModal('${t.sku}')`);
           return;
         }
@@ -2470,6 +2493,12 @@
       });
     }
     const applyNotifyMeTierMode = applyLadderRecommendation;
+    window.addEventListener('nv:launch-window-changed', function() {
+      applyLadderRecommendation();
+      if (_openLoShuDigit) {
+        populateOpenTilePrompt(_openLoShuDigit, (_loshuCountsCache[_openLoShuDigit] || 0) > 0);
+      }
+    });
 
     function openNotifyMeModal(skuId) {
       _notifyMeTargetSku = skuId || 'report_advanced';

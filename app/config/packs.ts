@@ -40,15 +40,18 @@ export const PACK_CATALOG: {
   launch_offer?: {
     enabled?: boolean;
     duration_days: number;
+    duration_hours?: number;
+    source_env_vars?: string[];
     started_at: string | null;
     ends_at?: string | null;
-    until_date_label?: string;
-    regular_from_date_label?: string;
+    until_date_label?: string | null;
+    regular_from_date_label?: string | null;
     copy_template?: string;
   };
   feature_flags?: {
     notify_me_higher_tiers: boolean;
     notify_me_tiers: string[];
+    waitlist_display_label?: string;
   };
   core_reports: Record<string, PackDefinition>;
   bundles: Record<string, PackDefinition>;
@@ -57,21 +60,26 @@ export const PACK_CATALOG: {
 } = {
   "version": "2.2.0",
   "currency": "INR",
-  "updated_at": "2026-11-12T00:55:00Z",
   "feature_flags": {
     "notify_me_higher_tiers": true,
     "notify_me_tiers": [
       "report_advanced",
       "report_premium"
-    ]
+    ],
+    "waitlist_display_label": "Coming soon, notify me"
   },
   "launch_offer": {
     "enabled": true,
     "duration_days": 7,
-    "started_at": "2026-11-12T00:00:00+05:30",
-    "ends_at": "2026-11-19T23:59:59+05:30",
-    "until_date_label": "19 Nov 2026",
-    "regular_from_date_label": "20 Nov 2026",
+    "duration_hours": 168,
+    "source_env_vars": [
+      "NV_LAUNCH_STARTS_AT",
+      "NV_LAUNCH_ENDS_AT"
+    ],
+    "started_at": null,
+    "ends_at": null,
+    "until_date_label": null,
+    "regular_from_date_label": null,
     "copy_template": "Launch price until {until_date}. Regular price \u20b9{mrp_formatted} from {from_date}."
   },
   "ladder_order": [
@@ -91,9 +99,6 @@ export const PACK_CATALOG: {
       "amount_paise": 105000,
       "mrp_inr": 2100,
       "mrp_paise": 210000,
-      "launch_offer_duration_days": 7,
-      "launch_offer_started_at": "2026-11-12T00:00:00+05:30",
-      "launch_offer_ends_at": "2026-11-19T23:59:59+05:30",
       "digital_root": 6,
       "mrp_digital_root": 3,
       "status": "active",
@@ -118,9 +123,6 @@ export const PACK_CATALOG: {
       "amount_paise": 51000,
       "mrp_inr": 1020,
       "mrp_paise": 102000,
-      "launch_offer_duration_days": 7,
-      "launch_offer_started_at": "2026-11-12T00:00:00+05:30",
-      "launch_offer_ends_at": "2026-11-19T23:59:59+05:30",
       "digital_root": 6,
       "mrp_digital_root": 3,
       "status": "active",
@@ -146,8 +148,8 @@ export const PACK_CATALOG: {
       "mrp_inr": 399,
       "mrp_paise": 39900,
       "launch_offer_duration_days": 7,
-      "launch_offer_started_at": "2026-11-12T00:00:00+05:30",
-      "launch_offer_ends_at": "2026-11-19T23:59:59+05:30",
+      "launch_offer_started_at": null,
+      "launch_offer_ends_at": null,
       "digital_root": 1,
       "mrp_digital_root": 3,
       "status": "active",

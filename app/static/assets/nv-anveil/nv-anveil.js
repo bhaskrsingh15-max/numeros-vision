@@ -13,9 +13,9 @@
     packageUrl: '/package/',                // "What's included" page, same params
     includeCoreInGrid: false, // Approved single rule: 8 raw non-zero DDMMYYYY digits only                // your method: plot Mulank + Bhagyank too
     tiers: {
-      e: { sku: 'report_premium', label: 'Anveil every charm', descriptor: 'Complete Numerology Report, 32 pages', price: '₹1,050', mrp: '₹2,100', pages: 'Complete Numerology Report, 32 pages', per: '' },
-      g: { sku: 'report_advanced', label: 'Anveil my glowing charms', descriptor: 'Advanced Numerology Report, 12 pages', price: '₹510', mrp: '₹1,020', pages: 'Advanced Numerology Report, 12 pages', per: '' },
-      a: { sku: 'report_basic', label: 'Anveil my alignments', descriptor: 'Basic Numerology Report, 3 pages', price: '₹199', mrp: '₹399', pages: 'Basic Numerology Report, 3 pages', per: '' }
+      e: { sku: 'report_premium', label: 'Anveil every charm', descriptor: 'Complete Numerology Report, 32 pages', price: 'Coming soon, notify me', mrp: '', pages: 'Complete Numerology Report, 32 pages', per: '', waitlistOnly: true },
+      g: { sku: 'report_advanced', label: 'Anveil my glowing charms', descriptor: 'Advanced Numerology Report, 12 pages', price: 'Coming soon, notify me', mrp: '', pages: 'Advanced Numerology Report, 12 pages', per: '', waitlistOnly: true },
+      a: { sku: 'report_basic', label: 'Anveil my alignments', descriptor: 'Basic Numerology Report, 3 pages', price: '₹399', mrp: '', pages: 'Basic Numerology Report, 3 pages', per: '', waitlistOnly: false }
     },
     // One row per calculator. Fill name, price, pages and key numbers.
     services: {}
@@ -157,9 +157,22 @@
     const go = (url, tier) => { saveDob(p.dob); location.href = `${url}?tier=${encodeURIComponent(tier)}&svc=${encodeURIComponent(svc)}`; };
     const tierFor = n => view === 'align' ? 'a' : (S ? svc : (counts[n] ? 'g' : 'e'));
     const resolveTierDisplay = t => {
-      if (S && t === svc) return { label: S.label || S.name, price: S.price, mrp: S.mrp || '', pages: S.pages || '', per: '', launchCopy: '' };
+      if (S && t === svc) return { label: S.label || S.name, price: S.price, mrp: S.mrp || '', pages: S.pages || '', per: '', launchCopy: '', waitlistOnly: false };
       const base = CONFIG.tiers[t];
       if (global.NV_PRICING && base && base.sku) {
+        const waitlistOnly = typeof global.NV_PRICING.isNotifyMeTier === 'function' && global.NV_PRICING.isNotifyMeTier(base.sku);
+        if (waitlistOnly) {
+          const wlLabel = typeof global.NV_PRICING.getWaitlistLabel === 'function' ? global.NV_PRICING.getWaitlistLabel() : 'Coming soon, notify me';
+          return {
+            label: base.label,
+            price: wlLabel,
+            mrp: '',
+            pages: base.descriptor || base.pages,
+            per: '',
+            launchCopy: '',
+            waitlistOnly: true
+          };
+        }
         const activePrice = global.NV_PRICING.formatPrice(base.sku);
         const struck = global.NV_PRICING.getStruckMrp(base.sku);
         const launchCopy = typeof global.NV_PRICING.formatLaunchOfferCopy === 'function'
@@ -171,10 +184,11 @@
           mrp: struck ? ('₹' + Number(struck).toLocaleString('en-IN')) : '',
           pages: base.descriptor || base.pages,
           per: '',
-          launchCopy
+          launchCopy,
+          waitlistOnly: false
         };
       }
-      return Object.assign({ launchCopy: '' }, base);
+      return Object.assign({ launchCopy: '', waitlistOnly: Boolean(base && base.waitlistOnly) }, base);
     };
     const priceOf = t => resolveTierDisplay(t).price;
 
@@ -189,16 +203,17 @@
       ORDER.forEach(n => {
         const k = counts[n] || 0, b = cells[n], open = sel === n;
         const focus = S && S.focus.indexOf(n) >= 0;
+        const tDisp = resolveTierDisplay(tierFor(n));
         if (k) {
           b.className = 'nv-cell ' + (k > 1 ? 'is-radiant' : 'is-glow');
           b.innerHTML = `<span class="nv-num">${String(n).repeat(Math.min(k, 4))}</span><span class="nv-name">${CHARM[n]}</span>` +
-            (open && view !== 'align' ? `<span class="nv-strip">Go deeper · ${priceOf(tierFor(n))} →</span>` : '');
+            (open && view !== 'align' ? `<span class="nv-strip">${tDisp.waitlistOnly ? tDisp.price : ('Go deeper · ' + tDisp.price)} →</span>` : '');
           b.setAttribute('aria-label', `${CHARM[n]} Charm ${n}, glowing`);
         } else {
           b.className = 'nv-cell is-veiled' + (open ? ' is-open' : '');
-          b.innerHTML = `<span class="nv-under"><span>${view === 'align' ? 'Your alignment' : (S ? S.name.split(' ')[0] + ' reading' : 'Every charm')}</span><b>${priceOf(tierFor(n))}</b><span>Anveil now →</span></span>` +
+          b.innerHTML = `<span class="nv-under"><span>${view === 'align' ? 'Your alignment' : (S ? S.name.split(' ')[0] + ' reading' : 'Every charm')}</span><b>${tDisp.price}</b><span>${tDisp.waitlistOnly ? 'Join waitlist →' : 'Anveil now →'}</span></span>` +
             `<span class="nv-shutter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Tap to Anveil${focus ? `<span class="nv-tag">Key for ${S.name.split(' ')[0].toLowerCase()}</span>` : ''}</span>`;
-          b.setAttribute('aria-label', open ? `Anveil now, ${priceOf(tierFor(n))}` : 'Veiled charm, locked, tap to Anveil');
+          b.setAttribute('aria-label', open ? `${tDisp.price}` : 'Veiled charm, locked, tap to Anveil');
         }
       });
     }
@@ -242,7 +257,8 @@
           `<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="nv-amt">${T.price}</span>${T.mrp ? `<s>${T.mrp}</s>` : ''}</div>` +
           (T.launchCopy ? `<div style="font-size:11.5px;color:#7A654D">${T.launchCopy}</div>` : '') +
           (cover ? `<p style="margin:0;font-size:13px">${cover}</p>` : '');
-        const buy = el('button', 'nv-btn', `Anveil now · ${T.price}`); buy.type = 'button';
+        const buyLabel = T.waitlistOnly ? T.price : `Anveil now · ${T.price}`;
+        const buy = el('button', 'nv-btn', buyLabel); buy.type = 'button';
         buy.addEventListener('click', () => { track('select_package', { tier: t, svc, value: T.price }); go(CONFIG.checkoutUrl, t); });
         const info = el('a', '', "What's included"); info.href = `${CONFIG.packageUrl}?tier=${t}&svc=${svc}`; info.addEventListener('click', () => saveDob(p.dob)); info.style.cssText = 'text-align:center;font-size:13px';
         card.append(buy, info); p.prices.append(card);

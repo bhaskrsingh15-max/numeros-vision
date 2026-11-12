@@ -37,6 +37,8 @@ console.log(`Found ${declaredIds.size} declared IDs in dashboard.html.`);
 
 const mockEnv = {
   ENVIRONMENT: 'local',
+  NV_LAUNCH_STARTS_AT: new Date(Date.now() - 86400000).toISOString(),
+  NV_LAUNCH_ENDS_AT: new Date(Date.now() + 6 * 86400000).toISOString(),
   RAZORPAY_KEY_ID: 'rzp_test_MOCK_KEY_SIMP',
   RAZORPAY_KEY_SECRET: 'test_secret_for_payment_verify_simplification',
   RAZORPAY_WEBHOOK_SECRET: 'test_webhook_secret_simplification',

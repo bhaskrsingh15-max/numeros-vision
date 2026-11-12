@@ -15,11 +15,6 @@
     "/samples/*",
     "/favicon.ico",
     "/apple-touch-icon.png",
-    "/robots.txt",
-    "/sitemap.xml",
-    "/sitemap-*.xml",
-    "/llms.txt",
-    "/llms-full.txt",
     "/BingSiteAuth.xml",
     "/manifest.json",
     "/manifest.webmanifest"

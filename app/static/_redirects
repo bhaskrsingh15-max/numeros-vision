@@ -40,8 +40,14 @@
 /sample-roadmap/                    /sample_roadmap/                    301
 /roadmap-preview                    /sample_roadmap/                    301
 /roadmap-preview/                   /sample_roadmap/                    301
-/reports                            /reports_catalogue/                 301
-/reports/                           /reports_catalogue/                 301
+/reports.html                       /reports/                           301
+/reports                            /reports/                           301
+/reports_catalogue                  /reports/                           301
+/reports_catalogue/                 /reports/                           301
+/reports_catalogue.html             /reports/                           301
+/reports-catalogue                  /reports/                           301
+/reports-catalogue/                 /reports/                           301
+/reports-catalogue.html             /reports/                           301
 /year_2027.html                     /year-2027/                         301
 /year_2027                          /year-2027/                         301
 /year_2027/                         /year-2027/                         301
