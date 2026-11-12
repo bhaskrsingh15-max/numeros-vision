@@ -8,15 +8,19 @@ export interface PackDefinition {
   pack_id: string;
   tier_id?: string;
   name: string;
+  descriptor?: string;
   display_name: string;
   price_inr: number;
   mrp_inr?: number;
-  per_page_inr?: number;
+  mrp_paise?: number;
   amount_paise: number;
   digital_root?: number;
   mrp_digital_root?: number;
+  launch_offer_duration_days?: number;
+  launch_offer_started_at?: string | null;
+  launch_offer_ends_at?: string | null;
   badge?: string | null;
-  status: 'active' | 'inactive';
+  status: 'active' | 'inactive' | 'coming_soon';
   pages?: number;
   deliverables: string[];
   voucher_allocation?: {
@@ -34,9 +38,13 @@ export const PACK_CATALOG: {
   updated_at?: string;
   ladder_order?: string[];
   launch_offer?: {
+    enabled?: boolean;
     duration_days: number;
     started_at: string | null;
-    prelaunch_label: string;
+    ends_at?: string | null;
+    until_date_label?: string;
+    regular_from_date_label?: string;
+    copy_template?: string;
   };
   feature_flags?: {
     notify_me_higher_tiers: boolean;
@@ -45,6 +53,7 @@ export const PACK_CATALOG: {
   core_reports: Record<string, PackDefinition>;
   bundles: Record<string, PackDefinition>;
   charm_ai: Record<string, PackDefinition>;
+  annual_planners?: Record<string, unknown>;
 } = {
   "version": "2.2.0",
   "currency": "INR",
@@ -59,9 +68,11 @@ export const PACK_CATALOG: {
   "launch_offer": {
     "enabled": true,
     "duration_days": 7,
-    "started_at": null,
-    "ends_at": null,
-    "prelaunch_label": "1-week launch offer \u00b7 valid for 7 days from launch"
+    "started_at": "2026-11-12T00:00:00+05:30",
+    "ends_at": "2026-11-19T23:59:59+05:30",
+    "until_date_label": "19 Nov 2026",
+    "regular_from_date_label": "20 Nov 2026",
+    "copy_template": "Launch price until {until_date}. Regular price \u20b9{mrp_formatted} from {from_date}."
   },
   "ladder_order": [
     "report_premium",
@@ -73,15 +84,16 @@ export const PACK_CATALOG: {
       "pack_id": "report_premium",
       "tier_id": "premium",
       "name": "Anveil every charm",
-      "display_name": "Anveil every charm \u00b7 Best value",
+      "descriptor": "Complete Numerology Report, 32 pages",
+      "display_name": "Anveil every charm \u00b7 Complete Numerology Report, 32 pages",
       "pages": 32,
       "price_inr": 1050,
       "amount_paise": 105000,
       "mrp_inr": 2100,
       "mrp_paise": 210000,
-      "per_page_inr": 33,
       "launch_offer_duration_days": 7,
-      "launch_offer_started_at": null,
+      "launch_offer_started_at": "2026-11-12T00:00:00+05:30",
+      "launch_offer_ends_at": "2026-11-19T23:59:59+05:30",
       "digital_root": 6,
       "mrp_digital_root": 3,
       "status": "active",
@@ -99,15 +111,16 @@ export const PACK_CATALOG: {
       "pack_id": "report_advanced",
       "tier_id": "advanced",
       "name": "Anveil my glowing charms",
-      "display_name": "Anveil my glowing charms",
+      "descriptor": "Advanced Numerology Report, 12 pages",
+      "display_name": "Anveil my glowing charms \u00b7 Advanced Numerology Report, 12 pages",
       "pages": 12,
       "price_inr": 510,
       "amount_paise": 51000,
       "mrp_inr": 1020,
       "mrp_paise": 102000,
-      "per_page_inr": 43,
       "launch_offer_duration_days": 7,
-      "launch_offer_started_at": null,
+      "launch_offer_started_at": "2026-11-12T00:00:00+05:30",
+      "launch_offer_ends_at": "2026-11-19T23:59:59+05:30",
       "digital_root": 6,
       "mrp_digital_root": 3,
       "status": "active",
@@ -125,15 +138,16 @@ export const PACK_CATALOG: {
       "pack_id": "report_basic",
       "tier_id": "basic",
       "name": "Anveil my alignments",
-      "display_name": "Anveil my alignments",
+      "descriptor": "Basic Numerology Report, 3 pages",
+      "display_name": "Anveil my alignments \u00b7 Basic Numerology Report, 3 pages",
       "pages": 3,
       "price_inr": 199,
       "amount_paise": 19900,
       "mrp_inr": 399,
       "mrp_paise": 39900,
-      "per_page_inr": 66,
       "launch_offer_duration_days": 7,
-      "launch_offer_started_at": null,
+      "launch_offer_started_at": "2026-11-12T00:00:00+05:30",
+      "launch_offer_ends_at": "2026-11-19T23:59:59+05:30",
       "digital_root": 1,
       "mrp_digital_root": 3,
       "status": "active",

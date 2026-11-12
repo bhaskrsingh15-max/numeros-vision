@@ -115,13 +115,13 @@ class TestLoShuCuriosityAndNotifyMeFlag(unittest.TestCase):
         for price_tok in ("199", "399", "510", "1,020", "1020", "1,050", "1050", "2,100", "2100"):
             self.assertNotIn(price_tok, curiosity_markup)
 
-        # Verify high-to-low three-card ladder with approved prices (1,050, 510, 199), MRPs (2,100, 1,020, 399), and 1-week dynamic launch offer
+        # Verify high-to-low three-card ladder with approved prices (1,050, 510, 199), MRPs (2,100, 1,020, 399), and fixed launch offer copy
         self.assertIn('id="price-report_premium">₹1,050', html)
         self.assertIn('id="price-report_advanced">₹510', html)
         self.assertIn('id="price-report_basic">₹199', html)
         self.assertLess(html.index('id="tier-card-premium"'), html.index('id="tier-card-advanced"'))
         self.assertLess(html.index('id="tier-card-advanced"'), html.index('id="tier-card-basic"'))
-        self.assertIn("1-week launch offer · valid for 7 days from launch", html)
+        self.assertIn("Launch price until 19 Nov 2026. Regular price ₹2,100 from 20 Nov 2026.", html)
         self.assertNotIn("31 Jan 2027", html)
 
         # Verify explicit DPDP consent text, purpose, 12-month retention, and delete-on-request UI in both pages
@@ -261,7 +261,8 @@ class TestLoShuCuriosityAndNotifyMeFlag(unittest.TestCase):
             self.assertIn("Anveil my glowing charms", msg["subject"])
             self.assertEqual(msg["purpose"], "tell me when this report is available")
             self.assertIn("tell you when", msg["text"])
-            self.assertIn("https://numerosvision.com/pricing.html", msg["html"])
+            self.assertIn("https://numerosvision.com/pricing/", msg["html"])
+            self.assertIn("Bhaskar Kumar Singh", msg["html"])
 
             # 6. Retention enforcement: after 12 months, notification email CANNOT be produced
             with self.assertRaises(ValueError):

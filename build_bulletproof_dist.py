@@ -168,15 +168,6 @@ ROUTING_MAP = {
     "charm-ai": "charm_ai.html",
     "charm-ai/chat": "charm_ai_chat.html",
 
-    # Unique Dedicated Tools (not duplicated under /calculators/)
-    "tools/business-alignment": "tools/business-alignment.html",
-    "tools/baby-naming": "tools/baby-naming.html",
-    "tools/property-numerology": "tools/property-numerology.html",
-    "tools/vehicle-numerology": "tools/vehicle-numerology.html",
-    "tools/profession-calculator": "tools/profession-calculator.html",
-    "tools/favourable-numbers": "tools/favourable-numbers.html",
-    "tools/logo-intelligence": "tools/logo-intelligence.html",
-
     # Knowledge, Methodology & Sitemap
     "your-reading": "your-reading.html",
     "sitemap": "sitemap.html",
@@ -186,7 +177,7 @@ ROUTING_MAP = {
     "compare": "compare_hub.html",
     "learn": "learn.html",
 
-    # Canonical /calculators/<slug>/ Directories (single 200 OK home per calculator)
+    # Canonical /calculators/<slug>/ Directories (single 200 OK home per calculator; /tools/<slug>/ 301-redirects here)
     "calculators/birth-number": "birth_number_calculator.html",
     "calculators/lo-shu-grid": "tools/lo-shu-grid.html",
     "calculators/pythagorean": "pythagorean_calculator.html",
@@ -196,6 +187,13 @@ ROUTING_MAP = {
     "calculators/name-balancing": "tools/name-balancing.html",
     "calculators/mobile-number": "tools/mobile-numerology.html",
     "calculators/compatibility": "tools/compatibility-calculator.html",
+    "calculators/business-alignment": "tools/business-alignment.html",
+    "calculators/baby-naming": "tools/baby-naming.html",
+    "calculators/property-numerology": "tools/property-numerology.html",
+    "calculators/vehicle-numerology": "tools/vehicle-numerology.html",
+    "calculators/profession-calculator": "tools/profession-calculator.html",
+    "calculators/favourable-numbers": "tools/favourable-numbers.html",
+    "calculators/logo-intelligence": "tools/logo-intelligence.html",
 
     # Regional City Hubs
     "local": "local_hub.html",
@@ -213,6 +211,14 @@ REDIRECTED_TOOL_SLUGS = {
     "life-path-calculator",
     "compatibility-calculator",
     "blessing-years",
+    "business-alignment",
+    "baby-naming",
+    "property-numerology",
+    "vehicle-numerology",
+    "profession-calculator",
+    "favourable-numbers",
+    "lucky-number",
+    "logo-intelligence",
 }
 
 # 3. Create physical directory/index.html for every canonical route (Clean trailing-slash architecture)

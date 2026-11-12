@@ -712,20 +712,20 @@
         </div>
         <div class="nv-footer-links-sec">
           <h4 class="nv-footer-heading">Calculators</h4>
-          <a href="/calculators/mulank-calculator/">Mulank Calculator</a>
-          <a href="/calculators/bhagyank-calculator/">Bhagyank Calculator</a>
-          <a href="/calculators/kua-calculator/">Kua Calculator</a>
+          <a href="/calculators/birth-number/">Mulank Calculator</a>
+          <a href="/calculators/life-path/">Bhagyank Calculator</a>
+          <a href="/calculators/lo-shu-grid/">Lo Shu &amp; Kua Calculator</a>
         </div>
         <div class="nv-footer-links-sec">
           <h4 class="nv-footer-heading">Intelligence</h4>
           <a href="/pricing/">Dossiers &amp; Pricing</a>
-          <a href="/ai-consultation/">Charm AI Oracle</a>
+          <a href="/charm-ai/">Charm AI Oracle</a>
         </div>
         <div class="nv-footer-links-sec">
           <h4 class="nv-footer-heading">Statutory &amp; Legal</h4>
           <a href="/privacy/">Privacy Policy (DPDP 2023)</a>
           <a href="/terms/">Terms of Service</a>
-          <a href="/refunds/">Refund Policy</a>
+          <a href="/refund-policy/">Refund Policy</a>
         </div>
       </div>
       <div class="nv-footer-bottom">
@@ -735,6 +735,7 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="/static/js/nv_pricing_catalog.js?v=1.2.0"></script>
   <script src="/static/js/nv_payment_gateway.js?v=5.6.0"></script>
   <script>
     let _dashboardState = null;
@@ -745,26 +746,29 @@
       {
         id: 'report_basic',
         name: 'Anveil my alignments',
+        descriptor: 'Basic Numerology Report, 3 pages',
         pages: 3,
-        priceInr: 199,
+        priceInr: (window.NV_PRICING && window.NV_PRICING.getPrice) ? window.NV_PRICING.getPrice('report_basic') : 199,
         badge: 'ENTRY TIER',
-        desc: '3-Page Personalised PDF · Deterministic Mulank & Bhagyank, Lo Shu 3×3 Grid Matrix & 5-Element Balancing Actions.'
+        desc: 'Basic Numerology Report, 3 pages · Deterministic Mulank & Bhagyank, Lo Shu 3×3 Grid Matrix & 5-Element Balancing Actions.'
       },
       {
         id: 'report_advanced',
         name: 'Anveil my glowing charms',
+        descriptor: 'Advanced Numerology Report, 12 pages',
         pages: 12,
-        priceInr: 510,
+        priceInr: (window.NV_PRICING && window.NV_PRICING.getPrice) ? window.NV_PRICING.getPrice('report_advanced') : 510,
         badge: 'RECOMMENDED',
-        desc: '12-Page Master Synthesis PDF · All Basic calculations + Auspicious Windows, Enabled Numbers in Depth & Vedic Remedies.'
+        desc: 'Advanced Numerology Report, 12 pages · All Basic calculations + Auspicious Windows, Glowing Charms in Depth & Vedic Remedies.'
       },
       {
         id: 'report_premium',
         name: 'Anveil every charm',
+        descriptor: 'Complete Numerology Report, 32 pages',
         pages: 32,
-        priceInr: 1050,
-        badge: 'COMPREHENSIVE',
-        desc: '32-Page Sovereign Executive Masterwork · 10-Year Macro Timing Radar, Acoustic Name Balancing & 81-Pair Void Diagnosis.'
+        priceInr: (window.NV_PRICING && window.NV_PRICING.getPrice) ? window.NV_PRICING.getPrice('report_premium') : 1050,
+        badge: 'BEST VALUE',
+        desc: 'Complete Numerology Report, 32 pages · 10-Year Macro Timing Radar, Acoustic Name Balancing & Complete Veiled Charm Synthesis.'
       }
     ];
 
@@ -877,7 +881,7 @@
 
     let _dashboardPollTimer = null;
     let _dashboardPollCount = 0;
-    const MAX_DASHBOARD_POLLS = 60; // 10s * 60 = 600s = 10 minutes
+    const MAX_DASHBOARD_POLLS = 90; // 10s * 90 = 900s = 15 minutes (automatically crosses the 10-minute Razorpay fallback threshold)
 
     function checkAndStartPreparingPoll(reports) {
       const hasPreparing = (reports || []).some(r => r.status === 'preparing');
@@ -899,7 +903,7 @@
             if (activeOrderId) qParts.push(`order_id=${encodeURIComponent(activeOrderId)}`);
             if (tokenParam) qParts.push(`token=${encodeURIComponent(tokenParam)}`);
             const viewUrl = '/api/v1/dashboard/view' + (qParts.length > 0 ? `?${qParts.join('&')}` : '');
-            const res = await fetch(viewUrl);
+            const res = await fetch(viewUrl, { credentials: 'include', cache: 'no-store' });
             if (res.ok) {
               _dashboardState = await res.json();
               renderDashboard(_dashboardState);
@@ -929,7 +933,7 @@
           <div style="background:var(--pearl-bg); border:1px dashed var(--border-gold); border-radius:12px; padding:24px; text-align:center;">
             <strong style="color:var(--gold-dark); font-size:0.95rem; display:block; margin-bottom:6px;">No Purchased Reports Yet</strong>
             <p style="font-size:0.80rem; color:var(--ink-muted); margin:0 0 14px 0; line-height:1.45;">
-              Your complimentary Lo Shu matrix is active below. You can unlock your bespoke 3-Page Anveil my alignments, 12-Page Master Dossier, or 32-Page Sovereign Blueprint anytime.
+              Your complimentary Lo Shu matrix is active below. You can unlock your bespoke 3-Page Anveil my alignments, 12-Page Anveil my glowing charms, or 32-Page Anveil every charm anytime.
             </p>
             <a href="#dashUpgradeCard" style="display:inline-block; background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFFFFF; text-decoration:none; padding:8px 16px; border-radius:6px; font-size:0.80rem; font-weight:700;">
               View Available Dossiers &darr;
@@ -939,13 +943,25 @@
         return;
       }
 
-      container.innerHTML = reports.map(r => {
+      const hasPreparing = reports.some(r => r.status === 'preparing');
+      const preparingBannerHtml = hasPreparing ? `
+        <div id="dashPreparingStatusBanner" role="status" aria-live="polite" style="background:rgba(201,162,39,0.10); border:1.5px solid var(--gold-primary); border-radius:10px; padding:12px 16px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="color:var(--gold-dark); font-size:1rem;">✦</span>
+            <strong style="color:var(--gold-dark); font-size:0.88rem;">Payment received, preparing your report</strong>
+          </div>
+          <span style="font-size:0.76rem; color:var(--ink-muted); font-weight:600;">Refreshing automatically every 10 seconds&hellip;</span>
+        </div>
+      ` : '';
+
+      container.innerHTML = preparingBannerHtml + reports.map(r => {
         const isReady = r.status === 'ready';
         const isNeedsAttention = r.status === 'needs_attention' || r.status === 'failed';
         const isPreparing = r.status === 'preparing';
 
         let badgeClass = isReady ? 'ready' : (isNeedsAttention ? 'failed' : 'preparing');
         let badgeText = r.statusBadge || (isReady ? 'READY ✓' : (isNeedsAttention ? 'NEEDS ATTENTION' : 'PREPARING'));
+        const itemMessage = r.message || (isPreparing ? 'Payment received, preparing your report' : '');
 
         return `
           <div class="report-item ${badgeClass}">
@@ -958,7 +974,7 @@
                 Subject: ${r.subjectName} · Locked DOB: ${r.subjectDob}
               </div>
               <div style="font-size:0.78rem; color:var(--ink-muted); line-height:1.4;">
-                ${r.message}
+                ${itemMessage}
               </div>
             </div>
             <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
@@ -975,7 +991,7 @@
                 <div id="dlMsg_${r.id}" style="font-size:0.75rem; color:#A61C1C; margin-top:2px; display:none; max-width:240px; text-align:right;"></div>
               ` : `
                 <span style="font-size:0.78rem; font-weight:600; color:var(--gold-dark);">
-                  ${isReady ? 'Preparing download link... or <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">contact support</a>' : (isNeedsAttention ? 'We’re checking this order. If it isn’t ready within 30 minutes, write to <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">support@numerosvision.com</a>' : 'Ready within a few minutes')}
+                  ${isReady ? 'Preparing download link... or <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">contact support</a>' : (isNeedsAttention ? 'We’re checking this order. If it isn’t ready within 30 minutes, write to <a href="mailto:support@numerosvision.com" style="color:var(--gold-dark); text-decoration:underline;">support@numerosvision.com</a>' : 'Refreshing automatically · Ready within a few minutes')}
                 </span>
               `}
             </div>
@@ -1198,6 +1214,8 @@
           <div style="background:#FFFFFF; border:1px solid var(--border-gold); border-radius:8px; padding:12px; margin-bottom:18px;">
             <div style="font-size:0.72rem; text-transform:uppercase; color:var(--ink-muted); margin-bottom:4px;">Item Description:</div>
             <strong style="font-size:0.92rem; color:var(--ink-dark);">${r.pack_name}</strong>
+            ${r.pack_descriptor ? `<div style="font-size:0.76rem; color:var(--ink-muted); margin-top:2px;">${r.pack_descriptor}</div>` : ''}
+            <div style="font-size:0.74rem; color:var(--ink-muted); margin-top:6px; padding-top:6px; border-top:1px dashed rgba(201,162,39,0.28);">Issued by: <strong>${r.supplier_entity || 'Numeros Vision Consultancy (Bhaskar Kumar Singh)'}</strong></div>
           </div>
 
           <div style="display:flex; justify-content:flex-end;">

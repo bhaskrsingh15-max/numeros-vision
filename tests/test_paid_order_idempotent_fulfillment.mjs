@@ -1,5 +1,7 @@
 import assert from 'node:assert';
-import worker from '../app/static/_worker.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import worker, { mintUserSession, getPackById, resolveServerLaunchOfferState } from '../app/static/_worker.js';
 
 // Mock environment for edge worker testing
 function createMockEnv(overrides = {}) {
@@ -14,6 +16,7 @@ function createMockEnv(overrides = {}) {
     events: [],
     users: new Map(),
     subjects: new Map(),
+    sessions: new Map(),
     emails_sent: []
   };
 
@@ -73,6 +76,22 @@ function createMockEnv(overrides = {}) {
           if (q.includes('SELECT count FROM email_rate_limits')) {
             return { count: 0 };
           }
+          if (q.includes('FROM sessions s JOIN users u')) {
+            const [tokenHash, nowTs] = p;
+            const sess = memoryDB.sessions.get(tokenHash);
+            if (sess && sess.expires_at > nowTs) {
+              const usr = memoryDB.users.get(sess.user_id) || {};
+              return {
+                session_id: sess.id,
+                expires_at: sess.expires_at,
+                user_id: sess.user_id,
+                email: usr.email || null,
+                phone_hash: usr.phone_hash || null,
+                created_at: usr.created_at || sess.created_at
+              };
+            }
+            return null;
+          }
           return null;
         },
         async all() {
@@ -92,9 +111,34 @@ function createMockEnv(overrides = {}) {
             const jobs = Array.from(memoryDB.report_jobs.values()).filter(j => j.user_id === p[0]);
             return { results: jobs };
           }
+          if (q.includes('FROM subjects WHERE user_id = ?')) {
+            const subjs = Array.from(memoryDB.subjects.values()).filter(s => s.user_id === p[0]);
+            return { results: subjs };
+          }
           if (q.includes("FROM orders WHERE user_id = ? AND status IN ('CREATED', 'PAYMENT_VERIFIED')")) {
             const pending = Array.from(memoryDB.orders.values()).filter(o => o.user_id === p[0] && (o.status === 'CREATED' || o.status === 'PAYMENT_VERIFIED'));
             return { results: pending };
+          }
+          if (q.includes('SELECT * FROM orders WHERE user_id = ?')) {
+            const orders = Array.from(memoryDB.orders.values()).filter(o => o.user_id === p[0]);
+            return { results: orders };
+          }
+          if (q.includes('LEFT JOIN payments p ON o.id = p.order_id') && q.includes("o.status = 'PAID'")) {
+            const paid = Array.from(memoryDB.orders.values()).filter(o => o.user_id === p[0] && o.status === 'PAID').map(ord => {
+              const pmt = Array.from(memoryDB.payments.values()).find(pm => pm.order_id === ord.id);
+              return {
+                order_id: ord.id,
+                rzp_order_id: ord.rzp_order_id,
+                pack_id: ord.pack_id,
+                amount_paise: ord.amount_paise,
+                currency: ord.currency || 'INR',
+                status: ord.status,
+                created_at: ord.created_at,
+                rzp_payment_id: pmt ? pmt.rzp_payment_id : null,
+                captured_at: pmt ? pmt.captured_at : ord.created_at
+              };
+            });
+            return { results: paid };
           }
           if (q.includes('FROM orders o') && q.includes('WHERE o.user_id = ?')) {
             const orders = Array.from(memoryDB.orders.values()).filter(o => o.user_id === p[0] && (o.status === 'PAID' || o.status === 'PAYMENT_VERIFIED'));
@@ -156,6 +200,9 @@ function createMockEnv(overrides = {}) {
             const action = isEmailSent ? 'order_confirmation_email_sent' : (isEmailAttempt ? 'order_confirmation_email_attempt' : (p[2] || 'order_paid_fulfilled'));
             const resource_id = (isEmailSent || isEmailAttempt) ? p[1] : (p[3] || p[2]);
             memoryDB.audit_log.push({ id: p[0], action, resource_id });
+          } else if (q.startsWith('INSERT INTO sessions')) {
+            const [id, user_id, token_hash, expires_at, created_at, ip_hash, user_agent] = p;
+            memoryDB.sessions.set(token_hash, { id, user_id, token_hash, expires_at, created_at, ip_hash, user_agent });
           } else if (q.startsWith('INSERT INTO events')) {
             if (overrides.telemetryThrows) {
               throw new Error('Simulated telemetry failure (e.g. events table lock or network failure)');
@@ -179,6 +226,7 @@ function createMockEnv(overrides = {}) {
     ADMIN_TOKEN: 'test_admin_token_secret_123',
     IP_HASH_SALT: 'test_ip_hash_salt_mock_12345',
     SESSION_SECRET: 'test_session_secret_32_chars_long_12345',
+    DATA_ENCRYPTION_KEY: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
     RAZORPAY_KEY_ID: 'rzp_test_mockKey123',
     RAZORPAY_KEY_SECRET: 'mockRazorpaySecret12345',
     RAZORPAY_WEBHOOK_SECRET: 'mockWebhookSecret12345',
@@ -737,6 +785,7 @@ async function runTestSuite() {
 
       // 7b. Age order to 11 minutes (>= 10 minutes) and poll again -> fallback triggers!
       env._memoryDB.orders.get(orderId).created_at = Date.now() - (11 * 60 * 1000);
+      env._memoryDB.orders.get(orderId).updated_at = Date.now() - (11 * 60 * 1000);
       const resLate = await worker.fetch(
         new Request(`https://test.numerosvision.com/api/v1/payments/status?orderId=${encodeURIComponent(orderId)}&token=${encodeURIComponent(validToken)}`),
         env,
@@ -797,7 +846,234 @@ async function runTestSuite() {
     console.log('✓ PASS: Single-hop www/tool 301s, /reports/*.pdf WAF, and Link rel="canonical" verified.');
   }
 
-  console.log('--- ALL SUITE TESTS PASSED SUCCESSFULLY (8/8) ---');
+  // =========================================================================
+  // TEST 9: DASHBOARD VIEW — (A) WEBHOOK ARRIVING LATE & (B) WEBHOOK NEVER ARRIVING
+  // =========================================================================
+  {
+    console.log('[Test 9] Dashboard /api/v1/dashboard/view: (a) webhook arriving late & (b) webhook never arriving');
+    const env = createMockEnv();
+    const crypto = await import('node:crypto');
+    const userId = 'usr_dash_reconcile_009';
+    env._memoryDB.users.set(userId, {
+      id: userId,
+      email: 'seeker9@example.com',
+      name: 'Bhaskr Singh',
+      verified: 1
+    });
+    env._memoryDB.subjects.set('sbj_dash_009', {
+      id: 'sbj_dash_009',
+      user_id: userId,
+      email: 'seeker9@example.com',
+      name: 'Bhaskr Singh'
+    });
+    const sessionToken = await mintUserSession(env, userId, '127.0.0.1', Date.now());
+    const cookieHeader = `nv_session=${sessionToken}`;
+
+    // --- (A) WEBHOOK ARRIVING LATE ---
+    const lateOrderId = 'ord_webhook_late_009a';
+    const lateRzpOrderId = 'order_rzp_late_009a';
+    env._memoryDB.orders.set(lateOrderId, {
+      id: lateOrderId,
+      user_id: userId,
+      subject_id: 'sbj_dash_009',
+      pack_id: 'report_basic',
+      amount_paise: 19900,
+      currency: 'INR',
+      rzp_order_id: lateRzpOrderId,
+      status: 'PAYMENT_VERIFIED',
+      email: 'seeker9@example.com',
+      created_at: Date.now() - (4 * 60 * 1000),
+      updated_at: Date.now() - (4 * 60 * 1000)
+    });
+
+    let rzpFallbackHits = 0;
+    const origFetch = globalThis.fetch;
+    globalThis.fetch = async (input, init) => {
+      const u = typeof input === 'string' ? input : input.url;
+      if (u.startsWith('https://api.razorpay.com/v1/orders/')) {
+        rzpFallbackHits++;
+        const oidMatch = u.split('/orders/')[1].split('/')[0];
+        return new Response(JSON.stringify({
+          items: [{
+            id: `pay_never_webhook_${oidMatch}`,
+            order_id: decodeURIComponent(oidMatch),
+            amount: 19900,
+            currency: 'INR',
+            status: 'captured',
+            method: 'upi'
+          }]
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      return origFetch(input, init);
+    };
+
+    try {
+      // Poll 1 at +4 min: shows "Payment received, preparing your report" without hitting Razorpay API
+      const dashRes1 = await worker.fetch(new Request('https://test.numerosvision.com/api/v1/dashboard/view', {
+        headers: { Cookie: cookieHeader }
+      }), env, {});
+      assert.strictEqual(dashRes1.status, 200);
+      const dashBody1 = await dashRes1.json();
+      assert.strictEqual(rzpFallbackHits, 0, 'Webhook-late order at +4 min must NOT hit Razorpay fallback API');
+      const lateReportCard1 = dashBody1.reports.find(r => r.orderId === lateOrderId);
+      assert.ok(lateReportCard1, 'PAYMENT_VERIFIED order must appear in dashboard reports');
+      assert.strictEqual(lateReportCard1.status, 'preparing');
+      assert.strictEqual(lateReportCard1.message, 'Payment received, preparing your report');
+
+      // Signed webhook arrives late (+5 min) -> fulfills order
+      const lateWebhookPayload = JSON.stringify({
+        event: 'order.paid',
+        payload: {
+          order: { entity: { id: lateRzpOrderId, amount_paid: 19900, status: 'paid' } },
+          payment: { entity: { id: 'pay_late_009a', order_id: lateRzpOrderId, amount: 19900, currency: 'INR', status: 'captured', method: 'upi' } }
+        }
+      });
+      const lateSig = crypto.createHmac('sha256', env.RAZORPAY_WEBHOOK_SECRET).update(lateWebhookPayload).digest('hex');
+      const whRes = await worker.fetch(new Request('https://test.numerosvision.com/api/v1/payments/webhook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Razorpay-Signature': lateSig },
+        body: lateWebhookPayload
+      }), env, {});
+      assert.strictEqual(whRes.status, 200);
+      assert.strictEqual(env._memoryDB.orders.get(lateOrderId).status, 'PAID');
+      const lateJobs = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === lateOrderId);
+      assert.strictEqual(lateJobs.length, 1, 'Late webhook must create 1 report job');
+
+      // --- (B) WEBHOOK NEVER ARRIVING ---
+      const neverOrderId = 'ord_webhook_never_009b';
+      const neverRzpOrderId = 'order_rzp_never_009b';
+      env._memoryDB.orders.set(neverOrderId, {
+        id: neverOrderId,
+        user_id: userId,
+        subject_id: 'sbj_dash_009',
+        pack_id: 'report_basic',
+        amount_paise: 19900,
+        currency: 'INR',
+        rzp_order_id: neverRzpOrderId,
+        status: 'PAYMENT_VERIFIED',
+        email: 'seeker9@example.com',
+        created_at: Date.now() - (11 * 60 * 1000),
+        updated_at: Date.now() - (11 * 60 * 1000)
+      });
+
+      // Dashboard auto-refresh poll at +11 min triggers reconcileStaleOrderWithRazorpay automatically!
+      const dashRes2 = await worker.fetch(new Request('https://test.numerosvision.com/api/v1/dashboard/view', {
+        headers: { Cookie: cookieHeader }
+      }), env, {});
+      assert.strictEqual(dashRes2.status, 200);
+      const dashBody2 = await dashRes2.json();
+      assert.strictEqual(rzpFallbackHits, 1, 'Dashboard poll at +11 min must call Razorpay fallback API once');
+      assert.strictEqual(env._memoryDB.orders.get(neverOrderId).status, 'PAID', 'Never-webhook order must transition to PAID via fallback');
+      const neverJobs = Array.from(env._memoryDB.report_jobs.values()).filter(j => j.order_id === neverOrderId);
+      assert.strictEqual(neverJobs.length, 1, 'Never-webhook order must fulfill exactly 1 report job');
+      const neverReceipt = dashBody2.receipts.find(rc => rc.order_id === neverOrderId);
+      assert.ok(neverReceipt, 'Paid receipt must be emitted in dashboard');
+      assert.strictEqual(neverReceipt.supplier_legal_name, 'Bhaskar Kumar Singh');
+
+      // Repeat dashboard poll must NOT re-call Razorpay or duplicate jobs
+      await worker.fetch(new Request('https://test.numerosvision.com/api/v1/dashboard/view', {
+        headers: { Cookie: cookieHeader }
+      }), env, {});
+      assert.strictEqual(rzpFallbackHits, 1, 'Subsequent dashboard polls must not re-query Razorpay');
+    } finally {
+      globalThis.fetch = origFetch;
+    }
+    console.log('✓ PASS: Dashboard preparing state + webhook-late and webhook-never-arriving flows verified.');
+  }
+
+  // =========================================================================
+  // TEST 10: SERVER FIXED LAUNCH-OFFER EXPIRY PRICE SWITCH
+  // =========================================================================
+  {
+    console.log('[Test 10] Server launch-offer fixed timestamp price switch (before vs after 2026-11-19T23:59:59+05:30)');
+    const env = createMockEnv();
+    const beforeMs = Date.parse('2026-11-15T12:00:00+05:30');
+    const afterMs = Date.parse('2026-11-20T00:00:01+05:30');
+
+    assert.strictEqual(resolveServerLaunchOfferState(env, beforeMs).active, true);
+    assert.strictEqual(resolveServerLaunchOfferState(env, afterMs).active, false);
+
+    assert.strictEqual(getPackById('report_basic', env, beforeMs).amount_paise, 19900);
+    assert.strictEqual(getPackById('report_basic', env, beforeMs).struck_mrp_inr, 399);
+    assert.strictEqual(getPackById('report_basic', env, afterMs).amount_paise, 39900);
+    assert.strictEqual(getPackById('report_basic', env, afterMs).struck_mrp_inr, null);
+
+    assert.strictEqual(getPackById('report_advanced', env, beforeMs).amount_paise, 51000);
+    assert.strictEqual(getPackById('report_advanced', env, afterMs).amount_paise, 102000);
+    assert.strictEqual(getPackById('report_advanced', env, afterMs).struck_mrp_inr, null);
+
+    assert.strictEqual(getPackById('report_premium', env, beforeMs).amount_paise, 105000);
+    assert.strictEqual(getPackById('report_premium', env, afterMs).amount_paise, 210000);
+    assert.strictEqual(getPackById('report_premium', env, afterMs).struck_mrp_inr, null);
+    console.log('✓ PASS: Server price switches automatically from 1050/510/199 to 2100/1020/399 after fixed ends_at.');
+  }
+
+  // =========================================================================
+  // TEST 11: ONE-HOP (301) REDIRECT VERIFICATION MATRIX AGAINST DIST
+  // =========================================================================
+  {
+    console.log('[Test 11] One-hop (301) redirect verification matrix against dist_cloudflare_pages');
+    const distDir = path.resolve(process.cwd(), 'dist_cloudflare_pages');
+    const env = createMockEnv({
+      ASSETS: {
+        fetch: async (req) => {
+          const u = new URL(req.url);
+          const rel = u.pathname === '/' ? 'index.html' : path.join(...u.pathname.replace(/^\/+|\/+$/g, '').split('/'), 'index.html');
+          const full = path.join(distDir, rel);
+          if (fs.existsSync(full)) {
+            return new Response(fs.readFileSync(full), {
+              status: 200,
+              headers: { 'Content-Type': 'text/html; charset=utf-8' }
+            });
+          }
+          return new Response('Not Found', { status: 404 });
+        }
+      }
+    });
+
+    const redirectCases = [
+      ['https://numerosvision.com/tools/lucky-number/', 'https://numerosvision.com/calculators/favourable-numbers/'],
+      ['https://numerosvision.com/tools/favourable-numbers/', 'https://numerosvision.com/calculators/favourable-numbers/'],
+      ['https://numerosvision.com/tools/lo-shu-grid/', 'https://numerosvision.com/calculators/lo-shu-grid/'],
+      ['https://numerosvision.com/tools/name-numerology/', 'https://numerosvision.com/calculators/name-numerology/'],
+      ['https://numerosvision.com/tools/name-balancing/', 'https://numerosvision.com/calculators/name-balancing/'],
+      ['https://numerosvision.com/tools/mobile-numerology/', 'https://numerosvision.com/calculators/mobile-number/'],
+      ['https://numerosvision.com/tools/life-path-calculator/', 'https://numerosvision.com/calculators/life-path/'],
+      ['https://numerosvision.com/tools/compatibility-calculator/', 'https://numerosvision.com/calculators/compatibility/'],
+      ['https://numerosvision.com/tools/kundali-milan/', 'https://numerosvision.com/calculators/compatibility/'],
+      ['https://numerosvision.com/tools/blessing-years/', 'https://numerosvision.com/calculators/personal-year/'],
+      ['https://numerosvision.com/tools/business-alignment/', 'https://numerosvision.com/calculators/business-alignment/'],
+      ['https://numerosvision.com/tools/business-numerology/', 'https://numerosvision.com/calculators/business-alignment/'],
+      ['https://numerosvision.com/tools/baby-naming/', 'https://numerosvision.com/calculators/baby-naming/'],
+      ['https://numerosvision.com/tools/property-numerology/', 'https://numerosvision.com/calculators/property-numerology/'],
+      ['https://numerosvision.com/tools/vehicle-numerology/', 'https://numerosvision.com/calculators/vehicle-numerology/'],
+      ['https://numerosvision.com/tools/profession-calculator/', 'https://numerosvision.com/calculators/profession-calculator/'],
+      ['https://numerosvision.com/tools/logo-intelligence/', 'https://numerosvision.com/calculators/logo-intelligence/'],
+      ['https://numerosvision.com/tools/logo-studio/', 'https://numerosvision.com/calculators/logo-intelligence/'],
+      ['https://numerosvision.com/reports/', 'https://numerosvision.com/reports_catalogue/'],
+      ['https://numerosvision.com/charm_ai.html', 'https://numerosvision.com/charm-ai/'],
+      ['https://numerosvision.com/privacy-policy/', 'https://numerosvision.com/privacy/'],
+      ['https://numerosvision.com/sample-report/', 'https://numerosvision.com/sample_roadmap/'],
+      ['http://numerosvision.com/', 'https://numerosvision.com/'],
+      ['https://www.numerosvision.com/', 'https://numerosvision.com/'],
+      ['http://www.numerosvision.com/tools/lucky-number/', 'https://numerosvision.com/calculators/favourable-numbers/'],
+      ['https://numerosvision.com/numerology_overview/', 'https://numerosvision.com/numerology-overview/'],
+      ['https://numerosvision.com/blog/gemstone-remedies.html', 'https://numerosvision.com/blog/vedic-gemstone-remedies/'],
+      ['https://numerosvision.com/blog/what-is-numerology.html', 'https://numerosvision.com/blog/what-is-numerology/']
+    ];
+
+    for (const [srcUrl, expectedTarget] of redirectCases) {
+      const r1 = await worker.fetch(new Request(srcUrl), env, {});
+      assert.strictEqual(r1.status, 301, `Expected 301 on ${srcUrl}, got ${r1.status}`);
+      const loc = r1.headers.get('Location');
+      assert.strictEqual(loc, expectedTarget, `Expected 1-hop Location ${expectedTarget} for ${srcUrl}, got ${loc}`);
+      const r2 = await worker.fetch(new Request(loc), env, {});
+      assert.strictEqual(r2.status, 200, `Expected final 200 OK at ${loc} (1 hop from ${srcUrl}), got ${r2.status}`);
+    }
+    console.log(`✓ PASS: All ${redirectCases.length} redirect routes verified as 301 in exactly 1 hop -> 200 OK.`);
+  }
+
+  console.log('--- ALL SUITE TESTS PASSED SUCCESSFULLY (11/11) ---');
 }
 
 runTestSuite().catch(err => {

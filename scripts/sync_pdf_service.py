@@ -19,6 +19,10 @@ def sync_pdf_service():
     (dest / '__init__.py').write_text('', encoding='utf-8')
 
     needed_files = [
+        'app/assets/nv-logo-mark.png',
+        'app/assets/nv-icon.png',
+        'app/assets/nv-report-watermark-12pct-4096.png',
+        'app/assets/nv-header-lockup-transparent-2x.png',
         'app/config/packs.json',
         'app/config/pricing_config.py',
         'app/data/birth_subdates_registry.json',

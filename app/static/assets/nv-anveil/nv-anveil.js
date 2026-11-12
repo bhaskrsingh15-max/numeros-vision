@@ -13,9 +13,9 @@
     packageUrl: '/package/',                // "What's included" page, same params
     includeCoreInGrid: false, // Approved single rule: 8 raw non-zero DDMMYYYY digits only                // your method: plot Mulank + Bhagyank too
     tiers: {
-      e: { sku: 'report_premium', label: 'Anveil every charm', price: '₹1,050', mrp: '₹2,100', pages: '32-page roadmap', per: '~₹33/page' },
-      g: { sku: 'report_advanced', label: 'Anveil my glowing charms', price: '₹510', mrp: '₹1,020', pages: '12-page reading', per: '~₹43/page' },
-      a: { sku: 'report_basic', label: 'Anveil my alignments', price: '₹199', mrp: '₹399', pages: '3-page reading', per: '~₹66/page' }
+      e: { sku: 'report_premium', label: 'Anveil every charm', descriptor: 'Complete Numerology Report, 32 pages', price: '₹1,050', mrp: '₹2,100', pages: 'Complete Numerology Report, 32 pages', per: '' },
+      g: { sku: 'report_advanced', label: 'Anveil my glowing charms', descriptor: 'Advanced Numerology Report, 12 pages', price: '₹510', mrp: '₹1,020', pages: 'Advanced Numerology Report, 12 pages', per: '' },
+      a: { sku: 'report_basic', label: 'Anveil my alignments', descriptor: 'Basic Numerology Report, 3 pages', price: '₹199', mrp: '₹399', pages: 'Basic Numerology Report, 3 pages', per: '' }
     },
     // One row per calculator. Fill name, price, pages and key numbers.
     services: {}
@@ -156,7 +156,27 @@
     let sel = null, view = 'charms', engaged = false, timers = [];
     const go = (url, tier) => { saveDob(p.dob); location.href = `${url}?tier=${encodeURIComponent(tier)}&svc=${encodeURIComponent(svc)}`; };
     const tierFor = n => view === 'align' ? 'a' : (S ? svc : (counts[n] ? 'g' : 'e'));
-    const priceOf = t => S && t === svc ? S.price : CONFIG.tiers[t].price;
+    const resolveTierDisplay = t => {
+      if (S && t === svc) return { label: S.label || S.name, price: S.price, mrp: S.mrp || '', pages: S.pages || '', per: '', launchCopy: '' };
+      const base = CONFIG.tiers[t];
+      if (global.NV_PRICING && base && base.sku) {
+        const activePrice = global.NV_PRICING.formatPrice(base.sku);
+        const struck = global.NV_PRICING.getStruckMrp(base.sku);
+        const launchCopy = typeof global.NV_PRICING.formatLaunchOfferCopy === 'function'
+          ? global.NV_PRICING.formatLaunchOfferCopy(base.sku)
+          : '';
+        return {
+          label: base.label,
+          price: activePrice,
+          mrp: struck ? ('₹' + Number(struck).toLocaleString('en-IN')) : '',
+          pages: base.descriptor || base.pages,
+          per: '',
+          launchCopy
+        };
+      }
+      return Object.assign({ launchCopy: '' }, base);
+    };
+    const priceOf = t => resolveTierDisplay(t).price;
 
     // Grid
     const grid = el('div', 'nv-grid'); p.grid.append(grid);
@@ -209,7 +229,7 @@
       const selVeiled = sel && !counts[sel] && view !== 'align';
       p.prices.innerHTML = '';
       keys.forEach(t => {
-        const T = S && t === svc ? S : CONFIG.tiers[t];
+        const T = resolveTierDisplay(t);
         const featured = S ? t === svc : t === 'e', match = t === matchT, notFor = selVeiled && t === 'g';
         const tag = (S && t === svc) ? `For your ${S.name.split(' ')[0].toLowerCase()} question` : (match ? 'Matches the charm you tapped' : (t === 'e' ? 'Best value' : ''));
         const cover = notFor ? 'Covers your glowing charms only, not this veiled one'
@@ -218,10 +238,12 @@
         const card = el('div', 'nv-price' + (featured ? ' is-featured' : '') + (match ? ' is-match' : '') + (notFor ? ' is-notfor' : ''));
         card.innerHTML =
           `<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong style="font-weight:500">${T.label}</strong>${tag ? `<span class="nv-pill${match ? ' is-match' : ''}">${tag}</span>` : ''}</div>` +
-          `<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="nv-amt">${T.price}</span>${T.mrp ? `<s>${T.mrp}</s>` : ''}<span style="font-size:12px">${T.pages}${T.per ? ' · ' + T.per : ''}</span></div>` +
+          `<div style="font-size:12px;color:#7A654D;margin-top:2px">${T.pages}</div>` +
+          `<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="nv-amt">${T.price}</span>${T.mrp ? `<s>${T.mrp}</s>` : ''}</div>` +
+          (T.launchCopy ? `<div style="font-size:11.5px;color:#7A654D">${T.launchCopy}</div>` : '') +
           (cover ? `<p style="margin:0;font-size:13px">${cover}</p>` : '');
         const buy = el('button', 'nv-btn', `Anveil now · ${T.price}`); buy.type = 'button';
-        buy.addEventListener('click', () => { track('select_package', { tier: t, svc, value: CONFIG.tiers[t] ? CONFIG.tiers[t].price : undefined }); go(CONFIG.checkoutUrl, t); });
+        buy.addEventListener('click', () => { track('select_package', { tier: t, svc, value: T.price }); go(CONFIG.checkoutUrl, t); });
         const info = el('a', '', "What's included"); info.href = `${CONFIG.packageUrl}?tier=${t}&svc=${svc}`; info.addEventListener('click', () => saveDob(p.dob)); info.style.cssText = 'text-align:center;font-size:13px';
         card.append(buy, info); p.prices.append(card);
       });

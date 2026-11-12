@@ -30,21 +30,23 @@ import os
 CURRENCY = "INR"
 LADDER_ORDER: List[str] = ["report_premium", "report_advanced", "report_basic"]
 LAUNCH_OFFER_DURATION_DAYS: int = 7
-LAUNCH_OFFER_PRELAUNCH_LABEL: str = "1-week launch offer · valid for 7 days from launch"
+LAUNCH_OFFER_STARTED_AT_DEFAULT: str = "2026-11-12T00:00:00+05:30"
+LAUNCH_OFFER_ENDS_AT_DEFAULT: str = "2026-11-19T23:59:59+05:30"
+IST_TZ = timezone(timedelta(hours=5, minutes=30))
 
 # ── 1. PRODUCT FAMILY A: STANDALONE REPORTS (3 UNIFIED TIERS) ────────────────
 REPORT_TIERS: Dict[str, Dict[str, Any]] = {
     "premium": {
         "tier_id": "premium",
         "name": "Anveil every charm",
-        "display_name": "Anveil every charm · Best value",
+        "descriptor": "Complete Numerology Report, 32 pages",
+        "display_name": "Anveil every charm · Complete Numerology Report, 32 pages",
         "pages": 32,
         "page_target": "32-page PDF",
         "price_inr": 1050,
         "amount_paise": 105000,
         "mrp_inr": 2100,
         "mrp_paise": 210000,
-        "per_page_inr": 33,
         "digital_root": 6,  # 1+0+5+0=6 (Venus / Harmony)
         "mrp_digital_root": 3,  # 2+1+0+0=3 (Jupiter / Wisdom)
         "best_value": True,
@@ -65,14 +67,14 @@ REPORT_TIERS: Dict[str, Dict[str, Any]] = {
     "advanced": {
         "tier_id": "advanced",
         "name": "Anveil my glowing charms",
-        "display_name": "Anveil my glowing charms",
+        "descriptor": "Advanced Numerology Report, 12 pages",
+        "display_name": "Anveil my glowing charms · Advanced Numerology Report, 12 pages",
         "pages": 12,
         "page_target": "12-page PDF",
         "price_inr": 510,
         "amount_paise": 51000,
         "mrp_inr": 1020,
         "mrp_paise": 102000,
-        "per_page_inr": 43,
         "digital_root": 6,  # 5+1+0=6 (Venus / Harmony)
         "mrp_digital_root": 3,  # 1+0+2+0=3 (Jupiter / Wisdom)
         "popular": True,
@@ -93,14 +95,14 @@ REPORT_TIERS: Dict[str, Dict[str, Any]] = {
     "basic": {
         "tier_id": "basic",
         "name": "Anveil my alignments",
-        "display_name": "Anveil my alignments",
+        "descriptor": "Basic Numerology Report, 3 pages",
+        "display_name": "Anveil my alignments · Basic Numerology Report, 3 pages",
         "pages": 3,
         "page_target": "3-page PDF",
         "price_inr": 199,
         "amount_paise": 19900,
         "mrp_inr": 399,
         "mrp_paise": 39900,
-        "per_page_inr": 66,
         "digital_root": 1,  # 1+9+9=19 -> 1+0=1 (Sun / Leadership)
         "mrp_digital_root": 3,  # 3+9+9=21 -> 3 (Jupiter / Wisdom)
         "purpose": "A focused 3-page reading of your core alignments with essential calculations and initial findings.",
@@ -441,7 +443,8 @@ CHARM_AI_PACKS: Dict[str, Dict[str, Any]] = {
     "charm_free": {
         "pack_id": "charm_free",
         "name": "Free Preview",
-        "display_name": "Charm AI · Free Preview",
+        "descriptor": "Free Exploratory Numerology Q&A, 3 questions",
+        "display_name": "Charm AI · Free Exploratory Numerology Q&A, 3 questions",
         "price_inr": 0,
         "amount_paise": 0,
         "questions_count": 3,
@@ -456,7 +459,8 @@ CHARM_AI_PACKS: Dict[str, Dict[str, Any]] = {
     "charm_single": {
         "pack_id": "charm_single",
         "name": "Charm AI Starter Pack",
-        "display_name": "Charm AI · Starter Pack",
+        "descriptor": "Guided Numerology Q&A Pack, 5 questions",
+        "display_name": "Charm AI Starter Pack · Guided Numerology Q&A Pack, 5 questions",
         "price_inr": 199,
         "amount_paise": 19900,
         "questions_count": 5,
@@ -531,27 +535,146 @@ CONSULTATION_PACKS: Dict[str, Dict[str, Any]] = {
 }
 
 
-def get_all_product_skus() -> Dict[str, Dict[str, Any]]:
+def _parse_iso_dt(ts: str) -> datetime:
+    cleaned = str(ts).strip().replace("Z", "+00:00")
+    dt = datetime.fromisoformat(cleaned)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt
+
+
+def _format_ist_date(dt: datetime) -> str:
+    ist_dt = dt.astimezone(IST_TZ)
+    return f"{ist_dt.day} {ist_dt.strftime('%b %Y')}"
+
+
+def resolve_launch_offer_state(
+    now_iso: Optional[str] = None,
+    ends_at_override: Optional[str] = None,
+) -> Dict[str, Any]:
+    """
+    Resolves the single fixed server-configured launch offer window:
+    - Fixed `ends_at` set once in server config (`packs.json` or `NV_LAUNCH_ENDS_AT`) —
+      never per visitor and never resets.
+    - Before/at `ends_at`: `active=True`, launch prices (`1050`/`510`/`199`) apply with struck regular MRP.
+    - After `ends_at`: `active=False`, regular prices (`2100`/`1020`/`399`) become the displayed AND charged prices,
+      and the strike-through disappears.
+    """
+    started_raw: Optional[str] = LAUNCH_OFFER_STARTED_AT_DEFAULT
+    ends_raw: Optional[str] = ends_at_override
+    enabled: bool = True
+
+    if ends_raw is None:
+        env_ends = os.getenv("NV_LAUNCH_ENDS_AT")
+        if env_ends and env_ends.strip():
+            ends_raw = env_ends.strip()
+        else:
+            try:
+                packs_path = os.path.join(os.path.dirname(__file__), "packs.json")
+                with open(packs_path, "r", encoding="utf-8") as fh:
+                    packs_data = json.load(fh)
+                lo = packs_data.get("launch_offer", {})
+                enabled = bool(lo.get("enabled", True))
+                started_raw = lo.get("started_at") or LAUNCH_OFFER_STARTED_AT_DEFAULT
+                ends_raw = lo.get("ends_at") or LAUNCH_OFFER_ENDS_AT_DEFAULT
+            except Exception:
+                ends_raw = LAUNCH_OFFER_ENDS_AT_DEFAULT
+
+    if not enabled or not ends_raw:
+        return {
+            "active": False,
+            "duration_days": LAUNCH_OFFER_DURATION_DAYS,
+            "started_at": started_raw,
+            "ends_at": ends_raw,
+            "until_date": "",
+            "from_date": "",
+            "label": "",
+        }
+
+    started_dt = _parse_iso_dt(started_raw) if started_raw else None
+    ends_dt = _parse_iso_dt(ends_raw)
+    from_dt = ends_dt + timedelta(seconds=1)
+    now_dt = _parse_iso_dt(now_iso) if now_iso else datetime.now(timezone.utc)
+    is_active = now_dt <= ends_dt
+    until_str = _format_ist_date(ends_dt)
+    from_str = _format_ist_date(from_dt)
+    return {
+        "active": is_active,
+        "duration_days": LAUNCH_OFFER_DURATION_DAYS,
+        "started_at": started_dt.isoformat() if started_dt else None,
+        "ends_at": ends_dt.isoformat(),
+        "until_date": until_str,
+        "from_date": from_str,
+        "label": (
+            f"Launch price until {until_str}."
+            if is_active
+            else f"Regular pricing in effect from {from_str}."
+        ),
+    }
+
+
+def format_launch_offer_copy(
+    sku_or_tier_id: str,
+    now_iso: Optional[str] = None,
+    ends_at_override: Optional[str] = None,
+) -> str:
+    """
+    Returns exact launch/regular price notice for a report SKU:
+    - Before `ends_at`: 'Launch price until <date>. Regular price ₹X from <date>.'
+    - After `ends_at`:  'Regular price ₹X (effective <date>).'
+    """
+    tier_key = str(sku_or_tier_id or "").strip().lower().replace("report_", "")
+    alias = {"essential": "basic", "alignments": "basic", "master": "advanced", "glowing": "advanced", "divine": "premium", "every_charm": "premium"}
+    tier_key = alias.get(tier_key, tier_key)
+    tier = REPORT_TIERS.get(tier_key)
+    if not tier:
+        return ""
+    mrp_inr = int(tier["mrp_inr"])
+    state = resolve_launch_offer_state(now_iso=now_iso, ends_at_override=ends_at_override)
+    if state["active"]:
+        return f"Launch price until {state['until_date']}. Regular price ₹{mrp_inr:,} from {state['from_date']}."
+    if state.get("from_date"):
+        return f"Regular price ₹{mrp_inr:,} (effective {state['from_date']})."
+    return f"Regular price ₹{mrp_inr:,}."
+
+
+def get_all_product_skus(
+    now_iso: Optional[str] = None,
+    ends_at_override: Optional[str] = None,
+) -> Dict[str, Dict[str, Any]]:
     """
     Returns a unified flat lookup dictionary of all purchasable SKUs with
-    authoritative price and metadata.
+    authoritative time-resolved price and metadata.
     """
     skus: Dict[str, Dict[str, Any]] = {}
+    launch_state = resolve_launch_offer_state(now_iso=now_iso, ends_at_override=ends_at_override)
+    launch_active = bool(launch_state.get("active"))
 
-    # Standalone report tiers
+    # Standalone report tiers (automatically switch to regular mrp_inr after fixed ends_at)
     for tier_id, tier in REPORT_TIERS.items():
+        mrp_inr = int(tier.get("mrp_inr", tier["price_inr"]))
+        mrp_paise = int(tier.get("mrp_paise", mrp_inr * 100))
+        active_inr = int(tier["price_inr"]) if launch_active else mrp_inr
+        active_paise = int(tier["amount_paise"]) if launch_active else mrp_paise
         skus[f"report_{tier_id}"] = {
             "sku_id": f"report_{tier_id}",
             "family": "standalone_report",
             "name": tier["name"],
+            "descriptor": tier.get("descriptor", ""),
+            "display_name": tier.get("display_name", tier["name"]),
             "tier": tier_id,
             "pages": tier["pages"],
-            "amount_inr": tier["price_inr"],
-            "amount_paise": tier["amount_paise"],
-            "mrp_inr": tier.get("mrp_inr", tier["price_inr"]),
-            "mrp_paise": tier.get("mrp_paise", tier["amount_paise"]),
-            "per_page_inr": tier.get("per_page_inr"),
-            "original_price_inr": tier.get("original_price_inr", tier.get("mrp_inr", tier["price_inr"])),
+            "launch_price_inr": int(tier["price_inr"]),
+            "launch_amount_paise": int(tier["amount_paise"]),
+            "amount_inr": active_inr,
+            "amount_paise": active_paise,
+            "mrp_inr": mrp_inr,
+            "mrp_paise": mrp_paise,
+            "struck_mrp_inr": mrp_inr if launch_active else None,
+            "show_strike_through": launch_active,
+            "launch_offer_active": launch_active,
+            "launch_offer_copy": format_launch_offer_copy(tier_id, now_iso=now_iso, ends_at_override=ends_at_override),
+            "original_price_inr": mrp_inr,
             "currency": CURRENCY,
             "deliverables": tier["deliverables"]
         }
@@ -562,6 +685,7 @@ def get_all_product_skus() -> Dict[str, Dict[str, Any]]:
             "sku_id": b_id,
             "family": "bundle",
             "name": bundle["name"],
+            "descriptor": bundle.get("included_reports_description", ""),
             "amount_inr": bundle["bundle_price_inr"],
             "amount_paise": bundle["amount_paise"],
             "original_price_inr": bundle.get("standalone_total_inr", bundle["bundle_price_inr"]),
@@ -575,6 +699,7 @@ def get_all_product_skus() -> Dict[str, Dict[str, Any]]:
             "sku_id": p_id,
             "family": "charm_ai",
             "name": pack["name"],
+            "descriptor": pack.get("descriptor", ""),
             "questions_count": pack["questions_count"],
             "amount_inr": pack["price_inr"],
             "amount_paise": pack["amount_paise"],
@@ -589,6 +714,7 @@ def get_all_product_skus() -> Dict[str, Dict[str, Any]]:
             "sku_id": c_id,
             "family": "consultation",
             "name": consult["name"],
+            "descriptor": "Private 1-on-1 Numerology Consultation, 45 minutes",
             "amount_inr": consult["price_inr"],
             "amount_paise": consult["amount_paise"],
             "original_price_inr": consult.get("original_price_inr", consult["price_inr"]),
@@ -599,13 +725,17 @@ def get_all_product_skus() -> Dict[str, Dict[str, Any]]:
     return skus
 
 
-def resolve_sku_price(sku_or_plan_id: str) -> Optional[Dict[str, Any]]:
+def resolve_sku_price(
+    sku_or_plan_id: str,
+    now_iso: Optional[str] = None,
+    ends_at_override: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
     """
     Given a SKU ID or legacy plan ID, safely resolves the authoritative server price.
-    Never trusts client input.
+    Never trusts client input. Switches core reports to regular price (`mrp_inr`) after `ends_at`.
     """
     clean_id = sku_or_plan_id.lower().strip()
-    skus = get_all_product_skus()
+    skus = get_all_product_skus(now_iso=now_iso, ends_at_override=ends_at_override)
 
     if clean_id in skus:
         return skus[clean_id]
@@ -671,71 +801,6 @@ def is_notify_me_higher_tiers_enabled() -> bool:
         return bool(packs_data.get("feature_flags", {}).get("notify_me_higher_tiers", True))
     except Exception:
         return True
-
-
-def resolve_launch_offer_state(
-    now_iso: Optional[str] = None,
-    started_at_override: Optional[str] = None,
-) -> Dict[str, Any]:
-    """
-    Resolves the dynamic 1-week (7-day) launch offer window:
-    - Before `started_at` (or `NV_LAUNCH_STARTED_AT`) is stamped:
-      returns active=True with label '1-week launch offer · valid for 7 days from launch'
-      (no hardcoded end date, no ticking countdown timer).
-    - Once `started_at` is set: computes `ends_at = started_at + 7 days` and returns
-      'Launch offer valid until <D Mon YYYY>' while active, or active=False once expired.
-    """
-    started_raw = started_at_override
-    if started_raw is None:
-        env_started = os.getenv("NV_LAUNCH_STARTED_AT")
-        if env_started and env_started.strip():
-            started_raw = env_started.strip()
-        else:
-            try:
-                packs_path = os.path.join(os.path.dirname(__file__), "packs.json")
-                with open(packs_path, "r", encoding="utf-8") as fh:
-                    packs_data = json.load(fh)
-                lo = packs_data.get("launch_offer", {})
-                if not lo.get("enabled", True):
-                    return {
-                        "active": False,
-                        "duration_days": int(lo.get("duration_days", LAUNCH_OFFER_DURATION_DAYS)),
-                        "started_at": None,
-                        "ends_at": None,
-                        "label": "",
-                    }
-                started_raw = lo.get("started_at")
-            except Exception:
-                started_raw = None
-
-    if not started_raw:
-        return {
-            "active": True,
-            "duration_days": LAUNCH_OFFER_DURATION_DAYS,
-            "started_at": None,
-            "ends_at": None,
-            "label": LAUNCH_OFFER_PRELAUNCH_LABEL,
-        }
-
-    def _parse_iso(ts: str) -> datetime:
-        cleaned = ts.strip().replace("Z", "+00:00")
-        dt = datetime.fromisoformat(cleaned)
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
-        return dt
-
-    started_dt = _parse_iso(str(started_raw))
-    ends_dt = started_dt + timedelta(days=LAUNCH_OFFER_DURATION_DAYS)
-    now_dt = _parse_iso(now_iso) if now_iso else datetime.now(timezone.utc)
-    is_active = now_dt <= ends_dt
-    day_str = str(ends_dt.day) + ends_dt.strftime(" %b %Y")
-    return {
-        "active": is_active,
-        "duration_days": LAUNCH_OFFER_DURATION_DAYS,
-        "started_at": started_dt.isoformat(),
-        "ends_at": ends_dt.isoformat(),
-        "label": f"Launch offer valid until {day_str}" if is_active else "",
-    }
 
 
 def recommend_ladder_tier(

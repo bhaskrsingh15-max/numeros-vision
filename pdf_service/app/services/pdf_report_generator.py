@@ -347,20 +347,19 @@ def draw_page_background(canvas_obj, doc):
     canvas_obj.rect(cx - 20, cy - 20, 40, 40, stroke=1, fill=0)
     canvas_obj.rect(cx - 14, cy - 14, 28, 28, stroke=1, fill=0)
 
-    # 3. Official Logo Mark Image Watermark (Approved centered watermark at 7% opacity)
-    logo_file = os.path.join(os.path.dirname(__file__), "..", "assets", "nv-logo-mark.png")
-    if not os.path.exists(logo_file):
-        logo_file = os.path.join(os.path.dirname(__file__), "..", "static", "logos", "nv-logo-mark.png")
-    if not os.path.exists(logo_file):
-        logo_file = os.path.join("app", "static", "logos", "nv-logo-mark.png")
-    if not os.path.exists(logo_file):
-        logo_file = os.path.join("pdf_service", "app", "assets", "nv-logo-mark.png")
-
-    if os.path.exists(logo_file):
+    # 3. Official Report Watermark (nv-report-watermark-12pct-4096.png: already 12%, ~140 mm wide, centred)
+    wm_candidates = [
+        os.path.join(os.path.dirname(__file__), "..", "assets", "nv-report-watermark-12pct-4096.png"),
+        os.path.join(os.path.dirname(__file__), "..", "static", "assets", "brand", "nv-report-watermark-12pct-4096.png"),
+        os.path.join("app", "static", "assets", "brand", "nv-report-watermark-12pct-4096.png"),
+        os.path.join("pdf_service", "app", "assets", "nv-report-watermark-12pct-4096.png"),
+    ]
+    wm_file = next((p for p in wm_candidates if os.path.exists(p)), None)
+    if wm_file:
         try:
-            canvas_obj.setFillAlpha(0.07)  # 7% opacity (within approved 6-8% band)
-            img_size = 220
-            canvas_obj.drawImage(logo_file, cx - img_size / 2, cy - img_size / 2,
+            canvas_obj.setFillAlpha(1.0)  # Asset is pre-baked at 12% opacity per brand spec
+            img_size = 396  # ~140 mm wide (140 * 72 / 25.4 = 396.85 pt)
+            canvas_obj.drawImage(wm_file, cx - img_size / 2, cy - img_size / 2,
                                  width=img_size, height=img_size, mask='auto',
                                  preserveAspectRatio=True)
         except Exception:
@@ -400,23 +399,28 @@ class NumerosReportCanvas(canvas.Canvas):
         self.setLineWidth(0.6)
         self.rect(21, 21, w - 42, h - 42, stroke=1, fill=0)
 
-        # 2. Running Header
-        logo_icon = os.path.join(os.path.dirname(__file__), "..", "static", "logos", "nv-logo-mark.png")
-        if not os.path.exists(logo_icon):
-            logo_icon = os.path.join("app", "static", "logos", "anveil-charm-square.png")
-        if os.path.exists(logo_icon):
+        # 2. Running Header (nv-header-lockup-transparent-2x.png ~12 mm high = 34 pt, with text fallback)
+        lockup_candidates = [
+            os.path.join(os.path.dirname(__file__), "..", "assets", "nv-header-lockup-transparent-2x.png"),
+            os.path.join(os.path.dirname(__file__), "..", "static", "assets", "brand", "nv-header-lockup-transparent-2x.png"),
+            os.path.join("app", "static", "assets", "brand", "nv-header-lockup-transparent-2x.png"),
+            os.path.join("pdf_service", "app", "assets", "nv-header-lockup-transparent-2x.png"),
+        ]
+        lockup_file = next((p for p in lockup_candidates if os.path.exists(p)), None)
+        drew_lockup = False
+        if lockup_file:
             try:
-                self.drawImage(logo_icon, 34, h - 31, width=13, height=13, mask='auto', preserveAspectRatio=True)
+                self.drawImage(lockup_file, 34, h - 32, width=130, height=15, mask='auto', preserveAspectRatio=True, anchor='sw')
+                drew_lockup = True
             except Exception:
-                pass
-
-        self.setFont(FONT_SERIF_BOLD, 8)
-        self.setFillColor(COLOR_GOLD_DARK)
-        self.drawString(51, h - 28, "NUMEROS VISION")
-
-        self.setFont(FONT_SERIF_ITALIC, 7.5)
-        self.setFillColor(COLOR_INK_MUTED)
-        self.drawString(136, h - 28, "·   ANVEIL EVERY CHARM")
+                drew_lockup = False
+        if not drew_lockup:
+            self.setFont(FONT_SERIF_BOLD, 8)
+            self.setFillColor(COLOR_GOLD_DARK)
+            self.drawString(34, h - 28, "NUMEROS VISION")
+            self.setFont(FONT_SERIF_ITALIC, 7.5)
+            self.setFillColor(COLOR_INK_MUTED)
+            self.drawString(119, h - 28, "·   ANVEIL EVERY CHARM")
 
         self.setFont(FONT_SERIF_REGULAR, 7.5)
         if total_pages == 3:
@@ -952,7 +956,7 @@ class NumerosPdfReportBuilder:
         self.story.append(Spacer(1, 1))
         self.story.append(Paragraph(name, s_name))
         self.story.append(Spacer(1, 1))
-        self.story.append(Paragraph(f"Foundational Planetary Frequency &amp; Lo Shu Grid Matrix ({edition.title()} Edition)", s_sub))
+        self.story.append(Paragraph(f"Basic Numerology Report, 3 pages · Foundational Frequency &amp; Lo Shu Matrix ({edition.title()} Edition)", s_sub))
         self.story.append(Spacer(1, 2))
 
         logo_mark = os.path.join("app", "static", "logos", "nv-logo-mark.png")

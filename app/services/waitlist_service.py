@@ -28,6 +28,8 @@ WAITLIST_PURPOSE = "tell me when this report is available"
 WAITLIST_RETENTION_MONTHS = 12
 WAITLIST_RETENTION_SECONDS = 365 * 86400  # 12 months (31,536,000 seconds)
 WAITLIST_CONSENT_VERSION = "dpdp_waitlist_v1.0"
+DATA_FIDUCIARY_LEGAL_NAME = "Bhaskar Kumar Singh"
+DATA_FIDUCIARY_ENTITY = "Numeros Vision Consultancy (Bhaskar Kumar Singh)"
 WAITLIST_DPDP_CONSENT_TEXT = (
     'I consent to Numeros Vision storing my encrypted email address for 12 months '
     'solely for the purpose: "tell me when this report is available", with the right '
@@ -218,6 +220,8 @@ def upsert_waitlist_record(
                         "consent_dpdp": True,
                         "consent_text": resolved_consent_text,
                         "consent_version": WAITLIST_CONSENT_VERSION,
+                        "data_fiduciary_legal_name": DATA_FIDUCIARY_LEGAL_NAME,
+                        "data_fiduciary": DATA_FIDUCIARY_ENTITY,
                         "retention_months": WAITLIST_RETENTION_MONTHS,
                         "source_page": (source_page or "your_reading")[:64],
                         "created_at": int(rec.get("created_at") or now),
@@ -239,6 +243,8 @@ def upsert_waitlist_record(
                 "consent_dpdp": True,
                 "consent_text": resolved_consent_text,
                 "consent_version": WAITLIST_CONSENT_VERSION,
+                "data_fiduciary_legal_name": DATA_FIDUCIARY_LEGAL_NAME,
+                "data_fiduciary": DATA_FIDUCIARY_ENTITY,
                 "retention_months": WAITLIST_RETENTION_MONTHS,
                 "source_page": (source_page or "your_reading")[:64],
                 "created_at": now,
@@ -358,7 +364,8 @@ def build_waitlist_notification_email(
         f"Why you received this email: You provided explicit DPDP 2023 consent for the single purpose "
         f'"{WAITLIST_PURPOSE}" (12-month maximum retention).\n'
         f"To delete your waitlist record at any time, use the Delete Waitlist Email option on our "
-        f"Notify Me dialog or contact privacy@numerosvision.com.\n\n"
+        f"Notify Me dialog or contact privacy@numerosvision.com.\n"
+        f"Data Fiduciary: {DATA_FIDUCIARY_ENTITY}\n\n"
         f"NUMEROS VISION · ANVEIL EVERY CHARM"
     )
     html_body = (
@@ -368,12 +375,13 @@ def build_waitlist_notification_email(
         f"NUMEROS VISION · ANVEIL EVERY CHARM</div>"
         f'<h2 style="color:#523E28;margin:10px 0 8px;">{pack_title} Is Now Available</h2>'
         f"<p>You asked us to tell you when <strong>{pack_title}</strong> opens.</p>"
-        f'<p><a href="https://numerosvision.com/pricing.html" '
+        f'<p><a href="https://numerosvision.com/pricing/" '
         f'style="display:inline-block;padding:10px 18px;background:#8B6914;color:#FFFDF7;'
         f'text-decoration:none;border-radius:8px;font-weight:600;">View Available Report</a></p>'
         f'<p style="font-size:12px;color:#7A654D;margin-top:18px;">'
         f'Sent strictly under your DPDP 2023 consent for purpose: "{WAITLIST_PURPOSE}" '
-        f"(12-month retention). You may delete your waitlist record on request at any time.</p>"
+        f"(12-month retention). Data Fiduciary: {DATA_FIDUCIARY_ENTITY}. "
+        f"You may delete your waitlist record on request at any time.</p>"
         f"</div>"
     )
 

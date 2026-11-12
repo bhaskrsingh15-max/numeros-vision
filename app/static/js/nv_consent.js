@@ -377,7 +377,8 @@
             <button type="button" onclick="window.nvConsent.closePreferences()" style="background:none; border:none; font-size:1.4rem; color:#7A654D; cursor:pointer;" aria-label="Close preferences">&times;</button>
           </div>
           <p style="font-size:0.80rem; color:#7A654D; line-height:1.5; margin:0 0 16px 0;">
-            Manage how Numeros Vision uses cookies and telemetry. You can update or withdraw your choices at any time.
+            Manage how Numeros Vision uses cookies and telemetry. You can update or withdraw your choices at any time.<br />
+            <span style="font-size:0.74rem;">Data Fiduciary: <strong>Numeros Vision Consultancy (Bhaskar Kumar Singh)</strong></span>
           </p>
 
           <!-- Group 1: Strictly Necessary -->

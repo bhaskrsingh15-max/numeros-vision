@@ -751,9 +751,13 @@ const PACK_CATALOG = {
   currency: "INR",
   ladder_order: ["report_premium", "report_advanced", "report_basic"],
   launch_offer: {
+    enabled: true,
     duration_days: 7,
-    started_at: null,
-    prelaunch_label: "1-week launch offer · valid for 7 days from launch"
+    started_at: "2026-11-12T00:00:00+05:30",
+    ends_at: "2026-11-19T23:59:59+05:30",
+    until_date_label: "19 Nov 2026",
+    regular_from_date_label: "20 Nov 2026",
+    copy_template: "Launch price until {until_date}. Regular price ₹{mrp_formatted} from {from_date}."
   },
   feature_flags: {
     notify_me_higher_tiers: true,
@@ -764,10 +768,11 @@ const PACK_CATALOG = {
       pack_id: "report_basic",
       tier_id: "basic",
       name: "Anveil my alignments",
+      descriptor: "Basic Numerology Report, 3 pages",
       pages: 3,
       price_inr: 199,
       mrp_inr: 399,
-      per_page_inr: 66,
+      mrp_paise: 39900,
       amount_paise: 19900,
       digital_root: 1,
       mrp_digital_root: 3,
@@ -777,10 +782,11 @@ const PACK_CATALOG = {
       pack_id: "report_advanced",
       tier_id: "advanced",
       name: "Anveil my glowing charms",
+      descriptor: "Advanced Numerology Report, 12 pages",
       pages: 12,
       price_inr: 510,
       mrp_inr: 1020,
-      per_page_inr: 43,
+      mrp_paise: 102000,
       amount_paise: 51000,
       digital_root: 6,
       mrp_digital_root: 3,
@@ -790,10 +796,11 @@ const PACK_CATALOG = {
       pack_id: "report_premium",
       tier_id: "premium",
       name: "Anveil every charm",
+      descriptor: "Complete Numerology Report, 32 pages",
       pages: 32,
       price_inr: 1050,
       mrp_inr: 2100,
-      per_page_inr: 33,
+      mrp_paise: 210000,
       amount_paise: 105000,
       digital_root: 6,
       mrp_digital_root: 3,
@@ -805,6 +812,7 @@ const PACK_CATALOG = {
     charm_free: {
       pack_id: "charm_free",
       name: "Free Preview",
+      descriptor: "Free Exploratory Numerology Q&A, 3 questions",
       price_inr: 0,
       amount_paise: 0,
       questions_count: 3,
@@ -813,6 +821,7 @@ const PACK_CATALOG = {
     charm_single: {
       pack_id: "charm_single",
       name: "Charm AI Starter Pack",
+      descriptor: "Guided Numerology Q&A Pack, 5 questions",
       price_inr: 199,
       amount_paise: 19900,
       questions_count: 5,
@@ -860,12 +869,41 @@ const PACK_CATALOG = {
   }
 };
 
-function getPackById(packId) {
+function resolveServerLaunchOfferState(env = null, nowMs = null) {
+  const lo = PACK_CATALOG.launch_offer || {};
+  if (lo.enabled === false) {
+    return { active: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
+  }
+  const rawEnds = (env && env.NV_LAUNCH_ENDS_AT && String(env.NV_LAUNCH_ENDS_AT).trim())
+    ? String(env.NV_LAUNCH_ENDS_AT).trim()
+    : (lo.ends_at || '2026-11-19T23:59:59+05:30');
+  const rawStarted = (env && env.NV_LAUNCH_STARTED_AT && String(env.NV_LAUNCH_STARTED_AT).trim())
+    ? String(env.NV_LAUNCH_STARTED_AT).trim()
+    : (lo.started_at || '2026-11-12T00:00:00+05:30');
+  const endMs = rawEnds ? Date.parse(rawEnds) : NaN;
+  if (Number.isNaN(endMs)) {
+    return { active: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
+  }
+  const currentMs = typeof nowMs === 'number' ? nowMs : Date.now();
+  const active = currentMs <= endMs;
+  const IST_OFFSET_MS = 5.5 * 3600 * 1000;
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const uIst = new Date(endMs + IST_OFFSET_MS);
+  const fIst = new Date(endMs + 1000 + IST_OFFSET_MS);
+  const untilDate = uIst.getUTCDate() + ' ' + months[uIst.getUTCMonth()] + ' ' + uIst.getUTCFullYear();
+  const fromDate = fIst.getUTCDate() + ' ' + months[fIst.getUTCMonth()] + ' ' + fIst.getUTCFullYear();
+  return {
+    active,
+    startedAt: rawStarted,
+    endsAt: new Date(endMs).toISOString(),
+    untilDate,
+    fromDate
+  };
+}
+
+function getPackById(packId, env = null, nowMs = null) {
   if (!packId || typeof packId !== 'string') return null;
   const p = packId.trim().toLowerCase();
-  if (PACK_CATALOG.core_reports[p]) return PACK_CATALOG.core_reports[p];
-  if (PACK_CATALOG.charm_ai[p]) return PACK_CATALOG.charm_ai[p];
-  if (PACK_CATALOG.bundles[p]) return PACK_CATALOG.bundles[p];
   const aliases = {
     'basic': 'report_basic',
     'report_essential': 'report_basic',
@@ -875,11 +913,29 @@ function getPackById(packId) {
     'report_divine': 'report_premium',
     'starter_5q': 'charm_single'
   };
-  const resolved = aliases[p];
-  if (resolved) {
-    return PACK_CATALOG.core_reports[resolved] || PACK_CATALOG.charm_ai[resolved] || PACK_CATALOG.bundles[resolved];
+  const key = aliases[p] || p;
+  const base = PACK_CATALOG.core_reports[key] || PACK_CATALOG.charm_ai[key] || PACK_CATALOG.bundles[key] || null;
+  if (!base) return null;
+  if (PACK_CATALOG.core_reports[key] && base.mrp_inr) {
+    const launchState = resolveServerLaunchOfferState(env, nowMs);
+    if (!launchState.active) {
+      return Object.assign({}, base, {
+        launch_price_inr: base.price_inr,
+        launch_amount_paise: base.amount_paise,
+        price_inr: base.mrp_inr,
+        amount_paise: base.mrp_paise || (base.mrp_inr * 100),
+        struck_mrp_inr: null,
+        launch_offer_active: false
+      });
+    }
+    return Object.assign({}, base, {
+      launch_price_inr: base.price_inr,
+      launch_amount_paise: base.amount_paise,
+      struck_mrp_inr: base.mrp_inr,
+      launch_offer_active: true
+    });
   }
-  return null;
+  return base;
 }
 
 function isNotifyMeHigherTiersEnabled(env) {
@@ -1062,6 +1118,7 @@ async function registerWaitlistNotifyMe(env, body = {}, nowOverrideSec = null) {
       retention_months: WAITLIST_RETENTION_MONTHS,
       expires_at: expiresAt,
       consent_version: WAITLIST_CONSENT_VERSION,
+      data_fiduciary: 'Numeros Vision Consultancy (Bhaskar Kumar Singh)',
       message: 'You are on the priority launch list. Your encrypted email is stored for up to 12 months solely to tell you when this report is available, and can be deleted at any time.'
     }
   };
@@ -1150,14 +1207,14 @@ async function buildWaitlistNotificationEmail(record, dataEncKey, nowOverrideSec
   }
 
   const packTitle = normPack === 'report_premium'
-    ? 'Anveil every charm (32 Pages)'
-    : 'Anveil my glowing charms (12 Pages)';
+    ? 'Anveil every charm (Complete Numerology Report, 32 pages)'
+    : 'Anveil my glowing charms (Advanced Numerology Report, 12 pages)';
   const subject = `${packTitle} Is Now Available | NUMEROS VISION`;
   const text =
     `Namaste,\n\n` +
     `You asked us to tell you when ${packTitle} becomes available on NUMEROS VISION.\n\n` +
-    `This edition is now open at https://numerosvision.com/pricing.html\n\n` +
-    `Why you received this email: You provided explicit DPDP 2023 consent for the single purpose "${WAITLIST_PURPOSE}" (12-month maximum retention).\n` +
+    `This edition is now open at https://numerosvision.com/pricing/\n\n` +
+    `Why you received this email: You provided explicit DPDP 2023 consent to Data Fiduciary Numeros Vision Consultancy (Bhaskar Kumar Singh) for the single purpose "${WAITLIST_PURPOSE}" (12-month maximum retention).\n` +
     `To delete your waitlist record at any time, use the Delete Waitlist Email option or contact privacy@numerosvision.com.\n\n` +
     `NUMEROS VISION · ANVEIL EVERY CHARM`;
   const html =
@@ -1165,8 +1222,8 @@ async function buildWaitlistNotificationEmail(record, dataEncKey, nowOverrideSec
     `<div style="font-size:12px;letter-spacing:0.12em;color:#8B6914;font-weight:700;">NUMEROS VISION · ANVEIL EVERY CHARM</div>` +
     `<h2 style="color:#523E28;margin:10px 0 8px;">${packTitle} Is Now Available</h2>` +
     `<p>You asked us to tell you when <strong>${packTitle}</strong> opens.</p>` +
-    `<p><a href="https://numerosvision.com/pricing.html" style="display:inline-block;padding:10px 18px;background:#8B6914;color:#FFFDF7;text-decoration:none;border-radius:8px;font-weight:600;">View Available Report</a></p>` +
-    `<p style="font-size:12px;color:#7A654D;margin-top:18px;">Sent strictly under your DPDP 2023 consent for purpose: "${WAITLIST_PURPOSE}" (12-month retention).</p>` +
+    `<p><a href="https://numerosvision.com/pricing/" style="display:inline-block;padding:10px 18px;background:#8B6914;color:#FFFDF7;text-decoration:none;border-radius:8px;font-weight:600;">View Available Report</a></p>` +
+    `<p style="font-size:12px;color:#7A654D;margin-top:18px;">Sent strictly under your DPDP 2023 consent (Data Fiduciary: Numeros Vision Consultancy · Bhaskar Kumar Singh) for purpose: "${WAITLIST_PURPOSE}" (12-month retention).</p>` +
     `</div>`;
 
   return {
@@ -1270,7 +1327,9 @@ async function reconcileStaleOrderWithRazorpay(order, env, now, request, ctx) {
   if (order.status !== 'PAYMENT_VERIFIED' && order.status !== 'CREATED' && order.status !== 'pending') {
     return { reconciled: false, reason: 'terminal_status' };
   }
-  const refTs = Number(order.created_at || order.updated_at || 0);
+  const refTs = order.status === 'PAYMENT_VERIFIED'
+    ? Number(order.updated_at || order.created_at || 0)
+    : Number(order.created_at || order.updated_at || 0);
   if (!refTs || (now - refTs) < WEBHOOK_FALLBACK_WINDOW_MS) {
     return { reconciled: false, reason: 'within_webhook_window' };
   }
@@ -2739,28 +2798,36 @@ export default {
       }
     }
 
-    // 0. CANONICAL 301 REDIRECTS & SINGLE-HOP WWW -> APEX NORMALIZATION
+    // 0. CANONICAL 301 REDIRECTS & SINGLE-HOP HTTP/WWW -> HTTPS APEX NORMALIZATION
     const canonicalRedirects = {
       '/charm_ai.html': '/charm-ai/',
       '/charm_ai': '/charm-ai/',
       '/charm_ai/': '/charm-ai/',
+      '/ai-consultation': '/charm-ai/',
+      '/ai-consultation/': '/charm-ai/',
       '/privacy-policy': '/privacy/',
       '/privacy-policy/': '/privacy/',
       '/privacy.html': '/privacy/',
       '/refund': '/refund-policy/',
       '/refund/': '/refund-policy/',
       '/refund.html': '/refund-policy/',
+      '/refunds': '/refund-policy/',
+      '/refunds/': '/refund-policy/',
       '/cancellation': '/cancel/',
       '/cancellation/': '/cancel/',
       '/cancel.html': '/cancel/',
       '/cookie_policy': '/cookie-policy/',
       '/cookie_policy/': '/cookie-policy/',
       '/cookie_policy.html': '/cookie-policy/',
+      '/cookies': '/cookie-policy/',
+      '/cookies/': '/cookie-policy/',
       '/numerology_overview': '/numerology-overview/',
       '/numerology_overview/': '/numerology-overview/',
       '/numerology_overview.html': '/numerology-overview/',
       '/numerology-calculators': '/calculators/',
       '/numerology-calculators/': '/calculators/',
+      '/tools': '/calculators/',
+      '/tools/': '/calculators/',
       '/register': '/signup/',
       '/register/': '/signup/',
       '/login.html': '/login/',
@@ -2778,7 +2845,7 @@ export default {
       '/roadmap-preview/': '/sample_roadmap/',
       '/reports': '/reports_catalogue/',
       '/reports/': '/reports_catalogue/',
-      // Duplicate /tools/<slug> -> canonical /calculators/<slug>/
+      // Every /tools/<slug> -> single-hop 301 to canonical /calculators/<slug>/
       '/tools/lo-shu-grid': '/calculators/lo-shu-grid/',
       '/tools/lo-shu-grid/': '/calculators/lo-shu-grid/',
       '/tools/lo-shu-grid.html': '/calculators/lo-shu-grid/',
@@ -2797,9 +2864,39 @@ export default {
       '/tools/compatibility-calculator': '/calculators/compatibility/',
       '/tools/compatibility-calculator/': '/calculators/compatibility/',
       '/tools/compatibility-calculator.html': '/calculators/compatibility/',
+      '/tools/kundali-milan': '/calculators/compatibility/',
+      '/tools/kundali-milan/': '/calculators/compatibility/',
       '/tools/blessing-years': '/calculators/personal-year/',
       '/tools/blessing-years/': '/calculators/personal-year/',
       '/tools/blessing-years.html': '/calculators/personal-year/',
+      '/tools/business-numerology': '/calculators/business-alignment/',
+      '/tools/business-numerology/': '/calculators/business-alignment/',
+      '/tools/business-alignment': '/calculators/business-alignment/',
+      '/tools/business-alignment/': '/calculators/business-alignment/',
+      '/tools/business-alignment.html': '/calculators/business-alignment/',
+      '/tools/baby-naming': '/calculators/baby-naming/',
+      '/tools/baby-naming/': '/calculators/baby-naming/',
+      '/tools/baby-naming.html': '/calculators/baby-naming/',
+      '/tools/property-numerology': '/calculators/property-numerology/',
+      '/tools/property-numerology/': '/calculators/property-numerology/',
+      '/tools/property-numerology.html': '/calculators/property-numerology/',
+      '/tools/vehicle-numerology': '/calculators/vehicle-numerology/',
+      '/tools/vehicle-numerology/': '/calculators/vehicle-numerology/',
+      '/tools/vehicle-numerology.html': '/calculators/vehicle-numerology/',
+      '/tools/profession-calculator': '/calculators/profession-calculator/',
+      '/tools/profession-calculator/': '/calculators/profession-calculator/',
+      '/tools/profession-calculator.html': '/calculators/profession-calculator/',
+      '/tools/lucky-number': '/calculators/favourable-numbers/',
+      '/tools/lucky-number/': '/calculators/favourable-numbers/',
+      '/tools/lucky-number.html': '/calculators/favourable-numbers/',
+      '/tools/favourable-numbers': '/calculators/favourable-numbers/',
+      '/tools/favourable-numbers/': '/calculators/favourable-numbers/',
+      '/tools/favourable-numbers.html': '/calculators/favourable-numbers/',
+      '/tools/logo-studio': '/calculators/logo-intelligence/',
+      '/tools/logo-studio/': '/calculators/logo-intelligence/',
+      '/tools/logo-intelligence': '/calculators/logo-intelligence/',
+      '/tools/logo-intelligence/': '/calculators/logo-intelligence/',
+      '/tools/logo-intelligence.html': '/calculators/logo-intelligence/',
       // Legacy /calculators/<old-slug> -> canonical /calculators/<slug>/
       '/calculators/chaldean': '/calculators/name-numerology/',
       '/calculators/chaldean/': '/calculators/name-numerology/',
@@ -2807,6 +2904,8 @@ export default {
       '/calculators/chaldean-name-numerology/': '/calculators/name-balancing/',
       '/calculators/life-path-number': '/calculators/life-path/',
       '/calculators/life-path-number/': '/calculators/life-path/',
+      '/calculators/mobile-numerology': '/calculators/mobile-number/',
+      '/calculators/mobile-numerology/': '/calculators/mobile-number/',
       '/calculators/mobile-number-numerology': '/calculators/mobile-number/',
       '/calculators/mobile-number-numerology/': '/calculators/mobile-number/',
       '/calculators/numerology-compatibility': '/calculators/compatibility/',
@@ -2815,16 +2914,31 @@ export default {
       '/calculators/pythagorean-numerology/': '/calculators/pythagorean/',
       '/calculators/personal-year-numerology': '/calculators/personal-year/',
       '/calculators/personal-year-numerology/': '/calculators/personal-year/',
-      '/calculators/business-name-numerology': '/tools/business-alignment/',
-      '/calculators/business-name-numerology/': '/tools/business-alignment/',
-      // Tool & blog renames
-      '/tools/business-numerology': '/tools/business-alignment/',
-      '/tools/business-numerology/': '/tools/business-alignment/',
-      '/tools/logo-studio': '/tools/logo-intelligence/',
-      '/tools/logo-studio/': '/tools/logo-intelligence/',
-      '/tools/lucky-number': '/tools/favourable-numbers/',
-      '/tools/lucky-number/': '/tools/favourable-numbers/',
-      '/tools/lucky-number.html': '/tools/favourable-numbers/',
+      '/calculators/business-name-numerology': '/calculators/business-alignment/',
+      '/calculators/business-name-numerology/': '/calculators/business-alignment/',
+      '/calculators/mulank-calculator': '/calculators/birth-number/',
+      '/calculators/mulank-calculator/': '/calculators/birth-number/',
+      '/calculators/bhagyank-calculator': '/calculators/life-path/',
+      '/calculators/bhagyank-calculator/': '/calculators/life-path/',
+      '/calculators/kua-calculator': '/calculators/lo-shu-grid/',
+      '/calculators/kua-calculator/': '/calculators/lo-shu-grid/',
+      // Missing trailing slash on canonical /calculators/<slug> -> 1-hop 301
+      '/calculators/birth-number': '/calculators/birth-number/',
+      '/calculators/lo-shu-grid': '/calculators/lo-shu-grid/',
+      '/calculators/life-path': '/calculators/life-path/',
+      '/calculators/name-numerology': '/calculators/name-numerology/',
+      '/calculators/name-balancing': '/calculators/name-balancing/',
+      '/calculators/pythagorean': '/calculators/pythagorean/',
+      '/calculators/mobile-number': '/calculators/mobile-number/',
+      '/calculators/compatibility': '/calculators/compatibility/',
+      '/calculators/personal-year': '/calculators/personal-year/',
+      '/calculators/business-alignment': '/calculators/business-alignment/',
+      '/calculators/baby-naming': '/calculators/baby-naming/',
+      '/calculators/property-numerology': '/calculators/property-numerology/',
+      '/calculators/vehicle-numerology': '/calculators/vehicle-numerology/',
+      '/calculators/profession-calculator': '/calculators/profession-calculator/',
+      '/calculators/favourable-numbers': '/calculators/favourable-numbers/',
+      '/calculators/logo-intelligence': '/calculators/logo-intelligence/',
       '/blog/gemstone-remedies': '/blog/vedic-gemstone-remedies/',
       '/blog/gemstone-remedies/': '/blog/vedic-gemstone-remedies/',
       '/blog/gemstone-remedies.html': '/blog/vedic-gemstone-remedies/'
@@ -2833,7 +2947,9 @@ export default {
     if (!resolvedRedirectPath && url.pathname.startsWith('/blog/') && url.pathname.endsWith('.html')) {
       resolvedRedirectPath = url.pathname.replace(/\.html$/, '/');
     }
-    if (url.hostname === 'www.numerosvision.com') {
+    const isProdDomain = url.hostname === 'numerosvision.com' || url.hostname === 'www.numerosvision.com';
+    const needsSchemeOrApexRedirect = isProdDomain && (url.protocol === 'http:' || url.hostname === 'www.numerosvision.com');
+    if (needsSchemeOrApexRedirect) {
       const destPath = resolvedRedirectPath || url.pathname;
       return Response.redirect('https://numerosvision.com' + destPath + url.search, 301);
     }
@@ -4645,8 +4761,8 @@ export default {
       const customerName = (body.name || body.customer_name || 'Valued Seeker').trim();
       const customerDob = (body.dob || body.locked_dob || body.customer_dob || body.customerDob || '').trim();
 
-      // 2. Deterministic pack lookup
-      const pack = getPackById(packId);
+      // 2. Deterministic pack lookup (resolves regular mrp_inr automatically after fixed launch_offer.ends_at)
+      const pack = getPackById(packId, env, now);
       if (!pack || pack.status !== 'active') {
         return new Response(JSON.stringify({
           success: false,
@@ -4791,16 +4907,17 @@ export default {
 
       if (env.DB) {
         existingOrder = await env.DB.prepare(
-          "SELECT id, rzp_order_id, status, created_at FROM orders WHERE user_id = ? AND subject_id = ? AND pack_id = ? AND status IN ('CREATED', 'pending') ORDER BY created_at DESC LIMIT 1"
+          "SELECT id, rzp_order_id, amount_paise, status, created_at FROM orders WHERE user_id = ? AND subject_id = ? AND pack_id = ? AND status IN ('CREATED', 'pending') ORDER BY created_at DESC LIMIT 1"
         ).bind(user.user_id, subjectId, pack.pack_id).first();
 
         if (existingOrder) {
           const ageMs = now - existingOrder.created_at;
-          if (ageMs > THIRTY_MINUTES_MS) {
+          const amountMismatch = existingOrder.amount_paise !== undefined && Number(existingOrder.amount_paise) !== Number(amountPaise);
+          if (ageMs > THIRTY_MINUTES_MS || amountMismatch) {
             await env.DB.prepare("UPDATE orders SET status = 'EXPIRED', updated_at = ? WHERE id = ?").bind(now, existingOrder.id).run();
             await env.DB.prepare(
               "INSERT INTO audit_log (id, actor_id, action, resource_type, resource_id, details_json, created_at) VALUES (?, ?, 'order_expired', 'orders', ?, ?, ?)"
-            ).bind('aud_' + now + '_' + getRandomHex(4), user.user_id, existingOrder.id, JSON.stringify({ reason: 'auto_expired_30m', ageMs }), now).run();
+            ).bind('aud_' + now + '_' + getRandomHex(4), user.user_id, existingOrder.id, JSON.stringify({ reason: amountMismatch ? 'launch_window_price_changed' : 'auto_expired_30m', ageMs }), now).run();
             existingOrder = null;
           }
         }
@@ -4808,7 +4925,8 @@ export default {
         for (const ord of memoryStore.orders.values()) {
           if (ord.user_id === user.user_id && ord.subject_id === subjectId && ord.pack_id === pack.pack_id && (ord.status === 'CREATED' || ord.status === 'pending')) {
             const ageMs = now - ord.created_at;
-            if (ageMs > THIRTY_MINUTES_MS) {
+            const amountMismatch = ord.amount_paise !== undefined && Number(ord.amount_paise) !== Number(amountPaise);
+            if (ageMs > THIRTY_MINUTES_MS || amountMismatch) {
               ord.status = 'EXPIRED';
             } else {
               existingOrder = ord;
@@ -5031,8 +5149,8 @@ export default {
         }), { status: 404, headers: corsHeaders });
       }
 
-      // Authoritative pricing check against packs.json catalog
-      const pack = getPackById(order.pack_id);
+      // Authoritative pricing check against packs.json catalog (evaluated at order creation timestamp)
+      const pack = getPackById(order.pack_id, env, Number(order.created_at || now));
       if (!pack || Number(order.amount_paise) !== Number(pack.amount_paise)) {
         return new Response(JSON.stringify({
           status: 'error',
@@ -5668,8 +5786,8 @@ export default {
         const st = job ? String(job.status || 'QUEUED').toUpperCase() : 'QUEUED';
         const attempts = job ? (job.attempts || 0) : 0;
         let displayStatus = 'preparing';
-        let statusBadge = 'Preparing';
-        let message = 'Your report is being prepared deterministically.';
+        let statusBadge = 'Payment received, preparing your report';
+        let message = 'Payment received, preparing your report';
         let isDownloadable = false;
 
         if (st === 'COMPLETED' || st === 'DOWNLOADED' || (job && (job.r2_key || job.download_url))) {
@@ -5857,8 +5975,8 @@ export default {
         const attempts = job.attempts || 0;
         
         let displayStatus = 'preparing';
-        let statusBadge = 'Preparing';
-        let message = 'Your personalized report is being prepared. It will be ready within a few minutes.';
+        let statusBadge = 'Payment received, preparing your report';
+        let message = 'Payment received, preparing your report';
         let isDownloadable = false;
 
         if (st === 'COMPLETED' || st === 'DOWNLOADED' || job.r2_key) {
@@ -5914,8 +6032,8 @@ export default {
               subjectName: pvSubj.name,
               subjectDob: pvSubj.dob,
               status: 'preparing',
-              statusBadge: 'Preparing',
-              message: 'Your payment is verified. Confirming settlement and preparing your personalized report.',
+              statusBadge: 'Payment received, preparing your report',
+              message: 'Payment received, preparing your report',
               attempts: 0,
               isDownloadable: false,
               downloadUrl: null,
@@ -5958,12 +6076,15 @@ export default {
       }
 
       const formattedReceipts = receipts.map(r => {
-        const packInfo = getPackById(r.pack_id);
+        const packInfo = getPackById(r.pack_id, env, Number(r.created_at || Date.now()));
         return {
           order_id: r.order_id,
           payment_id: r.rzp_payment_id || r.rzp_order_id || 'N/A',
           pack_id: r.pack_id,
           pack_name: packInfo ? packInfo.name : 'Numerology Report',
+          pack_descriptor: (packInfo && packInfo.descriptor) ? packInfo.descriptor : '',
+          supplier_legal_name: 'Bhaskar Kumar Singh',
+          supplier_entity: 'Numeros Vision Consultancy (Bhaskar Kumar Singh)',
           amount_paise: r.amount_paise,
           amount_inr: Math.round(r.amount_paise / 100),
           currency: r.currency || 'INR',
@@ -8565,4 +8686,4 @@ export default {
   }
 };
 
-export { calculateCanonicalKuaDetails, KUA_RULE_TEXT, KUA_NEEDS_GENDER_TEXT, WEBHOOK_FALLBACK_WINDOW_MS, reconcileStaleOrderWithRazorpay, isNotifyMeHigherTiersEnabled };
+export { calculateCanonicalKuaDetails, KUA_RULE_TEXT, KUA_NEEDS_GENDER_TEXT, WEBHOOK_FALLBACK_WINDOW_MS, reconcileStaleOrderWithRazorpay, isNotifyMeHigherTiersEnabled, resolveServerLaunchOfferState, getPackById };

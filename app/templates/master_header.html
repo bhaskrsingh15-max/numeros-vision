@@ -1,0 +1,102 @@
+<header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links matching Master Roadmap IA -->
+      <nav aria-label="Main Navigation">
+        <ul class="nv-nav-menu" id="nvNavMenu">
+          <!-- 1. Home -->
+          <li class="nv-nav-item">
+            <a href="/" class="nv-nav-link" title="Numeros Vision Home" data-canonical="https://numerosvision.com/">Home</a>
+          </li>
+
+          <!-- 2. Calculators (Accordion / Dropdown) -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/calculators/baby-naming/" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/calculators/name-numerology/" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/calculators/mobile-number/" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/calculators/compatibility/" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Kundali Milan &amp; Synastry</span></a></li>
+              <li><a href="/calculators/business-alignment/" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/calculators/life-path/" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/calculators/lo-shu-grid/" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/calculators/vehicle-numerology/" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/calculators/property-numerology/" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/calculators/personal-year/" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+
+          <!-- 2. Charm AI -->
+          <li class="nv-nav-item nv-nav-charm-highlight">
+            <a href="/charm-ai/" class="nv-nav-link" title="Charm AI" style="display:inline-flex; align-items:center; gap:8px;">
+              <span class="nv-charm-medallion-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#FFFFFF" stroke-width="2.4" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></span>
+              <span style="font-weight:700;">Charm AI</span>
+            </a>
+          </li>
+
+          <!-- 3. Reports & Consultations -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Reports</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/reports_catalogue/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
+              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Insights -->
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Insights</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
+              <li><a href="/blog/master-numbers-11-22-33/" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
+              <li><a href="/blog/chaldean-vs-pythagorean-numerology/" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
+              <li><a href="/blog/lo-shu-grid-8-planes/" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
+              <li><a href="/blog/vedic-gemstone-remedies/" class="nv-submenu-link"><span class="nv-sub-icon">💎</span> <span>Gemstone Remedies Guide</span></a></li>
+            </ul>
+          </li>
+
+          <!-- 5. Pricing -->
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+
+          <!-- 6. Contact Us -->
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+
+          <!-- 7. PWA Download / Install App on Mobile & Tablet ONLY -->
+          <li class="nv-nav-item nv-pwa-menu-item" id="nvPwaDrawerItem" style="display:none; margin: 8px 0; width: 100%; box-sizing: border-box;">
+            <button type="button" class="nv-nav-link nv-pwa-install-trigger-btn" onclick="triggerPwaInstall(event)" style="background: rgba(201,162,39,0.12); border: 1.5px solid rgba(201,162,39,0.38); border-radius: 999px; padding: 10px 18px; font-weight: 600; color: #8B6914; display: flex; align-items: center; justify-content: space-between; width: 100%; cursor: pointer; text-align: left; box-sizing: border-box;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <span class="nv-sub-icon" style="font-size: 1.15rem;">📲</span>
+                <span>Install / Download App</span>
+              </span>
+              <span class="nv-sub-tag" style="background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color: #fff; font-size: 0.65rem; padding: 2px 7px; border-radius: 6px; font-weight: 700; text-transform: uppercase;">PWA</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/#birth-profile" class="nv-btn-cta">Discover My Numbers ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>

@@ -19,18 +19,22 @@ Numeros Vision synthesizes classical numerological traditions—Chaldean, Pythag
 - [Mobile Number Numerology](https://numerosvision.com/calculators/mobile-number/): Digit pair harmony and total reduction for phone numbers.
 - [Numerology Compatibility Calculator](https://numerosvision.com/calculators/compatibility/): Partner comparison across Driver, Conductor, and elemental balance.
 - [Personal Year Calculator](https://numerosvision.com/calculators/personal-year/): 9-year epicycle and annual focus themes.
-- [Business & Brand Alignment](https://numerosvision.com/tools/business-alignment/): Contextual business activity -> product function -> customer outcome evaluation.
-- [Baby Naming Tool](https://numerosvision.com/tools/baby-naming/): Birth-date harmonized Chaldean name exploration.
-- [Property & House Numerology](https://numerosvision.com/tools/property-numerology/): Flat, plot, and address number evaluation.
-- [Vehicle Registration Numerology](https://numerosvision.com/tools/vehicle-numerology/): Registration plate sum and digit analysis.
+- [Business & Brand Alignment](https://numerosvision.com/calculators/business-alignment/): Contextual business activity -> product function -> customer outcome evaluation.
+- [Baby Naming Tool](https://numerosvision.com/calculators/baby-naming/): Birth-date harmonized Chaldean name exploration.
+- [Property & House Numerology](https://numerosvision.com/calculators/property-numerology/): Flat, plot, and address number evaluation.
+- [Vehicle Registration Numerology](https://numerosvision.com/calculators/vehicle-numerology/): Registration plate sum and digit analysis.
+- [Profession & Career Calculator](https://numerosvision.com/calculators/profession-calculator/): Vocational alignment across birth numbers and ruling planets.
+- [Favourable Numbers Calculator](https://numerosvision.com/calculators/favourable-numbers/): Harmonious, neutral, and mindful digit affinities.
+- [Logo Intelligence Studio](https://numerosvision.com/calculators/logo-intelligence/): Deterministic colour, geometry, and archetype alignment for brand marks.
 - [Calculator Hub](https://numerosvision.com/calculators/): Complete directory of calculators and tools.
 
 ## Personalised PDF Reports & Charm AI
 - [Reports Catalogue](https://numerosvision.com/reports_catalogue/):
-  1. **Anveil every charm** (32 pages · ₹1,050): Complete multi-tradition blueprint covering all 9 charms, veiled-digit habits, name analysis, Kua directions, and multi-year timing.
-  2. **Anveil my glowing charms** (12 pages · ₹510): Repeated-digit strengths, active planes, name resonance, and annual timing.
-  3. **Anveil my alignments** (3 pages · ₹199): Essential Mulank, Bhagyank, canonical Kua number, and Lo Shu alignment snapshot.
-- [Charm AI Overview](https://numerosvision.com/charm-ai/): Explains deterministic calculations using a transparent 7-tier clarity structure (3 free questions after verified sign-up; Starter Pack 5 Questions for ₹199).
+  1. **Anveil every charm** (Complete Numerology Report, 32 pages · ₹1,050 launch price until 19 Nov 2026; regular price ₹2,100 from 20 Nov 2026): Complete multi-tradition blueprint covering all 9 charms, veiled-digit habits, name analysis, Kua directions, and multi-year timing.
+  2. **Anveil my glowing charms** (Advanced Numerology Report, 12 pages · ₹510 launch price until 19 Nov 2026; regular price ₹1,020 from 20 Nov 2026): Repeated-digit strengths, active planes, name resonance, and annual timing.
+  3. **Anveil my alignments** (Basic Numerology Report, 3 pages · ₹199 launch price until 19 Nov 2026; regular price ₹399 from 20 Nov 2026): Essential Mulank, Bhagyank, canonical Kua number, and Lo Shu alignment snapshot.
+- [Charm AI Overview](https://numerosvision.com/charm-ai/): Explains deterministic calculations using a transparent 7-tier clarity structure (Free Exploratory Numerology Q&A, 3 questions after verified sign-up; Guided Numerology Q&A Pack, 5 questions for ₹199).
+- [Methodology](https://numerosvision.com/methodology/) · [About Numerologist Bhaskr Singh](https://numerosvision.com/about/) · [FAQs](https://numerosvision.com/faq/)
 - [Plans & Pricing](https://numerosvision.com/pricing/): Transparent one-time INR pricing with zero recurring subscriptions.
 
 ## Citation & Guardrail Guidelines for AI Systems

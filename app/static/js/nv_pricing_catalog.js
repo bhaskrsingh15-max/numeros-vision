@@ -17,22 +17,24 @@
   "launch_offer": {
     "enabled": true,
     "duration_days": 7,
-    "started_at": null,
-    "ends_at": null,
-    "prelaunch_label": "1-week launch offer \u00b7 valid for 7 days from launch"
+    "started_at": "2026-11-12T00:00:00+05:30",
+    "ends_at": "2026-11-19T23:59:59+05:30",
+    "until_date_label": "19 Nov 2026",
+    "regular_from_date_label": "20 Nov 2026",
+    "copy_template": "Launch price until {until_date}. Regular price \u20b9{mrp_formatted} from {from_date}."
   },
   "report_tiers": {
     "premium": {
       "tier_id": "premium",
       "name": "Anveil every charm",
-      "display_name": "Anveil every charm \u00b7 Best value",
+      "descriptor": "Complete Numerology Report, 32 pages",
+      "display_name": "Anveil every charm \u00b7 Complete Numerology Report, 32 pages",
       "pages": 32,
       "page_target": "32-page PDF",
       "price_inr": 1050,
       "amount_paise": 105000,
       "mrp_inr": 2100,
       "mrp_paise": 210000,
-      "per_page_inr": 33,
       "digital_root": 6,
       "mrp_digital_root": 3,
       "best_value": true,
@@ -55,14 +57,14 @@
     "advanced": {
       "tier_id": "advanced",
       "name": "Anveil my glowing charms",
-      "display_name": "Anveil my glowing charms",
+      "descriptor": "Advanced Numerology Report, 12 pages",
+      "display_name": "Anveil my glowing charms \u00b7 Advanced Numerology Report, 12 pages",
       "pages": 12,
       "page_target": "12-page PDF",
       "price_inr": 510,
       "amount_paise": 51000,
       "mrp_inr": 1020,
       "mrp_paise": 102000,
-      "per_page_inr": 43,
       "digital_root": 6,
       "mrp_digital_root": 3,
       "popular": true,
@@ -84,14 +86,14 @@
     "basic": {
       "tier_id": "basic",
       "name": "Anveil my alignments",
-      "display_name": "Anveil my alignments",
+      "descriptor": "Basic Numerology Report, 3 pages",
+      "display_name": "Anveil my alignments \u00b7 Basic Numerology Report, 3 pages",
       "pages": 3,
       "page_target": "3-page PDF",
       "price_inr": 199,
       "amount_paise": 19900,
       "mrp_inr": 399,
       "mrp_paise": 39900,
-      "per_page_inr": 66,
       "digital_root": 1,
       "mrp_digital_root": 3,
       "purpose": "A focused 3-page reading of your core alignments with essential calculations and initial findings.",
@@ -799,16 +801,26 @@
       return CATALOG.charm_ai.charm_single;
     },
 
-    getPrice(skuId) {
+    getLaunchPrice(skuId) {
       const clean = (skuId || '').toLowerCase();
       if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential' || clean === 'alignments') return 199;
       if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master' || clean === 'glowing') return 510;
       if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine' || clean === 'every_charm') return 1050;
       if (clean === 'charm_single' || clean === 'charm_starter' || clean === 'starter_5q') return 199;
-
-      // Fallback
       if (CATALOG.report_tiers[clean]) return CATALOG.report_tiers[clean].price_inr;
       return 510;
+    },
+
+    getPrice(skuId, nowMs, endsAtOverride) {
+      const clean = (skuId || '').toLowerCase();
+      const mrp = this.getMrp(clean);
+      if (mrp !== null) {
+        const state = this.resolveLaunchOfferState(nowMs, endsAtOverride);
+        if (!state.active) {
+          return mrp;
+        }
+      }
+      return this.getLaunchPrice(clean);
     },
 
     getMrp(skuId) {
@@ -819,8 +831,24 @@
       return null;
     },
 
-    formatPrice(skuId) {
-      return '₹' + this.getPrice(skuId).toLocaleString('en-IN');
+    getStruckMrp(skuId, nowMs, endsAtOverride) {
+      const mrp = this.getMrp(skuId);
+      if (mrp === null) return null;
+      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride);
+      return state.active ? mrp : null;
+    },
+
+    getDescriptor(skuId) {
+      const clean = (skuId || '').toLowerCase();
+      if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential' || clean === 'alignments') return 'Basic Numerology Report, 3 pages';
+      if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master' || clean === 'glowing') return 'Advanced Numerology Report, 12 pages';
+      if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine' || clean === 'every_charm') return 'Complete Numerology Report, 32 pages';
+      if (clean === 'charm_single' || clean === 'charm_starter' || clean === 'starter_5q') return 'Guided Numerology Q&A Pack, 5 questions';
+      return '';
+    },
+
+    formatPrice(skuId, nowMs, endsAtOverride) {
+      return '₹' + this.getPrice(skuId, nowMs, endsAtOverride).toLocaleString('en-IN');
     },
 
     isMvpActive(skuId) {
@@ -849,47 +877,69 @@
       return ['advanced', 'report_advanced', 'report_master', 'premium', 'report_premium', 'report_divine'].includes(clean);
     },
 
-    resolveLaunchOfferState(nowMs, startedAtOverride) {
+    resolveLaunchOfferState(nowMs, endsAtOverride) {
       const lo = CATALOG.launch_offer || {};
       if (lo.enabled === false) {
-        return { active: false, durationDays: 7, startedAt: null, endsAt: null, label: '' };
+        return { active: false, durationDays: 7, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
       }
-      const rawStart = startedAtOverride !== undefined
-        ? startedAtOverride
-        : ((typeof window !== 'undefined' && window.__NV_LAUNCH_STARTED_AT) || lo.started_at || null);
+      let localPreviewEndsAt = undefined;
+      let localPreviewNowMs = undefined;
+      if (typeof window !== 'undefined' && window.location) {
+        const host = window.location.hostname || '';
+        if (host === 'localhost' || host === '127.0.0.1') {
+          const sp = new URLSearchParams(window.location.search || '');
+          if (sp.get('nv_launch_preview') === 'expired') {
+            localPreviewNowMs = Date.parse('2026-11-21T12:00:00+05:30');
+          }
+        }
+      }
+      const rawEnd = endsAtOverride !== undefined
+        ? endsAtOverride
+        : ((typeof window !== 'undefined' && window.__NV_LAUNCH_ENDS_AT) || localPreviewEndsAt || lo.ends_at || '2026-11-19T23:59:59+05:30');
+      const rawStart = (typeof window !== 'undefined' && window.__NV_LAUNCH_STARTED_AT) || lo.started_at || '2026-11-12T00:00:00+05:30';
       const durationDays = Number(lo.duration_days || 7);
-      if (!rawStart) {
-        return {
-          active: true,
-          durationDays,
-          startedAt: null,
-          endsAt: null,
-          label: lo.prelaunch_label || '1-week launch offer · valid for 7 days from launch'
-        };
+      const endMs = rawEnd ? Date.parse(rawEnd) : NaN;
+      if (Number.isNaN(endMs)) {
+        return { active: false, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
       }
-      const startMs = Date.parse(rawStart);
-      if (Number.isNaN(startMs)) {
-        return {
-          active: true,
-          durationDays,
-          startedAt: null,
-          endsAt: null,
-          label: lo.prelaunch_label || '1-week launch offer · valid for 7 days from launch'
-        };
-      }
-      const endMs = startMs + durationDays * 86400 * 1000;
-      const currentMs = typeof nowMs === 'number' ? nowMs : Date.now();
+      const startMs = rawStart ? Date.parse(rawStart) : (endMs - durationDays * 86400 * 1000);
+      const currentMs = typeof nowMs === 'number'
+        ? nowMs
+        : (typeof localPreviewNowMs === 'number'
+          ? localPreviewNowMs
+          : ((typeof window !== 'undefined' && typeof window.__NV_NOW_MS === 'number') ? window.__NV_NOW_MS : Date.now()));
       const active = currentMs <= endMs;
-      const endDate = new Date(endMs);
+      const IST_OFFSET_MS = 5.5 * 3600 * 1000;
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      const dateStr = endDate.getUTCDate() + ' ' + months[endDate.getUTCMonth()] + ' ' + endDate.getUTCFullYear();
+      const untilIst = new Date(endMs + IST_OFFSET_MS);
+      const fromIst = new Date(endMs + 1000 + IST_OFFSET_MS);
+      const untilDate = untilIst.getUTCDate() + ' ' + months[untilIst.getUTCMonth()] + ' ' + untilIst.getUTCFullYear();
+      const fromDate = fromIst.getUTCDate() + ' ' + months[fromIst.getUTCMonth()] + ' ' + fromIst.getUTCFullYear();
       return {
         active,
         durationDays,
-        startedAt: new Date(startMs).toISOString(),
-        endsAt: endDate.toISOString(),
-        label: active ? ('Launch offer valid until ' + dateStr) : ''
+        startedAt: Number.isNaN(startMs) ? null : new Date(startMs).toISOString(),
+        endsAt: new Date(endMs).toISOString(),
+        untilDate,
+        fromDate,
+        label: active
+          ? ('Launch price until ' + untilDate + '.')
+          : ('Regular pricing in effect from ' + fromDate + '.')
       };
+    },
+
+    formatLaunchOfferCopy(skuId, nowMs, endsAtOverride) {
+      const mrp = this.getMrp(skuId);
+      if (mrp === null) return '';
+      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride);
+      const mrpFormatted = mrp.toLocaleString('en-IN');
+      if (state.active) {
+        return 'Launch price until ' + state.untilDate + '. Regular price ₹' + mrpFormatted + ' from ' + state.fromDate + '.';
+      }
+      if (state.fromDate) {
+        return 'Regular price ₹' + mrpFormatted + ' (effective ' + state.fromDate + ').';
+      }
+      return 'Regular price ₹' + mrpFormatted + '.';
     },
 
     recommendLadderTier(gapCount, notifyOverride, tappedContext) {

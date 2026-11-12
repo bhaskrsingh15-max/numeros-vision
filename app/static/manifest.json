@@ -65,7 +65,7 @@
       "name": "Auspicious Baby Naming",
       "short_name": "Baby Naming",
       "description": "Find auspicious baby names with Chaldean vibrations",
-      "url": "/tools/baby-naming/",
+      "url": "/calculators/baby-naming/",
       "icons": [{"src": "/static/icons/icon-96.png", "sizes": "96x96"}]
     },
     {

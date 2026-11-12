@@ -99,15 +99,15 @@ Numeros Vision integrates 6 distinct classical traditions side-by-side, preservi
 - Mobile Number Numerology: https://numerosvision.com/calculators/mobile-number/
 - Compatibility Calculator: https://numerosvision.com/calculators/compatibility/
 - Personal Year Calculator: https://numerosvision.com/calculators/personal-year/
-- Business Alignment: https://numerosvision.com/tools/business-alignment/
-- Baby Naming: https://numerosvision.com/tools/baby-naming/
-- Property Numerology: https://numerosvision.com/tools/property-numerology/
-- Vehicle Numerology: https://numerosvision.com/tools/vehicle-numerology/
-- Profession Calculator: https://numerosvision.com/tools/profession-calculator/
-- Favourable Numbers: https://numerosvision.com/tools/favourable-numbers/
-- Logo Intelligence: https://numerosvision.com/tools/logo-intelligence/
-- Charm AI Overview: https://numerosvision.com/charm-ai/
-- Reports Catalogue (Anveil every charm 32p ₹1,050 · Anveil my glowing charms 12p ₹510 · Anveil my alignments 3p ₹199): https://numerosvision.com/reports_catalogue/
+- Business Alignment: https://numerosvision.com/calculators/business-alignment/
+- Baby Naming: https://numerosvision.com/calculators/baby-naming/
+- Property Numerology: https://numerosvision.com/calculators/property-numerology/
+- Vehicle Numerology: https://numerosvision.com/calculators/vehicle-numerology/
+- Profession Calculator: https://numerosvision.com/calculators/profession-calculator/
+- Favourable Numbers: https://numerosvision.com/calculators/favourable-numbers/
+- Logo Intelligence: https://numerosvision.com/calculators/logo-intelligence/
+- Charm AI Overview (Guided Numerology Q&A Pack, 5 questions · ₹199): https://numerosvision.com/charm-ai/
+- Reports Catalogue (Anveil every charm — Complete Numerology Report, 32 pages · ₹1,050 launch / ₹2,100 regular · Anveil my glowing charms — Advanced Numerology Report, 12 pages · ₹510 launch / ₹1,020 regular · Anveil my alignments — Basic Numerology Report, 3 pages · ₹199 launch / ₹399 regular): https://numerosvision.com/reports_catalogue/
 - Sample Blueprint: https://numerosvision.com/sample_roadmap/
 - Plans & Pricing: https://numerosvision.com/pricing/
 - HTML Sitemap: https://numerosvision.com/sitemap/

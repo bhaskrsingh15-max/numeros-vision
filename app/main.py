@@ -1028,14 +1028,6 @@ def page_contact():
     path = os.path.join(STATIC_DIR, "contact.html")
     return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
 
-@app.get("/google-email-avatar", include_in_schema=False)
-@app.get("/google-email-avatar/", include_in_schema=False)
-@app.get("/google-avatar", include_in_schema=False)
-@app.get("/google-avatar/", include_in_schema=False)
-def page_google_email_avatar():
-    path = os.path.join(STATIC_DIR, "google_email_avatar", "index.html")
-    return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
-
 @app.get("/privacy", include_in_schema=False)
 @app.get("/privacy/", include_in_schema=False)
 @app.get("/privacy.html", include_in_schema=False)
