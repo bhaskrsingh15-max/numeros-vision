@@ -534,7 +534,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <div>
             <div style="font-family:'Cinzel',serif; font-size:0.88rem; font-weight:800; color:#523E28; letter-spacing:0.04em;">NATAL LO SHU 3×3 MATRIX</div>
-            <div style="font-size:0.76rem; color:#7A654D;">Seeker: <span id="lsGridSeekerName" style="font-weight:700;">Seeker</span> (DOB: <span id="lsGridSeekerDob" style="font-weight:700;">28-11-1981</span>)</div>
+            <div style="font-size:0.76rem; color:#7A654D;">Profile: <span id="lsGridSeekerName" style="font-weight:700;">—</span> (DOB: <span id="lsGridSeekerDob" style="font-weight:700;">—</span>)</div>
           </div>
           <span style="font-size:0.70rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 9px; border-radius:6px;">Click Any Cell</span>
         </div>
@@ -547,11 +547,11 @@
         <!-- Element Yogas Alignment Strip -->
         <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:10px 14px; margin-bottom:14px;">
           <div style="font-size:0.82rem; font-weight:700; color:#523E28; display:flex; align-items:center; gap:6px;">
-            <span style="color:#D97706;">⚡</span>
+            <span style="color:#8B6914;">✦</span>
             <span>Element Yogas Alignment: <span id="lsYogaPctText" style="color:#16835B; font-weight:800;">25% ACTIVE</span></span>
           </div>
-          <button type="button" onclick="selectConversionOffer('yogas')" style="background:#8B6914; color:#FFFFFF; border:none; border-radius:6px; padding:5px 11px; font-size:0.74rem; font-weight:700; cursor:pointer;">
-            Anveil Yogas Charm @ ₹199 &rarr;
+          <button type="button" onclick="seeLoShuReportOptions()" style="background:#8B6914; color:#FFFFFF; border:none; border-radius:6px; padding:5px 11px; font-size:0.74rem; font-weight:700; cursor:pointer;">
+            Basic Report · ₹399 &rarr;
           </button>
         </div>
 
@@ -559,13 +559,13 @@
         <div style="font-size:0.74rem; color:#7A654D; font-weight:700; margin-bottom:6px;">Report Focus Options:</div>
         <div style="display:flex; flex-wrap:wrap; gap:8px;">
           <button type="button" onclick="selectConversionOffer('missing')" style="background:#FFF9E6; border:1px solid rgba(201,162,39,0.4); color:#8B6914; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
-            🔒 1. Missing · Coming soon, notify me
+            1. Missing Numbers (Open Grid Cells) · Coming soon, notify me
           </button>
           <button type="button" onclick="selectConversionOffer('present')" style="background:#EBF7F2; border:1px solid rgba(22,131,91,0.4); color:#16835B; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
-            🌿 2. Present · Coming soon, notify me
+            2. Present Numbers &amp; Planes · Coming soon, notify me
           </button>
-          <button type="button" onclick="selectConversionOffer('yogas')" style="background:#FFF2EB; border:1px solid rgba(217,119,6,0.4); color:#B45309; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
-            ⚡ 3. Anveil Yogas (<span id="lsQuickYogaPct">25%</span>) @ ₹199
+          <button type="button" onclick="selectConversionOffer('yogas')" style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.45); color:#8B6914; font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer;">
+            3. Active Plane Strengths (<span id="lsQuickYogaPct">25%</span>) · ₹399
           </button>
         </div>
       </div>
@@ -579,7 +579,7 @@
     <!-- Key Lo Shu Patterns -->
     <div style="margin-top:22px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.35); border-radius:12px; padding:16px 18px;">
       <div style="font-family:'Cinzel',serif; font-size:0.84rem; font-weight:800; color:#8B6914; letter-spacing:0.04em; margin-bottom:10px;">
-        Key Lo Shu Patterns:
+        Key Lo Shu Grid (Lo Shu Square) Patterns:
       </div>
       <div style="overflow-x:auto;">
         <table style="width:100%; border-collapse:collapse; font-size:0.80rem; color:#523E28;">
@@ -587,25 +587,25 @@
             <tr style="border-bottom:1.5px solid rgba(201,162,39,0.4); text-align:left;">
               <th style="padding:6px 8px; font-weight:700; color:#8B6914;">User Intent</th>
               <th style="padding:6px 8px; font-weight:700; color:#8B6914;">Core Value Proposition</th>
-              <th style="padding:6px 8px; font-weight:700; color:#8B6914; text-align:right;">Offer &amp; Price</th>
+              <th style="padding:6px 8px; font-weight:700; color:#8B6914; text-align:right;">Availability</th>
             </tr>
           </thead>
           <tbody>
             <tr style="border-bottom:1px solid rgba(201,162,39,0.2); cursor:pointer;" onclick="selectConversionOffer('missing')">
-              <td style="padding:8px 8px; font-weight:700; color:#8B6914;">1. 🔒 Missing Voids</td>
-              <td style="padding:8px 8px;">Full Anveil: Name Balancing &amp; Vastu</td>
+              <td style="padding:8px 8px; font-weight:700; color:#8B6914;">1. Missing Numbers (Open Grid Cells)</td>
+              <td style="padding:8px 8px;">Chaldean Name Balancing &amp; Directional (Vastu) Harmonizers</td>
               <td style="padding:8px 8px; text-align:right; font-weight:700; color:#8B6914;">Coming soon, notify me</td>
             </tr>
             <tr style="border-bottom:1px solid rgba(201,162,39,0.2); cursor:pointer;" onclick="selectConversionOffer('present')">
-              <td style="padding:8px 8px; font-weight:700; color:#16835B;">2. 🌿 Present Digits</td>
-              <td style="padding:8px 8px;">Inborn gifts, digit overdrive &amp; Dasha</td>
+              <td style="padding:8px 8px; font-weight:700; color:#16835B;">2. Present Digits &amp; 8 Planes</td>
+              <td style="padding:8px 8px;">Repeating digit amplifications &amp; Raj Yoga combinations</td>
               <td style="padding:8px 8px; text-align:right; font-weight:700; color:#16835B;">Coming soon, notify me</td>
             </tr>
             <tr style="cursor:pointer;" onclick="selectConversionOffer('yogas')">
-              <td style="padding:8px 8px; font-weight:700; color:#B45309;">3. ⚡ Element Yogas</td>
-              <td style="padding:8px 8px;">Active Plane % &amp; foundational habits</td>
-              <td style="padding:8px 8px; text-align:right; font-weight:700; color:#B45309;">
-                ₹199
+              <td style="padding:8px 8px; font-weight:700; color:#8B6914;">3. Core Numbers &amp; Active Planes</td>
+              <td style="padding:8px 8px;">3-Page Basic Report: Core Numbers, Lo Shu Grid &amp; 5-Element Balance</td>
+              <td style="padding:8px 8px; text-align:right; font-weight:700; color:#8B6914;">
+                ₹399
               </td>
             </tr>
           </tbody>
@@ -623,44 +623,37 @@
 
   <!-- CTA -->
   <div class="cta-strip" style="background:linear-gradient(135deg, #FFFDF7 0%, #FFFFFF 100%); border:1.5px solid var(--gold, #C9A227); border-radius:20px; padding:32px 24px; text-align:center; box-shadow:0 8px 30px rgba(82,62,40,0.08); margin: 0 auto 60px; max-width: 680px;">
-    <div style="display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:50%; background:rgba(201,162,39,0.12); border:1.5px solid var(--gold, #C9A227); font-size:1.4rem; color:#8B6914; margin-bottom:10px;">
-      🔒
+    <div style="display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:50%; background:rgba(201,162,39,0.12); border:1.5px solid var(--gold, #C9A227); font-size:1.2rem; color:#8B6914; margin-bottom:10px;">
+      ✦
     </div>
     <div style="font-family:'Cinzel', serif; font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:#8B6914; font-weight:700; margin-bottom:6px;">
       NUMEROS VISION · ANVEIL EVERY CHARM
     </div>
     <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.75rem; color:#523E28; margin:0 0 10px; font-weight:700;">
-      ANVEIL Your Elemental Grid Charm — Explore Missing Plane Remedies
+      Explore Your Personalized Lo Shu Grid (Lo Shu Square) Report Options
     </h3>
     <p style="font-size:0.88rem; color:#7A654D; line-height:1.65; max-width:640px; margin:0 auto 18px;">
-      Empty grid sectors indicate life areas experiencing subtle friction—such as financial leaks (missing 4, 5, 6) or career delays (missing 1, 8). 
-      Discover how structured remedial protocols, sacred Yantras, and 5-element directional cures address empty planes in the 32-page Sovereign Blueprint 
-      in your comprehensive 12-page Advanced Report (Coming soon, notify me) or 32-page Complete Report (Coming soon, notify me).
+      Start immediately with the 3-page Basic Report (<span style="color:var(--gold-dark, #8B6914); font-weight:700;">₹399</span>) covering Mulank (Birth Day number), Bhagyank (Life Path number), Kua number (Vastu direction number), Personal Year, 9-cell Lo Shu Grid (Lo Shu Square) mapping, Calling Name number (Chaldean Name number) harmony, and Five-Element lifestyle balance—or join the waitlist for our 12-page Advanced and 32-page Complete reports.
     </p>
 
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:8px; text-align:left; max-width:640px; margin:0 auto 18px; background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:10px; padding:12px 16px; font-size:0.82rem; color:#523E28; font-weight:600;">
-      <div>✦ 8 Elemental Planes Strength &amp; Void Frequency Audit</div>
-      <div>✦ Golden (4-5-6) &amp; Silver (2-5-8) Rajyog Abundance Activation</div>
-      <div>✦ 7-Layer Holistic Remedial Protocols &amp; Directional Placement Guide</div>
-      <div>✦ 5-Year Dasha &amp; Personal Year Remedial Harmonization</div>
-    </div>
-
-    <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px; flex-wrap:wrap;">
-      <span style="font-family:'Cinzel', serif; font-size:1rem; font-weight:800; color:#8B6914;">Coming soon, notify me</span>
-      <span style="font-size:0.72rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 10px; border-radius:999px; text-transform:uppercase;">SAVE 50% · INSTANT PDF</span>
+      <div>✦ Core Numbers: Mulank, Bhagyank, Kua &amp; Personal Year</div>
+      <div>✦ 9-Cell Lo Shu Grid (Lo Shu Square) &amp; Active Plane Strengths</div>
+      <div>✦ Calling Name number (Chaldean Name number) Harmony Check</div>
+      <div>✦ Five-Element Distribution Balance &amp; Practical Lifestyle Guidance</div>
     </div>
 
     <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
-      <button type="button" onclick="launchOfferCheckout('report_premium', 1050, 'Full Anveil Charm: Missing Number Activation')" style="display:inline-flex; align-items:center; justify-content:center; padding:14px 28px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel', serif; font-weight:700; font-size:0.88rem; letter-spacing:0.06em; border-radius:10px; border:none; cursor:pointer; text-decoration:none; box-shadow:0 4px 18px rgba(201,162,39,0.35);">
-        <span>🔒 Complete Numerology Report · Coming soon, notify me ✦</span>
-      </button>
-      <a href="/sample_roadmap/?topic=loshu_grid" style="display:inline-flex; align-items:center; justify-content:center; padding:14px 20px; background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); color:#523E28; font-weight:600; font-size:0.82rem; border-radius:10px; text-decoration:none;">
-        Preview Sample Dossier
+      <a href="/pricing/" style="display:inline-flex; align-items:center; justify-content:center; padding:14px 28px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel', serif; font-weight:700; font-size:0.88rem; letter-spacing:0.06em; border-radius:10px; border:none; cursor:pointer; text-decoration:none; box-shadow:0 4px 18px rgba(201,162,39,0.35);">
+        <span>Compare Reports &amp; Pricing ✦</span>
+      </a>
+      <a href="/sample/" style="display:inline-flex; align-items:center; justify-content:center; padding:14px 20px; background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); color:#523E28; font-weight:600; font-size:0.82rem; border-radius:10px; text-decoration:none;">
+        Preview Sample Report
       </a>
     </div>
 
-    <div style="font-size:0.72rem; color:#7A654D; margin-top:10px;">
-      Authentic Classical Numerology · Pure Mathematical Precision · 100% Confidential &amp; Private
+    <div style="font-size:0.74rem; color:#7A654D; margin-top:12px;">
+      Waitlist tiers (Advanced 12-page &amp; Complete 32-page): When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.
     </div>
   </div>
 
@@ -700,7 +693,7 @@
           <ul class="nv-footer-links">
             <li><a href="/charm-ai/">Charm AI Assistant</a></li>
             <li><a href="/reports/">Reports Catalogue</a></li>
-            <li><a href="/sample_roadmap/?topic=loshu_grid">Sample Dossier</a></li>
+            <li><a href="/sample/">Sample Report</a></li>
             <li><a href="/pricing/">Plans &amp; Pricing</a></li>
             <li><a href="/consultation/">1-on-1 Consultation</a></li>
           </ul>
@@ -820,7 +813,7 @@
 
       const existing = JSON.parse(sessionStorage.getItem('nv_reading_input') || '{}');
       sessionStorage.setItem('nv_reading_input', JSON.stringify({
-        name: existing.name || 'Seeker',
+        name: existing.name || '',
         day: dayVal,
         month: monthVal,
         year: yearVal,
@@ -910,7 +903,7 @@
 
       
       // Call Reference Component Controller
-      const seekerName = (document.getElementById('ls-name') && document.getElementById('ls-name').value.trim()) || localStorage.getItem('nv_user_name') || 'Seeker';
+      const seekerName = (document.getElementById('ls-name') && document.getElementById('ls-name').value.trim()) || localStorage.getItem('nv_user_name') || '';
       const formattedDob = `${String(dayVal).padStart(2, '0')}-${String(monthVal).padStart(2, '0')}-${yearVal}`;
       renderLoShuReferenceComponent(counts, missingDigits, presentDigits, driver, conductor, seekerName, formattedDob);
 
@@ -1027,8 +1020,8 @@
       present: [],
       driver: 1,
       conductor: 1,
-      name: 'Seeker',
-      dob: '28-11-1981',
+      name: '',
+      dob: '',
       yogaPct: 25
     };
 
@@ -1038,8 +1031,8 @@
       _lastCalculatedData.present = presentDigits;
       _lastCalculatedData.driver = driver;
       _lastCalculatedData.conductor = conductor;
-      _lastCalculatedData.name = pName || 'Seeker';
-      _lastCalculatedData.dob = pDob || '28-11-1981';
+      _lastCalculatedData.name = pName || '—';
+      _lastCalculatedData.dob = pDob || '—';
 
       // 8 planes of Lo Shu
       const planes = [
@@ -1132,7 +1125,7 @@
 
     
 function seeLoShuReportOptions() {
-  const name = document.getElementById('ls-name')?.value?.trim() || 'Seeker';
+  const name = document.getElementById('ls-name')?.value?.trim() || '';
   const d = parseInt(document.getElementById('ls-day')?.value);
   const m = parseInt(document.getElementById('ls-month')?.value);
   const y = parseInt(document.getElementById('ls-year')?.value);
@@ -1160,8 +1153,8 @@ function selectConversionOffer(offerType, specificNum) {
         </div>
       `;
     }
-    let _selectedPlanKey = 'report_premium';
-    let _selectedPlanPrice = 1050;
+    let _selectedPlanKey = 'report_basic';
+    let _selectedPlanPrice = 399;
 
     function updateModalDobLockNotice() {
       const dobInput = document.getElementById('chk-dob');
@@ -1172,6 +1165,10 @@ function selectConversionOffer(offerType, specificNum) {
     }
 
     function openCheckout(planKey, planName, price) {
+      if (planKey === 'report_advanced' || planKey === 'report_premium' || planKey === 'planner_2027') {
+        window.location.href = '/pricing/';
+        return;
+      }
       _selectedPlanKey = planKey;
       _selectedPlanPrice = price;
 
@@ -1182,11 +1179,11 @@ function selectConversionOffer(offerType, specificNum) {
       if (nameEl) nameEl.textContent = planName;
       if (priceEl) priceEl.textContent = `₹${price}`;
 
-      const dayVal = document.getElementById('ls-day') ? document.getElementById('ls-day').value : '28';
-      const monthVal = document.getElementById('ls-month') ? document.getElementById('ls-month').value : '11';
-      const yearVal = document.getElementById('ls-year') ? document.getElementById('ls-year').value : '1981';
-      const nameVal = (document.getElementById('ls-name') && document.getElementById('ls-name').value.trim()) || localStorage.getItem('nv_user_name') || 'Seeker';
-      const dobStr = `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`;
+      const dayVal = document.getElementById('ls-day') ? document.getElementById('ls-day').value : '';
+      const monthVal = document.getElementById('ls-month') ? document.getElementById('ls-month').value : '';
+      const yearVal = document.getElementById('ls-year') ? document.getElementById('ls-year').value : '';
+      const nameVal = (document.getElementById('ls-name') && document.getElementById('ls-name').value.trim()) || localStorage.getItem('nv_user_name') || '';
+      const dobStr = (dayVal && monthVal && yearVal) ? `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}` : '';
 
       const dobInput = document.getElementById('chk-dob');
       if (dobInput) {
@@ -1245,9 +1242,9 @@ function selectConversionOffer(offerType, specificNum) {
 
       closeCheckout();
 
-      const planKey = _selectedPlanKey || 'report_premium';
-      const planName = (document.getElementById('modal-plan-name') || {}).textContent || 'Personal Numerology Report';
-      const price = _selectedPlanPrice || 1050;
+      const planKey = _selectedPlanKey || 'report_basic';
+      const planName = (document.getElementById('modal-plan-name') || {}).textContent || 'Basic Numerology Report';
+      const price = _selectedPlanPrice || 399;
       const profileKey = (name + '_' + dob).toLowerCase().replace(/[^a-z0-9]/g, '_');
 
       const launchGateway = (gatewayObj) => {
@@ -1296,28 +1293,10 @@ function selectConversionOffer(offerType, specificNum) {
     }
 
     function launchOfferCheckout(planId, amountInr, planName) {
-      const dayVal = document.getElementById('ls-day') ? document.getElementById('ls-day').value : '28';
-      const monthVal = document.getElementById('ls-month') ? document.getElementById('ls-month').value : '11';
-      const yearVal = document.getElementById('ls-year') ? document.getElementById('ls-year').value : '1981';
-      const nameVal = (document.getElementById('ls-name') && document.getElementById('ls-name').value.trim()) || localStorage.getItem('nv_user_name') || 'Seeker';
-      const dobStr = `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`;
-      
-      // Removed legacy localStorage write (DPDP privacy)
-      // Removed legacy localStorage write (DPDP privacy)
-      
-      const profileKey = (nameVal + '_' + dobStr).toLowerCase().replace(/[^a-z0-9]/g, '_');
-      const activeProf = {
-        id: profileKey,
-        name: nameVal,
-        dob: dobStr,
-        gender: 'male',
-        email: localStorage.getItem('nv_user_email') || '',
-        phone: localStorage.getItem('nv_user_phone') || '',
-        relation: 'Self (Primary)'
-      };
-      // Removed legacy localStorage active profile write (DPDP privacy));
-      
-      // Open in-page modal directly (no jarring redirects)
+      if (planId === 'report_advanced' || planId === 'report_premium' || planId === 'planner_2027') {
+        window.location.href = '/pricing/';
+        return;
+      }
       openCheckout(planId, planName, amountInr);
     }
 
@@ -1410,7 +1389,8 @@ function selectConversionOffer(offerType, specificNum) {
     </a>
   </nav>
   <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
-  <script src="/static/js/nv_payment_gateway.js?v=20261106_v9" defer>
+  <script src="/static/js/nv_payment_gateway.js?v=20261106_v9" defer></script>
+  <script>
     window.addEventListener('DOMContentLoaded', () => {
       try {
         const saved = sessionStorage.getItem('nv_reading_input');
@@ -1422,7 +1402,7 @@ function selectConversionOffer(offerType, specificNum) {
         }
       } catch (e) {}
     });
-</script>
+  </script>
 </body>
 </html>
 

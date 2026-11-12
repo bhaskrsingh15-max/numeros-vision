@@ -324,7 +324,7 @@
             <!-- Secondary Actions & Reassurance Strip -->
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:6px;border-top:1px solid rgba(201,162,39,0.15);">
               <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
-                <a href="/pricing#plans" style="font-size:0.78rem;color:#8B6914;font-weight:600;text-decoration:underline;">
+                <a href="/pricing/#plans" style="font-size:0.78rem;color:#8B6914;font-weight:600;text-decoration:underline;">
                   ${prod.secondary_cta}
                 </a>
                 <span style="font-size:0.75rem;color:var(--text-muted, #7A654D);">·</span>
@@ -332,7 +332,7 @@
                   Ask Charm AI Free ✦
                 </a>
                 <span style="font-size:0.75rem;color:var(--text-muted, #7A654D);">·</span>
-                <a href="/sample-report/" style="font-size:0.78rem;color:var(--text-muted, #7A654D);text-decoration:none;">
+                <a href="/sample/" style="font-size:0.78rem;color:var(--text-muted, #7A654D);text-decoration:none;">
                   ${prod.tertiary_link}
                 </a>
               </div>

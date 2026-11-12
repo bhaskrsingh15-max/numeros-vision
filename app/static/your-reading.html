@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
   <script src="/static/js/nv_consent.js?v=5.5.0"></script>
   <script src="/static/js/nv_kua.js?v=1.1.0"></script>
-  <script src="/static/js/nv_pricing_catalog.js?v=1.1.0"></script>
+  <script src="/static/js/nv_pricing_catalog.js?v=1.3.0"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="/api/turnstile-config.js"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -1258,17 +1258,17 @@
 
         <div class="numbers-grid">
           <div class="num-pill">
-            <div class="num-label">Driver (Mulank)</div>
+            <div class="num-label">Mulank (Birth Day number)</div>
             <div class="num-val" id="summary-driver">-</div>
             <div class="num-sub" id="summary-driver-planet">Ruling Planet</div>
           </div>
           <div class="num-pill">
-            <div class="num-label">Conductor (Bhagyank)</div>
+            <div class="num-label">Bhagyank (Life Path number)</div>
             <div class="num-val" id="summary-conductor" style="color:var(--emerald);">-</div>
             <div class="num-sub" id="summary-conductor-planet">Destiny Trajectory</div>
           </div>
           <div class="num-pill" id="summary-kua-container">
-            <div class="num-label">Kua Number</div>
+            <div class="num-label">Kua number (Vastu direction number)</div>
             <div class="num-val" id="summary-kua" style="font-size:1.15rem; line-height:1.3; padding-top:4px;">Kua needs gender</div>
             <div class="num-sub" id="summary-kua-meta">Directional Group</div>
             <div class="kua-rule-note" id="summary-kua-rule">Calculated from your birth year and gender</div>
@@ -1286,7 +1286,7 @@
         </div>
 
         <div id="summary-narrative" style="font-size:0.88rem; color:var(--ink-muted); line-height:1.6; border-top:1px solid rgba(201,162,39,0.2); padding-top:14px;">
-          Your Driver and Conductor numbers govern your instinctive temperament and overarching life purpose. Review our analytical report options below to explore complete dasha timing windows, acoustic name harmonization, and elemental balance.
+          Your Mulank (Birth Day number) and Bhagyank (Life Path number) describe your core temperament and long-horizon trajectory. Review our report options below to explore your Lo Shu Grid (Lo Shu Square), Calling Name number (Chaldean Name number) alignment, and Five-Element balance.
         </div>
       </div>
 
@@ -1378,29 +1378,25 @@
         </p>
       </div>
 
-      <!-- SPECIAL ANNUAL PLANNER CONTAINER (Triggered when ?from=personal-year) -->
+      <!-- SPECIAL ANNUAL PLANNER CONTAINER (Waitlist-only until Planner disclaimer is approved) -->
       <div id="planner-feature-container" style="display:none; margin-bottom:32px;">
-        <div class="tier-card highlighted" style="border:2px solid var(--gold-dark); max-width:860px; margin:0 auto; padding:32px 36px;">
-          <div class="tier-badge" style="background:var(--gold-dark);">RECOMMENDED FOR ANNUAL CYCLES</div>
+        <div class="tier-card" style="border:1.5px solid var(--border-gold); max-width:860px; margin:0 auto; padding:28px 32px;">
+          <div class="tier-badge" style="background:var(--ink-muted);">WAITLIST · NOTIFY ME</div>
           <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
             <div>
-              <span style="font-size:0.75rem; color:var(--gold-dark); text-transform:uppercase; font-weight:700; letter-spacing:0.08em;">Annual Planetary Guide</span>
-              <h3 class="tier-name" style="font-size:2rem; margin:4px 0;">2027 Year Ahead Planner</h3>
-              <div class="tier-meta">24-Page Personalized Annual Astrological &amp; Vibrational Blueprint</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:0.8rem; text-decoration:line-through; color:var(--ink-muted);">List Price: ₹1,999</div>
-              <div class="tier-price" id="planner-price-display">₹1,499</div>
-              <div class="tier-price-sub">Special Early-Access Offer</div>
+              <span style="font-size:0.75rem; color:var(--gold-dark); text-transform:uppercase; font-weight:700; letter-spacing:0.08em;">Annual Personal Year Edition</span>
+              <h3 class="tier-name" style="font-size:1.85rem; margin:4px 0;">2027 Year Ahead Numerology Planner</h3>
+              <div class="tier-meta">24-Page Personalized Annual Personal Year &amp; Monthly Cycle Edition</div>
             </div>
           </div>
-          <ul class="tier-features" style="margin-top:16px;">
-            <li>Comprehensive 24-page month-by-month personal year dasha analysis</li>
-            <li>Quarterly milestone breakdown with high-support timing windows</li>
-            <li>Customized remedial alignments and auspicious transit calendar</li>
+          <p class="tier-price-sub" style="margin:12px 0 0; display:block;">When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.</p>
+          <ul class="tier-features" style="margin-top:14px;">
+            <li>Personal Year 2027 &amp; 12-Month Personal Month Cycle Breakdown</li>
+            <li>Quarterly Planning Themes &amp; Reflective Review Checkpoints</li>
+            <li>24-Page Structured PDF Edition Tied to Your Birth Date</li>
           </ul>
-          <button type="button" class="btn-select-tier btn-select-gold" onclick="selectTierAndProceed('planner_2027')" style="font-size:1.02rem;">
-            <span>Select 2027 Planner (₹1,499)</span> <span>✦</span>
+          <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-planner_2027" onclick="openNotifyMeModal('planner_2027')" style="font-size:0.98rem;">
+            <span>Coming soon, notify me</span> <span>✉</span>
           </button>
         </div>
       </div>
@@ -1414,15 +1410,15 @@
           <div>
             <div style="font-size:0.76rem; color:var(--emerald); font-weight:700; letter-spacing:0.02em;">Complete Numerology Report, 32 pages</div>
             <h3 class="tier-name">Anveil every charm</h3>
-            <div class="tier-meta">Every Glowing &amp; Veiled Charm · 10-Year Timing Radar</div>
-            <div class="tier-price" id="price-report_premium" style="font-size:1.35rem;">Coming soon, notify me</div>
-            <div class="tier-price-sub" id="launch-sub-report_premium" style="display:none;"></div>
+            <div class="tier-meta">Missing Numbers (Open Grid Cells), Dasha Timeline &amp; Name Balancing</div>
+            <div class="tier-price" id="price-report_premium" style="display:none;"></div>
+            <div class="tier-price-sub" id="launch-sub-report_premium" style="display:block;">When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.</div>
             <ul class="tier-features" id="features-report_premium">
-              <li>32-Page Complete Sovereign PDF Blueprint</li>
-              <li>Unveils Every Glowing &amp; Veiled Charm in Your Grid</li>
-              <li>Dual-System Synthesis (Chaldean + Pythagorean)</li>
-              <li>10-Year Planetary Timing Radar &amp; Execution Windows</li>
-              <li>Complete Technical Appendix with Mathematical Proofs</li>
+              <li>Everything in Basic &amp; Advanced plus Missing Numbers (Open Grid Cells) Analysis</li>
+              <li>Multi-Year Numerology Dasha &amp; Pinnacle Cycle Timeline</li>
+              <li>Chaldean Name Balancing &amp; Signature Alignment Options</li>
+              <li>Practical Lifestyle, Color, Directional (Vastu) &amp; Habit Harmonizers</li>
+              <li>Complete 32-Page Personalized Reference PDF Report</li>
             </ul>
           </div>
           <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_premium" onclick="openNotifyMeModal('report_premium')">
@@ -1436,16 +1432,16 @@
           <div>
             <div style="font-size:0.76rem; color:var(--gold-dark); font-weight:700; letter-spacing:0.02em;">Advanced Numerology Report, 12 pages</div>
             <h3 class="tier-name">Anveil my glowing charms</h3>
-            <div class="tier-meta">Active Repetitions, 5-Year Dasha &amp; Remedy Protocols</div>
-            <div class="tier-price" id="price-report_advanced" style="font-size:1.35rem;">Coming soon, notify me</div>
-            <div class="tier-price-sub" id="launch-sub-report_advanced" style="display:none;"></div>
+            <div class="tier-meta">Present Numbers, Repeating Digits &amp; 8 Lo Shu Planes</div>
+            <div class="tier-price" id="price-report_advanced" style="display:none;"></div>
+            <div class="tier-price-sub" id="launch-sub-report_advanced" style="display:block;">When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.</div>
             <div class="tier-scope-note" id="scope-note-report_advanced">Covers your glowing charms only, not this veiled one.</div>
             <ul class="tier-features" id="features-report_advanced">
-              <li>12-Page Glowing Charms Synthesis PDF Dossier</li>
-              <li>Deep Analysis of Every Present &amp; Repeated Digit</li>
-              <li>Complete Lo Shu Plane Analysis (Thought, Will, Action)</li>
-              <li>Chaldean Sound Frequency &amp; Name Harmony Matrix</li>
-              <li>7-Layer Safe Planetary Lifestyle Protocols</li>
+              <li>Everything in Basic plus Deep Analysis of All Present Numbers</li>
+              <li>Repeating Digit Amplifications &amp; Behavioral Tendencies</li>
+              <li>8 Lo Shu Planes &amp; Raj Yoga Combinations Breakdown</li>
+              <li>Career, Relationship &amp; Financial Archetype Compatibility</li>
+              <li>12-Page Structured PDF Report with Actionable Daily Habits</li>
             </ul>
           </div>
           <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_advanced" onclick="openNotifyMeModal('report_advanced')">
@@ -1459,15 +1455,15 @@
           <div>
             <div style="font-size:0.76rem; color:var(--gold-dark); font-weight:700; letter-spacing:0.02em;">Basic Numerology Report, 3 pages</div>
             <h3 class="tier-name">Anveil my alignments</h3>
-            <div class="tier-meta">Core Numbers, Charm Alignments &amp; Elemental Balance</div>
+            <div class="tier-meta">Core Numbers, Lo Shu Grid (Lo Shu Square) &amp; Calling Name Check</div>
             <div class="tier-price" id="price-report_basic">₹399</div>
             <div class="tier-price-sub" id="launch-sub-report_basic" style="display:none;"></div>
             <ul class="tier-features" id="features-report_basic">
-              <li>3-Page Personalised Executive Alignment PDF</li>
-              <li>Deterministic Mulank, Bhagyank &amp; Kua Calculations</li>
-              <li>Lo Shu 3×3 Grid Planes &amp; 5-Element Breakdown</li>
-              <li>Chaldean Single Root &amp; Compound Name Analysis</li>
-              <li>90-Day Practical Habit &amp; Alignment Plan</li>
+              <li>Core Numbers: Mulank (Birth Day number), Bhagyank (Life Path number), Kua number (Vastu direction number) &amp; Personal Year</li>
+              <li>9-Cell Lo Shu Grid (Lo Shu Square) Mapping &amp; Active Plane Strengths</li>
+              <li>Calling Name number (Chaldean Name number) Harmony Check</li>
+              <li>Five-Element Distribution Balance &amp; Practical Lifestyle Guidance</li>
+              <li>Instant 3-Page Print-Ready Personalized PDF Report</li>
             </ul>
           </div>
           <button type="button" class="btn-select-tier btn-select-gold" id="btn-select-report_basic" onclick="selectTierAndProceed('report_basic')">
@@ -1489,7 +1485,7 @@
       <div class="checkout-modal-header">
         <div class="checkout-modal-tier-tag" id="stage-b-tier-tag">Selected Reading Package</div>
         <h2 class="checkout-modal-title" id="stage-b-title">Confirm Your Order</h2>
-        <div class="checkout-modal-price" id="stage-b-tier-price-display">₹199</div>
+        <div class="checkout-modal-price" id="stage-b-tier-price-display">₹399</div>
       </div>
 
       <form id="stage-b-checkout-form" onsubmit="event.preventDefault(); proceedToRazorpayPayment();">
@@ -1673,10 +1669,10 @@
     };
 
     const DEFAULT_TIERS = {
-      'report_basic': { name: 'Anveil my alignments', descriptor: 'Basic Numerology Report, 3 pages', price: 199, mrp: 399, meta: 'Core Numbers & Charm Alignments · 3 Pages' },
-      'report_advanced': { name: 'Anveil my glowing charms', descriptor: 'Advanced Numerology Report, 12 pages', price: 510, mrp: 1020, meta: 'Active Repetitions & Remedy Protocols · 12 Pages' },
-      'report_premium': { name: 'Anveil every charm', descriptor: 'Complete Numerology Report, 32 pages', price: 1050, mrp: 2100, meta: 'Every Glowing & Veiled Charm · 32 Pages' },
-      'planner_2027': { name: 'Numeros 2027 Executive Planner', descriptor: '2027 Year Ahead Numerology Planner, 24 pages', price: 1499, mrp: null, meta: '365-Day High-Precision Auspicious Execution' }
+      'report_basic': { name: 'Anveil my alignments', descriptor: 'Basic Numerology Report, 3 pages', price: 399, mrp: 399, meta: 'Core Numbers, Lo Shu Grid & Calling Name Check · 3 Pages' },
+      'report_advanced': { name: 'Anveil my glowing charms', descriptor: 'Advanced Numerology Report, 12 pages', price: null, mrp: 1020, meta: 'Present Numbers, Repeating Digits & 8 Lo Shu Planes · 12 Pages' },
+      'report_premium': { name: 'Anveil every charm', descriptor: 'Complete Numerology Report, 32 pages', price: null, mrp: 2100, meta: 'Missing Numbers, Dasha Timeline & Name Balancing · 32 Pages' },
+      'planner_2027': { name: '2027 Year Ahead Numerology Planner', descriptor: '2027 Year Ahead Numerology Planner, 24 pages', price: null, mrp: null, meta: '24-Page Annual Personal Year & Monthly Cycle Edition' }
     };
 
     let serverCatalog = null;
@@ -1810,7 +1806,7 @@
     }
 
     function submitInlineDob() {
-      const name = document.getElementById('inline-seeker-name')?.value?.trim() || 'Seeker';
+      const name = document.getElementById('inline-seeker-name')?.value?.trim() || '';
       const d = parseInt(document.getElementById('inline-dob-day')?.value, 10);
       const m = parseInt(document.getElementById('inline-dob-month')?.value, 10);
       const y = parseInt(document.getElementById('inline-dob-year')?.value, 10);
@@ -1903,7 +1899,7 @@
     }
 
     function renderSeekerSummary(data) {
-      document.getElementById('summary-seeker-name').textContent = data.name || 'Valued Seeker';
+      document.getElementById('summary-seeker-name').textContent = data.name || 'Your Birth-Date Profile';
       const formattedDob = data.dob || `${data.year}-${String(data.month).padStart(2,'0')}-${String(data.day).padStart(2,'0')}`;
       document.getElementById('summary-seeker-dob').textContent = formattedDob;
 
@@ -2000,21 +1996,26 @@
 
     function syncDynamicLaunchOfferLabels() {
       const offerState = resolveCurrentLaunchOffer();
+      const waitlistCaption = (window.NV_PRICING && window.NV_PRICING.WAITLIST_CAPTION)
+        || 'When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.';
       ['report_premium', 'report_advanced', 'report_basic'].forEach(sku => {
         const priceEl = document.getElementById(`price-${sku}`);
         const subEl = document.getElementById(`launch-sub-${sku}`);
         if (isNotifyMeEnabledForSku(sku)) {
           if (priceEl) {
-            priceEl.style.fontSize = '1.35rem';
-            priceEl.textContent = 'Coming soon, notify me';
+            priceEl.textContent = '';
+            priceEl.style.display = 'none';
           }
           if (subEl) {
-            subEl.textContent = '';
-            subEl.style.display = 'none';
+            subEl.textContent = waitlistCaption;
+            subEl.style.display = 'block';
           }
           return;
         }
-        if (priceEl) priceEl.style.fontSize = '';
+        if (priceEl) {
+          priceEl.style.display = '';
+          priceEl.style.fontSize = '';
+        }
         const activePrice = resolveActivePriceForSku(sku);
         const mrpVal = (window.NV_PRICING && typeof window.NV_PRICING.getStruckMrp === 'function')
           ? window.NV_PRICING.getStruckMrp(sku)
@@ -2091,7 +2092,9 @@
           d = parseInt(parts[2], 10);
         }
       }
-      d = d || 1; m = m || 1; y = y || 1990;
+      if (!d || !m || !y) {
+        return;
+      }
       const totalDobDigits = `${String(d).padStart(2, '0')}${String(m).padStart(2, '0')}${String(y).padStart(4, '0')}`;
 
       const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
@@ -2353,6 +2356,16 @@
     }
 
     function isNotifyMeEnabledForSku(skuId) {
+      if (skuId === 'planner_2027') {
+        if (serverCatalog && serverCatalog.annual_planners && serverCatalog.annual_planners.planner_2027) {
+          const pl = serverCatalog.annual_planners.planner_2027;
+          if (pl.waitlist_only === false || pl.status === 'active') return false;
+        }
+        if (window.NV_PRICING && typeof window.NV_PRICING.isNotifyMeTier === 'function') {
+          return window.NV_PRICING.isNotifyMeTier('planner_2027');
+        }
+        return true;
+      }
       if (skuId !== 'report_advanced' && skuId !== 'report_premium') return false;
       if (window.NV_PRICING && typeof window.NV_PRICING.isNotifyMeTier === 'function') {
         const localOverride = new URLSearchParams(window.location.search || '').get('nv_notify_me_preview');
@@ -2795,7 +2808,7 @@
       const priceDispEl = document.getElementById('stage-b-tier-price-display');
       const payAmountEl = document.getElementById('checkout-pay-btn-amount');
 
-      if (nameInput) nameInput.value = _activeReadingData.name || 'Valued Seeker';
+      if (nameInput) nameInput.value = _activeReadingData.name || 'Reader';
       
       const isoDob = _activeReadingData.dob || `${_activeReadingData.year}-${String(_activeReadingData.month).padStart(2,'0')}-${String(_activeReadingData.day).padStart(2,'0')}`;
       if (dobInput) dobInput.value = isoDob;
@@ -3085,7 +3098,7 @@
 
       const email = document.getElementById('checkout-email')?.value?.trim().toLowerCase() || '';
       const phone = document.getElementById('checkout-mobile')?.value?.trim() || '';
-      const name = _activeReadingData.name || 'Valued Seeker';
+      const name = _activeReadingData.name || 'Reader';
       const isoDob = _activeReadingData.dob || `${_activeReadingData.year}-${String(_activeReadingData.month).padStart(2,'0')}-${String(_activeReadingData.day).padStart(2,'0')}`;
       const marketingConsent = Boolean(document.getElementById('checkout-consent-marketing')?.checked);
 

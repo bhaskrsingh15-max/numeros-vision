@@ -370,49 +370,54 @@
     <section class="ai-console-card">
       <div class="ai-grid">
         <div class="ai-input-box">
-          <label for="ai_user_name">Your Name</label>
-          <input type="text" id="ai_user_name" value="Arjun Sharma" placeholder="Your name" />
+          <label for="ai_user_name">Your Name (Optional)</label>
+          <input type="text" id="ai_user_name" value="" placeholder="Enter your name" autocomplete="name" />
         </div>
         <div class="ai-input-box">
-          <label>Date of Birth (DD-MM-YYYY)</label>
+          <label>Date of Birth (DD-MM-YYYY) <span style="color:#8B6914;">*</span></label>
           <div style="display:flex; gap:8px;">
-            <input type="number" id="ai_day" value="15" min="1" max="31" placeholder="DD" style="width:30%;" />
-            <input type="number" id="ai_month" value="8" min="1" max="12" placeholder="MM" style="width:30%;" />
-            <input type="number" id="ai_year" value="1990" min="1900" max="2030" placeholder="YYYY" style="width:40%;" />
+            <input type="number" id="ai_day" value="" min="1" max="31" placeholder="DD" style="width:30%;" />
+            <input type="number" id="ai_month" value="" min="1" max="12" placeholder="MM" style="width:30%;" />
+            <input type="number" id="ai_year" value="" min="1900" max="2030" placeholder="YYYY" style="width:40%;" />
           </div>
         </div>
         <div class="ai-input-box">
-          <label for="ai_tob">Time of Birth (Optional for Extended Alignment)</label>
-          <input type="time" id="ai_tob" value="10:30" />
+          <label for="ai_tob">Time of Birth (Optional for Cross-Verification)</label>
+          <input type="time" id="ai_tob" value="" />
         </div>
         <div class="ai-input-box">
-          <label for="ai_city">Birth City (Optional for Regional Alignment)</label>
-          <input type="text" id="ai_city" value="New Delhi" placeholder="e.g. New Delhi, Mumbai, Bengaluru" />
+          <label for="ai_city">Birth City (Optional for Cross-Verification)</label>
+          <input type="text" id="ai_city" value="" placeholder="e.g. New Delhi, Mumbai, Bengaluru" />
         </div>
       </div>
 
       <div class="ai-input-box" style="margin-bottom:12px;">
         <label for="ai_query">What would you like to ask Charm AI?</label>
-        <textarea id="ai_query" rows="3" placeholder="e.g. Is 2026 favorable for expanding my business? What authentic remedial guidance harmonize my Driver 6 and Conductor 8?">Is 2026 favorable for my career progression and new ventures?</textarea>
+        <textarea id="ai_query" rows="3" placeholder="Ask about love, marriage, career, money, daily routine, children, or property — e.g. How do my Mulank (Birth Day number) and Bhagyank (Life Path number) shape marriage timing?"></textarea>
       </div>
 
       <!-- Quick Suggestion Pills -->
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;">
-        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('Is 2026 favorable for my career progression and promotions?')">✦ 2026 Career Timing</button>
-        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('What consecrated remedies and crystals harmonize my Driver and Conductor numbers?')">✦ Consecrated Upay &amp; Remedies</button>
-        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('How do my numbers influence my marriage harmony and relationship timing?')">✦ Marriage &amp; Relationships</button>
-        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('What are my lucky colors, days, and wealth direction?')">✦ Lucky Colors &amp; Wealth Direction</button>
-        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('Which Lo Shu planes are missing in my chart and how do I balance them?')">✦ Lo Shu Missing Planes</button>
+        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('Is 2026 favorable for my career progression and promotions?')">✦ Career &amp; Work Timing</button>
+        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('How do my numbers influence marriage timing and relationship harmony?')">✦ Marriage &amp; Love</button>
+        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('How should I pace my savings, cashflow, and financial commitments this year?')">✦ Money &amp; Finances</button>
+        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('Which flat number and Vastu direction suit my birth numbers?')">✦ Property &amp; Vastu</button>
+        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('What daily routine and work-rest habits steady my focus?')">✦ Daily Routine</button>
       </div>
 
-      <div class="ai-status-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <span id="aiStatusPill" style="font-size:0.75rem; color:#A13030; background:rgba(161,48,48,0.1); border:1px solid rgba(161,48,48,0.25); padding:4px 10px; border-radius:6px; font-weight:700;">🔒 3 Free Questions after verified sign-up • Starter Pack: 5 Questions for ₹199</span>
-        <button type="button" onclick="loadSampleProfile()" style="background:none; border:none; color:#8B6914; font-size:0.78rem; text-decoration:underline; cursor:pointer;">
-          Load Saved / Sample Profile
-        </button>
+      <div class="ai-status-row" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+        <span id="aiStatusPill" style="font-size:0.75rem; color:#16835B; background:rgba(22,131,91,0.1); border:1px solid rgba(22,131,91,0.25); padding:4px 10px; border-radius:6px; font-weight:700;">✦ Free Daily Access • 3 of 3 Free Questions Remaining Today</span>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <button type="button" onclick="openCharmPaywallModal()" style="background:none; border:none; color:var(--gold-dark, #8B6914); font-size:0.78rem; font-weight:700; text-decoration:underline; cursor:pointer;">
+            Starter Pack: 5 Questions for ₹199
+          </button>
+          <button type="button" onclick="clearCharmInputs()" style="background:none; border:none; color:#7A654D; font-size:0.78rem; text-decoration:underline; cursor:pointer;">
+            Clear Inputs
+          </button>
+        </div>
       </div>
 
-      <button class="btn-ai-ask" id="btnCharmAsk" onclick="handleCharmSubmitOrLock()" style="background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%);">Unlock Charm AI Pass (5 Questions for ₹199) 🔒</button>
+      <button class="btn-ai-ask" id="btnCharmAsk" onclick="handleCharmSubmitOrLock()" style="background:linear-gradient(135deg, #16835B 0%, #0E5E40 100%);">Consult Charm AI (3 Left Today) ✦</button>
 
       <div class="ai-response-box" id="ai_output_panel">
         <div class="ai-msg-header">
@@ -421,17 +426,16 @@
             <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
               <div style="display:flex; align-items:center; gap:6px;">
                 <span class="ai-author-name">Charm AI</span>
-                <span class="ai-verified-icon" title="Authentic Classical Numerology" aria-label="Verified" style="display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:#16835B; color:#FFFFFF; font-size:0.75rem; font-weight:800; line-height:1; box-shadow:0 1px 4px rgba(22,131,91,0.35);">✓</span>
               </div>
               <span style="font-size:0.70rem; font-weight:600; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.28); border-radius:12px; padding:3px 10px;">
                 Ready ✦
               </span>
             </div>
-            <div class="ai-author-sub">Authentic Classical Synthesis · Verified Numerological Cycles</div>
+            <div class="ai-author-sub">Deterministic Numerological &amp; Dasha Synthesis</div>
           </div>
         </div>
         <div style="font-size:0.92rem; line-height:1.7; color:#523E28;">
-          Your grounded numerological explanation will appear here after clicking <strong style="color:#8B6914;">"Consult Charm AI"</strong>. Every query is verified by our classical engine with classical precision.
+          Enter your <strong style="color:#8B6914;">Date of Birth</strong> and question above, then click <strong style="color:#8B6914;">"Consult Charm AI"</strong>. Each visitor receives 3 free questions per day, calculated server-side with zero fabricated defaults.
         </div>
       </div>
     </section>
@@ -605,18 +609,13 @@
       handleCharmSubmitOrLock();
     }
 
-    function loadSampleProfile() {
-      document.getElementById('ai_user_name').value = 'Aarav Sharma';
-      document.getElementById('ai_day').value = 15;
-      document.getElementById('ai_month').value = 8;
-      document.getElementById('ai_year').value = 1990;
-      document.getElementById('ai_query').value = 'Is 2026 favorable for my career progression and new ventures?';
-      
-      try {
-        // Removed legacy localStorage write (DPDP privacy)
-      } catch (e) {}
-
-      submitToCharmAI();
+    function clearCharmInputs() {
+      ['ai_user_name', 'ai_day', 'ai_month', 'ai_year', 'ai_tob', 'ai_city', 'ai_query'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const dayEl = document.getElementById('ai_day');
+      if (dayEl) dayEl.focus();
     }
 
     // ── CLASSICAL LO SHU GRID GENERATOR ──
@@ -654,25 +653,25 @@
       html += `
           </div>
           <div style="font-size:0.75rem; color:#7A654D; text-align:center;">
-            Classical Chinese 3×3 Natal Grid • Verified Presence of Vibrational Epicycles
+            Lo Shu Grid (Lo Shu Square) • 8-Digit Date-of-Birth Distribution
           </div>
         </div>
       `;
       return html;
     }
 
-    // ── SACRED PLANETARY HARMONIZERS ──
+    // ── PLANETARY HARMONIZERS ──
     function renderLuckyHarmonizers(driver, conductor) {
       const planets = {
-        1: { name: 'Sun (Surya)', color: 'Gold, Orange, Ruby Red', stone: 'Natural Ruby / Red Garnet', dir: 'East' },
-        2: { name: 'Moon (Chandra)', color: 'Pearl White, Silver, Cream', stone: 'Natural Pearl / Moonstone', dir: 'North-West' },
-        3: { name: 'Jupiter (Guru)', color: 'Yellow, Saffron, Gold', stone: 'Yellow Sapphire / Topaz', dir: 'North-East' },
-        4: { name: 'Rahu', color: 'Smoke Grey, Electric Blue', stone: 'Hessonite (Gomed)', dir: 'South-West' },
-        5: { name: 'Mercury (Budh)', color: 'Emerald Green, Mint', stone: 'Natural Emerald / Peridot', dir: 'North' },
-        6: { name: 'Venus (Shukra)', color: 'Diamond White, Pastels', stone: 'Natural Diamond / White Zircon', dir: 'South-East' },
-        7: { name: 'Ketu', color: 'Smoky, Variegated, Grey', stone: "Cat's Eye (Lehsunia)", dir: 'North-East' },
-        8: { name: 'Saturn (Shani)', color: 'Dark Navy, Charcoal, Blue', stone: 'Blue Sapphire / Amethyst', dir: 'West' },
-        9: { name: 'Mars (Mangal)', color: 'Coral Red, Crimson', stone: 'Red Coral (Moonga)', dir: 'South' }
+        1: { name: 'Sun (Surya)', color: 'Gold, Warm Amber', dir: 'East' },
+        2: { name: 'Moon (Chandra)', color: 'Pearl White, Cream', dir: 'North-West' },
+        3: { name: 'Jupiter (Guru)', color: 'Warm Yellow, Saffron', dir: 'North-East' },
+        4: { name: 'Rahu', color: 'Slate Grey, Steel Blue', dir: 'South-West' },
+        5: { name: 'Mercury (Budh)', color: 'Emerald Green, Mint', dir: 'North' },
+        6: { name: 'Venus (Shukra)', color: 'Ivory White, Soft Pastels', dir: 'South-East' },
+        7: { name: 'Ketu', color: 'Warm Taupe, Muted Grey', dir: 'North-East' },
+        8: { name: 'Saturn (Shani)', color: 'Deep Navy, Slate Blue', dir: 'West' },
+        9: { name: 'Mars (Mangal)', color: 'Terracotta, Warm Coral', dir: 'South' }
       };
       const dP = planets[driver] || planets[1];
       const cP = planets[conductor] || planets[1];
@@ -681,19 +680,17 @@
         <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:12px; padding:16px 18px; margin-top:16px;">
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
             <span style="color:#C9A227; font-size:1.15rem;">✦</span>
-            <span style="font-family:'Cinzel', serif; font-size:0.92rem; font-weight:700; color:#523E28; letter-spacing:0.04em;">Sacred Planetary Harmonizers</span>
+            <span style="font-family:'Cinzel', serif; font-size:0.92rem; font-weight:700; color:#523E28; letter-spacing:0.04em;">Planetary Color &amp; Directional Harmonizers</span>
           </div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; font-size:0.82rem;">
             <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:10px 12px;">
-              <strong style="color:#8B6914;">Driver ${driver} — ${dP.name}</strong>
-              <div style="color:#523E28; margin-top:4px;">Auspicious Colors: ${dP.color}</div>
-              <div style="color:#7A654D; margin-top:2px;">Sacred Stone: ${dP.stone}</div>
+              <strong style="color:#8B6914;">Mulank (Birth Day number) ${driver} — ${dP.name}</strong>
+              <div style="color:#523E28; margin-top:4px;">Supportive Colors: ${dP.color}</div>
               <div style="color:#16835B; margin-top:2px;">Direction: ${dP.dir}</div>
             </div>
             <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:10px 12px;">
-              <strong style="color:#8B6914;">Conductor ${conductor} — ${cP.name}</strong>
-              <div style="color:#523E28; margin-top:4px;">Auspicious Colors: ${cP.color}</div>
-              <div style="color:#7A654D; margin-top:2px;">Sacred Stone: ${cP.stone}</div>
+              <strong style="color:#8B6914;">Bhagyank (Life Path number) ${conductor} — ${cP.name}</strong>
+              <div style="color:#523E28; margin-top:4px;">Supportive Colors: ${cP.color}</div>
               <div style="color:#16835B; margin-top:2px;">Direction: ${cP.dir}</div>
             </div>
           </div>
@@ -701,14 +698,14 @@
       `;
     }
 
-    
     // ✦ Server-Authoritative Gating for Charm AI (localStorage is never an authority) ✦
     let _cachedCharmCredits = null;
     let _charmIsAuthenticated = false;
+    let _lastCharmPayload = null;
 
     async function syncCharmAiCreditsFromServer() {
       try {
-        const res = await fetch('/api/charm/credits');
+        const res = await fetch('/api/charm/credits', { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           _cachedCharmCredits = data.credits_remaining !== undefined ? data.credits_remaining : 0;
@@ -730,9 +727,9 @@
       const askBtn = document.getElementById('btnCharmAsk');
       const qInput = document.getElementById('ai_query');
 
-      if (access.isPaid || access.credits > 0) {
+      if (access.isPaid) {
         if (statusPill) {
-          statusPill.innerHTML = `✦ VIP Oracle Pass Active • ${access.credits} In-Depth Questions Remaining`;
+          statusPill.innerHTML = `✦ Charm AI Pass Active • ${access.credits} Question${access.credits === 1 ? '' : 's'} Remaining`;
           statusPill.style.color = '#16835B';
           statusPill.style.background = 'rgba(22,131,91,0.1)';
           statusPill.style.borderColor = 'rgba(22,131,91,0.25)';
@@ -741,23 +738,31 @@
           askBtn.innerHTML = `Consult Charm AI (${access.credits} Left) ✦`;
           askBtn.style.background = 'linear-gradient(135deg, #16835B 0%, #0E5E40 100%)';
         }
-        if (qInput) {
-          qInput.placeholder = 'e.g. Is 2026 favorable for expanding my business? What authentic remedial guidance harmonize my Driver 6 and Conductor 8?';
+      } else if (access.credits > 0) {
+        if (statusPill) {
+          statusPill.innerHTML = `✦ Free Daily Access • ${access.credits} of 3 Free Question${access.credits === 1 ? '' : 's'} Remaining Today`;
+          statusPill.style.color = '#16835B';
+          statusPill.style.background = 'rgba(22,131,91,0.1)';
+          statusPill.style.borderColor = 'rgba(22,131,91,0.25)';
+        }
+        if (askBtn) {
+          askBtn.innerHTML = `Consult Charm AI (${access.credits} Left Today) ✦`;
+          askBtn.style.background = 'linear-gradient(135deg, #16835B 0%, #0E5E40 100%)';
         }
       } else {
         if (statusPill) {
-          statusPill.innerHTML = '🔒 3 Free Questions after verified sign-up • Starter Pack: 5 Questions for ₹199';
-          statusPill.style.color = '#A13030';
-          statusPill.style.background = 'rgba(161,48,48,0.1)';
-          statusPill.style.borderColor = 'rgba(161,48,48,0.25)';
+          statusPill.innerHTML = '🔒 Daily Free Limit Reached (0 of 3 Remaining Today) • Starter Pack: 5 Questions for ₹199';
+          statusPill.style.color = '#8B6914';
+          statusPill.style.background = 'rgba(201,162,39,0.14)';
+          statusPill.style.borderColor = 'rgba(201,162,39,0.4)';
         }
         if (askBtn) {
-          askBtn.innerHTML = 'Unlock Charm AI Pass (5 Questions for ₹199) 🔒';
-          askBtn.style.background = 'linear-gradient(135deg, #C9A227 0%, #8B6914 100%);';
+          askBtn.innerHTML = 'Consult Charm AI (0 Free Left — See Upgrade Offer) ✦';
+          askBtn.style.background = 'linear-gradient(135deg, #C9A227 0%, #8B6914 100%)';
         }
-        if (qInput) {
-          qInput.placeholder = '🔒 Charm AI is reserved for paid members. Unlock your pass to ask questions...';
-        }
+      }
+      if (qInput) {
+        qInput.placeholder = 'Ask about love, marriage, career, money, daily routine, children, or property...';
       }
     }
 
@@ -765,7 +770,6 @@
       const modal = document.getElementById('charmPaywallModal');
       if (modal) {
         modal.style.display = 'flex';
-        // Prefill seeker Name & DOB
         const nameVal = document.getElementById('ai_user_name')?.value?.trim();
         const day = document.getElementById('ai_day')?.value;
         const month = document.getElementById('ai_month')?.value;
@@ -783,130 +787,117 @@
     }
 
     function handleCharmSubmitOrLock() {
-      const access = getCharmAiAccess();
-      if (!access.isPaid && access.credits <= 0) {
-        openCharmPaywallModal();
-        return;
+      submitToCharmAI();
+    }
+
+    function retryLastCharmQuestion() {
+      if (_lastCharmPayload) {
+        const nameEl = document.getElementById('ai_user_name');
+        const dayEl = document.getElementById('ai_day');
+        const monthEl = document.getElementById('ai_month');
+        const yearEl = document.getElementById('ai_year');
+        const tobEl = document.getElementById('ai_tob');
+        const cityEl = document.getElementById('ai_city');
+        const qEl = document.getElementById('ai_query');
+        if (nameEl && _lastCharmPayload.name !== undefined) nameEl.value = _lastCharmPayload.name;
+        if (dayEl && _lastCharmPayload.day) dayEl.value = _lastCharmPayload.day;
+        if (monthEl && _lastCharmPayload.month) monthEl.value = _lastCharmPayload.month;
+        if (yearEl && _lastCharmPayload.year) yearEl.value = _lastCharmPayload.year;
+        if (tobEl && _lastCharmPayload.birth_time !== undefined) tobEl.value = _lastCharmPayload.birth_time;
+        if (cityEl && _lastCharmPayload.birth_place !== undefined) cityEl.value = _lastCharmPayload.birth_place;
+        if (qEl && _lastCharmPayload.message) qEl.value = _lastCharmPayload.message;
       }
       submitToCharmAI();
     }
 
-    
-    // =========================================================================
-    // CLIENT-SIDE CHARM AI SYNTHESIZER (ZERO-LATENCY DETERMINISTIC FALLBACK)
-    // Ensures Charm AI works 100% reliably even if edge server returns 405/offline
-    // Authored as per Master Numerologist Bhaskr Singh & Section 18 Rectification
-    // =========================================================================
-    function generateClientSideCharmReading(params) {
-      const { message, name, day, month, year } = params;
-      function red(n) {
-        while (n > 9) {
-          n = String(n).split('').reduce((a, b) => a + parseInt(b, 10), 0);
-        }
-        return n;
-      }
-      const driver = red(day);
-      const conductor = red(day + month + year);
-      const currentYear = new Date().getFullYear();
-      const personalYear = red(driver + red(month) + red(currentYear));
+    function escapeCharmHtml(raw) {
+      return String(raw || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
-      const planets = {
-        1: 'Sun (Surya) — Sovereign Leadership & High Vitality',
-        2: 'Moon (Chandra) — Deep Intuition & Diplomatic Harmony',
-        3: 'Jupiter (Brihaspati) — Wisdom, Advisory & Expansion',
-        4: 'Rahu (North Node) — Strategic Innovation & Breakthrough Execution',
-        5: 'Mercury (Budh) — Analytical Speed, Commerce & Negotiation',
-        6: 'Venus (Shukra) — Creative Refinement, Harmony & Abundance',
-        7: 'Ketu (South Node) — Technical Depth, Research & Intuition',
-        8: 'Saturn (Shani) — Structural Mastery, Discipline & Enduring Wealth',
-        9: 'Mars (Mangal) — Direct Courage, Initiative & Decisive Action'
-      };
-
-      const beejMantras = {
-        1: '"Om Hram Hreem Hroum Sah Suryaya Namah" (108 times at sunrise on Sundays)',
-        2: '"Om Shram Shreem Shroum Sah Chandraya Namah" (108 times on Mondays)',
-        3: '"Om Gram Greem Groum Sah Gurave Namah" (108 times on Thursdays)',
-        4: '"Om Bhram Bhreem Bhroum Sah Rahave Namah" (108 times after sunset on Saturdays)',
-        5: '"Om Bram Breem Broum Sah Budhaya Namah" (108 times on Wednesdays)',
-        6: '"Om Dram Dreem Droum Sah Shukraya Namah" (108 times on Fridays)',
-        7: '"Om Stram Streem Stroum Sah Ketave Namah" (108 times on Tuesdays)',
-        8: '"Om Pram Preem Proum Sah Shanaischaraya Namah" (108 times on Saturdays)',
-        9: '"Om Kram Kreem Kroum Sah Bhaumaya Namah" (108 times on Tuesdays)'
-      };
-
-      const traceId = 'NV-TRC-' + Math.random().toString(36).substring(2, 9).toUpperCase();
-
-      const assistantText = `### ✦ Classical Numerological & Numerological Reading for ${name}
-
-**Query Analysis:** "${message}"
-
-**Core Planetary Architecture:**
-- **Psychic Driver (Mulank ${driver}):** Ruled by ${planets[driver] || 'Sun'}. You carry an innate capacity for visionary independence and decisive strategic focus.
-- **Destiny Conductor (Bhagyank ${conductor}):** Governed by ${planets[conductor] || 'Rahu'}. Your overarching life trajectory unfolds through systematic building, technical foresight, and calculated long-term compounding.
-- **Current Cycle:** Operating in **Personal Year ${personalYear}** (Foundation, Strategy & Structural Consolidation).
-
-**Timing Windows & Strategic Corridors:**
-- **Active Execution Window:** The primary Numerology Dasha indicates strong favorable momentum building from **mid-April through late September 2026**. This corridor strongly supports career elevation, commercial negotiations, and institutional positioning.
-- **Vigilance Corridors:** Maintain clear written contracts during transit inflection points; avoid hasty verbal commitments during planetary retrograde periods.
-
-**Governed Harmonizers & Remedial Actions:**
-1. **Directional Workspace Alignment:** Orient your primary executive desk facing **East or North-East** to maximize mental clarity and commercial vitality.
-2. **Harmonizing Colors:** Integrate **Gold, Warm Amber, and Forest Green** into high-stakes meetings and formal presentations.
-3. **Sacred Beej Mantra:** ${beejMantras[driver] || beejMantras[1]}
-4. **Charitable Duty (Karmic Alignment):** Feeding birds/street animals and donating aligned grains on Saturdays or Thursdays directly pacifies planetary friction.
-
-*Authentic Guidance: Numeros Vision. Prepared under Master Numerologist Bhaskr Singh (+91 99999 00000).*`;
-
-      return {
-        audit_trace_id: traceId,
-        consensus_status: "VERIFIED_BY_CORE_ENGINE",
-        career_event_assessment: {
-          event_type: "CAREER_AND_ENTERPRISE_ALIGNMENT",
-          direction: "FAVORABLE_GROWTH"
-        },
-        assistant_message: {
-          text: assistantText
-        },
-        human_friendly_summary: {
-          takeaway: `Personal Year ${personalYear} presents a pivotal structural building phase. Your ${driver}-${conductor} combination favors high-growth strategic ventures.`,
-          timing_status: "Primary Numerology Dasha indicates active momentum building in Q2–Q3 2026.",
-          supported_by_report: `Strong alignment of Mulank ${driver} and Bhagyank ${conductor} supports long-term authority and compounding.`,
-          unconcluded_aspects: "Micro-hourly decisions require local solar hora alignment.",
-          missing_inputs_explanation: "Exact time of birth is optional but refines planetary sub-lord cross-checks.",
-          practical_actions: [
-            "Schedule high-stakes negotiations for Sundays or Thursdays",
-            "Maintain clean financial ledgers to honor Saturn/Rahu discipline",
-            "Place desk facing your prime Vastu orientation"
-          ],
-          followup_question: "Would you like an analysis of how your Calling Name sound vibration interacts with your Mulank?"
-        },
-        numerology_dasha: {
-          primary_windows: [
-            { start: "2026-04-15", end: "2026-09-30", quality: "HIGH_MOMENTUM" }
-          ]
-        },
-        provenance_record: {
-          system_limitations: ["Deterministic numerological calculations; non-probabilistic traditional framework."]
-        }
-      };
+    function renderCharmUnavailableNotice() {
+      const panel = document.getElementById('ai_output_panel');
+      if (!panel) return;
+      panel.innerHTML = `
+        <div id="charmUnavailableCard" style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.45); border-radius:14px; padding:26px 22px; text-align:center;">
+          <div style="font-family:'Cormorant Garamond', serif; font-size:1.4rem; font-weight:700; color:#523E28; margin:0 0 8px;">
+            Temporary Service Interruption
+          </div>
+          <p id="charmUnavailableMsg" style="color:#523E28; font-size:0.95rem; line-height:1.6; margin:0 0 18px; font-weight:500;">
+            Charm AI is unavailable right now, no credit was used. Try again.
+          </p>
+          <button type="button" id="btnCharmRetry" onclick="retryLastCharmQuestion()" style="padding:10px 24px; font-weight:700; font-size:0.9rem; border-radius:999px; cursor:pointer; border:none; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7;">
+            Try again
+          </button>
+        </div>
+      `;
     }
 
     async function submitToCharmAI() {
-      const name = document.getElementById("ai_user_name").value.trim() || "Seeker";
-      const day = parseInt(document.getElementById("ai_day").value, 10) || 15;
-      const month = parseInt(document.getElementById("ai_month").value, 10) || 8;
-      const year = parseInt(document.getElementById("ai_year").value, 10) || 1990;
-      const q = document.getElementById("ai_query").value.trim() || "Is 2026 favorable for my career progression?";
-      const panel = document.getElementById("ai_output_panel");
+      const name = (document.getElementById('ai_user_name')?.value || '').trim();
+      const rawDay = (document.getElementById('ai_day')?.value || '').trim();
+      const rawMonth = (document.getElementById('ai_month')?.value || '').trim();
+      const rawYear = (document.getElementById('ai_year')?.value || '').trim();
+      const birthTime = (document.getElementById('ai_tob')?.value || '').trim();
+      const birthPlace = (document.getElementById('ai_city')?.value || '').trim();
+      const q = (document.getElementById('ai_query')?.value || '').trim();
+      const panel = document.getElementById('ai_output_panel');
 
-      // Save latest calculation profile to localStorage
+      const day = parseInt(rawDay, 10);
+      const month = parseInt(rawMonth, 10);
+      const year = parseInt(rawYear, 10);
+
+      // Requirement 6: Never send a default profile or fallback birth date; ask for Date of Birth first.
+      if (!day || !month || !year || day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > 2030) {
+        panel.innerHTML = `
+          <div id="charmDobPromptCard" style="background:#FFFDF7; border:1.5px solid #C9A227; border-radius:14px; padding:24px 22px;">
+            <div style="font-family:'Cormorant Garamond', serif; font-size:1.35rem; font-weight:700; color:#8B6914; margin:0 0 8px;">
+              Enter Your Date of Birth First
+            </div>
+            <p style="color:#523E28; font-size:0.92rem; line-height:1.65; margin:0;">
+              Please enter your complete <strong>Date of Birth (DD-MM-YYYY)</strong> above so Charm AI can calculate your Mulank (Birth Day number), Bhagyank (Life Path number), and Numerology Dasha cycles accurately. No credit was used.
+            </p>
+          </div>
+        `;
+        const dayEl = document.getElementById('ai_day');
+        if (dayEl) dayEl.focus();
+        return;
+      }
+
+      if (!q) {
+        panel.innerHTML = `
+          <div id="charmQuestionPromptCard" style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.45); border-radius:14px; padding:22px;">
+            <p style="color:#523E28; font-size:0.92rem; line-height:1.6; margin:0;">
+              Please type a question or tap one of the topic suggestions above to consult Charm AI. No credit was used.
+            </p>
+          </div>
+        `;
+        const qEl = document.getElementById('ai_query');
+        if (qEl) qEl.focus();
+        return;
+      }
+
+      const requestPayload = {
+        message: q,
+        name: name,
+        day: day,
+        month: month,
+        year: year,
+        birth_time: birthTime,
+        birth_place: birthPlace
+      };
+      _lastCharmPayload = requestPayload;
+
       try {
         const driver = ((day - 1) % 9) + 1;
         let conductor = (day + month + year);
         while (conductor > 9) {
           conductor = String(conductor).split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
         }
-        // Removed legacy localStorage write (DPDP privacy)
         if (window.nvProfileSync && typeof window.nvProfileSync.syncCalculation === 'function') {
           window.nvProfileSync.syncCalculation({
             name: name,
@@ -920,34 +911,34 @@
         }
       } catch (e) {}
 
-      // Check user tier / premium status from session & localStorage
-      const premiumToken = localStorage.getItem('nv_premium_token');
-      const activeTier = localStorage.getItem('nv_active_tier') || (premiumToken ? 'paid' : 'free');
-      const isPaidUser = !!(premiumToken || ['paid', 'growth_10q', 'starter_5q', 'complete_report', 'report_master', 'report_divine', 'tier1', 'tier2', 'tier3'].includes(activeTier));
-
-      // Loading State
       panel.innerHTML = `
         <div style="padding:40px 20px; text-align:center; color:#8B6914;">
           <div style="display:inline-block; width:38px; height:38px; border:3px solid rgba(201,162,39,0.25); border-top-color:#8B6914; border-radius:50%; animation:nv-spin 0.9s linear infinite; margin-bottom:14px;"></div>
-          <div style="font-family:'Cinzel', serif; font-size:1.1rem; font-weight:700; color:#523E28; margin-bottom:6px;">Synthesizing Planetary & Dasha Cycles...</div>
+          <div style="font-family:'Cinzel', serif; font-size:1.1rem; font-weight:700; color:#523E28; margin-bottom:6px;">Synthesizing Planetary &amp; Dasha Cycles...</div>
           <div style="font-size:0.84rem; color:#7A654D;">Calculating your personalized Numerology Dasha timing cycles.</div>
         </div>
       `;
 
       try {
         let data;
+        const abortCtrl = new AbortController();
+        const timeoutHandle = setTimeout(() => abortCtrl.abort(), 15000);
+        let resp;
         try {
-          const resp = await fetch('/api/charm/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: q,
-            name: name,
-            day: day,
-            month: month,
-            year: year
-          })
-        });
+          resp = await fetch('/api/charm/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            signal: abortCtrl.signal,
+            body: JSON.stringify(requestPayload)
+          });
+        } catch (fetchErr) {
+          clearTimeout(timeoutHandle);
+          await syncCharmAiCreditsFromServer();
+          renderCharmUnavailableNotice();
+          return;
+        }
+        clearTimeout(timeoutHandle);
 
         if (resp.ok) {
           data = await resp.json();
@@ -957,206 +948,215 @@
           }
         } else if (resp.status === 402) {
           const errData = await resp.json().catch(() => ({}));
-          _cachedCharmCredits = 0;
+          _cachedCharmCredits = errData.credits_remaining !== undefined ? errData.credits_remaining : 0;
           syncCharmAiGatingUi();
-          openCharmPaywallModal();
+          const offer = errData.upgrade_offer || {};
+          const offerTitle = escapeCharmHtml(offer.title || 'Charm AI Starter Pack (5 In-Depth Questions)');
+          const offerPrice = offer.price_inr || 199;
           panel.innerHTML = `
-            <div style="background:#FFFDF7; border:1.5px solid #C9A227; border-radius:14px; padding:28px 24px; text-align:center;">
-              <h3 style="font-family:'Cormorant Garamond', serif; color:#8B6914; font-size:1.4rem; margin:0 0 10px;">Consultation Limit Reached</h3>
-              <p style="color:#7A654D; font-size:0.92rem; margin:0 0 18px;">${errData.error || 'You have used all available consultation questions. Please recharge your pack to continue.'}</p>
-              <button onclick="openCharmPaywallModal()" class="btn-gold-action" style="padding:10px 24px; font-weight:700; border-radius:8px; cursor:pointer; border:none; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#fff;">View Recharge Packs ✦</button>
+            <div id="charmLimitUpgradeCard" style="background:#FFFDF7; border:1.5px solid #C9A227; border-radius:16px; padding:28px 24px; text-align:center;">
+              <div style="font-family:'Cinzel', serif; font-size:0.74rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#8B6914; margin-bottom:6px;">
+                DAILY FREE LIMIT REACHED • 0 CREDITS REMAINING
+              </div>
+              <h3 style="font-family:'Cormorant Garamond', serif; color:#523E28; font-size:1.55rem; margin:0 0 10px;">
+                You Have Used Your 3 Free Questions Today
+              </h3>
+              <p style="color:#7A654D; font-size:0.92rem; line-height:1.6; max-width:560px; margin:0 auto 18px;">
+                ${escapeCharmHtml(errData.error || 'You have used your 3 free Charm AI questions for today.')} Continue right away with a one-time Starter Pack, or return tomorrow for your next daily allowance.
+              </p>
+              <div style="background:#FAF6EE; border:1.5px solid rgba(201,162,39,0.38); border-radius:12px; padding:14px 18px; max-width:460px; margin:0 auto 18px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+                <div style="text-align:left;">
+                  <strong style="color:#523E28; font-size:0.94rem; display:block;">${offerTitle}</strong>
+                  <span style="font-size:0.78rem; color:#7A654D;">One-time pass • No subscription</span>
+                </div>
+                <span style="font-family:'Cinzel', serif; font-size:1.45rem; font-weight:800; color:var(--gold-dark, #8B6914);">₹${offerPrice}</span>
+              </div>
+              <button type="button" id="btnCharmUpgradeOffer" onclick="openCharmPaywallModal()" style="padding:12px 28px; font-weight:700; font-size:0.92rem; border-radius:999px; cursor:pointer; border:none; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7;">
+                Unlock 5 Questions for ₹${offerPrice} ✦
+              </button>
             </div>
           `;
           return;
         } else if (resp.status === 429) {
           const errData = await resp.json().catch(() => ({}));
+          if (errData.credits_remaining !== undefined) {
+            _cachedCharmCredits = errData.credits_remaining;
+            syncCharmAiGatingUi();
+          }
           panel.innerHTML = `
             <div style="background:#FFFDF7; border:1.5px solid #C9A227; border-radius:14px; padding:28px 24px; text-align:center;">
-              <h3 style="font-family:'Cormorant Garamond', serif; color:#8B6914; font-size:1.4rem; margin:0 0 10px;">High-Volume Notice</h3>
-              <p style="color:#7A654D; font-size:0.92rem; margin:0 0 18px;">${errData.error || 'Too many requests. Please wait a moment before trying again.'}</p>
+              <h3 style="font-family:'Cormorant Garamond', serif; color:#8B6914; font-size:1.4rem; margin:0 0 10px;">Rate Limit Reached</h3>
+              <p style="color:#7A654D; font-size:0.92rem; margin:0 0 18px;">${escapeCharmHtml(errData.error || 'Too many requests. No credit was used. Please wait a moment and try again.')}</p>
+              <button type="button" id="btnCharmRetry" onclick="retryLastCharmQuestion()" style="padding:10px 24px; font-weight:700; border-radius:999px; cursor:pointer; border:none; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7;">Try again</button>
             </div>
           `;
           return;
         } else {
-          throw new Error('Server error');
+          const errData = await resp.json().catch(() => ({}));
+          if (errData.credits_remaining !== undefined) {
+            _cachedCharmCredits = errData.credits_remaining;
+            syncCharmAiGatingUi();
+          }
+          renderCharmUnavailableNotice();
+          return;
         }
-      } catch (fetchErr) {
-        panel.innerHTML = `
-          <div style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.3); border-radius:14px; padding:24px; text-align:center; color:#7A654D;">
-            <p>Unable to connect to Charm AI. Please verify your connection and refresh.</p>
-          </div>
-        `;
-        return;
-      }
+
         const traceId = data.audit_trace_id || ('NV-TRC-' + Math.random().toString(36).substring(2, 9).toUpperCase());
-        const topicTitle = (data.career_event_assessment && data.career_event_assessment.event_type) ? data.career_event_assessment.event_type.replace(/_/g, ' ') : 'Career Alignment';
+        const topicTitle = data.topic_display
+          || ((data.career_event_assessment && data.career_event_assessment.event_type)
+            ? data.career_event_assessment.event_type.replace(/_/g, ' ')
+            : 'Personal Guidance');
+
+        // Requirement 1: Render strictly from canonical backend contract fields
+        const hfSummary = data.human_friendly_summary || {};
+        const headline = hfSummary.headline || '';
         const answer = (data.assistant_message && data.assistant_message.text) ? data.assistant_message.text : '';
+        const nextSteps = Array.isArray(data.practical_next_steps) ? data.practical_next_steps : [];
+        const followUpQuestion = data.follow_up_question || '';
+        const creditsRemaining = data.credits_remaining;
+
+        // Requirement 7: Show "Verified" ONLY when consensus_status === 'VERIFIED_SUPPORTED'
+        const isVerifiedSupported = data.consensus_status === 'VERIFIED_SUPPORTED';
+        const verifiedBadgeHtml = isVerifiedSupported
+          ? `<span class="ai-verified-icon" title="Multi-Method Cross-Verified" aria-label="Verified" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:rgba(22,131,91,0.12); border:1px solid #16835B; color:#16835B; font-size:0.72rem; font-weight:700;">✓ Verified</span>`
+          : `<span style="display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.3); color:#7A654D; font-size:0.70rem; font-weight:600;">Numerology Synthesis</span>`;
+
+        const creditsChipHtml = creditsRemaining !== undefined
+          ? `<span id="charmResponseCreditsBadge" style="font-size:0.72rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.1); border:1px solid rgba(22,131,91,0.25); border-radius:999px; padding:3px 10px;">${creditsRemaining} credit${creditsRemaining === 1 ? '' : 's'} remaining</span>`
+          : '';
+
         const driverNum = ((day - 1) % 9) + 1;
         let conductorNum = (day + month + year);
         while (conductorNum > 9) {
           conductorNum = String(conductorNum).split('').reduce((a, b) => a + parseInt(b, 10), 0);
         }
 
-        // Prepare charm consensus card
-        const charmObj = {
+        const nextStepsHtml = nextSteps.length > 0 ? `
+          <div class="charm-next-steps-box" style="margin:16px 0; background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:12px; padding:14px 18px;">
+            <div style="font-family:'Cinzel', serif; font-size:0.76rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#8B6914; margin-bottom:8px;">
+              ✦ Practical Next Steps
+            </div>
+            <ul style="margin:0; padding-left:20px; color:#523E28; font-size:0.90rem; line-height:1.65;">
+              ${nextSteps.map(step => `<li style="margin-bottom:6px;">${escapeCharmHtml(step)}</li>`).join('')}
+            </ul>
+          </div>
+        ` : '';
+
+        const followUpAttr = escapeCharmHtml(followUpQuestion).replace(/&#39;/g, "\\'");
+        const followUpHtml = followUpQuestion ? `
+          <div class="charm-followup-box" style="margin:14px 0 18px; background:#FFFDF7; border:1px solid #C9A227; border-radius:12px; padding:12px 16px;">
+            <div style="font-size:0.74rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#8B6914; margin-bottom:6px;">
+              ✦ Suggested Follow-Up Question
+            </div>
+            <button type="button" class="charm-followup-btn" onclick="setQueryAndSubmit('${followUpAttr}')" style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.5); border-radius:8px; padding:9px 14px; font-size:0.86rem; color:#8B6914; font-weight:600; cursor:pointer; width:100%; text-align:left;">
+              💬 "${escapeCharmHtml(followUpQuestion)}" <span style="float:right; font-weight:700;">Ask ➔</span>
+            </button>
+          </div>
+        ` : '';
+
+        // Prepare charm consensus card when supported
+        const isUnsupported = data.code === 'UNSUPPORTED_TOPIC' || data.consensus_status === 'UNSUPPORTED_TOPIC';
+        const charmObj = isUnsupported ? null : {
+          topic_label: topicTitle,
           verification_status: data.consensus_status,
           event_assessment: data.career_event_assessment ? data.career_event_assessment.direction : 'NEUTRAL',
-          human_friendly: data.human_friendly_summary,
+          human_friendly: hfSummary,
           primary_windows: (data.numerology_dasha_result && data.numerology_dasha_result.active_window) ? [data.numerology_dasha_result.active_window] : [],
           missing_requirements: data.missing_requirements,
-          practical_steps: data.practical_next_steps,
-          follow_up_question: data.follow_up_question
+          practical_steps: nextSteps,
+          follow_up_question: followUpQuestion
         };
-        const charmCardHtml = renderCharmAiCard(charmObj);
+        const charmCardHtml = charmObj ? renderCharmAiCard(charmObj) : '';
 
-        // Render Natal Lo Shu & Lucky Harmonizers
         const dobStr = `${String(day).padStart(2, '0')}${String(month).padStart(2, '0')}${String(year).padStart(4, '0')}`;
-        const loshuCardHtml = renderLoShuCard(dobStr);
-        const luckyHtml = renderLuckyHarmonizers(driverNum, conductorNum);
-        const whyText = (data.human_friendly_summary && data.human_friendly_summary.supported_by_report) ? data.human_friendly_summary.supported_by_report : '';
+        const loshuCardHtml = isUnsupported ? '' : renderLoShuCard(dobStr);
+        const luckyHtml = isUnsupported ? '' : renderLuckyHarmonizers(driverNum, conductorNum);
 
-        // Free vs Paid Conversion / Access Card
-        let conversionCardHtml = '';
-        if (isPaidUser) {
-          conversionCardHtml = `
-            <div class="charm-curiosity-card" style="margin-top:20px; margin-bottom:24px; background:linear-gradient(135deg, #FFFDF7 0%, #FAF6EE 100%); border:2px solid #16835B; border-radius:16px; padding:22px 20px; text-align:center; box-shadow:0 6px 24px rgba(22,131,91,0.15);">
-              <div style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:rgba(22,131,91,0.12); border:1.5px solid #16835B; font-size:1.35rem; color:#16835B; margin-bottom:10px;">
-                ✓
-              </div>
-              <div style="font-family:'Cinzel', serif; font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:#16835B; font-weight:700; margin-bottom:6px;">
-                ✦ VIP SUBSCRIBER ACCESS ACTIVE ✦
-              </div>
-              <h4 style="font-family:'Cormorant Garamond', serif; font-size:1.55rem; font-weight:700; color:#523E28; margin:0 0 10px;">
-                Complete 10-Year Career Roadmap &amp; Consecrated Timing Unlocked
-              </h4>
-              <p style="font-size:0.88rem; color:#7A654D; max-width:640px; margin:0 auto 16px; line-height:1.6;">
-                Your verified client account has full clearance for in-depth Dasha progressions, acute execution corridors, and personalized remedial protocols.
-              </p>
-              <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
-                <a href="/sample_roadmap/" style="display:inline-flex; align-items:center; padding:12px 24px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF; border-radius:100px; text-decoration:none; font-family:'Cinzel', serif; font-weight:700; font-size:0.84rem; box-shadow:0 4px 14px rgba(201,162,39,0.3);">
-                  📥 Access Complete 12-Page Master Dossier
-                </a>
-                <a href="/checkout/?plan=report_master" style="display:inline-flex; align-items:center; padding:11px 20px; background:#FFFDF7; border:1.5px solid #16835B; color:#16835B; border-radius:100px; text-decoration:none; font-weight:700; font-size:0.82rem;">
-                  ✦ Upgrade / Add Vedic Consultation
-                </a>
-              </div>
+        const conversionCardHtml = `
+          <div class="charm-curiosity-card" style="margin-top:20px; margin-bottom:20px; background:linear-gradient(135deg, #FFFDF7 0%, #FAF6EE 100%); border:1.5px solid var(--gold, #C9A227); border-radius:16px; padding:20px 18px; text-align:center;">
+            <div style="font-family:'Cinzel', serif; font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-dark, #8B6914); font-weight:700; margin-bottom:6px;">
+              NUMEROS VISION • PERSONALIZED PDF REPORTS
             </div>
-          `;
-        } else {
-          conversionCardHtml = `
-            <div class="charm-curiosity-card" style="margin-top:20px; margin-bottom:24px; background:linear-gradient(135deg, #FFFDF7 0%, #FAF6EE 100%); border:2px solid var(--gold, #C9A227); border-radius:16px; padding:24px 20px; text-align:center; box-shadow:0 6px 24px rgba(201,162,39,0.18);">
-              <div style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; background:rgba(201,162,39,0.12); border:1.5px solid var(--gold, #C9A227); font-size:1.35rem; color:#8B6914; margin-bottom:10px;">
-                ✦
-              </div>
-              <div style="font-family:'Cinzel', serif; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold-dark, #8B6914); font-weight:700; margin-bottom:6px;">
-                NUMEROS VISION • ANVEIL EVERY CHARM
-              </div>
-              <h4 style="font-family:'Cormorant Garamond', serif; font-size:1.6rem; font-weight:700; color:#523E28; margin:0 0 10px; line-height:1.25;">
-                ANVEIL Your Karmic &amp; Destiny Charm — Explore Your Dasha Timeline &amp; Full Remedies
-              </h4>
-              <p style="font-size:0.88rem; color:var(--text-muted, #7A654D); line-height:1.65; max-width:660px; margin:0 auto 16px;">
-                Unlock now and receive your complete personalized career acceleration blueprint: Complete 10-Year Career Progression Timeline, Peak High-Probability Career Golden Window, Full Vedic Gharelu Remedies &amp; Auspicious Colors Guide, and Comprehensive 12-Page Personal Dossier with priority access to Charm AI VIP personal queue.
-              </p>
-
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:10px; text-align:left; max-width:680px; margin:0 auto 18px; background:#FFFFFF; border:1px solid rgba(201,162,39,0.28); border-radius:12px; padding:14px 18px; font-size:0.82rem; color:#523E28; font-weight:600;">
-                <div>✦ 10-Year Numerology Dasha &amp; Numerology Dasha Progression Timeline</div>
-                <div>✦ Monthly Breakthrough Corridors &amp; Peak Decision Dates</div>
-                <div>✦ Personalized Vedic Gharelu Remedies, Beej Mantras &amp; Auspicious Colors</div>
-                <div>✦ Comprehensive 12-Page Personal Master Blueprint Dossier</div>
-              </div>
-
-              <!-- Centralized Master Pricing Display -->
-              <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
-                <span style="font-family:'Cinzel', serif; font-size:1.65rem; font-weight:800; color:var(--gold-dark, #8B6914);" style="font-size:1rem;">Coming soon, notify me</span>
-                <span style="font-size:0.72rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 10px; border-radius:999px; text-transform:uppercase;">SPECIAL 49% LAUNCH DISCOUNT</span>
-              </div>
-
-              <!-- Primary and Secondary Actions -->
-              <div style="display:flex; flex-direction:column; align-items:center; gap:12px; margin-bottom:12px;">
-                <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; width:100%;">
-                  <a href="/checkout/?plan=report_master&tool=charm-ai" style="display:inline-flex; align-items:center; justify-content:center; padding:13px 26px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel', serif; font-weight:700; font-size:0.86rem; letter-spacing:0.06em; border-radius:100px; text-decoration:none; box-shadow:0 4px 18px rgba(201,162,39,0.38); transition:all 0.2s ease;">
-                    <span>✨ 12-PAGE ACCELERATION ROADMAP (COMING SOON, NOTIFY ME) ✨</span>
-                  </a>
-                  <a href="/checkout/?plan=report_basic&tool=charm-ai" style="display:inline-flex; align-items:center; justify-content:center; padding:11px 20px; background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.45); color:#8B6914; font-weight:700; font-size:0.82rem; border-radius:100px; text-decoration:none;">
-                    <span>⚡ Rapid Action Plan (3 Pages — ₹199)</span>
-                  </a>
-                </div>
-                <a href="/sample_roadmap/" style="font-size:0.80rem; color:var(--text-muted, #7A654D); text-decoration:underline;">
-                  Or Preview Complete 72-Hour Free Silver Certificate &amp; Sample Dossier
-                </a>
-              </div>
-
-              <div style="font-size:0.72rem; color:var(--text-muted, #7A654D); letter-spacing:0.04em;">
-                Authentic Classical Numerology • Zero Fabricated Rules • 100% Confidential Report
-              </div>
+            <h4 style="font-family:'Cormorant Garamond', serif; font-size:1.45rem; font-weight:700; color:#523E28; margin:0 0 8px;">
+              Want a Permanent Birth-Date &amp; Lo Shu Grid PDF Report?
+            </h4>
+            <p style="font-size:0.86rem; color:var(--text-muted, #7A654D); line-height:1.6; max-width:600px; margin:0 auto 14px;">
+              Get your 3-Page Rapid Action Plan with Mulank (Birth Day number), Bhagyank (Life Path number), Kua number (Vastu direction number), 9-Cell Lo Shu Grid (Lo Shu Square), Calling Name number (Chaldean Name number), and Five-Element Lifestyle Guidance.
+            </p>
+            <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; align-items:center;">
+              <a href="/your-reading/" style="display:inline-flex; align-items:center; justify-content:center; padding:11px 22px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel', serif; font-weight:700; font-size:0.82rem; border-radius:999px; text-decoration:none;">
+                Explore Personalized Reports ✦
+              </a>
+              <a href="/sample/" style="font-size:0.82rem; color:var(--gold-dark, #8B6914); font-weight:700; text-decoration:underline;">
+                Preview Sample Report
+              </a>
             </div>
-          `;
-        }
+          </div>
+        `;
 
+        const displayName = name ? escapeCharmHtml(name) : 'Visitor';
         panel.innerHTML = `
           <div class="ai-msg-header">
             <div class="ai-avatar-wrap"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#FFFFFF" stroke-width="2.2" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></div>
             <div style="display:flex; flex-direction:column; gap:2px; flex:1;">
               <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
-                <div style="display:flex; align-items:center; gap:6px;">
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                   <span class="ai-author-name">Charm AI</span>
-                  <span class="ai-verified-icon" title="Authentic Classical Numerology" aria-label="Verified" style="display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:#16835B; color:#FFFFFF; font-size:0.75rem; font-weight:800; line-height:1; box-shadow:0 1px 4px rgba(22,131,91,0.35);">✓</span>
+                  ${verifiedBadgeHtml}
                 </div>
-                <span style="font-size:0.70rem; font-weight:600; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.28); border-radius:12px; padding:3px 10px;" data-trace-id="${traceId}" title="Audit Reference: ${traceId}">
-                  ${topicTitle}
-                </span>
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  ${creditsChipHtml}
+                  <span style="font-size:0.70rem; font-weight:600; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.28); border-radius:12px; padding:3px 10px;" data-trace-id="${escapeCharmHtml(traceId)}" title="Audit Reference: ${escapeCharmHtml(traceId)}">
+                    ${escapeCharmHtml(topicTitle)}
+                  </span>
+                </div>
               </div>
-              <div class="ai-author-sub">Authentic Classical Synthesis • Verified Numerological Cycles</div>
+              <div class="ai-author-sub">Deterministic Numerological &amp; Dasha Synthesis</div>
             </div>
           </div>
 
-          <!-- Grounded Dialogue Consultation (Zero Raw Code / Zero Markdown Artifacts) -->
-          <div style="margin-bottom:20px; font-size:0.96rem; line-height:1.75; color:#523E28;">
+          ${headline ? `
+            <h3 class="charm-response-headline" style="font-family:'Cormorant Garamond', serif; font-size:1.45rem; font-weight:700; color:#523E28; margin:12px 0 10px; line-height:1.3;">
+              ${escapeCharmHtml(headline)}
+            </h3>
+          ` : ''}
+
+          <div class="charm-response-answer" style="margin-bottom:16px; font-size:0.96rem; line-height:1.75; color:#523E28;">
             ${formatMarkdown(answer)}
           </div>
 
-          <!-- DYNAMIC FREE VS PAID CONVERSION / VIP CARD -->
-          ${conversionCardHtml}
+          ${nextStepsHtml}
+          ${followUpHtml}
 
-          <!-- FREE NATAL LO SHU GRID BIRTH CHART (Crisp Expandable Accordion) -->
-          <div style="margin-top:20px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); border-radius:12px; padding:12px 18px; cursor:pointer;" onclick="const el = document.getElementById('aiLoShuGridContent'); el.style.display = el.style.display === 'none' ? 'block' : 'none';">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span style="color:#C9A227; font-size:1.15rem;">✦</span>
-                <span style="font-family:\'Cormorant Garamond\',serif; font-size:1.25rem; font-weight:700; color:#8B6914;">
-                  Read Your Natal Lo Shu Grid Matrix (Free Preview)
-                </span>
+          ${loshuCardHtml ? `
+            <div style="margin-top:18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); border-radius:12px; padding:12px 18px; cursor:pointer;" onclick="const el = document.getElementById('aiLoShuGridContent'); el.style.display = el.style.display === 'none' ? 'block' : 'none';">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="color:#C9A227; font-size:1.15rem;">✦</span>
+                  <span style="font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:700; color:#8B6914;">
+                    Natal Lo Shu Grid (Lo Shu Square) Preview
+                  </span>
+                </div>
+                <span style="font-size:0.80rem; color:#8B6914; font-weight:600;">▼ Show / Hide</span>
               </div>
-              <span style="font-size:0.80rem; color:#8B6914; font-weight:600;">▼ Click to View / Hide Grid</span>
-            </div>
-            <div id="aiLoShuGridContent" style="display:block; margin-top:10px;">
-              ${loshuCardHtml}
-            </div>
-          </div>
-
-          <!-- LUCKY HARMONIZERS CARD -->
-          ${luckyHtml}
-
-          ${whyText ? `
-            <div style="font-size:0.88rem; color:#523E28; line-height:1.68; margin-top:16px; margin-bottom:16px; background:#FAF6EE; padding:14px 18px; border-radius:12px; border-left:4px solid #C9A227; border:1px solid rgba(201,162,39,0.22); box-shadow:0 2px 8px rgba(180,155,110,0.06);">
-              <strong style="color:#8B6914;">Planetary Alignment &amp; Root Cause:</strong><br />
-              ${whyText}
+              <div id="aiLoShuGridContent" style="display:none; margin-top:10px;">
+                ${loshuCardHtml}
+              </div>
             </div>
           ` : ''}
 
-          <!-- PROPRIETARY DETAILED DOSSIER MODULES -->
-          <div class="gated-charm-wrap ${isPaidUser ? 'unlocked' : 'locked'}" id="gatedCharmDetailed_${traceId}">
-            ${charmCardHtml}
-          </div>
+          ${luckyHtml}
+          ${charmCardHtml}
+          ${conversionCardHtml}
 
           <div style="font-size:0.76rem; color:#7A654D; border-top:1px solid rgba(180,155,110,0.25); padding-top:12px; margin-top:18px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-            <span>Profile: <strong>${name}</strong> (Born: ${day}-${month}-${year}) ${driverNum ? `• Driver ${driverNum} • Conductor ${conductorNum}` : ''}</span>
-            <span>Classical Heritage Vault • Timeless Classical Heritage</span>
+            <span>Profile: <strong>${displayName}</strong> (DOB: ${day}-${month}-${year}) • Mulank ${driverNum} • Bhagyank ${conductorNum}</span>
+            <span>Deterministic Engine Synthesis</span>
           </div>
           <div id="charmSaveProfileContainer" style="margin-top:14px;"></div>
         `;
 
-        if (window.nvProfileSync && typeof window.nvProfileSync.renderSaveProfileCard === 'function') {
+        if (window.nvProfileSync && typeof window.nvProfileSync.renderSaveProfileCard === 'function' && name) {
           window.nvProfileSync.renderSaveProfileCard('charmSaveProfileContainer', {
             name: name,
             day: day,
@@ -1167,29 +1167,12 @@
           });
         }
       } catch (err) {
-        panel.innerHTML = `
-          <div class="ai-msg-header">
-            <div class="ai-avatar-wrap"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#FFFFFF" stroke-width="2.2" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></div>
-            <div style="display:flex; flex-direction:column; gap:2px; flex:1;">
-              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <span class="ai-author-name">Charm AI</span>
-                  <span class="ai-verified-badge" style="color:#C0392B; background:rgba(192,57,43,0.1); border-color:rgba(192,57,43,0.25);">Notice</span>
-                </div>
-              </div>
-              <div class="ai-author-sub">Classical Vedic &amp; Chaldean Synthesis · Timeless Classical Heritage</div>
-            </div>
-          </div>
-          <div style="color:#8B6914; padding:12px; background:#FAF6EE; border-radius:8px; border:1px solid rgba(201,162,39,0.3); font-size:0.88rem;">
-            ${err.message}. Please verify your connection or refresh the page.
-          </div>
-        `;
+        renderCharmUnavailableNotice();
       }
     }
 
     function formatMarkdown(str) {
       if (!str) return '';
-      // Strip any accidental raw HTML tags from engine or LLM
       let s = str
         .replace(/<div[\s\S]*?<\/div>/gi, '')
         .replace(/<a[\s\S]*?<\/a>/gi, '')
@@ -1197,12 +1180,10 @@
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 
-      // Format markdown headings
       s = s.replace(/^###\s*(.*$)/gim, '<h4 style="font-family:\'Cormorant Garamond\',serif; font-size:1.25rem; font-weight:700; color:#8B6914; margin:16px 0 8px;">$1</h4>');
       s = s.replace(/^##\s*(.*$)/gim, '<h3 style="font-family:\'Cormorant Garamond\',serif; font-size:1.35rem; font-weight:700; color:#523E28; margin:18px 0 10px;">$1</h3>');
       s = s.replace(/^#\s*(.*$)/gim, '<h2 style="font-family:\'Cormorant Garamond\',serif; font-size:1.5rem; font-weight:700; color:#523E28; margin:20px 0 12px;">$1</h2>');
 
-      // Bold and italics
       s = s.replace(/\*\*\*(.*?)\*\*\*/g, '<strong style="color:#8B6914;"><em>$1</em></strong>');
       s = s.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#8B6914;">$1</strong>');
       s = s.replace(/\*(.*?)\*/g, '<em>$1</em>');
@@ -1240,19 +1221,20 @@
     function renderCharmAiCard(charm) {
       if (!charm) return '';
       const statusLabels = {
-        'NUMEROLOGY_PRIMARY_CORROBORATED': { bg: 'rgba(22,131,91,0.12)', border: '#16835B', text: '#16835B', label: '✓ High Multi-Cycle Harmonization' },
-        'NUMEROLOGY_PRIMARY_PARTIALLY_CORROBORATED': { bg: 'rgba(201,162,39,0.15)', border: '#C9A227', text: '#8B6914', label: '✦ Moderate Harmonization' },
-        'NUMEROLOGY_PRIMARY_CONFLICTED': { bg: 'rgba(184,93,25,0.12)', border: '#B85D19', text: '#B85D19', label: '⚠️ Methodological Divergence' },
-        'NUMEROLOGY_PRIMARY_ONLY': { bg: 'rgba(139,105,20,0.12)', border: '#8B6914', text: '#8B6914', label: '✦ Numerology-First Focus' },
-        'NUMEROLOGY_ONLY': { bg: 'rgba(139,105,20,0.12)', border: '#8B6914', text: '#8B6914', label: '✦ Numerology-First Focus' },
-        'INSUFFICIENT_EVIDENCE': { bg: 'rgba(122,101,77,0.14)', border: '#7A654D', text: '#7A654D', label: '⏸ Insufficient Evidence (Abstained)' },
-        'NOT_ELIGIBLE_FOR_PREDICTION': { bg: 'rgba(184,93,25,0.10)', border: '#B85D19', text: '#B85D19', label: '⊘ Not Eligible for Prediction' }
+        'VERIFIED_SUPPORTED': { bg: 'rgba(22,131,91,0.12)', border: '#16835B', text: '#16835B', label: '✓ Verified' },
+        'NUMEROLOGY_PRIMARY_CORROBORATED': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Multi-Cycle Alignment' },
+        'NUMEROLOGY_PRIMARY_PARTIALLY_CORROBORATED': { bg: 'rgba(201,162,39,0.15)', border: '#C9A227', text: '#8B6914', label: '✦ Partial Cycle Alignment' },
+        'NUMEROLOGY_PRIMARY_CONFLICTED': { bg: 'rgba(184,93,25,0.12)', border: '#B85D19', text: '#B85D19', label: '✦ Methodological Contrast' },
+        'NUMEROLOGY_PRIMARY_ONLY': { bg: 'rgba(139,105,20,0.12)', border: '#8B6914', text: '#8B6914', label: '✦ Numerology-Primary Synthesis' },
+        'NUMEROLOGY_ONLY': { bg: 'rgba(139,105,20,0.12)', border: '#8B6914', text: '#8B6914', label: '✦ Numerology-Primary Synthesis' },
+        'INSUFFICIENT_EVIDENCE': { bg: 'rgba(122,101,77,0.14)', border: '#7A654D', text: '#7A654D', label: '⏸ Additional Birth Inputs Needed' },
+        'NOT_ELIGIBLE_FOR_PREDICTION': { bg: 'rgba(184,93,25,0.10)', border: '#B85D19', text: '#B85D19', label: '✦ Reflective Guidance Only' }
       };
       const assessmentLabels = {
-        'FAVOURABLE': { bg: 'rgba(22,131,91,0.12)', text: '#16835B', label: 'Favourable Assessment' },
-        'MIXED': { bg: 'rgba(201,162,39,0.15)', text: '#8B6914', label: 'Mixed Assessment' },
-        'UNFAVOURABLE': { bg: 'rgba(184,93,25,0.12)', text: '#B85D19', label: 'Unfavourable Assessment' },
-        'NEUTRAL': { bg: 'rgba(122,101,77,0.12)', text: '#7A654D', label: 'Neutral Assessment' }
+        'FAVOURABLE': { bg: 'rgba(22,131,91,0.12)', text: '#16835B', label: 'Supportive Phase' },
+        'MIXED': { bg: 'rgba(201,162,39,0.15)', text: '#8B6914', label: 'Balanced Phase' },
+        'UNFAVOURABLE': { bg: 'rgba(184,93,25,0.12)', text: '#B85D19', label: 'Consolidation Phase' },
+        'NEUTRAL': { bg: 'rgba(122,101,77,0.12)', text: '#7A654D', label: 'Steady Phase' }
       };
 
       const vStatus = charm.verification_status || 'NUMEROLOGY_ONLY';
@@ -1261,24 +1243,22 @@
       const assessBadge = assessmentLabels[eAssessment] || assessmentLabels['NEUTRAL'];
 
       const hf = charm.human_friendly || {};
-      const takeaway = hf.takeaway || charm.numerology_summary || 'Your career trajectory is analyzed through classical Numerology Dasha timing cycles.';
-      const timingStatus = hf.timing_status || `Status: ${vStatus}`;
-      const supported = hf.supported_by_report || 'Core numbers confirm institutional career alignment.';
-      const unconcluded = hf.unconcluded_aspects || 'Lo Shu grid is static natal inventory and does not determine job-offer dates. Timing requires active Dasha epicycles.';
-      const missingExpl = hf.missing_inputs_explanation || 'Inputs verified and processed.';
+      const takeaway = hf.takeaway || hf.headline || charm.numerology_summary || 'Analyzed through deterministic Numerology Dasha timing cycles.';
+      const supported = hf.supported_by_report || 'Core birth numbers establish your foundational rhythm.';
+      const unconcluded = hf.unconcluded_aspects || 'Real-world outcomes depend on personal choices, dialogue, and practical execution alongside cyclical timing.';
+      const missingExpl = hf.missing_inputs_explanation || 'Date-of-birth numerology inputs processed.';
       const practicalSteps = (hf.practical_actions && hf.practical_actions.length > 0) ? hf.practical_actions : (charm.practical_steps || []);
       const followupQ = hf.followup_question || charm.follow_up_question || '';
 
-      const reqHorizon = (charm.requested_horizon || 'unspecified_horizon').replace(/_/g, ' ');
+      const reqHorizon = (charm.requested_horizon || 'current_cycle').replace(/_/g, ' ');
       const primaryWindows = charm.primary_windows || [];
-      let acuteWindowStr = 'Uncalculated pending verified birth inputs';
+      let acuteWindowStr = 'Pending complete birth inputs';
       if (primaryWindows.length > 0) {
         acuteWindowStr = `${primaryWindows[0].start} ➔ ${primaryWindows[0].end} (${primaryWindows[0].ruling_planet || 'Active Ruler'})`;
       } else if (vStatus === 'INSUFFICIENT_EVIDENCE') {
         acuteWindowStr = 'Abstained (Date of birth missing or incomplete)';
       }
 
-      // Tier 5 structured missing breakdown if insufficient evidence
       const isInsufficient = (vStatus === 'INSUFFICIENT_EVIDENCE');
       const missingReqs = charm.missing_requirements || {};
       const missingInputsList = (missingReqs.missing_inputs || []).map(inp => `<span style="background:rgba(184,93,25,0.12); color:#B85D19; font-weight:700; padding:2px 8px; border-radius:4px; font-size:0.75rem;">${inp.replace(/_/g, ' ')}</span>`).join(' ');
@@ -1288,22 +1268,12 @@
         tier5Html = `
           <div style="background:#FAF6EE; border:1.5px solid rgba(184,93,25,0.35); border-radius:10px; padding:12px 14px; margin-top:10px;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-              <span style="font-size:0.88rem; font-weight:700; color:#B85D19;">⚠️ Missing Mathematical Requirements</span>
+              <span style="font-size:0.88rem; font-weight:700; color:#B85D19;">⚠️ Missing Mathematical Inputs</span>
               ${missingInputsList}
             </div>
             <div style="font-size:0.80rem; color:#523E28; line-height:1.5; margin-bottom:6px;">
               <strong>Why Required:</strong> ${missingReqs.why_required || 'Date of birth is mandatory to calculate cyclical Dasha epicycles.'}
             </div>
-            ${missingReqs.blocked_calculations && missingReqs.blocked_calculations.length > 0 ? `
-              <div style="font-size:0.78rem; color:#7A654D; margin-bottom:4px;">
-                <strong>Blocked Calculations:</strong> ${missingReqs.blocked_calculations.join(', ')}
-              </div>
-            ` : ''}
-            ${missingReqs.safe_interim_conclusions && missingReqs.safe_interim_conclusions.length > 0 ? `
-              <div style="font-size:0.78rem; color:#16835B; background:rgba(22,131,91,0.08); padding:6px 10px; border-radius:6px; margin-top:6px;">
-                <strong>Safe Interim Findings:</strong> ${missingReqs.safe_interim_conclusions.join('; ')}
-              </div>
-            ` : ''}
           </div>
         `;
       } else {
@@ -1314,7 +1284,6 @@
         `;
       }
 
-      // Windows HTML for technical details
       let windowsHtml = '';
       if (primaryWindows.length > 0) {
         windowsHtml = primaryWindows.map((w) => `
@@ -1323,7 +1292,7 @@
               <span style="font-family:'Cinzel',serif; font-size:1.05rem; font-weight:700; color:#8B6914;">
                 ${w.start} &nbsp;➔&nbsp; ${w.end}
               </span>
-              <span id="aiStatusPill" style="font-size:0.75rem; color:#A13030; background:rgba(161,48,48,0.1); border:1px solid rgba(161,48,48,0.25); padding:4px 10px; border-radius:6px; font-weight:700;">🔒 3 Free Questions after verified sign-up • Starter Pack: 5 Questions for ₹199</span>
+              <span style="font-size:0.72rem; color:#16835B; background:rgba(22,131,91,0.1); padding:2px 8px; border-radius:6px; font-weight:700;">${w.ruling_planet || 'Active Cycle'}</span>
             </div>
             <div style="font-size:0.80rem; color:#523E28; margin-top:4px; font-weight:500;">
               ${w.label || ''}
@@ -1333,7 +1302,7 @@
       } else {
         windowsHtml = `
           <div style="font-size:0.82rem; color:#7A654D; padding:8px 12px; font-style:italic;">
-            No primary windows calculated due to incomplete birth date input. Calculation engine strictly abstains from estimating unverified dates.
+            Primary Dasha windows appear once complete birth date inputs are calculated.
           </div>
         `;
       }
@@ -1356,103 +1325,81 @@
         const isSupport = m.assessment === 'SUPPORTS';
         const pillColor = isSupport ? '#16835B' : (isGated ? '#7A654D' : '#B85D19');
         const pillBg = isSupport ? 'rgba(22,131,91,0.1)' : (isGated ? 'rgba(122,101,77,0.1)' : 'rgba(184,93,25,0.1)');
-        
         const mTitle = methodLabelMap[m.methodId] || (m.methodId || '').replace(/_/g, ' ');
-        const cleanSummary = (m.summary || '')
-          .replace(/\bKP Numerology\b/gi, 'Dasha temporal cycle')
-          .replace(/\bBhrigu Nandi Nadi \(BNN\)\b/gi, 'Planetary conjunction vibration')
-          .replace(/\bBNN\b/gi, 'Planetary Numerology')
-          .replace(/\bVedic Natal Numerology Chart\b/gi, 'Lo Shu vibrational grid')
-          .replace(/\bVedic numerology\b/gi, 'Vedic Numerology')
-          .replace(/\bLal Kitab\b/gi, 'Traditional balance')
-          .replace(/\bnumerology\b/gi, 'numerology');
-
-        const citations = (m.citations || []).map(c => {
-          const cleanTitle = (c.title || '')
-            .replace(/Numerology/gi, 'Numerology')
-            .replace(/Natal Numerology Chart/gi, 'Numerology Grid')
-            .replace(/BNN/gi, 'Planetary Conjunctions')
-            .replace(/KP/gi, 'Dasha Timing');
-          return `<span style="display:block; font-size:0.72rem; color:#7A654D; margin-top:3px;">📜 <em>${cleanTitle}</em> (${c.locator})</span>`;
-        }).join('');
-
         return `
           <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.22); border-radius:8px; padding:10px 12px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
               <strong style="font-size:0.82rem; color:#8B6914;">${mTitle}</strong>
               <span style="font-size:0.66rem; font-weight:700; color:${pillColor}; background:${pillBg}; padding:2px 6px; border-radius:6px;">
-                ${isGated ? 'Harmonizing' : (isSupport ? 'Aligned' : 'Refining')}
+                ${isGated ? 'Optional' : (isSupport ? 'Aligned' : 'Contrast')}
               </span>
             </div>
-            <div style="font-size:0.78rem; color:#523E28; line-height:1.45;">${cleanSummary}</div>
-            ${citations}
+            <div style="font-size:0.78rem; color:#523E28; line-height:1.45;">${m.summary || ''}</div>
           </div>
         `;
       }).join('');
 
       const practicalHtml = practicalSteps.map(p => `
         <div style="font-size:0.82rem; color:#523E28; margin-bottom:4px; line-height:1.5;">
-          • <strong>Practical Action:</strong> ${p}
+          • <strong>Practical Step:</strong> ${escapeCharmHtml(p)}
         </div>
       `).join('');
 
       const predId = charm.prediction_id || ('PRED-' + Date.now());
+      const cardHeading = escapeCharmHtml(charm.topic_label || 'Numerology Dasha Synthesis');
 
       return `
-        <div style="margin-top:16px; background:#FFFFFF; border:1.5px solid rgba(201,162,39,0.38); border-radius:14px; padding:18px 22px; box-shadow:0 3px 12px rgba(180,155,110,0.08);">
-          <!-- Header & Verification Badges -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
-            <div style="font-family:\'Cormorant Garamond\',serif; font-size:1.35rem; font-weight:700; color:#8B6914;">
-              ✦ Numerology Dasha Career Timing Matrix
-            </div>
-            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+        <details style="margin-top:16px; background:#FFFFFF; border:1.5px solid rgba(201,162,39,0.38); border-radius:14px; padding:14px 18px; box-shadow:0 3px 12px rgba(180,155,110,0.08);">
+          <summary style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; cursor:pointer; list-style:none;">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:700; color:#8B6914;">
+              ✦ 7-Tier Calculation Breakdown — ${cardHeading}
+            </span>
+            <span style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
               <span style="font-size:0.72rem; font-weight:700; color:${badge.text}; background:${badge.bg}; border:1px solid ${badge.border}; padding:3px 10px; border-radius:12px;">
                 ${badge.label}
               </span>
               <span style="font-size:0.70rem; font-weight:700; color:${assessBadge.text}; background:${assessBadge.bg}; border:1px solid rgba(201,162,39,0.3); padding:3px 8px; border-radius:10px;">
                 ${assessBadge.label}
               </span>
-            </div>
-          </div>
+            </span>
+          </summary>
 
-          <!-- Tier 1: Concise Career Takeaway -->
-          <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.35); border-left:4px solid #C9A227; border-radius:10px; padding:14px 16px; margin-bottom:12px; box-shadow:0 2px 6px rgba(180,155,110,0.05);">
-            <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#8B6914; margin-bottom:4px;">
-              ✦ Tier 1: Career Momentum Takeaway
-            </div>
-            <div style="font-size:0.92rem; color:#523E28; line-height:1.65; font-weight:500;">
-              ${takeaway}
-            </div>
-          </div>
-
-          <!-- Tier 2: Timing Status & Horizon Separation -->
-          <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.25); border-radius:10px; padding:12px 16px; margin-bottom:12px;">
-            <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A654D; margin-bottom:8px;">
-              ✦ Tier 2: Timing Horizon &amp; Verification Status
-            </div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px; font-size:0.84rem; color:#523E28;">
-              <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:8px 12px;">
-                <span style="font-size:0.72rem; color:#7A654D; text-transform:uppercase; display:block;">User Forecast Horizon:</span>
-                <strong style="color:#8B6914; font-size:0.90rem;">${reqHorizon}</strong>
-                <span style="display:block; font-size:0.68rem; color:#7A654D; margin-top:2px;">(Evaluated separately from calculated Dasha)</span>
+          <div style="margin-top:14px;">
+            <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.35); border-left:4px solid #C9A227; border-radius:10px; padding:14px 16px; margin-bottom:12px;">
+              <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#8B6914; margin-bottom:4px;">
+                ✦ Tier 1: Core Takeaway
               </div>
-              <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:8px 12px;">
-                <span style="font-size:0.72rem; color:#7A654D; text-transform:uppercase; display:block;">Calculated Acute Dasha Window:</span>
-                <strong style="color:#16835B; font-size:0.90rem;">${acuteWindowStr}</strong>
-                <span style="display:block; font-size:0.68rem; color:#7A654D; margin-top:2px;">(Classical calendar epicycle)</span>
+              <div style="font-size:0.92rem; color:#523E28; line-height:1.65; font-weight:500;">
+                ${escapeCharmHtml(takeaway)}
               </div>
             </div>
-          </div>
 
-          <!-- Tier 3: Supported by Verified Report -->
-          <div style="margin-bottom:10px; background:#FFFDF7; border:1px solid rgba(22,131,91,0.25); border-radius:8px; padding:10px 14px;">
-            <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#16835B; margin-bottom:4px;">
-              ✓ Tier 3: Supported by Verified Findings
+            <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.25); border-radius:10px; padding:12px 16px; margin-bottom:12px;">
+              <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A654D; margin-bottom:8px;">
+                ✦ Tier 2: Timing Horizon &amp; Cycle Status
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px; font-size:0.84rem; color:#523E28;">
+                <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:8px 12px;">
+                  <span style="font-size:0.72rem; color:#7A654D; text-transform:uppercase; display:block;">Requested Horizon:</span>
+                  <strong style="color:#8B6914; font-size:0.90rem;">${escapeCharmHtml(reqHorizon)}</strong>
+                  <span style="display:block; font-size:0.68rem; color:#7A654D; margin-top:2px;">(Evaluated separately from calculated Dasha)</span>
+                </div>
+                <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:8px 12px;">
+                  <span style="font-size:0.72rem; color:#7A654D; text-transform:uppercase; display:block;">Calculated Dasha Window:</span>
+                  <strong style="color:#16835B; font-size:0.90rem;">${escapeCharmHtml(acuteWindowStr)}</strong>
+                  <span style="display:block; font-size:0.68rem; color:#7A654D; margin-top:2px;">(Deterministic calendar epicycle)</span>
+                </div>
+              </div>
             </div>
-            <div style="font-size:0.84rem; color:#523E28; line-height:1.55;">
-              ${supported}
+
+            <div style="margin-bottom:10px; background:#FFFDF7; border:1px solid rgba(22,131,91,0.25); border-radius:8px; padding:10px 14px;">
+              <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#16835B; margin-bottom:4px;">
+                ✦ Tier 3: Supported by Calculated Findings
+              </div>
+              <div style="font-size:0.84rem; color:#523E28; line-height:1.55;">
+                ${escapeCharmHtml(supported)}
+              </div>
             </div>
-          </div>
 
           <!-- Tier 4: What Cannot Yet Be Concluded -->
           <div style="margin-bottom:12px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.22); border-radius:8px; padding:10px 14px;">
@@ -1467,7 +1414,7 @@
           <!-- Tier 5: Input & Calculation Trace / Missing Requirements -->
           <div style="margin-bottom:12px;">
             <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A654D; margin-bottom:4px;">
-              ✦ Tier 5: Input &amp; Calculation Verification
+              ✦ Tier 5: Input &amp; Calculation Provenance
             </div>
             ${tier5Html}
           </div>
@@ -1476,7 +1423,7 @@
           ${practicalHtml ? `
             <div style="margin-bottom:12px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:10px 14px;">
               <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#8B6914; margin-bottom:6px;">
-                ✦ Tier 6: Practical Executive Actions (Grounding First)
+                ✦ Tier 6: Practical Actions
               </div>
               ${practicalHtml}
             </div>
@@ -1495,35 +1442,35 @@
           ` : ''}
 
           <!-- Expandable Technical Calculations & Citations -->
-          <details style="margin-top:14px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:10px 14px;">
-            <summary style="font-weight:700; font-size:0.82rem; color:#8B6914; cursor:pointer; outline:none; user-select:none;">
-              ✦ View Detailed Dasha Cycles &amp; Alignment Notes
-            </summary>
+          <div style="margin-top:14px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:12px 14px;">
+            <div style="font-weight:700; font-size:0.82rem; color:#8B6914;">
+              ✦ Detailed Dasha Cycles &amp; Alignment Notes
+            </div>
             
             <div style="margin-top:12px;">
               <!-- Primary Event Windows -->
               <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:10px 12px; margin-bottom:10px;">
                 <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A654D;">
-                  ✦ Primary Calculated Event Windows (Primary Event Windows)
+                  ✦ Primary Calculated Event Windows
                 </div>
                 ${windowsHtml}
               </div>
 
-              <!-- Multi-Method Cross-Verification Analysis -->
+              <!-- Multi-Method Analysis -->
               <div style="margin-bottom:12px;">
                 <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A654D; margin-bottom:6px;">
-                  ✦ Multi-Cycle Numerological Verification (Dasha, Lo Shu, Chaldean)
+                  ✦ Multi-Cycle Numerological Comparison (Dasha, Lo Shu, Chaldean)
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:8px;">
                   ${methodsHtml}
                 </div>
               </div>
 
-              <!-- Interactive Outcome Verification (Section 10/13) -->
+              <!-- Interactive Outcome Feedback -->
               <div style="padding-top:10px; border-top:1px dashed rgba(201,162,39,0.3); margin-top:10px;">
                 <div style="margin-bottom:6px;">
                   <span style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A654D;">
-                    ✦ Calibrate Prediction Accuracy (Anonymous Verification)
+                    ✦ Calibrate Cycle Feedback (Anonymous)
                   </span>
                 </div>
                 <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
@@ -1547,8 +1494,9 @@
                 <em>Notice: Numerology cycles represent timing tendencies for personal reflection and lifestyle alignment.</em>
               </div>
             </div>
-          </details>
-        </div>
+          </div>
+          </div>
+        </details>
       `;
     }
 
@@ -1660,25 +1608,25 @@
         NUMEROS VISION · PAID FEATURE
       </div>
       <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.75rem; font-weight:700; color:#523E28; margin:0 0 8px;">
-        Charm AI Career &amp; Transit Oracle
+        Charm AI Starter Pack
       </h3>
       <p style="font-size:0.86rem; color:#7A654D; line-height:1.55; margin:0 0 14px;">
-        Unlock the <strong>Charm AI Starter Pack (5 Questions)</strong> for in-depth career inflection windows, transit radar, and acute timing:
+        Unlock the <strong>Charm AI Starter Pack (5 Questions)</strong> for topic-matched numerology &amp; Dasha guidance across career, marriage, love, money, property, and daily routine:
       </p>
 
       <div style="background:#FAF6EE; border:1.5px solid rgba(201,162,39,0.3); border-radius:12px; padding:10px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
         <div style="text-align:left;">
           <strong style="color:#8B6914; font-size:0.92rem; display:block;">Charm AI Starter Pack (5 Questions)</strong>
-          <span style="font-size:0.76rem; color:#7A654D;">5 Classical Inquiries · One-Time · Root 1</span>
+          <span style="font-size:0.76rem; color:#7A654D;">5 In-Depth Questions · One-Time Pass · No Subscription</span>
         </div>
-        <span style="font-family:'Cinzel', serif; font-size:1.3rem; font-weight:800; color:#8B6914;">₹199</span>
+        <span style="font-family:'Cinzel', serif; font-size:1.3rem; font-weight:800; color:var(--gold-dark, #8B6914);">₹199</span>
       </div>
 
       <!-- Charm Purchase Form -->
       <div id="charm-purchase-form" style="text-align:left;">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
           <div>
-            <label style="display:block; font-size:0.78rem; font-weight:700; color:#523E28; margin-bottom:4px;">Seeker Name</label>
+            <label style="display:block; font-size:0.78rem; font-weight:700; color:#523E28; margin-bottom:4px;">Full Name</label>
             <input type="text" id="charm-checkout-name" placeholder="Full Name" required style="width:100%; padding:9px 12px; border:1px solid rgba(201,162,39,0.4); border-radius:8px; font-size:0.88rem; background:#FFFFFF; color:#523E28; box-sizing:border-box;" />
           </div>
           <div>

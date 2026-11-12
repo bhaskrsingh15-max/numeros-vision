@@ -761,8 +761,9 @@ const PACK_CATALOG = {
   },
   feature_flags: {
     notify_me_higher_tiers: true,
-    notify_me_tiers: ["report_advanced", "report_premium"],
-    waitlist_display_label: "Coming soon, notify me"
+    notify_me_tiers: ["report_advanced", "report_premium", "planner_2027"],
+    waitlist_display_label: "Coming soon, notify me",
+    waitlist_caption: "When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens."
   },
   core_reports: {
     report_basic: {
@@ -777,6 +778,13 @@ const PACK_CATALOG = {
       amount_paise: 19900,
       digital_root: 1,
       mrp_digital_root: 3,
+      features: [
+        "Core Numbers: Mulank (Birth Day number), Bhagyank (Life Path number), Kua number (Vastu direction number) & Personal Year",
+        "9-Cell Lo Shu Grid (Lo Shu Square) Mapping & Active Plane Strengths",
+        "Calling Name number (Chaldean Name number) Harmony Check",
+        "Five-Element Distribution Balance & Practical Lifestyle Guidance",
+        "Instant 3-Page Print-Ready Personalized PDF Report"
+      ],
       status: "active"
     },
     report_advanced: {
@@ -791,6 +799,13 @@ const PACK_CATALOG = {
       amount_paise: 51000,
       digital_root: 6,
       mrp_digital_root: 3,
+      features: [
+        "Everything in Basic plus Deep Analysis of All Present Numbers",
+        "Repeating Digit Amplifications & Behavioral Tendencies",
+        "8 Lo Shu Planes & Raj Yoga Combinations Breakdown",
+        "Career, Relationship & Financial Archetype Compatibility",
+        "12-Page Structured PDF Report with Actionable Daily Habits"
+      ],
       status: "active"
     },
     report_premium: {
@@ -806,7 +821,37 @@ const PACK_CATALOG = {
       digital_root: 6,
       mrp_digital_root: 3,
       badge: "Best value",
+      features: [
+        "Everything in Basic & Advanced plus Missing Numbers (Open Grid Cells) Analysis",
+        "Multi-Year Numerology Dasha & Pinnacle Cycle Timeline",
+        "Chaldean Name Balancing & Signature Alignment Options",
+        "Practical Lifestyle, Color, Directional (Vastu) & Habit Harmonizers",
+        "Complete 32-Page Personalized Reference PDF Report"
+      ],
       status: "active"
+    }
+  },
+  annual_planners: {
+    planner_2027: {
+      pack_id: "planner_2027",
+      tier_id: "planner_2027",
+      name: "2027 Year Ahead Planner",
+      descriptor: "Personalized 2027 Annual Numerology Planner, 24 pages",
+      pages: 24,
+      price_inr: null,
+      mrp_inr: null,
+      mrp_paise: null,
+      amount_paise: null,
+      waitlist_only: true,
+      display_price_label: "Coming soon, notify me",
+      features: [
+        "Personal Year, Universal Year & Monthly Vibrational Forecast for 2027",
+        "12 Month-by-Month Focus Themes, Key Windows & Caution Corridors",
+        "Quarterly Career, Financial & Relationship Pacing Checklists",
+        "Lo Shu Grid & Elemental Rhythm Alignment for 2027",
+        "24-Page Personalized Annual Reference PDF"
+      ],
+      status: "waitlist"
     }
   },
   charm_ai: {
@@ -870,19 +915,36 @@ const PACK_CATALOG = {
   }
 };
 
-function resolveServerLaunchOfferState(env = null, nowMs = null) {
+function resolveServerLaunchOfferState(env = null, nowMs = null, packId = null) {
   const lo = PACK_CATALOG.launch_offer || {};
   if (lo.enabled === false) {
     return { active: false, configured: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
   }
-  const rawStarts = (env && env.NV_LAUNCH_STARTS_AT && String(env.NV_LAUNCH_STARTS_AT).trim())
-    ? String(env.NV_LAUNCH_STARTS_AT).trim()
-    : ((env && env.NV_LAUNCH_STARTED_AT && String(env.NV_LAUNCH_STARTED_AT).trim())
-      ? String(env.NV_LAUNCH_STARTED_AT).trim()
+  const tierEnvMap = {
+    report_basic: ['NV_LAUNCH_BASIC_STARTS_AT', 'NV_LAUNCH_BASIC_ENDS_AT'],
+    report_advanced: ['NV_LAUNCH_ADVANCED_STARTS_AT', 'NV_LAUNCH_ADVANCED_ENDS_AT'],
+    report_premium: ['NV_LAUNCH_PREMIUM_STARTS_AT', 'NV_LAUNCH_PREMIUM_ENDS_AT'],
+    planner_2027: ['NV_LAUNCH_PLANNER_2027_STARTS_AT', 'NV_LAUNCH_PLANNER_2027_ENDS_AT']
+  };
+  let tierStartVar = '';
+  let tierEndVar = '';
+  if (packId && tierEnvMap[packId] && env) {
+    const [sKey, eKey] = tierEnvMap[packId];
+    tierStartVar = env[sKey] ? String(env[sKey]).trim() : '';
+    tierEndVar = env[eKey] ? String(env[eKey]).trim() : '';
+  }
+  const rawStarts = tierStartVar
+    ? tierStartVar
+    : ((env && env.NV_LAUNCH_STARTS_AT && String(env.NV_LAUNCH_STARTS_AT).trim())
+      ? String(env.NV_LAUNCH_STARTS_AT).trim()
+      : ((env && env.NV_LAUNCH_STARTED_AT && String(env.NV_LAUNCH_STARTED_AT).trim())
+        ? String(env.NV_LAUNCH_STARTED_AT).trim()
+        : ''));
+  const rawEnds = tierEndVar
+    ? tierEndVar
+    : ((env && env.NV_LAUNCH_ENDS_AT && String(env.NV_LAUNCH_ENDS_AT).trim())
+      ? String(env.NV_LAUNCH_ENDS_AT).trim()
       : '');
-  const rawEnds = (env && env.NV_LAUNCH_ENDS_AT && String(env.NV_LAUNCH_ENDS_AT).trim())
-    ? String(env.NV_LAUNCH_ENDS_AT).trim()
-    : '';
   if (!rawStarts || !rawEnds) {
     return { active: false, configured: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
   }
@@ -917,6 +979,12 @@ function resolveServerLaunchOfferState(env = null, nowMs = null) {
   };
 }
 
+function isPlanner2027Live(env) {
+  if (!env || env.PLANNER_2027_LIVE === undefined || env.PLANNER_2027_LIVE === null) return false;
+  const v = String(env.PLANNER_2027_LIVE).trim().toLowerCase();
+  return v === 'true' || v === '1' || v === 'yes';
+}
+
 function getPackById(packId, env = null, nowMs = null) {
   if (!packId || typeof packId !== 'string') return null;
   const p = packId.trim().toLowerCase();
@@ -927,23 +995,41 @@ function getPackById(packId, env = null, nowMs = null) {
     'report_master': 'report_advanced',
     'premium': 'report_premium',
     'report_divine': 'report_premium',
+    'planner-2027': 'planner_2027',
+    'year_2027': 'planner_2027',
+    '2027_planner': 'planner_2027',
     'starter_5q': 'charm_single'
   };
   const key = aliases[p] || p;
-  const base = PACK_CATALOG.core_reports[key] || PACK_CATALOG.charm_ai[key] || PACK_CATALOG.bundles[key] || null;
+  const base = PACK_CATALOG.core_reports[key] || (PACK_CATALOG.annual_planners && PACK_CATALOG.annual_planners[key]) || PACK_CATALOG.charm_ai[key] || PACK_CATALOG.bundles[key] || null;
   if (!base) return null;
   const waitlistLabel = (PACK_CATALOG.feature_flags && PACK_CATALOG.feature_flags.waitlist_display_label) || 'Coming soon, notify me';
+  const waitlistCaption = (PACK_CATALOG.feature_flags && PACK_CATALOG.feature_flags.waitlist_caption) || 'When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.';
+  if (key === 'planner_2027' && !isPlanner2027Live(env)) {
+    return Object.assign({}, base, {
+      waitlist_only: true,
+      display_price_label: waitlistLabel,
+      waitlist_caption: waitlistCaption,
+      price_inr: null,
+      mrp_inr: null,
+      amount_paise: null,
+      struck_mrp_inr: null,
+      launch_offer_active: false,
+      launch_offer_copy: ''
+    });
+  }
   if (isNotifyMeHigherTiersEnabled(env) && (key === 'report_advanced' || key === 'report_premium')) {
     return Object.assign({}, base, {
       waitlist_only: true,
       display_price_label: waitlistLabel,
+      waitlist_caption: waitlistCaption,
       struck_mrp_inr: null,
       launch_offer_active: false,
       launch_offer_copy: ''
     });
   }
   if (PACK_CATALOG.core_reports[key] && base.mrp_inr) {
-    const launchState = resolveServerLaunchOfferState(env, nowMs);
+    const launchState = resolveServerLaunchOfferState(env, nowMs, key);
     if (!launchState.active) {
       return Object.assign({}, base, {
         waitlist_only: false,
@@ -1014,6 +1100,9 @@ function normalizeWaitlistPackId(rawPack) {
   if (clean === 'report_premium' || clean === 'premium' || clean === 'report_divine' || clean === 'divine') {
     return 'report_premium';
   }
+  if (clean === 'planner_2027' || clean === 'planner-2027' || clean === 'year_2027' || clean === '2027_planner') {
+    return 'planner_2027';
+  }
   return null;
 }
 
@@ -1059,7 +1148,7 @@ async function registerWaitlistNotifyMe(env, body = {}, nowOverrideSec = null) {
     return { status: 400, payload: { success: false, error: 'Please enter a valid email address.' } };
   }
   if (!normPack) {
-    return { status: 400, payload: { success: false, error: 'Waitlist notifications apply only to Advanced and Premium editions.' } };
+    return { status: 400, payload: { success: false, error: 'Waitlist notifications apply only to Advanced, Premium, and 2027 Planner editions.' } };
   }
   if (body.consent !== true) {
     return { status: 400, payload: { success: false, error: 'Explicit notification consent is required under DPDP 2023.' } };
@@ -1167,7 +1256,7 @@ async function deleteWaitlistNotifyMe(env, body = {}) {
   const rawPack = String(body.pack_id || body.packId || body.sku_id || body.skuId || '').trim();
   const normPack = rawPack ? normalizeWaitlistPackId(rawPack) : null;
   if (rawPack && !normPack) {
-    return { status: 400, payload: { success: false, error: 'Invalid pack_id; expected report_advanced or report_premium.' } };
+    return { status: 400, payload: { success: false, error: 'Invalid pack_id; expected report_advanced, report_premium, or planner_2027.' } };
   }
 
   const emailHash = await sha256Hex(emailClean);
@@ -1243,7 +1332,9 @@ async function buildWaitlistNotificationEmail(record, dataEncKey, nowOverrideSec
 
   const packTitle = normPack === 'report_premium'
     ? 'Anveil every charm (Complete Numerology Report, 32 pages)'
-    : 'Anveil my glowing charms (Advanced Numerology Report, 12 pages)';
+    : (normPack === 'planner_2027'
+      ? '2027 Year Ahead Planner (Personalized 2027 Annual Numerology Planner, 24 pages)'
+      : 'Anveil my glowing charms (Advanced Numerology Report, 12 pages)');
   const subject = `${packTitle} Is Now Available | NUMEROS VISION`;
   const text =
     `Namaste,\n\n` +
@@ -1669,18 +1760,26 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
       const orderLink = orderToken
         ? `${baseUrl}/dashboard/?order_id=${encodeURIComponent(order.id)}&token=${encodeURIComponent(orderToken)}`
         : `${baseUrl}/dashboard/?order_id=${encodeURIComponent(order.id)}`;
+      const packFeatures = (pack && Array.isArray(pack.features) && pack.features.length > 0) ? pack.features : [];
+      const featuresTextBlock = packFeatures.length > 0
+        ? `\nIncluded in your report:\n` + packFeatures.map(f => `- ${f}`).join('\n') + `\n`
+        : '';
+      const featuresHtmlBlock = packFeatures.length > 0
+        ? `<div style="margin:0 0 18px;font-size:13px;line-height:1.55;"><div style="font-weight:700;color:#523E28;margin-bottom:6px;">Included in your report:</div><ul style="margin:0;padding-left:18px;color:#523E28;">${packFeatures.map(f => `<li style="margin-bottom:4px;">${escapeHtmlAttr(f)}</li>`).join('')}</ul></div>`
+        : '';
       const emailSubject = `Order Confirmation: Your ${packName} · Numeros Vision`;
-      const emailText = `Thank you for your order with Numeros Vision.\n\nOrder ID: ${order.id}\nProduct: ${packName}\n\nYour personalized dossier is being prepared deterministically. You can view your order status and access your report directly on your private dashboard:\n${orderLink}\n\nIf you have any questions, write to support@numerosvision.com.`;
+      const emailText = `Thank you for your order with Numeros Vision.\n\nOrder ID: ${order.id}\nProduct: ${packName}${pack && pack.descriptor ? ' (' + pack.descriptor + ')' : ''}\n${featuresTextBlock}\nYour personalized report is being prepared deterministically. You can view your order status and access your report directly on your private dashboard:\n${orderLink}\n\nIf you have any questions, write to support@numerosvision.com.`;
       const emailHtml = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:540px;margin:0 auto;padding:32px 24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:14px;color:#523E28;">
   <div style="font-size:16px;font-weight:700;color:#8B6914;margin-bottom:14px;letter-spacing:0.04em;">NUMEROS VISION</div>
   <h2 style="font-size:20px;color:#8B6914;margin:0 0 12px;font-family:Georgia,serif;">Order Confirmed</h2>
   <p style="font-size:14px;line-height:1.6;margin:0 0 16px;">
-    Thank you for your order. Your personalized dossier (<strong>${packName}</strong>) is being prepared deterministically.
+    Thank you for your order. Your personalized report (<strong>${packName}</strong>) is being prepared deterministically.
   </p>
-  <div style="background:#FAF6EE;border:1px solid rgba(201,162,39,0.25);border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.6;">
+  <div style="background:#FAF6EE;border:1px solid rgba(201,162,39,0.25);border-radius:8px;padding:14px 18px;margin-bottom:16px;font-size:13px;line-height:1.6;">
     <div><strong>Order ID:</strong> <span style="font-family:monospace;color:#8B6914;">${order.id}</span></div>
-    <div><strong>Item:</strong> ${packName}</div>
+    <div><strong>Item:</strong> ${packName}${pack && pack.descriptor ? ' · ' + escapeHtmlAttr(pack.descriptor) : ''}</div>
   </div>
+  ${featuresHtmlBlock}
   <div style="margin:24px 0;">
     <a href="${orderLink}" style="background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%);color:#FFFFFF;padding:12px 24px;text-decoration:none;border-radius:8px;font-weight:700;display:inline-block;font-size:14px;">
       View Your Order on Dashboard →
@@ -2260,8 +2359,8 @@ function sanitizeViewForGenerator(view) {
     },
     subject: {
       id: view.subject ? view.subject.id : null,
-      name: view.subject ? view.subject.name : 'Valued Seeker',
-      dob: view.subject ? view.subject.dob : '1990-08-15',
+      name: view.subject ? view.subject.name : '',
+      dob: view.subject ? view.subject.dob : '',
       created_at: view.subject ? view.subject.created_at : null
     },
     tier: view.tier,
@@ -2709,15 +2808,20 @@ async function callCharmBackendService(payload, env) {
     throw new Error('CHARM_BACKEND_URL_UNSET');
   }
   backendUrl = backendUrl.replace(/\/+$/, '');
-
-  return await fetch(`${backendUrl}/api/charm/chat`, {
+  const timeoutMs = parseInt((env && env.CHARM_TIMEOUT_MS) || '12000', 10);
+  const fetchOpts = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-NV-Charm-Secret': charmSecret
+      'X-NV-Charm-Secret': charmSecret,
+      'X-NV-Upstream-Metered': '1'
     },
     body: JSON.stringify(payload)
-  });
+  };
+  if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function' && timeoutMs > 0) {
+    fetchOpts.signal = AbortSignal.timeout(timeoutMs);
+  }
+  return await fetch(`${backendUrl}/api/charm/chat`, fetchOpts);
 }
 
 function sanitizeReturnToUrl(returnTo, defaultUrl = '/dashboard/') {
@@ -2764,10 +2868,12 @@ export {
 };
 function isPreviewRequest(request, env) {
   const envMode = String((env && env.ENVIRONMENT) || '').trim().toLowerCase();
+  if (envMode === 'production') return false;
   if (envMode === 'preview') return true;
   try {
     const u = new URL(request.url);
     const h = (u.hostname || '').toLowerCase();
+    if (h === 'numerosvision.com' || h === 'www.numerosvision.com') return false;
     if (h.endsWith('.pages.dev') || h.startsWith('preview.')) return true;
   } catch (_) {}
   return false;
@@ -2956,14 +3062,19 @@ export default {
       '/year_2027': '/year-2027/',
       '/year_2027/': '/year-2027/',
       '/year_2027.html': '/year-2027/',
-      '/sample-report': '/sample_roadmap/',
-      '/sample-report/': '/sample_roadmap/',
-      '/sample_report': '/sample_roadmap/',
-      '/sample_report/': '/sample_roadmap/',
-      '/sample-roadmap': '/sample_roadmap/',
-      '/sample-roadmap/': '/sample_roadmap/',
-      '/roadmap-preview': '/sample_roadmap/',
-      '/roadmap-preview/': '/sample_roadmap/',
+      '/sample-report': '/sample/',
+      '/sample-report/': '/sample/',
+      '/sample_report': '/sample/',
+      '/sample_report/': '/sample/',
+      '/sample-roadmap': '/sample/',
+      '/sample-roadmap/': '/sample/',
+      '/sample_roadmap': '/sample/',
+      '/sample_roadmap/': '/sample/',
+      '/sample_roadmap.html': '/sample/',
+      '/roadmap-preview': '/sample/',
+      '/roadmap-preview/': '/sample/',
+      '/sample': '/sample/',
+      '/sample.html': '/sample/',
       '/reports': '/reports/',
       '/reports.html': '/reports/',
       '/reports_catalogue': '/reports/',
@@ -4266,20 +4377,34 @@ export default {
     return bal;
   }
 
+  function getUtcDayBoundsMs(tsMs = Date.now()) {
+    const dt = new Date(tsMs);
+    const startMs = Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate());
+    const dayKey = dt.toISOString().slice(0, 10);
+    return { startMs, dayKey };
+  }
+
   async function getGuestUsage(visitorHash, env) {
+    const { startMs, dayKey } = getUtcDayBoundsMs(Date.now());
     if (env && env.DB) {
       try {
-        const row = await env.DB.prepare('SELECT questions_used FROM free_chat_usage WHERE visitor_hash = ?').bind(visitorHash).first();
-        if (row) return row.questions_used;
+        const row = await env.DB.prepare('SELECT questions_used, updated_at FROM free_chat_usage WHERE visitor_hash = ?').bind(visitorHash).first();
+        if (row) {
+          if (Number(row.updated_at || 0) < startMs) return 0;
+          return Number(row.questions_used || 0);
+        }
       } catch (e) {}
     }
     if (!memoryStore.freeChatUsage) memoryStore.freeChatUsage = new Map();
     const entry = memoryStore.freeChatUsage.get(visitorHash);
-    return entry ? entry.questions_used : 0;
+    if (!entry) return 0;
+    if (entry.day_key && entry.day_key !== dayKey) return 0;
+    return Number(entry.questions_used || 0);
   }
 
   async function incrementGuestUsage(visitorHash, ipHash, env) {
     const now = Date.now();
+    const { startMs, dayKey } = getUtcDayBoundsMs(now);
     if (env && env.DB) {
       try {
         const id = 'fcu_' + now + '_' + getRandomHex(6);
@@ -4289,12 +4414,19 @@ export default {
           VALUES (?, ?, 0, 3, ?, ?, ?)
         `).bind(id, visitorHash, ipHash, now, now).run();
 
-        // Atomic conditional increment: only updates if questions_used < 3
+        // Reset daily counter if previous usage occurred on an earlier UTC day
+        await env.DB.prepare(`
+          UPDATE free_chat_usage
+          SET questions_used = 0, ip_hash = ?, updated_at = ?
+          WHERE visitor_hash = ? AND updated_at < ?
+        `).bind(ipHash, now, visitorHash, startMs).run();
+
+        // Atomic conditional increment: only updates if questions_used < 3 today
         const updateRes = await env.DB.prepare(`
           UPDATE free_chat_usage
-          SET questions_used = questions_used + 1, updated_at = ?
+          SET questions_used = questions_used + 1, ip_hash = ?, updated_at = ?
           WHERE visitor_hash = ? AND questions_used < 3
-        `).bind(now, visitorHash).run();
+        `).bind(ipHash, now, visitorHash).run();
 
         const changes = (updateRes && updateRes.meta && updateRes.meta.changes !== undefined)
           ? updateRes.meta.changes
@@ -4312,7 +4444,12 @@ export default {
       }
     }
     if (!memoryStore.freeChatUsage) memoryStore.freeChatUsage = new Map();
-    const current = memoryStore.freeChatUsage.get(visitorHash) || { questions_used: 0 };
+    let current = memoryStore.freeChatUsage.get(visitorHash) || { questions_used: 0, day_key: dayKey };
+    if (current.day_key && current.day_key !== dayKey) {
+      current = { questions_used: 0, day_key: dayKey };
+    } else if (!current.day_key) {
+      current.day_key = dayKey;
+    }
     if (current.questions_used >= 3) {
       return { success: false, questions_used: 3 };
     }
@@ -4887,6 +5024,15 @@ export default {
 
       // 2. Deterministic pack lookup (resolves regular mrp_inr automatically after fixed launch_offer.ends_at)
       const pack = getPackById(packId, env, now);
+      if (pack && pack.pack_id === 'planner_2027' && !isPlanner2027Live(env)) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'PLANNER_WAITLIST_ONLY',
+          status: 'waitlist_only',
+          display_label: 'Coming soon, notify me',
+          error: 'Coming soon, notify me. The 2027 Year Ahead Planner is waitlist-only until its legal disclaimer is approved.'
+        }), { status: 409, headers: corsHeaders });
+      }
       if (!pack || pack.status !== 'active') {
         return new Response(JSON.stringify({
           success: false,
@@ -6605,15 +6751,32 @@ export default {
     const PLANNER_2027_CONFIG = {
       product_id: 'planner_2027',
       name: '2027 Year Ahead Planner',
-      subtitle: '24-Page Personalized Annual Astrological & Vibrational Blueprint',
+      subtitle: 'Personalized 2027 Annual Numerology Planner, 24 pages',
       currency: 'INR',
-      list_price_paise: 199900,
-      offer_price_paise: 149900,
-      offer_ends_at: '2027-01-31T23:59:00+05:30',
+      list_price_paise: null,
+      offer_price_paise: null,
+      offer_ends_at: null,
       price_includes_gst: false,
       receipt_type: 'Payment receipt',
-      active: true
+      waitlist_display_label: 'Coming soon, notify me',
+      waitlist_caption: 'When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.',
+      active: false
     };
+
+    function resolveLivePlanner2027Price(env, nowMs) {
+      const regPaise = parseInt((env && env.NV_PLANNER_2027_REGULAR_PAISE) || '0', 10);
+      const launchPaise = parseInt((env && env.NV_PLANNER_2027_LAUNCH_PAISE) || '0', 10);
+      const loState = resolveServerLaunchOfferState(env, nowMs, 'planner_2027');
+      const isOfferActive = Boolean(loState.active && launchPaise > 0);
+      const currentPaise = isOfferActive ? launchPaise : (regPaise > 0 ? regPaise : null);
+      return {
+        list: regPaise > 0 ? regPaise : null,
+        offer: isOfferActive ? launchPaise : null,
+        amount_paise: currentPaise,
+        offer_ends_at: isOfferActive ? loState.endsAt : null,
+        is_offer_active: isOfferActive
+      };
+    }
 
     if (url.pathname.startsWith('/api/planner-2027/')) {
       assertRazorpayTestKey(env);
@@ -6627,20 +6790,38 @@ export default {
         'Access-Control-Allow-Origin': getCorsOrigin(request, env),
         'Vary': 'Origin'
       };
-      const now = Date.now();
-      const offerEndsAtMs = Date.parse(PLANNER_2027_CONFIG.offer_ends_at);
-      const isOfferActive = now < offerEndsAtMs;
-      const currentPricePaise = isOfferActive ? PLANNER_2027_CONFIG.offer_price_paise : PLANNER_2027_CONFIG.list_price_paise;
+      if (!isPlanner2027Live(env)) {
+        return new Response(JSON.stringify({
+          product_id: PLANNER_2027_CONFIG.product_id,
+          status: 'waitlist',
+          waitlist_only: true,
+          display_label: PLANNER_2027_CONFIG.waitlist_display_label,
+          waitlist_caption: PLANNER_2027_CONFIG.waitlist_caption,
+          list: null,
+          offer: null,
+          amount_paise: null,
+          currency: PLANNER_2027_CONFIG.currency,
+          offer_ends_at: null,
+          is_offer_active: false,
+          price_includes_gst: PLANNER_2027_CONFIG.price_includes_gst,
+          receipt_type: PLANNER_2027_CONFIG.receipt_type,
+          active: false
+        }), { status: 200, headers: corsHeaders });
+      }
+      const livePricing = resolveLivePlanner2027Price(env, Date.now());
       return new Response(JSON.stringify({
-        list: PLANNER_2027_CONFIG.list_price_paise,
-        offer: PLANNER_2027_CONFIG.offer_price_paise,
-        amount_paise: currentPricePaise,
+        product_id: PLANNER_2027_CONFIG.product_id,
+        status: 'active',
+        waitlist_only: false,
+        list: livePricing.list,
+        offer: livePricing.offer,
+        amount_paise: livePricing.amount_paise,
         currency: PLANNER_2027_CONFIG.currency,
-        offer_ends_at: PLANNER_2027_CONFIG.offer_ends_at,
-        is_offer_active: isOfferActive,
+        offer_ends_at: livePricing.offer_ends_at,
+        is_offer_active: livePricing.is_offer_active,
         price_includes_gst: PLANNER_2027_CONFIG.price_includes_gst,
         receipt_type: PLANNER_2027_CONFIG.receipt_type,
-        active: PLANNER_2027_CONFIG.active
+        active: Boolean(livePricing.amount_paise && livePricing.amount_paise > 0)
       }), { status: 200, headers: corsHeaders });
     }
 
@@ -6652,7 +6833,17 @@ export default {
         'Vary': 'Origin'
       };
       assertRazorpayTestKey(env);
-    assertNoPreviewFlagOnProduction(env, request);
+      assertNoPreviewFlagOnProduction(env, request);
+
+      if (!isPlanner2027Live(env)) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'PLANNER_WAITLIST_ONLY',
+          status: 'waitlist_only',
+          display_label: PLANNER_2027_CONFIG.waitlist_display_label,
+          error: 'Coming soon, notify me. The 2027 Year Ahead Planner is not open for checkout until its legal disclaimer is approved.'
+        }), { status: 409, headers: corsHeaders });
+      }
 
       const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
       if (!checkFormRateLimit('planner_order_' + clientIp, 10, 600000)) {
@@ -6694,8 +6885,15 @@ export default {
       }
 
       const now = Date.now();
-      const offerEndsAtMs = Date.parse(PLANNER_2027_CONFIG.offer_ends_at);
-      const amountPaise = now < offerEndsAtMs ? PLANNER_2027_CONFIG.offer_price_paise : PLANNER_2027_CONFIG.list_price_paise;
+      const livePricing = resolveLivePlanner2027Price(env, now);
+      const amountPaise = livePricing.amount_paise;
+      if (!amountPaise || amountPaise <= 0) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'PLANNER_PRICE_UNCONFIGURED',
+          error: 'Planner price is not configured on the server.'
+        }), { status: 503, headers: corsHeaders });
+      }
 
       const rzpKeyId = (env.RAZORPAY_KEY_ID || '').trim();
       const rzpSecret = (env.RAZORPAY_KEY_SECRET || '').trim();
@@ -7005,7 +7203,7 @@ export default {
       await logWorkerEvent(env, {
         event: 'payment_verified',
         product_id: 'planner_2027',
-        value_inr: (order.amount_paise || 149900) / 100,
+        value_inr: (order.amount_paise || 0) / 100,
         meta_json: { order_id: order.id, rzp_order_id: rzpOrderId }
       });
       await logWorkerEvent(env, {
@@ -7666,37 +7864,41 @@ export default {
         );
       }
 
+      const basicEffectiveInr = resolveEffectivePackPricePaise('report_basic', env) / 100;
       const skuDefinitions = [
         {
           sku: 'report_basic',
           name: 'Anveil my alignments',
-          page_price_inr: 199,
-          catalog_price_inr: PACK_CATALOG.core_reports.report_basic.price_inr,
-          razorpay_amount_paise: PACK_CATALOG.core_reports.report_basic.amount_paise,
+          page_price_inr: basicEffectiveInr,
+          catalog_price_inr: basicEffectiveInr,
+          razorpay_amount_paise: Math.round(basicEffectiveInr * 100),
           entitlement_type: 'report_entitlement'
         },
         {
           sku: 'report_advanced',
           name: 'Anveil my glowing charms',
-          page_price_inr: 510,
+          page_price_inr: PACK_CATALOG.core_reports.report_advanced.price_inr,
           catalog_price_inr: PACK_CATALOG.core_reports.report_advanced.price_inr,
           razorpay_amount_paise: PACK_CATALOG.core_reports.report_advanced.amount_paise,
+          status: PACK_CATALOG.core_reports.report_advanced.status,
           entitlement_type: 'report_entitlement'
         },
         {
           sku: 'report_premium',
           name: 'Anveil every charm',
-          page_price_inr: 1050,
+          page_price_inr: PACK_CATALOG.core_reports.report_premium.price_inr,
           catalog_price_inr: PACK_CATALOG.core_reports.report_premium.price_inr,
           razorpay_amount_paise: PACK_CATALOG.core_reports.report_premium.amount_paise,
+          status: PACK_CATALOG.core_reports.report_premium.status,
           entitlement_type: 'report_entitlement'
         },
         {
           sku: 'planner_2027',
           name: '2027 Year Ahead Planner',
-          page_price_inr: 1499,
-          catalog_price_inr: 1499,
-          razorpay_amount_paise: 149900,
+          page_price_inr: null,
+          catalog_price_inr: null,
+          razorpay_amount_paise: null,
+          status: 'coming_soon',
           entitlement_type: 'planner_entitlement'
         },
         {
@@ -7711,10 +7913,12 @@ export default {
 
       const skuRows = [];
       for (const item of skuDefinitions) {
-        const priceMatch = (
-          item.page_price_inr === item.catalog_price_inr &&
-          item.page_price_inr * 100 === item.razorpay_amount_paise
-        );
+        const priceMatch = item.page_price_inr === null
+          ? (item.catalog_price_inr === null && item.razorpay_amount_paise === null)
+          : (
+              item.page_price_inr === item.catalog_price_inr &&
+              item.page_price_inr * 100 === item.razorpay_amount_paise
+            );
 
         const sampleEvaluations = [];
         let bannedWordsCleanAll = true;
@@ -8240,6 +8444,70 @@ export default {
       });
     }
 
+    // ── ROUTE: CHARM AI HEALTH CHECK (/api/v1/health/charm) — NEVER ECHOES SECRET OR URL VALUES ──
+    if (url.pathname === '/api/v1/health/charm' && request.method === 'GET') {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin'
+      };
+      const backendUrl = (env && typeof env.CHARM_SERVICE_URL === 'string') ? env.CHARM_SERVICE_URL.trim() : '';
+      const charmSecret = (env && typeof env.CHARM_SERVICE_SECRET === 'string') ? env.CHARM_SERVICE_SECRET.trim() : '';
+      const urlConfigured = Boolean(backendUrl);
+      const secretConfigured = Boolean(charmSecret);
+      if (!urlConfigured || !secretConfigured) {
+        return new Response(JSON.stringify({
+          ok: false,
+          status: 'unconfigured',
+          service: 'charm_ai',
+          env_var: 'CHARM_SERVICE_URL',
+          auth_env_var: 'CHARM_SERVICE_SECRET',
+          backend_url_configured: urlConfigured,
+          service_secret_configured: secretConfigured
+        }), { status: 503, headers: corsHeaders });
+      }
+      if (url.searchParams.get('probe') === '1' && backendUrl !== 'https://preview-service.internal') {
+        try {
+          const probeOpts = { method: 'GET', headers: { 'Accept': 'application/json' } };
+          if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') {
+            probeOpts.signal = AbortSignal.timeout(5000);
+          }
+          const probeRes = await fetch(`${backendUrl.replace(/\/+$/, '')}/api/v1/health/charm`, probeOpts);
+          if (!probeRes.ok) {
+            return new Response(JSON.stringify({
+              ok: false,
+              status: 'upstream_unhealthy',
+              service: 'charm_ai',
+              env_var: 'CHARM_SERVICE_URL',
+              auth_env_var: 'CHARM_SERVICE_SECRET',
+              backend_url_configured: true,
+              service_secret_configured: true,
+              upstream_status: probeRes.status
+            }), { status: 503, headers: corsHeaders });
+          }
+        } catch (_) {
+          return new Response(JSON.stringify({
+            ok: false,
+            status: 'upstream_unreachable',
+            service: 'charm_ai',
+            env_var: 'CHARM_SERVICE_URL',
+            auth_env_var: 'CHARM_SERVICE_SECRET',
+            backend_url_configured: true,
+            service_secret_configured: true
+          }), { status: 503, headers: corsHeaders });
+        }
+      }
+      return new Response(JSON.stringify({
+        ok: true,
+        status: 'ok',
+        service: 'charm_ai',
+        env_var: 'CHARM_SERVICE_URL',
+        auth_env_var: 'CHARM_SERVICE_SECRET',
+        backend_url_configured: true,
+        service_secret_configured: true
+      }), { status: 200, headers: corsHeaders });
+    }
+
     // ── ROUTE: CHARM AI PREDICTION ENGINE (/api/charm/chat & /api/v1/readings/ask) ──
         // ── ROUTE: CHARM AI BALANCE & ENTITLEMENTS (/api/charm/credits) ──
     if (url.pathname === '/api/charm/credits' && request.method === 'GET') {
@@ -8262,6 +8530,7 @@ export default {
           authenticated: true,
           user_id: user.user_id,
           credits_remaining: Math.max(0, bal),
+          daily_free_limit: 3,
           tier: bal > 0 ? 'paid' : 'exhausted'
         }), { status: 200, headers: corsHeaders });
       } else {
@@ -8270,7 +8539,9 @@ export default {
         return new Response(JSON.stringify({
           authenticated: false,
           user_id: null,
+          visitor_id: 'vis_' + visitorInfo.visitorHash.slice(0, 16),
           credits_remaining: remaining,
+          daily_free_limit: 3,
           tier: remaining > 0 ? 'guest' : 'exhausted'
         }), { status: 200, headers: corsHeaders });
       }
@@ -8358,8 +8629,8 @@ export default {
       }
 
       const body = await request.json().catch(() => ({}));
-      const message = (body.message || body.question || 'Is 2026 favorable for my career progression?').trim();
-      if (message.length > 500) {
+      const rawMessage = String(body.message || body.question || '').trim();
+      if (rawMessage.length > 500) {
         return new Response(JSON.stringify({
           success: false,
           code: 'QUERY_TOO_LONG',
@@ -8367,26 +8638,44 @@ export default {
         }), { status: 400, headers: corsHeaders });
       }
 
-      const name = (body.name || body.user_name || 'Seeker').trim();
-      const d = parseInt(body.day, 10) || 28;
-      const m = parseInt(body.month, 10) || 11;
-      const y = parseInt(body.year, 10) || 1981;
+      // Parse birth date without ANY default profile (never 'Seeker', never 15/8/1990 or 28/11/1981)
+      let rawName = String(body.name || body.user_name || '').trim();
+      if (rawName.toLowerCase() === 'seeker' || rawName.toLowerCase() === 'guest_user') {
+        rawName = '';
+      }
+      let d = parseInt(body.day, 10);
+      let m = parseInt(body.month, 10);
+      let y = parseInt(body.year, 10);
+      if ((Number.isNaN(d) || Number.isNaN(m) || Number.isNaN(y)) && typeof body.dob === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.dob.trim())) {
+        const [py, pm, pd] = body.dob.trim().split('-').map(Number);
+        y = py; m = pm; d = pd;
+      }
+      const hasValidDob = Number.isInteger(d) && d >= 1 && d <= 31 &&
+                          Number.isInteger(m) && m >= 1 && m <= 12 &&
+                          Number.isInteger(y) && y >= 1900 && y <= 2100;
 
-      // 4. Identity & Credit Gate
+      // 4. Identity & Credit Gate (Atomic reservation + guaranteed refund on non-ANSWERED outcomes)
       const user = await authenticateUser(request, env);
       const visitorInfo = await getOrCreateVisitorId(request, env);
       if (visitorInfo.isNew) {
         corsHeaders['Set-Cookie'] = `nv_visitor_id=${visitorInfo.visitorId}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`;
       }
 
+      const upgradeOffer = {
+        pack_id: 'charm_single',
+        name: 'Charm AI Starter Pack',
+        descriptor: 'Guided Numerology Q&A Pack, 5 questions',
+        questions_count: 5,
+        price_inr: 199,
+        cta_url: '/pricing/#charm-ai'
+      };
+
       let userReservationId = null;
       let newRemainingCredits = 0;
 
       if (user) {
-        // Authenticated: Ensure lifetime free allowance (carrying over guest usage, max 3)
         await ensureUserFreeAllowance(user.user_id, visitorInfo.visitorHash, env);
 
-        // Reserve-then-refund: Atomically insert -1 row only if SUM(delta) > 0
         const resId = 'crd_res_' + now + '_' + getRandomHex(6);
         let reserved = false;
 
@@ -8423,21 +8712,23 @@ export default {
           return new Response(JSON.stringify({
             success: false,
             code: 'CREDITS_EXHAUSTED',
-            error: 'No consultation questions remaining in your balance. Please recharge your pack.',
-            credits_remaining: 0
+            error: 'You have reached your question limit. Unlock 5 guided questions with the Charm AI Starter Pack (₹199).',
+            credits_remaining: 0,
+            upgrade_offer: upgradeOffer
           }), { status: 402, headers: corsHeaders });
         }
         userReservationId = resId;
         newRemainingCredits = await getUserCreditBalance(user.user_id, env);
       } else {
-        // Guest: Atomic conditional check and increment of lifetime total of 3 free questions
+        // Guest: Atomic conditional check and increment of 3 free questions per day per visitor
         const guestInc = await incrementGuestUsage(visitorInfo.visitorHash, ipHash, env);
         if (!guestInc.success) {
           return new Response(JSON.stringify({
             success: false,
             code: 'FREE_TIER_EXHAUSTED',
-            error: 'You have used your 3 complimentary questions. Please sign in or recharge your pack.',
-            credits_remaining: 0
+            error: 'You have used your 3 free Charm AI questions for today. Unlock 5 more questions with the Charm AI Starter Pack (₹199).',
+            credits_remaining: 0,
+            upgrade_offer: upgradeOffer
           }), { status: 402, headers: corsHeaders });
         }
         newRemainingCredits = Math.max(0, 3 - guestInc.questions_used);
@@ -8448,75 +8739,307 @@ export default {
       const charmSecret = (env && env.CHARM_SERVICE_SECRET || '').trim();
 
       if (!backendUrl) {
-        await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+        const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
         return new Response(JSON.stringify({
           success: false,
           code: 'SERVICE_BACKEND_UNAVAILABLE',
-          error: 'Charm AI consultation backend URL is not configured.'
+          error: 'Charm AI is unavailable right now, no credit was used. Try again.',
+          credits_remaining: restored
         }), { status: 503, headers: corsHeaders });
       }
 
       if (!charmSecret) {
-        await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+        const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
         return new Response(JSON.stringify({
           success: false,
           code: 'SERVICE_AUTH_UNAVAILABLE',
-          error: 'Charm AI consultation service authorization is not configured.'
+          error: 'Charm AI is unavailable right now, no credit was used. Try again.',
+          credits_remaining: restored
         }), { status: 503, headers: corsHeaders });
       }
 
-      // 5. Model Execution with Automatic Refund on Failure
+      if (!rawMessage) {
+        const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'EMPTY_QUERY',
+          error: 'Please enter a question to consult Charm AI. No credit was used.',
+          credits_remaining: restored
+        }), { status: 400, headers: corsHeaders });
+      }
+
+      // 6. Mandatory Date of Birth Gate — Never fabricate a default profile; refund credit immediately
+      if (!hasValidDob) {
+        const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+        return new Response(JSON.stringify({
+          status: 'INSUFFICIENT_EVIDENCE',
+          code: 'DOB_REQUIRED',
+          consensus_status: 'INSUFFICIENT_EVIDENCE',
+          credits_remaining: restored,
+          missing_requirements: {
+            missing_inputs: ['birth_date']
+          },
+          human_friendly_summary: {
+            headline: 'Enter Your Date of Birth First',
+            supported_by_report: 'Charm AI calculates Mulank (Birth Day number), Bhagyank (Life Path number), and Numerology Dasha cycles deterministically from your Date of Birth.'
+          },
+          assistant_message: {
+            text: 'Please enter your **Date of Birth (DD / MM / YYYY)** before asking a question so Charm AI can calculate your Mulank (Birth Day number), Bhagyank (Life Path number), and Personal Year cycle. **No question credit was used.**'
+          },
+          practical_next_steps: [
+            'Enter your birth day, month, and year in the profile bar above.',
+            'Re-send your question once your Date of Birth is set.'
+          ],
+          follow_up_question: 'What is your Date of Birth (DD / MM / YYYY)?'
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      // 7. Topic Classifier & Unsupported-Topic Honesty Gate (No credit used on unsupported topics)
+      function classifyCharmTopic(qText) {
+        const q = String(qText || '').toLowerCase();
+        if (/\b(cancer|diabetes|surgery|tumor|tumour|medical\s+diagnosis|prescribe|medication|dosage|cure\s+my|lottery|jackpot|betting|gamble|gambling|roulette|crypto\s+price|stock\s+tip|nifty\s+tomorrow|share\s+price|when\s+will\s+i\s+die|death\s+date|lifespan|court\s+verdict|win\s+the\s+lawsuit|criminal\s+case)\b/i.test(q)) {
+          return 'unsupported';
+        }
+        if (/\b(marry|marriage|wedding|spouse|husband|wife|engaged|engagement|matrimony|shaadi|nikah|rishta)\b/i.test(q)) {
+          return 'marriage';
+        }
+        if (/\b(love|romance|romantic|boyfriend|girlfriend|crush|dating|relationship|partner|breakup|affection|heartbreak)\b/i.test(q)) {
+          return 'love';
+        }
+        if (/\b(child|children|baby|kids|parenting|son|daughter|conceive|family\s+planning|newborn|schooling\s+for\s+my)\b/i.test(q)) {
+          return 'children';
+        }
+        if (/\b(property|house|home|flat|apartment|plot|land|real\s+estate|vastu|door\s+number|house\s+number|rent|relocat|buy\s+a\s+home)\b/i.test(q)) {
+          return 'property';
+        }
+        if (/\b(routine|sleep|habit|daily\s+rhythm|energy\s+slump|burnout|fatigue|discipline|schedule|focus\s+routine|morning\s+routine|wellness|stress\s+pacing)\b/i.test(q)) {
+          return 'health_of_routine';
+        }
+        if (/\b(money|wealth|finance|financial|income|savings|debt|loan|cashflow|cash\s+flow|revenue|budget|salary\s+hike|expenses)\b/i.test(q)) {
+          return 'money';
+        }
+        if (/\b(career|job|promotion|profession|work|role|office|switch\s+jobs|interview|startup|company|leadership|business|client)\b/i.test(q)) {
+          return 'career';
+        }
+        return 'general';
+      }
+
+      const detectedTopic = classifyCharmTopic(rawMessage);
+      if (detectedTopic === 'unsupported') {
+        const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+        return new Response(JSON.stringify({
+          status: 'UNSUPPORTED_TOPIC',
+          code: 'UNSUPPORTED_TOPIC',
+          topic: 'unsupported',
+          consensus_status: 'UNSUPPORTED_TOPIC',
+          credits_remaining: restored,
+          missing_requirements: { missing_inputs: [] },
+          human_friendly_summary: {
+            headline: 'Topic Outside Numerology Consultation Scope',
+            supported_by_report: 'Charm AI supports career, love, marriage, financial pacing, daily routine habits, children/family dynamics, property/Vastu numbers, and Personal Year timing.'
+          },
+          assistant_message: {
+            text: 'Charm AI does not provide medical diagnoses or treatments, stock/lottery/betting predictions, court verdicts, or lifespan forecasts. **No question credit was used.** You can ask about career transitions, relationship or marriage compatibility, financial discipline cycles, daily routine pacing, family harmony, or property numbers.'
+          },
+          practical_next_steps: [
+            'Consult a qualified medical, legal, or licensed financial professional for clinical, legal, or market decisions.',
+            'Ask a question focused on personal timing cycles, habits, or numerological compatibility if helpful.'
+          ],
+          follow_up_question: 'Would you like to explore your Personal Year timing for career, marriage, finances, or daily routine instead?'
+        }), { status: 200, headers: corsHeaders });
+      }
+
+      // 8. Upstream Charm AI Service Call (when CHARM_SERVICE_URL points to a real service)
+      const useRealUpstream = backendUrl !== 'https://preview-service.internal' || (env && env.CHARM_FORCE_HTTP_UPSTREAM === 'true');
+      if (useRealUpstream) {
+        try {
+          if (body.__force_upstream_503__ && isTestEnv) {
+            throw new Error('SIMULATED_UPSTREAM_503');
+          }
+          memoryStore.charmModelInvocations = (memoryStore.charmModelInvocations || 0) + 1;
+          const upstreamPayload = {
+            message: rawMessage,
+            user_id: user ? user.user_id : ('vis_' + visitorInfo.visitorHash.slice(0, 24)),
+            user_name: rawName || null,
+            day: d,
+            month: m,
+            year: y,
+            birth_time: body.birth_time || body.birthTime || null,
+            birth_place: body.birth_place || body.birthPlace || null
+          };
+          const upstreamResp = await callCharmBackendService(upstreamPayload, env);
+          if (!upstreamResp || !upstreamResp.ok) {
+            const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+            return new Response(JSON.stringify({
+              success: false,
+              code: 'CHARM_UNAVAILABLE',
+              error: 'Charm AI is unavailable right now, no credit was used. Try again.',
+              credits_remaining: restored
+            }), { status: 503, headers: corsHeaders });
+          }
+          const upstreamData = await upstreamResp.json();
+          const upStatus = String(upstreamData.status || '').toUpperCase();
+          if (upStatus && upStatus !== 'ANSWERED' && upStatus !== 'SUCCESS') {
+            newRemainingCredits = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+          }
+          const normalizedFollowUp = upstreamData.follow_up_question || upstreamData.follow_up_prompt || '';
+          const merged = Object.assign({}, upstreamData, {
+            credits_remaining: newRemainingCredits,
+            follow_up_question: normalizedFollowUp
+          });
+          delete merged.follow_up_prompt;
+          return new Response(JSON.stringify(merged), { status: 200, headers: corsHeaders });
+        } catch (upErr) {
+          const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'CHARM_UNAVAILABLE',
+            error: 'Charm AI is unavailable right now, no credit was used. Try again.',
+            credits_remaining: restored
+          }), { status: 503, headers: corsHeaders });
+        }
+      }
+
+      // 9. Deterministic Topic-Routed Local Consultation (Test/Sandbox Preview-Internal Harness)
       let assistantText = '';
       const traceId = 'NV-TRC-' + getRandomHex(6).toUpperCase();
       const predId = 'pred_' + Date.now();
 
       try {
+        if (body.__force_upstream_503__ && isTestEnv) {
+          const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'CHARM_UNAVAILABLE',
+            error: 'Charm AI is unavailable right now, no credit was used. Try again.',
+            credits_remaining: restored
+          }), { status: 503, headers: corsHeaders });
+        }
         if (body.__force_failure__ && isTestEnv) {
           throw new Error('Forced model failure for test verification');
         }
         memoryStore.charmModelInvocations = (memoryStore.charmModelInvocations || 0) + 1;
-        // Deterministic reductions
+
         function red(n) {
           while (n > 9) {
             n = String(n).split('').reduce((a, b) => a + parseInt(b, 10), 0);
           }
-          return n;
+          return n === 0 ? 9 : n;
         }
         const driver = red(d);
-        const conductor = red(d + m + y);
+        const conductor = red(String(d).padStart(2, '0').split('').concat(String(m).padStart(2, '0').split(''), String(y).padStart(4, '0').split('')).reduce((a, b) => a + parseInt(b, 10), 0));
         const personalYear = red(driver + red(m) + red(new Date().getFullYear()));
+        const greetingLine = rawName ? `for ${rawName}` : `for DOB ${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}/${y}`;
 
         const planets = {
-          1: 'Sun (Surya) — Sovereign Leadership & High Vitality',
-          2: 'Moon (Chandra) — Deep Intuition & Diplomatic Harmony',
-          3: 'Jupiter (Brihaspati) — Wisdom, Advisory & Expansion',
-          4: 'Rahu (North Node) — Strategic Innovation & Breakthrough Execution',
-          5: 'Mercury (Budh) — Analytical Speed, Commerce & Negotiation',
-          6: 'Venus (Shukra) — Creative Refinement, Harmony & Abundance',
-          7: 'Ketu (South Node) — Technical Depth, Research & Intuition',
-          8: 'Saturn (Shani) — Structural Mastery, Discipline & Enduring Wealth',
-          9: 'Mars (Mangal) — Direct Courage, Initiative & Decisive Action'
+          1: 'Sun (Surya) — Sovereign Initiative & Clarity',
+          2: 'Moon (Chandra) — Emotional Attunement & Diplomacy',
+          3: 'Jupiter (Brihaspati) — Advisory Wisdom & Growth',
+          4: 'Rahu (North Node) — Structured Execution & Systems',
+          5: 'Mercury (Budh) — Adaptable Communication & Commerce',
+          6: 'Venus (Shukra) — Domestic Harmony & Commitment',
+          7: 'Ketu (South Node) — Reflective Depth & Research',
+          8: 'Saturn (Shani) — Long-Term Discipline & Stewardship',
+          9: 'Mars (Mangal) — Decisive Courage & Completion'
         };
 
-        assistantText = `### ✦ Classical Astrological & Numerological Reading for ${name}
+        const topicTemplates = {
+          marriage: {
+            eventType: 'MARRIAGE_TIMING_AND_COMMITMENT',
+            headline: `Marriage & Long-Term Commitment Pacing (Personal Year ${personalYear})`,
+            focusBody: `Your **Mulank (Birth Day number) ${driver}** and **Bhagyank (Life Path number) ${conductor}** shape how you evaluate trust, household responsibility, and long-term marital partnership. In **Personal Year ${personalYear}**, prioritize transparent family dialogue, shared domestic values, and steady emotional pacing over rushed timelines.`,
+            steps: [
+              `Review mutual expectations on family roles, finances, and living arrangements during Personal Year ${personalYear}.`,
+              `Compare your Mulank ${driver} and Bhagyank ${conductor} communication style with your partner's birth numbers before finalizing ceremony dates.`
+            ],
+            followUp: 'Would you like to check compatibility with your partner’s Date of Birth or review a specific quarter for marriage discussions?'
+          },
+          love: {
+            eventType: 'LOVE_AND_RELATIONAL_HARMONY',
+            headline: `Love & Relationship Emotional Alignment (Personal Year ${personalYear})`,
+            focusBody: `With **Mulank (Birth Day number) ${driver}** and **Bhagyank (Life Path number) ${conductor}**, emotional trust deepens when affection is matched by consistent communication. **Personal Year ${personalYear}** highlights honest listening and unhurried emotional clarity in romantic bonds.`,
+            steps: [
+              `Express emotional expectations clearly rather than assuming unspoken understanding in Personal Year ${personalYear}.`,
+              `Balance Mulank ${driver} independence with calm, receptive dialogue during sensitive relationship conversations.`
+            ],
+            followUp: 'Would you like to explore emotional compatibility using your partner’s Date of Birth or focus on communication pacing this quarter?'
+          },
+          career: {
+            eventType: 'CAREER_PROGRESSION_AND_ELEVATION',
+            headline: `Career & Role Progression Window (Personal Year ${personalYear})`,
+            focusBody: `Your **Mulank (Birth Day number) ${driver}** (${planets[driver]}) and **Bhagyank (Life Path number) ${conductor}** (${planets[conductor]}) govern your professional execution style. Operating in **Personal Year ${personalYear}**, structured preparation, documented milestones, and deliberate role positioning are favored.`,
+            steps: [
+              `Align major role discussions, appraisals, or project launches with Personal Year ${personalYear} quarterly milestones.`,
+              `Keep written clarity on scope and deliverables before committing to new professional responsibilities.`
+            ],
+            followUp: 'Would you like to narrow this down to a job switch vs. internal role growth over the next 6 months?'
+          },
+          money: {
+            eventType: 'FINANCIAL_DISCIPLINE_AND_CASHFLOW',
+            headline: `Financial Pacing & Cash-Flow Discipline (Personal Year ${personalYear})`,
+            focusBody: `Your **Mulank (Birth Day number) ${driver}** and **Bhagyank (Life Path number) ${conductor}** indicate strongest financial stability when liquidity buffers and written budgets precede new commitments. **Personal Year ${personalYear}** favors disciplined savings cadence and careful contract review.`,
+            steps: [
+              `Audit recurring outflows and maintain a clear reserve buffer throughout Personal Year ${personalYear}.`,
+              `Separate long-term capital commitments from impulsive short-term expenses.`
+            ],
+            followUp: 'Would you like to focus on savings structure, debt reduction pacing, or commercial contract timing next?'
+          },
+          health_of_routine: {
+            eventType: 'DAILY_ROUTINE_AND_ENERGY_RHYTHM',
+            headline: `Daily Routine, Rest & Energy Cadence (Personal Year ${personalYear})`,
+            focusBody: `From a non-medical lifestyle perspective, **Mulank (Birth Day number) ${driver}** and **Bhagyank (Life Path number) ${conductor}** respond best to consistent sleep-wake anchors and structured mental rest. In **Personal Year ${personalYear}**, steady daily rhythm prevents cognitive fatigue.`,
+            steps: [
+              `Anchor a fixed morning start window and consistent wind-down hour across Personal Year ${personalYear}.`,
+              `Schedule short screen-free breaks to balance Mulank ${driver} mental intensity.`
+            ],
+            followUp: 'Would you like to align your study/work block hours or workspace Vastu direction with your Kua number?'
+          },
+          children: {
+            eventType: 'CHILDREN_AND_FAMILY_NURTURING',
+            headline: `Children, Parenting & Family Rhythm (Personal Year ${personalYear})`,
+            focusBody: `Your **Mulank (Birth Day number) ${driver}** and **Bhagyank (Life Path number) ${conductor}** shape a nurturing yet structured family environment. **Personal Year ${personalYear}** supports patient routines, supportive communication with children, and calm household planning.`,
+            steps: [
+              `Create predictable daily study and play rhythms at home during Personal Year ${personalYear}.`,
+              `If naming or reviewing a child’s chart, share the child’s Date of Birth for a dedicated Mulank and Lo Shu check.`
+            ],
+            followUp: 'Would you like to evaluate a child’s Date of Birth or explore baby-name Chaldean harmony?'
+          },
+          property: {
+            eventType: 'PROPERTY_AND_VASTU_ALIGNMENT',
+            headline: `Property, Home & Vastu Number Alignment (Personal Year ${personalYear})`,
+            focusBody: `With **Mulank (Birth Day number) ${driver}** and **Bhagyank (Life Path number) ${conductor}**, residential and property decisions benefit from checking Earth-plane stability (2-5-8) alongside your unit or house-number sum. In **Personal Year ${personalYear}**, verify documentation thoroughly before signing.`,
+            steps: [
+              `Reduce your flat, plot, or house number to a single digit and compare its compatibility with Mulank ${driver} and Bhagyank ${conductor}.`,
+              `Keep primary work or study seating oriented cleanly with uncluttered North-East and East zones.`
+            ],
+            followUp: 'Do you have a specific house/flat number or facing direction you would like checked against your birth numbers?'
+          },
+          general: {
+            eventType: 'PERSONAL_YEAR_LIFE_ALIGNMENT',
+            headline: `Personal Year ${personalYear} Numerology Overview (Mulank ${driver} · Bhagyank ${conductor})`,
+            focusBody: `Your **Mulank (Birth Day number) ${driver}** (${planets[driver]}) sets your daily approach, while **Bhagyank (Life Path number) ${conductor}** (${planets[conductor]}) guides your broader life arc. **Personal Year ${personalYear}** calls for steady prioritization aligned with your core strengths.`,
+            steps: [
+              `Focus on one primary priority per quarter during Personal Year ${personalYear}.`,
+              `Use your Mulank ${driver} strengths deliberately while pacing major commitments cleanly.`
+            ],
+            followUp: 'Which life area would you like to explore next — career, marriage, love, finances, routine habits, children, or property?'
+          }
+        };
 
-**Query Analysis:** "${message}"
+        const tpl = topicTemplates[detectedTopic] || topicTemplates.general;
+        const buildCleanReading = () => `### Numerology Synthesis ${greetingLine}
 
-**Core Planetary Architecture:**
-- **Driver (Mulank ${driver}):** Ruled by ${planets[driver] || 'Sun'}. You carry an innate capacity for visionary independence and decisive strategic focus.
-- **Conductor (Bhagyank ${conductor}):** Governed by ${planets[conductor] || 'Rahu'}. Your overarching life trajectory unfolds through systematic building, technical foresight, and calculated pivots.
-- **Current Cycle:** Operating in **Personal Year ${personalYear}** (Foundation & Structural Consolidation).
+**Question:** "${rawMessage}"
 
-**Timing Window & Strategic Corridors:**
-- **Active Execution Window:** The planetary dasha indicates favorable momentum building from early Q2 through late Q3 2026. This period strongly supports career elevation, commercial negotiations, and institutional positioning.
-- **Vigilance Corridors:** Maintain clear written contracts during transit inflection points; avoid impulsive verbal commitments when Mars transits neutral sectors.
+**Deterministic Core Indicators:**
+- **Mulank (Birth Day number): ${driver}** — ${planets[driver] || 'Sun (Surya)'}
+- **Bhagyank (Life Path number): ${conductor}** — ${planets[conductor] || 'Rahu'}
+- **Active Cycle:** **Personal Year ${personalYear}**
 
-**Governed Harmonizers & Remedial Actions:**
-1. **Directional Focus:** Place your primary workstation facing **East or South-East** to maximize mental clarity and executive vitality.
-2. **Harmonizing Colors:** Integrate **Gold, Warm Amber, and Forest Green** into high-stakes meetings and formal presentations.
-3. **Daily Alignment:** Begin high-priority strategic initiatives during morning hours (08:00 AM – 10:30 AM) to capitalize on dominant Solar and Mercurial frequencies.`;
+**Topic Assessment (${detectedTopic.replace(/_/g, ' ')}):**
+${tpl.focusBody}`;
 
-        // Banned-term detection -> single retry with stricter instruction -> safe fallback sentence (never delete words):
+        assistantText = buildCleanReading();
         if (body.__simulated_text__ && isTestEnv) {
           assistantText = body.__simulated_text__;
         }
@@ -8524,69 +9047,54 @@ export default {
           if (body.__simulated_retry_text__ && isTestEnv) {
             return body.__simulated_retry_text__;
           }
-          return `### ✦ Classical Astrological & Numerological Reading for ${name}
-
-**Query Analysis:** "${message}"
-
-**Core Planetary Architecture:**
-- **Driver (Mulank ${driver}):** Ruled by ${planets[driver] || 'Sun'}. You carry an innate capacity for visionary independence and decisive strategic focus.
-- **Conductor (Bhagyank ${conductor}):** Governed by ${planets[conductor] || 'Rahu'}. Your overarching life trajectory unfolds through systematic building, technical foresight, and calculated pivots.
-- **Current Cycle:** Operating in **Personal Year ${personalYear}** (Foundation & Structural Consolidation).
-
-**Timing Window & Strategic Corridors:**
-- **Active Execution Window:** The planetary dasha indicates favorable momentum building from early Q2 through late Q3 2026. This period strongly supports career elevation, commercial negotiations, and institutional positioning.
-- **Vigilance Corridors:** Maintain clear written contracts during transit inflection points; avoid impulsive verbal commitments when Mars transits neutral sectors.
-
-**Governed Harmonizers & Remedial Actions:**
-1. **Directional Focus:** Place your primary workstation facing **East or South-East** to maximize mental clarity and executive vitality.
-2. **Harmonizing Colors:** Integrate **Gold, Warm Amber, and Forest Green** into high-stakes meetings and formal presentations.
-3. **Daily Alignment:** Begin high-priority strategic initiatives during morning hours (08:00 AM – 10:30 AM) to capitalize on dominant Solar and Mercurial frequencies.`;
+          return buildCleanReading();
         });
 
-        // If the regenerated reply still hits a banned term and CHARM_SAFE_FALLBACK_TEXT is returned,
-        // automatically refund the reserved credit so the seeker is never charged for an unfulfilled fallback.
         if (assistantText === CHARM_SAFE_FALLBACK_TEXT) {
           newRemainingCredits = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
         }
+
+        const hasFullAstroInputs = Boolean((body.birth_time || body.birthTime) && (body.birth_place || body.birthPlace));
+        const consensusStatus = hasFullAstroInputs ? 'VERIFIED_SUPPORTED' : 'NUMEROLOGY_PRIMARY_CORROBORATED';
+
+        return new Response(JSON.stringify({
+          status: 'ANSWERED',
+          topic: detectedTopic,
+          credits_remaining: newRemainingCredits,
+          consensus_status: consensusStatus,
+          audit_trace_id: traceId,
+          prediction_id: predId,
+          career_event_assessment: {
+            event_type: tpl.eventType,
+            direction: 'SUPPORTED'
+          },
+          assistant_message: {
+            text: assistantText
+          },
+          human_friendly_summary: {
+            headline: tpl.headline,
+            supported_by_report: `Mulank (Birth Day number) ${driver} and Bhagyank (Life Path number) ${conductor} evaluated within Personal Year ${personalYear}.`
+          },
+          numerology_dasha_result: {
+            active_window: `Personal Year ${personalYear} Active Cycle`,
+            mahadasha_planet: (planets[driver] || 'Sun').split(' ')[0],
+            antardasha_planet: (planets[conductor] || 'Mercury').split(' ')[0]
+          },
+          missing_requirements: {
+            missing_inputs: hasFullAstroInputs ? [] : ['birth_time', 'birth_place']
+          },
+          practical_next_steps: tpl.steps,
+          follow_up_question: tpl.followUp
+        }), { status: 200, headers: corsHeaders });
       } catch (genErr) {
-        // Automatic refund if execution failed
-        await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+        const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
         return new Response(JSON.stringify({
           success: false,
           code: 'MODEL_GENERATION_FAILED',
-          error: 'Unable to complete consultation analysis. Your credit has been safely refunded.'
+          error: 'Unable to complete consultation analysis. Your credit has been safely refunded.',
+          credits_remaining: restored
         }), { status: 500, headers: corsHeaders });
       }
-
-      return new Response(JSON.stringify({
-        status: 'success',
-        credits_remaining: newRemainingCredits,
-        consensus_status: 'VERIFIED_SUPPORTED',
-        audit_trace_id: traceId,
-        prediction_id: predId,
-        career_event_assessment: {
-          event_type: 'CAREER_PROGRESSION_AND_ELEVATION',
-          direction: 'FAVORABLE'
-        },
-        assistant_message: {
-          text: assistantText
-        },
-        human_friendly_summary: {
-          headline: 'High-Impact Career Momentum Identified',
-          supported_by_report: 'Driver 1 and Conductor 4 synergize to unlock executive breakthroughs in Personal Year 4.'
-        },
-        numerology_dasha_result: {
-          active_window: '2026 Q2 – 2026 Q4 (Peak Consolidation Corridor)',
-          mahadasha_planet: 'Venus',
-          antardasha_planet: 'Mercury'
-        },
-        missing_requirements: [],
-        practical_next_steps: [
-          'Position key professional negotiations within the upcoming Q2/Q3 dasha corridor.',
-          'Align primary decisions with your core driver frequencies.'
-        ],
-        follow_up_prompt: 'Would you like to examine your specific business partnership synastry or evaluate an optimal date for contract execution?'
-      }), { status: 200, headers: corsHeaders });
     }
 
     // ── ROUTE: PDF REPORT DISPATCH (/api/v1/reports/generate-pdf) ──

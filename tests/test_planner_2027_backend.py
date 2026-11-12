@@ -52,24 +52,38 @@ class TestPlanner2027Backend(unittest.TestCase):
     # 1. PRICING & SERVER AUTHORITY TESTS
     # ─────────────────────────────────────────────────────────────────
     def test_pricing_config_and_dates(self):
-        """Asserts pricing constants and strict server-side offer cutoff."""
+        """Asserts waitlist-only default (zero prices) and post-approval server-side offer cutoff."""
         cfg = load_planner_2027_config()
-        self.assertEqual(cfg["list_price_paise"], 199900)
-        self.assertEqual(cfg["offer_price_paise"], 149900)
+        self.assertFalse(cfg["active"])
+        self.assertEqual(cfg["status"], "waitlist")
+        self.assertIsNone(cfg["list_price_paise"])
+        self.assertIsNone(cfg["offer_price_paise"])
+        self.assertIsNone(cfg["offer_ends_at"])
         self.assertEqual(cfg["currency"], "INR")
         self.assertFalse(cfg["price_includes_gst"])
         self.assertEqual(cfg["receipt_type"], "Payment receipt")
-        self.assertEqual(cfg["offer_ends_at"], "2027-01-31T23:59:00+05:30")
 
-        # Before cutoff: must be offer price 149,900 paise (₹1,499)
+        default_price = get_planner_2027_price()
+        self.assertFalse(default_price["active"])
+        self.assertTrue(default_price["waitlist_only"])
+        self.assertIsNone(default_price["amount_paise"])
+
+        # Post-approval live configuration check (when PLANNER_2027_LIVE + prices configured)
+        live_cfg = {
+            **cfg,
+            "active": True,
+            "status": "active",
+            "list_price_paise": 199900,
+            "offer_price_paise": 149900,
+            "offer_ends_at": "2027-01-31T23:59:00+05:30",
+        }
         dt_before = datetime.datetime(2027, 1, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
-        price_before = get_planner_2027_price(now=dt_before)
+        price_before = get_planner_2027_price(now=dt_before, cfg_override=live_cfg)
         self.assertEqual(price_before["amount_paise"], 149900)
         self.assertTrue(price_before["is_offer_active"])
 
-        # After cutoff: must be list price 199,900 paise (₹1,999)
         dt_after = datetime.datetime(2027, 2, 5, 12, 0, 0, tzinfo=datetime.timezone.utc)
-        price_after = get_planner_2027_price(now=dt_after)
+        price_after = get_planner_2027_price(now=dt_after, cfg_override=live_cfg)
         self.assertEqual(price_after["amount_paise"], 199900)
         self.assertFalse(price_after["is_offer_active"])
 
@@ -255,18 +269,21 @@ class TestPlanner2027Backend(unittest.TestCase):
                             )
 
     def test_no_tax_claims_and_pricing_only(self):
-        """Asserts year_2027.html does not claim statutory GST or payment receipt, showing price only."""
+        """Asserts year_2027.html is waitlist-only with zero GST claims, zero prices, and zero undated offers."""
         html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
         with open(html_path, "r", encoding="utf-8") as hf:
             html = hf.read()
 
         self.assertNotIn("Excludes statutory GST", html)
         self.assertNotIn("statutory GST", html)
-        self.assertIn("Offer ends 31 January 2027", html)
-        self.assertIn("₹1,499", html)
+        self.assertIn("Coming soon, notify me", html)
+        self.assertNotIn("Offer ends 31 January 2027", html)
+        self.assertNotIn("₹1,499", html)
+        self.assertNotIn("₹1,999", html)
+        self.assertNotIn("Early-Access Offer", html)
 
     def test_seo_meta_and_structured_data(self):
-        """Asserts SEO title (50-60 chars), description (140-160 chars), canonical, OG, Twitter & JSON-LD."""
+        """Asserts SEO title (50-60 chars), description (140-160 chars), canonical, OG, Twitter & waitlist JSON-LD."""
         import re
         html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
         with open(html_path, "r", encoding="utf-8") as hf:
@@ -291,15 +308,14 @@ class TestPlanner2027Backend(unittest.TestCase):
         self.assertIn('<meta property="og:title"', html)
         self.assertIn('<meta name="twitter:card"', html)
 
-        # JSON-LD Product & Offer
+        # JSON-LD Product WITHOUT Offer/price while waitlist-only
         jsonld_m = re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.DOTALL)
         self.assertIsNotNone(jsonld_m)
         ld = json.loads(jsonld_m.group(1))
         self.assertEqual(ld["@type"], "Product")
         self.assertEqual(ld["name"], "2027 Year Ahead Planner")
-        self.assertEqual(ld["offers"]["price"], "1499")
-        self.assertEqual(ld["offers"]["priceCurrency"], "INR")
-        self.assertEqual(ld["offers"]["priceValidUntil"], "2027-01-31")
+        self.assertNotIn("offers", ld, "Waitlist Product MUST NOT contain offers")
+        self.assertNotIn("price", ld, "Waitlist Product MUST NOT contain price")
         self.assertNotIn("aggregateRating", ld, "Zero review/rating markup allowed")
         self.assertNotIn("review", ld, "Zero review/rating markup allowed")
 
@@ -366,34 +382,46 @@ class TestPlanner2027Backend(unittest.TestCase):
         self.assertIn(expected_phrase, desc, f"Meta description must contain '{expected_phrase}', got: '{desc}'")
 
     def test_jsonld_build_time_pricing_derivation(self):
-        """Asserts JSON-LD Product & Offer data correctly transitions at offer cutoff."""
+        """Asserts JSON-LD omits Offer while waitlist-only, and emits Offer when explicitly active."""
         from app.config.planner_2027_jsonld import generate_planner_2027_jsonld
         cfg = load_planner_2027_config()
 
+        # Default waitlist state: strictly zero offers/price
+        ld_waitlist = generate_planner_2027_jsonld(cfg)
+        self.assertNotIn("offers", ld_waitlist)
+        self.assertNotIn("price", ld_waitlist)
+
+        live_cfg = {
+            **cfg,
+            "active": True,
+            "status": "active",
+            "list_price_paise": 199900,
+            "offer_price_paise": 149900,
+            "offer_ends_at": "2027-01-31T23:59:00+05:30",
+        }
+
         # Before offer cutoff: ₹1499
         dt_before = datetime.datetime(2027, 1, 15, 12, 0, 0, tzinfo=datetime.timezone.utc)
-        ld_before = generate_planner_2027_jsonld(cfg, now=dt_before)
+        ld_before = generate_planner_2027_jsonld(live_cfg, now=dt_before)
         self.assertEqual(ld_before["offers"]["price"], "1499")
         self.assertEqual(ld_before["offers"]["priceValidUntil"], "2027-01-31")
         self.assertEqual(ld_before["offers"]["availability"], "https://schema.org/InStock")
 
         # After offer cutoff: ₹1999
         dt_after = datetime.datetime(2027, 2, 5, 12, 0, 0, tzinfo=datetime.timezone.utc)
-        ld_after = generate_planner_2027_jsonld(cfg, now=dt_after)
+        ld_after = generate_planner_2027_jsonld(live_cfg, now=dt_after)
         self.assertEqual(ld_after["offers"]["price"], "1999")
         self.assertEqual(ld_after["offers"]["priceValidUntil"], "2027-12-31")
         self.assertEqual(ld_after["offers"]["availability"], "https://schema.org/InStock")
 
     def test_price_offer_note_class_renamed(self):
-        """Asserts .price-tax-note is renamed to .price-offer-note in CSS and markup."""
+        """Asserts .price-tax-note does not exist in year_2027.html."""
         html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
         with open(html_path, "r", encoding="utf-8") as hf:
             html = hf.read()
 
         self.assertNotIn(".price-tax-note", html)
         self.assertNotIn('class="price-tax-note"', html)
-        self.assertIn(".price-offer-note", html)
-        self.assertIn('class="price-offer-note"', html)
 
     def test_preview_flag_production_refusal_and_banner(self):
         """Asserts PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW refuses production and shows PREVIEW ONLY banner."""
@@ -446,18 +474,14 @@ class TestPlanner2027Backend(unittest.TestCase):
 
 
     def test_dynamic_pricing_post_cutoff_client_state(self):
-        """Asserts year_2027.html JS contains logic to hide strike-through and offer note after cutoff."""
+        """Asserts year_2027.html wires DPDP waitlist submission for planner_2027 without checkout pricing."""
         html_path = os.path.join(_ROOT, "app", "static", "year_2027.html")
         with open(html_path, "r", encoding="utf-8") as hf:
             html = hf.read()
 
-        self.assertIn("initPricing()", html)
-        self.assertIn("heroPriceOriginal.style.display = 'none'", html)
-        self.assertIn("heroOfferNote.style.display = 'none'", html)
-        self.assertIn("checkoutPriceOriginal.style.display = 'none'", html)
-        self.assertIn('id="heroPriceCurrent"', html)
-        self.assertIn('id="heroPriceOriginal"', html)
-        self.assertIn('id="heroOfferNote"', html)
+        self.assertIn("/api/v1/waitlist/notify-me", html)
+        self.assertIn("planner_2027", html)
+        self.assertIn("Coming soon, notify me", html)
 
 
 if __name__ == "__main__":

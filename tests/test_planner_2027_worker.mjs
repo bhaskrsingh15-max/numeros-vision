@@ -105,9 +105,46 @@ async function runWorkerTestSuite() {
     console.log('  ✓ Preview flag strictly guarded to ENVIRONMENT == "preview"');
   }
 
-  // 2. Pricing endpoint
+  // 2. Pricing & order endpoints: Waitlist-only default + post-approval live env
+  const defaultWaitlistEnv = { ...baseEnv };
   {
-    console.log('[TEST 2] Testing GET /api/planner-2027/price...');
+    console.log('[TEST 2A] Testing default waitlist-only state on /price and 409 block on /order...');
+    const priceReq = new Request('http://localhost/api/planner-2027/price', {
+      method: 'GET',
+      headers: { 'Origin': 'http://localhost' }
+    });
+    const priceRes = await worker.fetch(priceReq, defaultWaitlistEnv, {});
+    assert.strictEqual(priceRes.status, 200);
+    const priceData = await priceRes.json();
+    assert.strictEqual(priceData.active, false);
+    assert.strictEqual(priceData.waitlist_only, true);
+    assert.strictEqual(priceData.amount_paise, null);
+    assert.strictEqual(priceData.list, null);
+    assert.strictEqual(priceData.offer, null);
+
+    const blockedOrderReq = new Request('http://localhost/api/planner-2027/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Origin': 'http://localhost', 'CF-Connecting-IP': '10.0.0.99' },
+      body: JSON.stringify({ name: 'Arun Sharma', dob: '1988-04-14', email: 'test@example.com', consent: true })
+    });
+    const blockedRes = await worker.fetch(blockedOrderReq, defaultWaitlistEnv, {});
+    assert.strictEqual(blockedRes.status, 409);
+    const blockedData = await blockedRes.json();
+    assert.strictEqual(blockedData.code, 'PLANNER_WAITLIST_ONLY');
+    console.log('  ✓ Default waitlist-only pricing (null) and 409 order block verified');
+  }
+
+  // Enable post-approval live Planner env for downstream payment/tamper/concurrency tests
+  Object.assign(baseEnv, {
+    PLANNER_2027_LIVE: 'true',
+    NV_PLANNER_2027_REGULAR_PAISE: '199900',
+    NV_PLANNER_2027_LAUNCH_PAISE: '149900',
+    NV_LAUNCH_PLANNER_2027_STARTS_AT: '2026-01-01T00:00:00Z',
+    NV_LAUNCH_PLANNER_2027_ENDS_AT: '2027-01-31T23:59:00+05:30'
+  });
+
+  {
+    console.log('[TEST 2B] Testing post-approval GET /api/planner-2027/price when PLANNER_2027_LIVE=true...');
     const req = new Request('http://localhost/api/planner-2027/price', {
       method: 'GET',
       headers: { 'Origin': 'http://localhost' }
@@ -122,7 +159,7 @@ async function runWorkerTestSuite() {
     assert.strictEqual(data.price_includes_gst, false);
     assert.strictEqual(data.receipt_type, 'Payment receipt');
     assert.strictEqual(data.active, true);
-    console.log('  ✓ Pricing endpoint verified');
+    console.log('  ✓ Post-approval pricing endpoint verified');
   }
 
   // 3. Mandatory DPDP consent

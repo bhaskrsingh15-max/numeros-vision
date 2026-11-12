@@ -59,8 +59,8 @@ def check_and_meter_usage(user_id: str, estimated_tokens: int, plan: str = "free
     if plan in ("premium", "pro") or (plan == "plus" and user_meter["plan"] in ("free", "basic")):
         user_meter["plan"] = plan
 
-    # Test / diagnostic IDs or unmetered passes have expanded limits for workable validation
-    if user_id.startswith("test_") or user_id.startswith("perf_") or user_id in ("guest_user", "tester"):
+    # Test / diagnostic IDs have expanded limits for automated test suites only (never guest visitors)
+    if user_id.startswith("test_") or user_id.startswith("perf_") or user_id == "tester":
         return True
 
     allowed_limit = PLAN_TOKEN_LIMITS.get(user_meter["plan"], PLAN_TOKEN_LIMITS["free"])

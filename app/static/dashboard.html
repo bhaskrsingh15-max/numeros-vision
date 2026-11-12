@@ -446,7 +446,7 @@
       <nav class="nv-nav-menu" id="nvNavMenu">
         <a href="/" class="nv-nav-item">Home</a>
         <a href="/pricing/" class="nv-nav-item">Pricing</a>
-        <a href="/ai-consultation/" class="nv-nav-item">Charm AI</a>
+        <a href="/charm-ai/chat/" class="nv-nav-item">Charm AI</a>
         <a href="/contact/" class="nv-nav-item">Contact</a>
         <a href="/dashboard/" class="nv-nav-item active">My Dashboard</a>
       </nav>
@@ -515,23 +515,23 @@
         </span>
       </div>
       <p class="dash-sub">
-        Deterministic 3×3 elemental grid derived from your locked Date of Birth. Digits present are active; missing digits indicate karmic void areas analyzed in depth in full dossiers.
+        Deterministic 3×3 Lo Shu Grid (Lo Shu Square) derived from your locked Date of Birth. Present digits are active; Missing numbers (Open grid cells) are analyzed in full in expanded reports.
       </p>
 
-      <!-- Numerical Vectors (Driver, Conductor, Kua, Personal Year) -->
+      <!-- Numerical Vectors (Mulank, Bhagyank, Kua, Personal Year) -->
       <div class="vectors-row">
         <div class="vector-box">
-          <div class="vector-label">Driver (Mulank)</div>
+          <div class="vector-label">Mulank (Birth Day number)</div>
           <div class="vector-val" id="dashDriverVal">--</div>
           <div class="vector-sub" id="dashDriverPlanet">--</div>
         </div>
         <div class="vector-box">
-          <div class="vector-label">Conductor (Bhagyank)</div>
+          <div class="vector-label">Bhagyank (Life Path number)</div>
           <div class="vector-val" id="dashConductorVal">--</div>
           <div class="vector-sub" id="dashConductorPlanet">--</div>
         </div>
         <div class="vector-box">
-          <div class="vector-label">Kua Number</div>
+          <div class="vector-label">Kua number (Vastu direction number)</div>
           <div class="vector-val" id="dashKuaVal">--</div>
           <div class="vector-sub" id="dashKuaDirection">--</div>
           <div class="vector-sub" id="dashKuaRule" style="font-size:0.68rem;opacity:0.86;margin-top:2px;">Calculated from your birth year and gender</div>
@@ -602,8 +602,8 @@
         </div>
       </div>
       <div>
-        <a href="/ai-consultation/" class="nv-btn-cta" style="padding:10px 18px; font-size:0.82rem; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-          Consult Oracle &rarr;
+        <a href="/charm-ai/chat/" class="nv-btn-cta" style="padding:10px 18px; font-size:0.82rem; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+          Open Charm AI &rarr;
         </a>
       </div>
     </div>
@@ -749,23 +749,41 @@
         descriptor: 'Basic Numerology Report, 3 pages',
         pages: 3,
         badge: 'RECOMMENDED',
-        desc: 'Basic Numerology Report, 3 pages · Deterministic Mulank & Bhagyank, Lo Shu 3×3 Grid Matrix & 5-Element Balancing Actions.'
+        features: [
+          'Core Numbers: Mulank (Birth Day number), Bhagyank (Life Path number), Kua number (Vastu direction number) & Personal Year',
+          '9-Cell Lo Shu Grid (Lo Shu Square) Mapping & Active Plane Strengths',
+          'Calling Name number (Chaldean Name number) Harmony Check',
+          'Five-Element Distribution Balance & Practical Lifestyle Guidance',
+          'Instant 3-Page Print-Ready Personalized PDF Report'
+        ]
       },
       {
         id: 'report_advanced',
         name: 'Anveil my glowing charms',
         descriptor: 'Advanced Numerology Report, 12 pages',
         pages: 12,
-        badge: 'COMING SOON',
-        desc: 'Advanced Numerology Report, 12 pages · All Basic calculations + Auspicious Windows, Glowing Charms in Depth & Vedic Remedies.'
+        badge: 'WAITLIST',
+        features: [
+          'Everything in Basic plus Deep Analysis of All Present Numbers',
+          'Repeating Digit Amplifications & Behavioral Tendencies',
+          '8 Lo Shu Planes & Raj Yoga Combinations Breakdown',
+          'Career, Relationship & Financial Archetype Compatibility',
+          '12-Page Structured PDF Report with Actionable Daily Habits'
+        ]
       },
       {
         id: 'report_premium',
         name: 'Anveil every charm',
         descriptor: 'Complete Numerology Report, 32 pages',
         pages: 32,
-        badge: 'BEST VALUE',
-        desc: 'Complete Numerology Report, 32 pages · 10-Year Macro Timing Radar, Acoustic Name Balancing & Complete Veiled Charm Synthesis.'
+        badge: 'WAITLIST',
+        features: [
+          'Everything in Basic & Advanced plus Missing Numbers (Open Grid Cells) Analysis',
+          'Multi-Year Numerology Dasha & Pinnacle Cycle Timeline',
+          'Chaldean Name Balancing & Signature Alignment Options',
+          'Practical Lifestyle, Color, Directional (Vastu) & Habit Harmonizers',
+          'Complete 32-Page Personalized Reference PDF Report'
+        ]
       }
     ];
 
@@ -1056,12 +1074,12 @@
         const missingList = calc.missingDigits || [2, 3, 5, 6, 7];
         summaryEl.innerHTML = `
           <div style="margin-bottom:10px;">
-            <strong style="color:var(--emerald);">Active Natal Frequencies (${presentList.length}):</strong>
-            <span style="font-weight:600;">Digits ${presentList.join(', ')}</span> provide primary baseline cognitive and executive drive.
+            <strong style="color:var(--emerald);">Present Digits (${presentList.length}):</strong>
+            <span style="font-weight:600;">Digits ${presentList.join(', ')}</span> provide primary baseline cognitive and practical focus.
           </div>
           <div>
-            <strong style="color:var(--gold-dark);">Karmic Voids (${missingList.length}):</strong>
-            <span style="font-weight:600;">Digits ${missingList.join(', ')}</span> represent missing elemental vibrations. Comprehensive remedies and directional alignments are analyzed in detail in the full dossiers.
+            <strong style="color:var(--gold-dark);">Missing numbers (Open grid cells) (${missingList.length}):</strong>
+            <span style="font-weight:600;">Digits ${missingList.join(', ')}</span> represent open positions in your Lo Shu Grid (Lo Shu Square), analyzed in full in the 32-page Complete Numerology Report.
           </div>
         `;
       }
@@ -1080,6 +1098,9 @@
       const isBasicOwned = userTier === 'basic' || userTier === 'advanced' || userTier === 'premium' || entitlements.includes('report_basic');
       const isAdvancedOwned = userTier === 'advanced' || userTier === 'premium' || entitlements.includes('report_advanced');
       const isPremiumOwned = userTier === 'premium' || entitlements.includes('report_premium');
+      const waitlistCaption = (window.NV_PRICING && typeof window.NV_PRICING.getWaitlistCaption === 'function')
+        ? window.NV_PRICING.getWaitlistCaption('report_advanced')
+        : 'When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.';
 
       container.innerHTML = PACK_TIERS.map(t => {
         const isWaitlist = (window.NV_PRICING && typeof window.NV_PRICING.isNotifyMeTier === 'function')
@@ -1091,9 +1112,9 @@
         const resolvedStruck = (!isWaitlist && window.NV_PRICING && window.NV_PRICING.getStruckMrp)
           ? window.NV_PRICING.getStruckMrp(t.id)
           : null;
-        const priceStr = isWaitlist ? 'Coming soon, notify me' : `₹${Number(resolvedAmt).toLocaleString('en-IN')}`;
+        const priceStr = isWaitlist ? '' : `₹${Number(resolvedAmt).toLocaleString('en-IN')}`;
         const priceHtml = isWaitlist
-          ? 'Coming soon, notify me'
+          ? ''
           : (resolvedStruck ? `${priceStr} <s style="font-size:0.75em; opacity:0.65; font-weight:500;">₹${Number(resolvedStruck).toLocaleString('en-IN')}</s>` : priceStr);
         const isOwned = (t.id === 'report_basic' && isBasicOwned) ||
                         (t.id === 'report_advanced' && isAdvancedOwned) ||
@@ -1127,16 +1148,23 @@
         } else if (isWaitlist) {
           buttonHtml = `
             <a href="/your-reading/?from=dashboard" class="tier-btn" style="text-decoration:none; display:block; text-align:center;">
-              Coming soon, notify me ✉
+              Coming soon, notify me
             </a>
           `;
         } else {
           buttonHtml = `
             <button type="button" onclick="triggerTierCheckout('${t.id}', '${t.name}', ${resolvedAmt})" class="tier-btn">
-              Unlock ${t.name.split(' ')[0]} (${priceStr}) 🔒
+              Get ${t.name} (${priceStr})
             </button>
           `;
         }
+
+        const featuresListHtml = `<ul style="list-style:none; padding:0; margin:10px 0 14px; font-size:0.79rem; color:var(--ink-dark); line-height:1.5;">${(t.features || []).map(f => `<li style="margin-bottom:5px;">✓ ${f}</li>`).join('')}</ul>`;
+        const priceRowHtml = isOwned
+          ? `<div class="tier-price" style="color:var(--emerald);">Active Profile Entitlement</div>`
+          : (isWaitlist
+              ? `<div style="font-size:0.78rem; color:var(--ink-muted); line-height:1.45; margin:6px 0 8px;">${waitlistCaption}</div>`
+              : `<div class="tier-price">${priceHtml}</div>`);
 
         return `
           <div class="tier-card" id="tierCard_${t.id}" style="${isOwned ? 'border-color:var(--emerald); background:rgba(22,131,91,0.03);' : ''}">
@@ -1145,8 +1173,9 @@
                 ${isOwned ? 'PURCHASED ✓' : (isWaitlist ? 'WAITLIST' : t.badge)}
               </span>
               <h3 class="tier-title">${t.name}</h3>
-              <div class="tier-price" style="${isOwned ? 'color:var(--emerald);' : ''}">${isOwned ? 'Active Profile Entitlement' : priceHtml}</div>
-              <p class="tier-desc">${t.desc}</p>
+              <div style="font-size:0.74rem; color:var(--ink-muted); margin-bottom:4px;">${t.descriptor}</div>
+              ${priceRowHtml}
+              ${featuresListHtml}
             </div>
             ${buttonHtml}
           </div>

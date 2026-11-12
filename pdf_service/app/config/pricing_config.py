@@ -34,6 +34,7 @@ LAUNCH_OFFER_DURATION_SECONDS: int = 7 * 24 * 3600
 LAUNCH_OFFER_STARTED_AT_DEFAULT: Optional[str] = None
 LAUNCH_OFFER_ENDS_AT_DEFAULT: Optional[str] = None
 WAITLIST_DISPLAY_LABEL: str = "Coming soon, notify me"
+WAITLIST_LAUNCH_CAPTION: str = "When this report opens, it starts at a launch price for its first 7 days. We\u2019ll email you the day it opens."
 IST_TZ = timezone(timedelta(hours=5, minutes=30))
 
 # ── 1. PRODUCT FAMILY A: STANDALONE REPORTS (3 UNIFIED TIERS) ────────────────
@@ -49,21 +50,20 @@ REPORT_TIERS: Dict[str, Dict[str, Any]] = {
         "amount_paise": 105000,
         "mrp_inr": 2100,
         "mrp_paise": 210000,
-        "digital_root": 6,  # 1+0+5+0=6 (Venus / Harmony)
-        "mrp_digital_root": 3,  # 2+1+0+0=3 (Jupiter / Wisdom)
+        "digital_root": 6,
+        "mrp_digital_root": 3,
         "best_value": True,
-        "purpose": "The complete 32-page roadmap covering every glowing and veiled charm, multi-engine synthesis, remedies, and timing.",
+        "purpose": "The complete 32-page roadmap covering every glowing and veiled charm, dual-system synthesis, practical habits, and timing.",
         "deliverables": [
-            "32-Page Complete Roadmap PDF (all 9 glowing & veiled charms)",
-            "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
-            "10-Year Macro Planetary Timing Radar & Acute Execution Windows",
-            "Multi-Generational Synastry & Compatibility Analysis",
-            "Commercial & Professional Resonance Vectors",
-            "Complete Technical Appendix: Formulas, Engine Versions & Assumptions"
+            "32-Page Complete Numerology Report PDF (all 9 glowing & veiled positions)",
+            "Everything in the 12-Page Report + Missing numbers (Open grid cells) & Poorak Numbers",
+            "81-Pair Mulank–Bhagyank Matrix & Chaldean + Pythagorean Dual Synthesis",
+            "Calling Name Spelling Alignment, Mobile/Email/PIN & Property/Vehicle Checks",
+            "Month-by-Month Personal Timing Calendar, Blessing Years & 4-Stage Pinnacles"
         ],
         "depth_level": "Comprehensive",
         "comparisons": "Integrated across all supported modules",
-        "methodology": "Detailed mathematical proofs & engine version trace",
+        "methodology": "Deterministic formula steps & engine version trace",
         "guidance": "Consolidated lifetime reference & strategic roadmap"
     },
     "advanced": {
@@ -77,17 +77,16 @@ REPORT_TIERS: Dict[str, Dict[str, Any]] = {
         "amount_paise": 51000,
         "mrp_inr": 1020,
         "mrp_paise": 102000,
-        "digital_root": 6,  # 5+1+0=6 (Venus / Harmony)
-        "mrp_digital_root": 3,  # 1+0+2+0=3 (Jupiter / Wisdom)
+        "digital_root": 6,
+        "mrp_digital_root": 3,
         "popular": True,
         "purpose": "Expanded 12-page analysis of your glowing charms, supporting calculations, comparisons, and structured guidance.",
         "deliverables": [
-            "12-Page Glowing Charms Synthesis PDF",
-            "All Alignment calculations + 5-Year Numerology Dasha Timing Timeline",
-            "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
-            "Chaldean Sound Frequency & Name Harmony Matrix",
-            "7-Layer Safe Planetary Remedy Protocols",
-            "Structured Cross-Factor Comparisons & Practical Guidance"
+            "12-Page Personalised Glowing Charms PDF",
+            "Everything in the 3-Page Report + Present & Repeated Digits Analysis",
+            "Benefic vs Mindful Operating Matrix & Career/Relationship Priority Chapters",
+            "Interpersonal Synergy, Co-Founder Matching & Auspicious Monthly Dates",
+            "Vedic Household (Gharelu) Habits, 40-Day Routine & Full Kua Directional Table"
         ],
         "depth_level": "Expanded",
         "comparisons": "Multiple, where supported",
@@ -105,20 +104,20 @@ REPORT_TIERS: Dict[str, Dict[str, Any]] = {
         "amount_paise": 19900,
         "mrp_inr": 399,
         "mrp_paise": 39900,
-        "digital_root": 1,  # 1+9+9=19 -> 1+0=1 (Sun / Leadership)
-        "mrp_digital_root": 3,  # 3+9+9=21 -> 3 (Jupiter / Wisdom)
-        "purpose": "A focused 3-page reading of your core alignments with essential calculations and initial findings.",
+        "digital_root": 1,
+        "mrp_digital_root": 3,
+        "purpose": "A focused 3-page reading of your core alignments with essential calculations and practical daily habits.",
         "deliverables": [
             "3-Page Personalised Alignments PDF",
-            "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
-            "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
-            "Chaldean Single Root & Compound Letter Breakdown",
-            "Methodology Note & Interpretive Limitations Summary"
+            "Mulank (Birth Day number), Bhagyank (Life Path number) & Calling Name number",
+            "Lo Shu Grid (Lo Shu Square), 8 Planes & 5-Element Balance Audit",
+            "Kua number (Vastu direction number) & Desk Orientation",
+            "Top-3 Practical Everyday Habits & 90-Day Action Plan (no gemstones or rituals)"
         ],
         "depth_level": "Focused",
         "comparisons": "Essential",
         "methodology": "Included",
-        "guidance": "Key takeaways & reflection points"
+        "guidance": "Key takeaways & practical daily habits"
     }
 }
 
@@ -453,9 +452,9 @@ CHARM_AI_PACKS: Dict[str, Dict[str, Any]] = {
         "has_remedies": False,
         "purpose": "Experience conversational Charm AI intelligence with 3 free exploratory inquiries daily.",
         "deliverables": [
-            "3 Free Exploratory Inquiries Daily per Account",
-            "Instant Driver / Conductor token verification",
-            "24/7 web access"
+            "3 Free Exploratory Inquiries After Verified Sign-In",
+            "Instant Mulank (Birth Day number) & Bhagyank (Life Path number) Context",
+            "24/7 Web Access in Charm AI"
         ]
     },
     "charm_single": {
@@ -470,10 +469,10 @@ CHARM_AI_PACKS: Dict[str, Dict[str, Any]] = {
         "digital_root": 1,
         "purpose": "Focused query resolution for immediate decision crossroads.",
         "deliverables": [
-            "5 In-Depth Consultation Inquiries across any life area",
-            "Acute execution timing windows (Hora & transit)",
-            "Grounded non-fatalistic practical guidance",
-            "Credits valid for 6 months"
+            "5 Guided Numerology Q&A Inquiries across Career, Relationships, or Timing",
+            "Deterministic Dasha & Personal Year Window Context",
+            "Grounded, Non-Fatalistic Practical Reflection Points",
+            "Credits Valid for 6 Months in Your Private Dashboard"
         ]
     },
     "charm_multi": {
@@ -557,16 +556,29 @@ def resolve_launch_offer_state(
     now_iso: Optional[str] = None,
     ends_at_override: Optional[str] = None,
     starts_at_override: Optional[str] = None,
+    tier_id: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
-    Resolves the single server-configured launch offer window strictly from
+    Resolves the server-configured launch offer window strictly from per-tier
+    `NV_LAUNCH_<TIER>_STARTS_AT`/`NV_LAUNCH_<TIER>_ENDS_AT` falling back to
     `NV_LAUNCH_STARTS_AT` (alias `NV_LAUNCH_STARTED_AT`) and `NV_LAUNCH_ENDS_AT`.
     - Left unset until go-live (`configured=False`, `active=False` -> regular prices apply with zero strike-through).
     - Within `[starts_at, ends_at]`: `active=True`, launch price applies on purchasable tiers with struck regular MRP.
     - Outside `[starts_at, ends_at]`: `active=False`, regular price (`mrp_inr`) applies with no strike-through.
     """
-    env_starts = (os.getenv("NV_LAUNCH_STARTS_AT") or os.getenv("NV_LAUNCH_STARTED_AT") or "").strip()
-    env_ends = (os.getenv("NV_LAUNCH_ENDS_AT") or "").strip()
+    clean_tier = str(tier_id or "").strip().lower().replace("report_", "")
+    tier_alias = {"essential": "basic", "alignments": "basic", "master": "advanced", "glowing": "advanced", "divine": "premium", "every_charm": "premium"}
+    clean_tier = tier_alias.get(clean_tier, clean_tier)
+
+    tier_starts = ""
+    tier_ends = ""
+    if clean_tier in ("basic", "advanced", "premium"):
+        upper = clean_tier.upper()
+        tier_starts = (os.getenv(f"NV_LAUNCH_{upper}_STARTS_AT") or os.getenv(f"NV_LAUNCH_{upper}_STARTED_AT") or "").strip()
+        tier_ends = (os.getenv(f"NV_LAUNCH_{upper}_ENDS_AT") or "").strip()
+
+    env_starts = tier_starts or (os.getenv("NV_LAUNCH_STARTS_AT") or os.getenv("NV_LAUNCH_STARTED_AT") or "").strip()
+    env_ends = tier_ends or (os.getenv("NV_LAUNCH_ENDS_AT") or "").strip()
 
     started_raw: Optional[str] = (
         starts_at_override.strip()
@@ -649,6 +661,7 @@ def format_launch_offer_copy(
         now_iso=now_iso,
         ends_at_override=ends_at_override,
         starts_at_override=starts_at_override,
+        tier_id=tier_key,
     )
     if not state.get("configured"):
         return ""
@@ -701,6 +714,7 @@ def get_all_product_skus(
                 "waitlist_only": True,
                 "status": "waitlist",
                 "display_price_label": WAITLIST_DISPLAY_LABEL,
+                "waitlist_caption": WAITLIST_LAUNCH_CAPTION,
                 "launch_price_inr": None,
                 "launch_amount_paise": None,
                 "amount_inr": None,
@@ -717,8 +731,15 @@ def get_all_product_skus(
             }
             continue
 
-        active_inr = int(tier["price_inr"]) if launch_active else mrp_inr
-        active_paise = int(tier["amount_paise"]) if launch_active else mrp_paise
+        tier_launch_state = resolve_launch_offer_state(
+            now_iso=now_iso,
+            ends_at_override=ends_at_override,
+            starts_at_override=starts_at_override,
+            tier_id=tier_id,
+        )
+        tier_launch_active = bool(tier_launch_state.get("active"))
+        active_inr = int(tier["price_inr"]) if tier_launch_active else mrp_inr
+        active_paise = int(tier["amount_paise"]) if tier_launch_active else mrp_paise
         skus[f"report_{tier_id}"] = {
             "sku_id": f"report_{tier_id}",
             "family": "standalone_report",
@@ -736,9 +757,9 @@ def get_all_product_skus(
             "amount_paise": active_paise,
             "mrp_inr": mrp_inr,
             "mrp_paise": mrp_paise,
-            "struck_mrp_inr": mrp_inr if launch_active else None,
-            "show_strike_through": launch_active,
-            "launch_offer_active": launch_active,
+            "struck_mrp_inr": mrp_inr if tier_launch_active else None,
+            "show_strike_through": tier_launch_active,
+            "launch_offer_active": tier_launch_active,
             "launch_offer_copy": format_launch_offer_copy(
                 tier_id,
                 now_iso=now_iso,
@@ -951,8 +972,9 @@ def export_pricing_catalog_json() -> str:
         "ladder_order": LADDER_ORDER,
         "feature_flags": {
             "notify_me_higher_tiers": notify_active,
-            "notify_me_tiers": ["report_advanced", "report_premium"],
+            "notify_me_tiers": ["report_advanced", "report_premium", "planner_2027"],
             "waitlist_display_label": WAITLIST_DISPLAY_LABEL,
+            "waitlist_launch_caption": WAITLIST_LAUNCH_CAPTION,
         },
         "launch_offer": launch_offer,
         "ladder_recommendation_rule": {

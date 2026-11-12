@@ -117,33 +117,32 @@
       charm_free: {
         pack_id: 'charm_free',
         name: 'Free Preview',
-        display_name: 'Charm AI · Free Preview',
+        display_name: 'Charm AI · Free Exploratory Numerology Q&A, 3 questions',
         price_inr: 0,
         amount_paise: 0,
         questions_count: 3,
         digital_root: 0,
         status: 'active',
         deliverables: [
-          '3 Free Exploratory Inquiries Daily per Account',
-          'Instant Driver / Conductor token verification',
-          '24/7 web access'
+          '3 Free Exploratory Inquiries per Visitor per Day',
+          'Instant Mulank (Birth Day number) & Bhagyank (Life Path number) Context',
+          '24/7 Web Access in Charm AI'
         ]
       },
       charm_single: {
         pack_id: 'charm_single',
         name: 'Charm AI Starter Pack',
-        display_name: 'Charm AI · Starter Pack',
+        display_name: 'Charm AI Starter Pack · Guided Numerology Q&A Pack, 5 questions',
         price_inr: 199,
         amount_paise: 19900,
-        mrp_inr: 399,
         questions_count: 5,
         digital_root: 1,
         status: 'active',
         deliverables: [
-          '5 In-Depth Consultation Inquiries across any life area',
-          'Acute execution timing windows (Hora & transit)',
-          'Grounded non-fatalistic practical guidance',
-          'Credits valid for 6 months'
+          '5 Guided Numerology Q&A Inquiries across Career, Relationships, or Timing',
+          'Deterministic Dasha & Personal Year Window Context',
+          'Grounded, Non-Fatalistic Practical Reflection Points',
+          'Credits Valid for 6 Months in Your Private Dashboard'
         ]
       },
       charm_multi: {
@@ -187,9 +186,9 @@
     currency: PACKS_JSON.currency,
     packsJson: PACKS_JSON,
     deliveryPromise: 'Your personalized PDF report is ready within minutes in your account dashboard.',
-    investmentNotice: '100% One-Time Investment · Zero Auto-Debit · Zero Recurring Fees',
-    sacredRootNotice: 'Publication fees reduce to sacred harmonic root numbers (1, 3, 5, or 6) aligned with planetary vibrations.',
-    freeAllowanceNotice: '3 free exploratory inquiries after verified sign-up.',
+    investmentNotice: '100% One-Time Payment · Zero Auto-Debit · Zero Recurring Fees',
+    waitlistCaption: 'When this report opens, it starts at a launch price for its first 7 days. We\u2019ll email you the day it opens.',
+    freeAllowanceNotice: '3 free exploratory inquiries per visitor per day.',
 
     tiers: {
       basic: {
@@ -202,8 +201,8 @@
         price_usd: PACKS_JSON.core_reports.report_basic.price_usd,
         pages: PACKS_JSON.core_reports.report_basic.pages,
         digital_root: PACKS_JSON.core_reports.report_basic.digital_root,
-        timeline: 'Foundational Lo Shu & Element Balancing',
-        summary: '3-Page Personalised Executive PDF covering Driver, Conductor, Kua, Lo Shu 3x3 grid, and element balancing.'
+        timeline: 'Foundational Lo Shu Grid & Element Balancing',
+        summary: '3-Page Personalised Alignments PDF covering Mulank (Birth Day number), Bhagyank (Life Path number), Calling Name number, Kua number, Lo Shu Grid, and practical daily habits.'
       },
       advanced: {
         id: 'report_advanced',
@@ -216,8 +215,8 @@
         pages: PACKS_JSON.core_reports.report_advanced.pages,
         digital_root: PACKS_JSON.core_reports.report_advanced.digital_root,
         popular: true,
-        timeline: 'Element Balancing + Enabled Numbers in Depth',
-        summary: '12-Page Master Synthesis PDF Dossier with element balancing and enabled numbers in depth.'
+        timeline: 'Present & Repeated Digits + 40-Day Household Habits',
+        summary: '12-Page Personalised Glowing Charms PDF with present and repeated digits analysis, priority chapters, auspicious monthly dates, and Vedic household habits.'
       },
       premium: {
         id: 'report_premium',
@@ -229,8 +228,8 @@
         price_usd: PACKS_JSON.core_reports.report_premium.price_usd,
         pages: PACKS_JSON.core_reports.report_premium.pages,
         digital_root: PACKS_JSON.core_reports.report_premium.digital_root,
-        timeline: '10-Year Macro Planetary Timing Radar, Missing Numbers, Remedies & Predictions',
-        summary: '32-Page Sovereign Executive Blueprint with dual Chaldean + Pythagorean synthesis, missing numbers in depth, remedies, and 10-year macro timing radar.'
+        timeline: 'All 9 Glowing & Veiled Positions + Month-by-Month Calendar',
+        summary: '32-Page Complete Numerology Report PDF with dual Chaldean + Pythagorean synthesis, missing numbers & Poorak numbers, calling name/mobile/property checks, and 4-stage pinnacles.'
       }
     },
 

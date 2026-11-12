@@ -203,6 +203,17 @@ def reduce_digit(n: int) -> int:
         n = sum(int(d) for d in str(n))
     return n
 
+
+def _base_1_to_9(n: int) -> int:
+    val = abs(int(n))
+    while val > 9:
+        val = sum(int(d) for d in str(val))
+    return val if 1 <= val <= 9 else 1
+
+
+def _has_word(ql: str, terms: List[str]) -> bool:
+    return any(re.search(r"\b" + re.escape(w) + r"\b", ql) for w in terms)
+
 # ── Religion & Faith Detector ────────────────────────────────────────────────
 def detect_faith_and_tradition(name: str, explicit_faith: Optional[str] = None) -> str:
     if explicit_faith:
@@ -297,26 +308,32 @@ class CharmOracleSynthesizer:
         year: int,
         question: str,
         is_premium: bool = False,
-        explicit_faith: Optional[str] = None
+        explicit_faith: Optional[str] = None,
+        event_family: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Executes complete multi-dimensional synthesis across all 18 classical parameters.
         """
-        user_name = (name or "Seeker").strip()
-        first_name = user_name.split()[0].capitalize() if user_name else "Seeker"
+        raw_name = (name or "").strip()
+        if raw_name.lower() == "seeker":
+            raw_name = ""
+        user_name = raw_name
+        first_name = user_name.split()[0].capitalize() if user_name else ""
         clean_q = (question or "").strip()
         ql = clean_q.lower()
 
-        # 1. Deterministic Core Numbers
-        d_val = day if 1 <= day <= 31 else 15
-        m_val = month if 1 <= month <= 12 else 8
-        y_val = year if 1900 <= year <= 2100 else 1990
+        # 1. Deterministic Core Numbers (Caller validates DOB; clamp safely without hardcoded profile dates)
+        d_val = max(1, min(31, int(day or 1)))
+        m_val = max(1, min(12, int(month or 1)))
+        y_val = max(1900, min(2100, int(year or 2000)))
 
         driver = reduce_digit(d_val)
         conductor = reduce_digit(d_val + m_val + y_val)
+        driver_base = _base_1_to_9(driver)
+        conductor_base = _base_1_to_9(conductor)
         
         current_year = datetime.now().year
-        personal_year = reduce_digit(d_val + m_val + current_year)
+        personal_year = _base_1_to_9(reduce_digit(d_val + m_val + current_year))
 
         is_karmic_debt = d_val in (13, 14, 16, 19)
         karmic_number = d_val if is_karmic_debt else None
@@ -326,7 +343,7 @@ class CharmOracleSynthesizer:
 
         # Name vibration
         chaldean_compound, chaldean_single = calculate_chaldean_name(user_name)
-        name_harmonic = chaldean_single in (driver, conductor) or chaldean_single in (1, 3, 5, 6)
+        name_harmonic = chaldean_single in (driver_base, conductor_base) or chaldean_single in (1, 3, 5, 6)
 
         # 2. Lo Shu Grid Construction & Digit Repetition Degree (Numeros Vision Classical Methodology Slide 4)
         dob_str = f"{d_val:02d}{m_val:02d}{y_val}"
@@ -353,17 +370,17 @@ class CharmOracleSynthesizer:
                 active_planes.append(plane)
 
         # 3. Topic Classification across 16 Specific Syllabus Domains
-        topic_key, topic_label = self._classify_topic(ql)
+        topic_key, topic_label = self._classify_topic(ql, event_family=event_family)
 
         # 4. Faith & Cultural Detection
         faith = detect_faith_and_tradition(user_name, explicit_faith)
 
         # 5. Master Engines Calculations
-        dc_81 = lookup_driver_conductor_81(driver, conductor)
-        poorak_data = calculate_complementary_poorak(driver, conductor, missing_numbers)
+        dc_81 = lookup_driver_conductor_81(driver_base, conductor_base)
+        poorak_data = calculate_complementary_poorak(driver_base, conductor_base, missing_numbers)
         hygiene_items = diagnose_user_elemental_hygiene(present_numbers, missing_numbers)
         subdate_entry = BIRTH_DAY_SUBDATE_REGISTRY.get(d_val, {})
-        astro_corr = calculate_multi_astrology_correlation(driver, conductor, personal_year)
+        astro_corr = calculate_multi_astrology_correlation(driver_base, conductor_base, personal_year)
 
         # 6. Build Humanized Master Consultation Dialogue
         consultation_dialogue = self._build_dialogue(
@@ -404,71 +421,103 @@ class CharmOracleSynthesizer:
 
         return consultation_dialogue
 
-    def _classify_topic(self, ql: str) -> Tuple[str, str]:
+    def _classify_topic(self, ql: str, event_family: Optional[str] = None) -> Tuple[str, str]:
+        fam = (event_family or "").strip().lower()
+        if fam == "love":
+            return "love_romance", "Love, Romance & Relationship Harmony"
+        if fam == "marriage":
+            if _has_word(ql, ["partner match", "matching", "compatibility", "gun milan", "kundali match", "partner compatibility"]):
+                return "partner_matching", "Marriage Compatibility & Partner Alignment"
+            return "marriage_union", "Marriage Timing & Spousal Harmony"
+        if fam == "career":
+            if _has_word(ql, ["business", "partnership", "startup", "venture", "firm", "founder", "freelance", "own company", "commercial"]):
+                return "business_partnerships", "Business Alignment, Contracts & Partnerships"
+            if _has_word(ql, ["stuck", "blocked", "lost opportunity", "lost job", "struggling in job", "delay in job", "career reset", "layoff"]):
+                return "career_stuck", "Career Reset, Pacing & Practical Outreach"
+            return "career_growth", "Career Direction, Promotion & Leadership"
+        if fam in ("money", "wealth"):
+            if _has_word(ql, ["share market", "stocks", "stock market", "trading", "mutual fund", "equity"]):
+                return "share_market", "Long-Term Investment Discipline & Risk Pacing"
+            return "wealth_finances", "Money Management, Debt Relief & Steady Savings"
+        if fam in ("health_of_routine", "health"):
+            return "health_of_routine", "Daily Routine, Sleep Rhythm & Energy Habits"
+        if fam == "children":
+            if _has_word(ql, ["conceive", "conception", "progeny", "santan", "pregnant", "pregnancy", "baby birth", "fertility", "have a baby", "baby name"]):
+                return "child_conception", "Children, Family Readiness & Naming Alignment"
+            return "child_studies", "Children, Parenting Warmth & Study Focus"
+        if fam == "property":
+            return "property_vastu", "Property, Home Address & Vastu Alignment"
+
         # Universal Obstacles
-        if any(w in ql for w in ["stuck everywhere", "blocked everywhere", "universal obstacle", "karmic block", "nothing working", "stuck in life", "problems everywhere"]) or \
-           ("obstacle" in ql and any(w in ql for w in ["everywhere", "all areas", "in everything"])) or \
-           ("wealth" in ql and "career" in ql and ("marriage" in ql or "love" in ql)):
-            return "universal_obstacles", "Karmic Stagnation & Universal Obstacle Reset"
+        if _has_word(ql, ["stuck everywhere", "blocked everywhere", "universal obstacle", "karmic block", "nothing working", "stuck in life", "problems everywhere"]) or \
+           ("obstacle" in ql and _has_word(ql, ["everywhere", "all areas", "in everything"])) or \
+           (_has_word(ql, ["wealth"]) and _has_word(ql, ["career"]) and _has_word(ql, ["marriage", "love"])):
+            return "universal_obstacles", "Multi-Area Reset & Practical Grounding"
 
-        # Child Conception & Progeny
-        if any(w in ql for w in ["conceive", "conception", "progeny", "santan", "pregnant", "pregnancy", "baby birth", "fertility"]):
-            return "child_conception", "Child Conception, Fertility & Progeny Timing"
+        # Children, Parenting, Conception & Studies
+        if _has_word(ql, ["conceive", "conception", "progeny", "santan", "pregnant", "pregnancy", "baby birth", "fertility", "have a baby", "baby name"]):
+            return "child_conception", "Children, Family Readiness & Naming Alignment"
 
-        # Child Studies & Education
-        if any(w in ql for w in ["child studies", "teen career", "studies", "exam", "education", "school", "college", "marks", "focus in study"]):
-            return "child_studies", "Child Studies, Academic Focus & Youth Career Direction"
+        if _has_word(ql, ["child studies", "teen career", "studies", "exam", "education", "school", "college", "marks", "focus in study", "my child", "our child", "my son", "my daughter", "my kids", "parenting", "children"]):
+            return "child_studies", "Children, Parenting Warmth & Study Focus"
 
-        # Partner Matching & Compatibility
-        if any(w in ql for w in ["partner match", "matching", "compatibility", "gun milan", "kundali match", "should i marry", "partner compatibility"]):
-            return "partner_matching", "Partner Matching, Cosmic Synergy & Compatibility"
+        # Property, Home, Vehicle & Vastu (whole-word matching so 'car' never matches 'career')
+        if _has_word(ql, ["property", "house", "home", "flat", "apartment", "plot", "land", "real estate", "makan", "zameen", "ghar", "vastu", "vehicle", "car", "relocation", "buy a home", "buy a house", "buy a flat", "address"]):
+            return "property_vastu", "Property, Home Address & Vastu Alignment"
 
-        # Love & Marriage Harmony
-        if any(w in ql for w in ["love", "marriage", "partner", "husband", "wife", "spouse", "shaadi", "vivah", "relationship", "divorce", "marital"]):
-            return "love_marriage", "Love, Marriage & Relationship Harmony"
+        # Partner Matching & Marriage Union (Distinct from Love/Dating)
+        if _has_word(ql, ["partner match", "matching", "compatibility", "gun milan", "kundali match", "should i marry", "partner compatibility"]):
+            return "partner_matching", "Marriage Compatibility & Partner Alignment"
 
-        # Share Market & Speculation
-        if any(w in ql for w in ["share market", "stocks", "stock market", "trading", "crypto", "intraday", "nifty", "mutual fund", "equity"]):
-            return "share_market", "Share Market, Stock Trading & Speculative Wealth"
+        if _has_word(ql, ["marriage", "marry", "married", "husband", "wife", "spouse", "shaadi", "vivah", "wedding", "divorce", "marital", "engagement", "kundali", "matrimony"]):
+            return "marriage_union", "Marriage Timing & Spousal Harmony"
+
+        # Love, Romance & Dating
+        if _has_word(ql, ["love", "romance", "romantic", "dating", "boyfriend", "girlfriend", "crush", "affection", "relationship", "partner", "breakup", "heartbreak", "soulmate"]):
+            return "love_romance", "Love, Romance & Relationship Harmony"
+
+        # Share Market & Savings Allocation
+        if _has_word(ql, ["share market", "stocks", "stock market", "trading", "mutual fund", "equity"]):
+            return "share_market", "Long-Term Investment Discipline & Risk Pacing"
 
         # Wealth, Money & Debt
-        if any(w in ql for w in ["money", "wealth", "finance", "debt", "loan", "bankrupt", "income", "paisa", "dhan", "trapped money"]):
-            return "wealth_finances", "Wealth Obstacles, Debt Relief & Capital Growth"
+        if _has_word(ql, ["money", "wealth", "finance", "financial", "debt", "loan", "bankrupt", "income", "salary", "savings", "budget", "expenses", "cashflow", "paisa", "dhan", "trapped money"]):
+            return "wealth_finances", "Money Management, Debt Relief & Steady Savings"
 
         # Business & Partnerships
-        if any(w in ql for w in ["business", "partnership", "startup", "venture", "firm", "founder", "freelance", "own company", "commercial"]):
-            return "business_partnerships", "Business Alignment, Commercial Scale & Partnerships"
+        if _has_word(ql, ["business", "partnership", "startup", "venture", "firm", "founder", "freelance", "own company", "commercial"]):
+            return "business_partnerships", "Business Alignment, Contracts & Partnerships"
 
         # Career Stuck & Job Reset
-        if any(w in ql for w in ["stuck", "blocked", "lost opportunity", "lost job", "struggling in job", "delay in job", "career reset", "layoff"]):
-            return "career_stuck", "Career Stuck, Job Delays & Strategic Reset"
+        if _has_word(ql, ["stuck", "blocked", "lost opportunity", "lost job", "struggling in job", "delay in job", "career reset", "layoff"]):
+            return "career_stuck", "Career Reset, Pacing & Practical Outreach"
 
         # Career Growth & Promotion
-        if any(w in ql for w in ["promotion", "growth", "new job", "senior role", "interview", "salary hike", "appraisal", "career"]):
-            return "career_growth", "Career Acceleration, Promotion & Leadership Elevation"
+        if _has_word(ql, ["promotion", "growth", "new job", "senior role", "interview", "salary hike", "appraisal", "career", "job", "office", "role", "leadership", "profession", "work"]):
+            return "career_growth", "Career Direction, Promotion & Leadership"
+
+        # Daily Routine, Sleep & Non-Medical Energy Habits
+        if _has_word(ql, ["routine", "habit", "habits", "health", "vitality", "wellness", "stress", "sleep", "fatigue", "burnout", "energy", "rest", "morning", "schedule", "circadian"]):
+            return "health_of_routine", "Daily Routine, Sleep Rhythm & Energy Habits"
 
         # Foreign Travel & Relocation
-        if any(w in ql for w in ["foreign", "abroad", "visa", "relocation", "overseas", "pr", "settlement"]):
-            return "foreign_relocation", "Foreign Settlement, Relocation & Travel Opportunities"
+        if _has_word(ql, ["foreign", "abroad", "visa", "overseas", "permanent residency", "settlement"]):
+            return "foreign_relocation", "Relocation & Cross-Border Transition Timing"
 
         # Missing Numbers & Lo Shu Grid
-        if any(w in ql for w in ["missing number", "missing numbers", "lo shu grid", "elements", "loshu"]):
-            return "missing_numbers", "Missing Lo Shu Elements & Planetary Balances"
+        if _has_word(ql, ["missing number", "missing numbers", "lo shu grid", "elements", "loshu"]):
+            return "missing_numbers", "Lo Shu Grid (Lo Shu Square) & Elemental Balance"
 
         # Repetition Degrees
-        if any(w in ql for w in ["repetitive", "repeat", "multiple times", "degree", "power of numbers"]):
-            return "repetition_degree", "Repetitive Numbers Degree & Planetary Energy"
+        if _has_word(ql, ["repetitive", "repeat", "multiple times", "degree", "power of numbers"]):
+            return "repetition_degree", "Repeated Digits & Balanced Expression"
 
         # Name Balancing
-        if any(w in ql for w in ["name spelling", "name balance", "change name", "chaldean name", "name harmony"]):
-            return "name_balancing", "Chaldean Name Balancing & Sound Vibrations"
-
-        # Health & Vitality
-        if any(w in ql for w in ["health", "illness", "disease", "vitality", "stress", "sleep", "depression", "fatigue"]):
-            return "health_vitality", "Health, Vitality & Nervous System Balance"
+        if _has_word(ql, ["name spelling", "name balance", "change name", "chaldean name", "name harmony"]):
+            return "name_balancing", "Calling Name Number & Chaldean Spelling Balance"
 
         # Default General Destiny
-        return "general_destiny", "Personal Destiny, Dasha Alignment & Cosmic Cycles"
+        return "general_destiny", "Personal Year Cycle & Core Numerology Overview"
 
     def _build_dialogue(
         self,
@@ -503,8 +552,10 @@ class CharmOracleSynthesizer:
         """
         Creates authentic, deeply personalized, humanized numerology consultation.
         """
-        d_p = PLANETARY_INFO[driver]["planet"]
-        c_p = PLANETARY_INFO[conductor]["planet"]
+        d_base = _base_1_to_9(driver)
+        c_base = _base_1_to_9(conductor)
+        d_p = PLANETARY_INFO[d_base]["planet"]
+        c_p = PLANETARY_INFO[c_base]["planet"]
         sub = subdate_entry or {}
         dc = dc_81 or {}
         poorak = poorak_data or {}
@@ -541,38 +592,53 @@ class CharmOracleSynthesizer:
             timing_window_str = f"**{t_today.isoformat()}** to **{(t_today + timedelta(days=90)).isoformat()}**"
 
         # Sacred Remedial Muhurta: Always begin remedies, gems, and mantras during Shukla Paksha
-        shukla_info = calculate_shukla_paksha_timing(ruling_planet_num=driver)
+        shukla_info = calculate_shukla_paksha_timing(ruling_planet_num=d_base)
         shukla_guidance = shukla_info["guidance_narrative"]
 
         # ── 1. Topic-Specific Diagnostic Insight ──
-        if topic_key in ("love_marriage", "partner_matching"):
+        if topic_key == "love_romance":
             diagnosis_text = (
-                f"In your birth matrix, your primary relationship axis is governed by Driver {driver} ({d_p}) and Conductor {conductor} ({c_p}). "
-                f"In love and marriage, Driver {driver} establishes your inborn communication temperament ({NUMBER_DUAL_ATTRIBUTES[driver]['good']}), "
-                f"while Conductor {conductor} dictates long-term domestic karma. "
+                f"In romantic connection and emotional bonding, your birth matrix pairs Mulank (Birth Day number) {driver} ({d_p}) "
+                f"with Bhagyank (Life Path number) {conductor} ({c_p}). Mulank {driver} shapes how you express affection and listen ({NUMBER_DUAL_ATTRIBUTES[d_base]['good']}), "
+                f"while Bhagyank {conductor} reflects what helps long-term emotional trust feel steady. "
             )
-            if 6 in missing_numbers:
-                diagnosis_text += "Crucially, **Number 6 (Venus - Home & Family Relationships)** is missing from your core birth grid, which often introduces subtle feelings of domestic misunderstanding, emotional expectations going unexpressed, or delay in marital contentment unless actively compensated. "
+            if 2 in missing_numbers:
+                diagnosis_text += "Because **Number 2 (Moon — Emotional Sensitivity)** is open in your Lo Shu Grid, romantic misunderstandings often arise when feelings are assumed rather than spoken gently. "
             elif 6 in pair_numbers:
-                diagnosis_text += "Your chart possesses **Number 6 as a balanced Pair (Two Times)**, which gives you deep affection, high loyalty, and an instinctive aesthetic care for your partner once trust is secured. "
-            elif 2 in missing_numbers:
-                diagnosis_text += "Because **Number 2 (Moon - Intuitive Empathy)** is absent, misunderstandings often stem not from a lack of love, but from differing emotional communication styles where one partner expects words while the other shows care through actions. "
-
+                diagnosis_text += "With **Number 6 (Venus — Affection & Warmth)** balanced as a pair in your grid, you naturally create warmth, loyalty, and steady care in relationships. "
             core_advice = (
-                f"During your current **Personal Year {personal_year}**, relationship dynamics are asking for conscious renewal. "
-                f"Instead of reacting to temporary mood shifts, establish an open weekly dialogue window without digital distractions. "
-                f"When you balance mutual space with consistent appreciation, the friction naturally softens."
+                f"During **Personal Year {personal_year}** (active window {timing_window_str}), romantic clarity improves through unhurried, honest conversation rather than rushing commitments under pressure."
             )
             practical_steps = [
-                "Dedicate a weekly screen-free 30-minute dialogue with your partner solely to listen without defense or debate.",
-                "Keep a pair of light pink or cream quartz stones in the South-West relationship corner of your bedroom to ground emotional peace."
+                "Set aside one unhurried, screen-free conversation each week to share expectations openly and listen without interrupting.",
+                "Notice whether you are matching actions with words before making major relationship promises.",
+                "Keep evenings calm and uncluttered so emotional conversations happen when both people are rested."
+            ]
+
+        elif topic_key in ("marriage_union", "partner_matching"):
+            diagnosis_text = (
+                f"For marriage timing and spousal harmony, your chart pairs Mulank (Birth Day number) {driver} ({d_p}) "
+                f"with Bhagyank (Life Path number) {conductor} ({c_p}). Mulank {driver} governs day-to-day domestic communication ({NUMBER_DUAL_ATTRIBUTES[d_base]['good']}), "
+                f"while Bhagyank {conductor} shapes shared household responsibility and long-term partnership rhythm. "
+            )
+            if 6 in missing_numbers:
+                diagnosis_text += "**Number 6 (Venus — Home & Spousal Harmony)** is open in your Lo Shu Grid, suggesting marriage decisions benefit from explicit alignment on family routines, finances, and mutual expectations beforehand. "
+            elif 6 in pair_numbers:
+                diagnosis_text += "Your grid holds **Number 6 as a balanced Pair**, supporting domestic loyalty, shared hospitality, and steady marital companionship. "
+            core_advice = (
+                f"Within **Personal Year {personal_year}**, your supportive Dasha window for marriage discussions and family alignment spans {timing_window_str}."
+            )
+            practical_steps = [
+                "Discuss shared household priorities—living arrangements, finances, and family boundaries—calmly before fixing milestone dates.",
+                "Schedule a weekly 30-minute spousal or partner check-in focused on practical mutual support rather than past grievances.",
+                "Keep the South-West corner of your living or sleeping space tidy, warm, and free of work clutter."
             ]
 
         elif topic_key in ("career_growth", "career_stuck"):
             diagnosis_text = (
                 f"Your professional blueprint combines the pioneering executive drive of Driver {driver} ({d_p}) "
                 f"with the overarching karmic trajectory of Conductor {conductor} ({c_p}). "
-                f"You are naturally wired for {NUMBER_DUAL_ATTRIBUTES[driver]['attribute']}. "
+                f"You are naturally wired for {NUMBER_DUAL_ATTRIBUTES[d_base]['attribute']}. "
             )
             if topic_key == "career_stuck":
                 diagnosis_text += (
@@ -678,8 +744,9 @@ class CharmOracleSynthesizer:
             ]
 
         elif topic_key in ("universal_obstacles",):
+            greeting_inline = f"Namaste {first_name}" if first_name else "Namaste"
             diagnosis_text = (
-                f"Namaste {first_name} 🙏 Take a deep, reassuring breath. When obstacles seem to appear on all sides—in career, money, and personal peace—"
+                f"{greeting_inline} 🙏 Take a deep, reassuring breath. When obstacles seem to appear on all sides—in career, money, and personal peace—"
                 f"it feels exhausting, but in authentic occult numerology, this is the classic signature of **Karmic Boundary Recalibration**. "
                 f"Combining Driver {driver} ({d_p}) and Conductor {conductor} ({c_p}) in Personal Year {personal_year}: "
                 f"your soul has outgrown old compromises. The friction you are experiencing is your planetary cycles forcefully shutting doors to outmoded, draining paths "
@@ -698,10 +765,44 @@ class CharmOracleSynthesizer:
                 "Feed stray animals, birds, or cows once weekly on Saturday morning to neutralize heavy karmic friction."
             ]
 
-        else: # general_destiny, foreign_relocation, missing_numbers, repetition_degree, health
+        elif topic_key == "property_vastu":
+            has_silver_plane = all(n in present_numbers for n in (2, 5, 8))
+            diagnosis_text = (
+                f"For property, home address, and Vastu alignment, classical Lo Shu analysis examines the Earth axis **2–5–8** alongside Mulank {driver} ({d_p}) and Bhagyank {conductor} ({c_p}). "
+                + ("Your birth grid activates the **2–5–8 Earth Plane**, supporting steady real-estate planning and grounded household stability. "
+                   if has_silver_plane else
+                   "Because one or more Earth digits (**2, 5, or 8**) are open in your Lo Shu Grid, property purchases and moves go smoothest when backed by unhurried title verification and conservative EMI planning. ")
+            )
+            core_advice = (
+                f"In **Personal Year {personal_year}**, your supportive Dasha window for shortlisting homes, checking flat/plot digits, or planning a move runs from {timing_window_str}."
+            )
+            practical_steps = [
+                "Verify title deeds, RERA registration, and total monthly outgoings independently before paying any booking token.",
+                "Check how a candidate flat or house number reduces to a single digit alongside Mulank " + str(driver) + " and Bhagyank " + str(conductor) + ".",
+                "Keep the North-East and central area of your home bright, ventilated, and uncluttered."
+            ]
+
+        elif topic_key == "health_of_routine":
+            diagnosis_text = (
+                f"From a strictly non-medical daily-routine perspective, Mulank {driver} ({d_p}) and Bhagyank {conductor} ({c_p}) highlight how you pace work, rest, and focus. "
+                f"(Note: Charm AI offers lifestyle rhythm suggestions only, never medical diagnosis or clinical advice.) "
+                + ("With **Number 5 (Mercury — Central Balance)** open in your grid, irregular meal or sleep times quickly create mental fatigue. "
+                   if 5 in missing_numbers else
+                   "Your grid supports steady daily rhythm once waking, hydration, and screen cutoffs are kept consistent. ")
+            )
+            core_advice = (
+                f"During **Personal Year {personal_year}** ({timing_window_str}), small, repeatable daily habits outperform intense short-lived overhauls."
+            )
+            practical_steps = [
+                "Anchor a fixed wake-up time and get 10–15 minutes of natural morning daylight before checking messages.",
+                "Use 45-minute focused work blocks followed by a 5-minute standing or hydration break.",
+                "Switch off bright work screens 45 minutes before sleep to let mental restlessness settle."
+            ]
+
+        else: # general_destiny, foreign_relocation, missing_numbers, repetition_degree, name_balancing
             diagnosis_text = (
                 f"Your core cosmic matrix combines **Driver {driver} ({d_p})** with **Conductor {conductor} ({c_p})**. "
-                f"Driver {driver} represents your inborn decision temperament ({NUMBER_DUAL_ATTRIBUTES[driver]['attribute']}), "
+                f"Driver {driver} represents your inborn decision temperament ({NUMBER_DUAL_ATTRIBUTES[d_base]['attribute']}), "
                 f"while Conductor {conductor} guides your overarching life lessons and ultimate destination. "
                 f"Currently in 2026, your cycle is energized by **Personal Year {personal_year}**, setting a pivotal stage for milestone transitions."
             )
@@ -714,8 +815,8 @@ class CharmOracleSynthesizer:
                 f"Aligning your daily habits, workspace direction, and ethical choices with this timing unlocks clear, friction-free momentum."
             )
             practical_steps = [
-                f"Wear or surround yourself with your auspicious planetary colors: {self._get_favourable_colors(driver)}.",
-                f"Schedule major decisions and high-stakes conversations on your power day: {self._get_favourable_day(driver)}.",
+                f"Wear or surround yourself with your auspicious planetary colors: {self._get_favourable_colors(d_base)}.",
+                f"Schedule major decisions and high-stakes conversations on your power day: {self._get_favourable_day(d_base)}.",
                 "Align your working desk facing North or East to channel focused solar and commercial mental clarity."
             ]
 
@@ -780,8 +881,11 @@ class CharmOracleSynthesizer:
 
         # ── 5. Full Humanized Consultation Text ──
         steps_text = "\n".join(f"• **Step {i+1}:** {step}" for i, step in enumerate(practical_steps))
+        greeting_header = f"Namaste {first_name} ✨" if first_name else "Namaste ✨"
+        question_context_line = f"*Inquiry Focus: {clean_q}*\n\n" if clean_q else ""
         full_text = (
-            f"Namaste {first_name} ✨\n\n"
+            f"{greeting_header}\n\n"
+            f"{question_context_line}"
             f"**1. What Your Numbers Reveal About '{topic_label}':**\n"
             f"{diagnosis_text}\n\n"
             f"**2. Your Inborn Character & Life Dynamics:**\n"
@@ -832,17 +936,18 @@ class CharmOracleSynthesizer:
             8: "Dark Navy Blue, Charcoal Grey, Steel Grey",
             9: "Crimson Red, Coral, Warm Terracotta"
         }
-        return color_map.get(num, "Gold, White, Cream")
+        return color_map.get(_base_1_to_9(num), "Gold, White, Cream")
 
     def _get_favourable_day(self, num: int) -> str:
         day_map = {
             1: "Sunday", 2: "Monday", 3: "Thursday", 4: "Wednesday & Saturday",
             5: "Wednesday", 6: "Friday", 7: "Thursday & Monday", 8: "Saturday", 9: "Tuesday"
         }
-        return day_map.get(num, "Thursday & Sunday")
+        return day_map.get(_base_1_to_9(num), "Thursday & Sunday")
 
     def _get_faith_tailored_remedy(self, faith: str, driver: int, conductor: int, missing_nums: List[int]) -> str:
-        d_p = PLANETARY_INFO[driver]["planet"]
+        d_base = _base_1_to_9(driver)
+        d_p = PLANETARY_INFO[d_base]["planet"]
 
         if faith == "hindu":
             beej_mantras = {
@@ -857,20 +962,20 @@ class CharmOracleSynthesizer:
                 9: "Om Kram Krim Kroum Sah Bhaumaya Namah (chant Hanuman Chalisa on Tuesday morning, physical exercise)"
             }
             return (
-                f"• **Vedic Beej Mantra & Arghya:** Chant *{beej_mantras.get(driver, beej_mantras[1])}*.\n"
+                f"• **Vedic Beej Mantra & Arghya:** Chant *{beej_mantras.get(d_base, beej_mantras[1])}*.\n"
                 f"• **Elemental Balance:** Keep a natural brass or copper vessel in the North-East; offer pure water to the morning sun to vitalize your core {d_p} energy."
             )
 
         elif faith == "muslim":
             return (
-                f"• **Sadaqah & Charitable Giving:** Practice voluntary Sadaqah on auspicious days ({self._get_favourable_day(driver)}). Provide clean drinking water to travelers or feed birds and stray animals quietly without ostentation.\n"
+                f"• **Sadaqah & Charitable Giving:** Practice voluntary Sadaqah on auspicious days ({self._get_favourable_day(d_base)}). Provide clean drinking water to travelers or feed birds and stray animals quietly without ostentation.\n"
                 f"• **Elemental Harmonization:** Infuse your personal space with natural green plants and natural attar (pure non-alcoholic fragrance like rose or sandalwood) on Fridays to balance peaceful mental vibrations.\n"
                 f"• **Contemplation:** Dedicate 10 minutes after morning prayers for quiet gratitude and reflection, facing East/North."
             )
 
         elif faith == "christian":
             return (
-                f"• **Benevolent Almsgiving & Charity:** Donate warm meals, clean blankets, or school supplies to local children's homes or community shelters on {self._get_favourable_day(driver)} mornings.\n"
+                f"• **Benevolent Almsgiving & Charity:** Donate warm meals, clean blankets, or school supplies to local children's homes or community shelters on {self._get_favourable_day(d_base)} mornings.\n"
                 f"• **Contemplative Light:** Light a pure beeswax or white candle during morning personal prayer to invite divine clarity, focus, and peace.\n"
                 f"• **Gratitude & Scripture:** Spend 10 minutes in morning contemplative scripture reflection and journaling your daily intentions."
             )

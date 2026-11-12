@@ -21,6 +21,7 @@ export interface PackDefinition {
   launch_offer_ends_at?: string | null;
   badge?: string | null;
   status: 'active' | 'inactive' | 'coming_soon';
+  waitlist_label?: string;
   pages?: number;
   deliverables: string[];
   voucher_allocation?: {
@@ -52,6 +53,7 @@ export const PACK_CATALOG: {
     notify_me_higher_tiers: boolean;
     notify_me_tiers: string[];
     waitlist_display_label?: string;
+    waitlist_launch_caption?: string;
   };
   core_reports: Record<string, PackDefinition>;
   bundles: Record<string, PackDefinition>;
@@ -64,9 +66,11 @@ export const PACK_CATALOG: {
     "notify_me_higher_tiers": true,
     "notify_me_tiers": [
       "report_advanced",
-      "report_premium"
+      "report_premium",
+      "planner_2027"
     ],
-    "waitlist_display_label": "Coming soon, notify me"
+    "waitlist_display_label": "Coming soon, notify me",
+    "waitlist_launch_caption": "When this report opens, it starts at a launch price for its first 7 days. We\u2019ll email you the day it opens."
   },
   "launch_offer": {
     "enabled": true,
@@ -74,7 +78,13 @@ export const PACK_CATALOG: {
     "duration_hours": 168,
     "source_env_vars": [
       "NV_LAUNCH_STARTS_AT",
-      "NV_LAUNCH_ENDS_AT"
+      "NV_LAUNCH_ENDS_AT",
+      "NV_LAUNCH_BASIC_STARTS_AT",
+      "NV_LAUNCH_BASIC_ENDS_AT",
+      "NV_LAUNCH_ADVANCED_STARTS_AT",
+      "NV_LAUNCH_ADVANCED_ENDS_AT",
+      "NV_LAUNCH_PREMIUM_STARTS_AT",
+      "NV_LAUNCH_PREMIUM_ENDS_AT"
     ],
     "started_at": null,
     "ends_at": null,
@@ -102,13 +112,13 @@ export const PACK_CATALOG: {
       "digital_root": 6,
       "mrp_digital_root": 3,
       "status": "active",
+      "waitlist_label": "Coming soon, notify me",
       "deliverables": [
-        "32-Page Complete Roadmap PDF (all 9 glowing & veiled charms)",
-        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
-        "Full Name Balancing, Acoustic Spelling & Poorak Numbers Protocol",
-        "10-Year Macro Planetary Timing Radar & Month-by-Month Auspicious Windows",
-        "Veiled Charms Deep Diagnosis, 81-Pair Matrix & 4-Stage Pinnacle Cycles",
-        "Multi-Generational Synastry, Commercial Vectors & Methodology Appendix"
+        "32-Page Complete Numerology Report PDF (all 9 glowing & veiled positions)",
+        "Everything in the 12-Page Report + Missing numbers (Open grid cells) & Poorak Numbers",
+        "81-Pair Mulank\u2013Bhagyank Matrix & Chaldean + Pythagorean Dual Synthesis",
+        "Calling Name Spelling Alignment, Mobile/Email/PIN & Property/Vehicle Checks",
+        "Month-by-Month Personal Timing Calendar, Blessing Years & 4-Stage Pinnacles"
       ],
       "progressive_unlock": "includes_basic"
     },
@@ -126,13 +136,13 @@ export const PACK_CATALOG: {
       "digital_root": 6,
       "mrp_digital_root": 3,
       "status": "active",
+      "waitlist_label": "Coming soon, notify me",
       "deliverables": [
-        "12-Page Glowing Charms Reading PDF",
-        "All Alignment calculations + Auspicious Initiation Windows & Personal Year Cycles",
-        "Complete 8 Elemental Planes & Lo Shu Grid Analysis",
-        "Glowing Numbers in Depth & Benefic vs Malefic Operating Matrix",
-        "Vedic Gharelu Remedies Bank & 40-Day Aura Cleansing",
-        "Interpersonal Synergy, Co-Founder Matching & Kua Directional Blueprint"
+        "12-Page Personalised Glowing Charms PDF",
+        "Everything in the 3-Page Report + Present & Repeated Digits Analysis",
+        "Benefic vs Mindful Operating Matrix & Career/Relationship Priority Chapters",
+        "Interpersonal Synergy, Co-Founder Matching & Auspicious Monthly Dates",
+        "Vedic Household (Gharelu) Habits, 40-Day Routine & Full Kua Directional Table"
       ],
       "progressive_unlock": "includes_basic"
     },
@@ -155,10 +165,10 @@ export const PACK_CATALOG: {
       "status": "active",
       "deliverables": [
         "3-Page Personalised Alignments PDF",
-        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
-        "Lo Shu 3x3 Grid Matrix & 8 Elemental Planes Audit",
-        "Chaldean Calling Name Compound & Root Summary",
-        "5-Element Balancing Actions & 90-Day Roadmap"
+        "Mulank (Birth Day number), Bhagyank (Life Path number) & Calling Name number",
+        "Lo Shu Grid (Lo Shu Square), 8 Planes & 5-Element Balance Audit",
+        "Kua number (Vastu direction number) & Desk Orientation",
+        "Top-3 Practical Everyday Habits & 90-Day Action Plan (no gemstones or rituals)"
       ],
       "progressive_unlock": "entry"
     }
@@ -229,32 +239,34 @@ export const PACK_CATALOG: {
     "charm_free": {
       "pack_id": "charm_free",
       "name": "Free Preview",
-      "display_name": "Charm AI \u00b7 Free Preview",
+      "descriptor": "Free Exploratory Numerology Q&A, 3 questions",
+      "display_name": "Charm AI \u00b7 Free Exploratory Numerology Q&A, 3 questions",
       "price_inr": 0,
       "amount_paise": 0,
       "questions_count": 3,
       "digital_root": 0,
       "status": "active",
       "deliverables": [
-        "3 Free Exploratory Inquiries Daily per Account",
-        "Instant Driver / Conductor token verification",
-        "24/7 web access"
+        "3 Free Exploratory Inquiries After Verified Sign-In",
+        "Instant Mulank (Birth Day number) & Bhagyank (Life Path number) Context",
+        "24/7 Web Access in Charm AI"
       ]
     },
     "charm_single": {
       "pack_id": "charm_single",
       "name": "Charm AI Starter Pack",
-      "display_name": "Charm AI \u00b7 Starter Pack",
+      "descriptor": "Guided Numerology Q&A Pack, 5 questions",
+      "display_name": "Charm AI Starter Pack \u00b7 Guided Numerology Q&A Pack, 5 questions",
       "price_inr": 199,
       "amount_paise": 19900,
       "questions_count": 5,
       "digital_root": 1,
       "status": "active",
       "deliverables": [
-        "5 In-Depth Consultation Inquiries across any life area",
-        "Acute execution timing windows (Hora & transit)",
-        "Grounded non-fatalistic practical guidance",
-        "Credits valid for 6 months"
+        "5 Guided Numerology Q&A Inquiries across Career, Relationships, or Timing",
+        "Deterministic Dasha & Personal Year Window Context",
+        "Grounded, Non-Fatalistic Practical Reflection Points",
+        "Credits Valid for 6 Months in Your Private Dashboard"
       ]
     },
     "charm_multi": {
@@ -297,22 +309,23 @@ export const PACK_CATALOG: {
       "pack_id": "planner_2027",
       "tier_id": "year_ahead_2027",
       "name": "2027 Year Ahead Planner",
-      "display_name": "2027 Year Ahead Planner \u00b7 Annual Blueprint",
-      "pages": 16,
-      "list_price_inr": 1999,
-      "list_price_paise": 199900,
-      "offer_price_inr": 1499,
-      "offer_price_paise": 149900,
-      "offer_ends_at": "2027-01-31T23:59:59+05:30",
+      "display_name": "2027 Year Ahead Planner \u00b7 24-Page Annual Blueprint",
+      "pages": 24,
+      "list_price_inr": null,
+      "list_price_paise": null,
+      "offer_price_inr": null,
+      "offer_price_paise": null,
+      "offer_ends_at": null,
       "currency": "INR",
-      "status": "active",
+      "status": "coming_soon",
+      "waitlist_only": true,
+      "waitlist_label": "Coming soon, notify me",
       "deliverables": [
-        "16-Page High-Precision 2027 Annual Master Planner PDF",
-        "Personal Year 2027 Governing Archetype & Macro Trajectory",
-        "12-Month Tactical Matrix with Auspicious Decision Windows",
-        "Quarterly Pivot Radar (Q1\u2013Q4 Strategic Milestones)",
-        "Commercial, Vocational & Relationship Timing Corridors",
-        "Vedic Gharelu Remedies & 40-Day Aural Attunement for 2027"
+        "24-Page Personalised 2027 Year Ahead Planner PDF",
+        "Personal Year (Varshik Anka) 2027 Theme & 7 Life Dimensions",
+        "12-Month Calendar Pages with Personal Month & Day Calculations",
+        "Quarterly Focus Pages (Q1\u2013Q4 Practical Planning)",
+        "Deterministic Mulank (Birth Day number) & Bhagyank (Life Path number) Trace"
       ]
     }
   }

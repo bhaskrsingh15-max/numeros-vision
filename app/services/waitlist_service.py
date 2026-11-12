@@ -47,6 +47,7 @@ _HEX_ANY_RE = re.compile(r"^[0-9a-fA-F]+$")
 _PACK_TITLES = {
     "report_advanced": "Anveil my glowing charms (12 Pages)",
     "report_premium": "Anveil every charm (32 Pages)",
+    "planner_2027": "2027 Year Ahead Numerology Planner",
 }
 
 
@@ -61,6 +62,8 @@ def normalize_waitlist_pack_id(pack_id: Optional[str]) -> Optional[str]:
         return "report_advanced"
     if clean in ("report_premium", "premium", "report_divine", "divine"):
         return "report_premium"
+    if clean in ("planner_2027", "year_2027", "year-2027", "2027_planner"):
+        return "planner_2027"
     return None
 
 
@@ -178,7 +181,7 @@ def upsert_waitlist_record(
 
     norm_pack = normalize_waitlist_pack_id(pack_id)
     if not norm_pack:
-        raise ValueError("Waitlist notifications apply only to Advanced and Premium editions.")
+        raise ValueError("Waitlist notifications apply only to Advanced, Premium, and 2027 Planner editions.")
 
     if consent is not True:
         raise ValueError("Explicit notification consent is required under DPDP 2023.")
@@ -285,7 +288,7 @@ def delete_waitlist_records(
     if pack_id and str(pack_id).strip():
         norm_pack = normalize_waitlist_pack_id(pack_id)
         if not norm_pack:
-            raise ValueError("Invalid pack_id; expected report_advanced or report_premium.")
+            raise ValueError("Invalid pack_id; expected report_advanced, report_premium, or planner_2027.")
 
     email_hash = hashlib.sha256(email_clean.encode("utf-8")).hexdigest()
     target_path = storage_path or default_waitlist_storage_path()
@@ -356,11 +359,12 @@ def build_waitlist_notification_email(
         raise ValueError("Decrypted waitlist recipient email is invalid.")
 
     pack_title = _PACK_TITLES[norm_pack]
+    open_url = "https://numerosvision.com/year-2027/" if norm_pack == "planner_2027" else "https://numerosvision.com/pricing/"
     subject = f"{pack_title} Is Now Available | NUMEROS VISION"
     text_body = (
         f"Namaste,\n\n"
         f"You asked us to tell you when {pack_title} becomes available on NUMEROS VISION.\n\n"
-        f"This edition is now open at https://numerosvision.com/pricing.html\n\n"
+        f"This edition is now open at {open_url}\n\n"
         f"Why you received this email: You provided explicit DPDP 2023 consent for the single purpose "
         f'"{WAITLIST_PURPOSE}" (12-month maximum retention).\n'
         f"To delete your waitlist record at any time, use the Delete Waitlist Email option on our "

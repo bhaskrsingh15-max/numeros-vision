@@ -18,7 +18,7 @@ class FreeReadingRequest(BaseModel):
     day: int = Field(..., ge=1, le=31, description="Day of birth (1-31)")
     month: int = Field(..., ge=1, le=12, description="Month of birth (1-12)")
     year: int = Field(..., ge=1900, le=2100, description="Year of birth (YYYY)")
-    user_id: Optional[str] = Field("guest_user", description="User ID for usage metering")
+    user_id: Optional[str] = Field(None, description="User ID for usage metering")
     birth_time: Optional[str] = Field("12:00", description="Birth time in HH:MM format (e.g. 16:15 or 04:15 PM)")
     place_name: Optional[str] = Field("Delhi, India", description="Birth city/place name")
     latitude: Optional[float] = Field(None, description="Birth latitude in degrees (-90.0 to 90.0)")
@@ -31,11 +31,11 @@ class RemedyRequest(FreeReadingRequest):
 
 class OpenEndedQuestionRequest(BaseModel):
     question: str = Field(..., description="Open-ended question in natural language")
-    name: Optional[str] = Field("Seeker", description="User full name")
-    day: Optional[int] = Field(15, ge=1, le=31, description="Day of birth (1-31)")
-    month: Optional[int] = Field(8, ge=1, le=12, description="Month of birth (1-12)")
-    year: Optional[int] = Field(1990, ge=1900, le=2100, description="Year of birth (YYYY)")
-    user_id: Optional[str] = Field("guest_user", description="User ID for usage metering")
+    name: Optional[str] = Field("", description="User full name (optional)")
+    day: Optional[int] = Field(None, ge=1, le=31, description="Day of birth (1-31)")
+    month: Optional[int] = Field(None, ge=1, le=12, description="Month of birth (1-12)")
+    year: Optional[int] = Field(None, ge=1900, le=2100, description="Year of birth (YYYY)")
+    user_id: Optional[str] = Field(None, description="User ID for usage metering")
     birth_time: Optional[str] = Field("12:00", description="Birth time in HH:MM format (e.g. 16:15 or 04:15 PM)")
     place_name: Optional[str] = Field("Delhi, India", description="Birth city/place name")
     latitude: Optional[float] = Field(None, description="Birth latitude in degrees (-90.0 to 90.0)")
@@ -260,7 +260,7 @@ def ask_question(req: OpenEndedQuestionRequest, request: Request = None):
     try:
         # Context extraction fallback for flexible frontend submissions
         if req.context and isinstance(req.context, dict):
-            if (not req.name or req.name == "Seeker") and req.context.get("name"):
+            if (not req.name or req.name.strip().lower() == "seeker") and req.context.get("name"):
                 req.name = str(req.context["name"])
             if req.context.get("day"):
                 try: req.day = int(req.context["day"])
@@ -271,10 +271,8 @@ def ask_question(req: OpenEndedQuestionRequest, request: Request = None):
             if req.context.get("year"):
                 try: req.year = int(req.context["year"])
                 except Exception: pass
-        if not req.day: req.day = 15
-        if not req.month: req.month = 8
-        if not req.year: req.year = 1990
-        if not req.name: req.name = "Seeker"
+        if req.name and req.name.strip().lower() == "seeker":
+            req.name = ""
 
         clean_q = sanitize_user_input(req.question)
 
@@ -284,12 +282,34 @@ def ask_question(req: OpenEndedQuestionRequest, request: Request = None):
             req.day, req.month, req.year = dob_extracted
             req.current_age = max(1, 2026 - req.year)
 
+        from app.api.charm_ai import resolve_or_create_visitor_identity
+        resolved_uid = (req.user_id or "").strip()
+        if not resolved_uid or resolved_uid == "guest_user":
+            if request is not None:
+                _, vis_hash, _ = resolve_or_create_visitor_identity(request)
+                resolved_uid = f"anon_{vis_hash[:16]}"
+            else:
+                resolved_uid = "anon_visitor"
+        req.user_id = resolved_uid
+
+        if not (req.day and req.month and req.year):
+            from app.charm.chat.response_composer import charm_chat_orchestrator
+            abstain_turn = charm_chat_orchestrator.process_chat_turn(
+                message=clean_q,
+                user_name=req.name or "",
+                day=None,
+                month=None,
+                year=None,
+                user_id=resolved_uid,
+            )
+            return apply_ai_disclosure(abstain_turn.model_dump())
+
         # ── Enterprise Agentic AI Safety & Traceability Perimeter ──
         from app.engine.enterprise_agent_gateway import EnterpriseAgentGateway
         gateway_audit = EnterpriseAgentGateway.process_turn(
             user_prompt=clean_q,
             topic=_classify_question_topic(clean_q),
-            user_id=req.user_id or "guest_user"
+            user_id=resolved_uid
         )
         if gateway_audit.get("intercepted"):
             cb_status = gateway_audit.get("circuit_breaker", {}).get("status")
@@ -487,11 +507,11 @@ def ask_question(req: OpenEndedQuestionRequest, request: Request = None):
         from app.charm.chat.response_composer import charm_chat_orchestrator
         charm_turn = charm_chat_orchestrator.process_chat_turn(
             message=clean_q,
-            user_name=req.name or "Seeker",
+            user_name=req.name or "",
             day=req.day,
             month=req.month,
             year=req.year,
-            user_id=req.user_id or "guest_user",
+            user_id=req.user_id or "anon_visitor",
             tob=getattr(req, "tob", None),
             pob=getattr(req, "pob", None) or getattr(req, "city", None),
             loshu_grid=lo_shu_data
@@ -500,24 +520,30 @@ def ask_question(req: OpenEndedQuestionRequest, request: Request = None):
 
         if not has_active_credit:
             freemium_response = {
-                "status": "success",
+                "status": "success" if charm_turn.status == "ANSWERED" else charm_turn.status,
                 "phase": "diagnosis",
                 "is_freemium_gate": True,
                 "is_premium": False,
                 "trace_id": gateway_audit.get("trace_id"),
                 "governing_policy": "/disclaimer",
                 "question": clean_q,
-                "classified_topic": topic,
+                "classified_topic": charm_turn.topic,
+                "topic": charm_turn.topic,
                 "topic_display": topic_label,
                 "alignment_status": alignment_status,
                 "alignment_grade": alignment_grade,
                 "alignment_score": alignment_score,
                 "alignment_summary": alignment_summary,
+                "assistant_message": charm_turn.assistant_message,
+                "human_friendly_summary": charm_turn.human_friendly_summary,
+                "practical_next_steps": charm_turn.practical_next_steps,
+                "follow_up_question": charm_turn.follow_up_question,
+                "consensus_status": charm_turn.consensus_status,
                 "direct_answer": (charm_turn.assistant_message.get("text") if (charm_turn and charm_turn.assistant_message and charm_turn.assistant_message.get("text")) else (expl["direct_answer"] + "\n\n" + loshu_chart_md)),
                 "humanized_consultation": (charm_turn.assistant_message.get("text") if (charm_turn and charm_turn.assistant_message and charm_turn.assistant_message.get("text")) else expl["direct_answer"]),
                 "loshu_grid": lo_shu_data,
                 "loshu_grid_markdown": loshu_chart_md,
-                "charm_prediction": None,
+                "charm_prediction": charm_prediction,
                 "age_numerology": age_data,
                 "why_this_is_happening": None,
                 "validation_question": expl.get("validation_question", ""),

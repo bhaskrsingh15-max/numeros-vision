@@ -251,11 +251,16 @@
           : (selVeiled && t === 'e') ? 'Unlocks this veiled charm: its number, gifts and remedies, plus all 9 charms'
           : (S && t === svc) ? `Focused on ${S.name.toLowerCase()}` : '';
         const card = el('div', 'nv-price' + (featured ? ' is-featured' : '') + (match ? ' is-match' : '') + (notFor ? ' is-notfor' : ''));
+        const wlCaption = (global.NV_PRICING && typeof global.NV_PRICING.getWaitlistCaption === 'function')
+          ? global.NV_PRICING.getWaitlistCaption()
+          : 'When this report opens, it starts at a launch price for its first 7 days. We\u2019ll email you the day it opens.';
         card.innerHTML =
           `<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong style="font-weight:500">${T.label}</strong>${tag ? `<span class="nv-pill${match ? ' is-match' : ''}">${tag}</span>` : ''}</div>` +
           `<div style="font-size:12px;color:#7A654D;margin-top:2px">${T.pages}</div>` +
-          `<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="nv-amt">${T.price}</span>${T.mrp ? `<s>${T.mrp}</s>` : ''}</div>` +
-          (T.launchCopy ? `<div style="font-size:11.5px;color:#7A654D">${T.launchCopy}</div>` : '') +
+          (T.waitlistOnly
+            ? `<div style="font-size:11.5px;color:#7A654D;margin-top:4px;line-height:1.45">${wlCaption}</div>`
+            : `<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="nv-amt">${T.price}</span>${T.mrp ? `<s>${T.mrp}</s>` : ''}</div>`) +
+          (!T.waitlistOnly && T.launchCopy ? `<div style="font-size:11.5px;color:#7A654D">${T.launchCopy}</div>` : '') +
           (cover ? `<p style="margin:0;font-size:13px">${cover}</p>` : '');
         const buyLabel = T.waitlistOnly ? T.price : `Anveil now · ${T.price}`;
         const buy = el('button', 'nv-btn', buyLabel); buy.type = 'button';

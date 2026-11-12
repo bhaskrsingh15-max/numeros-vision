@@ -43,7 +43,7 @@ Numeros Vision integrates 6 distinct classical traditions side-by-side, preservi
   - 9 = I, R
 - **Core Coordinates**: Expression/Destiny Number, Soul Urge (Vowels), Personality (Consonants), and Birthday Number.
 
-### C. Lo Shu 3×3 Ancient Magic Square (Natal Vibrational Grid)
+### C. Lo Shu Grid (Lo Shu Square) — 3×3 Natal Grid
 - **Fixed Layout**:
   - Row 1: 4 (Wood/SE), 9 (Fire/S), 2 (Earth/SW) — Mental Plane
   - Row 2: 3 (Wood/E), 5 (Earth/Center), 7 (Metal/W) — Emotional/Spiritual Plane
@@ -58,9 +58,9 @@ Numeros Vision integrates 6 distinct classical traditions side-by-side, preservi
   7. Golden Raj Yoga (4-5-6): Complete diagonal plane of prosperity, commercial acclaim, and social magnetism.
   8. Silver Raj Yoga (2-5-8): Complete diagonal plane of property acquisition, emotional stability, and enduring land wealth.
 
-### D. Vedic Sankhya Shastra (Driver & Conductor Dynamics)
-- **Driver (Mulank)**: Single-digit reduction of birth day (1-31). Represents immediate decision temperament, instinctive habits, and everyday mind.
-- **Conductor (Bhagyank / Life Path)**: Single-digit reduction of entire birth date (Day + Month + Year). Represents overarching life lessons, vocational calling, and ultimate destiny trajectory.
+### D. Vedic Sankhya Shastra (Mulank & Bhagyank Dynamics)
+- **Mulank (Birth Day number)**: Single-digit reduction of birth day (1-31). Represents immediate decision temperament, instinctive habits, and everyday mind.
+- **Bhagyank (Life Path number)**: Single-digit reduction of entire birth date (Day + Month + Year). Represents overarching life lessons, vocational calling, and long-term trajectory.
 - **Ruling Planetary Associations**:
   - 1: Sun (Surya) — Executive authority, will, clarity, leadership.
   - 2: Moon (Chandra) — Intuition, sensitive empathy, diplomacy, fluidity.
@@ -106,9 +106,12 @@ Numeros Vision integrates 6 distinct classical traditions side-by-side, preservi
 - Profession Calculator: https://numerosvision.com/calculators/profession-calculator/
 - Favourable Numbers: https://numerosvision.com/calculators/favourable-numbers/
 - Logo Intelligence: https://numerosvision.com/calculators/logo-intelligence/
-- Charm AI Overview (Guided Numerology Q&A Pack, 5 questions · ₹199): https://numerosvision.com/charm-ai/
-- Reports Catalogue (Anveil every charm — Complete Numerology Report, 32 pages · Coming soon, notify me · Anveil my glowing charms — Advanced Numerology Report, 12 pages · Coming soon, notify me · Anveil my alignments — Basic Numerology Report, 3 pages · ₹399 regular): https://numerosvision.com/reports/
-- Sample Blueprint: https://numerosvision.com/sample_roadmap/
+- Charm AI Overview (3 free questions per day; Charm AI Starter Pack, 5 questions · ₹199): https://numerosvision.com/charm-ai/
+- Reports Catalogue (https://numerosvision.com/reports/):
+  - **Anveil every charm** (Complete Numerology Report, 32 pages · Coming soon, notify me): (1) Everything in Basic & Advanced plus Missing Numbers (Open Grid Cells) Analysis; (2) Multi-Year Numerology Dasha & Pinnacle Cycle Timeline; (3) Chaldean Name Balancing & Signature Alignment Options; (4) Practical Lifestyle, Color, Directional (Vastu) & Habit Harmonizers; (5) Complete 32-Page Personalized Reference PDF Report.
+  - **Anveil my glowing charms** (Advanced Numerology Report, 12 pages · Coming soon, notify me): (1) Everything in Basic plus Deep Analysis of All Present Numbers; (2) Repeating Digit Amplifications & Behavioral Tendencies; (3) 8 Lo Shu Planes & Raj Yoga Combinations Breakdown; (4) Career, Relationship & Financial Archetype Compatibility; (5) 12-Page Structured PDF Report with Actionable Daily Habits.
+  - **Anveil my alignments** (Basic Numerology Report, 3 pages · ₹399 regular): (1) Core Numbers: Mulank (Birth Day number), Bhagyank (Life Path number), Kua number (Vastu direction number) & Personal Year; (2) 9-Cell Lo Shu Grid (Lo Shu Square) Mapping & Active Plane Strengths; (3) Calling Name number (Chaldean Name number) Harmony Check; (4) Five-Element Distribution Balance & Practical Lifestyle Guidance; (5) Instant 3-Page Print-Ready Personalized PDF Report.
+- Sample Blueprint: https://numerosvision.com/sample/
 - Plans & Pricing: https://numerosvision.com/pricing/
 - HTML Sitemap: https://numerosvision.com/sitemap/
 

@@ -66,40 +66,58 @@ PLANS = {
     # ── UNIFIED STANDALONE REPORT TIERS ──────────────────────────────────────
     "report_basic": {
         "name": "Anveil my alignments",
-        "amount_inr": 199,
+        "amount_inr": 399,
         "original_price_inr": 399,
-        "amount_paise": 19900,
-        "period": "3-Page Executive PDF",
+        "amount_paise": 39900,
+        "period": "3-Page Personalized PDF",
         "questions_count": 0,
         "has_remedies": True,
         "category": "report",
-        "description": "3-page focused report with core calculations, method note, and initial interpretation.",
-        "features": ["3-Page Personalised PDF", "Driver & Conductor Calculations", "Lo Shu 3x3 Grid Matrix", "Chaldean Letter Breakdown", "Methodology & Limitations Note"]
+        "description": "3-page personalized report covering core birth numbers, 9-cell Lo Shu Grid (Lo Shu Square), Calling Name number (Chaldean Name number) harmony, and Five-Element lifestyle guidance.",
+        "features": [
+            "Core Numbers: Mulank (Birth Day number), Bhagyank (Life Path number), Kua number (Vastu direction number) & Personal Year",
+            "9-Cell Lo Shu Grid (Lo Shu Square) Mapping & Active Plane Strengths",
+            "Calling Name number (Chaldean Name number) Harmony Check",
+            "Five-Element Distribution Balance & Practical Lifestyle Guidance",
+            "Instant 3-Page Print-Ready Personalized PDF Report"
+        ]
     },
     "report_advanced": {
-        "name": "Advanced Report",
-        "amount_inr": 510,
-        "original_price_inr": 999,
-        "amount_paise": 51000,
-        "period": "12-Page Master PDF",
+        "name": "Anveil my glowing charms",
+        "amount_inr": 1020,
+        "original_price_inr": 1020,
+        "amount_paise": 102000,
+        "period": "12-Page Structured PDF",
         "questions_count": 0,
         "has_remedies": True,
         "category": "report",
         "popular": True,
-        "description": "12-page comprehensive master dossier with expanded analysis, comparisons, and safe remedies.",
-        "features": ["12-Page Master Synthesis Dossier", "5-Year Numerology Dasha & Dasha Timeline", "Complete Lo Shu Plane Analysis", "Chaldean Sound Frequency Analysis", "7-Layer Safe Planetary Remedies"]
+        "description": "12-page structured report covering present numbers, repeating digit amplifications, all 8 Lo Shu planes, and career/relationship/financial archetype compatibility.",
+        "features": [
+            "Everything in Basic plus Deep Analysis of All Present Numbers",
+            "Repeating Digit Amplifications & Behavioral Tendencies",
+            "8 Lo Shu Planes & Raj Yoga Combinations Breakdown",
+            "Career, Relationship & Financial Archetype Compatibility",
+            "12-Page Structured PDF Report with Actionable Daily Habits"
+        ]
     },
     "report_premium": {
-        "name": "Premium Dossier",
-        "amount_inr": 1050,
-        "original_price_inr": 1999,
-        "amount_paise": 105000,
-        "period": "32-Page Sovereign Blueprint",
-        "questions_count": 5,
+        "name": "Anveil every charm",
+        "amount_inr": 2100,
+        "original_price_inr": 2100,
+        "amount_paise": 210000,
+        "period": "32-Page Complete Reference PDF",
+        "questions_count": 0,
         "has_remedies": True,
         "category": "report",
-        "description": "32-page sovereign executive dossier bringing together all supported calculations and technical appendix.",
-        "features": ["32-Page Sovereign Master Dossier", "Dual-System Synthesis (Chaldean + Pythagorean)", "10-Year Macro Planetary Radar", "Multi-Factor Synastry & Compatibility", "Complete Mathematical Proofs Appendix"]
+        "description": "32-page complete reference report covering missing numbers (open grid cells), multi-year Numerology Dasha & Pinnacle cycles, Chaldean name & signature alignment options, and practical lifestyle harmonizers.",
+        "features": [
+            "Everything in Basic & Advanced plus Missing Numbers (Open Grid Cells) Analysis",
+            "Multi-Year Numerology Dasha & Pinnacle Cycle Timeline",
+            "Chaldean Name Balancing & Signature Alignment Options",
+            "Practical Lifestyle, Color, Directional (Vastu) & Habit Harmonizers",
+            "Complete 32-Page Personalized Reference PDF Report"
+        ]
     },
     # ── UNIFIED MULTI-REPORT BUNDLES ─────────────────────────────────────────
     "starter_bundle": {
@@ -1967,6 +1985,37 @@ async def get_alignment_gap_analysis(req: AlignmentGapRequest, request: Request)
     return analysis
 
 
+@api_router.get("/planner-2027/price")
+def get_planner_2027_price_endpoint():
+    """Returns server-side status for 2027 Planner (waitlist-only with zero price until PLANNER_2027_LIVE=true)."""
+    from app.config.planner_2027_pricing import get_planner_2027_price
+    return get_planner_2027_price()
+
+
+@api_router.post("/planner-2027/order")
+async def create_planner_2027_order_endpoint(request: Request):
+    """Server-side guard blocking 2027 Planner order creation until statutory disclaimer is approved."""
+    from app.config.planner_2027_pricing import is_planner_2027_live
+    if not is_planner_2027_live():
+        return JSONResponse(
+            status_code=409,
+            content={
+                "success": False,
+                "code": "PLANNER_WAITLIST_ONLY",
+                "error": "Coming soon, notify me. The 2027 Year Ahead Numerology Planner is currently waitlist-only until statutory disclaimer approval.",
+                "waitlist_pack_id": "planner_2027",
+            },
+        )
+    body = await request.json()
+    order_req = CreateOrderRequest(
+        plan="planner_2027",
+        name=body.get("full_name") or body.get("name"),
+        email=body.get("email"),
+        mobile=body.get("phone") or body.get("mobile"),
+    )
+    return await create_order(order_req)
+
+
 @router.post("/create-order")
 async def create_order(req: CreateOrderRequest):
     """
@@ -1974,8 +2023,21 @@ async def create_order(req: CreateOrderRequest):
     Calls Razorpay Orders API: POST https://api.razorpay.com/v1/orders
     Validates minimum amount (>= 100 paise) and handles authentication / API errors.
     """
+    from app.config.planner_2027_pricing import is_planner_2027_live
+
     plan_key = req.plan or req.plan_id or "report_basic"
-    if is_notify_me_higher_tiers_enabled() and _normalize_notify_pack(plan_key) is not None:
+    norm_pack = _normalize_notify_pack(plan_key)
+    if norm_pack == "planner_2027" and not is_planner_2027_live():
+        return JSONResponse(
+            status_code=409,
+            content={
+                "success": False,
+                "code": "PLANNER_WAITLIST_ONLY",
+                "detail": "Coming soon, notify me. The 2027 Year Ahead Numerology Planner is currently waitlist-only until statutory disclaimer approval.",
+                "waitlist_pack_id": "planner_2027",
+            },
+        )
+    if is_notify_me_higher_tiers_enabled() and norm_pack in ("report_advanced", "report_premium"):
         return JSONResponse(
             status_code=409,
             content={

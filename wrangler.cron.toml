@@ -1,0 +1,59 @@
+# NUMEROS VISION — COMPANION SCHEDULED WORKER (Stale-Order Reconcile + 30-Day Retention)
+# Deploy ONLY after explicit approval. Secrets must be entered via `wrangler secret put`:
+#   - RAZORPAY_KEY_ID       (rzp_test_... in preview; rzp_live_... in production)
+#   - RAZORPAY_KEY_SECRET
+#   - INTERNAL_CRON_SECRET  (optional bearer secret for authenticated manual check / webhook trigger)
+
+name = "numeros-vision-cron"
+main = "workers/reconcile_and_purge_cron.js"
+compatibility_date = "2026-10-21"
+
+[triggers]
+# 1) Every 10 minutes: reconcile stale CREATED/PAYMENT_PENDING/PAYMENT_VERIFIED orders against Razorpay Orders Payments API
+# 2) Daily 02:15 UTC (07:45 IST): 30-day retention audit/purge (strictly disabled behind ENABLE_RETENTION_PURGE_30D until approved)
+crons = ["*/10 * * * *", "15 2 * * *"]
+
+[vars]
+ENVIRONMENT = "preview"
+ENABLE_STALE_RECONCILE = "true"
+ENABLE_RETENTION_PURGE_30D = "false"
+RETENTION_PURGE_MODE = "report_only"
+STALE_RECONCILE_MIN_AGE_MS = "600000"
+STALE_RECONCILE_MAX_AGE_MS = "604800000"
+RETENTION_WINDOW_DAYS = "30"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "numeros-vision-db-preview"
+database_id = "5c8c33e5-8782-48cd-8404-41b881e9eb4b"
+migrations_dir = "migrations"
+
+[env.preview.vars]
+ENVIRONMENT = "preview"
+ENABLE_STALE_RECONCILE = "true"
+ENABLE_RETENTION_PURGE_30D = "false"
+RETENTION_PURGE_MODE = "report_only"
+STALE_RECONCILE_MIN_AGE_MS = "600000"
+STALE_RECONCILE_MAX_AGE_MS = "604800000"
+RETENTION_WINDOW_DAYS = "30"
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "numeros-vision-db-preview"
+database_id = "5c8c33e5-8782-48cd-8404-41b881e9eb4b"
+migrations_dir = "migrations"
+
+[env.production.vars]
+ENVIRONMENT = "production"
+ENABLE_STALE_RECONCILE = "true"
+ENABLE_RETENTION_PURGE_30D = "false"
+RETENTION_PURGE_MODE = "report_only"
+STALE_RECONCILE_MIN_AGE_MS = "600000"
+STALE_RECONCILE_MAX_AGE_MS = "604800000"
+RETENTION_WINDOW_DAYS = "30"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "numeros-vision-db"
+database_id = "18c0b0aa-b252-4c3f-bfee-37c9b8062d83"
+migrations_dir = "migrations"

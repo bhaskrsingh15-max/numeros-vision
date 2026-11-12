@@ -372,14 +372,24 @@ def root():
 @app.get("/sample", include_in_schema=False)
 @app.get("/sample/", include_in_schema=False)
 @app.get("/sample.html", include_in_schema=False)
-@app.get("/sample-report", include_in_schema=False)
-@app.get("/sample-report/", include_in_schema=False)
-@app.get("/sample_report", include_in_schema=False)
-@app.get("/sample-reports", include_in_schema=False)
 def serve_sample_report():
     path = os.path.join(STATIC_DIR, "sample.html")
     headers = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"}
     return FileResponse(path, media_type="text/html", headers=headers) if os.path.exists(path) else root()
+
+@app.get("/sample-report", include_in_schema=False)
+@app.get("/sample-report/", include_in_schema=False)
+@app.get("/sample_report", include_in_schema=False)
+@app.get("/sample_report/", include_in_schema=False)
+@app.get("/sample-reports", include_in_schema=False)
+@app.get("/sample-roadmap", include_in_schema=False)
+@app.get("/sample-roadmap/", include_in_schema=False)
+@app.get("/sample_roadmap", include_in_schema=False)
+@app.get("/sample_roadmap/", include_in_schema=False)
+@app.get("/roadmap-preview", include_in_schema=False)
+@app.get("/roadmap-preview/", include_in_schema=False)
+def redirect_legacy_sample_urls():
+    return RedirectResponse(url="/sample/", status_code=301)
 
 @app.get("/sample2", include_in_schema=False)
 @app.get("/sample2/", include_in_schema=False)
@@ -396,18 +406,6 @@ def serve_sample2():
 def serve_logo_preview():
     path = os.path.join(STATIC_DIR, "logo-preview.html")
     return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
-
-# ── Master Website Roadmap: Separate Sample Preview Version ──
-@app.get("/sample-roadmap", include_in_schema=False)
-@app.get("/sample-roadmap/", include_in_schema=False)
-@app.get("/sample_roadmap", include_in_schema=False)
-@app.get("/sample_roadmap/", include_in_schema=False)
-@app.get("/roadmap-preview", include_in_schema=False)
-@app.get("/roadmap-preview/", include_in_schema=False)
-def serve_sample_roadmap():
-    path = os.path.join(STATIC_DIR, "sample_roadmap.html")
-    headers = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"}
-    return FileResponse(path, media_type="text/html", headers=headers) if os.path.exists(path) else root()
 
 # ── Canonical Roadmap Hub Pages ─────────────────────────────
 @app.get("/numerology-calculators", include_in_schema=False)
@@ -1240,18 +1238,43 @@ def api_get_agent_traces(limit: int = 50):
     from app.engine.enterprise_agent_gateway import get_recent_traces
     return {"status": "success", "traces": get_recent_traces(limit)}
 
+@app.get("/api/v1/health/charm")
+def api_health_charm():
+    """
+    Verifies Charm AI backend configuration without exposing secret or URL values.
+    Returns 200 when CHARM_SERVICE_URL and CHARM_SERVICE_SECRET are configured,
+    or 503 when unset.
+    """
+    backend_url_set = bool((os.getenv("CHARM_SERVICE_URL") or "").strip())
+    secret_set = bool((os.getenv("CHARM_SERVICE_SECRET") or "").strip())
+    is_ok = backend_url_set and secret_set
+    payload = {
+        "ok": is_ok,
+        "status": "ok" if is_ok else "misconfigured",
+        "backend_url_env": "CHARM_SERVICE_URL",
+        "backend_url_configured": backend_url_set,
+        "service_secret_env": "CHARM_SERVICE_SECRET",
+        "service_secret_configured": secret_set,
+    }
+    return JSONResponse(content=payload, status_code=200 if is_ok else 503)
+
+
 @app.post("/api/v1/agent/gateway/turn")
 async def api_agent_gateway_turn(request: Request):
     from app.engine.enterprise_agent_gateway import EnterpriseAgentGateway
+    from app.api.charm_ai import resolve_or_create_visitor_identity
     body = await request.json()
     prompt = body.get("prompt", "")
     topic = body.get("topic", "general")
-    user_id = body.get("user_id", "guest_user")
+    raw_uid = (body.get("user_id") or "").strip()
+    if not raw_uid or raw_uid == "guest_user":
+        _, vis_hash, _ = resolve_or_create_visitor_identity(request)
+        raw_uid = f"anon_{vis_hash[:16]}"
     session_id = body.get("session_id")
     result = EnterpriseAgentGateway.process_turn(
         user_prompt=prompt,
         topic=topic,
-        user_id=user_id,
+        user_id=raw_uid,
         session_id=session_id
     )
     return JSONResponse(result)

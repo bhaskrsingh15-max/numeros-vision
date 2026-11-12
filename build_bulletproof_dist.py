@@ -142,8 +142,7 @@ for fname in [
 
 # 3. Create physical directory/index.html for every canonical route
 ROUTING_MAP = {
-    # Roadmap & Sample Reports
-    "sample_roadmap": "sample_roadmap.html",
+    # Canonical /sample/ Report Preview (single 200 OK home; /sample-report* & /sample_roadmap* 301 -> /sample/)
     "sample": "sample.html",
     "year-2027": "year_2027.html",
     "sample2": "sample2.html",
@@ -272,12 +271,28 @@ for cr in consumed_root_html:
     if os.path.exists(fp):
         os.remove(fp)
 
-# Ensure legacy /reports_catalogue* never serves a static file (must hit 1-hop 301 -> /reports/)
-for legacy_rep in ["reports_catalogue.html", "reports.html", "reports-catalogue.html"]:
+# Ensure legacy /reports_catalogue* and /sample_roadmap* never serve a static file (must hit 1-hop 301)
+for legacy_rep in [
+    "reports_catalogue.html",
+    "reports.html",
+    "reports-catalogue.html",
+    "sample_roadmap.html",
+    "sample-roadmap.html",
+    "sample-report.html",
+    "sample_report.html",
+    "sample.html",
+]:
     lfp = os.path.join(DIST_DIR, legacy_rep)
     if os.path.exists(lfp):
         os.remove(lfp)
-for legacy_rep_dir in ["reports_catalogue", "reports-catalogue"]:
+for legacy_rep_dir in [
+    "reports_catalogue",
+    "reports-catalogue",
+    "sample_roadmap",
+    "sample-roadmap",
+    "sample-report",
+    "sample_report",
+]:
     ldp = os.path.join(DIST_DIR, legacy_rep_dir)
     if os.path.exists(ldp):
         shutil.rmtree(ldp)
@@ -492,7 +507,39 @@ def validate_production_launch_window(environ=None, now_utc=None) -> dict:
     }
 
 
-if os.environ.get("ENVIRONMENT") == "production" or os.environ.get("BUILD_ENV") == "production":
+def validate_charm_service_env(environ=None) -> dict:
+    """
+    Preview & production Charm AI backend health check:
+    - Verifies CHARM_SERVICE_URL (and CHARM_SERVICE_SECRET) are set and well-formed.
+    - NEVER prints or logs secret/URL values.
+    """
+    env_map = os.environ if environ is None else environ
+    raw_url = (env_map.get("CHARM_SERVICE_URL") or "").strip()
+    raw_secret = (env_map.get("CHARM_SERVICE_SECRET") or "").strip()
+    if not raw_url:
+        raise RuntimeError(
+            "BUILD BLOCKED: Required environment variable CHARM_SERVICE_URL is unset."
+        )
+    if not (raw_url.startswith("https://") or raw_url.startswith("http://")):
+        raise RuntimeError(
+            "BUILD BLOCKED: CHARM_SERVICE_URL must start with https:// or http://."
+        )
+    if not raw_secret:
+        raise RuntimeError(
+            "BUILD BLOCKED: Required environment variable CHARM_SERVICE_SECRET is unset."
+        )
+    return {
+        "charm_service_url_configured": True,
+        "charm_service_secret_configured": True,
+    }
+
+
+_active_build_env = (os.environ.get("ENVIRONMENT") or os.environ.get("BUILD_ENV") or "").strip().lower()
+if _active_build_env in ("preview", "production") or os.environ.get("NV_REQUIRE_CHARM_ENV", "").strip().lower() == "true":
+    validate_charm_service_env()
+    print("PASS: Charm AI backend environment variables (CHARM_SERVICE_URL, CHARM_SERVICE_SECRET) verified set.")
+
+if _active_build_env == "production":
     validate_production_launch_window()
     print("PASS: Production 7×24h launch window verified.")
     verify_production_html_no_placeholders(DIST_DIR)
@@ -522,12 +569,17 @@ def verify_wrangler_no_placeholders(toml_content: str) -> None:
 
 if __name__ == "__main__":
     import sys
+    if "--require-charm-env" in sys.argv or "--verify-preview" in sys.argv:
+        validate_charm_service_env()
+        print("PASS: Charm AI backend environment variables verified set.")
     if "--verify-deploy" in sys.argv:
         wrangler_path = os.path.join(BASE_DIR, "wrangler.toml")
         with open(wrangler_path, "r", encoding="utf-8") as wf:
             verify_wrangler_no_placeholders(wf.read())
         print("PASS: wrangler.toml verified with real non-placeholder D1 database_ids.")
     if "--verify-production" in sys.argv:
+        validate_charm_service_env()
+        print("PASS: Charm AI backend environment variables verified set.")
         validate_production_launch_window()
         print("PASS: Production 7×24h launch window verified.")
         verify_production_html_no_placeholders(DIST_DIR)

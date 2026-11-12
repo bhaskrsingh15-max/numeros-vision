@@ -266,7 +266,7 @@
 
         <!-- Live Calculation Chip Preview -->
         <div id="nv-calc-preview-chip" style="background:#FAF6EE; border:1px solid #C9A227; border-radius:10px; padding:7px 12px; margin-bottom:14px; font-size:0.78rem; color:#523E28; display:flex; align-items:center; justify-content:space-between; gap:8px;">
-          <span id="nv-preview-chip-dob">📅 Date of Birth: 15-08-1990</span>
+          <span id="nv-preview-chip-dob">📅 Date of Birth: Ready</span>
           <span style="color:#16835B; font-weight:700; font-size:0.72rem; text-transform:uppercase;">✓ Calculated</span>
         </div>
 

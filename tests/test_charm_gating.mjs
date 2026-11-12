@@ -220,7 +220,7 @@ async function runTests() {
       const req = new Request('https://numerosvision.com/api/charm/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Cookie': guestCookie, 'CF-Connecting-IP': '10.0.0.10' },
-        body: JSON.stringify({ message: `Concurrent Guest Query ${i + 1}`, name: 'Parallel Guest' })
+        body: JSON.stringify({ message: `Concurrent Guest Query ${i + 1}`, name: 'Parallel Guest', day: 14, month: 4, year: 1988 })
       });
       return worker.fetch(req, envWithDb, mockCtx);
     });
@@ -271,7 +271,7 @@ async function runTests() {
       const req = new Request('https://numerosvision.com/api/charm/chat', {
         method: 'POST',
         headers: authHeaders,
-        body: JSON.stringify({ message: `Concurrent Paid Query ${i + 1}`, name: 'Paid Seeker' })
+        body: JSON.stringify({ message: `Concurrent Paid Query ${i + 1}`, name: 'Paid Seeker', day: 14, month: 4, year: 1988 })
       });
       return worker.fetch(req, envWithDb, mockCtx);
     });
@@ -318,7 +318,7 @@ async function runTests() {
         'Cookie': `nv_session=${sessionToken}`,
         'CF-Connecting-IP': '10.0.0.12'
       },
-      body: JSON.stringify({ message: 'Trigger failure', __force_failure__: true })
+      body: JSON.stringify({ message: 'Trigger failure', day: 14, month: 4, year: 1988, __force_failure__: true })
     });
 
     const res = await worker.fetch(req, envWithDb, mockCtx);
@@ -581,7 +581,10 @@ async function runTests() {
         'CF-Connecting-IP': '10.0.0.88'
       },
       body: JSON.stringify({
-        message: 'Tell me my future',
+        message: 'Tell me my career alignment',
+        day: 14,
+        month: 4,
+        year: 1988,
         __simulated_text__: 'This amulet will bring you clarity.',
         __simulated_retry_text__: 'We wish you good luck in career.'
       })

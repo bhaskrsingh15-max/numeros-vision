@@ -12,8 +12,9 @@
   "ladder_order": ["report_premium", "report_advanced", "report_basic"],
   "feature_flags": {
     "notify_me_higher_tiers": true,
-    "notify_me_tiers": ["report_advanced", "report_premium"],
-    "waitlist_display_label": "Coming soon, notify me"
+    "notify_me_tiers": ["report_advanced", "report_premium", "planner_2027"],
+    "waitlist_display_label": "Coming soon, notify me",
+    "waitlist_launch_caption": "When this report opens, it starts at a launch price for its first 7 days. We\u2019ll email you the day it opens."
   },
   "launch_offer": {
     "enabled": true,
@@ -39,21 +40,19 @@
       "digital_root": 6,
       "mrp_digital_root": 3,
       "best_value": true,
-      "purpose": "The complete 32-page roadmap covering every glowing and veiled charm, multi-engine synthesis, remedies, and timing.",
+      "purpose": "The complete 32-page roadmap covering every glowing and veiled charm, dual-system synthesis, practical habits, and timing.",
       "deliverables": [
-        "32-Page Complete Roadmap PDF (all 9 glowing & veiled charms)",
-        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
-        "10-Year Macro Planetary Timing Radar (Quarter Breakdown), 12 Personal Months & 90-Day Execution Windows",
-        "Multi-Generational Synastry & Compatibility Analysis",
-        "Commercial & Professional Resonance Vectors",
-        "Complete Technical Appendix: Formulas, Engine Versions & Assumptions"
+        "Everything in Basic & Advanced plus Missing Numbers (Open Grid Cells) Analysis",
+        "Multi-Year Numerology Dasha & Pinnacle Cycle Timeline",
+        "Chaldean Name Balancing & Signature Alignment Options",
+        "Practical Lifestyle, Color, Directional (Vastu) & Habit Harmonizers",
+        "Complete 32-Page Personalized Reference PDF Report"
       ],
       "depth_level": "Comprehensive",
       "comparisons": "Integrated across all supported modules",
-      "methodology": "Detailed mathematical proofs & engine version trace",
+      "methodology": "Deterministic formula steps & engine version trace",
       "guidance": "Consolidated lifetime reference & strategic roadmap",
-      "active": true,
-      "charm_credits_included": 5
+      "active": true
     },
     "advanced": {
       "tier_id": "advanced",
@@ -71,12 +70,11 @@
       "popular": true,
       "purpose": "Expanded 12-page analysis of your glowing charms, supporting calculations, comparisons, and structured guidance.",
       "deliverables": [
-        "12-Page Glowing Charms Synthesis PDF",
-        "All Alignment calculations + 3-Year Numerology Dasha Timing Radar + 12 Personal Months",
-        "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
-        "Chaldean Sound Frequency & Name Harmony Matrix",
-        "7-Layer Safe Planetary Remedy Protocols",
-        "Structured Cross-Factor Comparisons & Practical Guidance"
+        "Everything in Basic plus Deep Analysis of All Present Numbers",
+        "Repeating Digit Amplifications & Behavioral Tendencies",
+        "8 Lo Shu Planes & Raj Yoga Combinations Breakdown",
+        "Career, Relationship & Financial Archetype Compatibility",
+        "12-Page Structured PDF Report with Actionable Daily Habits"
       ],
       "depth_level": "Expanded",
       "comparisons": "Multiple, where supported",
@@ -97,18 +95,18 @@
       "mrp_paise": 39900,
       "digital_root": 1,
       "mrp_digital_root": 3,
-      "purpose": "A focused 3-page reading of your core alignments with essential calculations and initial findings.",
+      "purpose": "A focused 3-page reading of your core alignments with essential calculations and practical daily habits.",
       "deliverables": [
-        "3-Page Personalised Alignments PDF",
-        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
-        "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
-        "Chaldean Single Root & Compound Letter Breakdown",
-        "Methodology Note & Interpretive Limitations Summary"
+        "Core Numbers: Mulank (Birth Day number), Bhagyank (Life Path number), Kua number (Vastu direction number) & Personal Year",
+        "9-Cell Lo Shu Grid (Lo Shu Square) Mapping & Active Plane Strengths",
+        "Calling Name number (Chaldean Name number) Harmony Check",
+        "Five-Element Distribution Balance & Practical Lifestyle Guidance",
+        "Instant 3-Page Print-Ready Personalized PDF Report"
       ],
       "depth_level": "Focused",
       "comparisons": "Essential",
       "methodology": "Included",
-      "guidance": "Key takeaways & reflection points",
+      "guidance": "Key takeaways & practical daily habits",
       "active": true
     }
   },
@@ -473,11 +471,11 @@
       "amount_paise": 19900,
       "currency": "INR",
       "deliverables": [
-        "3-Page Personalised Executive PDF",
-        "Deterministic Mulank (Driver) & Bhagyank (Conductor) Calculations",
-        "Lo Shu 3x3 Grid Matrix & Elemental Distribution",
-        "Chaldean Single Root & Compound Letter Breakdown",
-        "Methodology Note & Interpretive Limitations Summary"
+        "Core Numbers: Mulank (Birth Day number), Bhagyank (Life Path number), Kua number (Vastu direction number) & Personal Year",
+        "9-Cell Lo Shu Grid (Lo Shu Square) Mapping & Active Plane Strengths",
+        "Calling Name number (Chaldean Name number) Harmony Check",
+        "Five-Element Distribution Balance & Practical Lifestyle Guidance",
+        "Instant 3-Page Print-Ready Personalized PDF Report"
       ]
     },
     "report_advanced": {
@@ -490,12 +488,11 @@
       "amount_paise": 51000,
       "currency": "INR",
       "deliverables": [
-        "12-Page Master Synthesis PDF Dossier",
-        "All Basic calculations + 3-Year Numerology Dasha Timing Radar + 12 Personal Months",
-        "Complete Lo Shu Plane Analysis (Thought, Will, Action, Mental, Emotional)",
-        "Chaldean Sound Frequency & Name Harmony Matrix",
-        "7-Layer Safe Planetary Remedy Protocols",
-        "Structured Cross-Factor Comparisons & Practical Guidance"
+        "Everything in Basic plus Deep Analysis of All Present Numbers",
+        "Repeating Digit Amplifications & Behavioral Tendencies",
+        "8 Lo Shu Planes & Raj Yoga Combinations Breakdown",
+        "Career, Relationship & Financial Archetype Compatibility",
+        "12-Page Structured PDF Report with Actionable Daily Habits"
       ]
     },
     "report_premium": {
@@ -508,12 +505,11 @@
       "amount_paise": 105000,
       "currency": "INR",
       "deliverables": [
-        "32-Page Sovereign Executive Master Blueprint PDF",
-        "Dual-System Comprehensive Synthesis (Chaldean + Pythagorean)",
-        "10-Year Macro Planetary Timing Radar & Acute Execution Windows",
-        "Multi-Generational Synastry & Compatibility Analysis",
-        "Commercial & Professional Resonance Vectors",
-        "Complete Technical Appendix: Formulas, Engine Versions & Assumptions"
+        "Everything in Basic & Advanced plus Missing Numbers (Open Grid Cells) Analysis",
+        "Multi-Year Numerology Dasha & Pinnacle Cycle Timeline",
+        "Chaldean Name Balancing & Signature Alignment Options",
+        "Practical Lifestyle, Color, Directional (Vastu) & Habit Harmonizers",
+        "Complete 32-Page Personalized Reference PDF Report"
       ]
     },
     "starter_bundle": {
@@ -562,29 +558,29 @@
       "sku_id": "charm_free",
       "family": "charm_ai",
       "name": "Free Preview",
-      "questions_count": 1,
+      "questions_count": 3,
       "amount_inr": 0,
       "amount_paise": 0,
       "currency": "INR",
       "deliverables": [
-        "1 Targeted Question Prediction",
-        "Instant Driver / Conductor token verification",
-        "24/7 web access"
+        "3 Free Exploratory Inquiries per Visitor per Day",
+        "Instant Mulank (Birth Day number) & Bhagyank (Life Path number) Context",
+        "24/7 Web Access in Charm AI"
       ]
     },
     "charm_single": {
       "sku_id": "charm_single",
       "family": "charm_ai",
-      "name": "Single Paid Reading",
-      "questions_count": 3,
+      "name": "Charm AI Starter Pack",
+      "questions_count": 5,
       "amount_inr": 199,
       "amount_paise": 19900,
       "currency": "INR",
       "deliverables": [
-        "3 In-Depth Question Predictions",
-        "Acute execution timing windows (Hora & transit)",
-        "Grounded non-fatalistic practical guidance",
-        "Credits valid for 6 months"
+        "5 Guided Numerology Q&A Inquiries across Career, Relationships, or Timing",
+        "Deterministic Dasha & Personal Year Window Context",
+        "Grounded, Non-Fatalistic Practical Reflection Points",
+        "Credits Valid for 6 Months in Your Private Dashboard"
       ]
     },
     "charm_multi": {
@@ -696,9 +692,9 @@
     "amount_paise": 0,
     "currency": "INR",
     "deliverables": [
-      "3 Free Exploratory Inquiries Daily per Account",
-      "Instant Driver / Conductor token verification",
-      "24/7 web access"
+      "3 Free Exploratory Inquiries per Visitor per Day",
+      "Instant Mulank (Birth Day number) & Bhagyank (Life Path number) Context",
+      "24/7 Web Access in Charm AI"
     ]
   },
   "charm_single": {
@@ -711,10 +707,10 @@
     "currency": "INR",
     "digital_root": 1,
     "deliverables": [
-      "5 Targeted Consultation Inquiries across any life area",
-      "Acute execution timing windows (Hora & transit)",
-      "Grounded non-fatalistic practical guidance",
-      "Credits valid for 6 months"
+      "5 Guided Numerology Q&A Inquiries across Career, Relationships, or Timing",
+      "Deterministic Dasha & Personal Year Window Context",
+      "Grounded, Non-Fatalistic Practical Reflection Points",
+      "Credits Valid for 6 Months in Your Private Dashboard"
     ]
   },
   "charm_multi": {
@@ -771,8 +767,7 @@
       "PREMIUM_REPORT": {
         "sku": "report_premium",
         "price_inr": 1050,
-        "pages": 32,
-        "charm_credits": 5
+        "pages": 32
       },
       "CHARM_AI_STARTER": {
         "sku": "charm_single",
@@ -806,6 +801,10 @@
       return (CATALOG.feature_flags && CATALOG.feature_flags.waitlist_display_label) || 'Coming soon, notify me';
     },
 
+    getWaitlistCaption() {
+      return (CATALOG.feature_flags && CATALOG.feature_flags.waitlist_launch_caption) || 'When this report opens, it starts at a launch price for its first 7 days. We\u2019ll email you the day it opens.';
+    },
+
     getLaunchPrice(skuId) {
       const clean = (skuId || '').toLowerCase();
       if (this.isNotifyMeTier(clean)) return null;
@@ -822,7 +821,7 @@
       if (this.isNotifyMeTier(clean)) return null;
       const mrp = this.getMrp(clean);
       if (mrp !== null) {
-        const state = this.resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride);
+        const state = this.resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride, clean);
         if (!state.active) {
           return mrp;
         }
@@ -843,7 +842,7 @@
       if (this.isNotifyMeTier(skuId)) return null;
       const mrp = this.getMrp(skuId);
       if (mrp === null) return null;
-      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride);
+      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride, skuId);
       return state.active ? mrp : null;
     },
 
@@ -884,23 +883,40 @@
     },
 
     isNotifyMeTier(skuId) {
-      if (!this.isNotifyMeHigherTiersEnabled()) return false;
       const clean = (skuId || '').toLowerCase();
+      if (clean === 'planner_2027' || clean === 'year_ahead_2027') {
+        if (typeof window !== 'undefined' && window.__NV_PLANNER_2027_LIVE === true) return false;
+        return true;
+      }
+      if (!this.isNotifyMeHigherTiersEnabled()) return false;
       return ['advanced', 'report_advanced', 'report_master', 'glowing', 'premium', 'report_premium', 'report_divine', 'every_charm'].includes(clean);
     },
 
-    resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride) {
+    resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride, skuId) {
       const lo = CATALOG.launch_offer || {};
       const durationDays = Number(lo.duration_days || 7);
       if (lo.enabled === false) {
         return { active: false, configured: false, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
       }
+      const clean = String(skuId || '').toLowerCase().replace('report_', '');
+      let tierKey = '';
+      if (clean === 'basic' || clean === 'essential' || clean === 'alignments') tierKey = 'BASIC';
+      else if (clean === 'advanced' || clean === 'master' || clean === 'glowing') tierKey = 'ADVANCED';
+      else if (clean === 'premium' || clean === 'divine' || clean === 'every_charm') tierKey = 'PREMIUM';
+
+      let tierEnd = '';
+      let tierStart = '';
+      if (tierKey && typeof window !== 'undefined') {
+        tierEnd = window['__NV_LAUNCH_' + tierKey + '_ENDS_AT'] || window['NV_LAUNCH_' + tierKey + '_ENDS_AT'] || '';
+        tierStart = window['__NV_LAUNCH_' + tierKey + '_STARTS_AT'] || window['NV_LAUNCH_' + tierKey + '_STARTS_AT'] || '';
+      }
+
       const rawEnd = endsAtOverride !== undefined
         ? endsAtOverride
-        : ((typeof window !== 'undefined' && (window.__NV_LAUNCH_ENDS_AT || window.NV_LAUNCH_ENDS_AT)) || '');
+        : (tierEnd || ((typeof window !== 'undefined' && (window.__NV_LAUNCH_ENDS_AT || window.NV_LAUNCH_ENDS_AT)) || ''));
       const rawStart = startsAtOverride !== undefined
         ? startsAtOverride
-        : ((typeof window !== 'undefined' && (window.__NV_LAUNCH_STARTS_AT || window.NV_LAUNCH_STARTS_AT || window.__NV_LAUNCH_STARTED_AT)) || '');
+        : (tierStart || ((typeof window !== 'undefined' && (window.__NV_LAUNCH_STARTS_AT || window.NV_LAUNCH_STARTS_AT || window.__NV_LAUNCH_STARTED_AT)) || ''));
       if (!rawEnd || (!rawStart && endsAtOverride === undefined)) {
         return { active: false, configured: false, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
       }
@@ -943,7 +959,7 @@
       if (this.isNotifyMeTier(skuId)) return '';
       const mrp = this.getMrp(skuId);
       if (mrp === null) return '';
-      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride);
+      const state = this.resolveLaunchOfferState(nowMs, endsAtOverride, startsAtOverride, skuId);
       if (!state.configured) return '';
       const mrpFormatted = mrp.toLocaleString('en-IN');
       if (state.active) {

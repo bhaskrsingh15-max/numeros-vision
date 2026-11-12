@@ -1,11 +1,15 @@
 {
   "product_id": "planner_2027",
   "name": "2027 Year Ahead Planner",
-  "subtitle": "24-Page Personalized Annual Astrological & Vibrational Blueprint",
+  "subtitle": "24-Page Personalized Annual Numerology & Timing Blueprint",
   "currency": "INR",
-  "list_price_paise": 199900,
-  "offer_price_paise": 149900,
-  "offer_ends_at": "2027-01-31T23:59:00+05:30",
+  "active": false,
+  "status": "waitlist",
+  "waitlist_label": "Coming soon, notify me",
+  "waitlist_caption": "When this report opens, it starts at a launch price for its first 7 days. We\u2019ll email you the day it opens.",
+  "list_price_paise": null,
+  "offer_price_paise": null,
+  "offer_ends_at": null,
   "price_includes_gst": false,
   "receipt_type": "Payment receipt"
 }
