@@ -3117,7 +3117,7 @@
 
           while (n > 9) {
 
-            if (preserveMaster && (n === 11 || n === 22 || n === 33)) return n;
+            // One number rule: every derived number reduces fully to 1..9
 
             n = String(n).split('').reduce((a, b) => a + parseInt(b, 10), 0);
 
@@ -3137,11 +3137,11 @@
 
         const sum = fullDigits.split('').reduce((a, d) => a + parseInt(d, 10), 0);
 
-        const conductorRaw = reduceDigits(sum, true);
+        const conductorRaw = reduceDigits(sum, false);
 
         const conductor = reduceDigits(conductorRaw, false);
 
-        const conductorDisplay = conductorRaw > 9 ? `${conductorRaw}/${conductor}` : `${conductor}`;
+        const conductorDisplay = `${conductor}`;
 
 
 
@@ -3151,7 +3151,7 @@
 
         if (statusEl) {
 
-          statusEl.innerText = 'Mathematically Validated';
+          statusEl.innerText = 'Calculation Ready';
 
           statusEl.style.color = 'var(--emerald)';
 

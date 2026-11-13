@@ -69,7 +69,7 @@
             "name": "How can I use Favourable Numbers in everyday scheduling?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "In traditional numerology, people use their Favourable Numbers as simple personal preferences when picking calendar dates for reviews, choosing room or desk orientation, or selecting wardrobe colours—never for gambling, speculation, or guaranteed outcomes."
+              "text": "In traditional numerology, people use their Favourable Numbers as simple personal preferences when picking calendar dates for reviews, choosing room or desk orientation, or selecting wardrobe colours—never for gambling, speculation, or promised outcomes."
             }
           },
           {
@@ -575,7 +575,7 @@
   </div>
   <div class="faq-item">
     <div class="faq-q" onclick="toggleFaq(this)">How can I use Favourable Numbers in everyday scheduling? <span>+</span></div>
-    <div class="faq-a">In traditional numerology, people use their Favourable Numbers as simple personal preferences when picking calendar dates for reviews, choosing room or desk orientation, or selecting wardrobe colours—never for gambling, speculation, or guaranteed outcomes.</div>
+    <div class="faq-a">In traditional numerology, people use their Favourable Numbers as simple personal preferences when picking calendar dates for reviews, choosing room or desk orientation, or selecting wardrobe colours—never for gambling, speculation, or promised outcomes.</div>
   </div>
   <div class="faq-item">
     <div class="faq-q" onclick="toggleFaq(this)">What is the difference between Mulank and Bhagyank? <span>+</span></div>
@@ -673,7 +673,7 @@
             </div>
           </a>
           <p>
-            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+            AI-powered numerological intelligence combining traditional Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
           </p>
         </div>
 
@@ -736,6 +736,7 @@
 
 <script src="/static/js/nav.js?v=5.5.0"></script>
 <script src="/static/js/nv_profile_sync.js?v=5.4.0"></script>
+<script src="/static/js/nv_tool_coming_soon.js?v=5.5.0"></script>
 <script>
 const PLANET_NAMES = {1:'Sun (Surya)',2:'Moon (Chandra)',3:'Jupiter (Guru)',4:'Rahu',5:'Mercury (Budha)',6:'Venus (Shukra)',7:'Ketu',8:'Saturn (Shani)',9:'Mars (Mangal)',11:'Master 11',22:'Master 22'};
 
@@ -747,7 +748,7 @@ const D = {
 };
 
 function digitSum(n){return String(Math.abs(n)).split('').reduce((a,c)=>a+parseInt(c,10),0);}
-function reduceToSingle(n, preserveMaster=false){while(n>9){if(preserveMaster&&(n===11||n===22||n===33))return n;n=digitSum(n);}return n;}
+function reduceToSingle(n){while(n>9){n=digitSum(n);}return n;}
 function reduce(n){return reduceToSingle(n, false);}
 function chaldean(s){
   const m={a:1,i:1,q:1,j:1,y:1,b:2,k:2,r:2,c:3,g:3,l:3,s:3,d:4,m:4,t:4,e:5,h:5,n:5,x:5,u:6,v:6,w:6,o:7,z:7,f:8,p:8};
@@ -761,13 +762,13 @@ function seeLuckyReportOptions() {
   const y = parseInt(document.getElementById('ln-year').value);
   const name = document.getElementById('ln-name')?.value?.trim() || '';
   if (!d || !m || !y || d < 1 || d > 31 || m < 1 || m > 12 || y < 1900) {
-    alert('Please enter a valid date of birth.');
+    if(window.nvShowInlineNotice)window.nvShowInlineNotice(document.getElementById('ln-year'),'Please enter a valid date of birth.','error');
     return;
   }
   const formattedDob = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
   const driver = reduceToSingle(d, false);
   const fullDigits = `${String(d).padStart(2, '0')}${String(m).padStart(2, '0')}${String(y).padStart(4, '0')}`;
-  const destinyRaw = reduceToSingle(digitSum(fullDigits), true);
+  const destinyRaw = reduceToSingle(digitSum(fullDigits));
   sessionStorage.setItem('nv_reading_input', JSON.stringify({
     name: name,
     day: d,
@@ -785,7 +786,7 @@ function calcLucky(){
   const m=parseInt(document.getElementById('ln-month').value);
   const y=parseInt(document.getElementById('ln-year').value);
   const name=document.getElementById('ln-name').value.trim();
-  if(!d||!m||!y||d<1||d>31||m<1||m>12||y<1900){alert('Please enter a valid date of birth.');return;}
+  if(!d||!m||!y||d<1||d>31||m<1||m>12||y<1900){if(window.nvShowInlineNotice)window.nvShowInlineNotice(document.getElementById('ln-year'),'Please enter a valid date of birth.','error');return;}
 
   const dobStr = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
   const calcData = {
@@ -798,11 +799,10 @@ function calcLucky(){
   const doRenderLucky = function() {
     const psychic=reduceToSingle(d, false);          // driver / primary
     const fullDigits=`${String(d).padStart(2,'0')}${String(m).padStart(2,'0')}${String(y).padStart(4,'0')}`;
-    const destinyRaw=reduceToSingle(digitSum(fullDigits), true);
-    const destiny=reduceToSingle(destinyRaw, false);
-    const destinyDisplay=destinyRaw>9?`${destinyRaw}/${destiny}`:`${destiny}`;
+    const destiny=reduceToSingle(digitSum(fullDigits));
+    const destinyDisplay=`${destiny}`;
     const cy=new Date().getFullYear();
-    const personalYear=reduce(reduce(d)+reduce(m)+digitSum(cy));
+    const personalYear=reduceToSingle(digitSum(`${String(d).padStart(2,'0')}${String(m).padStart(2,'0')}${String(cy).padStart(4,'0')}`));
 
     // Lucky set: psychic, destiny, personal year — unique, sorted
     const luckySet=[...new Set([psychic,destiny,personalYear])].sort((a,b)=>a-b);

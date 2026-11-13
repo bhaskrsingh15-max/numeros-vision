@@ -769,11 +769,11 @@
     function runResonance() {
       const name = document.getElementById('resName').value.trim().toUpperCase();
       const box = document.getElementById('resOutput');
-      if (!name) { alert('Enter your name.'); return; }
+      if (!name) { box.style.display='block'; box.textContent='Please enter your name.'; return; }
       let sum = 0;
       for (let ch of name) if (cMap[ch]) sum += cMap[ch];
       let root = sum;
-      while (root > 9 && root !== 11 && root !== 22 && root !== 33) {
+      while (root > 9) {
         let s = 0;
         for (let d of String(root)) s += parseInt(d, 10);
         root = s;

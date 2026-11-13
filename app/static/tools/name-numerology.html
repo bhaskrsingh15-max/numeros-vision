@@ -69,7 +69,7 @@
             "name": "What is the Expression Number?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Your Expression Number is summed from all letters in your full name and reduced to a single digit (preserving 11 and 22 where applicable). While your Bhagyank (Life Path number) comes from your birth date, the Expression Number reflects your outward communication style and everyday working strengths."
+              "text": "Your Expression Number is summed from all letters in your full name and reduced fully to a single digit from 1 to 9 (intermediate double digits such as 11, 22, and 33 always reduce to 2, 4, and 6). While your Bhagyank (Life Path number) comes from your birth date, the Expression Number reflects your outward communication style and everyday working strengths."
             }
           },
           {
@@ -520,6 +520,7 @@
   </div>
 
   <button class="btn-calc" onclick="calcName()">✦ Analyse My Name</button>
+  <div id="nnInlineNotice" role="status" aria-live="polite" style="display:none; margin-top:12px; padding:10px 14px; border-radius:10px; border:1px solid rgba(180,65,45,0.38); background:#FDF5F3; color:#9B2C2C; font-size:0.85rem; font-weight:600;"></div>
 </div>
 
 <!-- ───── RESULT ───── -->
@@ -572,7 +573,7 @@
       <li><strong>Pythagorean Table (1 to 9 sequential):</strong> Cycles sequentially across the alphabet—1 (A, J, S), 2 (B, K, T), 3 (C, L, U), 4 (D, M, V), 5 (E, N, W), 6 (F, O, X), 7 (G, P, Y), 8 (H, Q, Z), 9 (I, R).</li>
     </ul>
     <p style="font-size:0.94rem; color:#523E28; line-height:1.78; margin:0;">
-      For example, the name <strong>KAVYA</strong> in Chaldean sums as K(2) + A(1) + V(6) + Y(1) + A(1) = <strong>Compound 11</strong> (or single-digit root 2), with vowels A(1) + A(1) = <strong>Soul Urge 2</strong> and consonants K(2) + V(6) + Y(1) = <strong>Personality 9</strong>. When you also enter your birth date, the calculator compares your <strong>Calling Name number (Chaldean Name number)</strong> against your <strong>Mulank (Birth Day number)</strong> and <strong>Bhagyank (Life Path number)</strong> to show whether your everyday name reinforces or contrasts with your birth chart—strictly as a deterministic reflection tool without claiming guaranteed life outcomes.
+      For example, the name <strong>KAVYA</strong> in Chaldean sums as K(2) + A(1) + V(6) + Y(1) + A(1) = <strong>Compound 11</strong>, reducing fully to <strong>single-digit root 2</strong>, with vowels A(1) + A(1) = <strong>Soul Urge 2</strong> and consonants K(2) + V(6) + Y(1) = <strong>Personality 9</strong>. When you also enter your birth date, the calculator compares your <strong>Calling Name number (Chaldean Name number)</strong> against your <strong>Mulank (Birth Day number)</strong> and <strong>Bhagyank (Life Path number)</strong> to show whether your everyday name reinforces or contrasts with your birth chart—strictly as a deterministic reflection tool without promising specific life outcomes.
     </p>
   </div>
 </section>
@@ -586,7 +587,7 @@
   </div>
   <div class="faq-item">
     <div class="faq-q" onclick="toggleFaq(this)">What is the Expression Number? <span>+</span></div>
-    <div class="faq-a">Your Expression Number is summed from all letters in your full name and reduced to a single digit (preserving 11 and 22 where applicable). While your Bhagyank (Life Path number) comes from your birth date, the Expression Number reflects your outward communication style and everyday working strengths.</div>
+    <div class="faq-a">Your Expression Number is summed from all letters in your full name and reduced fully to a single digit from 1 to 9 (intermediate double digits such as 11, 22, and 33 always reduce to 2, 4, and 6). While your Bhagyank (Life Path number) comes from your birth date, the Expression Number reflects your outward communication style and everyday working strengths.</div>
   </div>
   <div class="faq-item">
     <div class="faq-q" onclick="toggleFaq(this)">What is the Soul Urge Number? <span>+</span></div>
@@ -684,7 +685,7 @@
             </div>
           </a>
           <p>
-            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+            AI-powered numerological intelligence combining classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
           </p>
         </div>
 
@@ -765,7 +766,7 @@ const PLANET_NAMES = {1:'Sun (Surya)',2:'Moon (Chandra)',3:'Jupiter (Guru)',4:'R
 const THEMES = {1:'Root 1 (Sun)',2:'Root 2 (Moon)',3:'Root 3 (Jupiter)',4:'Root 4 (Rahu)',5:'Root 5 (Mercury)',6:'Root 6 (Venus)',7:'Root 7 (Ketu)',8:'Root 8 (Saturn)',9:'Root 9 (Mars)',11:'Master 11',22:'Master 22'};
 
 function digitSum(n){return String(Math.abs(n)).split('').reduce((a,c)=>a+parseInt(c),0);}
-function reduce(n){while(n>9&&![11,22].includes(n))n=digitSum(n);return n;}
+function reduce(n){while(n>9)n=digitSum(n);return n;}
 
 function calcForSystem(letters, sys) {
   const map = sys==='chaldean' ? CHAL : PYTH;
@@ -806,7 +807,9 @@ function calcName(){
   const d = parseInt(document.getElementById('nn-day').value)||0;
   const m = parseInt(document.getElementById('nn-month').value)||0;
   const y = parseInt(document.getElementById('nn-year').value)||0;
-  if(!rawName){alert('Please enter your full name.');return;}
+  const noticeEl = document.getElementById('nnInlineNotice');
+  if(!rawName){if(noticeEl){noticeEl.textContent='Please enter your full name.';noticeEl.style.display='block';}return;}
+  if(noticeEl)noticeEl.style.display='none';
 
   const existing = JSON.parse(sessionStorage.getItem('nv_reading_input') || '{}');
   const isoDob = (d && m && y) ? `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}` : existing.dob || '';

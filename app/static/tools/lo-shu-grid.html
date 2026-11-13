@@ -509,6 +509,7 @@
     </div>
   </div>
   <button class="btn-calc" onclick="generateGrid()">✦ Generate My Lo Shu Grid</button>
+  <div id="lsInlineNotice" role="status" aria-live="polite" style="display:none; margin-top:12px; padding:10px 14px; border-radius:10px; border:1px solid rgba(180,65,45,0.38); background:#FDF5F3; color:#9B2C2C; font-size:0.85rem; font-weight:600;"></div>
 </div>
 
 <!-- ───── RESULTS ───── -->
@@ -671,7 +672,7 @@
             </div>
           </a>
           <p>
-            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+            AI-powered numerological intelligence combining classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
           </p>
         </div>
 
@@ -785,9 +786,8 @@
       9: "Lack of aggressive ambition, difficulty fighting for rightful credit, passive hesitation."
     };
 
-    function reduceToSingle(num, preserveMaster = false) {
+    function reduceToSingle(num) {
       while (num > 9) {
-        if (preserveMaster && (num === 11 || num === 22 || num === 33)) return num;
         num = String(num).split('').reduce((acc, digit) => acc + parseInt(digit, 10), 0);
       }
       return num;
@@ -797,16 +797,21 @@
       const dayVal = parseInt(document.getElementById('ls-day').value, 10);
       const monthVal = parseInt(document.getElementById('ls-month').value, 10);
       const yearVal = parseInt(document.getElementById('ls-year').value, 10);
+      const noticeEl = document.getElementById('lsInlineNotice');
 
       if (!dayVal || !monthVal || !yearVal || dayVal < 1 || dayVal > 31 || yearVal < 1900 || yearVal > 2099) {
-        alert("Please enter a valid Day (1-31), Month, and Year (1900-2099).");
+        if (noticeEl) {
+          noticeEl.textContent = "Please enter a valid Day (1–31), Month, and Year (1900–2099).";
+          noticeEl.style.display = "block";
+        }
         return;
       }
+      if (noticeEl) noticeEl.style.display = "none";
 
       const driver = ((dayVal - 1) % 9) + 1;
       const dobStr = `${String(dayVal).padStart(2, '0')}${String(monthVal).padStart(2, '0')}${String(yearVal).padStart(4, '0')}`;
       let conductorRaw = dobStr.split('').reduce((sum, ch) => sum + parseInt(ch, 10), 0);
-      while (conductorRaw > 9 && conductorRaw !== 11 && conductorRaw !== 22 && conductorRaw !== 33) {
+      while (conductorRaw > 9) {
         conductorRaw = String(conductorRaw).split('').reduce((sum, ch) => sum + parseInt(ch, 10), 0);
       }
       const isoDob = `${yearVal}-${String(monthVal).padStart(2, '0')}-${String(dayVal).padStart(2, '0')}`;
@@ -829,11 +834,11 @@
     function _legacyGenerateGrid() {
 
       // Calculate Driver (Mulank) and Conductor (Bhagyank) via Core Matrix Engine rules
-      const driver = reduceToSingle(dayVal, false);
+      const driver = reduceToSingle(dayVal);
       const dobStr = `${String(dayVal).padStart(2, '0')}${String(monthVal).padStart(2, '0')}${String(yearVal).padStart(4, '0')}`;
-      const conductorRaw = reduceToSingle(dobStr.split('').reduce((acc, d) => acc + parseInt(d, 10), 0), true);
-      const conductor = reduceToSingle(conductorRaw, false);
-      const conductorDisplay = conductorRaw > 9 ? `${conductorRaw}/${conductor}` : `${conductor}`;
+      const conductorRaw = reduceToSingle(dobStr.split('').reduce((acc, d) => acc + parseInt(d, 10), 0));
+      const conductor = conductorRaw;
+      const conductorDisplay = `${conductor}`;
 
       // Build Lo Shu counts from natal DOB digits (1..9)
       const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
@@ -907,7 +912,7 @@
       const formattedDob = `${String(dayVal).padStart(2, '0')}-${String(monthVal).padStart(2, '0')}-${yearVal}`;
       renderLoShuReferenceComponent(counts, missingDigits, presentDigits, driver, conductor, seekerName, formattedDob);
 
-      // Persist verified calculation pipeline entity
+      // Persist calculation pipeline entity
       const calculationId = 'CALC-LOSHU-' + Date.now().toString(36).toUpperCase();
       const calcRecord = {
         calculation_id: calculationId,

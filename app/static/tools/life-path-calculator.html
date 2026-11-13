@@ -140,10 +140,10 @@
           },
           {
             "@type": "Question",
-            "name": "What are Master Numbers (11, 22, 33)?",
+            "name": "How are double-digit sums like 11, 22, and 33 handled?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Master numbers are double digits (11, 22, 33) that carry amplified traditional symbolic significance and are preserved without immediate reduction in many traditions."
+              "text": "Numeros Vision reduces every derived number fully to a single digit from 1 to 9. Intermediate double-digit sums such as 11, 22, and 33 always reduce further to 2, 4, and 6 without master-number exceptions."
             }
           },
           {
@@ -552,6 +552,7 @@
       </div>
     </div>
     <button class="btn-calc" onclick="calculateLifePath()">Calculate My Life Path Number ✦</button>
+    <div id="lpInlineNotice" role="status" aria-live="polite" style="display:none; margin-top:12px; padding:10px 14px; border-radius:10px; border:1px solid rgba(180,65,45,0.38); background:#FDF5F3; color:#9B2C2C; font-size:0.85rem; font-weight:600;"></div>
   </div>
 
   <!-- ───── RESULT CONTAINER ───── -->
@@ -689,8 +690,8 @@
     </div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)">What are Master Numbers (11, 22, 33)? <span>+</span></div>
-      <div class="faq-a">Master numbers are double digits (11, 22, 33) that carry amplified traditional symbolic significance and are preserved without immediate reduction in many traditions.</div>
+      <div class="faq-q" onclick="toggleFaq(this)">How are double-digit sums like 11, 22, and 33 handled? <span>+</span></div>
+      <div class="faq-a">Numeros Vision reduces every derived number fully to a single digit from 1 to 9. Intermediate double-digit sums such as 11, 22, and 33 always reduce further to 2, 4, and 6 without master-number exceptions.</div>
     </div>
 
     <div class="faq-item">
@@ -727,7 +728,7 @@
             </div>
           </a>
           <p>
-            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+            AI-powered numerological intelligence combining classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
           </p>
         </div>
 
@@ -810,35 +811,39 @@
     };
 
     function digitSum(n) { return String(Math.abs(n)).split('').reduce((a,c)=>a+parseInt(c,10),0); }
-    function reduceToSingle(n, preserveMaster = false) {
+    function reduceToSingle(n) {
       let val = Math.abs(n);
       while (val > 9) {
-        if (preserveMaster && (val === 11 || val === 22 || val === 33)) return val;
         val = digitSum(val);
       }
       return val;
     }
-    function reduce(n) { return reduceToSingle(n, true); }
+    function reduce(n) { return reduceToSingle(n); }
     function calcLP(d,m,y) {
       const dobDigits = `${String(d).padStart(2,'0')}${String(m).padStart(2,'0')}${String(y).padStart(4,'0')}`;
-      return reduceToSingle(digitSum(dobDigits), true);
+      return reduceToSingle(digitSum(dobDigits));
     }
-    function personalYear(d,m) { const cy=new Date().getFullYear(); return reduceToSingle(reduceToSingle(d,false)+reduceToSingle(m,false)+digitSum(cy), false); }
+    function personalYear(d,m) { const cy=new Date().getFullYear(); return reduceToSingle(reduceToSingle(d)+reduceToSingle(m)+digitSum(cy)); }
 
     function calculateLifePath() {
       const d = parseInt(document.getElementById('lp-day').value);
       const m = parseInt(document.getElementById('lp-month').value);
       const y = parseInt(document.getElementById('lp-year').value);
+      const noticeEl = document.getElementById('lpInlineNotice');
       if (!d||!m||!y||d<1||d>31||m<1||m>12||y<1900) {
-        alert('Please fill in a valid date of birth.');
+        if (noticeEl) {
+          noticeEl.textContent = 'Please fill in a valid day (1–31), month, and year (1900–2099).';
+          noticeEl.style.display = 'block';
+        }
         return;
       }
+      if (noticeEl) noticeEl.style.display = 'none';
 
-      const personName = document.getElementById('lp-name')?.value?.trim() || 'Seeker';
+      const personName = document.getElementById('lp-name')?.value?.trim() || '';
       const driver = ((d - 1) % 9) + 1;
       const fullDobDigits = `${String(d).padStart(2, '0')}${String(m).padStart(2, '0')}${String(y).padStart(4, '0')}`;
       let conductorRaw = fullDobDigits.split('').reduce((sum, ch) => sum + parseInt(ch, 10), 0);
-      while (conductorRaw > 9 && conductorRaw !== 11 && conductorRaw !== 22 && conductorRaw !== 33) {
+      while (conductorRaw > 9) {
         conductorRaw = String(conductorRaw).split('').reduce((sum, ch) => sum + parseInt(ch, 10), 0);
       }
       const isoDob = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
@@ -860,7 +865,7 @@
       const d = parseInt(document.getElementById('lp-day').value);
       const m = parseInt(document.getElementById('lp-month').value);
       const y = parseInt(document.getElementById('lp-year').value);
-      const personName = document.getElementById('lp-name')?.value?.trim() || 'Seeker';
+      const personName = document.getElementById('lp-name')?.value?.trim() || '';
       const formattedDob = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const lp = calcLP(d,m,y);
       const driver = reduceToSingle(d, false);
@@ -898,7 +903,7 @@
       const missing = [1,2,3,4,5,6,7,8,9].filter(n=>counts[n]===0);
       const repeating = [1,2,3,4,5,6,7,8,9].filter(n=>counts[n]>1);
 
-      const personName = document.getElementById('lp-name')?.value?.trim() || 'Seeker';
+      const personName = document.getElementById('lp-name')?.value?.trim() || '';
       try {
         // Removed legacy localStorage write (DPDP privacy)
       } catch (e) {}
@@ -945,7 +950,7 @@
       const totalSum = rd + rm + ry;
       const totalDigits = String(totalSum).split('').map(Number);
       let totalStep = `${rd} + ${rm} + ${ry} = ${totalSum}`;
-      if (totalDigits.length > 1 && totalSum !== 11 && totalSum !== 22 && totalSum !== 33) {
+      if (totalDigits.length > 1) {
         totalStep += ` &rarr; ${totalDigits.join(' + ')} = ${lp}`;
       }
 

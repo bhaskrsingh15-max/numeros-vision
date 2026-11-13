@@ -845,6 +845,20 @@
       z-index: 10;
     }
 
+    .nv-unbacked-hidden { display: none !important; }
+    .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
+    .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
+    .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
+    .nv-cs-desc { font-size: 0.94rem; color: #523E28; line-height: 1.7; margin: 0 0 18px; }
+    .nv-cs-form { display: flex; flex-direction: column; gap: 14px; max-width: 560px; }
+    .nv-cs-label { display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8B6914; margin-bottom: 6px; }
+    .nv-cs-input { width: 100%; background: #FFFDF7; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 12px; padding: 13px 15px; color: #523E28; font-family: 'Inter', sans-serif; font-size: 0.95rem; box-sizing: border-box; }
+    .nv-cs-consent { display: flex; align-items: flex-start; gap: 10px; font-size: 0.8rem; color: #523E28; line-height: 1.55; cursor: pointer; font-weight: 500; }
+    .nv-cs-consent input { margin-top: 3px; accent-color: #8B6914; }
+    .nv-cs-btn { background: linear-gradient(135deg, #C9A227, #8B6914); color: #FFFDF7; border: none; border-radius: 12px; padding: 13px 22px; font-weight: 700; font-size: 0.92rem; cursor: pointer; max-width: 300px; }
+    .nv-cs-status { display: none; padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(201,162,39,0.35); background: #FFFDF7; font-size: 0.86rem; font-weight: 600; color: #523E28; }
+    .nv-cs-links { margin-top: 18px; padding-top: 14px; border-top: 1px dashed rgba(201,162,39,0.28); font-size: 0.84rem; color: #7A654D; }
+    .nv-cs-links a { color: #8B6914; font-weight: 700; text-decoration: none; }
   </style>
 </head>
 <body class="nv-body">
@@ -981,8 +995,32 @@
       </div>
     </div>
 
+    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
+    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="Business & Venture Alignment Coming Soon">
+      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
+      <h2 class="nv-cs-heading">Business & Venture Alignment Is Coming Soon</h2>
+      <p class="nv-cs-desc">We are connecting the deterministic Business & Venture Alignment engine (commercial readiness paired separately with Chaldean trading-name and founder birth-number compatibility). Leave your email below and we will write to you as soon as this service opens.</p>
+      <form data-nv-waitlist-form data-source-page="tool_business_alignment" class="nv-cs-form">
+        <div>
+          <label for="nvWaitlistEmail_business_alignment" class="nv-cs-label">Email Address *</label>
+          <input type="email" id="nvWaitlistEmail_business_alignment" placeholder="you@example.com" required class="nv-cs-input" />
+        </div>
+        <label class="nv-cs-consent">
+          <input type="checkbox" id="nvWaitlistConsent_business_alignment" />
+          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
+        </label>
+        <button type="submit" class="nv-cs-btn">
+          <span>Notify Me When Available ✦</span>
+        </button>
+        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
+      </form>
+      <div class="nv-cs-links">
+        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
+      </div>
+    </section>
+
     <!-- Luxury Tab Switcher -->
-    <div class="tool-tab-wrap">
+    <div class="tool-tab-wrap nv-unbacked-hidden">
       <div class="tool-tab-pill">
         <button class="tool-tab-btn active" id="tabStartupBtn" onclick="switchTab('startup')">
           New Venture Assessment
@@ -994,7 +1032,7 @@
     </div>
 
     <!-- Panel A: Startup Direction -->
-    <section class="form-card" id="panelStartup">
+    <section class="form-card nv-unbacked-hidden" id="panelStartup">
       <span class="step-badge">Module 1.A · Venture Direction &amp; Name Audit</span>
       <h2 class="step-title">Founder Profile &amp; Candidate Venture Audit</h2>
 
@@ -1064,7 +1102,7 @@
     </section>
 
     <!-- Panel B: Existing Business Alignment -->
-    <section class="form-card" id="panelExisting" style="display: none;">
+    <section class="form-card nv-unbacked-hidden" id="panelExisting" style="display: none;">
       <span class="step-badge">Module 1.B · Operating Business Diagnostic</span>
       <h2 class="step-title">Existing Business Diagnostic &amp; Remedies</h2>
 
@@ -1220,7 +1258,7 @@
             </div>
           </a>
           <p>
-            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu mathematical frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+            AI-powered numerological intelligence combining traditional Vedic, Chaldean, and Lo Shu mathematical frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
           </p>
         </div>
 
@@ -1549,7 +1587,7 @@
         const entryPrice = mg.entry_price_inr || 510;
         const anchorPrice = mg.anchor_price_inr || 999;
         const discountBadge = mg.discount_badge || "SAVE 49% · INSTANT ACCESS";
-        const checkoutUrl = mg.checkout_url || `/checkout/?plan=report_master&tool=business-alignment`;
+        const checkoutUrl = mg.checkout_url || `/pricing/`;
 
         resBox.innerHTML = `
           <!-- Header Verdict (Exact Free Diagnostic Output as Highlighted in Reference Audit) -->
@@ -1604,7 +1642,7 @@
             </div>
 
             <div class="lock-legal-guarantee">
-              Authentic Classical Numerology · Pure Mathematical Precision · 100% Confidential & Private
+              Traditional Classical Numerology · Pure Mathematical Precision · 100% Confidential & Private
             </div>
           </div>
 
@@ -1679,7 +1717,7 @@
         resBox.scrollIntoView({ behavior: 'smooth' });
 
       } catch (err) {
-        alert("Evaluation failed: " + err.message);
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(btn, "Evaluation failed: " + err.message, "error");
       } finally {
         btn.disabled = false;
         btn.innerText = "Evaluate Commercial Viability & Sacred Synergy ✦";
@@ -1724,7 +1762,7 @@
         const entryPrice = mg.entry_price_inr || 510;
         const anchorPrice = mg.anchor_price_inr || 999;
         const discountBadge = mg.discount_badge || "SAVE 49% · INSTANT ACCESS";
-        const checkoutUrl = mg.checkout_url || `/checkout/?plan=report_master&tool=business-alignment`;
+        const checkoutUrl = mg.checkout_url || `/pricing/`;
 
         resBox.innerHTML = `
           <!-- Header Verdict (Exact Free Diagnostic Output as Highlighted in Reference Audit) -->
@@ -1774,7 +1812,7 @@
             </div>
 
             <div class="lock-legal-guarantee">
-              Authentic Classical Numerology · Pure Mathematical Precision · 100% Confidential & Private
+              Traditional Classical Numerology · Pure Mathematical Precision · 100% Confidential & Private
             </div>
           </div>
 
@@ -1821,7 +1859,7 @@
         resBox.scrollIntoView({ behavior: 'smooth' });
 
       } catch (err) {
-        alert("Diagnostic failed: " + err.message);
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(btn, "Diagnostic failed: " + err.message, "error");
       } finally {
         btn.disabled = false;
         btn.innerText = "Run Operating Diagnostic & Remedies ✦";
@@ -1848,5 +1886,6 @@
       <span>Account</span>
     </a>
   </nav>
+  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
 </body>
 </html>

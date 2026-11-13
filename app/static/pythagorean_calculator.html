@@ -250,7 +250,7 @@
       <div class="result-display" id="resultDisplay">
         <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#8B6914; text-align:center; margin-bottom:12px;">Pythagorean Tri-Vector Analysis</h3>
         <p style="text-align:center; font-size:0.9rem; color:#7A654D; max-width:620px; margin:0 auto 16px;">
-          Computed using the sequential 1 to 9 Western matrix. Master numbers (11, 22, 33) are preserved in their higher vibrational state.
+          Computed using the sequential 1 to 9 Western matrix. Every derived total reduces fully to a single digit from 1 to 9.
         </p>
 
         <div class="res-tri-grid">
@@ -413,6 +413,7 @@
 
   <script src="/static/js/nav.js?v=5.5.0"></script>
   <script src="/static/js/nv_profile_sync.js?v=5.4.0"></script>
+  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0"></script>
   <script>
     const PYTH_MAP = {
       'A':1, 'B':2, 'C':3, 'D':4, 'E':5, 'F':6, 'G':7, 'H':8, 'I':9,
@@ -422,7 +423,7 @@
     const VOWELS = new Set(['A', 'E', 'I', 'O', 'U']);
 
     function reducePyth(n) {
-      while (n > 9 && n !== 11 && n !== 22 && n !== 33) {
+      while (n > 9) {
         n = String(n).split('').reduce((acc, d) => acc + parseInt(d), 0);
       }
       return n;
@@ -433,7 +434,7 @@
       const clean = raw.replace(/[^A-Z]/g, '');
 
       if (!clean) {
-        alert("Please enter a valid name.");
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById("pythName"), "Please enter a valid name.", "error");
         return;
       }
 
@@ -451,7 +452,7 @@
       const clean = raw.replace(/[^A-Z]/g, '');
 
       if (!clean) {
-        alert("Please enter a valid name.");
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById("pythName"), "Please enter a valid name.", "error");
         return;
       }
 

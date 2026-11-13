@@ -789,23 +789,23 @@
     function runResonance() {
       const name = document.getElementById('resName').value.trim().toUpperCase();
       const box = document.getElementById('resOutput');
-      if (!name) { alert('Enter your spoken name.'); return; }
+      if (!name) { box.style.display='block'; box.textContent='Please enter your spoken name.'; return; }
       let sum = 0;
       for (let ch of name) if (cMap[ch]) sum += cMap[ch];
       let root = sum;
-      while (root > 9 && root !== 11 && root !== 22 && root !== 33) {
+      while (root > 9) {
         let s = 0;
         for (let d of String(root)) s += parseInt(d, 10);
         root = s;
       }
-      const isHarmonious = (root === 6 || root === 33 || root === 5 || root === 1);
+      const isHarmonious = (root === 6 || root === 5 || root === 1);
       box.style.display = 'block';
       box.innerHTML = `
         <div style="font-weight:700; color:var(--nv-gold-dark); margin-bottom:4px;">
           ${name}: Chaldean Compound ${sum} → Root ${root}
         </div>
         <div style="color:${isHarmonious ? 'var(--nv-emerald)' : 'var(--nv-gold-dark)'}; font-weight:700; margin-bottom:6px;">
-          ${isHarmonious ? '✦ High Resonance with Bengaluru (Venus 33/6)' : '⚠ Noticeable Friction with Bengaluru (Venus 6)'}
+          ${isHarmonious ? '✦ Supportive Indication with Bengaluru (Venus 6)' : '⚠ Noticeable Friction with Bengaluru (Venus 6)'}
         </div>
         <p style="margin:0 0 10px; font-size:0.85rem; line-height:1.45;">
           ${isHarmonious ? 'Your name aligns with Bengaluru’s creative wealth wave. Optimize your signature to maximize deal flow.' : 'Your number may experience unexpected delays or burnout in Bengaluru. A subtle name balancing tuning resolves this clash.'}

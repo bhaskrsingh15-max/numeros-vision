@@ -408,6 +408,7 @@
 
   <script src="/static/js/nav.js?v=5.5.0"></script>
   <script src="/static/js/nv_profile_sync.js?v=5.4.0"></script>
+  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0"></script>
   <script>
     const ARCHETYPES = {
       1: { title: "Number 1 · Sun (Surya)", planet: "Sun (Surya)", vibration: "Leadership & Sovereign Will", days: "Sunday, Monday", colors: "Gold, Copper, Amber, Yellow", desc: "Pioneering, independent, and visionary. Governed by the Sun, individuals with Birth Number 1 excel in executive leadership, entrepreneurial initiative, and original ideation." },
@@ -424,14 +425,14 @@
     function handleCalculateBirthNumber() {
       const dayInput = parseInt(document.getElementById("birthDay").value);
       if (isNaN(dayInput) || dayInput < 1 || dayInput > 31) {
-        alert("Please enter a valid day of birth between 1 and 31.");
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById("birthDay"), "Please enter a valid day of birth between 1 and 31.", "error");
         return;
       }
 
       const driver = ((dayInput - 1) % 9) + 1;
       const existing = JSON.parse(sessionStorage.getItem('nv_reading_input') || '{}');
       sessionStorage.setItem('nv_reading_input', JSON.stringify({
-        name: existing.name || 'Seeker',
+        name: existing.name || '',
         day: dayInput,
         month: existing.month || null,
         year: existing.year || null,
@@ -446,7 +447,7 @@
     function computeBirthNumber() {
       const dayInput = parseInt(document.getElementById("birthDay").value);
       if (isNaN(dayInput) || dayInput < 1 || dayInput > 31) {
-        alert("Please enter a valid day of birth between 1 and 31.");
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById("birthDay"), "Please enter a valid day of birth between 1 and 31.", "error");
         return;
       }
 

@@ -653,6 +653,10 @@
       line-height: 1;
     }
 
+    .nv-unbacked-hidden {
+      display: none !important;
+    }
+
   </style>
 </head>
 <body class="nv-body">
@@ -784,13 +788,39 @@
         <p style="margin:0 0 6px;"><strong>• Create a New Logo:</strong> Explore wordmarks, geometric symbols, colour palettes, layout variants and vector exports guided by your business brief.</p>
         <p style="margin:0 0 6px;"><strong>• Inspect an Existing Logo:</strong> Upload or paste SVG markup to review geometric structure, visible text, colour contrast and design criteria.</p>
         <p style="margin:0; font-size:0.82rem; color:var(--text-muted, #7A654D); border-top:1px dashed rgba(201,162,39,0.25); padding-top:8px;">
-          ✦ <em>Design and Validation Notice:</em> Numerology and planetary associations are used as symbolic design preferences. They do not establish commercial success, statutory trademark exclusivity, or legal ownership.
+          ✦ <em>Design and Review Notice:</em> Numerology and planetary associations are used as symbolic design preferences. They do not establish commercial success, statutory trademark exclusivity, or legal ownership.
         </p>
       </div>
     </div>
 
+    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
+    <section class="studio-card" id="nvLogoStudioComingSoon" aria-label="Logo Studio Coming Soon">
+      <span class="section-eyebrow">Coming Soon · Five-Layer Brand Geometry Engine</span>
+      <h2 class="card-heading">Logo Intelligence Studio &amp; Existing Logo Inspection Are Coming Soon</h2>
+      <p style="font-size:0.94rem; color:#523E28; line-height:1.7; margin:0 0 18px;">
+        We are completing the five-layer Logo Intelligence service (business category fit, owner and active-partner numerology profile, colour and shape reconciliation, nine measurable vector quality gates, and Shukla Paksha (waxing lunar fortnight) activation dates). Leave your email below and we will notify you the day the live studio opens.
+      </p>
+      <form data-nv-waitlist-form data-source-page="tool_logo_intelligence" style="display:flex; flex-direction:column; gap:14px; max-width:580px;">
+        <div>
+          <label for="nvLogoWaitlistEmail">Email Address *</label>
+          <input type="email" id="nvLogoWaitlistEmail" placeholder="you@example.com" required style="width:100%; background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); border-radius:12px; padding:13px 15px; color:#523E28; font-family:'Inter', sans-serif; font-size:0.95rem; box-sizing:border-box;" />
+        </div>
+        <label style="display:flex; align-items:flex-start; gap:10px; font-size:0.8rem; text-transform:none; letter-spacing:normal; font-weight:500; color:#523E28; line-height:1.55; cursor:pointer;">
+          <input type="checkbox" id="nvLogoWaitlistConsent" style="margin-top:3px; accent-color:#8B6914;" />
+          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
+        </label>
+        <button type="submit" class="btn-calc" style="max-width:320px;">
+          <span>Notify Me When Studio Opens ✦</span>
+        </button>
+        <div data-nv-waitlist-status role="status" aria-live="polite" style="display:none; padding:12px 16px; border-radius:10px; border:1px solid rgba(201,162,39,0.35); background:#FFFDF7; font-size:0.86rem; font-weight:600; color:#523E28;"></div>
+      </form>
+      <div style="margin-top:18px; padding-top:14px; border-top:1px dashed rgba(201,162,39,0.28); font-size:0.84rem; color:#7A654D;">
+        Available right now: <a href="/calculators/name-numerology/" style="color:#8B6914; font-weight:700;">Name Numerology Calculator</a> · <a href="/calculators/lo-shu-grid/" style="color:#8B6914; font-weight:700;">Lo Shu 3×3 Grid</a> · <a href="/pricing/" style="color:#8B6914; font-weight:700;">3-Page Basic Numerology Report</a>
+      </div>
+    </section>
+
     <!-- Mode Selector Tabs -->
-    <div class="studio-tab-wrap">
+    <div class="studio-tab-wrap nv-unbacked-hidden">
       <div class="studio-tab-pill">
         <button class="studio-tab-btn active" id="tabCreateBtn" onclick="switchStudioMode('create')">
           Create a New Logo
@@ -802,7 +832,7 @@
     </div>
 
     <!-- Panel 1: Create a New Logo -->
-    <section id="panelCreate">
+    <section id="panelCreate" class="nv-unbacked-hidden">
       <!-- Card A: Brand Definition & Acoustic Profile -->
       <div class="studio-card">
         <span class="section-eyebrow">Module 1 · Brand Wordmark &amp; Archetype</span>
@@ -811,12 +841,12 @@
                 <div class="form-grid">
           <div class="field-group">
             <label for="businessName">Exact Business Name (Wordmark) *</label>
-            <input type="text" id="businessName" value="AURA PEAK" oninput="onBrandDetailsChange()" placeholder="e.g. AURA PEAK or APEX ADVISORY" required />
+            <input type="text" id="businessName" value="" oninput="onBrandDetailsChange()" placeholder="Enter exact business or brand name" required />
           </div>
 
           <div class="field-group">
             <label for="brandTagline">Brand Tagline / Slogan</label>
-            <input type="text" id="brandTagline" value="ANVEIL EVERY CHARM" oninput="onBrandDetailsChange()" placeholder="e.g. ANVEIL EVERY CHARM" />
+            <input type="text" id="brandTagline" value="" oninput="onBrandDetailsChange()" placeholder="Optional tagline or descriptor" />
           </div>
 
           <div class="field-group">
@@ -870,18 +900,18 @@
 
           <div class="field-group full-width">
             <label for="businessActivity">Product Function &amp; Business Activity *</label>
-            <textarea id="businessActivity" rows="2" placeholder="Describe the physical products or services, usage context, and customer outcomes..." required>High performance athletic footwear engineered for endurance running and marathon training.</textarea>
+            <textarea id="businessActivity" rows="2" placeholder="Describe the products or services, usage context, and customer outcomes..." required></textarea>
           </div>
         </div>
 
         <!-- Live Numerology Intelligence Banner -->
         <div id="numerologyBriefBox" style="margin-top:18px; background:rgba(201,162,39,0.08); border:1.5px solid var(--border-gold); border-radius:12px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
-            <div style="font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-dark); font-weight:700;">✦ Numerology Calculation Audit</div>
-            <div id="briefNumCalc" style="font-size:0.95rem; font-weight:700; color:#523E28; margin-top:2px;">Chaldean Wordmark: "AURA PEAK" &rarr; Compound 26 &rarr; Root 8 (Saturn)</div>
+            <div style="font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-dark); font-weight:700;">✦ Numerology Calculation</div>
+            <div id="briefNumCalc" style="font-size:0.95rem; font-weight:700; color:#523E28; margin-top:2px;">Enter a business name above to calculate its Chaldean compound and single-digit root (1–9).</div>
           </div>
           <div id="briefRecommendationTag" style="font-size:0.8rem; background:#FFFFFF; border:1px solid var(--border-gold); padding:4px 12px; border-radius:100px; color:#8B6914; font-weight:600;">
-            Recommended: Ascending Peak Geometry &amp; Sandalwood Luxe
+            Awaiting business name input
           </div>
         </div>
 
@@ -1008,6 +1038,7 @@
           <button type="button" class="btn-calc" id="btnUpdateStudio" onclick="refreshLiveCanvas()">
             <span>Update Live Studio Canvas ✦</span>
           </button>
+          <div id="studioInlineNotice" role="status" aria-live="polite" style="display:none; margin-top:12px; padding:12px 16px; border-radius:10px; font-size:0.86rem; font-weight:600;"></div>
         </div>
       </div>
 
@@ -1031,31 +1062,26 @@
 
         <!-- SVG Render Stage -->
         <div class="svg-stage" id="svgStage">
-          <!-- Dynamically loaded pure vector SVG -->
-          <div style="color:var(--text-muted); font-size:0.9rem;">Initializing Sacred Geometry Engine...</div>
+          <div style="color:var(--text-muted); font-size:0.9rem;">Enter your business name and click Update Live Studio Canvas to render a server preview.</div>
         </div>
 
-                <!-- Multi-Gate Independent Quality Audit -->
-        <div style="margin-top: 22px;">
+        <!-- Measurable Quality Checks (shown only after a real server response) -->
+        <div id="qualityAuditSection" style="margin-top: 22px; display: none;">
           <div style="font-family:'Cormorant Garamond', serif; font-size:1.25rem; font-weight:700; color:#523E28; margin-bottom:10px;">
-            ✦ Measurable Quality &amp; Accessibility Audit
+            ✦ Measurable Quality &amp; Accessibility Checks
           </div>
           <div class="validation-grid" id="validationGrid">
             <div class="gate-item">
-              <span>✅</span>
-              <span id="gateExactText"><strong>Exact Wordmark:</strong> Verified character match</span>
+              <span id="gateExactText"><strong>Exact Wordmark:</strong> Pending server check</span>
             </div>
             <div class="gate-item">
-              <span>✅</span>
-              <span id="gateContrast"><strong>WCAG Contrast:</strong> 9.93:1 (Measured Ratio)</span>
+              <span id="gateContrast"><strong>WCAG Contrast:</strong> Pending server check</span>
             </div>
             <div class="gate-item">
-              <span>✅</span>
-              <span><strong>Vector Standard:</strong> Pure geometric SVG paths</span>
+              <span id="gateVector"><strong>Vector Structure:</strong> Pending server check</span>
             </div>
             <div class="gate-item">
-              <span>✅</span>
-              <span id="gateChaldean"><strong>Chaldean Vibration:</strong> Compound 26 / Root 8</span>
+              <span id="gateChaldean"><strong>Chaldean Name Number:</strong> Pending server check</span>
             </div>
           </div>
         </div>
@@ -1076,12 +1102,12 @@
     </section>
 
     <!-- Panel 2: Inspect an Existing Logo -->
-    <section id="panelAudit" style="display: none;">
+    <section id="panelAudit" class="nv-unbacked-hidden">
       <div class="studio-card">
-        <span class="section-eyebrow">Module 3 · Existing Logo Verification</span>
-        <h2 class="card-heading">Existing Brand Logo Audit &amp; Visual Harmony Verification</h2>
+        <span class="section-eyebrow">Module 3 · Existing Logo Inspection</span>
+        <h2 class="card-heading">Existing Brand Logo Inspection &amp; Visual Harmony Review</h2>
         <p style="font-size:0.9rem; color:var(--text-muted, #7A654D); line-height:1.6; margin-bottom:18px;">
-          Paste your existing SVG markup below to verify WCAG contrast ratios, OCR text match, and planetary symbol alignment against classical guidelines.
+          Paste your existing SVG markup below to measure WCAG contrast ratios, visible text extraction, and planetary symbol alignment against classical guidelines.
         </p>
 
         <div class="field-group full-width">
@@ -1091,17 +1117,18 @@
 
         <div style="margin-top: 18px;">
           <button type="button" class="btn-calc" onclick="handleAuditSubmit()">
-            <span>Audit Existing Logo Vector ✦</span>
+            <span>Inspect Existing Logo Vector ✦</span>
           </button>
+          <div id="auditInlineNotice" role="status" aria-live="polite" style="display:none; margin-top:12px; padding:12px 16px; border-radius:10px; font-size:0.86rem; font-weight:600;"></div>
         </div>
 
         <div id="auditResultBox" style="display: none; margin-top:24px;"></div>
       </div>
     </section>
 
-        <!-- Design & Validation Notice -->
+        <!-- Design & Review Notice -->
     <div class="notice-box">
-      <strong>Design &amp; Validation Notice:</strong> Numeros Vision generates logo concepts using the selected design settings and supported vector-rendering methods. Available validation checks evaluate SVG structure, visible wordmark characters, color contrast, and selected brand criteria. Review all exported files prior to production deployment. Numerology and planetary associations are symbolic aesthetic interpretations and do not guarantee business revenue, trademark registration, commercial exclusivity, or legal protection.
+      <strong>Design &amp; Review Notice:</strong> Numeros Vision generates logo concepts using the selected design settings and supported vector-rendering methods. Available checks evaluate SVG structure, visible wordmark characters, colour contrast, and selected brand criteria. Review all exported files prior to production deployment. Numerology and planetary associations are symbolic aesthetic indications and do not promise business revenue, trademark registration, commercial exclusivity, or legal protection.
     </div>
 
     <!-- GEO & AEO Methodology Section -->
@@ -1221,7 +1248,7 @@
             </div>
           </a>
           <p>
-            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu mathematical frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+            AI-powered numerological intelligence combining classical Vedic, Chaldean, and Lo Shu mathematical frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
           </p>
         </div>
 
@@ -1377,39 +1404,88 @@
         8: 'Saturn (Shani)',
         9: 'Mars (Mangal)'
       };
-      return { compound: compound || 26, root: root || 8, planet: planets[root] || 'Universal' };
+      if (!clean) {
+        return { compound: null, root: null, planet: null };
+      }
+      return { compound: compound, root: root, planet: planets[root] || null };
     }
 
+    function setBoxNotice(elId, msg, tone) {
+      const box = document.getElementById(elId);
+      if (!box) return;
+      if (!msg) {
+        box.style.display = 'none';
+        box.textContent = '';
+        return;
+      }
+      box.style.display = 'block';
+      box.style.background = tone === 'error' ? '#FDF5F3' : tone === 'success' ? '#EFF9F5' : '#FFFDF7';
+      box.style.color = tone === 'error' ? '#9B2C2C' : tone === 'success' ? '#16835B' : '#523E28';
+      box.style.border = tone === 'error'
+        ? '1px solid rgba(180,65,45,0.38)'
+        : tone === 'success'
+        ? '1px solid rgba(22,131,91,0.38)'
+        : '1px solid rgba(201,162,39,0.38)';
+      box.textContent = msg;
+    }
+
+    const ROOT_RECOMMENDATION_MAP = {
+      1: 'Indication (Root 1 · Sun / Surya): Solar Suncrest · Royal Sunburst or Jupiter Gold & Pearl',
+      2: 'Root 2 (Moon / Chandra): Symbol rule not configured · Jupiter Gold & Pearl palette',
+      3: 'Indication (Root 3 · Jupiter / Guru): Golden Triangle · Jupiter Gold & Pearl',
+      4: 'Root 4 (Rahu / North Node): Symbol rule not configured · Deep Sapphire palette',
+      5: 'Indication (Root 5 · Mercury / Budh): Mercury Caduceus · Mercury Emerald',
+      6: 'Indication (Root 6 · Venus / Shukra): Sacred Lotus · Jupiter Gold & Pearl',
+      7: 'Root 7 (Ketu / South Node): Symbol rule not configured · Sandalwood Luxe palette',
+      8: 'Indication (Root 8 · Saturn / Shani): Ascending Peak · Deep Sapphire or Sandalwood Luxe',
+      9: 'Indication (Root 9 · Mars / Mangal): Dynamic Shield · Royal Sunburst'
+    };
+
     function updateNumerologyBrief() {
-      const name = document.getElementById('businessName').value.trim() || 'AURA PEAK';
-      const calc = calculateChaldeanWordmark(name);
+      const name = document.getElementById('businessName').value.trim();
       const briefEl = document.getElementById('briefNumCalc');
       const tagEl = document.getElementById('briefRecommendationTag');
+      if (!name) {
+        if (briefEl) briefEl.innerText = 'Enter a business name above to calculate its Chaldean compound and single-digit root (1–9).';
+        if (tagEl) tagEl.innerText = 'Awaiting business name input';
+        return;
+      }
+      const calc = calculateChaldeanWordmark(name);
+      if (!calc.root) {
+        if (briefEl) briefEl.innerText = 'Business name must contain at least one Latin letter (A–Z) for Chaldean calculation.';
+        if (tagEl) tagEl.innerText = 'Calculation not available';
+        return;
+      }
       if (briefEl) {
         briefEl.innerText = `Chaldean Wordmark: "${name}" → Compound ${calc.compound} → Root ${calc.root} (${calc.planet})`;
       }
       if (tagEl) {
-        let rec = 'Recommended: Harmonic Octagram & Sandalwood Luxe';
-        if (calc.root === 1) rec = 'Recommended: Solar Suncrest & Jupiter Gold';
-        else if (calc.root === 3) rec = 'Recommended: Golden Triangle & Emerald';
-        else if (calc.root === 5) rec = 'Recommended: Mercury Caduceus & Mercury Emerald';
-        else if (calc.root === 6) rec = 'Recommended: Sacred Lotus & Pearl Luxe';
-        else if (calc.root === 8) rec = 'Recommended: Ascending Peak & Sandalwood';
-        else if (calc.root === 9) rec = 'Recommended: Dynamic Shield & Royal Sunburst';
-        tagEl.innerText = rec;
+        tagEl.innerText = ROOT_RECOMMENDATION_MAP[calc.root] || 'Symbol rule not configured';
       }
     }
 
-    function onBrandDetailsChange() { updateNumerologyBrief();
+    function onBrandDetailsChange() {
+      updateNumerologyBrief();
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
-        refreshLiveCanvas();
+        if (document.getElementById('businessName').value.trim()) {
+          refreshLiveCanvas();
+        }
       }, 400);
     }
 
     async function refreshLiveCanvas() {
-      const name = document.getElementById('businessName').value.trim() || 'AURA PEAK';
-      const tagline = document.getElementById('brandTagline').value.trim() || 'ANVEIL EVERY CHARM';
+      const name = document.getElementById('businessName').value.trim();
+      const tagline = document.getElementById('brandTagline').value.trim();
+      const auditSec = document.getElementById('qualityAuditSection');
+
+      if (!name) {
+        if (auditSec) auditSec.style.display = 'none';
+        setBoxNotice('studioInlineNotice', 'Please enter your exact business name before updating the studio canvas.', 'error');
+        return;
+      }
+
+      setBoxNotice('studioInlineNotice', 'Calculating wordmark numbers and preparing vector preview...', 'working');
 
       const payload = {
         business_name: name,
@@ -1429,27 +1505,31 @@
         });
 
         if (!res.ok) {
-          throw new Error('Preview fetch failed');
+          throw new Error('Logo preview service is currently coming soon.');
         }
 
         const data = await res.json();
-        currentSvgMarkup = data.svg;
-
-        // Render SVG into Stage
+        currentSvgMarkup = data.svg || '';
         document.getElementById('svgStage').innerHTML = currentSvgMarkup;
 
-        // Update Validation Checklist
         const val = data.validation || {};
         const num = data.name_numerology || {};
-        const contrast = val.contrast_ratio || 4.5;
-        const compound = num.compound_sum || 26;
-        const root = num.single_root || 8;
+        const hasContrast = typeof val.contrast_ratio === 'number';
+        const contrastLabel = hasContrast
+          ? `${val.contrast_ratio}:1 (${val.contrast_ratio >= 7.0 ? 'WCAG AAA 7:1+' : (val.contrast_ratio >= 4.5 ? 'WCAG AA 4.5:1+' : 'Below 4.5:1 threshold')})`
+          : 'Not configured';
+        const compoundLabel = typeof num.compound_sum === 'number' ? String(num.compound_sum) : 'Not configured';
+        const rootLabel = typeof num.single_root === 'number' ? String(num.single_root) : 'Not configured';
 
-        document.getElementById('gateContrast').innerHTML = `<strong>WCAG 2.1 Contrast:</strong> ${contrast}:1 (${contrast >= 4.5 ? 'AAA Pass' : 'Adjusted'})`;
-        document.getElementById('gateChaldean').innerHTML = `<strong>Chaldean Vibration:</strong> Compound ${compound} / Root ${root}`;
-
+        document.getElementById('gateExactText').innerHTML = `<strong>Exact Wordmark:</strong> ${val.exact_text_match === true ? 'Character match confirmed' : (val.exact_text_match === false ? 'Mismatch detected' : 'Not configured')}`;
+        document.getElementById('gateContrast').innerHTML = `<strong>WCAG 2.1 Contrast:</strong> ${contrastLabel}`;
+        document.getElementById('gateVector').innerHTML = `<strong>Vector Structure:</strong> ${val.clean_svg === true ? 'Clean SVG paths' : 'Pending inspection'}`;
+        document.getElementById('gateChaldean').innerHTML = `<strong>Chaldean Name Number:</strong> Compound ${compoundLabel} / Root ${rootLabel}`;
+        if (auditSec) auditSec.style.display = 'block';
+        setBoxNotice('studioInlineNotice', '', 'working');
       } catch (err) {
-        console.error('Preview error:', err);
+        if (auditSec) auditSec.style.display = 'none';
+        setBoxNotice('studioInlineNotice', err.message || 'Logo preview service is not configured right now.', 'error');
       }
     }
 
@@ -1465,17 +1545,22 @@
       openLogoLockModal('json');
     }
 
-        async function handleAuditSubmit() {
+    async function handleAuditSubmit() {
       const svgInput = document.getElementById('auditSvgInput').value.trim();
+      const box = document.getElementById('auditResultBox');
+      if (box) box.style.display = 'none';
+
       if (!svgInput) {
-        alert('Please paste SVG code to audit.');
+        setBoxNotice('auditInlineNotice', 'Please paste SVG markup to inspect.', 'error');
         return;
       }
 
-      // Safe client-side pre-sanitization check
       if (/<script|javascript:|onload|onerror/i.test(svgInput)) {
-        alert('Security warning: Pasted SVG markup contains potentially unsafe script or event tags. Scripts have been safely removed for evaluation.');
+        setBoxNotice('auditInlineNotice', 'Unsafe script or event attributes were detected in the pasted SVG markup. Please remove executable tags before submitting.', 'error');
+        return;
       }
+
+      setBoxNotice('auditInlineNotice', 'Analysing SVG geometry, visible text, and contrast ratios...', 'working');
 
       try {
         const res = await fetch('/api/v1/logo/analyze-existing', {
@@ -1483,84 +1568,64 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ svg_content: svgInput })
         });
+        if (!res.ok) {
+          throw new Error('Logo inspection service is currently coming soon.');
+        }
         const data = await res.json();
-        const box = document.getElementById('auditResultBox');
         const m = data.measurable_design_checks || {};
+        const contrastDisplay = typeof m.contrast_ratio === 'number' ? `${m.contrast_ratio}:1` : 'Not configured';
+        const paletteDisplay = Array.isArray(m.palette_sampled) && m.palette_sampled.length > 0
+          ? m.palette_sampled.join(', ')
+          : 'No colours detected';
 
         box.innerHTML = `
           <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:14px; padding:20px;">
             <div style="font-family:'Cormorant Garamond', serif; font-size:1.3rem; font-weight:700; color:#523E28; margin-bottom:10px;">
-              Existing Logo Audit Report
+              Existing Logo Inspection Summary
             </div>
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; font-size:0.86rem; color:#523E28;">
-              <div><strong>Vector Path Validity:</strong> ${m.is_vector ? '✅ Pure Geometric Vector' : '⚠️ Raster Elements Embedded'}</div>
+              <div><strong>Vector Path Check:</strong> ${m.is_vector === true ? 'Pure geometric vector' : (m.is_vector === false ? 'Raster elements embedded' : 'Not configured')}</div>
               <div><strong>Detected Wordmark:</strong> ${m.extracted_text || 'No text detected'}</div>
-              <div><strong>Measured Contrast Ratio:</strong> ${m.contrast_ratio ? m.contrast_ratio + ':1' : 'Evaluated in viewer'}</div>
-              <div><strong>Sampled Palette:</strong> ${(m.palette_sampled || []).join(', ') || 'Standard palette'}</div>
+              <div><strong>Measured Contrast Ratio:</strong> ${contrastDisplay}</div>
+              <div><strong>Sampled Palette:</strong> ${paletteDisplay}</div>
             </div>
             <div style="margin-top:12px; font-size:0.78rem; color:var(--text-muted); border-top:1px dashed rgba(201,162,39,0.25); padding-top:8px;">
-              ✦ Note: Contrast and vector metrics reflect the parsed elements of the provided markup. Review visual scalability across both light and dark backgrounds.
+              ✦ Note: Contrast and vector checks reflect measurable properties of the submitted SVG markup.
             </div>
           </div>
         `;
         box.style.display = 'block';
+        setBoxNotice('auditInlineNotice', '', 'working');
       } catch (err) {
-        alert('Audit failed: ' + err.message);
+        setBoxNotice('auditInlineNotice', err.message || 'Inspection could not be completed right now.', 'error');
       }
     }
-
-    // Auto-initialize canvas on page load
-    window.addEventListener('DOMContentLoaded', () => {
-      refreshLiveCanvas();
-    });
   </script>
 
-  <!-- Curiosity Lock Modal Container -->
-  <div class="lock-modal-backdrop" id="logoLockModal" style="display: none;">
+  <!-- Logo Kit Coming Soon Modal Container -->
+  <div class="lock-modal-backdrop nv-unbacked-hidden" id="logoLockModal" style="display: none;">
     <div class="lock-modal-box">
       <button type="button" class="modal-close-btn" onclick="closeLogoLockModal()">✕</button>
-      
-      <div style="display:inline-flex; align-items:center; justify-content:center; width:52px; height:52px; border-radius:50%; background:rgba(201,162,39,0.12); border:1.5px solid var(--gold, #C9A227); font-size:1.5rem; color:#8B6914; margin-bottom:12px;">
-        🔒
-      </div>
 
       <div style="font-family:'Cinzel', serif; font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-dark, #8B6914); font-weight:700; margin-bottom:6px;">
         NUMEROS VISION · ANVEIL EVERY CHARM
       </div>
 
       <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.65rem; font-weight:700; color:#523E28; margin:0 0 10px; line-height:1.25;">
-        ANVEIL Your Brand Geometry Charm — Explore Production Vector Kit
+        Logo Intelligence Exports Are Coming Soon
       </h3>
 
       <p style="font-size:0.88rem; color:var(--text-muted, #7A654D); line-height:1.65; margin:0 auto 18px;">
-        Your custom sacred geometry mark is harmonized. To deploy your visual identity across legal trademark filings, 
-        luxury packaging, and digital signage, Explore Your <strong>production-ready W3C vector assets</strong> with 
-        certified WCAG 2.1 AAA color contrast.
+        Production SVG, PNG, and brand specification exports will open once the five-layer Logo Intelligence engine completes preview review. Join the update list on this page to be notified when it opens.
       </p>
 
-      <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:12px; padding:14px 18px; text-align:left; margin-bottom:20px; font-size:0.82rem; color:#523E28; font-weight:600; display:flex; flex-direction:column; gap:8px;">
-        <div>✦ Pure Scalable Vector Graphics (SVG 1.1) in Horizontal, Stacked, and Icon lockups</div>
-        <div>✦ Ultra High-Resolution 4K Transparent PNGs for print, signage &amp; merchandise</div>
-        <div>✦ Certified Multi-Gate Independent Audit Manifest (100% Exact Wordmark OCR Match)</div>
-        <div>✦ W3C &amp; WCAG 2.1 AAA Contrast Ratio Legal Certification Report</div>
-      </div>
-
-      <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:18px; flex-wrap:wrap;">
-        <span style="font-family:'Cinzel', serif; font-size:1.6rem; font-weight:800; color:var(--gold-dark, #8B6914);">Coming soon, notify me</span>
-        <span style="font-size:0.72rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 10px; border-radius:999px; text-transform:uppercase;">SAVE 66% · INSTANT Explore</span>
-      </div>
-
-      <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
-        <a href="/checkout/?plan=report_master&tool=logo-studio" style="display:inline-flex; align-items:center; justify-content:center; padding:14px 28px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel', serif; font-weight:700; font-size:0.88rem; letter-spacing:0.06em; border-radius:10px; text-decoration:none; box-shadow:0 4px 18px rgba(201,162,39,0.35);">
-          <span>🔒 Brand Geometry Kit · Coming soon, notify me ✦</span>
-        </a>
-      </div>
-
       <div style="font-size:0.72rem; color:var(--text-muted, #7A654D);">
-        Sacred Geometric Precision · Classical Vedic Alignment · 100% Confidential & Private
+        Geometric Vector Review · Traditional Numerology Indications · Confidential &amp; Private
       </div>
     </div>
   </div>
+
+  <script src="/static/js/nv_tool_coming_soon.js?v=1.0.0"></script>
 
   <script src="/static/js/nav.js?v=5.5.0"></script>
   <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
