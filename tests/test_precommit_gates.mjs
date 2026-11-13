@@ -19,13 +19,14 @@ import vm from 'node:vm';
 import { DatabaseSync } from 'node:sqlite';
 import { fileURLToPath } from 'node:url';
 
-import worker, {
+import worker from '../app/static/_worker.js';
+const {
   resolveEffectivePackPricePaise,
   resolveServerLaunchOfferState,
   getPackById,
   mintUserSession,
   memoryStore
-} from '../app/static/_worker.js';
+} = worker;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');

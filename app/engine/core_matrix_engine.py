@@ -60,8 +60,6 @@ CHALDEAN_VALUES = {
 
 from app.engine.digit_root import (
     digit_root,
-    sum_digits_str,
-    calc_compound_steps,
     calc_driver as _canonical_calc_driver,
     calc_bhagyank as _canonical_calc_bhagyank,
     calc_personal_year as _canonical_calc_personal_year,
@@ -92,10 +90,7 @@ def calculate_conductor_details(day: int, month: int, year: int) -> Dict[str, An
     - conductor_root: reduced single digit 1-9
     - conductor_display: '1'..'9'
     - conductor_planet: planet from the reduced digit (root)
-    - reduction_path_note: e.g. '11, then 2' when digit sum > 9, else None
     """
-    dob_digits = f"{int(day):02d}{int(month):02d}{int(year):04d}"
-    compound_info = calc_compound_steps(sum_digits_str(dob_digits))
     root = _canonical_calc_bhagyank(day, month, year)
     display = str(root)
     planet_short = {
@@ -114,7 +109,6 @@ def calculate_conductor_details(day: int, month: int, year: int) -> Dict[str, An
         "conductor_root": root,
         "conductor_display": display,
         "conductor_planet": planet_short,
-        "reduction_path_note": compound_info["note"],
         "is_master": False
     }
 

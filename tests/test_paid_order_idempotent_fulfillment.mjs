@@ -1,7 +1,8 @@
 import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
-import worker, { mintUserSession, getPackById, resolveServerLaunchOfferState } from '../app/static/_worker.js';
+import worker from '../app/static/_worker.js';
+const { mintUserSession, getPackById, resolveServerLaunchOfferState } = worker;
 
 // Mock environment for edge worker testing
 function createMockEnv(overrides = {}) {

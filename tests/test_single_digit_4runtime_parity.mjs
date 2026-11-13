@@ -20,21 +20,22 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import workerDefault, {
-  KUA_NEEDS_GENDER_TEXT as WORKER_KUA_NEEDS_GENDER,
-  calcBhagyank as wCalcBhagyank,
-  calcChaldeanNameNumber as wCalcChaldean,
-  calcDriver as wCalcDriver,
-  calcLoShuDobOnly as wCalcLoShu,
-  calcPersonalCyclesForDate as wCalcCycles,
-  calcPersonalDay as wCalcPD,
-  calcPersonalMonth as wCalcPM,
-  calcPersonalYear as wCalcPY,
-  calcPythagoreanNameNumber as wCalcPythagorean,
-  calculateCanonicalKuaDetails as wCalcKua,
-  digitRoot as wDigitRoot,
+import workerDefault from '../app/static/_worker.js';
+const {
+  KUA_NEEDS_GENDER_TEXT: WORKER_KUA_NEEDS_GENDER,
+  calcBhagyank: wCalcBhagyank,
+  calcChaldeanNameNumber: wCalcChaldean,
+  calcDriver: wCalcDriver,
+  calcLoShuDobOnly: wCalcLoShu,
+  calcPersonalCyclesForDate: wCalcCycles,
+  calcPersonalDay: wCalcPD,
+  calcPersonalMonth: wCalcPM,
+  calcPersonalYear: wCalcPY,
+  calcPythagoreanNameNumber: wCalcPythagorean,
+  calculateCanonicalKuaDetails: wCalcKua,
+  digitRoot: wDigitRoot,
   viewFor,
-} from '../app/static/_worker.js';
+} = workerDefault;
 
 const require = createRequire(import.meta.url);
 const NVKua = require('../app/static/js/nv_kua.js');

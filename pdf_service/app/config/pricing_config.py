@@ -592,9 +592,25 @@ def resolve_launch_offer_state(
     )
 
     if not ends_raw:
+        env_mode = (os.getenv("ENVIRONMENT") or "production").strip().lower()
+        force_raw = (os.getenv("NV_FORCE_LAUNCH_MODE") or "").strip().lower()
+        if env_mode != "production" and force_raw in ("1", "true", "yes", "on"):
+            return {
+                "active": True,
+                "configured": True,
+                "forced": True,
+                "duration_days": LAUNCH_OFFER_DURATION_DAYS,
+                "duration_hours": LAUNCH_OFFER_DURATION_DAYS * 24,
+                "started_at": None,
+                "ends_at": None,
+                "until_date": "",
+                "from_date": "",
+                "label": "Launch price active during the launch window.",
+            }
         return {
             "active": False,
             "configured": False,
+            "forced": False,
             "duration_days": LAUNCH_OFFER_DURATION_DAYS,
             "duration_hours": LAUNCH_OFFER_DURATION_DAYS * 24,
             "started_at": None,
@@ -666,6 +682,8 @@ def format_launch_offer_copy(
     if not state.get("configured"):
         return ""
     if state["active"]:
+        if state.get("forced") and not state.get("until_date"):
+            return f"Launch price active during the launch window. Regular price ₹{mrp_inr:,} thereafter."
         return f"Launch price until {state['until_date']}. Regular price ₹{mrp_inr:,} from {state['from_date']}."
     if state.get("from_date"):
         return f"Regular price ₹{mrp_inr:,} (effective {state['from_date']})."
@@ -772,13 +790,44 @@ def get_all_product_skus(
             "deliverables": tier["deliverables"]
         }
 
-    # Bundles
+    # Annual Planners (planner_2027)
+    try:
+        from app.config.planner_2027_pricing import is_planner_2027_live
+        planner_live = is_planner_2027_live()
+    except Exception:
+        planner_live = False
+    skus["planner_2027"] = {
+        "sku_id": "planner_2027",
+        "family": "annual_planner",
+        "name": "2027 Year Ahead Planner",
+        "descriptor": "Personalized 2027 Annual Numerology Planner, 24 pages",
+        "pages": 24,
+        "waitlist_only": not planner_live,
+        "status": "active" if planner_live else "waitlist",
+        "display_price_label": WAITLIST_DISPLAY_LABEL if not planner_live else None,
+        "waitlist_caption": WAITLIST_LAUNCH_CAPTION if not planner_live else "",
+        "amount_inr": None,
+        "amount_paise": None,
+        "original_price_inr": None,
+        "currency": CURRENCY,
+        "deliverables": [
+            "Personal Year, Universal Year & Monthly Vibrational Forecast for 2027",
+            "12 Month-by-Month Focus Themes, Key Windows & Caution Corridors",
+            "Quarterly Career, Financial & Relationship Pacing Checklists",
+            "Lo Shu Grid & Elemental Rhythm Alignment for 2027",
+            "24-Page Personalized Annual Reference PDF",
+        ],
+    }
+
+    # Bundles (coming_soon per packs.json)
     for b_id, bundle in BUNDLES.items():
         skus[b_id] = {
             "sku_id": b_id,
             "family": "bundle",
             "name": bundle["name"],
             "descriptor": bundle.get("included_reports_description", ""),
+            "waitlist_only": False,
+            "status": bundle.get("status", "coming_soon"),
             "amount_inr": bundle["bundle_price_inr"],
             "amount_paise": bundle["amount_paise"],
             "original_price_inr": bundle.get("standalone_total_inr", bundle["bundle_price_inr"]),
@@ -786,7 +835,8 @@ def get_all_product_skus(
             "deliverables": bundle["deliverables"]
         }
 
-    # Charm AI
+    # Charm AI (charm_free & charm_single active; charm_multi & charm_extended inactive per packs.json)
+    active_charm_ids = {"charm_free", "charm_single"}
     for p_id, pack in CHARM_AI_PACKS.items():
         skus[p_id] = {
             "sku_id": p_id,
@@ -794,6 +844,8 @@ def get_all_product_skus(
             "name": pack["name"],
             "descriptor": pack.get("descriptor", ""),
             "questions_count": pack["questions_count"],
+            "waitlist_only": False,
+            "status": pack.get("status", "active" if p_id in active_charm_ids else "inactive"),
             "amount_inr": pack["price_inr"],
             "amount_paise": pack["amount_paise"],
             "original_price_inr": pack.get("original_price_inr", pack["price_inr"]),
@@ -808,6 +860,8 @@ def get_all_product_skus(
             "family": "consultation",
             "name": consult["name"],
             "descriptor": "Private 1-on-1 Numerology Consultation, 45 minutes",
+            "waitlist_only": False,
+            "status": consult.get("status", "active"),
             "amount_inr": consult["price_inr"],
             "amount_paise": consult["amount_paise"],
             "original_price_inr": consult.get("original_price_inr", consult["price_inr"]),
@@ -854,16 +908,14 @@ def resolve_sku_price(
         "premium": "report_premium",
         "complete": "report_premium",
         "report_divine": "report_premium",
-        "complete_report": "report_premium",
         "every_charm": "report_premium",
+        "planner-2027": "planner_2027",
+        "year_2027": "planner_2027",
+        "2027_planner": "planner_2027",
 
-        # Charm AI aliases
+        # Charm AI approved legacy aliases (ai_report_combo, growth_10q, ai_growth_15q, ai_power_35q, complete_report retired/rejected)
         "starter_5q": "charm_single",
         "ai_starter_5q": "charm_single",
-        "growth_10q": "charm_multi",
-        "ai_growth_15q": "charm_multi",
-        "ai_power_35q": "charm_extended",
-        "ai_report_combo": "charm_extended",
 
         # Bundles aliases
         "bundle_starter": "starter_bundle",

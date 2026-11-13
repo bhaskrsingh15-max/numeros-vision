@@ -17,7 +17,8 @@
 
 import assert from 'node:assert';
 import crypto from 'node:crypto';
-import worker, { memoryStore } from '../app/static/_worker.js';
+import worker from '../app/static/_worker.js';
+const { memoryStore } = worker;
 
 async function runWorkerTestSuite() {
   console.log('[TEST] Starting Full Planner 2027 Worker Test Suite...');

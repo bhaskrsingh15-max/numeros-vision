@@ -77,7 +77,7 @@ BUILD_TOKENS = {
 }
 for root, _, files in os.walk(DIST_DIR):
     for f in files:
-        if f.lower().endswith((".html", ".js")):
+        if f.lower().endswith((".html", ".js")) and f != "_worker.js":
             fp = os.path.join(root, f)
             txt = open(fp, "r", encoding="utf-8", errors="ignore").read()
             updated = txt
@@ -87,19 +87,16 @@ for root, _, files in os.walk(DIST_DIR):
             if updated != txt:
                 open(fp, "w", encoding="utf-8").write(updated)
 
-# 1c-bis. Strip Node-unit-test named `export { ... };` blocks from `dist_cloudflare_pages/_worker.js`
-# Cloudflare Pages `workerd` requires entrypoint exports to be functions/classes/`ExportedHandler` (`export default`).
-# Keeping named exports in `app/static/_worker.js` preserves Node ESM unit tests while making `dist` 100% `workerd`-valid.
+# 1c-bis. Enforce strict SHA-256 byte identity between app/static/_worker.js and dist_cloudflare_pages/_worker.js
+import hashlib
+_src_worker_path = os.path.join(STATIC_SRC, "_worker.js")
 _dist_worker_path = os.path.join(DIST_DIR, "_worker.js")
-if os.path.exists(_dist_worker_path):
-    with open(_dist_worker_path, "r", encoding="utf-8") as _wf:
-        _worker_raw = _wf.read()
-    _worker_clean = re.sub(r"\bexport\s*\{[^}]*\}\s*;?", "", _worker_raw)
-    assert "export default" in _worker_clean, "dist _worker.js must retain export default handler"
-    if _worker_clean != _worker_raw:
-        with open(_dist_worker_path, "w", encoding="utf-8") as _wf:
-            _wf.write(_worker_clean)
-        print("PASS: Stripped non-handler named exports from dist_cloudflare_pages/_worker.js for workerd")
+if os.path.exists(_src_worker_path) and os.path.exists(_dist_worker_path):
+    shutil.copy2(_src_worker_path, _dist_worker_path)
+    _src_sha = hashlib.sha256(open(_src_worker_path, "rb").read()).hexdigest()
+    _dist_sha = hashlib.sha256(open(_dist_worker_path, "rb").read()).hexdigest()
+    assert _src_sha == _dist_sha, f"Worker byte mismatch: src={_src_sha} vs dist={_dist_sha}"
+    print(f"PASS: app/static/_worker.js and dist_cloudflare_pages/_worker.js are byte-identical (SHA-256: {_dist_sha})")
 
 # 1d. Inject build-time JSON-LD for 2027 Year Ahead Planner derived from planner_2027_pricing.json
 try:

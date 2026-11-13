@@ -17,7 +17,8 @@ import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import worker, { memoryStore } from '../app/static/_worker.js';
+import worker from '../app/static/_worker.js';
+const { memoryStore } = worker;
 
 const htmlPath = path.resolve('app/static/dashboard.html');
 const dashboardHtml = fs.readFileSync(htmlPath, 'utf8');

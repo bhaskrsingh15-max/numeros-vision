@@ -18,7 +18,8 @@
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
-import worker, {
+import worker from '../app/static/_worker.js';
+const {
   fulfillPaidOrder,
   memoryStore,
   hasBannedTerms,
@@ -27,7 +28,7 @@ import worker, {
   isValidRelativeReturnTo,
   sanitizeReturnToUrl,
   callCharmBackendService
-} from '../app/static/_worker.js';
+} = worker;
 
 console.log('[TEST] Starting Charm AI Server-Side Gating Suite (Real SQLite Backend via node:sqlite)...');
 

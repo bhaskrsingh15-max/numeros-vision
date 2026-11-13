@@ -12,7 +12,8 @@
 
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
-import worker, {
+import worker from '../app/static/_worker.js';
+const {
   encryptField,
   signPdfServiceRequest,
   createSignedDownloadToken,
@@ -22,7 +23,7 @@ import worker, {
   REPORT_JOB_STATUS,
   doesReportExistOrWasServed,
   memoryStore
-} from '../app/static/_worker.js';
+} = worker;
 
 const TEST_ENV = {
   ENVIRONMENT: 'local',

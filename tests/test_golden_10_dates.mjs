@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { viewFor } from '../app/static/_worker.js';
+import worker from '../app/static/_worker.js';
+const { viewFor } = worker;
 
 const GOLDEN_10_DATES = [
   { dob: '28-11-1981', d: 28, m: 11, y: 1981, driver: 1, conductorRaw: 4, conductorRoot: 4, conductorDisplay: '4', planet: 'Rahu' },
