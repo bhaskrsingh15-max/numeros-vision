@@ -365,6 +365,8 @@ async def handle_render_pdf(request: Request) -> Response:
         pdf_bytes, meta = render_pdf_from_view(payload)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"{type(exc).__name__}: {exc}") from exc
 
     return Response(
         content=pdf_bytes,

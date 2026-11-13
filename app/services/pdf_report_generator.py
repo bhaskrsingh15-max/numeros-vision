@@ -130,6 +130,31 @@ def _init_theme_fonts():
 
 _init_theme_fonts()
 
+_CACHED_IMAGE_READERS: Dict[str, Any] = {}
+
+
+def _get_cached_image_reader(candidates: list[str], cache_key: str, max_dim: int = 800) -> Any:
+    if cache_key in _CACHED_IMAGE_READERS:
+        return _CACHED_IMAGE_READERS[cache_key]
+    fpath = next((p for p in candidates if os.path.exists(p)), None)
+    if not fpath:
+        return None
+    try:
+        from PIL import Image as _PILImage
+        from reportlab.lib.utils import ImageReader as _ImageReader
+        with _PILImage.open(fpath) as im:
+            im = im.convert("RGBA")
+            if max(im.size) > max_dim:
+                im.thumbnail((max_dim, max_dim), _PILImage.Resampling.LANCZOS)
+            buf = io.BytesIO()
+            im.save(buf, format="PNG", optimize=True)
+            buf.seek(0)
+            reader = _ImageReader(buf)
+            _CACHED_IMAGE_READERS[cache_key] = reader
+            return reader
+    except Exception:
+        return fpath
+
 # Classical Accuracy Imports
 from app.engine.kua import (
     KUA_METADATA,
@@ -354,12 +379,12 @@ def draw_page_background(canvas_obj, doc):
         os.path.join("app", "static", "assets", "brand", "nv-report-watermark-12pct-4096.png"),
         os.path.join("pdf_service", "app", "assets", "nv-report-watermark-12pct-4096.png"),
     ]
-    wm_file = next((p for p in wm_candidates if os.path.exists(p)), None)
-    if wm_file:
+    wm_reader = _get_cached_image_reader(wm_candidates, "watermark_1024", max_dim=1024)
+    if wm_reader:
         try:
             canvas_obj.setFillAlpha(1.0)  # Asset is pre-baked at 12% opacity per brand spec
             img_size = 396  # ~140 mm wide (140 * 72 / 25.4 = 396.85 pt)
-            canvas_obj.drawImage(wm_file, cx - img_size / 2, cy - img_size / 2,
+            canvas_obj.drawImage(wm_reader, cx - img_size / 2, cy - img_size / 2,
                                  width=img_size, height=img_size, mask='auto',
                                  preserveAspectRatio=True)
         except Exception:
@@ -406,11 +431,11 @@ class NumerosReportCanvas(canvas.Canvas):
             os.path.join("app", "static", "assets", "brand", "nv-header-lockup-transparent-2x.png"),
             os.path.join("pdf_service", "app", "assets", "nv-header-lockup-transparent-2x.png"),
         ]
-        lockup_file = next((p for p in lockup_candidates if os.path.exists(p)), None)
+        lockup_reader = _get_cached_image_reader(lockup_candidates, "header_lockup_800", max_dim=800)
         drew_lockup = False
-        if lockup_file:
+        if lockup_reader:
             try:
-                self.drawImage(lockup_file, 34, h - 32, width=130, height=15, mask='auto', preserveAspectRatio=True, anchor='sw')
+                self.drawImage(lockup_reader, 34, h - 32, width=130, height=15, mask='auto', preserveAspectRatio=True, anchor='sw')
                 drew_lockup = True
             except Exception:
                 drew_lockup = False

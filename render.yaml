@@ -28,6 +28,8 @@ services:
     dockerContext: ./pdf_service
     region: singapore
     plan: starter
+    autoDeploy: false
+    maxShutdownDelaySeconds: 30
     healthCheckPath: /health
     envVars:
       - key: ENVIRONMENT
