@@ -313,14 +313,25 @@ def main() -> int:
     assert st6 == 200, f"Dashboard view failed ({st6}): {data6}"
     dash_dump = json.dumps(data6)
     assert "report_basic" in dash_dump and str(job_id) in dash_dump, f"Dashboard missing report_basic or job {job_id}: {dash_dump[:500]}"
-    steps_log[-1]["note"] = f"Dashboard lists unlocked report_basic & jobId={job_id} (COMPLETED)"
+    dash_reports = data6.get("reports") or data6.get("data", {}).get("reports") or []
+    matched_rep = next((r for r in dash_reports if str(r.get("id")) == str(job_id) or r.get("packId") == "report_basic"), {})
+    dash_orders = data6.get("orders") or data6.get("data", {}).get("orders") or []
+    matched_ord = next((o for o in dash_orders if str(o.get("id")) == str(internal_order_id)), {})
+    subject_id = (
+        matched_rep.get("subjectId")
+        or matched_ord.get("subject_id")
+        or data2.get("subject_id")
+        or data2.get("subjectId")
+    )
+    assert subject_id, f"Could not resolve subjectId from dashboard view: {dash_dump[:500]}"
+    steps_log[-1]["note"] = f"Dashboard lists unlocked report_basic, subjectId={subject_id}, jobId={job_id} (COMPLETED)"
 
     # Step 7: Mint Signed 5-Minute Download Link
     st7, _, data7 = request_json(
         "7. Mint Signed Download Token (/api/v1/reports/download-token)",
         "POST",
         "/api/v1/reports/download-token",
-        {"jobId": job_id},
+        {"subjectId": subject_id, "packId": "report_basic", "jobId": job_id},
     )
     assert st7 == 200 and data7.get("downloadUrl"), f"Download token mint failed ({st7}): {data7}"
     download_url = data7["downloadUrl"]

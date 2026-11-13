@@ -299,7 +299,13 @@
     }
   },
   "category_norms_layer1": {
-    "source_citation": "Lülfesmann & Riegel (2022) — Logo colours following product category norms yield more favourable brand attitudes.",
+    "rule_id": "RESEARCH_CATEGORY_COLOUR_NORMS_LULFESMANN_RIEGEL_2022",
+    "authors": "Emily Lülfesmann & Nina Marie Riegel",
+    "year": 2022,
+    "title": "Competent Blue and Exciting Red: Examining the Effect of Logo Colors on Consumers' Brand Attitudes in Different Product Categories",
+    "journal": "Master's Thesis (MSc in International Marketing and Management), Copenhagen Business School",
+    "doi_or_url": "https://research.cbs.dk/en/studentProjects/competent-blue-and-exciting-red-examining-the-effect-of-logo-colo/",
+    "source_citation": "Lülfesmann & Riegel (2022), Copenhagen Business School — Logo colours following product category norms yield more favourable brand attitudes.",
     "evidence_label": "PUBLISHED_RESEARCH",
     "categories": {
       "sports": {
@@ -470,14 +476,24 @@
   "published_perception_rules": {
     "shape_vs_promise": {
       "rule_id": "RESEARCH_SHAPE_PROMISE_JIANG_2016",
-      "source_citation": "Jiang, Gorn, Galli & Chattopadhyay (2016) — Circular logos signal softness and care; angular logos signal hardness and durability.",
+      "authors": "Yuwei Jiang, Gerald J. Gorn, Maria Galli & Amitava Chattopadhyay",
+      "year": 2016,
+      "title": "Does Your Company Have the Right Logo? How and Why Circular- and Angular-Logo Shapes Influence Brand Attribute Judgments",
+      "journal": "Journal of Consumer Research, 42(5), 709–726",
+      "doi_or_url": "https://doi.org/10.1093/jcr/ucv049",
+      "source_citation": "Jiang, Gorn, Galli & Chattopadhyay (2016), Journal of Consumer Research — Circular logos signal softness and care; angular logos signal hardness and durability.",
       "evidence_label": "PUBLISHED_RESEARCH",
       "softness_care_keywords": ["care", "warmth", "gentle", "comfort", "nourish", "wellness", "harmony", "friendly", "organic", "hospitality"],
       "durability_precision_keywords": ["durable", "strength", "precision", "speed", "tough", "engineered", "security", "performance", "industrial", "authority"]
     },
     "lightness_vs_brand_position": {
       "rule_id": "RESEARCH_LIGHTNESS_AGE_ZENG",
-      "source_citation": "Zeng et al. — Darker logos read as established/traditional brands; lighter hues suit modern/youthful brand positions.",
+      "authors": "Shuaifan Zeng, Shuilong Wu, Yongna Yuan & Xiaobing Xu",
+      "year": 2025,
+      "title": "Designing Age: The Impact of Logo Color Lightness on Brand Age Perception and Brand Attitude",
+      "journal": "Psychology & Marketing, 42(4), 1188–1200",
+      "doi_or_url": "https://doi.org/10.1002/mar.22172",
+      "source_citation": "Zeng, Wu, Yuan & Xu (2025), Psychology & Marketing — Darker logos read as established/traditional brands; lighter hues suit modern/youthful brand positions.",
       "evidence_label": "PUBLISHED_RESEARCH",
       "heritage_traditional_keywords": ["heritage", "traditional", "classic", "institutional", "legacy", "bespoke", "executive"],
       "modern_youthful_keywords": ["modern", "youthful", "fresh", "digital", "agile", "playful", "accessible"],
@@ -486,28 +502,53 @@
     },
     "nothing_cut_trust_support": {
       "rule_id": "RESEARCH_INCOMPLETE_TYPEFACE_HAGTVEDT_2011",
+      "authors": "Henrik Hagtvedt",
+      "year": 2011,
+      "title": "The Impact of Incomplete Typeface Logos on Perceptions of the Firm",
+      "journal": "Journal of Marketing, 75(4), 86–93",
+      "doi_or_url": "https://doi.org/10.1509/jmkg.75.4.86",
       "source_citation": "Hagtvedt (2011), Journal of Marketing — Incomplete/missing-part typefaces increase perceived innovativeness at the expense of perceived trustworthiness.",
       "evidence_label": "PUBLISHED_RESEARCH"
     },
     "startup_descriptiveness": {
       "rule_id": "RESEARCH_DESCRIPTIVENESS_LUFFARELLI_2019",
-      "source_citation": "Luffarelli, Mukesh & Mahmood (2019) — Descriptive marks that hint at what the business sells improve brand evaluations and purchase intent for unfamiliar/startup brands.",
+      "authors": "Jonathan Luffarelli, Mudra Mukesh & Ammara Mahmood",
+      "year": 2019,
+      "title": "Let the Logo Do the Talking: The Influence of Logo Descriptiveness on Brand Equity",
+      "journal": "Journal of Marketing Research, 56(5), 862–878",
+      "doi_or_url": "https://doi.org/10.1177/0022243719845000",
+      "source_citation": "Luffarelli, Mukesh & Mahmood (2019), Journal of Marketing Research — Descriptive marks that hint at what the business sells improve brand evaluations and purchase intent for unfamiliar/startup brands.",
       "evidence_label": "PUBLISHED_RESEARCH"
     },
     "simplicity_vs_warmth": {
       "rule_id": "RESEARCH_SIMPLICITY_CHEN_2025",
-      "source_citation": "Chen et al. (2025), Journal of Business Research — Simple logos heighten perceived competence; moderately detailed logos heighten perceived warmth.",
+      "authors": "Jiuqi Chen, Xin Liu, Wenjin Feng & Lu Meng",
+      "year": 2025,
+      "title": "The visual language of brand logos: Exploring the relationship between logo simplicity and perceptions of brand warmth and competence",
+      "journal": "Journal of Business Research, 200, 115580",
+      "doi_or_url": "https://doi.org/10.1016/j.jbusres.2025.115580",
+      "source_citation": "Chen, Liu, Feng & Meng (2025), Journal of Business Research — Simple logos heighten perceived competence; moderately detailed logos heighten perceived warmth.",
       "evidence_label": "PUBLISHED_RESEARCH"
     },
     "vowel_sound_symbolism": {
       "rule_id": "RESEARCH_VOWEL_SOUND_LOWREY_SHRUM_2007",
+      "authors": "Tina M. Lowrey & L. J. Shrum",
+      "year": 2007,
+      "title": "Phonetic Symbolism and Brand Name Preference",
+      "journal": "Journal of Consumer Research, 34(3), 406–414",
+      "doi_or_url": "https://doi.org/10.1086/518530",
       "source_citation": "Lowrey & Shrum (2007), Journal of Consumer Research — Front vs. back vowel sounds shift brand name preference depending on product attribute fit (small/fast/crisp vs. large/rich/enduring).",
       "evidence_label": "PUBLISHED_RESEARCH"
     }
   },
   "regional_colour_context": {
     "rule_id": "RESEARCH_REGIONAL_COLOUR_MADDEN_2000",
-    "source_citation": "Madden, Hewett & Roth (2000) — Cross-national colour meanings are partly shared (blue/green calm & trust) and partly culture-specific across markets.",
+    "authors": "Thomas J. Madden, Kelly Hewett & Martin S. Roth",
+    "year": 2000,
+    "title": "Managing Images in Different Cultures: A Cross-National Study of Color Meanings and Preferences",
+    "journal": "Journal of International Marketing, 8(4), 90–107",
+    "doi_or_url": "https://doi.org/10.1509/jimk.8.4.90.19795",
+    "source_citation": "Madden, Hewett & Roth (2000), Journal of International Marketing — Cross-national colour meanings are partly shared (blue/green calm & trust) and partly culture-specific across markets.",
     "evidence_label": "PUBLISHED_RESEARCH",
     "regions": {
       "INDIA": {
