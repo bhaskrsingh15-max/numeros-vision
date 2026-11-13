@@ -12,11 +12,15 @@ def sync_pdf_service():
     root = pathlib.Path(__file__).resolve().parent.parent
     dest = root / 'pdf_service' / 'app'
 
-    for sub in ('config', 'data', 'engine', 'services'):
+    for sub in ('config', 'data', 'engine', 'services', 'logo_intelligence'):
         d = dest / sub
         d.mkdir(parents=True, exist_ok=True)
-        (d / '__init__.py').write_text('', encoding='utf-8')
-    (dest / '__init__.py').write_text('', encoding='utf-8')
+        init_file = d / '__init__.py'
+        if not init_file.exists():
+            init_file.write_text('', encoding='utf-8')
+    root_init = dest / '__init__.py'
+    if not root_init.exists():
+        root_init.write_text('', encoding='utf-8')
 
     needed_files = [
         'app/assets/nv-logo-mark.png',
@@ -56,6 +60,9 @@ def sync_pdf_service():
         'app/engine/rule_governance.py',
         'app/services/pdf_report_generator.py',
         'app/services/internal_pdf_worker_service.py',
+        'data/logo_rules_v1.json',
+        'app/logo_intelligence/__init__.py',
+        'app/logo_intelligence/rulebook_v1.py',
     ]
 
     for rel in needed_files:

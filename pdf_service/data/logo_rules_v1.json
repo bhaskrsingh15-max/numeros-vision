@@ -1,0 +1,557 @@
+{
+  "schema_version": "1.0.0",
+  "ruleset_id": "NV_LOGO_RULES_V1",
+  "effective_date": "2026-11-14",
+  "description": "Numeros Vision Logo Intelligence Rule Set v1 — Single server-side configuration combining measured design thresholds, published brand research, and read-only traditional numerology bindings.",
+  "evidence_labels": {
+    "MEASURED": "Deterministic physical or mathematical measurement (WCAG 2.1 luminance contrast, vector path closure, dimensions, OCR string comparison, font count).",
+    "PUBLISHED_RESEARCH": "Peer-reviewed or empirical marketing and visual perception study.",
+    "TRADITIONAL_RULE": "Approved Numeros Vision traditional numerology or classical correlation table.",
+    "NOT_CONFIGURED": "Rule or symbol concept intentionally left unconfigured pending domain owner approval; never guessed."
+  },
+  "client_palette_policy": {
+    "rule_id": "CLIENT_PALETTE_POLICY_D6",
+    "evidence_label": "TRADITIONAL_RULE",
+    "allow_client_navy_and_black_when_chart_supports": true,
+    "ui_chrome_restriction_applies_to_client_logos": false,
+    "summary": "Client logo palettes follow the client's own numerology tables and category range (no blanket navy or black ban on client logos). Numeros Vision's Venus Pearl / Sandalwood Ink UI chrome palette applies only to site and report chrome."
+  },
+  "contrast_thresholds": {
+    "rule_id": "WCAG21_LOGO_CONTRAST_V1",
+    "evidence_label": "MEASURED",
+    "symbol_and_large_text_min_ratio": 3.0,
+    "small_text_min_ratio": 4.5,
+    "large_text_definition": "24px regular (>=18pt) or 18.66px bold (>=14pt bold)",
+    "explicit_pair_policies": [
+      {
+        "foreground_hex": "#C9A227",
+        "background_hex": "#FFFDF7",
+        "measured_ratio": 2.38,
+        "allowed_for_symbol": false,
+        "allowed_for_large_text": false,
+        "allowed_for_small_text": false,
+        "evidence_label": "MEASURED",
+        "note": "#C9A227 on #FFFDF7 measures 2.38:1 and fails both 3.0:1 symbol/large-text and 4.5:1 small-text hard gates. Use #8B6914 (5.00:1) or #523E28 (9.93:1) on #FFFDF7."
+      },
+      {
+        "foreground_hex": "#C9A227",
+        "background_hex": "#523E28",
+        "measured_ratio": 4.18,
+        "allowed_for_symbol": true,
+        "allowed_for_large_text": true,
+        "allowed_for_small_text": false,
+        "evidence_label": "MEASURED",
+        "note": "#C9A227 on #523E28 measures 4.18:1 (>=3.0:1, <4.5:1): permitted ONLY for the symbol and large text; small text on #523E28 must use #FFFDF7 (9.93:1) or #F7F3EA (9.08:1)."
+      }
+    ]
+  },
+  "allowed_logo_types_v1": {
+    "rule_id": "LOGO_TYPES_V1",
+    "evidence_label": "MEASURED",
+    "active_types": [
+      "wordmark",
+      "lettermark",
+      "combination_mark",
+      "emblem"
+    ],
+    "conditional_types": {
+      "pictorial_mark": "Permitted for existing-logo audit when all contours are closed and nothing is cut.",
+      "abstract_mark": "Permitted for existing-logo audit when all contours are closed and nothing is cut."
+    },
+    "disabled_types": {
+      "mascot": "NOT_CONFIGURED"
+    }
+  },
+  "free_scan_verdict_rule": {
+    "rule_id": "FREE_SCAN_VERDICT_V1",
+    "evidence_label": "MEASURED",
+    "states": {
+      "Aligned": "All 9 hard gates pass AND zero enemy colour/number conflicts exist.",
+      "Partly aligned": "Either at least 1 hard gate fails OR at least 1 enemy colour/number conflict exists, but NOT both.",
+      "Not aligned": "At least 1 hard gate fails AND at least 1 enemy colour/number conflict exists."
+    }
+  },
+  "symbol_concepts_by_root": {
+    "1": {
+      "root_number": 1,
+      "planet": "Sun (Surya)",
+      "status": "APPROVED",
+      "display_status": "Approved",
+      "symbol_id": "solar_crest",
+      "symbol_name": "Solar Crest",
+      "shape_family": "circular_curved",
+      "geometry_keywords": ["radial symmetry", "concentric solar core", "eight closed cardinal rays"],
+      "evidence_label": "TRADITIONAL_RULE",
+      "source_id": "NV_VECTOR_STUDIO_V1"
+    },
+    "2": {
+      "root_number": 2,
+      "planet": "Moon (Chandra)",
+      "status": "NOT_CONFIGURED",
+      "display_status": "Not configured",
+      "symbol_id": null,
+      "symbol_name": null,
+      "shape_family": "circular_curved",
+      "geometry_keywords": [],
+      "evidence_label": "NOT_CONFIGURED",
+      "source_id": null
+    },
+    "3": {
+      "root_number": 3,
+      "planet": "Jupiter (Guru)",
+      "status": "APPROVED",
+      "display_status": "Approved",
+      "symbol_id": "golden_triangle",
+      "symbol_name": "Harmonic Triangle",
+      "shape_family": "angular_geometric",
+      "geometry_keywords": ["equilateral upward triangle", "nested triad", "closed apex nodes"],
+      "evidence_label": "TRADITIONAL_RULE",
+      "source_id": "NV_VECTOR_STUDIO_V1"
+    },
+    "4": {
+      "root_number": 4,
+      "planet": "Rahu (North Node)",
+      "status": "NOT_CONFIGURED",
+      "display_status": "Not configured",
+      "symbol_id": null,
+      "symbol_name": null,
+      "shape_family": "angular_geometric",
+      "geometry_keywords": [],
+      "evidence_label": "NOT_CONFIGURED",
+      "source_id": null
+    },
+    "5": {
+      "root_number": 5,
+      "planet": "Mercury (Budh)",
+      "status": "APPROVED",
+      "display_status": "Approved",
+      "symbol_id": "mercury_caduceus",
+      "symbol_name": "Mercury Caduceus Loop",
+      "shape_family": "balanced_hybrid",
+      "geometry_keywords": ["closed figure-eight loop", "central axis", "symmetrical wings"],
+      "evidence_label": "TRADITIONAL_RULE",
+      "source_id": "NV_VECTOR_STUDIO_V1"
+    },
+    "6": {
+      "root_number": 6,
+      "planet": "Venus (Shukra)",
+      "status": "APPROVED",
+      "display_status": "Approved",
+      "symbol_id": "sacred_lotus",
+      "symbol_name": "Three-Petal Lotus",
+      "shape_family": "circular_curved",
+      "geometry_keywords": ["closed symmetrical petals", "organic grace", "harmonic base"],
+      "evidence_label": "TRADITIONAL_RULE",
+      "source_id": "NV_VECTOR_STUDIO_V1"
+    },
+    "7": {
+      "root_number": 7,
+      "planet": "Ketu (South Node)",
+      "status": "NOT_CONFIGURED",
+      "display_status": "Not configured",
+      "symbol_id": null,
+      "symbol_name": null,
+      "shape_family": "balanced_hybrid",
+      "geometry_keywords": [],
+      "evidence_label": "NOT_CONFIGURED",
+      "source_id": null
+    },
+    "8": {
+      "root_number": 8,
+      "planet": "Saturn (Shani)",
+      "status": "APPROVED",
+      "display_status": "Approved",
+      "symbol_id": "ascending_peak",
+      "symbol_name": "Ascending Structural Peak",
+      "shape_family": "angular_geometric",
+      "geometry_keywords": ["closed structural triangle", "grounded base", "apex keystone"],
+      "evidence_label": "TRADITIONAL_RULE",
+      "source_id": "NV_VECTOR_STUDIO_V1"
+    },
+    "9": {
+      "root_number": 9,
+      "planet": "Mars (Mangal)",
+      "status": "APPROVED",
+      "display_status": "Approved",
+      "symbol_id": "mars_shield",
+      "symbol_name": "Hexagonal Valor Shield",
+      "shape_family": "angular_geometric",
+      "geometry_keywords": ["closed hexagonal crest", "protective symmetry", "decisive chevrons"],
+      "evidence_label": "TRADITIONAL_RULE",
+      "source_id": "NV_VECTOR_STUDIO_V1"
+    }
+  },
+  "colour_families": {
+    "gold_yellow": {
+      "label": "Gold & Yellow",
+      "canonical_swatches": {
+        "Gold": {"canonical_hex": "#C9A227", "accessible_on_light_hex": "#8B6914", "accessible_on_dark_hex": "#E2B84B"},
+        "Warm Yellow": {"canonical_hex": "#EAB308", "accessible_on_light_hex": "#854D0E", "accessible_on_dark_hex": "#FDE047"},
+        "Bright Yellow": {"canonical_hex": "#FACC15", "accessible_on_light_hex": "#854D0E", "accessible_on_dark_hex": "#FEF08A"},
+        "Golden Yellow": {"canonical_hex": "#D4AF37", "accessible_on_light_hex": "#8B6914", "accessible_on_dark_hex": "#F3CF55"},
+        "Pure Golden Yellow": {"canonical_hex": "#C9A227", "accessible_on_light_hex": "#8B6914", "accessible_on_dark_hex": "#FFD700"},
+        "Dark Yellow": {"canonical_hex": "#A16207", "accessible_on_light_hex": "#713F12", "accessible_on_dark_hex": "#EAB308"}
+      }
+    },
+    "orange_amber_copper": {
+      "label": "Orange, Amber, Saffron & Copper",
+      "canonical_swatches": {
+        "Orange": {"canonical_hex": "#EA580C", "accessible_on_light_hex": "#C2410C", "accessible_on_dark_hex": "#FB923C"},
+        "Copper": {"canonical_hex": "#B87333", "accessible_on_light_hex": "#9A4E1C", "accessible_on_dark_hex": "#D99058"},
+        "Bright Amber": {"canonical_hex": "#D97706", "accessible_on_light_hex": "#92400E", "accessible_on_dark_hex": "#FBBF24"},
+        "Amber": {"canonical_hex": "#D97706", "accessible_on_light_hex": "#92400E", "accessible_on_dark_hex": "#FBBF24"},
+        "Saffron": {"canonical_hex": "#E07A16", "accessible_on_light_hex": "#9C5700", "accessible_on_dark_hex": "#F4A261"}
+      }
+    },
+    "white_cream_pearl": {
+      "label": "White, Pearl & Cream",
+      "canonical_swatches": {
+        "White": {"canonical_hex": "#FFFFFF", "accessible_on_light_hex": "#523E28", "accessible_on_dark_hex": "#FFFFFF", "preferred_role": "background"},
+        "Diamond White": {"canonical_hex": "#FAF9F6", "accessible_on_light_hex": "#523E28", "accessible_on_dark_hex": "#FAF9F6", "preferred_role": "background"},
+        "Cream": {"canonical_hex": "#F7F3EA", "accessible_on_light_hex": "#523E28", "accessible_on_dark_hex": "#F7F3EA", "preferred_role": "background"},
+        "Pearl": {"canonical_hex": "#FFFDF7", "accessible_on_light_hex": "#523E28", "accessible_on_dark_hex": "#FFFDF7", "preferred_role": "background"}
+      }
+    },
+    "grey_silver": {
+      "label": "Silver, Steel & Grey",
+      "canonical_swatches": {
+        "Silver": {"canonical_hex": "#C0C7D0", "accessible_on_light_hex": "#4B5563", "accessible_on_dark_hex": "#E5E7EB"},
+        "Grey": {"canonical_hex": "#6B7280", "accessible_on_light_hex": "#4B5563", "accessible_on_dark_hex": "#D1D5DB"},
+        "Light Grey": {"canonical_hex": "#CBD5E1", "accessible_on_light_hex": "#475569", "accessible_on_dark_hex": "#F1F5F9"},
+        "Steel Grey": {"canonical_hex": "#4A5568", "accessible_on_light_hex": "#374151", "accessible_on_dark_hex": "#CBD5E1"},
+        "Dark Grey": {"canonical_hex": "#374151", "accessible_on_light_hex": "#374151", "accessible_on_dark_hex": "#D1D5DB"}
+      }
+    },
+    "green_emerald_mint": {
+      "label": "Emerald, Mint, Turquoise & Green",
+      "canonical_swatches": {
+        "Emerald Green": {"canonical_hex": "#16835B", "accessible_on_light_hex": "#16835B", "accessible_on_dark_hex": "#6EE7B7"},
+        "Light Green": {"canonical_hex": "#86EFAC", "accessible_on_light_hex": "#15803D", "accessible_on_dark_hex": "#86EFAC"},
+        "Pale Green": {"canonical_hex": "#BBF7D0", "accessible_on_light_hex": "#166534", "accessible_on_dark_hex": "#DCFCE7"},
+        "Pastel Green": {"canonical_hex": "#A7F3D0", "accessible_on_light_hex": "#0F766E", "accessible_on_dark_hex": "#A7F3D0"},
+        "Mint": {"canonical_hex": "#34D399", "accessible_on_light_hex": "#047857", "accessible_on_dark_hex": "#6EE7B7"},
+        "Turquoise": {"canonical_hex": "#0D9488", "accessible_on_light_hex": "#0F766E", "accessible_on_dark_hex": "#5EEAD4"},
+        "Dark Green in Business": {"canonical_hex": "#14532D", "accessible_on_light_hex": "#14532D", "accessible_on_dark_hex": "#86EFAC"}
+      }
+    },
+    "blue_sky_electric": {
+      "label": "Sky, Smoky & Electric Blue",
+      "canonical_swatches": {
+        "Electric Blue": {"canonical_hex": "#2563EB", "accessible_on_light_hex": "#1D4ED8", "accessible_on_dark_hex": "#93C5FD"},
+        "Smoky Blue": {"canonical_hex": "#4B6B88", "accessible_on_light_hex": "#365069", "accessible_on_dark_hex": "#B8CFE0"},
+        "Light Sky Blue": {"canonical_hex": "#7DD3FC", "accessible_on_light_hex": "#0369A1", "accessible_on_dark_hex": "#BAE6FD"}
+      }
+    },
+    "navy_dark_blue": {
+      "label": "Navy & Dark Blue",
+      "canonical_swatches": {
+        "Dark Blue": {"canonical_hex": "#1B365D", "accessible_on_light_hex": "#1B365D", "accessible_on_dark_hex": "#93C5FD"},
+        "Navy Blue": {"canonical_hex": "#1E3A8A", "accessible_on_light_hex": "#1E3A8A", "accessible_on_dark_hex": "#BFDBFE"},
+        "Dark Navy": {"canonical_hex": "#0F172A", "accessible_on_light_hex": "#0F172A", "accessible_on_dark_hex": "#CBD5E1"}
+      }
+    },
+    "black_charcoal": {
+      "label": "Charcoal & Mindful Black (Client Palette Only)",
+      "canonical_swatches": {
+        "Charcoal": {"canonical_hex": "#2F353B", "accessible_on_light_hex": "#2F353B", "accessible_on_dark_hex": "#E5E7EB"},
+        "Dark Charcoal": {"canonical_hex": "#1F2428", "accessible_on_light_hex": "#1F2428", "accessible_on_dark_hex": "#E5E7EB"},
+        "Black (used mindfully)": {"canonical_hex": "#141414", "accessible_on_light_hex": "#141414", "accessible_on_dark_hex": "#F7F3EA"},
+        "Black": {"canonical_hex": "#000000", "accessible_on_light_hex": "#000000", "accessible_on_dark_hex": "#FFFFFF"},
+        "Jet Black": {"canonical_hex": "#0A0A0A", "accessible_on_light_hex": "#0A0A0A", "accessible_on_dark_hex": "#FFFFFF"}
+      }
+    },
+    "red_crimson_coral": {
+      "label": "Red, Crimson, Maroon & Coral",
+      "canonical_swatches": {
+        "Red": {"canonical_hex": "#B91C1C", "accessible_on_light_hex": "#B91C1C", "accessible_on_dark_hex": "#FCA5A5"},
+        "Bright Red": {"canonical_hex": "#DC2626", "accessible_on_light_hex": "#B91C1C", "accessible_on_dark_hex": "#FCA5A5"},
+        "Fiery Red": {"canonical_hex": "#DC2626", "accessible_on_light_hex": "#B91C1C", "accessible_on_dark_hex": "#FCA5A5"},
+        "Harsh Red": {"canonical_hex": "#EF4444", "accessible_on_light_hex": "#B91C1C", "accessible_on_dark_hex": "#FCA5A5"},
+        "Dark Red": {"canonical_hex": "#7F1D1D", "accessible_on_light_hex": "#7F1D1D", "accessible_on_dark_hex": "#FCA5A5"},
+        "Crimson": {"canonical_hex": "#991B1B", "accessible_on_light_hex": "#991B1B", "accessible_on_dark_hex": "#FECACA"},
+        "Maroon": {"canonical_hex": "#6B1220", "accessible_on_light_hex": "#6B1220", "accessible_on_dark_hex": "#FBCFE8"},
+        "Coral": {"canonical_hex": "#E05A47", "accessible_on_light_hex": "#B83B2A", "accessible_on_dark_hex": "#FDBA74"}
+      }
+    },
+    "pink_rose": {
+      "label": "Rose, Soft Pink & Pastel",
+      "canonical_swatches": {
+        "Rose": {"canonical_hex": "#BE185D", "accessible_on_light_hex": "#9D174D", "accessible_on_dark_hex": "#F9A8D4"},
+        "Soft Pink": {"canonical_hex": "#F4B8C8", "accessible_on_light_hex": "#9D174D", "accessible_on_dark_hex": "#FCE7F3"},
+        "Harsh Pink": {"canonical_hex": "#EC4899", "accessible_on_light_hex": "#9D174D", "accessible_on_dark_hex": "#F9A8D4"},
+        "Pastel Shades": {"canonical_hex": "#F3E8EE", "accessible_on_light_hex": "#6D4C5C", "accessible_on_dark_hex": "#F3E8EE", "preferred_role": "background"}
+      }
+    },
+    "purple_lavender": {
+      "label": "Lavender & Violet",
+      "canonical_swatches": {
+        "Lavender": {"canonical_hex": "#C4B5FD", "accessible_on_light_hex": "#5B21B6", "accessible_on_dark_hex": "#DDD6FE"}
+      }
+    },
+    "brown_earth_khaki": {
+      "label": "Earth, Sandalwood, Khaki & Brown",
+      "canonical_swatches": {
+        "Khaki": {"canonical_hex": "#A39262", "accessible_on_light_hex": "#665833", "accessible_on_dark_hex": "#E6D8AD"},
+        "Smoky Brown": {"canonical_hex": "#5C4738", "accessible_on_light_hex": "#523E28", "accessible_on_dark_hex": "#E7DDD3"},
+        "Muddy Brown": {"canonical_hex": "#5C4033", "accessible_on_light_hex": "#5C4033", "accessible_on_dark_hex": "#D6C2B8"},
+        "Dark Muddy Brown": {"canonical_hex": "#43302B", "accessible_on_light_hex": "#43302B", "accessible_on_dark_hex": "#D6C2B8"}
+      }
+    }
+  },
+  "category_norms_layer1": {
+    "source_citation": "Lülfesmann & Riegel (2022) — Logo colours following product category norms yield more favourable brand attitudes.",
+    "evidence_label": "PUBLISHED_RESEARCH",
+    "categories": {
+      "sports": {
+        "allowed_colour_families": ["red_crimson_coral", "orange_amber_copper", "navy_dark_blue", "black_charcoal", "blue_sky_electric"],
+        "allowed_shape_families": ["angular_geometric", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["SPORTS_ARCHETYPE_MARS_9"]
+      },
+      "athletic_footwear": {
+        "allowed_colour_families": ["red_crimson_coral", "black_charcoal", "navy_dark_blue", "orange_amber_copper", "grey_silver"],
+        "allowed_shape_families": ["angular_geometric", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["SPORTS_ARCHETYPE_MARS_9"]
+      },
+      "sportswear": {
+        "allowed_colour_families": ["red_crimson_coral", "navy_dark_blue", "black_charcoal", "blue_sky_electric", "green_emerald_mint"],
+        "allowed_shape_families": ["angular_geometric", "balanced_hybrid"],
+        "approved_archetype_rule_ids": []
+      },
+      "endurance_sports": {
+        "allowed_colour_families": ["navy_dark_blue", "black_charcoal", "grey_silver", "red_crimson_coral", "orange_amber_copper"],
+        "allowed_shape_families": ["angular_geometric", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_SATURN_INFRA_8"]
+      },
+      "team_sports": {
+        "allowed_colour_families": ["red_crimson_coral", "navy_dark_blue", "gold_yellow", "blue_sky_electric", "green_emerald_mint"],
+        "allowed_shape_families": ["angular_geometric", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["SPORTS_ARCHETYPE_MARS_9"]
+      },
+      "sports_equipment": {
+        "allowed_colour_families": ["black_charcoal", "grey_silver", "red_crimson_coral", "navy_dark_blue", "orange_amber_copper"],
+        "allowed_shape_families": ["angular_geometric"],
+        "approved_archetype_rule_ids": []
+      },
+      "sports_coaching": {
+        "allowed_colour_families": ["navy_dark_blue", "gold_yellow", "orange_amber_copper", "green_emerald_mint", "blue_sky_electric"],
+        "allowed_shape_families": ["balanced_hybrid", "angular_geometric"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_JUPITER_3"]
+      },
+      "technology": {
+        "allowed_colour_families": ["blue_sky_electric", "navy_dark_blue", "green_emerald_mint", "grey_silver", "black_charcoal", "purple_lavender"],
+        "allowed_shape_families": ["angular_geometric", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_MERCURY_5"]
+      },
+      "hospitality_food": {
+        "allowed_colour_families": ["orange_amber_copper", "gold_yellow", "green_emerald_mint", "brown_earth_khaki", "red_crimson_coral", "white_cream_pearl"],
+        "allowed_shape_families": ["circular_curved", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_MOON_2", "BUSINESS_ARCHETYPE_VENUS_6"]
+      },
+      "finance": {
+        "allowed_colour_families": ["navy_dark_blue", "green_emerald_mint", "gold_yellow", "blue_sky_electric", "grey_silver"],
+        "allowed_shape_families": ["angular_geometric", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_MERCURY_5", "BUSINESS_ARCHETYPE_JUPITER_3"]
+      },
+      "children_education": {
+        "allowed_colour_families": ["gold_yellow", "orange_amber_copper", "blue_sky_electric", "green_emerald_mint", "pink_rose"],
+        "allowed_shape_families": ["circular_curved", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_JUPITER_3", "BUSINESS_ARCHETYPE_MOON_2"]
+      },
+      "consulting_legal": {
+        "allowed_colour_families": ["navy_dark_blue", "gold_yellow", "grey_silver", "brown_earth_khaki", "green_emerald_mint"],
+        "allowed_shape_families": ["angular_geometric", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_JUPITER_3", "BUSINESS_ARCHETYPE_SUN_1"]
+      },
+      "luxury_fashion_beauty": {
+        "allowed_colour_families": ["gold_yellow", "white_cream_pearl", "pink_rose", "black_charcoal", "purple_lavender", "brown_earth_khaki"],
+        "allowed_shape_families": ["circular_curved", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_VENUS_6", "BUSINESS_ARCHETYPE_SUN_1"]
+      },
+      "healthcare_wellness": {
+        "allowed_colour_families": ["green_emerald_mint", "blue_sky_electric", "white_cream_pearl", "purple_lavender"],
+        "allowed_shape_families": ["circular_curved", "balanced_hybrid"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_MOON_2"]
+      },
+      "real_estate_infrastructure": {
+        "allowed_colour_families": ["navy_dark_blue", "brown_earth_khaki", "grey_silver", "black_charcoal", "gold_yellow"],
+        "allowed_shape_families": ["angular_geometric"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_SATURN_INFRA_8"]
+      },
+      "retail_ecommerce": {
+        "allowed_colour_families": ["green_emerald_mint", "orange_amber_copper", "blue_sky_electric", "red_crimson_coral", "gold_yellow"],
+        "allowed_shape_families": ["balanced_hybrid", "circular_curved"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_MERCURY_5"]
+      },
+      "creative_design_media": {
+        "allowed_colour_families": ["purple_lavender", "pink_rose", "gold_yellow", "green_emerald_mint", "blue_sky_electric", "black_charcoal"],
+        "allowed_shape_families": ["circular_curved", "balanced_hybrid", "angular_geometric"],
+        "approved_archetype_rule_ids": ["BUSINESS_ARCHETYPE_VENUS_6", "BUSINESS_ARCHETYPE_MERCURY_5"]
+      }
+    }
+  },
+  "approved_business_archetype_rules": {
+    "SPORTS_ARCHETYPE_MARS_9": {
+      "rule_id": "SPORTS_ARCHETYPE_MARS_9",
+      "status": "APPROVED",
+      "archetype": "Mars",
+      "associated_number": 9,
+      "business_categories": ["sports", "team_sports", "athletic_footwear"],
+      "trigger_conditions": ["physical_agility", "competitive_scoring", "speed"],
+      "source_id": "SRC_BPHS_1984_V1",
+      "evidence_label": "TRADITIONAL_RULE"
+    },
+    "BUSINESS_ARCHETYPE_MERCURY_5": {
+      "rule_id": "BUSINESS_ARCHETYPE_MERCURY_5",
+      "status": "APPROVED",
+      "archetype": "Mercury",
+      "associated_number": 5,
+      "business_categories": ["technology", "digital_systems", "ecommerce", "commerce", "media_communications", "finance", "fintech"],
+      "trigger_conditions": ["automation", "computation", "connectivity", "data_processing", "efficiency", "speed", "communication", "commerce", "analytics", "scalability"],
+      "source_id": "SRC_BPHS_1984_V1",
+      "evidence_label": "TRADITIONAL_RULE"
+    },
+    "BUSINESS_ARCHETYPE_JUPITER_3": {
+      "rule_id": "BUSINESS_ARCHETYPE_JUPITER_3",
+      "status": "APPROVED",
+      "archetype": "Jupiter",
+      "associated_number": 3,
+      "business_categories": ["consulting", "education", "finance", "legal_advisory", "publishing", "executive_coaching", "wealth_management"],
+      "trigger_conditions": ["advisory", "wisdom", "education", "expansion", "growth", "strategic_planning", "scalability", "ethics", "guidance"],
+      "source_id": "SRC_BPHS_1984_V1",
+      "evidence_label": "TRADITIONAL_RULE"
+    },
+    "BUSINESS_ARCHETYPE_SUN_1": {
+      "rule_id": "BUSINESS_ARCHETYPE_SUN_1",
+      "status": "APPROVED",
+      "archetype": "Sun",
+      "associated_number": 1,
+      "business_categories": ["leadership", "enterprise_governance", "luxury", "public_relations", "corporate_headquarters"],
+      "trigger_conditions": ["leadership", "authority", "vision", "prestige", "sovereignty", "executive_command", "prominence"],
+      "source_id": "SRC_BPHS_1984_V1",
+      "evidence_label": "TRADITIONAL_RULE"
+    },
+    "BUSINESS_ARCHETYPE_VENUS_6": {
+      "rule_id": "BUSINESS_ARCHETYPE_VENUS_6",
+      "status": "APPROVED",
+      "archetype": "Venus",
+      "associated_number": 6,
+      "business_categories": ["design", "creative_arts", "fashion", "hospitality", "luxury_goods", "cosmetics", "entertainment", "lifestyle"],
+      "trigger_conditions": ["aesthetics", "creativity", "harmony", "hospitality", "customer_delight", "luxury", "beauty", "design", "comfort"],
+      "source_id": "SRC_BPHS_1984_V1",
+      "evidence_label": "TRADITIONAL_RULE"
+    },
+    "BUSINESS_ARCHETYPE_MOON_2": {
+      "rule_id": "BUSINESS_ARCHETYPE_MOON_2",
+      "status": "APPROVED",
+      "archetype": "Moon",
+      "associated_number": 2,
+      "business_categories": ["food_hospitality", "wellness_therapy", "childcare", "caregiving", "culinary", "public_services", "mental_wellness"],
+      "trigger_conditions": ["nourishment", "care", "wellness", "empathy", "community", "hospitality", "nurturing", "customer_satisfaction"],
+      "source_id": "SRC_BPHS_1984_V1",
+      "evidence_label": "TRADITIONAL_RULE"
+    },
+    "BUSINESS_ARCHETYPE_SATURN_INFRA_8": {
+      "rule_id": "BUSINESS_ARCHETYPE_SATURN_INFRA_8",
+      "status": "APPROVED",
+      "archetype": "Saturn",
+      "associated_number": 8,
+      "business_categories": ["infrastructure", "manufacturing", "real_estate", "logistics_supply_chain", "endurance_sports", "mining_minerals", "hardware"],
+      "trigger_conditions": ["endurance", "infrastructure", "logistics", "discipline", "stamina", "ground_support", "foundational_stability", "durability"],
+      "source_id": "SRC_BPHS_1984_V1",
+      "evidence_label": "TRADITIONAL_RULE"
+    }
+  },
+  "excluded_draft_archetype_rules": {
+    "SPORTS_ARCHETYPE_SATURN_8": {"status": "NOT_CONFIGURED", "evidence_label": "NOT_CONFIGURED"},
+    "SPORTS_ARCHETYPE_KETU_7": {"status": "NOT_CONFIGURED", "evidence_label": "NOT_CONFIGURED"},
+    "BUSINESS_ARCHETYPE_SATURN_001": {"status": "NOT_CONFIGURED", "evidence_label": "NOT_CONFIGURED"},
+    "BUSINESS_ARCHETYPE_RAHU_001": {"status": "NOT_CONFIGURED", "evidence_label": "NOT_CONFIGURED"}
+  },
+  "published_perception_rules": {
+    "shape_vs_promise": {
+      "rule_id": "RESEARCH_SHAPE_PROMISE_JIANG_2016",
+      "source_citation": "Jiang, Gorn, Galli & Chattopadhyay (2016) — Circular logos signal softness and care; angular logos signal hardness and durability.",
+      "evidence_label": "PUBLISHED_RESEARCH",
+      "softness_care_keywords": ["care", "warmth", "gentle", "comfort", "nourish", "wellness", "harmony", "friendly", "organic", "hospitality"],
+      "durability_precision_keywords": ["durable", "strength", "precision", "speed", "tough", "engineered", "security", "performance", "industrial", "authority"]
+    },
+    "lightness_vs_brand_position": {
+      "rule_id": "RESEARCH_LIGHTNESS_AGE_ZENG",
+      "source_citation": "Zeng et al. — Darker logos read as established/traditional brands; lighter hues suit modern/youthful brand positions.",
+      "evidence_label": "PUBLISHED_RESEARCH",
+      "heritage_traditional_keywords": ["heritage", "traditional", "classic", "institutional", "legacy", "bespoke", "executive"],
+      "modern_youthful_keywords": ["modern", "youthful", "fresh", "digital", "agile", "playful", "accessible"],
+      "dark_luminance_max": 0.18,
+      "light_luminance_min": 0.18
+    },
+    "nothing_cut_trust_support": {
+      "rule_id": "RESEARCH_INCOMPLETE_TYPEFACE_HAGTVEDT_2011",
+      "source_citation": "Hagtvedt (2011), Journal of Marketing — Incomplete/missing-part typefaces increase perceived innovativeness at the expense of perceived trustworthiness.",
+      "evidence_label": "PUBLISHED_RESEARCH"
+    },
+    "startup_descriptiveness": {
+      "rule_id": "RESEARCH_DESCRIPTIVENESS_LUFFARELLI_2019",
+      "source_citation": "Luffarelli, Mukesh & Mahmood (2019) — Descriptive marks that hint at what the business sells improve brand evaluations and purchase intent for unfamiliar/startup brands.",
+      "evidence_label": "PUBLISHED_RESEARCH"
+    },
+    "simplicity_vs_warmth": {
+      "rule_id": "RESEARCH_SIMPLICITY_CHEN_2025",
+      "source_citation": "Chen et al. (2025), Journal of Business Research — Simple logos heighten perceived competence; moderately detailed logos heighten perceived warmth.",
+      "evidence_label": "PUBLISHED_RESEARCH"
+    },
+    "vowel_sound_symbolism": {
+      "rule_id": "RESEARCH_VOWEL_SOUND_LOWREY_SHRUM_2007",
+      "source_citation": "Lowrey & Shrum (2007), Journal of Consumer Research — Front vs. back vowel sounds shift brand name preference depending on product attribute fit (small/fast/crisp vs. large/rich/enduring).",
+      "evidence_label": "PUBLISHED_RESEARCH"
+    }
+  },
+  "regional_colour_context": {
+    "rule_id": "RESEARCH_REGIONAL_COLOUR_MADDEN_2000",
+    "source_citation": "Madden, Hewett & Roth (2000) — Cross-national colour meanings are partly shared (blue/green calm & trust) and partly culture-specific across markets.",
+    "evidence_label": "PUBLISHED_RESEARCH",
+    "regions": {
+      "INDIA": {
+        "region_code": "INDIA",
+        "label": "India & South Asian Cultural Context",
+        "cultural_notes": {
+          "orange_amber_copper": "Saffron, copper, and warm amber carry auspicious, sacred, and hospitable connotations when paired with clean contrast.",
+          "gold_yellow": "Turmeric and deep gold signal prosperity, festivity, and heritage prestige.",
+          "red_crimson_coral": "Crimson and vermilion signal auspicious vitality, celebration, and decisive energy.",
+          "white_cream_pearl": "Cream and pearl provide warm serenity without stark institutional austerity.",
+          "black_charcoal": "Use mindfully only when supported by both category (e.g. endurance/luxury/engineering) and client numerology (e.g. Saturn 8), avoiding ceremonial/auspicious food or devotional marks."
+        },
+        "caution_categories_for_pure_black": ["hospitality_food", "children_education", "healthcare_wellness"]
+      },
+      "INTERNATIONAL": {
+        "region_code": "INTERNATIONAL",
+        "label": "International / Cross-Border Market Context",
+        "cultural_notes": {
+          "navy_dark_blue": "Universally associated with institutional competence, corporate trust, and stability.",
+          "green_emerald_mint": "Broadly associated with sustainability, growth, health, and balanced finance.",
+          "black_charcoal": "Readily accepted in luxury, fashion, athletic performance, and architectural minimalism when client numerology permits.",
+          "orange_amber_copper": "Reads primarily as energetic, value-forward, or youthful; balance saturation for premium positioning.",
+          "white_cream_pearl": "Clean white and off-white read as modern clarity, hygiene, and simplicity."
+        },
+        "caution_categories_for_pure_black": ["children_education", "healthcare_wellness"]
+      }
+    }
+  },
+  "hard_gates_v1": [
+    {"gate_id": "nothing_cut", "name": "Nothing Cut / Closed Forms", "evidence_label": "MEASURED"},
+    {"gate_id": "exact_text", "name": "Exact Wordmark Match", "evidence_label": "MEASURED"},
+    {"gate_id": "no_enemy_colour", "name": "Zero Enemy Colour in Mark", "evidence_label": "TRADITIONAL_RULE"},
+    {"gate_id": "colour_count_max_3", "name": "Maximum 3 Colours (60/30/10 Balance)", "evidence_label": "MEASURED"},
+    {"gate_id": "contrast_threshold", "name": "Contrast Threshold (>=3.0:1 Symbol/Large, >=4.5:1 Small)", "evidence_label": "MEASURED"},
+    {"gate_id": "monochrome_clarity", "name": "Single-Colour / Monochrome Clarity", "evidence_label": "MEASURED"},
+    {"gate_id": "app_icon_legibility", "name": "Small-Size Legibility (64x64 & 32x32)", "evidence_label": "MEASURED"},
+    {"gate_id": "max_two_fonts", "name": "Maximum 2 Font Families", "evidence_label": "MEASURED"},
+    {"gate_id": "vector_integrity", "name": "Pure Vector Integrity (Zero Embedded Raster/Script)", "evidence_label": "MEASURED"}
+  ],
+  "advisory_gates_v1": [
+    {"gate_id": "category_colour_fit", "name": "Category Colour Fit", "evidence_label": "PUBLISHED_RESEARCH"},
+    {"gate_id": "shape_promise_fit", "name": "Shape vs. Brand Promise Fit", "evidence_label": "PUBLISHED_RESEARCH"},
+    {"gate_id": "lightness_brand_position", "name": "Lightness vs. Brand Age/Position", "evidence_label": "PUBLISHED_RESEARCH"},
+    {"gate_id": "startup_descriptiveness", "name": "Startup Descriptiveness", "evidence_label": "PUBLISHED_RESEARCH"},
+    {"gate_id": "simplicity_vs_warmth", "name": "Simplicity vs. Warmth Balance", "evidence_label": "PUBLISHED_RESEARCH"}
+  ]
+}

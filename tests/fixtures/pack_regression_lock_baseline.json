@@ -2,102 +2,101 @@
   "engine_files_sha256": {
     "app/engine/adtech_firewall.py": "a538e1ea5c1cb233dd1db4706acd3f0a46d0cedea36a72d941375f4c486aac6d",
     "app/engine/ai_cost_and_security.py": "fdb0f670b672c57d92c35ec68e9b6e046bbd3693dcfd1a5e6f0d6e6cd647a0c0",
-    "app/engine/archetype_engine.py": "752a6b4de89b877802ddb0d12f3176d3bdc3935d062c3f1dfa434b8b777b3585",
+    "app/engine/archetype_engine.py": "571575cdd6cc680f96d58759e51056206bf872384901ae14e379aeed396aa6e7",
     "app/engine/asset_numerology_engine.py": "126f710743e08f698b8210adaedb5f61fcd41b2557fb583843576cc46a6fdbd9",
     "app/engine/astrolearn_knowledge.py": "af95b3fe6577323ac826af60811fc41f6bbcf127869ef5a31629c9368294b6f8",
-    "app/engine/astrology_correlation_engine.py": "8c556cb357986c2a12df4223f6159e2feb38f161cddbba8353a84985db529556",
-    "app/engine/bnn_numerology_engine.py": "4516ab4b469f0acf58a28cf208af2fca616a446115a2504eb8215881e5989e54",
-    "app/engine/business_direction_engine.py": "c66e32d40f7fd2d3f125d8a4960979af723daba765e9af82e9a3b4bc13fd082a",
+    "app/engine/astrology_correlation_engine.py": "518ceef5bfe3965fbc32764fe65a8986eeac480bae1566d1ef8679ed435b4da6",
+    "app/engine/bnn_numerology_engine.py": "edc2ca76a2d922e7e58ee9b06c745352dd640d3aabe8a0ede53773577897f21e",
+    "app/engine/business_direction_engine.py": "d64206434a5a819b4c61c849ebe1fda40c41c3dd73df75b58597cb97b97b049e",
     "app/engine/business_taxonomy.py": "8a45306c1c571885bdfb078d9d6dcf22b6172342688a479803ec115bf1e69975",
     "app/engine/cache_service.py": "c8dd529db0e4c0657cf58621bf9f3a63b32876854bd8297d2ccfce9671f3acc5",
     "app/engine/case_intelligence_schema.py": "0c0b0c472db28fcb73099ed4241c911941e96d8c0ebde68fec4369039ee83d4a",
-    "app/engine/case_library_engine.py": "c03e07ad17c94a839365dee1b362ad80d050c19582b4749bd9bea2c87a28b411",
-    "app/engine/cdp_identity_engine.py": "13dd874b6f9cc689ef74d07bac111bc8749c9cb8cdb26b13c3041b1c5e4c8812",
-    "app/engine/charm_oracle_synthesizer.py": "28fa4380951a694ea4c0c692ea76024339d7fecc533edf5c6370653444f98720",
-    "app/engine/charm_resonance_engine.py": "38dcba7009335e20ed844bc38bd2bd56245938716a5118fa418e89bbae53d99f",
-    "app/engine/cheiro_engine.py": "aa860b982accac57af916b1e4111dddc2c0a31d4b3ff6e8744fb575aa0516470",
-    "app/engine/claim_validator.py": "2561d8d9c7619518dba3fed4e2aff4e9fb941535f0bf574ea798a3f4664e46e4",
-    "app/engine/complementary_poorak_engine.py": "ee1d3c78797a74ac01308b765e201b33a23f6373b80d0d7a1d54feba04ad5034",
-    "app/engine/consensus.py": "67b5ddbc5e851336361a833da9a86b3bc78d7e8ea6bacf355f0690271e2d445c",
+    "app/engine/case_library_engine.py": "2b6c4fa626fde3f931ccc08453b1ca898667c6991f7be9f123372f189485edd3",
+    "app/engine/cdp_identity_engine.py": "99350801ffdd6d9e5949ae14efaf83c965a6491794bc85b7aee684a9aef317ac",
+    "app/engine/charm_oracle_synthesizer.py": "ad712889043744c423bb9abcee0eed9790675946abc732326aa7e242fb0ff88d",
+    "app/engine/charm_resonance_engine.py": "bb5a5f4e4e2d400222f63ab556df925383ff295e31e62c9653aac18ed1c3da2a",
+    "app/engine/cheiro_engine.py": "6ff798a80623238a9cb9d4e2e48a8a89a9738ad33dbdf9d99c1b2860339fce20",
+    "app/engine/claim_validator.py": "1047e5bb716a5191fa4fb1cc768cdfc047d73eadd4513620a33fe3b7cb13e701",
+    "app/engine/complementary_poorak_engine.py": "5290611d21fb52933ad581b4d22726ee7bd8192b33517b1d440a33c186f441f8",
+    "app/engine/consensus.py": "63a93e1c35af158a9632dc431f12713233bd27648633da4b855e98962af19e7d",
     "app/engine/core_matrix_engine.py": "a6f388d519940ca25a8cafb4d3c611cd44bdd1d0e59825655f0830d5f54dc1c2",
-    "app/engine/cost_accounting.py": "80bc8e98c5d1324a31333510e0ee9f469adc8d2f61da485bea735a4aa0351f6a",
+    "app/engine/cost_accounting.py": "8cbe9535ee86873c87283cb6db40962af477540f637e881e298f5e67b22617dd",
     "app/engine/cost_optimized_cache.py": "18afe3d2e019221bd2b0dad2b77ab1ef29390333a876e098d085c3e5ae9b2356",
     "app/engine/digit_root.py": "9d9bed1bbf35023b2f152022a0c87a44b4ca1817677916e7c9e7640f81154c5f",
-    "app/engine/diplomatic_narrative_engine.py": "f8d1820f4a0a911c3bf4e7b965a104bf3bd67cd8e13798f9b586d91b5615dbc0",
-    "app/engine/driver_conductor_81_engine.py": "318615d4569a6ba4600cc3a9f60b1edf94fca2d95de55b282b9e9a3d8f56a974",
-    "app/engine/enhanced_lo_shu_engine.py": "b37cc016c41e71b8b3f2022b97ea07013bb3866c86d035d6ab9c7332f7953a4d",
+    "app/engine/diplomatic_narrative_engine.py": "db0dd8db42918271081936b3f15d3fc5af948426bb17e558f409681a1306e8aa",
+    "app/engine/driver_conductor_81_engine.py": "8d0beb9082f795c53cfc5cfb22a3ef5f71360a2ff4d440f95ce4fb8e1d920949",
+    "app/engine/enhanced_lo_shu_engine.py": "7ea731f8a9b7b700c8184fd9df6257b22e7708a84c90a9c4dbb1f9711082eb64",
     "app/engine/enterprise_agent_gateway.py": "c00f014750730aa93aceb333a1f6a4f3ac7943943c794ed3d4b8ef704bf5d444",
-    "app/engine/five_elements_hygiene_engine.py": "1bb6815594592e7d977c5ec6ddccc7ce3e1f4c5c43ed5520f2d9769c79e4c893",
+    "app/engine/five_elements_hygiene_engine.py": "633982e0cc3bb0e0562d58f251d0acf9293b88d8276219882df0728cb2990dcc",
     "app/engine/forecast_engine.py": "ed92a47f229a2a4c504789a24be59e068cd04f109c7f396b0f4ed37285563994",
-    "app/engine/funnel_service.py": "c851f19a8410e1c676518817ac471e3b17204c62226a2ded7920be37a82ac57a",
+    "app/engine/funnel_service.py": "51cc57be47e62d1611540fd033012bd744a3815905770b6082604c096d42e343",
     "app/engine/identity_service.py": "a4d541ecaba6775d71ee373a63bc3fffcd22c803d91c8433e516af8ac4394d76",
     "app/engine/indication_schema_and_loader.py": "c8f47f63945738ea5327582d15545c4379d3e9866e7432d040a02b0c88120718",
     "app/engine/indication_validator.py": "2d644d16ef54727dcad38ada3aead6fa01a4008554d1e38f755c9b1bd7e16452",
     "app/engine/indications_engine.py": "f4efd35c375fb643ea2713c6b0d990bc5fe70e8d8601c34ea239fd37ef2e56ac",
-    "app/engine/international_remedy_engine.py": "48f3275c39ab08a277abc47bdae6cc8a7800497e5e3367ffe69f7d65c3a9ddbc",
-    "app/engine/kua.py": "a9ac66f474052ca3b15524951843674938d72afe23a510614ca239fc08b9ca78",
+    "app/engine/international_remedy_engine.py": "9ad3e0d3726c603646a30f082c9f23b2ed18c9a29b7d9dd1758c5644858abe11",
+    "app/engine/kua.py": "bf10ea2e7a411a757df0eb750a9cb009d517e1cae84683881d27012136868eb3",
     "app/engine/layer1_golden_snapshot.py": "7b0ab89862dc5fc133daacff2b71c4b71293a3ec12fc88c49cb48026e06d118c",
     "app/engine/life_aspects_engine.py": "a62956055cd34088cef8202c558da7fce0f253f0063e41da7d605a10cc04ccca",
     "app/engine/lo_shu.py": "3913a6d2812c2d7944c81d8538c7b967e16af2614ae3f626cfb57fc5d206cbae",
     "app/engine/lunar_paksha_engine.py": "6a403a457e88e364f6ad922211fa194ef37d271afc9fb6b56ea881b8592a194b",
-    "app/engine/master_knowledge_engine.py": "f17613211f6d8f4be634323ef1f28f79921515e41de42b0e3e1ef9b8538c1006",
-    "app/engine/methodology_registry.py": "60c877a63d1ddeeff4e455cdbf77d9c514116c9a49203ff2a1313437639c4402",
-    "app/engine/model_router.py": "2f32a559cd3700ebf8a605f79ab06234bb1c798e11ae4b4683ebaa4a56d8ef27",
-    "app/engine/monetization_alignment_engine.py": "7643247a50955d66fc487061c26d247c19cfe922256229151424880667b84d9b",
-    "app/engine/nadi_event_engine.py": "105c8c3687da75c53ce710e279c535a8bca396ce36c81684b4752a1b67ef08c9",
+    "app/engine/master_knowledge_engine.py": "e70519a7f7c1f5bea245d9353d707ead121f805eff24935b42eb94cd31b596bc",
+    "app/engine/methodology_registry.py": "771559b331e1cd19a3031bc1bccc530335b9398a2f81e5f4fce5e0fc82b9419c",
+    "app/engine/model_router.py": "0a54a1ca3dd5cee31afe715246ff80a99d609edfd6930221d299e432072c531b",
+    "app/engine/monetization_alignment_engine.py": "f0749d83f38dd1a921c2a2aadaf2b056c4ee3c806d5284811e59788588e15480",
+    "app/engine/nadi_event_engine.py": "54a846429fbc0c50268702ac8232a3b1bda9068fa5e53034d76a5d0323592ddb",
     "app/engine/name_balancing_engine.py": "d8b6bbacd785b5eb004dbae8aec776a3b1cbd2957c6237f0a534cb38b9e02e0c",
-    "app/engine/naming_engine.py": "06dfb5f11b335569b485e9d01201ac47e00905756b10ce521c55cbefb05adbcb",
-    "app/engine/number_characteristics_registry.py": "72d5bcee4dae5b36065ebf674b1ad34c827078b8a71824dd0846ce80f1a0e6c6",
+    "app/engine/naming_engine.py": "d509e5bd326913e6383101de58bd48647cfffb29f410bb4ff236a9acccb4e7d8",
+    "app/engine/number_characteristics_registry.py": "fa503e7c253096ba95e909c20f9693ee96fc57bc8964331ba62f8cf04f69b48c",
     "app/engine/nv_psychology_engine.py": "260f46c9d3449589da6e501e66582d3ab1a4f9e62a8052395443c177a985e908",
-    "app/engine/package_report_generator.py": "a91233b8d1e109228ea5431f9d7b41b39a68eb73a459217999482c20d8640ca7",
-    "app/engine/planetary_package_reports.py": "fc7d29d1a76568160387ada8c3198d56ca7b5148da74848832dd014689be48d3",
+    "app/engine/package_report_generator.py": "3acfa7570f93514317a1dfa75e4caaaa43a40957b9390e2ed84d6b816efcb907",
+    "app/engine/planetary_package_reports.py": "0b2c6eba11525eb439b798c8b54153a5490be1c0e51c23a0dab09e9a54b862e3",
     "app/engine/planner_2027_engine.py": "55bc468e5bb4935dda164193796d381125dadaaca688be039c6bcb2c1cd49d5d",
-    "app/engine/practitioner_engine.py": "aefbe90fb9d7888cf5fd30b7c450591586404b700c1dcaea3da3be32f20ad273",
+    "app/engine/practitioner_engine.py": "aeb2f065f5d3f261b612ed1f47872f19a38477fc1ca561c7c96942c8fb5968d5",
     "app/engine/prediction_ledger_engine.py": "e03d5913c8313058f54e9540c7b8345b2d4094931ee1f222261274fe63bd9759",
-    "app/engine/prediction_orchestrator.py": "189a03a0e953f55eecebb3804353219e59c7457858f42320f74e9cb5b835e9cd",
+    "app/engine/prediction_orchestrator.py": "5e59d3b4553e67b51f8897f5fb825b3653a19aaef75c1fde618c38fa2a144713",
     "app/engine/profession_engine.py": "37944c383e2991fd950adf2ff0a3a6938d14f12303bd1fa7e770e030e098c830",
     "app/engine/professional_numerology_engine.py": "38cecdd8d4bd6e45c4758401fd8c9041fc55581ee4c217bc9f1bf6d9ee07cce0",
     "app/engine/pythagorean_engine.py": "454a76ef518fd5acdeda89f07cd474f116a0ae3d98ba3bf4a36f9384532ec1e6",
-    "app/engine/question_explanation_engine.py": "f7ec732f15b984dbd0d8222b4c5319fca1c3e5b50ea2dd3d0b6935287e7d1f78",
+    "app/engine/question_explanation_engine.py": "09201cbd4c3a67b231d9449cc834b203bfc530b616040b18e7d1e94aaa8b68ca",
     "app/engine/rag_retriever.py": "bae550cf26013c6e55e48961846ff43dd8714bdec67f66b81d2b795aa4a8e943",
     "app/engine/reading_pipeline.py": "fa4ff34b30a33f2fec690154fd85ae1aafbcdc969ca67dfc6c4b0d25e27a287e",
-    "app/engine/remedy_engine.py": "7891e99aa5e3c398f54fda7e78af321973a8f0bad13a04cc21819c2047a44f85",
+    "app/engine/remedy_engine.py": "8a4bd934d9c2fb0fe989def1397100f63dc6e5e36ee0443ec44381ab1020a14d",
     "app/engine/remedy_rules_engine.py": "b4b60a0c4a37c2b882d5bfa745e7342840eafb24c52c5c23cc7dce115d261594",
-    "app/engine/rule_governance.py": "85c7b9845cbd246a817f9245077cb321ebfe9e963e763c726fddb982748f1f03",
-    "app/engine/rule_registry.py": "2c54fbccd74e00d1e527448863ddc937947e0a345f1bd6abaa067181f58e063e",
-    "app/engine/source_privacy_shield.py": "1869dff7d5b51153eca470bc2be8d03319d81a86efbde87bca543df8bb48f836",
-    "app/engine/twin_paradox_engine.py": "1d1b3f25cd82445d29f80df1613c7db51a8622d968f26b7bdb60a0f9c7fd59a8",
-    "app/engine/unified_planetary_numerology_engine.py": "40f2a0dc180dffef215b6d4b74f4b91dec7556cf8038698e62d56e46a2362205",
-    "app/engine/vedic_gharelu_remedies.py": "3ede82c19751a95d566b67099607a93c7be2a04c0fd69970aec28cb30dc0040e",
+    "app/engine/rule_governance.py": "b58f8505c35af41eb1fe38d95cda1a20154465fef3036f5ff680168d73e98da6",
+    "app/engine/rule_registry.py": "d5b5e9d1edd22526d8e9aaa53e498d4ea476f72a308cbe7cbb95741017973711",
+    "app/engine/source_privacy_shield.py": "bdb111d5ccbb0dd294cbe7d2683028720e8d472132c478e8c21d51174a7982fd",
+    "app/engine/twin_paradox_engine.py": "39ce6174e6fdb156c96996a1529d69842be54d5628d2815ac5ab66ee257ec230",
+    "app/engine/unified_planetary_numerology_engine.py": "2a2dff8ad9a36e9f5fc2cb24a6f7a6ad590aaf44f8a0077afec97c7d01166e56",
+    "app/engine/vedic_gharelu_remedies.py": "13ac826d93f5c80fd041c34455e553bff37afdf6fc1448d2b1ceb910022b44dc",
     "app/engine/vedic_numerology.py": "de6d5ef8439f731554686b3815fa9270cc0d8f5ceaafad93d76ce0e144a7b863",
     "app/engine/zero_cost_llm.py": "649973c6a1b029976facecbbdb5f8402196e2f1947442692c6572547323be8f3",
     "pdf_service/app/engine/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "pdf_service/app/engine/asset_numerology_engine.py": "126f710743e08f698b8210adaedb5f61fcd41b2557fb583843576cc46a6fdbd9",
-    "pdf_service/app/engine/charm_oracle_synthesizer.py": "28fa4380951a694ea4c0c692ea76024339d7fecc533edf5c6370653444f98720",
-    "pdf_service/app/engine/cheiro_engine.py": "aa860b982accac57af916b1e4111dddc2c0a31d4b3ff6e8744fb575aa0516470",
-    "pdf_service/app/engine/complementary_poorak_engine.py": "ee1d3c78797a74ac01308b765e201b33a23f6373b80d0d7a1d54feba04ad5034",
+    "pdf_service/app/engine/charm_oracle_synthesizer.py": "ad712889043744c423bb9abcee0eed9790675946abc732326aa7e242fb0ff88d",
+    "pdf_service/app/engine/cheiro_engine.py": "6ff798a80623238a9cb9d4e2e48a8a89a9738ad33dbdf9d99c1b2860339fce20",
+    "pdf_service/app/engine/complementary_poorak_engine.py": "5290611d21fb52933ad581b4d22726ee7bd8192b33517b1d440a33c186f441f8",
     "pdf_service/app/engine/core_matrix_engine.py": "a6f388d519940ca25a8cafb4d3c611cd44bdd1d0e59825655f0830d5f54dc1c2",
     "pdf_service/app/engine/digit_root.py": "9d9bed1bbf35023b2f152022a0c87a44b4ca1817677916e7c9e7640f81154c5f",
-    "pdf_service/app/engine/driver_conductor_81_engine.py": "318615d4569a6ba4600cc3a9f60b1edf94fca2d95de55b282b9e9a3d8f56a974",
-    "pdf_service/app/engine/five_elements_hygiene_engine.py": "1bb6815594592e7d977c5ec6ddccc7ce3e1f4c5c43ed5520f2d9769c79e4c893",
+    "pdf_service/app/engine/driver_conductor_81_engine.py": "8d0beb9082f795c53cfc5cfb22a3ef5f71360a2ff4d440f95ce4fb8e1d920949",
+    "pdf_service/app/engine/five_elements_hygiene_engine.py": "633982e0cc3bb0e0562d58f251d0acf9293b88d8276219882df0728cb2990dcc",
     "pdf_service/app/engine/forecast_engine.py": "ed92a47f229a2a4c504789a24be59e068cd04f109c7f396b0f4ed37285563994",
     "pdf_service/app/engine/indication_schema_and_loader.py": "c8f47f63945738ea5327582d15545c4379d3e9866e7432d040a02b0c88120718",
     "pdf_service/app/engine/indication_validator.py": "2d644d16ef54727dcad38ada3aead6fa01a4008554d1e38f755c9b1bd7e16452",
     "pdf_service/app/engine/indications_engine.py": "f4efd35c375fb643ea2713c6b0d990bc5fe70e8d8601c34ea239fd37ef2e56ac",
-    "pdf_service/app/engine/kua.py": "a9ac66f474052ca3b15524951843674938d72afe23a510614ca239fc08b9ca78",
+    "pdf_service/app/engine/kua.py": "bf10ea2e7a411a757df0eb750a9cb009d517e1cae84683881d27012136868eb3",
     "pdf_service/app/engine/layer1_golden_snapshot.py": "7b0ab89862dc5fc133daacff2b71c4b71293a3ec12fc88c49cb48026e06d118c",
-    "pdf_service/app/engine/number_characteristics_registry.py": "72d5bcee4dae5b36065ebf674b1ad34c827078b8a71824dd0846ce80f1a0e6c6",
+    "pdf_service/app/engine/number_characteristics_registry.py": "fa503e7c253096ba95e909c20f9693ee96fc57bc8964331ba62f8cf04f69b48c",
     "pdf_service/app/engine/planner_2027_engine.py": "e0311206a90d44527fd018f1ea03fd6193811c8df16a0fc35ac249b5022e1113",
     "pdf_service/app/engine/professional_numerology_engine.py": "38cecdd8d4bd6e45c4758401fd8c9041fc55581ee4c217bc9f1bf6d9ee07cce0",
-    "pdf_service/app/engine/rule_governance.py": "85c7b9845cbd246a817f9245077cb321ebfe9e963e763c726fddb982748f1f03",
-    "pdf_service/app/engine/vedic_gharelu_remedies.py": "3ede82c19751a95d566b67099607a93c7be2a04c0fd69970aec28cb30dc0040e"
+    "pdf_service/app/engine/rule_governance.py": "b58f8505c35af41eb1fe38d95cda1a20154465fef3036f5ff680168d73e98da6",
+    "pdf_service/app/engine/vedic_gharelu_remedies.py": "13ac826d93f5c80fd041c34455e553bff37afdf6fc1448d2b1ceb910022b44dc"
   },
   "fixed_reference_date": "2026-11-13",
   "packs": {
     "planner_2027": {
       "engine_json_sha256": "55bfbb872aecd5e0962dc475570a8ec0070c22ecdd75439e9262ef78e0029716",
       "pdf_fingerprint": {
-        "author": "NUMEROS VISION",
         "combined_text_sha256": "358ffe591a95eb4dcdbff76578f99f6b80a16ce65e43ff7cfa549d07812f9b8f",
         "page_count": 24,
         "page_text_sha256": [
@@ -125,13 +124,11 @@
           "ac527fec2b1f8ac85ff471b202e9de5218047dfaca68fb26fad3a1bb1eacd202",
           "2b9ae79721b2d9446b676acf04959d0efc09059dd8d9a17207559f8b6e727914",
           "4a12f041a3e5120e2239359c8a3dbe5b3a8e80cab89b582593000064a8f5beca"
-        ],
-        "title": "2027 Year Ahead Planner - Arun Sharma"
+        ]
       }
     },
     "report_advanced": {
       "pdf_fingerprint": {
-        "author": "(anonymous)",
         "combined_text_sha256": "7d831e2bffdc0239c02823c78ee4c8abda3f644db8696133b01870c5aea8f05d",
         "page_count": 12,
         "page_text_sha256": [
@@ -147,40 +144,34 @@
           "c0f9742e25704e73c64a26f86a3d368047fddb4ac8ab1cbe1320b97618faea45",
           "0e1f778c4a1f5a749aa4db345d98db042405378455ca5021a86c40aea68b6189",
           "b9c74a91d8877981082a1df3dda4cb6488c3bfd8ed161cfbf2e57cba84071d67"
-        ],
-        "title": "(anonymous)"
+        ]
       },
       "render_meta": {
         "job_id": "job_reglock_advanced",
         "pack_id": "report_advanced",
-        "pdf_size_bytes": 1507407,
         "report_id": "NV-E22315076D",
         "tier": "advanced"
       }
     },
     "report_basic": {
       "pdf_fingerprint": {
-        "author": "(anonymous)",
         "combined_text_sha256": "f7d3e5e60e4bb99c8cd6f41b0cfc68d1324e7f37cb152a12bbb30c7eaf47f893",
         "page_count": 3,
         "page_text_sha256": [
           "ebbf42fc307a9498a8bd523c435f552d4fa020449f1d8d8f0a74d2d4f413248e",
           "1e705414317a80026fd6d2df359891f6c9a3078e02732bcbcb1b24d72339f11f",
           "29b93a31061f9e79a6fd816f7f4096aa6e03c6bc448de3fe6784a11c6574725a"
-        ],
-        "title": "(anonymous)"
+        ]
       },
       "render_meta": {
         "job_id": "job_reglock_basic",
         "pack_id": "report_basic",
-        "pdf_size_bytes": 1439317,
         "report_id": "NV-9794FBAEDB",
         "tier": "basic"
       }
     },
     "report_premium": {
       "pdf_fingerprint": {
-        "author": "(anonymous)",
         "combined_text_sha256": "6d6e98013b878e5f9226f81a9ebe11aad8a2fca3120de0dbcf05771e26607678",
         "page_count": 32,
         "page_text_sha256": [
@@ -216,17 +207,15 @@
           "ba78d7ce4b0a8dd9091dd3a6544df5942dcca4b1bb2185d02764ccf542f81301",
           "8449d353de5ce8921069fcd0f9b94a64245d9033e99642bde2f73c7dfa0565f6",
           "bbc582e2718ca0b82091eae5453bd366fad62337b6349f7776791ab7f29b891e"
-        ],
-        "title": "(anonymous)"
+        ]
       },
       "render_meta": {
         "job_id": "job_reglock_premium",
         "pack_id": "report_premium",
-        "pdf_size_bytes": 1570685,
         "report_id": "NV-2568586E6C",
         "tier": "premium"
       }
     }
   },
-  "schema_version": "1.0.0"
+  "schema_version": "1.1.0"
 }

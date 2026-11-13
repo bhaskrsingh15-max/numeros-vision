@@ -14,6 +14,8 @@ COMMIT A Security Regression Suite:
 import os
 import pathlib
 import re
+import subprocess
+import sys
 import unittest
 
 from app.api.payments import get_session_info
@@ -23,6 +25,22 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
 class TestCommitASecurityBypasses(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        build_env = dict(os.environ)
+        build_env["ENVIRONMENT"] = "test"
+        build_env.pop("BUILD_ENV", None)
+        build_env.pop("NV_REQUIRE_CHARM_ENV", None)
+        subprocess.run(
+            [sys.executable, str(ROOT / "build_bulletproof_dist.py")],
+            cwd=str(ROOT),
+            env=build_env,
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
 
     def _assert_no_duplicate_style_attrs(self, html_text: str, label: str) -> None:
         tag_rx = re.compile(r"<[a-zA-Z0-9-]+(?:\s+[^>]*?)?>", re.DOTALL)

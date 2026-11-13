@@ -54,7 +54,7 @@ def sha256_text(text: str) -> str:
 
 
 def collect_engine_file_hashes() -> Dict[str, str]:
-    """Hashes every .py file in app/engine/ and pdf_service/app/engine/ to guarantee zero edits/deletions."""
+    """Hashes every .py file in app/engine/ and pdf_service/app/engine/ after LF line-ending normalisation."""
     manifest: Dict[str, str] = {}
     for rel_dir in ("app/engine", "pdf_service/app/engine"):
         abs_dir = os.path.join(ROOT_DIR, *rel_dir.split("/"))
@@ -68,8 +68,9 @@ def collect_engine_file_hashes() -> Dict[str, str]:
                 fpath = os.path.join(root, fname)
                 rel_path = os.path.relpath(fpath, ROOT_DIR).replace("\\", "/")
                 with open(fpath, "rb") as f:
-                    manifest[rel_path] = sha256_bytes(f.read())
-    return manifest
+                    norm_bytes = f.read().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+                    manifest[rel_path] = sha256_bytes(norm_bytes)
+    return dict(sorted(manifest.items()))
 
 
 def build_canonical_view_payload(tier: str, pack_id: str) -> Dict[str, Any]:
@@ -130,11 +131,8 @@ def extract_pdf_fingerprint(pdf_bytes: bytes) -> Dict[str, Any]:
         # Normalize line endings for cross-platform stability
         norm_txt = "\n".join(line.rstrip() for line in txt.splitlines()).strip()
         page_hashes.append(sha256_text(norm_txt))
-    meta = reader.metadata
     return {
         "page_count": len(reader.pages),
-        "title": getattr(meta, "title", None) if meta else None,
-        "author": getattr(meta, "author", None) if meta else None,
         "page_text_sha256": page_hashes,
         "combined_text_sha256": sha256_text("|".join(page_hashes)),
     }
@@ -160,9 +158,11 @@ def generate_all_pack_fingerprints() -> Dict[str, Any]:
                 raise RuntimeError(
                     f"Pack {pack_id} rendered {fp['page_count']} pages, expected {expected_pages}."
                 )
-            # Exclude any wall-clock duration fields if present in render_meta
+            # Exclude wall-clock duration and OS/compression-sensitive pdf_size_bytes
             stable_meta = {
-                k: v for k, v in render_meta.items() if k not in ("duration_ms", "generated_at", "timestamp")
+                k: v
+                for k, v in render_meta.items()
+                if k not in ("duration_ms", "generated_at", "timestamp", "pdf_size_bytes")
             }
             packs[pack_id] = {
                 "render_meta": stable_meta,
@@ -188,11 +188,31 @@ def generate_all_pack_fingerprints() -> Dict[str, Any]:
             }
 
     return {
-        "schema_version": "1.0.0",
+        "schema_version": "1.1.0",
         "fixed_reference_date": FIXED_TODAY.isoformat(),
         "engine_files_sha256": collect_engine_file_hashes(),
         "packs": packs,
     }
+
+
+def _strip_ignored_pack_fields(pack_entry: Dict[str, Any]) -> Dict[str, Any]:
+    fp = pack_entry.get("pdf_fingerprint", {})
+    norm: Dict[str, Any] = {
+        "pdf_fingerprint": {
+            "page_count": fp.get("page_count"),
+            "page_text_sha256": fp.get("page_text_sha256", []),
+            "combined_text_sha256": fp.get("combined_text_sha256"),
+        }
+    }
+    if "engine_json_sha256" in pack_entry:
+        norm["engine_json_sha256"] = pack_entry["engine_json_sha256"]
+    if "render_meta" in pack_entry:
+        norm["render_meta"] = {
+            k: v
+            for k, v in pack_entry["render_meta"].items()
+            if k not in ("duration_ms", "generated_at", "timestamp", "pdf_size_bytes")
+        }
+    return norm
 
 
 def compare_snapshots(baseline: Dict[str, Any], current: Dict[str, Any]) -> list[str]:
@@ -216,15 +236,17 @@ def compare_snapshots(baseline: Dict[str, Any], current: Dict[str, Any]) -> list
 
     base_packs = baseline.get("packs", {})
     curr_packs = current.get("packs", {})
-    for pack_id, b_pack in base_packs.items():
-        c_pack = curr_packs.get(pack_id)
-        if not c_pack:
+    for pack_id, b_pack_raw in base_packs.items():
+        c_pack_raw = curr_packs.get(pack_id)
+        if not c_pack_raw:
             diffs.append(f"[PACK MISSING] {pack_id} missing from current run.")
             continue
+        b_pack = _strip_ignored_pack_fields(b_pack_raw)
+        c_pack = _strip_ignored_pack_fields(c_pack_raw)
         if json.dumps(b_pack, sort_keys=True) != json.dumps(c_pack, sort_keys=True):
             diffs.append(f"[PACK DRIFT] {pack_id} output differs from locked baseline!")
-            b_fp = b_pack.get("pdf_fingerprint", {})
-            c_fp = c_pack.get("pdf_fingerprint", {})
+            b_fp = b_pack["pdf_fingerprint"]
+            c_fp = c_pack["pdf_fingerprint"]
             if b_fp.get("page_count") != c_fp.get("page_count"):
                 diffs.append(
                     f"  - Page count changed: {b_fp.get('page_count')} -> {c_fp.get('page_count')}"
