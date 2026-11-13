@@ -6,8 +6,12 @@ console.log('--- STARTING COOKIE CONSENT & PRIVACY AUDIT VERIFICATION TESTS ---'
 
 // 1. Verify sw.js privacy guard
 const swCode = fs.readFileSync('app/static/sw.js', 'utf8');
-assert.ok(swCode.includes("url.pathname.startsWith('/api/') || url.pathname.includes('/reports/download') || url.pathname.endsWith('.pdf')"),
-  'FAIL: sw.js must strictly pass-through /api/, /reports/download, and .pdf without caching');
+assert.ok(
+  swCode.includes("url.pathname.startsWith('/api/')") &&
+  swCode.includes("url.pathname.includes('/reports/download')") &&
+  swCode.includes("url.pathname.endsWith('.pdf')"),
+  'FAIL: sw.js must strictly pass-through /api/, /reports/download, and .pdf without caching'
+);
 assert.ok(swCode.includes("url.pathname.startsWith('/dashboard')"),
   'FAIL: sw.js must strictly pass-through /dashboard without caching');
 console.log('✓ PASS: Test 1 - sw.js never caches /api/*, /dashboard*, or report downloads/PDFs');

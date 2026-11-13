@@ -28,8 +28,8 @@
     :root {
       --gold-dark: #8B6914;
       --gold-primary: #C9A227;
-      --emerald: #16835B;
-      --emerald-bg: #eef8f2;
+      --emerald: #8B6914;
+      --emerald-bg: rgba(201, 162, 39, 0.14);
       --pearl-bg: #FFFDF7;
       --sand-bg: #F7F3EA;
       --ink-dark: #523E28;
@@ -464,7 +464,7 @@
       <div style="font-size:2.2rem; margin-bottom:12px; color:var(--gold);">✦</div>
       <h2 style="font-family:'Cinzel', Georgia, serif; font-size:1.45rem; color:var(--gold-dark); margin-bottom:10px;">Sign In to View Your Order</h2>
       <p style="font-size:0.88rem; color:var(--ink-muted); line-height:1.6; margin-bottom:24px;">
-        Please sign in with your email to access your purchased reports, dossiers, and personalized numerological blueprint.
+        Please sign in with your email to access your purchased reports and personalized numerological blueprint.
       </p>
       <a id="btnDashSignInPrompt" href="/login.html" class="nv-btn-cta" style="display:inline-block; padding:12px 28px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFFFF; border-radius:10px; font-weight:700; text-decoration:none; font-size:0.9rem; letter-spacing:0.02em;">
         Sign In with Email Code →
@@ -495,13 +495,13 @@
       <div class="dash-title">
         <span>Your Purchased Reports</span>
         <span style="font-size:0.75rem; font-family:'Inter'; color:var(--ink-muted); font-weight:500;">
-          Deterministic Reports &amp; Dossiers
+          Personalised PDF Reports
         </span>
       </div>
       <div id="dashReportsContainer">
         <!-- Rendered from /api/v1/dashboard/view -->
         <div style="text-align:center; color:var(--ink-muted); padding:20px 0; font-size:0.86rem;">
-          Loading your verified reports...
+          Loading your reports...
         </div>
       </div>
     </div>
@@ -575,13 +575,13 @@
     <!-- ── 4. ONE UPGRADE CARD WITH 3 TIERS IN ONE ROW (HIDES OWNED TIERS) ── -->
     <div class="dash-card" id="dashUpgradeCard">
       <div class="dash-title">
-        <span>Upgrade Your Dossier Depth</span>
+        <span>Upgrade Your Report Depth</span>
         <span style="font-size:0.75rem; font-family:'Inter'; color:var(--gold-dark); font-weight:600;">
           Fixed Pricing · One-Time Access
         </span>
       </div>
       <p class="dash-sub">
-        Choose your desired depth of analysis. Every dossier is bespoke, strictly adhering to classical Chaldean-Vedic mathematical principles with zero generative distortion.
+        Choose your desired depth of analysis. Every report is calculated directly from your birth date and name using Chaldean and Lo Shu principles.
       </p>
 
       <div class="upgrade-row" id="dashUpgradeTiersContainer">
@@ -951,7 +951,7 @@
               Your complimentary Lo Shu matrix is active below. You can unlock your bespoke 3-Page Anveil my alignments, 12-Page Anveil my glowing charms, or 32-Page Anveil every charm anytime.
             </p>
             <a href="#dashUpgradeCard" style="display:inline-block; background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFFFFF; text-decoration:none; padding:8px 16px; border-radius:6px; font-size:0.80rem; font-weight:700;">
-              View Available Dossiers &darr;
+              View Available Reports &darr;
             </a>
           </div>
         `;
@@ -976,21 +976,27 @@
 
         let badgeClass = isReady ? 'ready' : (isNeedsAttention ? 'failed' : 'preparing');
         let badgeText = r.statusBadge || (isReady ? 'READY ✓' : (isNeedsAttention ? 'NEEDS ATTENTION' : 'PREPARING'));
-        const itemMessage = r.message || (isPreparing ? 'Payment received, preparing your report' : '');
+        const itemMessage = (isPreparing && r.progressLine)
+          ? r.progressLine
+          : (r.message || (isPreparing ? 'Step 1 of 5: reading your birth date' : ''));
+        const delayedNoticeHtml = (isPreparing && r.delayedNotice)
+          ? `<div class="dash-delayed-notice" role="status" aria-live="polite" style="margin-top:6px; font-size:0.76rem; color:var(--gold-dark); background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.34); border-radius:6px; padding:6px 10px; font-weight:600;">${r.delayedNotice}</div>`
+          : '';
 
         return `
           <div class="report-item ${badgeClass}">
             <div style="flex:1; min-width:240px;">
               <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <strong style="font-size:1.02rem; color:${isReady ? 'var(--emerald)' : 'var(--gold-dark)'};">${r.title}</strong>
+                <strong style="font-size:1.02rem; color:var(--gold-dark);">${r.title}</strong>
                 <span class="report-badge ${badgeClass}">${badgeText}</span>
               </div>
               <div style="font-size:0.75rem; color:var(--gold-dark); font-weight:600; margin-bottom:3px;">
                 Subject: ${r.subjectName} · Locked DOB: ${r.subjectDob}
               </div>
-              <div style="font-size:0.78rem; color:var(--ink-muted); line-height:1.4;">
+              <div class="dash-report-progress-line" aria-live="polite" style="font-size:0.80rem; color:var(--ink-dark); font-weight:${isPreparing ? '600' : '400'}; line-height:1.4;">
                 ${itemMessage}
               </div>
+              ${delayedNoticeHtml}
             </div>
             <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
               ${(isReady && (r.isDownloadable || r.downloadUrl)) ? `
@@ -1055,7 +1061,7 @@
         if (isPresent) {
           cellEl.className = '';
           numEl.className = 'loshu-num present';
-          numEl.textContent = String(num).repeat(cell.count || 1);
+          numEl.textContent = String(num);
           tagEl.className = 'loshu-tag active';
           tagEl.textContent = `×${cell.count || 1}`;
         } else {

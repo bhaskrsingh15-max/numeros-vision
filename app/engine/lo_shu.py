@@ -87,7 +87,7 @@ def generate_loshu_grid_markdown(day: int, month: int, year: int) -> str:
     
     def cell(num: int, elem: str) -> str:
         cnt = counts.get(num, 0)
-        disp = str(num) * cnt if cnt > 0 else "GAP"
+        disp = f"{num} (x{cnt})" if cnt > 0 else "GAP"
         return f"{num} ({elem}): {disp}"
 
     c4 = cell(4, "Wood")

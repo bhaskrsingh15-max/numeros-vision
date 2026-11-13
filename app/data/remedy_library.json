@@ -1,0 +1,869 @@
+{
+  "meta": {
+    "status": "DRAFT",
+    "drafted_by": "Drafted for line-by-line owner review. Not approved. Do not publish.",
+    "styles": {
+      "vedic": "Traditional Vedic (India default with universal)",
+      "universal": "Universal: service, donation, habits, colours, affirmations (all regions)",
+      "western": "Western: colour, journaling, meditation, intention planning, gemstones as information only"
+    },
+    "rules": [
+      "Never infer religion from name, language or location. Style is chosen by the user.",
+      "Every item is traditionally suggested practice, never a promise of an outcome. Never claim it prevents, diverts or reduces an event or problem.",
+      "Health or safety lines carry: Traditional practice, in addition to medical care and sensible safety.",
+      "Gemstones are information only: optional, never sold or linked, no health or wealth claims. Strong stones (blue sapphire, cat's eye, hessonite) are traditionally worn only after consulting a qualified practitioner. Gentle alternatives are listed.",
+      "Not allowed in any remedy: self-injury, drawing own blood, hospital water, unsafe or unhygienic acts, fasting plans, replacing medicine, dumping offerings in rivers, paid rituals.",
+      "Gemstones and mantras are not shown in the Basic report (3 pages).",
+      "Mantra spellings come from the supplied sheets and need review."
+    ],
+    "order": [
+      "Step 1 Foundation: existing element balance, then plane balance (element_support is optional extra for the element step)",
+      "Step 2 Planet remedies from the selected style",
+      "Step 3 Manifestation block",
+      "Step 4 Timing (start-before months)"
+    ]
+  },
+  "planets": [
+    {
+      "number": 1,
+      "planet": "Sun",
+      "lo_shu_element": "Water",
+      "day": "Sunday",
+      "colours": [
+        "gold",
+        "orange",
+        "soft red"
+      ],
+      "themes": [
+        "confidence",
+        "leadership",
+        "recognition",
+        "authority"
+      ],
+      "items": [
+        {
+          "id": "sun-h1",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Get ten minutes of morning sunlight and keep a regular wake-up time."
+        },
+        {
+          "id": "sun-h2",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Give credit to a teacher, mentor or elder this week and ask for their advice."
+        },
+        {
+          "id": "sun-d1",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "On a Sunday, donate wheat, jaggery (gur) or food grains to someone in need."
+        },
+        {
+          "id": "sun-s1",
+          "styles": [
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Support a teacher, mentor or public-service cause with your time or money."
+        },
+        {
+          "id": "sun-v1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "vedic_practice",
+          "text": "Offer water (arghya) to the sun at sunrise, and wear a touch of the day's colour."
+        },
+        {
+          "id": "sun-m1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "mantra",
+          "text": "Om Surya Namah (from the supplied sheet; spelling to be reviewed)."
+        }
+      ],
+      "gemstone": {
+        "traditional": "Ruby (Manik)",
+        "gentle_alternatives": [
+          "Sunstone",
+          "Red garnet"
+        ]
+      },
+      "affirmation": "I lead with steady confidence and listen as well as I speak."
+    },
+    {
+      "number": 2,
+      "planet": "Moon",
+      "lo_shu_element": "Earth",
+      "day": "Monday",
+      "colours": [
+        "white",
+        "silver",
+        "soft blue"
+      ],
+      "themes": [
+        "emotions",
+        "calm",
+        "relationships",
+        "sleep"
+      ],
+      "items": [
+        {
+          "id": "moon-h1",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Keep a regular sleep time and spend a little time near water or in quiet each day."
+        },
+        {
+          "id": "moon-h2",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Keep a glass of water by your bed at night and drink it in the morning."
+        },
+        {
+          "id": "moon-d1",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "On a Monday, donate rice, milk or white sweets to someone in need."
+        },
+        {
+          "id": "moon-s1",
+          "styles": [
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Support a cause for mothers, clean drinking water or mental well-being."
+        },
+        {
+          "id": "moon-v1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "vedic_practice",
+          "text": "Offer milk or water at a Shiva temple on a Monday, and respect your mother or elder women."
+        },
+        {
+          "id": "moon-m1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "mantra",
+          "text": "Om Som Somaya Namah (from the supplied sheet; spelling to be reviewed)."
+        }
+      ],
+      "gemstone": {
+        "traditional": "Pearl (Moti)",
+        "gentle_alternatives": [
+          "Moonstone",
+          "White quartz"
+        ]
+      },
+      "affirmation": "I stay calm and listen to my feelings without being ruled by them."
+    },
+    {
+      "number": 3,
+      "planet": "Jupiter",
+      "lo_shu_element": "Wood",
+      "day": "Thursday",
+      "colours": [
+        "yellow",
+        "saffron",
+        "gold"
+      ],
+      "themes": [
+        "wisdom",
+        "advice",
+        "communication",
+        "growth"
+      ],
+      "items": [
+        {
+          "id": "jup-h1",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Learn something new each day, even ten minutes of reading."
+        },
+        {
+          "id": "jup-h2",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "habit",
+          "text": "Add a pinch of turmeric (haldi) to your bath water on Thursday, or wear a touch of yellow."
+        },
+        {
+          "id": "jup-d1",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "On a Thursday, donate chana dal, bananas or yellow items to someone in need."
+        },
+        {
+          "id": "jup-s1",
+          "styles": [
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Sponsor a student, donate books or help a teacher."
+        },
+        {
+          "id": "jup-v1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "vedic_practice",
+          "text": "Respect your teachers and elders, and visit a place of learning or a temple on Thursday."
+        },
+        {
+          "id": "jup-m1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "mantra",
+          "text": "Om Gurave Namah (from the supplied sheet; spelling to be reviewed)."
+        }
+      ],
+      "gemstone": {
+        "traditional": "Yellow sapphire (Pukhraj)",
+        "gentle_alternatives": [
+          "Citrine",
+          "Yellow topaz"
+        ]
+      },
+      "affirmation": "I speak with clarity and keep learning."
+    },
+    {
+      "number": 4,
+      "planet": "Rahu",
+      "lo_shu_element": "Wood",
+      "day": "Saturday",
+      "colours": [
+        "smoke grey",
+        "deep blue"
+      ],
+      "themes": [
+        "structure",
+        "paperwork",
+        "order",
+        "discipline",
+        "hidden matters"
+      ],
+      "items": [
+        {
+          "id": "rahu-h1",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Declutter one space a week and keep paperwork, documents and accounts in order."
+        },
+        {
+          "id": "rahu-h2",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Keep promises small and honest; review commitments before you take on new ones."
+        },
+        {
+          "id": "rahu-d1",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "Donate blankets or food to street cleaners and sanitation workers."
+        },
+        {
+          "id": "rahu-s1",
+          "styles": [
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Join a community clean-up or support a local sanitation cause. Never litter or dump offerings in rivers."
+        },
+        {
+          "id": "rahu-v1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "vedic_practice",
+          "text": "Keep the home clean, especially the corners, and light a lamp in the evening."
+        },
+        {
+          "id": "rahu-m1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "mantra",
+          "text": "Om Rahave Namah (from the supplied sheet; spelling to be reviewed)."
+        }
+      ],
+      "gemstone": {
+        "traditional": "Hessonite (Gomed)",
+        "gentle_alternatives": [
+          "Smoky quartz",
+          "Orange carnelian"
+        ],
+        "extra_caution": "Traditionally considered a strong stone; consult a qualified practitioner first."
+      },
+      "affirmation": "I build order and keep my word."
+    },
+    {
+      "number": 5,
+      "planet": "Mercury",
+      "lo_shu_element": "Earth",
+      "day": "Wednesday",
+      "colours": [
+        "green",
+        "light green"
+      ],
+      "themes": [
+        "communication",
+        "decisions",
+        "nerves",
+        "business"
+      ],
+      "items": [
+        {
+          "id": "mer-h1",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Practise slow breathing for five minutes (pranayama) and pause before replying to tense messages."
+        },
+        {
+          "id": "mer-h2",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Write down decisions and review them at a fixed time."
+        },
+        {
+          "id": "mer-d1",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "On a Wednesday, donate green gram (moong), green vegetables or school supplies."
+        },
+        {
+          "id": "mer-s1",
+          "styles": [
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Support literacy, school supplies or a skills-training cause."
+        },
+        {
+          "id": "mer-v1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "vedic_practice",
+          "text": "Feed green fodder to a cow on Wednesday, or keep a green plant at home. Offer only suitable food, and never to animals that may be harmed by it."
+        },
+        {
+          "id": "mer-m1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "mantra",
+          "text": "Om Bum Budhaya Namah (from the supplied sheet; spelling to be reviewed)."
+        }
+      ],
+      "gemstone": {
+        "traditional": "Emerald (Panna)",
+        "gentle_alternatives": [
+          "Green aventurine",
+          "Peridot"
+        ]
+      },
+      "affirmation": "I think clearly and communicate with kindness."
+    },
+    {
+      "number": 6,
+      "planet": "Venus",
+      "lo_shu_element": "Metal",
+      "day": "Friday",
+      "colours": [
+        "white",
+        "soft pink",
+        "cream"
+      ],
+      "themes": [
+        "love",
+        "relationships",
+        "comfort",
+        "creativity",
+        "spending"
+      ],
+      "items": [
+        {
+          "id": "ven-h1",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Keep your home clean and pleasant, and say thank you out loud once a day."
+        },
+        {
+          "id": "ven-h2",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "habit",
+          "text": "Use a pleasant fragrance or perfume when you bathe on Friday."
+        },
+        {
+          "id": "ven-d1",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "On a Friday, donate white sweets, rice, curd or clothes to someone in need."
+        },
+        {
+          "id": "ven-s1",
+          "styles": [
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Support an arts, family or women's cause."
+        },
+        {
+          "id": "ven-v1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "vedic_practice",
+          "text": "Respect the women in your life, and offer flowers or sweets at a temple on Friday."
+        },
+        {
+          "id": "ven-m1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "mantra",
+          "text": "Om Shum Shukraya Namah (from the supplied sheet; spelling to be reviewed)."
+        }
+      ],
+      "gemstone": {
+        "traditional": "Diamond or white sapphire (Heera)",
+        "gentle_alternatives": [
+          "Clear quartz",
+          "Opal"
+        ]
+      },
+      "affirmation": "I give and receive care with balance."
+    },
+    {
+      "number": 7,
+      "planet": "Ketu",
+      "lo_shu_element": "Metal",
+      "day": "A quiet day (traditions vary)",
+      "colours": [
+        "grey",
+        "multicolour"
+      ],
+      "themes": [
+        "inner peace",
+        "intuition",
+        "detachment",
+        "research"
+      ],
+      "items": [
+        {
+          "id": "ketu-h1",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Take ten minutes of quiet or meditation each day, away from screens."
+        },
+        {
+          "id": "ketu-h2",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Keep one evening a week free of work and social media."
+        },
+        {
+          "id": "ketu-d1",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "Donate blankets, or support a street-animal or animal-shelter cause."
+        },
+        {
+          "id": "ketu-s1",
+          "styles": [
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Volunteer at an animal shelter or a quiet-space or well-being project."
+        },
+        {
+          "id": "ketu-v1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "vedic_practice",
+          "text": "Spend time in a quiet place of worship or in nature, and feed street dogs suitable food. Offer only suitable food, and never to animals that may be harmed by it."
+        },
+        {
+          "id": "ketu-m1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "mantra",
+          "text": "Om Ketave Namah (from the supplied sheet; spelling to be reviewed)."
+        }
+      ],
+      "gemstone": {
+        "traditional": "Cat's eye (Lehsunia)",
+        "gentle_alternatives": [
+          "Tiger's eye",
+          "Smoky quartz"
+        ],
+        "extra_caution": "Traditionally considered a strong stone; consult a qualified practitioner first."
+      },
+      "affirmation": "I trust my inner voice and stay grounded."
+    },
+    {
+      "number": 8,
+      "planet": "Saturn",
+      "lo_shu_element": "Earth",
+      "day": "Saturday",
+      "colours": [
+        "dark blue",
+        "black",
+        "grey"
+      ],
+      "themes": [
+        "discipline",
+        "work",
+        "delay",
+        "patience",
+        "responsibility"
+      ],
+      "items": [
+        {
+          "id": "sat-h1",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Keep a fixed daily routine and finish one small task each day without delay."
+        },
+        {
+          "id": "sat-h2",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Treat the people who work for you fairly: pay on time and say thank you."
+        },
+        {
+          "id": "sat-d1",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "On a Saturday, donate clothes, blankets or shoes to someone in need."
+        },
+        {
+          "id": "sat-d2",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "Give a cobbler polish, brushes or tools, or pay for a repair, as a gift of support."
+        },
+        {
+          "id": "sat-s1",
+          "styles": [
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Support elderly care or workers' welfare."
+        },
+        {
+          "id": "sat-v1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "vedic_practice",
+          "text": "Light a sesame-oil lamp on Saturday evening, and give sesame or black items to someone in need."
+        },
+        {
+          "id": "sat-m1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "mantra",
+          "text": "Om Sham Shanicharaya Namah (from the supplied sheet; spelling to be reviewed)."
+        }
+      ],
+      "gemstone": {
+        "traditional": "Blue sapphire (Neelam)",
+        "gentle_alternatives": [
+          "Amethyst",
+          "Lapis lazuli"
+        ],
+        "extra_caution": "Traditionally considered a strong stone; worn only after consulting a qualified practitioner."
+      },
+      "affirmation": "I work steadily and patiently, and my effort adds up."
+    },
+    {
+      "number": 9,
+      "planet": "Mars",
+      "lo_shu_element": "Fire",
+      "day": "Tuesday",
+      "colours": [
+        "red",
+        "coral"
+      ],
+      "themes": [
+        "energy",
+        "courage",
+        "haste",
+        "safety",
+        "health"
+      ],
+      "items": [
+        {
+          "id": "mars-h1",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Exercise regularly (yoga or sun salutation, surya namaskar) and slow down on the road."
+        },
+        {
+          "id": "mars-h2",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "habit",
+          "text": "Service the vehicle, wear a seatbelt or helmet, and book a routine health check-up."
+        },
+        {
+          "id": "mars-d1",
+          "styles": [
+            "vedic",
+            "universal"
+          ],
+          "kind": "donation",
+          "text": "On a Tuesday, donate red lentils (masoor dal), jaggery or red cloth to someone in need."
+        },
+        {
+          "id": "mars-s1",
+          "styles": [
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Support hospital welfare, first-aid training, or patients' families."
+        },
+        {
+          "id": "mars-s2",
+          "styles": [
+            "vedic",
+            "universal",
+            "western"
+          ],
+          "kind": "service",
+          "text": "Blood donation, only through a licensed blood bank and only if you are eligible (check with a doctor)."
+        },
+        {
+          "id": "mars-v1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "vedic_practice",
+          "text": "Read the Hanuman Chalisa on Tuesday and light a lamp at a Hanuman temple."
+        },
+        {
+          "id": "mars-m1",
+          "styles": [
+            "vedic"
+          ],
+          "kind": "mantra",
+          "text": "Om Kraam Kreem Kraum Sah Bhaumaya Namah (from the supplied sheet; spelling to be reviewed)."
+        }
+      ],
+      "gemstone": {
+        "traditional": "Red coral (Moonga)",
+        "gentle_alternatives": [
+          "Red carnelian",
+          "Red jasper"
+        ]
+      },
+      "affirmation": "I act with calm courage."
+    }
+  ],
+  "element_support": {
+    "Wood": {
+      "numbers": [
+        3,
+        4
+      ],
+      "colours": [
+        "green"
+      ],
+      "gems_as_commonly_taught": [
+        "Green aventurine",
+        "Jade"
+      ],
+      "habits": [
+        "Spend time with plants or in a park",
+        "Plan one growth step a week"
+      ]
+    },
+    "Fire": {
+      "numbers": [
+        9
+      ],
+      "colours": [
+        "red",
+        "orange"
+      ],
+      "gems_as_commonly_taught": [
+        "Carnelian",
+        "Garnet"
+      ],
+      "habits": [
+        "Morning light and movement",
+        "Do one thing that excites you"
+      ]
+    },
+    "Earth": {
+      "numbers": [
+        2,
+        5,
+        8
+      ],
+      "colours": [
+        "yellow",
+        "brown",
+        "cream"
+      ],
+      "gems_as_commonly_taught": [
+        "Citrine",
+        "Tiger's eye"
+      ],
+      "habits": [
+        "Regular meals and sleep",
+        "Walk barefoot on grass or earth where safe"
+      ]
+    },
+    "Metal": {
+      "numbers": [
+        6,
+        7
+      ],
+      "colours": [
+        "white",
+        "grey",
+        "silver"
+      ],
+      "gems_as_commonly_taught": [
+        "Clear quartz",
+        "Pearl"
+      ],
+      "habits": [
+        "Tidy and simplify",
+        "Keep a clean, organised workspace"
+      ]
+    },
+    "Water": {
+      "numbers": [
+        1
+      ],
+      "colours": [
+        "blue",
+        "black"
+      ],
+      "gems_as_commonly_taught": [
+        "Lapis lazuli",
+        "Obsidian"
+      ],
+      "habits": [
+        "Drink enough water",
+        "Take quiet time near water"
+      ]
+    }
+  }
+}

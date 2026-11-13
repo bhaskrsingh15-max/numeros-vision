@@ -85,7 +85,7 @@
 }
 
 .nv-brand-tagline {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.60rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -113,7 +113,7 @@
 }
 
 .nv-nav-link {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.84rem;
   font-weight: 600;
   color: #523E28;
@@ -248,7 +248,7 @@ button.nv-nav-link {
   align-items: center;
   gap: 10px;
   padding: 8px 12px;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.88rem;
   font-weight: 500;
   color: #523E28;
@@ -322,7 +322,7 @@ button.nv-nav-link {
 }
 
 .nv-nav-link-auth {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 600;
   color: #8B6914;
@@ -343,7 +343,7 @@ button.nv-nav-link {
 .nv-btn-cta {
   background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
   color: #FFFFFF !important;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -426,7 +426,7 @@ button.nv-nav-link {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   color: #7A654D;
 }
@@ -456,9 +456,9 @@ button.nv-nav-link {
   background: #F7F3EA;
   border-top: 1.5px solid var(--border-gold, rgba(201, 162, 39, 0.38));
   margin-top: 80px;
-  padding: 60px 24px 30px;
+  padding: 60px 24px 104px;
   color: #523E28;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
 }
 
 .nv-footer-container {
@@ -498,10 +498,12 @@ button.nv-nav-link {
 }
 
 .nv-footer-links li {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .nv-footer-links a {
+  display: inline-block;
+  padding: 4px 0;
   color: #7A654D;
   text-decoration: none;
   font-size: 0.85rem;
@@ -537,22 +539,43 @@ button.nv-nav-link {
   font-size: 0.8rem;
   color: #7A654D;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px 16px;
 }
 
 .nv-footer-legal-inline {
   display: flex;
-  gap: 18px;
+  gap: 8px 24px;
   flex-wrap: wrap;
 }
 
+@media (min-width: 1200px) {
+  .nv-footer-bottom {
+    flex-wrap: nowrap;
+  }
+  .nv-footer-legal-inline {
+    flex-wrap: nowrap;
+    gap: 8px 16px;
+  }
+}
+
 .nv-footer-legal-inline a {
+  padding: 4px 2px;
   color: #7A654D;
   text-decoration: none;
 }
 
 .nv-footer-legal-inline a:hover {
   color: var(--gold-dark, #8B6914);
+}
+
+.nv-footer a:focus-visible {
+  outline: 2px solid currentColor !important;
+  outline-offset: 2px !important;
+  box-shadow: none !important;
+}
+
+.nv-footer button:focus-visible {
+  outline-color: var(--gold-dark, #8B6914) !important;
 }
 
 /* ── 4. RESPONSIVE BREAKPOINTS ──────────────────────────────── */
@@ -708,7 +731,7 @@ body.nv-nav-open .nv-drawer-backdrop {
     max-width: 130px;
     text-decoration: none;
     color: #7A654D;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 0.68rem;
     font-weight: 500;
     padding: 4px 6px;
@@ -1231,7 +1254,7 @@ body.nv-nav-open .nv-drawer-backdrop {
   padding: 18px 22px;
   box-shadow: 0 12px 36px rgba(180, 155, 110, 0.22), 0 4px 12px rgba(30, 24, 16, 0.06);
   z-index: 99998;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-body);
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
@@ -1544,7 +1567,7 @@ body.nv-nav-open .nv-drawer-backdrop {
   margin-bottom: 6px;
 }
 .planet-chars-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.4rem, 2.5vw, 1.95rem);
   color: #523E28;
   margin: 0 0 6px 0;
@@ -1598,7 +1621,7 @@ body.nv-nav-open .nv-drawer-backdrop {
   border: 1px solid rgba(22, 131, 91, 0.28);
 }
 .archetype-name {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-display);
   font-size: 1.55rem;
   color: #8B6914;
   margin: 0 0 4px 0;
@@ -1694,7 +1717,7 @@ body.nv-nav-open .nv-drawer-backdrop {
 .synergy-neutral { background: rgba(122, 101, 77, 0.12); color: #523E28; border: 1px solid #7A654D; }
 
 .synergy-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-display);
   font-size: 1.25rem;
   color: #523E28;
   margin: 0;

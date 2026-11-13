@@ -118,9 +118,9 @@
     .ai-verified-badge {
       font-size: 0.66rem;
       font-weight: 700;
-      color: #16835B;
-      background: rgba(22, 131, 91, 0.12);
-      border: 1px solid rgba(22, 131, 91, 0.25);
+      color: #8B6914;
+      background: rgba(201, 162, 39, 0.14);
+      border: 1px solid rgba(201, 162, 39, 0.35);
       padding: 2px 8px;
       border-radius: 999px;
       text-transform: uppercase;
@@ -406,7 +406,7 @@
       </div>
 
       <div class="ai-status-row" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-        <span id="aiStatusPill" style="font-size:0.75rem; color:#16835B; background:rgba(22,131,91,0.1); border:1px solid rgba(22,131,91,0.25); padding:4px 10px; border-radius:6px; font-weight:700;">✦ Free Daily Access • 3 of 3 Free Questions Remaining Today</span>
+        <span id="aiStatusPill" style="font-size:0.75rem; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.34); padding:4px 10px; border-radius:6px; font-weight:700;">✦ Free Daily Access • 3 of 3 Free Questions Remaining Today (resets at midnight)</span>
         <div style="display:flex; gap:12px; align-items:center;">
           <button type="button" onclick="openCharmPaywallModal()" style="background:none; border:none; color:var(--gold-dark, #8B6914); font-size:0.78rem; font-weight:700; text-decoration:underline; cursor:pointer;">
             Starter Pack: 5 Questions for ₹199
@@ -417,7 +417,7 @@
         </div>
       </div>
 
-      <button class="btn-ai-ask" id="btnCharmAsk" onclick="handleCharmSubmitOrLock()" style="background:linear-gradient(135deg, #16835B 0%, #0E5E40 100%);">Consult Charm AI (3 Left Today) ✦</button>
+      <button class="btn-ai-ask" id="btnCharmAsk" onclick="handleCharmSubmitOrLock()" style="background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%);">Consult Charm AI (3 Left Today) ✦</button>
 
       <div class="ai-response-box" id="ai_output_panel">
         <div class="ai-msg-header">
@@ -641,10 +641,11 @@
           const num = grid[r][c];
           const cnt = counts[num] || 0;
           const hasNum = cnt > 0;
-          const displayDigits = hasNum ? String(num).repeat(cnt) : '—';
+          const displayDigit = hasNum ? String(num) : '—';
+          const chipHtml = hasNum ? `<span style="display:inline-block; margin-left:4px; font-size:0.66rem; font-weight:700; color:#8B6914; background:rgba(201,162,39,0.22); border-radius:999px; padding:1px 6px; vertical-align:middle;">x${cnt}</span>` : '';
           html += `
             <div style="background:${hasNum ? 'rgba(201,162,39,0.12)' : '#FAF6EE'}; border:1.5px solid ${hasNum ? '#C9A227' : 'rgba(180,155,110,0.3)'}; border-radius:8px; padding:12px 6px; text-align:center;">
-              <div style="font-family:'Cinzel', serif; font-size:1.15rem; font-weight:700; color:${hasNum ? '#8B6914' : '#A89F91'};">${displayDigits}</div>
+              <div style="font-family:'Cinzel', serif; font-size:1.15rem; font-weight:700; color:${hasNum ? '#8B6914' : '#A89F91'};">${displayDigit}${chipHtml}</div>
               <div style="font-size:0.65rem; color:#7A654D; text-transform:uppercase; margin-top:2px;">Cell ${num}</div>
             </div>
           `;
@@ -686,12 +687,12 @@
             <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:10px 12px;">
               <strong style="color:#8B6914;">Mulank (Birth Day number) ${driver} — ${dP.name}</strong>
               <div style="color:#523E28; margin-top:4px;">Supportive Colors: ${dP.color}</div>
-              <div style="color:#16835B; margin-top:2px;">Direction: ${dP.dir}</div>
+              <div style="color:#8B6914; margin-top:2px;">Direction: ${dP.dir}</div>
             </div>
             <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:10px 12px;">
               <strong style="color:#8B6914;">Bhagyank (Life Path number) ${conductor} — ${cP.name}</strong>
               <div style="color:#523E28; margin-top:4px;">Supportive Colors: ${cP.color}</div>
-              <div style="color:#16835B; margin-top:2px;">Direction: ${cP.dir}</div>
+              <div style="color:#8B6914; margin-top:2px;">Direction: ${cP.dir}</div>
             </div>
           </div>
         </div>
@@ -730,24 +731,24 @@
       if (access.isPaid) {
         if (statusPill) {
           statusPill.innerHTML = `✦ Charm AI Pass Active • ${access.credits} Question${access.credits === 1 ? '' : 's'} Remaining`;
-          statusPill.style.color = '#16835B';
-          statusPill.style.background = 'rgba(22,131,91,0.1)';
-          statusPill.style.borderColor = 'rgba(22,131,91,0.25)';
+          statusPill.style.color = '#8B6914';
+          statusPill.style.background = 'rgba(201,162,39,0.12)';
+          statusPill.style.borderColor = 'rgba(201,162,39,0.34)';
         }
         if (askBtn) {
           askBtn.innerHTML = `Consult Charm AI (${access.credits} Left) ✦`;
-          askBtn.style.background = 'linear-gradient(135deg, #16835B 0%, #0E5E40 100%)';
+          askBtn.style.background = 'linear-gradient(135deg, #C9A227 0%, #8B6914 100%)';
         }
       } else if (access.credits > 0) {
         if (statusPill) {
-          statusPill.innerHTML = `✦ Free Daily Access • ${access.credits} of 3 Free Question${access.credits === 1 ? '' : 's'} Remaining Today`;
-          statusPill.style.color = '#16835B';
-          statusPill.style.background = 'rgba(22,131,91,0.1)';
-          statusPill.style.borderColor = 'rgba(22,131,91,0.25)';
+          statusPill.innerHTML = `✦ Free Daily Access • ${access.credits} of 3 Free Question${access.credits === 1 ? '' : 's'} Remaining Today (resets at midnight)`;
+          statusPill.style.color = '#8B6914';
+          statusPill.style.background = 'rgba(201,162,39,0.12)';
+          statusPill.style.borderColor = 'rgba(201,162,39,0.34)';
         }
         if (askBtn) {
           askBtn.innerHTML = `Consult Charm AI (${access.credits} Left Today) ✦`;
-          askBtn.style.background = 'linear-gradient(135deg, #16835B 0%, #0E5E40 100%)';
+          askBtn.style.background = 'linear-gradient(135deg, #C9A227 0%, #8B6914 100%)';
         }
       } else {
         if (statusPill) {
@@ -912,41 +913,133 @@
       } catch (e) {}
 
       panel.innerHTML = `
-        <div style="padding:40px 20px; text-align:center; color:#8B6914;">
-          <div style="display:inline-block; width:38px; height:38px; border:3px solid rgba(201,162,39,0.25); border-top-color:#8B6914; border-radius:50%; animation:nv-spin 0.9s linear infinite; margin-bottom:14px;"></div>
-          <div style="font-family:'Cinzel', serif; font-size:1.1rem; font-weight:700; color:#523E28; margin-bottom:6px;">Synthesizing Planetary &amp; Dasha Cycles...</div>
-          <div style="font-size:0.84rem; color:#7A654D;">Calculating your personalized Numerology Dasha timing cycles.</div>
+        <div id="charmLiveProgressPanel" role="status" aria-live="polite" style="padding:26px 22px; background:#FFFDF7; border:1px solid rgba(201,162,39,0.32); border-radius:14px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <span style="display:inline-block; width:18px; height:18px; border:2.5px solid rgba(201,162,39,0.28); border-top-color:#8B6914; border-radius:50%; animation:nv-spin 0.9s linear infinite;"></span>
+            <span style="font-family:'Cormorant Garamond', serif; font-size:1.25rem; font-weight:700; color:#523E28;">Preparing your reading&hellip;</span>
+          </div>
+          <ul id="charmStageChecklist" style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;"></ul>
+          <div id="charmSlowStageNotice" style="display:none; margin-top:12px; font-size:0.84rem; color:#8B6914; font-weight:600;">Still working on your reading.</div>
         </div>
       `;
 
+      const seenStages = new Map();
+      const renderStageRow = (ev) => {
+        const stageKey = ev && (ev.stage_id || ev.stage);
+        if (!ev || !stageKey || !ev.label) return;
+        const listEl = document.getElementById('charmStageChecklist');
+        if (!listEl) return;
+        let rowEl = seenStages.get(stageKey);
+        const isDone = (ev.status === 'completed' || ev.state === 'completed');
+        if (!rowEl) {
+          rowEl = document.createElement('li');
+          rowEl.setAttribute('data-stage-id', stageKey);
+          rowEl.style.cssText = 'display:flex; align-items:center; gap:10px; font-size:0.88rem; color:#523E28; padding:6px 10px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.25); border-radius:8px; transition:opacity 0.3s ease, border-color 0.3s ease;';
+          listEl.appendChild(rowEl);
+          seenStages.set(stageKey, rowEl);
+        }
+        rowEl.style.borderColor = isDone ? '#C9A227' : 'rgba(201,162,39,0.25)';
+        rowEl.innerHTML = isDone
+          ? `<span style="color:#8B6914; font-weight:800; width:18px; text-align:center;" aria-hidden="true">✓</span><span style="font-weight:600; color:#523E28;">${escapeCharmHtml(ev.label)}</span>`
+          : `<span style="color:#C9A227; font-weight:700; width:18px; text-align:center;" aria-hidden="true">•</span><span style="color:#7A654D;">${escapeCharmHtml(ev.label)}</span>`;
+      };
+
+      const slowNoticeTimer = setTimeout(() => {
+        const sn = document.getElementById('charmSlowStageNotice');
+        if (sn) sn.style.display = 'block';
+      }, 10000);
+
       try {
-        let data;
+        let data = null;
         const abortCtrl = new AbortController();
         const timeoutHandle = setTimeout(() => abortCtrl.abort(), 15000);
         let resp;
         try {
-          resp = await fetch('/api/charm/chat', {
+          const useStream = Boolean(window.__NV_USE_CHARM_SSE !== false && typeof ReadableStream !== 'undefined');
+          const targetEndpoint = useStream ? '/api/charm/chat/stream' : '/api/charm/chat';
+          resp = await fetch(targetEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
             signal: abortCtrl.signal,
             body: JSON.stringify(requestPayload)
           });
+          if (useStream && resp && resp.status === 404) {
+            resp = await fetch('/api/charm/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              signal: abortCtrl.signal,
+              body: JSON.stringify(requestPayload)
+            });
+          }
         } catch (fetchErr) {
           clearTimeout(timeoutHandle);
+          clearTimeout(slowNoticeTimer);
           await syncCharmAiCreditsFromServer();
           renderCharmUnavailableNotice();
           return;
         }
         clearTimeout(timeoutHandle);
 
-        if (resp.ok) {
+        const cType = (resp.headers && resp.headers.get && resp.headers.get('content-type')) || '';
+        if (resp.ok && cType.includes('text/event-stream') && resp.body && typeof resp.body.getReader === 'function') {
+          const reader = resp.body.getReader();
+          const decoder = new TextDecoder('utf-8');
+          let buffer = '';
+          let streamErrPayload = null;
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const blocks = buffer.split('\n\n');
+            buffer = blocks.pop() || '';
+            for (const blk of blocks) {
+              const lines = blk.split('\n');
+              let evType = 'message';
+              let dataStr = '';
+              for (const ln of lines) {
+                if (ln.startsWith('event:')) evType = ln.slice(6).trim();
+                else if (ln.startsWith('data:')) dataStr += ln.slice(5).trim();
+              }
+              if (!dataStr) continue;
+              let parsed = null;
+              try { parsed = JSON.parse(dataStr); } catch (_e) {}
+              if (!parsed) continue;
+              if (evType === 'stage') {
+                renderStageRow(parsed);
+              } else if (evType === 'result') {
+                data = parsed;
+              } else if (evType === 'error') {
+                streamErrPayload = parsed;
+              }
+            }
+          }
+          clearTimeout(slowNoticeTimer);
+          if (streamErrPayload || !data) {
+            if (streamErrPayload && streamErrPayload.credits_remaining !== undefined) {
+              _cachedCharmCredits = streamErrPayload.credits_remaining;
+              syncCharmAiGatingUi();
+            }
+            renderCharmUnavailableNotice();
+            return;
+          }
+          if (data.credits_remaining !== undefined) {
+            _cachedCharmCredits = data.credits_remaining;
+            syncCharmAiGatingUi();
+          }
+        } else if (resp.ok) {
+          clearTimeout(slowNoticeTimer);
           data = await resp.json();
+          if (Array.isArray(data.stage_events)) {
+            data.stage_events.forEach(renderStageRow);
+          }
           if (data.credits_remaining !== undefined) {
             _cachedCharmCredits = data.credits_remaining;
             syncCharmAiGatingUi();
           }
         } else if (resp.status === 402) {
+          clearTimeout(slowNoticeTimer);
           const errData = await resp.json().catch(() => ({}));
           _cachedCharmCredits = errData.credits_remaining !== undefined ? errData.credits_remaining : 0;
           syncCharmAiGatingUi();
@@ -978,6 +1071,7 @@
           `;
           return;
         } else if (resp.status === 429) {
+          clearTimeout(slowNoticeTimer);
           const errData = await resp.json().catch(() => ({}));
           if (errData.credits_remaining !== undefined) {
             _cachedCharmCredits = errData.credits_remaining;
@@ -992,6 +1086,7 @@
           `;
           return;
         } else {
+          clearTimeout(slowNoticeTimer);
           const errData = await resp.json().catch(() => ({}));
           if (errData.credits_remaining !== undefined) {
             _cachedCharmCredits = errData.credits_remaining;
@@ -1015,14 +1110,14 @@
         const followUpQuestion = data.follow_up_question || '';
         const creditsRemaining = data.credits_remaining;
 
-        // Requirement 7: Show "Verified" ONLY when consensus_status === 'VERIFIED_SUPPORTED'
+        // Requirement 7 & Section 17.C: Show cross-check badge ONLY when consensus_status === 'VERIFIED_SUPPORTED' (gold palette, never "Verified")
         const isVerifiedSupported = data.consensus_status === 'VERIFIED_SUPPORTED';
         const verifiedBadgeHtml = isVerifiedSupported
-          ? `<span class="ai-verified-icon" title="Multi-Method Cross-Verified" aria-label="Verified" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:rgba(22,131,91,0.12); border:1px solid #16835B; color:#16835B; font-size:0.72rem; font-weight:700;">✓ Verified</span>`
+          ? `<span class="ai-verified-icon" title="Multi-Cycle Alignment" aria-label="Cross-Checked" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:rgba(201,162,39,0.14); border:1px solid #C9A227; color:#8B6914; font-size:0.72rem; font-weight:700;">✦ Cross-Checked</span>`
           : `<span style="display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.3); color:#7A654D; font-size:0.70rem; font-weight:600;">Numerology Synthesis</span>`;
 
         const creditsChipHtml = creditsRemaining !== undefined
-          ? `<span id="charmResponseCreditsBadge" style="font-size:0.72rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.1); border:1px solid rgba(22,131,91,0.25); border-radius:999px; padding:3px 10px;">${creditsRemaining} credit${creditsRemaining === 1 ? '' : 's'} remaining</span>`
+          ? `<span id="charmResponseCreditsBadge" style="font-size:0.72rem; font-weight:700; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.34); border-radius:999px; padding:3px 10px;">${creditsRemaining} credit${creditsRemaining === 1 ? '' : 's'} remaining</span>`
           : '';
 
         const driverNum = ((day - 1) % 9) + 1;
@@ -1121,7 +1216,10 @@
             </h3>
           ` : ''}
 
-          <div class="charm-response-answer" style="margin-bottom:16px; font-size:0.96rem; line-height:1.75; color:#523E28;">
+          <div style="display:flex; justify-content:flex-end; margin-bottom:4px;">
+            <button type="button" id="btnCharmShowAll" style="display:none; background:#FAF6EE; border:1px solid rgba(201,162,39,0.45); color:#8B6914; font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:999px; cursor:pointer;">Show all</button>
+          </div>
+          <div class="charm-response-answer" id="charmValidatedAnswerBox" aria-live="polite" style="margin-bottom:16px; font-size:0.96rem; line-height:1.75; color:#523E28;">
             ${formatMarkdown(answer)}
           </div>
 
@@ -1166,9 +1264,54 @@
             conductor: conductorNum
           });
         }
+        revealValidatedCharmAnswer(answer);
       } catch (err) {
+        clearTimeout(slowNoticeTimer);
         renderCharmUnavailableNotice();
       }
+    }
+
+    let _activeCharmRevealTimer = null;
+    function revealValidatedCharmAnswer(validatedMarkdownText) {
+      if (_activeCharmRevealTimer) {
+        clearInterval(_activeCharmRevealTimer);
+        _activeCharmRevealTimer = null;
+      }
+      const box = document.getElementById('charmValidatedAnswerBox');
+      const showAllBtn = document.getElementById('btnCharmShowAll');
+      if (!box || !validatedMarkdownText) return;
+      const reducedMotion = Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      if (reducedMotion || validatedMarkdownText.length <= 60) {
+        box.innerHTML = formatMarkdown(validatedMarkdownText);
+        if (showAllBtn) showAllBtn.style.display = 'none';
+        return;
+      }
+      const totalLen = validatedMarkdownText.length;
+      const tickMs = 35;
+      // Adaptive typing speed: ~50 chars/sec, capped at ~6.5 seconds total
+      const charsPerTick = Math.max(2, Math.ceil(totalLen / (6500 / tickMs)));
+      let pos = 0;
+      box.innerHTML = '';
+      if (showAllBtn) {
+        showAllBtn.style.display = 'inline-block';
+        showAllBtn.onclick = () => {
+          if (_activeCharmRevealTimer) {
+            clearInterval(_activeCharmRevealTimer);
+            _activeCharmRevealTimer = null;
+          }
+          box.innerHTML = formatMarkdown(validatedMarkdownText);
+          showAllBtn.style.display = 'none';
+        };
+      }
+      _activeCharmRevealTimer = setInterval(() => {
+        pos = Math.min(totalLen, pos + charsPerTick);
+        box.innerHTML = formatMarkdown(validatedMarkdownText.slice(0, pos));
+        if (pos >= totalLen) {
+          clearInterval(_activeCharmRevealTimer);
+          _activeCharmRevealTimer = null;
+          if (showAllBtn) showAllBtn.style.display = 'none';
+        }
+      }, tickMs);
     }
 
     function formatMarkdown(str) {
@@ -1221,7 +1364,7 @@
     function renderCharmAiCard(charm) {
       if (!charm) return '';
       const statusLabels = {
-        'VERIFIED_SUPPORTED': { bg: 'rgba(22,131,91,0.12)', border: '#16835B', text: '#16835B', label: '✓ Verified' },
+        'VERIFIED_SUPPORTED': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Cross-Checked' },
         'NUMEROLOGY_PRIMARY_CORROBORATED': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Multi-Cycle Alignment' },
         'NUMEROLOGY_PRIMARY_PARTIALLY_CORROBORATED': { bg: 'rgba(201,162,39,0.15)', border: '#C9A227', text: '#8B6914', label: '✦ Partial Cycle Alignment' },
         'NUMEROLOGY_PRIMARY_CONFLICTED': { bg: 'rgba(184,93,25,0.12)', border: '#B85D19', text: '#B85D19', label: '✦ Methodological Contrast' },
@@ -1231,7 +1374,7 @@
         'NOT_ELIGIBLE_FOR_PREDICTION': { bg: 'rgba(184,93,25,0.10)', border: '#B85D19', text: '#B85D19', label: '✦ Reflective Guidance Only' }
       };
       const assessmentLabels = {
-        'FAVOURABLE': { bg: 'rgba(22,131,91,0.12)', text: '#16835B', label: 'Supportive Phase' },
+        'FAVOURABLE': { bg: 'rgba(201,162,39,0.14)', text: '#8B6914', label: 'Supportive Phase' },
         'MIXED': { bg: 'rgba(201,162,39,0.15)', text: '#8B6914', label: 'Balanced Phase' },
         'UNFAVOURABLE': { bg: 'rgba(184,93,25,0.12)', text: '#B85D19', label: 'Consolidation Phase' },
         'NEUTRAL': { bg: 'rgba(122,101,77,0.12)', text: '#7A654D', label: 'Steady Phase' }
@@ -1292,7 +1435,7 @@
               <span style="font-family:'Cinzel',serif; font-size:1.05rem; font-weight:700; color:#8B6914;">
                 ${w.start} &nbsp;➔&nbsp; ${w.end}
               </span>
-              <span style="font-size:0.72rem; color:#16835B; background:rgba(22,131,91,0.1); padding:2px 8px; border-radius:6px; font-weight:700;">${w.ruling_planet || 'Active Cycle'}</span>
+              <span style="font-size:0.72rem; color:#8B6914; background:rgba(201,162,39,0.12); padding:2px 8px; border-radius:6px; font-weight:700;">${w.ruling_planet || 'Active Cycle'}</span>
             </div>
             <div style="font-size:0.80rem; color:#523E28; margin-top:4px; font-weight:500;">
               ${w.label || ''}
@@ -1323,8 +1466,8 @@
       const methodsHtml = methodsList.map(m => {
         const isGated = m.assessment === 'NOT_EVALUATED';
         const isSupport = m.assessment === 'SUPPORTS';
-        const pillColor = isSupport ? '#16835B' : (isGated ? '#7A654D' : '#B85D19');
-        const pillBg = isSupport ? 'rgba(22,131,91,0.1)' : (isGated ? 'rgba(122,101,77,0.1)' : 'rgba(184,93,25,0.1)');
+        const pillColor = isSupport ? '#8B6914' : (isGated ? '#7A654D' : '#B85D19');
+        const pillBg = isSupport ? 'rgba(201,162,39,0.12)' : (isGated ? 'rgba(122,101,77,0.1)' : 'rgba(184,93,25,0.1)');
         const mTitle = methodLabelMap[m.methodId] || (m.methodId || '').replace(/_/g, ' ');
         return `
           <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.22); border-radius:8px; padding:10px 12px;">
@@ -1386,14 +1529,14 @@
                 </div>
                 <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:8px 12px;">
                   <span style="font-size:0.72rem; color:#7A654D; text-transform:uppercase; display:block;">Calculated Dasha Window:</span>
-                  <strong style="color:#16835B; font-size:0.90rem;">${escapeCharmHtml(acuteWindowStr)}</strong>
+                  <strong style="color:#8B6914; font-size:0.90rem;">${escapeCharmHtml(acuteWindowStr)}</strong>
                   <span style="display:block; font-size:0.68rem; color:#7A654D; margin-top:2px;">(Deterministic calendar epicycle)</span>
                 </div>
               </div>
             </div>
 
-            <div style="margin-bottom:10px; background:#FFFDF7; border:1px solid rgba(22,131,91,0.25); border-radius:8px; padding:10px 14px;">
-              <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#16835B; margin-bottom:4px;">
+            <div style="margin-bottom:10px; background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:10px 14px;">
+              <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#8B6914; margin-bottom:4px;">
                 ✦ Tier 3: Supported by Calculated Findings
               </div>
               <div style="font-size:0.84rem; color:#523E28; line-height:1.55;">
@@ -1664,15 +1807,15 @@
         </div>
 
         <!-- Email Verified Status Badge -->
-        <div id="charm-email-verified-badge" style="display:none; background:#EBF7F2; border:1px solid rgba(22,131,91,0.3); border-radius:8px; padding:8px 12px; margin-bottom:14px; color:#16835B; font-size:0.82rem; font-weight:700; align-items:center; gap:8px;">
-          <span>✓ Email Verified: <span id="charm-verified-email-text"></span></span>
+        <div id="charm-email-verified-badge" style="display:none; background:#FAF6EE; border:1px solid rgba(201,162,39,0.38); border-radius:8px; padding:8px 12px; margin-bottom:14px; color:#8B6914; font-size:0.82rem; font-weight:700; align-items:center; gap:8px;">
+          <span>✓ Email Confirmed: <span id="charm-verified-email-text"></span></span>
         </div>
 
         <!-- Statutory Consent Block (DPDP Act 2023) -->
         <div id="charm-consent-block" style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.25); border-radius:10px; padding:10px 14px; margin-bottom:14px;">
           <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.80rem; color:#523E28; cursor:pointer; margin-bottom:6px;">
             <input type="checkbox" id="charm-consent-service" required style="margin-top:2px; accent-color:#8B6914;" />
-            <span><strong>Service Consent (Required):</strong> I consent to processing my birth details for personalized calculations and oracle responses ({{CONSENT_TEXT_PENDING}}).</span>
+            <span><strong>Service Consent (Required):</strong> I consent to processing my birth details for personalized calculations and consultation responses under our <a href="/privacy/" target="_blank" style="color:#8B6914;">Privacy Policy</a><span class="nv-pending-legal" style="display:none;">{{CONSENT_TEXT_PENDING}}</span>.</span>
           </label>
           <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.80rem; color:#7A654D; cursor:pointer;">
             <input type="checkbox" id="charm-consent-marketing" style="margin-top:2px; accent-color:#8B6914;" />

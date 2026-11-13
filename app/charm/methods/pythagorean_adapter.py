@@ -44,9 +44,8 @@ class PythagoreanMethodAdapter:
         name_res = calculate_pythagorean_name(name) if name else {}
         expr_num = name_res.get("expression_number", 1)
 
-        # Career & milestone assessment under Western Pythagorean traditions
-        # Master numbers (11, 22, 33) and leaders (1, 3, 8) strongly support executive expansion
-        favorable_lps = {1, 3, 5, 8, 11, 22, 33}
+        # Career & milestone assessment under Western Pythagorean traditions (strict 1-9 reduction)
+        favorable_lps = {1, 3, 5, 8}
         if lp_num in favorable_lps and not is_karmic:
             assessment = "SUPPORTS"
             summary = f"Western Life Path {lp_num} ({WESTERN_PLANETARY_MAP.get(lp_num, {}).get('archetype', 'Builder')}) aligns with structured career elevation."

@@ -58,37 +58,41 @@ CHALDEAN_VALUES = {
     'F': 8, 'P': 8
 }
 
+from app.engine.digit_root import (
+    digit_root,
+    calc_driver as _canonical_calc_driver,
+    calc_bhagyank as _canonical_calc_bhagyank,
+    calc_personal_year as _canonical_calc_personal_year,
+    calc_personal_month as _canonical_calc_personal_month,
+    calc_personal_day as _canonical_calc_personal_day,
+)
+
 KARMIC_DEBT_NUMBERS = {13, 14, 16, 19}
-MASTER_NUMBERS = {11, 22, 33}
+MASTER_NUMBERS: set[int] = set()
 
 # ── 4. Calculation Utilities ──────────────────────────────────────────────────
-def reduce_to_single_digit(n: int, preserve_master: bool = False) -> int:
-    while n > 9:
-        if preserve_master and n in MASTER_NUMBERS:
-            return n
-        n = sum(int(d) for d in str(n))
-    return n
+def reduce_to_single_digit(n: int) -> int:
+    """Canonical single-digit reduction 1..9 via shared digit_root (never preserves 11/22/33)."""
+    return digit_root(int(n))
 
 def calculate_driver(day: int) -> int:
-    """Driver (Mulank): sum of day digits reduced to 1-9."""
-    return reduce_to_single_digit(day, preserve_master=False)
+    """Driver (Mulank): day of birth reduced strictly to single digit 1-9."""
+    return _canonical_calc_driver(day)
 
 def calculate_conductor(day: int, month: int, year: int) -> int:
-    """Conductor (Bhagyank): sum of all DOB digits reduced to 1-9 (preserving 11, 22, 33 if master)."""
-    total = sum(int(d) for d in f"{day:02d}{month:02d}{year:04d}")
-    return reduce_to_single_digit(total, preserve_master=True)
+    """Conductor (Bhagyank): sum of all DOB digits reduced strictly to single digit 1-9."""
+    return _canonical_calc_bhagyank(day, month, year)
 
 def calculate_conductor_details(day: int, month: int, year: int) -> Dict[str, Any]:
     """
     Canonical Core Matrix Conductor (Bhagyank) details:
-    - conductor_raw: 11, 22, 33 if Master Number, else 1-9
-    - conductor_root: reduced single digit 1-9 (e.g. 11->2, 22->4, 33->6)
-    - conductor_display: '11/2', '22/4', '33/6' for Master Numbers, else '1'..'9'
+    - conductor_raw: reduced single digit 1-9 (never 11, 22, 33)
+    - conductor_root: reduced single digit 1-9
+    - conductor_display: '1'..'9'
     - conductor_planet: planet from the reduced digit (root)
     """
-    raw = calculate_conductor(day, month, year)
-    root = reduce_to_single_digit(raw, preserve_master=False)
-    display = f"{raw}/{root}" if raw in MASTER_NUMBERS else str(raw)
+    root = _canonical_calc_bhagyank(day, month, year)
+    display = str(root)
     planet_short = {
         1: "Sun",
         2: "Moon",
@@ -101,11 +105,11 @@ def calculate_conductor_details(day: int, month: int, year: int) -> Dict[str, An
         9: "Mars"
     }.get(root, "Sun")
     return {
-        "conductor_raw": raw,
+        "conductor_raw": root,
         "conductor_root": root,
         "conductor_display": display,
         "conductor_planet": planet_short,
-        "is_master": raw in MASTER_NUMBERS
+        "is_master": False
     }
 
 def calculate_kua_number(year: int, gender: Optional[str] = None) -> Optional[int]:
@@ -288,9 +292,8 @@ def get_kua_profile(year: int, gender: Optional[str] = None) -> Dict[str, Any]:
 def calculate_chaldean_name(name: str) -> Dict[str, Any]:
     clean = "".join(c.upper() for c in name if c.isalpha())
     compound = sum(CHALDEAN_VALUES.get(c, 0) for c in clean)
-    single = reduce_to_single_digit(compound, preserve_master=True)
+    single = reduce_to_single_digit(compound)
     is_karmic = compound in KARMIC_DEBT_NUMBERS
-    is_master = compound in MASTER_NUMBERS or single in MASTER_NUMBERS
     return {
         "compound_sum": compound,
         "compound_number": compound,
@@ -298,8 +301,9 @@ def calculate_chaldean_name(name: str) -> Dict[str, Any]:
         "single_root": single,
         "single_digit": single,
         "root": single,
+        "root_number": single,
         "is_karmic": is_karmic,
-        "is_master": is_master
+        "is_master": False
     }
 
 # ── 5. Dasha & Personal Cycles ────────────────────────────────────────────────
@@ -307,15 +311,14 @@ def calculate_dasha_cycles(day: int, month: int, year: int, current_age: int = 3
     today = datetime.date.today()
     current_year = today.year
     
-    # Personal Year: Day + Month + Current Year
-    py_sum = sum(int(d) for d in f"{day:02d}{month:02d}{current_year}")
-    personal_year = reduce_to_single_digit(py_sum)
+    # Personal Year: Day + Month + Current Year (strictly reduced 1..9)
+    personal_year = _canonical_calc_personal_year(day, month, current_year)
     
     # Personal Month: Personal Year + Current Month
-    personal_month = reduce_to_single_digit(personal_year + today.month)
+    personal_month = _canonical_calc_personal_month(personal_year, today.month)
     
-    # Personal Day: Personal Month + Current Day
-    personal_day = reduce_to_single_digit(personal_month + today.day)
+    # Personal Day: PY output + PM output + date digits (strictly reduced 1..9)
+    personal_day = _canonical_calc_personal_day(personal_year, personal_month, today.day, today.month, today.year)
     
     # Mahadasha: 9-year cycle ruler based on Driver + age progression
     driver = calculate_driver(day)

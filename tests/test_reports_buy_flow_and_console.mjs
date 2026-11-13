@@ -35,9 +35,10 @@ async function runSuite() {
   assert.ok(yourReadingHtml.includes('card-report-basic'), 'card-report-basic must exist in your-reading.html');
   assert.ok(yourReadingHtml.includes('card-report-advanced'), 'card-report-advanced must exist in your-reading.html');
   assert.ok(yourReadingHtml.includes('card-report-premium'), 'card-report-premium must exist in your-reading.html');
-  assert.ok(yourReadingHtml.includes('₹199'), 'Basic price ₹199 must be in your-reading.html');
-  assert.ok(yourReadingHtml.includes('₹510'), 'Advanced price ₹510 must be in your-reading.html');
-  assert.ok(yourReadingHtml.includes('₹1,050'), 'Premium price ₹1,050 must be in your-reading.html');
+  assert.ok(yourReadingHtml.includes('₹199') && yourReadingHtml.includes('₹399'), 'Basic launch/MRP prices ₹199 / ₹399 must be in your-reading.html');
+  assert.ok(packsJson.feature_flags.notify_me_higher_tiers === true, 'notify_me_higher_tiers flag must be enabled in packs.json');
+  assert.ok(yourReadingHtml.includes('id="btn-select-report_advanced"') && yourReadingHtml.includes('Coming soon, notify me'), 'Advanced waitlist CTA must be in your-reading.html');
+  assert.ok(yourReadingHtml.includes('id="btn-select-report_premium"') && yourReadingHtml.includes('Coming soon, notify me'), 'Premium waitlist CTA must be in your-reading.html');
   console.log('  ✓ Tier picker prices match PACK_CATALOG exactly (199, 510, 1050)');
   passedCount++;
 
@@ -99,10 +100,10 @@ async function runSuite() {
   // Menu navigation on index.html directs to #reports instead of /pricing/
   assert.ok(indexHtml.includes('href="/#reports" class="nv-nav-link">Reports</a>'), 'Menu nav link must go to /#reports');
 
-  // Pricing comparison buttons enter the product flow directly
+  // Pricing comparison buttons enter the product flow or waitlist modal directly
   assert.ok(pricingHtml.includes('/?plan=report_basic#reports'), 'Pricing table Basic button must enter /?plan=report_basic#reports');
-  assert.ok(pricingHtml.includes('/?plan=report_advanced#reports'), 'Pricing table Advanced button must enter /?plan=report_advanced#reports');
-  assert.ok(pricingHtml.includes('/?plan=report_premium#reports'), 'Pricing table Premium button must enter /?plan=report_premium#reports');
+  assert.ok(pricingHtml.includes("openPricingNotifyMeModal('report_advanced')"), 'Pricing table Advanced button must open waitlist notify modal while higher tiers are waitlisted');
+  assert.ok(pricingHtml.includes("openPricingNotifyMeModal('report_premium')"), 'Pricing table Premium button must open waitlist notify modal while higher tiers are waitlisted');
   assert.ok(pricingHtml.includes('/charm-ai/chat/#pass'), 'Pricing table Charm AI button must enter /charm-ai/chat/#pass');
   assert.ok(pricingHtml.includes('window.location.href = \'/?plan=\' + encodeURIComponent(targetPlan) + \'#reports\';'), 'startCheckout on pricing.html must redirect to in-page flow');
   console.log('  ✓ Menu tabs and pricing comparison buttons enter product flow directly with zero /pricing detour');

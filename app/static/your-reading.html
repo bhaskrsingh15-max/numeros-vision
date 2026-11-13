@@ -9,13 +9,14 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   
   <link rel="stylesheet" href="/static/css/theme.css?v=5.5.0" />
   <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
   <script src="/static/js/nv_consent.js?v=5.5.0"></script>
-  <script src="/static/js/nv_kua.js?v=1.1.0"></script>
+  <script src="/static/js/nv_kua.js?v=2.0.0"></script>
   <script src="/static/js/nv_pricing_catalog.js?v=1.3.0"></script>
+  <script src="/static/js/nav.js?v=5.5.0" defer></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="/api/turnstile-config.js"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -27,10 +28,13 @@
       --gold-primary: #C9A227;
       --gold-dark: #8B6914;
       --gold-soft: #E2B84B;
-      --emerald: #16835B;
       --ink: #523E28;
       --ink-muted: #7A654D;
       --border-gold: rgba(201, 162, 39, 0.35);
+    }
+
+    .nv-pending-placeholder {
+      display: none !important;
     }
 
     body {
@@ -238,8 +242,8 @@
       gap: 3px;
     }
     .present-cell .cell-top-tag {
-      color: var(--emerald);
-      background: rgba(22, 131, 91, 0.10);
+      color: var(--gold-dark);
+      background: rgba(201, 162, 39, 0.14);
       padding: 1px 6px;
       border-radius: 999px;
     }
@@ -366,7 +370,7 @@
     .cell-reveal-cta {
       font-size: 0.60rem;
       font-weight: 700;
-      color: var(--emerald);
+      color: var(--gold-dark);
       line-height: 1.15;
     }
     .cell-glowing-strip {
@@ -640,7 +644,7 @@
       padding: 1px 6px;
       border-radius: 999px;
     }
-    .plane-badge.badge-complete { background: rgba(22, 131, 91, 0.12); color: var(--emerald); }
+    .plane-badge.badge-complete { background: rgba(201, 162, 39, 0.22); color: var(--gold-dark); }
     .plane-badge.badge-active { background: rgba(201, 162, 39, 0.16); color: var(--gold-dark); }
     .plane-badge.badge-dormant { background: #FAF6EE; color: var(--ink-muted); }
     .plane-pill.active-pill .plane-badge { background: rgba(255, 255, 255, 0.22); color: #FFFFFF; }
@@ -719,7 +723,7 @@
     .nv-sticky-tag {
       font-size: 0.62rem;
       font-weight: 700;
-      color: var(--emerald);
+      color: var(--gold-dark);
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
@@ -990,7 +994,7 @@
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--emerald);
+      color: var(--gold-dark);
       font-weight: 700;
       margin-bottom: 4px;
     }
@@ -1167,13 +1171,46 @@
           <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
         </div>
       </a>
-      <nav class="nv-nav-menu" id="nvNavMenu">
-        <a href="/" class="nv-nav-item">Home</a>
-        <a href="/pricing/" class="nv-nav-item">Pricing</a>
-        <a href="/charm-ai/" class="nv-nav-item">Charm AI</a>
-        <a href="/contact/" class="nv-nav-item">Contact</a>
-        <a href="/dashboard/" class="nv-nav-item">My Dashboard</a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nv-nav-menu" id="nvNavMenu">
+          <li class="nv-nav-item">
+            <a href="/" class="nv-nav-link" title="Numeros Vision Home" data-canonical="https://numerosvision.com/">Home</a>
+          </li>
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/calculators/baby-naming/" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/calculators/name-numerology/" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/calculators/mobile-number/" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/calculators/compatibility/" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Compatibility &amp; Relationship Synastry</span></a></li>
+              <li><a href="/calculators/business-alignment/" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/calculators/life-path/" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/calculators/lo-shu-grid/" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/calculators/vehicle-numerology/" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/calculators/property-numerology/" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/calculators/personal-year/" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Personal Year Calculator</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+          <li class="nv-nav-item nv-nav-charm-highlight">
+            <a href="/charm-ai/" class="nv-nav-link" title="Charm AI" style="display:inline-flex; align-items:center; gap:8px;">
+              <span class="nv-charm-medallion-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#FFFFFF" stroke-width="2.4" style="display:block;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></span> <span style="font-weight:700;">Charm AI</span>
+            </a>
+          </li>
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+          <li class="nv-nav-item"><a href="/dashboard/" class="nv-nav-link">My Dashboard</a></li>
+        </ul>
       </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/#birth-profile" class="nv-btn-cta">Discover My Numbers ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation">☰</button>
+      </div>
     </div>
   </header>
 
@@ -1230,13 +1267,13 @@
     
     <div class="reading-hero">
       <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--gold-dark); font-weight:700; margin-bottom:8px;">
-        ✦ VERIFIED NUMEROLOGICAL SYNTHESIS
+        ✦ YOUR FREE PROFILE
       </div>
       <h1 style="font-family:'Cormorant Garamond',serif; font-size:2.6rem; color:var(--ink); margin:0 0 8px; font-weight:700;">
-        Your Free Profile &amp; Report Options
+        Calculations and Your Lo Shu Grid
       </h1>
       <p style="font-size:0.95rem; color:var(--ink-muted); margin:0 auto; max-width:600px;">
-        Your foundational calculations are complete. Below is your initial synthesis, followed by our in-depth analytical dossiers.
+        Review your birth-date numbers and Lo Shu grid below, then choose your report if you would like the full personalised PDF.
       </p>
     </div>
 
@@ -1246,25 +1283,25 @@
       <div class="summary-card">
         <div class="summary-header">
           <div>
-            <h2 class="seeker-title" id="summary-seeker-name">Seeker Profile</h2>
+            <h2 class="seeker-title" id="summary-seeker-name">Your Birth-Date Profile</h2>
             <div class="seeker-meta">
               Date of Birth: <strong id="summary-seeker-dob">--</strong>
             </div>
           </div>
-          <div style="font-size:0.78rem; background:rgba(22,131,91,0.1); color:var(--emerald); border:1px solid var(--emerald); padding:4px 10px; border-radius:6px; font-weight:700;">
-            ✦ FREE CALCULATION VALIDATED
+          <div style="font-size:0.78rem; background:rgba(201,162,39,0.12); color:var(--gold-dark); border:1px solid var(--border-gold); padding:4px 10px; border-radius:6px; font-weight:700;">
+            ✦ YOUR FREE PROFILE
           </div>
         </div>
 
         <div class="numbers-grid">
           <div class="num-pill">
             <div class="num-label">Mulank (Birth Day number)</div>
-            <div class="num-val" id="summary-driver">-</div>
+            <div class="num-val" id="summary-driver" style="color:var(--gold-dark);">-</div>
             <div class="num-sub" id="summary-driver-planet">Ruling Planet</div>
           </div>
           <div class="num-pill">
             <div class="num-label">Bhagyank (Life Path number)</div>
-            <div class="num-val" id="summary-conductor" style="color:var(--emerald);">-</div>
+            <div class="num-val" id="summary-conductor" style="color:var(--gold-dark);">-</div>
             <div class="num-sub" id="summary-conductor-planet">Destiny Trajectory</div>
           </div>
           <div class="num-pill" id="summary-kua-container">
@@ -1369,12 +1406,15 @@
         </div>
       </section>
 
+      <!-- ADDITIVE LAYER 2 & 3 + INDICATIONS, TEASER CARE MONTH & GENERAL AFFIRMATION (Flag-gated) -->
+      <section id="nv-indications-care-layer" aria-label="Personalised Indications and Care Guide Preview" style="display:none; margin: 0 auto 36px; max-width: 1120px;"></section>
+
       <!-- 2. REPORT SELECTION SECTION -->
       <div class="tiers-header">
-        <span class="tiers-eyebrow">DETERMINISTIC DOSSIER SELECTION</span>
-        <h2 class="tiers-title">Choose Your Personalised Dossier</h2>
+        <span class="tiers-eyebrow">PERSONALISED PDF REPORTS</span>
+        <h2 class="tiers-title">Choose your report</h2>
         <p class="tiers-sub">
-          All reports are generated deterministically from your verified birth data. The server authoritatively establishes pricing and deliverables.
+          Calculated directly from your birth date and name. Numbers are a guide, not a compulsion.
         </p>
       </div>
 
@@ -1408,9 +1448,9 @@
         <div class="tier-card card-report-premium" id="tier-card-premium">
           <div class="tier-badge" id="tier-badge-premium">BEST VALUE · NOTIFY ME</div>
           <div>
-            <div style="font-size:0.76rem; color:var(--emerald); font-weight:700; letter-spacing:0.02em;">Complete Numerology Report, 32 pages</div>
+            <div style="font-size:0.76rem; color:var(--gold-dark); font-weight:700; letter-spacing:0.02em;">Complete Numerology Report, 32 pages</div>
             <h3 class="tier-name">Anveil every charm</h3>
-            <div class="tier-meta">Missing Numbers (Open Grid Cells), Dasha Timeline &amp; Name Balancing</div>
+            <div class="tier-meta">Missing Numbers (Open Grid Cells), Multi-Year Cycles &amp; Name Balancing</div>
             <div class="tier-price" id="price-report_premium" style="display:none;"></div>
             <div class="tier-price-sub" id="launch-sub-report_premium" style="display:block;">When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.</div>
             <ul class="tier-features" id="features-report_premium">
@@ -1418,7 +1458,7 @@
               <li>Multi-Year Numerology Dasha &amp; Pinnacle Cycle Timeline</li>
               <li>Chaldean Name Balancing &amp; Signature Alignment Options</li>
               <li>Practical Lifestyle, Color, Directional (Vastu) &amp; Habit Harmonizers</li>
-              <li>Complete 32-Page Personalized Reference PDF Report</li>
+              <li>Complete 32-page report delivered as a print-ready PDF</li>
             </ul>
           </div>
           <button type="button" class="btn-select-tier btn-select-outline" id="btn-select-report_premium" onclick="openNotifyMeModal('report_premium')">
@@ -1535,11 +1575,11 @@
         <div class="checkout-consents">
           <label class="checkout-consent-item" for="checkout-consent-service">
             <input type="checkbox" id="checkout-consent-service" autocomplete="off" onchange="validateCheckoutReadiness()" />
-            <span><strong>Service Delivery Consent (Required):</strong> I agree to the processing of my birth details strictly for personalized calculations and report generation ({{CONSENT_TEXT_PENDING}}).</span>
+            <span><strong>Service Delivery Consent (Required):</strong> I agree to the processing of my birth details strictly for personalized calculations and report generation.<span class="nv-pending-placeholder" hidden style="display:none !important;">{{CONSENT_TEXT_PENDING}}</span></span>
           </label>
           <label class="checkout-consent-item" for="checkout-consent-marketing">
             <input type="checkbox" id="checkout-consent-marketing" autocomplete="off" />
-            <span>Send me transit alerts and personalized planetary timing updates via email (optional) ({{CONSENT_TEXT_PENDING}}).</span>
+            <span>Send me transit alerts and personalized timing updates via email (optional).<span class="nv-pending-placeholder" hidden style="display:none !important;">{{CONSENT_TEXT_PENDING}}</span></span>
           </label>
         </div>
 
@@ -1641,7 +1681,7 @@
           </ul>
         </div>
       </div>
-      <div style="margin: 20px auto 14px; max-width: 900px; padding: 12px 16px; background: rgba(201, 162, 39, 0.08); border: 1px solid var(--border-gold); border-radius: 8px; font-size: 0.76rem; color: var(--ink-muted); text-align: center; line-height: 1.5;">
+      <div class="nv-pending-placeholder" hidden style="display:none !important;">
         <p style="margin:0;">{{DISCLAIMER_APPROVED_TEXT}}</p>
       </div>
       <div class="nv-footer-bottom">
@@ -1682,24 +1722,27 @@
     let _isEmailVerified = false;
     let _otpCountdownTimer = null;
 
-    // Strict Mathematical Engine Parity with app/engine/core_matrix_engine.py
+    // Canonical single-digit reduction via shared NVKua.digitRoot (1..9, never keeps 11/22/33)
     function digitSum(n) {
-      return String(Math.abs(n)).split('').reduce((a, c) => a + parseInt(c, 10), 0);
+      return (window.NVKua && typeof window.NVKua.sumDigits === 'function')
+        ? window.NVKua.sumDigits(String(Math.abs(n)))
+        : String(Math.abs(n)).split('').reduce((a, c) => a + (parseInt(c, 10) || 0), 0);
     }
 
-    function reduceToSingle(n, preserveMaster = false) {
-      while (n > 9) {
-        if (preserveMaster && (n === 11 || n === 22 || n === 33)) return n;
-        n = digitSum(n);
+    function reduceToSingle(n) {
+      if (window.NVKua && typeof window.NVKua.digitRoot === 'function') {
+        return window.NVKua.digitRoot(n);
       }
-      return n;
+      const v = Math.trunc(Number(n) || 0);
+      return v > 0 ? 1 + ((v - 1) % 9) : 0;
     }
 
     function calcConductor(d, m, y) {
-      // Sum all digits of day, month, and 4-digit year, reduce to single digit
-      const allDigits = `${d}${m}${y}`.split('').map(c => parseInt(c, 10)).filter(n => !isNaN(n));
-      const sumAll = allDigits.reduce((acc, v) => acc + v, 0);
-      return reduceToSingle(sumAll, false);
+      if (window.NVKua && typeof window.NVKua.calcBhagyank === 'function') {
+        return window.NVKua.calcBhagyank(d, m, y);
+      }
+      const dobStr = `${String(parseInt(d, 10) || 0).padStart(2, '0')}${String(parseInt(m, 10) || 0).padStart(2, '0')}${String(parseInt(y, 10) || 0).padStart(4, '0')}`;
+      return reduceToSingle(digitSum(dobStr));
     }
 
     // Strict Gregorian Calendar Validation (checks 31 Feb, 31 Apr, leap years)
@@ -1903,8 +1946,15 @@
       const formattedDob = data.dob || `${data.year}-${String(data.month).padStart(2,'0')}-${String(data.day).padStart(2,'0')}`;
       document.getElementById('summary-seeker-dob').textContent = formattedDob;
 
-      const driver = data.driver || reduceToSingle(parseInt(data.day, 10) || 1, false);
-      const conductor = data.conductor || calcConductor(parseInt(data.day, 10) || 1, parseInt(data.month, 10) || 1, parseInt(data.year, 10) || 1990);
+      let dNum = parseInt(data.day, 10);
+      let mNum = parseInt(data.month, 10);
+      let yNum = parseInt(data.year, 10);
+      if ((!dNum || !mNum || !yNum) && data.dob) {
+        const p = String(data.dob).split('-');
+        if (p.length === 3) { yNum = parseInt(p[0], 10); mNum = parseInt(p[1], 10); dNum = parseInt(p[2], 10); }
+      }
+      const driver = reduceToSingle(dNum || 1);
+      const conductor = calcConductor(dNum || 1, mNum || 1, yNum || 1990);
       const driverNum = parseInt(driver, 10);
       const conductorNum = parseInt(conductor, 10);
 
@@ -1975,6 +2025,9 @@
 
     function resolveCurrentLaunchOffer() {
       if (serverCatalog && serverCatalog.launch_offer && window.NV_PRICING && typeof window.NV_PRICING.resolveLaunchOfferState === 'function') {
+        if (serverCatalog.launch_offer.forced === true) {
+          window.__NV_FORCE_LAUNCH_MODE = true;
+        }
         if (serverCatalog.launch_offer.started_at && !window.__NV_LAUNCH_STARTS_AT) {
           window.__NV_LAUNCH_STARTS_AT = serverCatalog.launch_offer.started_at;
         }
@@ -2145,8 +2198,8 @@
                     aria-label="${ariaLabel}"
                     onclick="handleLoShuCellClick(${num}, ${cnt})"
                     style="animation-delay: ${delaySec}s;">
-              <span class="cell-top-tag"><span>&times;${cnt}</span></span>
-              <span class="cell-num">${String(num).repeat(cnt)}</span>
+              <span class="cell-top-tag"><span class="cell-count-chip">x${cnt}</span></span>
+              <span class="cell-num">${num}</span>
               <span class="cell-elem">${elemInfo.name}</span>
               <span class="cell-glowing-strip" id="lsc_strip_${num}"></span>
             </button>
@@ -2193,6 +2246,112 @@
 
       applyLadderRecommendation();
       trackFunnelEvent('loshu_grid_rendered', { active_cells: activeCount, open_cells: openCount, veiled: openCount });
+      maybeRenderIndicationsCareLayer(d, m, y, data.gender || '', data.name || '');
+    }
+
+    async function maybeRenderIndicationsCareLayer(day, month, year, gender, callingName) {
+      const container = document.getElementById('nv-indications-care-layer');
+      if (!container) return;
+      const params = new URLSearchParams(window.location.search);
+      const flagOn = Boolean(window.__NV_ENABLE_LAYERS_2_3 === true || (window.__NV_IS_PREVIEW === true && params.get('layers23') === '1'));
+      if (!flagOn) {
+        container.style.display = 'none';
+        container.innerHTML = '';
+        return;
+      }
+      try {
+        const res = await fetch('/api/v2/numerology/indications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            day: day,
+            month: month,
+            year: year,
+            gender: gender || null,
+            calling_name: callingName || null,
+            requested_tier: 'free'
+          })
+        });
+        if (!res.ok) return;
+        const payload = await res.json();
+        if (!payload || !payload.layers_2_3_enabled || !payload.bundle) return;
+        const b = payload.bundle;
+        const card = (b.indication_cards && b.indication_cards[0]) || null;
+        const cg = (b.cycles && b.cycles.care_guide_2027) || {};
+        const prioMonth = (cg.priority_care_months && cg.priority_care_months[0]) || (cg.months && cg.months[0]) || null;
+        const affMan = b.affirmation_and_manifestation || {};
+        const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        let html = `<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:18px;">`;
+        if (card) {
+          const stepsHtml = (card.gentle_steps || []).map(st => `<li style="margin-bottom:4px;">${esc(st)}</li>`).join('');
+          html += `
+            <article id="nv-free-indication-card" style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.38); border-radius:16px; padding:20px 22px; box-shadow:0 6px 20px rgba(82,62,40,0.05);">
+              <div style="font-family:'Cinzel', serif; font-size:0.70rem; font-weight:700; letter-spacing:0.12em; color:#8B6914; text-transform:uppercase; margin-bottom:6px;">
+                ✦ PERSONALISED INDICATION PREVIEW
+              </div>
+              <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.38rem; font-weight:700; color:#523E28; margin:0 0 8px;">
+                ${esc(card.title || 'Birth Grid Indication')}
+              </h3>
+              <div style="font-size:0.80rem; color:#8B6914; font-weight:600; margin-bottom:8px;">
+                Your numbers: ${esc(card.your_numbers)}
+              </div>
+              <p style="font-size:0.86rem; color:#523E28; line-height:1.58; margin:0 0 8px;">
+                <strong>Why this shows:</strong> ${esc(card.why_this_shows)}
+              </p>
+              <p style="font-size:0.86rem; color:#523E28; line-height:1.58; margin:0 0 8px;">
+                <strong>What it may indicate:</strong> ${esc(card.what_it_may_indicate)}
+              </p>
+              ${card.growth_edge ? `<p style="font-size:0.84rem; color:#7A654D; line-height:1.52; margin:0 0 8px;"><strong>Growth edge:</strong> ${esc(card.growth_edge)}</p>` : ''}
+              ${card.be_mindful_of ? `<p style="font-size:0.84rem; color:#7A654D; line-height:1.52; margin:0 0 8px;"><strong>Be mindful of:</strong> ${esc(card.be_mindful_of)}</p>` : ''}
+              ${stepsHtml ? `<div style="font-size:0.84rem; color:#523E28; margin:8px 0;"><strong style="color:#8B6914;">Gentle steps:</strong><ul style="margin:4px 0 0; padding-left:18px;">${stepsHtml}</ul></div>` : ''}
+              <div style="font-size:0.75rem; color:#7A654D; border-top:1px solid rgba(201,162,39,0.22); padding-top:8px; margin-top:10px;">
+                ${esc(card.footer || 'Numerology is a reflective guide, not a prediction.')}
+              </div>
+            </article>
+          `;
+        }
+        if (prioMonth) {
+          html += `
+            <article id="nv-free-care-month-teaser" style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.38); border-radius:16px; padding:20px 22px; box-shadow:0 6px 20px rgba(82,62,40,0.05); display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="font-family:'Cinzel', serif; font-size:0.70rem; font-weight:700; letter-spacing:0.12em; color:#8B6914; text-transform:uppercase; margin-bottom:6px;">
+                  ✦ 2027 CARE GUIDE · SAMPLE MONTH (PERSONAL YEAR ${esc(cg.personal_year)})
+                </div>
+                <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.38rem; font-weight:700; color:#523E28; margin:0 0 8px;">
+                  ${esc(prioMonth.month_name)} 2027 · Personal Month ${esc(prioMonth.personal_month)} (${esc(prioMonth.ruling_planet)})
+                </h3>
+                <p style="font-size:0.86rem; color:#523E28; line-height:1.58; margin:0 0 8px;">
+                  <strong>Focus:</strong> ${esc(prioMonth.focus)}
+                </p>
+                <p style="font-size:0.84rem; color:#7A654D; line-height:1.55; margin:0 0 8px;">
+                  <strong>Watch for:</strong> ${esc(prioMonth.watch_for)}
+                </p>
+                <div style="font-size:0.80rem; color:#8B6914; font-weight:600; margin-bottom:10px;">
+                  Start before: ${esc(prioMonth.start_before)}
+                </div>
+              </div>
+              ${affMan.affirmation ? `
+                <div id="nv-free-general-affirmation" style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.32); border-radius:12px; padding:12px 14px; margin-top:8px;">
+                  <div style="font-family:'Cinzel', serif; font-size:0.68rem; font-weight:700; letter-spacing:0.10em; color:#8B6914; text-transform:uppercase; margin-bottom:4px;">
+                    General Daily Affirmation (Driver ${esc(b.foundation && b.foundation.driver)})
+                  </div>
+                  <div style="font-family:'Cormorant Garamond', serif; font-size:1.08rem; font-style:italic; color:#523E28; font-weight:600;">
+                    &ldquo;${esc(affMan.affirmation)}&rdquo;
+                  </div>
+                  <div style="font-size:0.75rem; color:#7A654D; margin-top:6px;">
+                    A personalised version is included in Anveil My Glowing Charms (Advanced) and Complete Numerology Report.
+                  </div>
+                </div>
+              ` : ''}
+            </article>
+          `;
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+        container.style.display = 'block';
+      } catch (_err) {}
     }
 
     function populateOpenTilePrompt(num, isPresent) {
@@ -2568,7 +2727,7 @@
         if (res.ok && (data.success || data.status === 'registered' || data.status === 'recorded')) {
           if (statusEl) {
             statusEl.textContent = data.message || 'Recorded. Your encrypted email will be retained for up to 12 months solely to tell you when this report is available.';
-            statusEl.style.color = 'var(--emerald)';
+            statusEl.style.color = 'var(--gold-dark)';
           }
           trackFunnelEvent('notify_me_registered', { sku_id: _notifyMeTargetSku });
         } else {
@@ -2610,7 +2769,7 @@
         if (res.ok && (data.success || data.status === 'deleted')) {
           if (statusEl) {
             statusEl.textContent = data.message || 'Your encrypted email has been permanently deleted from the waitlist.';
-            statusEl.style.color = 'var(--emerald)';
+            statusEl.style.color = 'var(--gold-dark)';
           }
         } else {
           if (statusEl) {
@@ -2815,7 +2974,11 @@
 
       if (tierTag) tierTag.textContent = tierInfo.name;
       if (titleEl) titleEl.textContent = `Order Confirmation · ${tierInfo.name}`;
-      if (priceDispEl) priceDispEl.textContent = `₹${tierInfo.price.toLocaleString('en-IN')}`;
+      const offerStateForModal = resolveCurrentLaunchOffer();
+      const mrpValForModal = (window.NV_PRICING && typeof window.NV_PRICING.getStruckMrp === 'function')
+        ? window.NV_PRICING.getStruckMrp(tierId)
+        : (offerStateForModal.active ? LAUNCH_MRPS[tierId] : null);
+      if (priceDispEl) setTierPricePreservingMrp('stage-b-tier-price-display', tierInfo.price, mrpValForModal);
       if (payAmountEl) payAmountEl.textContent = `₹${tierInfo.price.toLocaleString('en-IN')}`;
 
       // Reset Consents (both default unticked, marketing off)
@@ -2902,7 +3065,7 @@
                 const statusEl = document.getElementById('checkout-otp-status');
                 if (statusEl) {
                   statusEl.textContent = '✓ Verified session: ' + _authenticatedSessionEmail;
-                  statusEl.style.color = 'var(--emerald)';
+                  statusEl.style.color = 'var(--gold-dark)';
                 }
               }
             }
@@ -2919,7 +3082,7 @@
         const statusEl = document.getElementById('checkout-otp-status');
         if (statusEl) {
           statusEl.textContent = '✓ Verified session: ' + _authenticatedSessionEmail;
-          statusEl.style.color = 'var(--emerald)';
+          statusEl.style.color = 'var(--gold-dark)';
         }
       } else {
         // Any different email revokes session verification and requires code step
@@ -2994,7 +3157,7 @@
         if (res.ok && data.success) {
           if (statusEl) {
             statusEl.textContent = '✓ 6-digit code sent to ' + email + '. Enter code below.';
-            statusEl.style.color = 'var(--emerald)';
+            statusEl.style.color = 'var(--gold-dark)';
           }
           const otpInput = document.getElementById('checkout-otp-code');
           if (otpInput) otpInput.focus();
@@ -3053,7 +3216,7 @@
           _checkoutToken = data.checkout_token;
           if (statusEl) {
             statusEl.textContent = '✓ Email verified successfully: ' + email;
-            statusEl.style.color = 'var(--emerald)';
+            statusEl.style.color = 'var(--gold-dark)';
           }
           validateCheckoutReadiness();
         } else {

@@ -1,0 +1,773 @@
+{
+  "version": "1.0.0",
+  "philosophy_line": "Numbers are a guide, not a compulsion.",
+  "remedy_effort_line": "These are choices you can make, and the effort is yours.",
+  "default_footer": "Numerology is a reflective guide, not a prediction.",
+  "footer_status": "PLACEHOLDER_AWAITING_OWNER_APPROVAL",
+  "health_safety_line": "Traditional practice, in addition to medical care and sensible safety.",
+  "single_digit_rule_note": "Every derived number reduces to a single digit 1-9; multiples of 9 return 9; compound sums appear as informational notes only.",
+  "care_area_enum": [
+    "health",
+    "name and reputation",
+    "money",
+    "relationships",
+    "travel and safety"
+  ],
+  "entries": [
+    {
+      "id": "ind_py_4_d1",
+      "fact_signature": "personal_year:4",
+      "category": "py_pm",
+      "theme": "cycle_theme",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "care_areas": ["name and reputation", "money"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "4 (Rahu, North Node) stands for structure, paperwork and steady order.",
+          "what_it_may_indicate": "This Personal Year brings structure, records and steady planning into focus.",
+          "be_mindful_of": "contracts, paperwork, online posts and unfinished tasks.",
+          "gentle_steps_practical": [
+            "Keep records organised month by month and review commitments carefully before signing.",
+            "Maintain one steady daily routine rather than rushing large changes."
+          ]
+        },
+        "international": {
+          "why_this_shows": "4 (Rahu, North Node) stands for structure, paperwork and steady order.",
+          "what_it_may_indicate": "This Personal Year brings structure, records and steady planning into focus.",
+          "be_mindful_of": "contracts, paperwork, online posts and unfinished tasks.",
+          "gentle_steps_practical": [
+            "Keep records organised month by month and review commitments carefully before signing.",
+            "Maintain one steady daily routine rather than rushing large changes."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_py_2_d1",
+      "fact_signature": "personal_year:2",
+      "category": "py_pm",
+      "theme": "cycle_theme",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "care_areas": ["relationships", "health"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "2 (Chandra / Moon) stands for cooperation, patience and emotional steadiness.",
+          "what_it_may_indicate": "This Personal Year tends to highlight partnerships, listening and unhurried pacing.",
+          "be_mindful_of": "relationships, sleep routine and over-thinking small delays.",
+          "gentle_steps_practical": [
+            "Pause before replying in sensitive conversations and keep regular rest hours.",
+            "Write down priorities clearly so decisions feel calm and measured."
+          ]
+        },
+        "international": {
+          "why_this_shows": "2 (Moon / Chandra) stands for cooperation, patience and emotional steadiness.",
+          "what_it_may_indicate": "This Personal Year tends to highlight partnerships, listening and unhurried pacing.",
+          "be_mindful_of": "relationships, sleep routine and over-thinking small delays.",
+          "gentle_steps_practical": [
+            "Pause before replying in sensitive conversations and keep regular rest hours.",
+            "Write down priorities clearly so decisions feel calm and measured."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_py_8_d1",
+      "fact_signature": "personal_year:8",
+      "category": "py_pm",
+      "theme": "cycle_theme",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "care_areas": ["money", "name and reputation"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "8 (Shani / Saturn) stands for discipline, accountability and long-term effort.",
+          "what_it_may_indicate": "This Personal Year may highlight workload, financial structure and steady responsibility.",
+          "be_mindful_of": "money commitments, workload pacing and rest.",
+          "gentle_steps_practical": [
+            "Review budgets and timelines early and pace demanding work weeks with scheduled rest."
+          ]
+        },
+        "international": {
+          "why_this_shows": "8 (Saturn / Shani) stands for discipline, accountability and long-term effort.",
+          "what_it_may_indicate": "This Personal Year may highlight workload, financial structure and steady responsibility.",
+          "be_mindful_of": "money commitments, workload pacing and rest.",
+          "gentle_steps_practical": [
+            "Review budgets and timelines early and pace demanding work weeks with scheduled rest."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_pm_1_d1",
+      "fact_signature": "personal_month:1",
+      "category": "py_pm",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "planet_number": 1,
+      "care_areas": ["name and reputation", "relationships"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "1 stands for initiative, clear direction and self-reliance.",
+          "what_it_may_indicate": "You may feel ready to begin fresh tasks or take the lead on pending plans.",
+          "be_mindful_of": "name and reputation, tone in leadership and listening to others.",
+          "gentle_steps_practical": [
+            "Set one clear priority the month before and keep communication open with family and colleagues."
+          ]
+        },
+        "international": {
+          "why_this_shows": "1 stands for initiative, clear direction and self-reliance.",
+          "what_it_may_indicate": "You may feel ready to begin fresh tasks or take the lead on pending plans.",
+          "be_mindful_of": "name and reputation, tone in leadership and listening to others.",
+          "gentle_steps_practical": [
+            "Set one clear priority the month before and keep communication open with family and colleagues."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_pm_2_d1",
+      "fact_signature": "personal_month:2",
+      "category": "py_pm",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": true,
+      "planet_number": 2,
+      "care_areas": ["relationships", "health"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "2 stands for sensitivity, cooperation and steady emotional rhythm.",
+          "what_it_may_indicate": "Shared plans and family conversations may need extra patience and calm listening.",
+          "be_mindful_of": "relationships, hydration, rest and unhurried communication.",
+          "gentle_steps_practical": [
+            "Keep a steady sleep schedule starting the month before and clarify expectations gently."
+          ]
+        },
+        "international": {
+          "why_this_shows": "2 stands for sensitivity, cooperation and steady emotional rhythm.",
+          "what_it_may_indicate": "Shared plans and family conversations may need extra patience and calm listening.",
+          "be_mindful_of": "relationships, hydration, rest and unhurried communication.",
+          "gentle_steps_practical": [
+            "Keep a steady sleep schedule starting the month before and clarify expectations gently."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_pm_3_d1",
+      "fact_signature": "personal_month:3",
+      "category": "py_pm",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "planet_number": 3,
+      "care_areas": ["money", "name and reputation"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "3 stands for learning, counsel and structured growth.",
+          "what_it_may_indicate": "Study, planning and mentoring conversations may feel constructive when kept focused.",
+          "be_mindful_of": "over-promising time or money across too many commitments.",
+          "gentle_steps_practical": [
+            "List key commitments the month before and keep spending aligned with written priorities."
+          ]
+        },
+        "international": {
+          "why_this_shows": "3 stands for learning, counsel and structured growth.",
+          "what_it_may_indicate": "Study, planning and mentoring conversations may feel constructive when kept focused.",
+          "be_mindful_of": "over-promising time or money across too many commitments.",
+          "gentle_steps_practical": [
+            "List key commitments the month before and keep spending aligned with written priorities."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_pm_4_d1",
+      "fact_signature": "personal_month:4",
+      "category": "py_pm",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "planet_number": 4,
+      "care_areas": ["name and reputation", "money"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "4 stands for structure, paperwork and order.",
+          "what_it_may_indicate": "Matters of organisation, documents and reputation may feel more visible, and building routines early may help.",
+          "be_mindful_of": "contracts, paperwork, online posts and unfinished tasks.",
+          "gentle_steps_practical": [
+            "Tidy records the month before, review commitments before signing, and keep one steady daily habit."
+          ]
+        },
+        "international": {
+          "why_this_shows": "4 stands for structure, paperwork and order.",
+          "what_it_may_indicate": "Matters of organisation, documents and reputation may feel more visible, and building routines early may help.",
+          "be_mindful_of": "contracts, paperwork, online posts and unfinished tasks.",
+          "gentle_steps_practical": [
+            "Tidy records the month before, review commitments before signing, and keep one steady daily habit."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_gap_meets_cycle_4_d1",
+      "fact_signature": "gap_meets_cycle:4",
+      "category": "gap_meets_cycle",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "planet_number": 4,
+      "care_areas": ["name and reputation", "money"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "4 stands for structure, paperwork and order. It is missing from your grid, and the cycle brings it forward.",
+          "what_it_may_indicate": "Matters of organisation, documents and reputation may feel more visible, and building routines early may help.",
+          "be_mindful_of": "contracts, paperwork, online posts and unfinished tasks.",
+          "gentle_steps_practical": [
+            "Tidy records the month before, review commitments before signing, and keep one steady daily habit."
+          ]
+        },
+        "international": {
+          "why_this_shows": "4 stands for structure, paperwork and order. It is missing from your grid, and the cycle brings it forward.",
+          "what_it_may_indicate": "Matters of organisation, documents and reputation may feel more visible, and building routines early may help.",
+          "be_mindful_of": "contracts, paperwork, online posts and unfinished tasks.",
+          "gentle_steps_practical": [
+            "Tidy records the month before, review commitments before signing, and keep one steady daily habit."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_pm_5_d1",
+      "fact_signature": "personal_month:5",
+      "category": "py_pm",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "planet_number": 5,
+      "care_areas": ["money", "travel and safety"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "5 stands for movement, communication and adaptability.",
+          "what_it_may_indicate": "Schedules, short travel and messages may move briskly and benefit from double-checking details.",
+          "be_mindful_of": "impulsive spending, travel itineraries and written confirmations.",
+          "gentle_steps_practical": [
+            "Confirm bookings and written terms the month before and keep a simple spending checklist."
+          ]
+        },
+        "international": {
+          "why_this_shows": "5 stands for movement, communication and adaptability.",
+          "what_it_may_indicate": "Schedules, short travel and messages may move briskly and benefit from double-checking details.",
+          "be_mindful_of": "impulsive spending, travel itineraries and written confirmations.",
+          "gentle_steps_practical": [
+            "Confirm bookings and written terms the month before and keep a simple spending checklist."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_pm_6_d1",
+      "fact_signature": "personal_month:6",
+      "category": "py_pm",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "planet_number": 6,
+      "care_areas": ["relationships", "money"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "6 stands for family responsibility, harmony and comfort.",
+          "what_it_may_indicate": "Home duties, relationships and household budgeting may come into focus.",
+          "be_mindful_of": "relationships, household expenses and balanced personal rest.",
+          "gentle_steps_practical": [
+            "Plan shared family expenses the month before and set aside quiet time for rest."
+          ]
+        },
+        "international": {
+          "why_this_shows": "6 stands for family responsibility, harmony and comfort.",
+          "what_it_may_indicate": "Home duties, relationships and household budgeting may come into focus.",
+          "be_mindful_of": "relationships, household expenses and balanced personal rest.",
+          "gentle_steps_practical": [
+            "Plan shared family expenses the month before and set aside quiet time for rest."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_pm_7_d1",
+      "fact_signature": "personal_month:7",
+      "category": "py_pm",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": true,
+      "planet_number": 7,
+      "care_areas": ["health", "relationships"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "7 stands for reflection, study and quiet observation.",
+          "what_it_may_indicate": "You may prefer quieter reflection and thorough review over rapid outward changes.",
+          "be_mindful_of": "rest, clear communication with loved ones and avoiding isolation.",
+          "gentle_steps_practical": [
+            "Schedule quiet study or review time the month before while staying connected with close family."
+          ]
+        },
+        "international": {
+          "why_this_shows": "7 stands for reflection, study and quiet observation.",
+          "what_it_may_indicate": "You may prefer quieter reflection and thorough review over rapid outward changes.",
+          "be_mindful_of": "rest, clear communication with loved ones and avoiding isolation.",
+          "gentle_steps_practical": [
+            "Schedule quiet study or review time the month before while staying connected with close family."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_pm_8_d1",
+      "fact_signature": "personal_month:8",
+      "category": "py_pm",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": true,
+      "planet_number": 8,
+      "care_areas": ["money", "health", "name and reputation"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "8 stands for workload, discipline and steady accountability.",
+          "what_it_may_indicate": "Work demands and financial details may feel heavier and reward patient, methodical pacing.",
+          "be_mindful_of": "workload, discipline, financial paperwork and physical fatigue.",
+          "gentle_steps_practical": [
+            "Organise deadlines and budgets the month before and protect regular rest and stretching."
+          ]
+        },
+        "international": {
+          "why_this_shows": "8 stands for workload, discipline and steady accountability.",
+          "what_it_may_indicate": "Work demands and financial details may feel heavier and reward patient, methodical pacing.",
+          "be_mindful_of": "workload, discipline, financial paperwork and physical fatigue.",
+          "gentle_steps_practical": [
+            "Organise deadlines and budgets the month before and protect regular rest and stretching."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_pm_9_d1",
+      "fact_signature": "personal_month:9",
+      "category": "py_pm",
+      "theme": "care_month",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": true,
+      "planet_number": 9,
+      "care_areas": ["travel and safety", "health", "relationships"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "9 stands for energy, courage and haste, and it can shorten patience.",
+          "what_it_may_indicate": "You may feel more driven this month and quicker to react. Rushed decisions and physical strain may need extra care.",
+          "growth_edge": "A short fuse under pressure when pace speeds up (Personal Month 9 Mars), paired with courage and decisive energy — slow travel and check plans calmly before acting.",
+          "strength_it_comes_with": "Courage, initiative and decisive follow-through",
+          "be_mindful_of": "travel, vehicle use, workload and arguments.",
+          "gentle_steps_practical": [
+            "Service your vehicle and book a routine health check-up the month before.",
+            "Keep a calm daily routine."
+          ]
+        },
+        "international": {
+          "why_this_shows": "9 stands for energy, courage and haste, and it can shorten patience.",
+          "what_it_may_indicate": "You may feel more driven this month and quicker to react. Rushed decisions and physical strain may need extra care.",
+          "growth_edge": "A short fuse under pressure when pace speeds up (Personal Month 9 Mars), paired with courage and decisive energy — slow travel and check plans calmly before acting.",
+          "strength_it_comes_with": "Courage, initiative and decisive follow-through",
+          "be_mindful_of": "travel, vehicle use, workload and arguments.",
+          "gentle_steps_practical": [
+            "Service your vehicle and book a routine health check-up the month before.",
+            "Keep a calm daily routine."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_commanding_planet_1_d1",
+      "fact_signature": "commanding_planet:1",
+      "category": "commanding_planet",
+      "theme": "commanding_planet",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "planet_number": 1,
+      "care_areas": ["name and reputation", "relationships"],
+      "language_variants": {
+        "india": {
+          "why_this_shows": "1 is Surya (Sun), the king of the grid. When it repeats this often it leads the whole chart.",
+          "what_it_may_indicate": "Strong leadership, confidence and a need to be recognised. When the Sun is this strong, it may also bring stubbornness or a wish to control. Traditionally, the Sun's strength is also seen as steadying when circumstances are not favourable.",
+          "growth_edge": "A tendency to carry too much alone or to resist advice when 1 repeats strongly, paired with natural leadership and steadying presence — practise delegating one responsibility each week.",
+          "strength_it_comes_with": "Leadership, clarity and steadying presence",
+          "be_mindful_of": "carrying duties alone, tone in leadership and listening to close counsel.",
+          "gentle_steps_practical": [
+            "Start with plane-balance habits for your incomplete planes first.",
+            "Practise listen-first routines, early morning sunlight and one weekly day to delegate."
+          ]
+        },
+        "international": {
+          "why_this_shows": "1 is the Sun (Surya), the king of the grid. When it repeats this often it leads the whole chart.",
+          "what_it_may_indicate": "Strong leadership, confidence and a need to be recognised. When the Sun is this strong, it may also bring stubbornness or a wish to control. Traditionally, the Sun's strength is also seen as steadying when circumstances are not favourable.",
+          "growth_edge": "A tendency to carry too much alone or to resist advice when 1 repeats strongly, paired with natural leadership and steadying presence — practise delegating one responsibility each week.",
+          "strength_it_comes_with": "Leadership, clarity and steadying presence",
+          "be_mindful_of": "carrying duties alone, tone in leadership and listening to close counsel.",
+          "gentle_steps_practical": [
+            "Start with plane-balance habits for your incomplete planes first.",
+            "Practise listen-first routines, early morning sunlight and one weekly day to delegate."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_plane_thought_d1",
+      "fact_signature": "plane:thought",
+      "category": "plane",
+      "theme": "plane_balance",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Thought plane (4-3-8) links structure, judgement and disciplined planning.",
+          "what_it_may_indicate": "It may indicate structured planning and analytical clarity. It may also tend toward over-analysing details when tired.",
+          "be_mindful_of": "rigid scheduling and mental fatigue.",
+          "gentle_steps_practical": ["Keep written plans simple and allow room for practical adjustments."],
+          "positive_traits": "Structured planning and clear analysis",
+          "shadow_side": "May tend toward over-analysing or rigid scheduling",
+          "key_focus": "Pair written plans with flexible pacing"
+        },
+        "international": {
+          "why_this_shows": "Thought plane (4-3-8) links structure, judgement and disciplined planning.",
+          "what_it_may_indicate": "It may indicate structured planning and analytical clarity. It may also tend toward over-analysing details when tired.",
+          "be_mindful_of": "rigid scheduling and mental fatigue.",
+          "gentle_steps_practical": ["Keep written plans simple and allow room for practical adjustments."],
+          "positive_traits": "Structured planning and clear analysis",
+          "shadow_side": "May tend toward over-analysing or rigid scheduling",
+          "key_focus": "Pair written plans with flexible pacing"
+        }
+      }
+    },
+    {
+      "id": "ind_plane_will_d1",
+      "fact_signature": "plane:will",
+      "category": "plane",
+      "theme": "plane_balance",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Will plane (9-5-1) links drive, adaptability and steady determination.",
+          "what_it_may_indicate": "It may indicate strong determination and follow-through. It may also need care with pushing pace too hard.",
+          "be_mindful_of": "impatience and taking on everything alone.",
+          "gentle_steps_practical": ["Delegate routine tasks and pause to review progress calmly."],
+          "positive_traits": "Steady determination and purposeful drive",
+          "shadow_side": "Needs care with impatience or pushing pace too hard",
+          "key_focus": "Balance determination with shared effort"
+        },
+        "international": {
+          "why_this_shows": "Will plane (9-5-1) links drive, adaptability and steady determination.",
+          "what_it_may_indicate": "It may indicate strong determination and follow-through. It may also need care with pushing pace too hard.",
+          "be_mindful_of": "impatience and taking on everything alone.",
+          "gentle_steps_practical": ["Delegate routine tasks and pause to review progress calmly."],
+          "positive_traits": "Steady determination and purposeful drive",
+          "shadow_side": "Needs care with impatience or pushing pace too hard",
+          "key_focus": "Balance determination with shared effort"
+        }
+      }
+    },
+    {
+      "id": "ind_plane_action_d1",
+      "fact_signature": "plane:action",
+      "category": "plane",
+      "theme": "plane_balance",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Action plane (2-7-6) is complete in your grid.",
+          "what_it_may_indicate": "It may indicate readiness to act, practical helpfulness and follow-through. It may also lead to acting before pausing to reflect, so unhurried pacing matters.",
+          "be_mindful_of": "hasty commitments and physical tiredness.",
+          "gentle_steps_practical": ["Review priorities briefly before starting busy tasks and schedule regular rest."],
+          "positive_traits": "Practical follow-through and helpful execution",
+          "shadow_side": "May tend toward acting quickly before quiet review",
+          "key_focus": "Pause briefly to verify priorities before acting"
+        },
+        "international": {
+          "why_this_shows": "Action plane (2-7-6) is complete in your grid.",
+          "what_it_may_indicate": "It may indicate readiness to act, practical helpfulness and follow-through. It may also lead to acting before pausing to reflect, so unhurried pacing matters.",
+          "be_mindful_of": "hasty commitments and physical tiredness.",
+          "gentle_steps_practical": ["Review priorities briefly before starting busy tasks and schedule regular rest."],
+          "positive_traits": "Practical follow-through and helpful execution",
+          "shadow_side": "May tend toward acting quickly before quiet review",
+          "key_focus": "Pause briefly to verify priorities before acting"
+        }
+      }
+    },
+    {
+      "id": "ind_plane_mental_d1",
+      "fact_signature": "plane:mental",
+      "category": "plane",
+      "theme": "plane_balance",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Mental plane (4-9-2) connects memory, alertness and quick observation.",
+          "what_it_may_indicate": "It may indicate alert thinking and strong recall. It may also tend toward mental restlessness if routines are irregular.",
+          "be_mindful_of": "mental overload and late-night screen habits.",
+          "gentle_steps_practical": ["Write tasks down on paper and wind down calmly before sleep."],
+          "positive_traits": "Alert observation and structured recall",
+          "shadow_side": "May tend toward mental restlessness under busy schedules",
+          "key_focus": "Use written checklists and calm evening routines"
+        },
+        "international": {
+          "why_this_shows": "Mental plane (4-9-2) connects memory, alertness and quick observation.",
+          "what_it_may_indicate": "It may indicate alert thinking and strong recall. It may also tend toward mental restlessness if routines are irregular.",
+          "be_mindful_of": "mental overload and late-night screen habits.",
+          "gentle_steps_practical": ["Write tasks down on paper and wind down calmly before sleep."],
+          "positive_traits": "Alert observation and structured recall",
+          "shadow_side": "May tend toward mental restlessness under busy schedules",
+          "key_focus": "Use written checklists and calm evening routines"
+        }
+      }
+    },
+    {
+      "id": "ind_plane_emotional_d1",
+      "fact_signature": "plane:emotional",
+      "category": "plane",
+      "theme": "plane_balance",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Emotional plane (3-5-7) connects warmth, empathy and inner reflection.",
+          "what_it_may_indicate": "It may indicate warmth, empathy and intuitive care for people. It may also need care with taking others' moods to heart.",
+          "be_mindful_of": "emotional boundaries and clear agreements.",
+          "gentle_steps_practical": ["Pair warm support with clear written agreements in shared matters."],
+          "positive_traits": "Empathy, warmth and thoughtful listening",
+          "shadow_side": "Needs care with absorbing others' stress",
+          "key_focus": "Keep clear, calm boundaries alongside empathy"
+        },
+        "international": {
+          "why_this_shows": "Emotional plane (3-5-7) connects warmth, empathy and inner reflection.",
+          "what_it_may_indicate": "It may indicate warmth, empathy and intuitive care for people. It may also need care with taking others' moods to heart.",
+          "be_mindful_of": "emotional boundaries and clear agreements.",
+          "gentle_steps_practical": ["Pair warm support with clear written agreements in shared matters."],
+          "positive_traits": "Empathy, warmth and thoughtful listening",
+          "shadow_side": "Needs care with absorbing others' stress",
+          "key_focus": "Keep clear, calm boundaries alongside empathy"
+        }
+      }
+    },
+    {
+      "id": "ind_plane_practical_d1",
+      "fact_signature": "plane:practical",
+      "category": "plane",
+      "theme": "plane_balance",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Practical plane (8-1-6) is complete in your grid.",
+          "what_it_may_indicate": "It may indicate strong skills in work, money and stability. It may also lead to over-working or holding on too tightly, so balance and rest matter.",
+          "be_mindful_of": "over-working, rigid routines and skipping rest.",
+          "gentle_steps_practical": ["Protect regular rest hours and share practical responsibilities where possible."],
+          "positive_traits": "Strong skills in work, money and stability",
+          "shadow_side": "May tend toward over-working or holding on too tightly",
+          "key_focus": "Balance steady effort with scheduled rest"
+        },
+        "international": {
+          "why_this_shows": "Practical plane (8-1-6) is complete in your grid.",
+          "what_it_may_indicate": "It may indicate strong skills in work, money and stability. It may also lead to over-working or holding on too tightly, so balance and rest matter.",
+          "be_mindful_of": "over-working, rigid routines and skipping rest.",
+          "gentle_steps_practical": ["Protect regular rest hours and share practical responsibilities where possible."],
+          "positive_traits": "Strong skills in work, money and stability",
+          "shadow_side": "May tend toward over-working or holding on too tightly",
+          "key_focus": "Balance steady effort with scheduled rest"
+        }
+      }
+    },
+    {
+      "id": "ind_plane_golden_raj_yoga_d1",
+      "fact_signature": "plane:golden_raj_yoga",
+      "category": "plane",
+      "theme": "plane_balance",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Golden Raj Yoga plane (4-5-6) connects order, adaptability and stewardship.",
+          "what_it_may_indicate": "It may indicate steady organisational resourcefulness when backed by consistent habits.",
+          "be_mindful_of": "complacency or scattering focus across too many fronts.",
+          "gentle_steps_practical": ["Keep financial and family commitments organised in one simple review habit."],
+          "positive_traits": "Balanced organisation, adaptability and stewardship",
+          "shadow_side": "Needs care with scattered priorities",
+          "key_focus": "Sustain consistent weekly review habits"
+        },
+        "international": {
+          "why_this_shows": "Golden Raj Yoga plane (4-5-6) connects order, adaptability and stewardship.",
+          "what_it_may_indicate": "It may indicate steady organisational resourcefulness when backed by consistent habits.",
+          "be_mindful_of": "complacency or scattering focus across too many fronts.",
+          "gentle_steps_practical": ["Keep financial and family commitments organised in one simple review habit."],
+          "positive_traits": "Balanced organisation, adaptability and stewardship",
+          "shadow_side": "Needs care with scattered priorities",
+          "key_focus": "Sustain consistent weekly review habits"
+        }
+      }
+    },
+    {
+      "id": "ind_plane_silver_raj_yoga_d1",
+      "fact_signature": "plane:silver_raj_yoga",
+      "category": "plane",
+      "theme": "plane_balance",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Silver Raj Yoga plane (2-5-8) connects patience, communication and patient effort.",
+          "what_it_may_indicate": "It may indicate patient asset-building and steady negotiation skills.",
+          "be_mindful_of": "hesitation or over-cautious delays in routine decisions.",
+          "gentle_steps_practical": ["Set clear review dates for long-term plans so progress stays steady."],
+          "positive_traits": "Patient stewardship and measured communication",
+          "shadow_side": "May tend toward over-cautious delay",
+          "key_focus": "Use clear milestones for long-term plans"
+        },
+        "international": {
+          "why_this_shows": "Silver Raj Yoga plane (2-5-8) connects patience, communication and patient effort.",
+          "what_it_may_indicate": "It may indicate patient asset-building and steady negotiation skills.",
+          "be_mindful_of": "hesitation or over-cautious delays in routine decisions.",
+          "gentle_steps_practical": ["Set clear review dates for long-term plans so progress stays steady."],
+          "positive_traits": "Patient stewardship and measured communication",
+          "shadow_side": "May tend toward over-cautious delay",
+          "key_focus": "Use clear milestones for long-term plans"
+        }
+      }
+    },
+    {
+      "id": "ind_dc_8_2_d1",
+      "fact_signature": "dc:8_2",
+      "category": "dc",
+      "theme": "pair_dynamic",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Mulank (Driver) 8 pairs structured Saturn effort with Bhagyank (Conductor) 2 Moon sensitivity.",
+          "what_it_may_indicate": "This combination may pair steady endurance and responsibility with quiet care for people. At times, inner sensitivity and outward duty can pull at different speeds.",
+          "be_mindful_of": "relationships, workload pacing and unspoken expectations.",
+          "gentle_steps_practical": [
+            "Share timelines openly rather than carrying pressure silently.",
+            "Keep a calm evening routine to balance busy workdays."
+          ]
+        },
+        "international": {
+          "why_this_shows": "Birth Day (Driver) 8 pairs structured Saturn effort with Life Path (Conductor) 2 Moon sensitivity.",
+          "what_it_may_indicate": "This combination may pair steady endurance and responsibility with quiet care for people. At times, inner sensitivity and outward duty can pull at different speeds.",
+          "be_mindful_of": "relationships, workload pacing and unspoken expectations.",
+          "gentle_steps_practical": [
+            "Share timelines openly rather than carrying pressure silently.",
+            "Keep a calm evening routine to balance busy workdays."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_missing_4_d1",
+      "fact_signature": "missing_digit:4",
+      "category": "missing_digit",
+      "theme": "general",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Digit 4 (Rahu, order and records) is absent from your birth-date Lo Shu grid.",
+          "what_it_may_indicate": "Building external systems for filing, checklists and step-by-step routines may take conscious practice.",
+          "be_mindful_of": "paperwork, schedules and keeping commitments documented.",
+          "gentle_steps_practical": [
+            "Use one written checklist for bills, documents and weekly tasks."
+          ]
+        },
+        "international": {
+          "why_this_shows": "Digit 4 (Rahu, order and records) is absent from your birth-date Lo Shu grid.",
+          "what_it_may_indicate": "Building external systems for filing, checklists and step-by-step routines may take conscious practice.",
+          "be_mindful_of": "paperwork, schedules and keeping commitments documented.",
+          "gentle_steps_practical": [
+            "Use one written checklist for bills, documents and weekly tasks."
+          ]
+        }
+      }
+    },
+    {
+      "id": "ind_compound_29_d1",
+      "fact_signature": "compound_note:29",
+      "category": "compound_note",
+      "theme": "compound_info",
+      "depth": 1,
+      "source_tag": "PLACEHOLDER_SAMPLE",
+      "status": "DRAFT",
+      "touches_health_or_safety": false,
+      "language_variants": {
+        "india": {
+          "why_this_shows": "Your total passes through 29, then 11, then reduces to single digit 2.",
+          "what_it_may_indicate": "Shown as a background note under 2: calm communication and clear agreements help keep shared plans steady.",
+          "be_mindful_of": "assumptions in partnerships and emotional fatigue.",
+          "gentle_steps_practical": ["Confirm shared plans in writing and keep unhurried time for rest."]
+        },
+        "international": {
+          "why_this_shows": "Your total passes through 29, then 11, then reduces to single digit 2.",
+          "what_it_may_indicate": "Shown as a background note under 2: calm communication and clear agreements help keep shared plans steady.",
+          "be_mindful_of": "assumptions in partnerships and emotional fatigue.",
+          "gentle_steps_practical": ["Confirm shared plans in writing and keep unhurried time for rest."]
+        }
+      }
+    }
+  ]
+}

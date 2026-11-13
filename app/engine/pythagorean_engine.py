@@ -70,32 +70,26 @@ KARMIC_DEBT_MEANINGS = {
 }
 
 
-def reduce_pythagorean(val: int, preserve_master: bool = True) -> int:
-    """Reduces an integer to a single digit (1-9), preserving Master Numbers 11, 22, 33 if requested."""
-    while val > 9:
-        if preserve_master and val in (11, 22, 33):
-            return val
-        val = sum(int(d) for d in str(val))
-    return val
+from app.engine.digit_root import digit_root, calc_bhagyank, sum_digits_str
+
+
+def reduce_pythagorean(val: int) -> int:
+    """Reduces an integer strictly to a single digit (1-9) via shared digit_root (never preserves 11/22/33)."""
+    return digit_root(int(val))
 
 
 def calculate_pythagorean_life_path(day: int, month: int, year: int) -> Dict[str, Any]:
     """
-    Computes Life Path via standard 3-tier Western reduction:
-    1. Reduce month (preserving 11, 22)
-    2. Reduce day (preserving 11, 22)
-    3. Reduce year (preserving 11, 22)
-    4. Sum the three components and reduce, preserving 11, 22, 33.
+    Computes Life Path via single-digit reduction (1-9) of full DOB digits.
+    No master-number exceptions (11, 22, 33 are never kept).
     """
     r_month = reduce_pythagorean(month)
     r_day = reduce_pythagorean(day)
-    r_year = reduce_pythagorean(year)
+    r_year = reduce_pythagorean(sum_digits_str(f"{year:04d}"))
 
     intermediate_sum = r_month + r_day + r_year
-    final_root = reduce_pythagorean(intermediate_sum, preserve_master=True)
-    single_root = reduce_pythagorean(final_root, preserve_master=False)
-
-    is_master = final_root in (11, 22, 33)
+    final_root = calc_bhagyank(day, month, year)
+    single_root = final_root
     is_karmic = intermediate_sum in KARMIC_DEBT_MEANINGS
 
     return {
@@ -105,9 +99,10 @@ def calculate_pythagorean_life_path(day: int, month: int, year: int) -> Dict[str
         "year_reduction": r_year,
         "intermediate_sum": intermediate_sum,
         "compound_value": intermediate_sum,
+        "life_path_number": final_root,
         "final_life_path": final_root,
         "single_root": single_root,
-        "is_master_number": is_master,
+        "is_master_number": False,
         "is_karmic_debt": is_karmic,
         "karmic_debt_detail": KARMIC_DEBT_MEANINGS.get(intermediate_sum),
         "planetary_association": WESTERN_PLANETARY_MAP.get(final_root, {}),
@@ -117,10 +112,9 @@ def calculate_pythagorean_life_path(day: int, month: int, year: int) -> Dict[str
 
 def calculate_pythagorean_birthday(day: int) -> Dict[str, Any]:
     """
-    Computes Birthday Number from the calendar day of birth.
-    Preserves compound day (e.g. 14, 23, 28) and reduced root (1-9).
+    Computes Birthday Number from the calendar day of birth, reduced strictly to 1-9.
     """
-    single = reduce_pythagorean(day, preserve_master=False)
+    single = reduce_pythagorean(day)
     is_karmic = day in KARMIC_DEBT_MEANINGS
     return {
         "original_day": day,
@@ -135,7 +129,8 @@ def calculate_pythagorean_birthday(day: int) -> Dict[str, Any]:
 
 def calculate_pythagorean_name(name: str) -> Dict[str, Any]:
     """
-    Calculates Expression, Soul Urge (vowels), and Personality (consonants) numbers.
+    Calculates Expression, Soul Urge (vowels), and Personality (consonants) numbers,
+    each reduced strictly to a single digit 1-9.
     """
     clean_name = "".join(c.upper() for c in name if c.isalpha())
     if not clean_name:
@@ -160,34 +155,35 @@ def calculate_pythagorean_name(name: str) -> Dict[str, Any]:
         else:
             consonant_sum += val
 
-    expression_root = reduce_pythagorean(total_sum, preserve_master=True)
-    soul_urge_root = reduce_pythagorean(vowel_sum, preserve_master=True)
-    personality_root = reduce_pythagorean(consonant_sum, preserve_master=True)
+    expression_root = reduce_pythagorean(total_sum)
+    soul_urge_root = reduce_pythagorean(vowel_sum)
+    personality_root = reduce_pythagorean(consonant_sum)
 
     return {
         "full_name": name,
         "clean_name": clean_name,
         "letter_breakdown": letter_breakdown,
+        "expression_number": expression_root,
         "expression": {
             "compound_sum": total_sum,
             "reduced_root": expression_root,
-            "single_root": reduce_pythagorean(expression_root, preserve_master=False),
-            "is_master": expression_root in (11, 22, 33),
+            "single_root": expression_root,
+            "is_master": False,
             "is_karmic": total_sum in KARMIC_DEBT_MEANINGS,
             "planetary_association": WESTERN_PLANETARY_MAP.get(expression_root, {})
         },
         "soul_urge": {
             "compound_sum": vowel_sum,
             "reduced_root": soul_urge_root,
-            "single_root": reduce_pythagorean(soul_urge_root, preserve_master=False),
-            "is_master": soul_urge_root in (11, 22, 33),
+            "single_root": soul_urge_root,
+            "is_master": False,
             "planetary_association": WESTERN_PLANETARY_MAP.get(soul_urge_root, {})
         },
         "personality": {
             "compound_sum": consonant_sum,
             "reduced_root": personality_root,
-            "single_root": reduce_pythagorean(personality_root, preserve_master=False),
-            "is_master": personality_root in (11, 22, 33),
+            "single_root": personality_root,
+            "is_master": False,
             "planetary_association": WESTERN_PLANETARY_MAP.get(personality_root, {})
         }
     }
@@ -195,22 +191,18 @@ def calculate_pythagorean_name(name: str) -> Dict[str, Any]:
 
 def calculate_pythagorean_pinnacles_and_cycles(day: int, month: int, year: int) -> Dict[str, Any]:
     """
-    Computes the Four Pinnacles and Three Life Period Cycles.
-    - Pinnacle 1 = reduce(month) + reduce(day)
-    - Pinnacle 2 = reduce(day) + reduce(year)
-    - Pinnacle 3 = reduce(P1 + P2)
-    - Pinnacle 4 = reduce(month) + reduce(year)
+    Computes the Four Pinnacles and Three Life Period Cycles (all reduced strictly 1-9).
     """
-    r_m = reduce_pythagorean(month, preserve_master=False)
-    r_d = reduce_pythagorean(day, preserve_master=False)
-    r_y = reduce_pythagorean(year, preserve_master=False)
+    r_m = reduce_pythagorean(month)
+    r_d = reduce_pythagorean(day)
+    r_y = reduce_pythagorean(sum_digits_str(f"{year:04d}"))
 
-    p1 = reduce_pythagorean(r_m + r_d, preserve_master=True)
-    p2 = reduce_pythagorean(r_d + r_y, preserve_master=True)
-    p3 = reduce_pythagorean(p1 + p2, preserve_master=True)
-    p4 = reduce_pythagorean(r_m + r_y, preserve_master=True)
+    p1 = reduce_pythagorean(r_m + r_d)
+    p2 = reduce_pythagorean(r_d + r_y)
+    p3 = reduce_pythagorean(p1 + p2)
+    p4 = reduce_pythagorean(r_m + r_y)
 
-    life_path_single = reduce_pythagorean(r_m + r_d + r_y, preserve_master=False)
+    life_path_single = calc_bhagyank(day, month, year)
     p1_end_age = 36 - life_path_single
     p2_end_age = p1_end_age + 9
     p3_end_age = p2_end_age + 9

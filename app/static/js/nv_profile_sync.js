@@ -146,7 +146,7 @@
           padding: 22px 20px 18px !important;
           position: relative !important;
           box-shadow: 0 24px 60px rgba(0,0,0,0.4) !important;
-          font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+          font-family: var(--font-body) !important;
           scrollbar-width: thin !important;
           scrollbar-color: #C9A227 #FAF6EE !important;
         }
@@ -241,6 +241,9 @@
           font-weight: 700 !important;
           color: #8B6914 !important;
         }
+        #nv-consent-Explore-card > div:nth-child(2) > div:nth-child(2) {
+          font-family: var(--font-display);
+        }
       `;
       document.head.appendChild(styleEl);
     }
@@ -255,8 +258,8 @@
         <!-- Brand Header -->
         <div style="text-align:center; margin-bottom:14px;">
           <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision" style="width:34px; height:34px; margin:0 auto 6px; display:block; filter:drop-shadow(0 2px 6px rgba(201,162,39,0.35));" />
-          <div style="font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.12em; color:#8B6914; font-weight:700;">NUMEROS VISION · ANVEIL EVERY CHARM</div>
-          <h3 id="nv-modal-heading" style="font-family:'Cormorant Garamond',Georgia,serif; font-size:clamp(1.22rem, 4.8vw, 1.55rem); color:#8B6914; margin:5px 0 4px; font-weight:700; line-height:1.2; text-align:center;">
+          <div style="font-size:0.7rem; letter-spacing:0.12em; color:#8B6914; font-weight:700;">NUMEROS VISION · ANVEIL EVERY CHARM</div>
+          <h3 id="nv-modal-heading" style="font-size:clamp(1.22rem, 4.8vw, 1.55rem); color:#8B6914; margin:5px 0 4px; font-weight:700; line-height:1.2; text-align:center;">
             <span style="color:#C9A227; font-size:1.1em; vertical-align:middle; display:inline-block; margin-right:4px;">✦</span><span>Explore Your Free Calculation</span><span style="color:#C9A227; font-size:1.1em; vertical-align:middle; display:inline-block; margin-left:4px;">✦</span>
           </h3>
           <p id="nv-modal-sub" style="font-size:0.82rem; color:#7A654D; margin:0 auto; max-width:400px; line-height:1.48;">
@@ -548,10 +551,10 @@
     el.innerHTML = `
       <div style="background:#FFFDF7; border:2px dashed #C9A227; border-radius:18px; padding:36px 24px; text-align:center; margin-top:24px; box-shadow:0 8px 24px rgba(180,155,110,0.08);">
         <div style="font-size:2.2rem; margin-bottom:8px;">🔒</div>
-        <div style="font-family:'Cinzel',serif; font-size:0.75rem; color:#8B6914; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px;">
+        <div style="font-size:0.75rem; color:#8B6914; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px;">
           Statutory Consent Required Under DPDP Act 2023
         </div>
-        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.85rem; color:#8B6914; margin-bottom:10px; font-weight:700;">
+        <h3 style="font-size:1.85rem; color:#8B6914; margin-bottom:10px; font-weight:700;">
           Your Free Calculation is Ready to Unveil
         </h3>
         <p style="font-size:0.9rem; color:#7A654D; max-width:540px; margin:0 auto 20px; line-height:1.65;">
@@ -811,7 +814,7 @@
           <div style="display:flex; align-items:center; gap:12px;">
             <span style="font-size:1.5rem; color:#16835B;">✓</span>
             <div>
-              <div style="font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:700; color:#16835B;">
+              <div style="font-size:1.2rem; font-weight:700; color:#16835B;">
                 Linked to Your Golden Profile
               </div>
               <div style="font-size:0.8rem; color:#523E28;">
@@ -830,7 +833,7 @@
           <div style="flex:1; min-width:240px;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
               <span style="color:#C9A227; font-size:1.25rem;">✦</span>
-              <span style="font-family:'Cormorant Garamond',serif; font-size:1.35rem; font-weight:700; color:#8B6914;">
+              <span style="font-size:1.35rem; font-weight:700; color:#8B6914;">
                 Save Your Lo Shu Grid &amp; Numerological Matrix
               </span>
             </div>

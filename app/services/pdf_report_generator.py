@@ -172,7 +172,7 @@ COLOR_GOLD       = colors.HexColor("#C9A227")
 COLOR_GOLD_LIGHT = colors.HexColor("#E2B84B")
 COLOR_INK_DARK   = colors.HexColor("#523E28")
 COLOR_INK_MUTED  = colors.HexColor("#7A654D")
-COLOR_EMERALD    = colors.HexColor("#16835B")
+COLOR_EMERALD    = colors.HexColor("#8B6914")
 COLOR_BORDER     = colors.HexColor("#EEDDB8")
 COLOR_CARD_BG    = colors.HexColor("#FFFFFF")
 COLOR_RED_ALERT  = colors.HexColor("#A13030")
@@ -489,17 +489,9 @@ def run_deterministic_calculation(
     c_compound = chaldean_res.get("compound", 32)
     c_root = chaldean_res.get("root", 5)
 
-    # 3. Pythagorean Name Reduction
-    pyth_map = {
-        'A':1,'J':1,'S':1, 'B':2,'K':2,'T':2, 'C':3,'L':3,'U':3,
-        'D':4,'M':4,'V':4, 'E':5,'N':5,'W':5, 'F':6,'O':6,'X':6,
-        'G':7,'P':7,'Y':7, 'H':8,'Q':8,'Z':8, 'I':9,'R':9
-    }
-    pyth_sum = sum(pyth_map.get(ch, 0) for ch in clean_name.upper() if ch.isalpha())
-    p_temp = pyth_sum
-    while p_temp > 9 and p_temp not in (11, 22, 33):
-        p_temp = sum(int(d) for d in str(p_temp))
-    pyth_root = sum(int(d) for d in str(p_temp)) if p_temp > 9 else p_temp
+    # 3. Pythagorean Name Reduction (strictly single-digit 1..9 via shared digit_root)
+    from app.engine.digit_root import digit_root, calc_personal_year, calc_pythagorean_name_number
+    pyth_sum, pyth_root = calc_pythagorean_name_number(clean_name)
 
     # 4. Kua Number — Canonical century-invariant 4-digit formula (never guess missing gender)
     kua_details = calculate_kua_details(year, gender)
@@ -522,11 +514,8 @@ def run_deterministic_calculation(
     else:
         target_year = datetime.datetime.now().year
 
-    # 5. Personal Year: (Day + Month + target_year)
-    py_sum = driver + (sum(int(d) for d in str(month))) + (sum(int(d) for d in str(target_year)))
-    while py_sum > 9:
-        py_sum = sum(int(d) for d in str(py_sum))
-    personal_year = py_sum
+    # 5. Personal Year: (Day + Month + target_year) strictly reduced 1..9
+    personal_year = calc_personal_year(day, month, target_year)
 
     # 6. Lo Shu Digits & Counts
     dob_digits = [int(d) for d in f"{day:02d}{month:02d}{year}" if d != '0']
@@ -819,8 +808,7 @@ class NumerosPdfReportBuilder:
         def cell_txt(num, elem):
             c = cnts.get(num, 0)
             if c > 0:
-                repeated = str(num) * c
-                return Paragraph(f"<font size=11 color='#8B6914'><b>{repeated}</b></font><br/><font size=7 color='#16835B'><b>Present ×{c}</b></font><br/><font size=7 color='#7A654D'>{elem}</font>", s['TableCellCenter'])
+                return Paragraph(f"<font size=11 color='#8B6914'><b>{num}</b></font><br/><font size=7 color='#8B6914'><b>x{c}</b></font><br/><font size=7 color='#7A654D'>{elem}</font>", s['TableCellCenter'])
             else:
                 return Paragraph(f"<font size=8 color='#8B6914'><b>OPEN · ANVEIL CHARM</b></font><br/><font size=10 color='#523E28'><b>{num}</b></font><br/><font size=7 color='#7A654D'>{elem} · Unsealed</font>", s['TableCellCenter'])
 
@@ -988,16 +976,16 @@ class NumerosPdfReportBuilder:
 
         # 4 Metric Pills with Geo-Switching
         kua_pill_val = (
-            f"<font size=9.5 color='#16835B'><b>{kua} ({kua_details['element']} · {kua_details['group_short']})</b></font>"
+            f"<font size=9.5 color='#8B6914'><b>{kua} ({kua_details['element']} · {kua_details['group_short']})</b></font>"
             if kua is not None
             else f"<font size=8.5 color='#8B6914'><b>{KUA_NEEDS_GENDER_TEXT}</b></font>"
         )
         pills_data = [
             [
-                Paragraph(f"{get_geo_label('driver', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{driver} · {_planet_geo(driver)}</b></font>", s_pill_lbl),
-                Paragraph(f"{get_geo_label('conductor', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{d.get('conductor_display', conductor)} · {_planet_geo(conductor_root)}</b></font>", s_pill_lbl),
+                Paragraph(f"{get_geo_label('driver', edition).upper()}<br/><font size=9.5 color='#8B6914'><b>{driver} · {_planet_geo(driver)}</b></font>", s_pill_lbl),
+                Paragraph(f"{get_geo_label('conductor', edition).upper()}<br/><font size=9.5 color='#8B6914'><b>{d.get('conductor_display', conductor)} · {_planet_geo(conductor_root)}</b></font>", s_pill_lbl),
                 Paragraph(f"{get_geo_label('kua', edition).upper()}<br/>{kua_pill_val}", s_pill_lbl),
-                Paragraph(f"{get_geo_label('calling_name', edition).upper()}<br/><font size=9.5 color='#16835B'><b>{c_root} ({c_compound})</b></font>", s_pill_lbl),
+                Paragraph(f"{get_geo_label('calling_name', edition).upper()}<br/><font size=9.5 color='#8B6914'><b>{c_root} ({c_compound})</b></font>", s_pill_lbl),
             ]
         ]
         t_pills = Table(pills_data, colWidths=[130, 130, 130, 130], rowHeights=[30])
@@ -1050,8 +1038,7 @@ class NumerosPdfReportBuilder:
             if c == 0:
                 return Paragraph(f"<font size=6 color='#A13030'><b>OPEN</b></font><br/><font size=10 color='#8C827A'><b>{num}</b></font><br/><font size=6 color='#7A654D'>{elem}</font>", s_cell_sub)
             else:
-                rep = str(num) * c
-                return Paragraph(f"<font size=6 color='#16835B'><b>×{c}</b></font><br/><font size=10 color='#523E28'><b>{rep}</b></font><br/><font size=6 color='#7A654D'>{elem}</font>", s_cell_sub)
+                return Paragraph(f"<font size=6 color='#8B6914'><b>x{c}</b></font><br/><font size=10 color='#523E28'><b>{num}</b></font><br/><font size=6 color='#7A654D'>{elem}</font>", s_cell_sub)
 
         grid_rows = [
             [ls_cell(4, "Wood"), ls_cell(9, "Fire"), ls_cell(2, "Earth")],
@@ -1125,7 +1112,7 @@ class NumerosPdfReportBuilder:
 
         def plane_status_str(nums):
             present = sum(1 for n in nums if cnts.get(n, 0) > 0)
-            if present == 3: return "<font color='#16835B'><b>Complete (3/3)</b></font>"
+            if present == 3: return "<font color='#8B6914'><b>Complete (3/3)</b></font>"
             elif present == 2: return "<font color='#C9A227'><b>Partial (2/3)</b></font>"
             elif present == 1: return "<font color='#7A654D'><b>Partial (1/3)</b></font>"
             else: return "<font color='#A13030'><b>Open (0/3)</b></font>"
@@ -1322,6 +1309,48 @@ class NumerosPdfReportBuilder:
         ]))
         self.story.append(t_roadmap)
 
+        from app.engine.indications_engine import is_layers_2_3_enabled
+        ind_bundle = d.get("indications_bundle")
+        if is_layers_2_3_enabled() and ind_bundle:
+            cards = ind_bundle.get("indication_cards") or []
+            aff_man = ind_bundle.get("affirmation_and_manifestation") or {}
+            plane_step1 = (ind_bundle.get("remedies") or {}).get("step_1_plane_balance") or []
+            if cards or aff_man.get("affirmation"):
+                s_tiny_h = ParagraphStyle('BasicIndH', parent=s_card_h, fontSize=6.6, leading=8.0, spaceAfter=1)
+                s_tiny_b = ParagraphStyle('BasicIndB', parent=s_card_txt, fontSize=5.9, leading=7.2, spaceAfter=1)
+                c0 = cards[0] if cards else {}
+                step_txt = c0.get("gentle_steps", [plane_step1[0]["habit"] if plane_step1 else "Keep one calm daily routine."])[0]
+                ge_txt = c0.get("growth_edge") or ""
+                aff_line = aff_man.get("affirmation") or ""
+                ind_lines = []
+                if c0:
+                    ind_lines.append(
+                        f"<b>Personalised Indication ({c0.get('your_numbers', '')}):</b> {c0.get('what_it_may_indicate', '')}"
+                        + (f" <b>Growth edge:</b> {ge_txt}" if ge_txt else "")
+                        + f" <b>Gentle step:</b> {step_txt}"
+                    )
+                if aff_line:
+                    ind_lines.append(f"<b>General Affirmation (Driver {driver}):</b> \"{aff_line}\"")
+                ind_lines.append("Numbers are a guide, not a compulsion. Numerology is a reflective guide, not a prediction.")
+                self.story.append(Spacer(1, 3))
+                t_ind_basic = Table(
+                    [
+                        [Paragraph("<b>• INDICATIONS & DAILY AFFIRMATION GUIDE</b>", s_tiny_h)],
+                        [Paragraph("<br/>".join(ind_lines), s_tiny_b)],
+                    ],
+                    colWidths=[520],
+                    hAlign='CENTER',
+                )
+                t_ind_basic.setStyle(TableStyle([
+                    ('BACKGROUND', (0, 0), (-1, -1), COLOR_PEARL_BG),
+                    ('BOX', (0, 0), (-1, -1), 0.6, COLOR_GOLD_LIGHT),
+                    ('TOPPADDING', (0, 0), (-1, -1), 2.5),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 2.5),
+                    ('LEFTPADDING', (0, 0), (-1, -1), 6),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                ]))
+                self.story.append(t_ind_basic)
+
     def _assemble_advanced_12_pages(self):
         s = self.styles
         d = self.data
@@ -1463,10 +1492,10 @@ class NumerosPdfReportBuilder:
         planes_rows = [
             [Paragraph("<b>Plane Name</b>", s['TableHeader']), Paragraph("<b>Numbers</b>", s['TableHeader']), Paragraph("<b>Status in Your Chart</b>", s['TableHeader']), Paragraph("<b>Behavioral & Commercial Manifestation</b>", s['TableHeader'])],
             [Paragraph("Thought Plane", s['TableCell']), Paragraph("4 - 3 - 8", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Active 8 (Double)</b></font>", s['TableCellCenter']), Paragraph("Carries immense perseverance and long-range planning. Missing 4 and 3 means strategic frameworks must be documented in writing.", s['TableCell'])],
-            [Paragraph("Will Plane", s['TableCell']), Paragraph("9 - 5 - 1", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Active 9 & 1 (Quad)</b></font>", s['TableCellCenter']), Paragraph("Unstoppable breakthrough energy. Quadruple 1 gives supreme communication stamina; missing central 5 is bridged by Calling Name 32/5.", s['TableCell'])],
+            [Paragraph("Will Plane", s['TableCell']), Paragraph("9 - 5 - 1", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Active 9 & 1 (Quad)</b></font>", s['TableCellCenter']), Paragraph("Unstoppable breakthrough energy. Quadruple 1 gives supreme communication stamina; missing central 5 is bridged by Calling Name 32/5.", s['TableCell'])],
             [Paragraph("Action Plane", s['TableCell']), Paragraph("2 - 7 - 6", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Active 2 (Single)</b></font>", s['TableCellCenter']), Paragraph("Empathy and diplomatic intuition active. Missing 7 and 6 indicates a preference for direct execution over decorative deliberation.", s['TableCell'])],
-            [Paragraph("Mental Plane", s['TableCell']), Paragraph("4 - 9 - 2", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Active 9 & 2</b></font>", s['TableCellCenter']), Paragraph("Sharp situational awareness, analytical synthesis, and quick memory retention.", s['TableCell'])],
-            [Paragraph("Practical Plane", s['TableCell']), Paragraph("8 - 1 - 6", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Active 8 & 1</b></font>", s['TableCellCenter']), Paragraph("Strong commercial grounding. Ability to turn abstract concepts into revenue-generating business models.", s['TableCell'])],
+            [Paragraph("Mental Plane", s['TableCell']), Paragraph("4 - 9 - 2", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Active 9 & 2</b></font>", s['TableCellCenter']), Paragraph("Sharp situational awareness, analytical synthesis, and quick memory retention.", s['TableCell'])],
+            [Paragraph("Practical Plane", s['TableCell']), Paragraph("8 - 1 - 6", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Active 8 & 1</b></font>", s['TableCellCenter']), Paragraph("Strong commercial grounding. Ability to turn abstract concepts into revenue-generating business models.", s['TableCell'])],
         ]
         t_pl = Table(planes_rows, colWidths=[95, 65, 116, 240])
         t_pl.setStyle(TableStyle([
@@ -1494,9 +1523,9 @@ class NumerosPdfReportBuilder:
 
         synastry_table = [
             [Paragraph("<b>Partner Archetype</b>", s['TableHeader']), Paragraph("<b>Planetary Dynamic</b>", s['TableHeader']), Paragraph("<b>Synergy Rating</b>", s['TableHeader']), Paragraph("<b>Strategic Collaboration Protocol</b>", s['TableHeader'])],
-            [Paragraph("Number 1 (Sun)", s['TableCell']), Paragraph("Solar Mirroring", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>High (Advisory)</b></font>", s['TableCellCenter']), Paragraph("Excellent as peer advisors or board members; avoid operational co-CEO models to prevent ego friction.", s['TableCell'])],
-            [Paragraph("Number 3 (Jupiter)", s['TableCell']), Paragraph("Wisdom & Expansion", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Supreme (Co-Founder)</b></font>", s['TableCellCenter']), Paragraph("Ideal co-founder or strategic mentor. Balances your Rahu 4 with structured ethical wisdom and deep institutional trust.", s['TableCell'])],
-            [Paragraph("Number 5 (Mercury)", s['TableCell']), Paragraph("Commercial Synergy", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Excellent (Sales/Growth)</b></font>", s['TableCellCenter']), Paragraph("Matches your calling name vibration. Ideal for Chief Growth Officers, media buyers, and international business development.", s['TableCell'])],
+            [Paragraph("Number 1 (Sun)", s['TableCell']), Paragraph("Solar Mirroring", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>High (Advisory)</b></font>", s['TableCellCenter']), Paragraph("Excellent as peer advisors or board members; avoid operational co-CEO models to prevent ego friction.", s['TableCell'])],
+            [Paragraph("Number 3 (Jupiter)", s['TableCell']), Paragraph("Wisdom & Expansion", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Supreme (Co-Founder)</b></font>", s['TableCellCenter']), Paragraph("Ideal co-founder or strategic mentor. Balances your Rahu 4 with structured ethical wisdom and deep institutional trust.", s['TableCell'])],
+            [Paragraph("Number 5 (Mercury)", s['TableCell']), Paragraph("Commercial Synergy", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Excellent (Sales/Growth)</b></font>", s['TableCellCenter']), Paragraph("Matches your calling name vibration. Ideal for Chief Growth Officers, media buyers, and international business development.", s['TableCell'])],
             [Paragraph("Number 8 (Saturn)", s['TableCell']), Paragraph("Karmic Realism", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Good with Strict Contracts</b></font>", s['TableCellCenter']), Paragraph("Brings immense operational discipline, but ensure all equity terms are legally documented on day one.", s['TableCell'])],
             [Paragraph("Number 6 (Venus)", s['TableCell']), Paragraph("Creative Polar", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Neutral / Aesthetic</b></font>", s['TableCellCenter']), Paragraph("Great for creative design, brand styling, and PR campaigns; keep separate from financial treasury management.", s['TableCell'])],
         ]
@@ -1654,6 +1683,11 @@ class NumerosPdfReportBuilder:
         )
         self.story.append(closing_p)
 
+        from app.engine.indications_engine import is_layers_2_3_enabled
+        ind_bundle = d.get("indications_bundle")
+        if is_layers_2_3_enabled() and ind_bundle and not is_premium_tier:
+            self._append_layered_indications_block(ind_bundle, full_monthly=False)
+
     def _build_topic_pages_12(self):
         s = self.styles
         d = self.data
@@ -1670,10 +1704,10 @@ class NumerosPdfReportBuilder:
 
             pres_rows = [
                 [Paragraph("<b>Number & Planet</b>", s['TableHeader']), Paragraph("<b>Frequency</b>", s['TableHeader']), Paragraph("<b>Operating Status</b>", s['TableHeader']), Paragraph("<b>Inborn Psychological & Commercial Energy</b>", s['TableHeader'])],
-                [Paragraph("<b>Number 1</b><br/>Sun (Surya)", s['TableCell']), Paragraph("<b>×4 (1111)</b>", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Solar Overdrive</b></font>", s['TableCellCenter']), Paragraph("Extraordinary executive presence, pioneer spirit, and supreme communication stamina. Overdrive tendency: can become impatient with slow collaborators or take on all burdens solo.", s['TableCell'])],
+                [Paragraph("<b>Number 1</b><br/>Sun (Surya)", s['TableCell']), Paragraph("<b>×4 (1111)</b>", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Solar Overdrive</b></font>", s['TableCellCenter']), Paragraph("Extraordinary executive presence, pioneer spirit, and supreme communication stamina. Overdrive tendency: can become impatient with slow collaborators or take on all burdens solo.", s['TableCell'])],
                 [Paragraph("<b>Number 8</b><br/>Saturn (Shani)", s['TableCell']), Paragraph("<b>×2 (88)</b>", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Double Earth</b></font>", s['TableCellCenter']), Paragraph("Profound material realism, resilience, and wealth compounding. Double 8 grants immense endurance through economic storms, but can make you feel you carry the world alone.", s['TableCell'])],
-                [Paragraph("<b>Number 2</b><br/>Moon (Chandra)", s['TableCell']), Paragraph("<b>×1 (2)</b>", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Harmonic Single</b></font>", s['TableCellCenter']), Paragraph("Gentle emotional intelligence, diplomatic sensitivity, and instinctive ability to read the unspoken room during commercial negotiations.", s['TableCell'])],
-                [Paragraph("<b>Number 9</b><br/>Mars (Mangal)", s['TableCell']), Paragraph("<b>×1 (9)</b>", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Harmonic Single</b></font>", s['TableCellCenter']), Paragraph("Courage, righteous moral drive, and breakthrough momentum to complete long-term initiatives. Operates cleanly without martial aggression.", s['TableCell'])],
+                [Paragraph("<b>Number 2</b><br/>Moon (Chandra)", s['TableCell']), Paragraph("<b>×1 (2)</b>", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Harmonic Single</b></font>", s['TableCellCenter']), Paragraph("Gentle emotional intelligence, diplomatic sensitivity, and instinctive ability to read the unspoken room during commercial negotiations.", s['TableCell'])],
+                [Paragraph("<b>Number 9</b><br/>Mars (Mangal)", s['TableCell']), Paragraph("<b>×1 (9)</b>", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Harmonic Single</b></font>", s['TableCellCenter']), Paragraph("Courage, righteous moral drive, and breakthrough momentum to complete long-term initiatives. Operates cleanly without martial aggression.", s['TableCell'])],
             ]
             t_pr = Table(pres_rows, colWidths=[95, 65, 116, 240])
             t_pr.setStyle(TableStyle([
@@ -1784,11 +1818,11 @@ class NumerosPdfReportBuilder:
             syn_rows = [
                 [Paragraph("<b>Partner Driver</b>", s['TableHeader']), Paragraph("<b>Planetary Dynamic</b>", s['TableHeader']), Paragraph("<b>Harmony Score</b>", s['TableHeader']), Paragraph("<b>Relationship Dynamic & Growth Focus</b>", s['TableHeader'])],
                 [Paragraph("Number 1 (Sun)", s['TableCell']), Paragraph("Solar Mirroring", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>70% · Co-Leaders</b></font>", s['TableCellCenter']), Paragraph("Mutual admiration, but competing executive wills require clear territorial boundaries in household management.", s['TableCell'])],
-                [Paragraph("Number 2 (Moon)", s['TableCell']), Paragraph("Sun-Moon Polarity", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>95% · Soulmate</b></font>", s['TableCellCenter']), Paragraph("Supreme natural union. Moon provides soothing emotional reassurance that melts solar tension; you provide unyielding safety.", s['TableCell'])],
-                [Paragraph("Number 3 (Jupiter)", s['TableCell']), Paragraph("Wisdom & Royalty", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>90% · Auspicious</b></font>", s['TableCellCenter']), Paragraph("Deep philosophical and intellectual bond. Jupiter's optimism broadens your worldview; excellent for long-term marriage.", s['TableCell'])],
+                [Paragraph("Number 2 (Moon)", s['TableCell']), Paragraph("Sun-Moon Polarity", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>95% · Soulmate</b></font>", s['TableCellCenter']), Paragraph("Supreme natural union. Moon provides soothing emotional reassurance that melts solar tension; you provide unyielding safety.", s['TableCell'])],
+                [Paragraph("Number 3 (Jupiter)", s['TableCell']), Paragraph("Wisdom & Royalty", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>90% · Auspicious</b></font>", s['TableCellCenter']), Paragraph("Deep philosophical and intellectual bond. Jupiter's optimism broadens your worldview; excellent for long-term marriage.", s['TableCell'])],
                 [Paragraph("Number 4 (Rahu)", s['TableCell']), Paragraph("Systems Harmony", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>75% · Intellectual</b></font>", s['TableCellCenter']), Paragraph("Matches your Conductor. Strong shared unconventional vision, but guard against mutual stubbornness.", s['TableCell'])],
-                [Paragraph("Number 5 (Mercury)", s['TableCell']), Paragraph("Commercial Spark", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>85% · Dynamic</b></font>", s['TableCellCenter']), Paragraph("Exciting, communicative, and socially active partnership. Matches your Calling Name 32/5 vibration.", s['TableCell'])],
-                [Paragraph("Number 6 (Venus)", s['TableCell']), Paragraph("Beauty & Devotion", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>88% · Romantic</b></font>", s['TableCellCenter']), Paragraph("Venus brings aesthetic luxury, romance, and warm family foundations to your disciplined life.", s['TableCell'])],
+                [Paragraph("Number 5 (Mercury)", s['TableCell']), Paragraph("Commercial Spark", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>85% · Dynamic</b></font>", s['TableCellCenter']), Paragraph("Exciting, communicative, and socially active partnership. Matches your Calling Name 32/5 vibration.", s['TableCell'])],
+                [Paragraph("Number 6 (Venus)", s['TableCell']), Paragraph("Beauty & Devotion", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>88% · Romantic</b></font>", s['TableCellCenter']), Paragraph("Venus brings aesthetic luxury, romance, and warm family foundations to your disciplined life.", s['TableCell'])],
                 [Paragraph("Number 7 (Ketu)", s['TableCell']), Paragraph("Occult Mystery", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>72% · Spiritual</b></font>", s['TableCellCenter']), Paragraph("Quiet, introspective connection, though partner may occasionally retreat into solitary phases.", s['TableCell'])],
                 [Paragraph("Number 8 (Saturn)", s['TableCell']), Paragraph("Karmic Balance", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>68% · Duty-Bound</b></font>", s['TableCellCenter']), Paragraph("Very solid financial teamwork, but requires deliberate effort to cultivate warmth and spontaneous romance.", s['TableCell'])],
                 [Paragraph("Number 9 (Mars)", s['TableCell']), Paragraph("Fire & Fire", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>65% · Fiery</b></font>", s['TableCellCenter']), Paragraph("Passionate and protective, but quick temper flare-ups can occur unless emotional patience is maintained.", s['TableCell'])],
@@ -1991,10 +2025,10 @@ class NumerosPdfReportBuilder:
 
             yogas_rows = [
                 [Paragraph("<b>Raj Yoga / Plane</b>", s['TableHeader']), Paragraph("<b>Numbers</b>", s['TableHeader']), Paragraph("<b>Activation Status in Chart</b>", s['TableHeader']), Paragraph("<b>Commercial & Life Authority Manifestation</b>", s['TableHeader'])],
-                [Paragraph("<b>Golden Raj Yoga</b><br/>(Success Plane)", s['TableCell']), Paragraph("4 - 5 - 6", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Actively Completed</b></font>", s['TableCellCenter']), Paragraph("Conductor provides 4, Calling Name provides 5, Northwest metal chime activates 6. Bestows immense enterprise scaling power, high public visibility, and sovereign commercial victory.", s['TableCell'])],
-                [Paragraph("<b>Silver Earth Plane</b><br/>(Property Plane)", s['TableCell']), Paragraph("2 - 5 - 8", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>100% Fully Activated</b></font>", s['TableCellCenter']), Paragraph("Birth date contains 2 and double 8; Calling Name 32/5 directly supplies the missing central 5. Confers exceptional real estate acumen, grounded stability, and enduring generational wealth.", s['TableCell'])],
+                [Paragraph("<b>Golden Raj Yoga</b><br/>(Success Plane)", s['TableCell']), Paragraph("4 - 5 - 6", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Actively Completed</b></font>", s['TableCellCenter']), Paragraph("Conductor provides 4, Calling Name provides 5, Northwest metal chime activates 6. Bestows immense enterprise scaling power, high public visibility, and sovereign commercial victory.", s['TableCell'])],
+                [Paragraph("<b>Silver Earth Plane</b><br/>(Property Plane)", s['TableCell']), Paragraph("2 - 5 - 8", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>100% Fully Activated</b></font>", s['TableCellCenter']), Paragraph("Birth date contains 2 and double 8; Calling Name 32/5 directly supplies the missing central 5. Confers exceptional real estate acumen, grounded stability, and enduring generational wealth.", s['TableCell'])],
                 [Paragraph("<b>Thought Plane</b>", s['TableCell']), Paragraph("4 - 3 - 8", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Supported by Conductor</b></font>", s['TableCellCenter']), Paragraph("Double 8 active; Conductor bridges 4. Engage trusted legal/philosophical counsel to supply the missing Jupiter 3 perspective.", s['TableCell'])],
-                [Paragraph("<b>Will Plane</b>", s['TableCell']), Paragraph("9 - 5 - 1", s['TableCellCenter']), Paragraph("<font color='#16835B'><b>Supreme Breakthrough</b></font>", s['TableCellCenter']), Paragraph("Quadruple 1 + single 9 + Calling Name 5 creates unstoppable execution will, rapid recovery from setbacks, and relentless forward drive.", s['TableCell'])],
+                [Paragraph("<b>Will Plane</b>", s['TableCell']), Paragraph("9 - 5 - 1", s['TableCellCenter']), Paragraph("<font color='#8B6914'><b>Supreme Breakthrough</b></font>", s['TableCellCenter']), Paragraph("Quadruple 1 + single 9 + Calling Name 5 creates unstoppable execution will, rapid recovery from setbacks, and relentless forward drive.", s['TableCell'])],
             ]
             t_yg = Table(yogas_rows, colWidths=[100, 75, 115, 226])
             t_yg.setStyle(TableStyle([
@@ -2286,6 +2320,81 @@ class NumerosPdfReportBuilder:
             self.story.append(t_chap)
             self.story.append(Spacer(1, 4))
 
+        from app.engine.indications_engine import is_layers_2_3_enabled
+        ind_bundle = self.data.get("indications_bundle")
+        if is_layers_2_3_enabled() and ind_bundle:
+            self._append_layered_indications_block(ind_bundle, full_monthly=True)
+
+    def _append_layered_indications_block(self, ind_bundle: Dict[str, Any], *, full_monthly: bool = False):
+        """Additive Section 3/6/7/19 block for Advanced (12p) & Premium (32p) within final page."""
+        s = self.styles
+        s_cmp = ParagraphStyle('AdvIndCmp', parent=s['TableCellDense'], fontSize=6.4, leading=8.0)
+        cards = ind_bundle.get("indication_cards") or []
+        cmd = ind_bundle.get("commanding_planet") or {}
+        cg = (ind_bundle.get("cycles") or {}).get("care_guide_2027") or {}
+        rems = ind_bundle.get("remedies") or {}
+        planet_block = rems.get("step_3_planet_practices")
+        aff_man = ind_bundle.get("affirmation_and_manifestation") or {}
+
+        rows = [
+            [Paragraph("<b>Indications, Care Guide & Intention Layer</b>", s['TableHeader']),
+             Paragraph("<b>Personalised Guidance (Numbers Are a Guide, Not a Compulsion)</b>", s['TableHeader'])]
+        ]
+        if cmd.get("has_commander"):
+            c0 = cmd["commanders"][0]
+            rows.append([
+                Paragraph("<b>Commanding Planet</b>", s_cmp),
+                Paragraph(f"{c0['planet']} ({c0['digit']} x{c0['count']}) leads the grid — {c0['growth_edge']}. {c0['practical_step']}", s_cmp),
+            ])
+        if cards:
+            c_main = cards[0]
+            rows.append([
+                Paragraph("<b>Primary Indication</b>", s_cmp),
+                Paragraph(f"{c_main['what_it_may_indicate']} Growth edge: {c_main.get('growth_edge', '')}", s_cmp),
+            ])
+        prio = cg.get("priority_care_months") or []
+        if prio:
+            care_summary = "; ".join(f"{m['month_name']} PM {m['personal_month']} ({m['start_before']})" for m in prio[:4])
+            rows.append([
+                Paragraph("<b>2027 Care Guide</b>", s_cmp),
+                Paragraph(f"Personal Year {cg.get('personal_year')}: {care_summary}.", s_cmp),
+            ])
+        if planet_block and planet_block.get("planets"):
+            p_lines = []
+            for pk in planet_block["planets"][:2]:
+                first_it = pk["items"][0]["text"] if pk.get("items") else ""
+                gem_note = f" Gemstone info: {pk['gemstone_info']['display_note']}" if pk.get("gemstone_info") else ""
+                p_lines.append(f"{pk['planet']} ({pk['planet_number']}): {first_it}{gem_note}")
+            rows.append([
+                Paragraph(f"<b>{planet_block['heading']}</b>", s_cmp),
+                Paragraph(" | ".join(p_lines) + " Traditional practice, in addition to medical care and sensible safety.", s_cmp),
+            ])
+        if aff_man.get("affirmation"):
+            man = aff_man.get("manifestation") or {}
+            man_txt = ""
+            if man.get("year_theme"):
+                man_txt = f" Year Theme: {man['year_theme']}. {man.get('intention_sentence', '')}"
+            if full_monthly and aff_man.get("monthly_affirmations"):
+                m1 = aff_man["monthly_affirmations"][0]
+                man_txt += f" Monthly sample ({m1['month_name']}): {m1['affirmation']}"
+            rows.append([
+                Paragraph("<b>Affirmation & Intention</b>", s_cmp),
+                Paragraph(f"\"{aff_man['affirmation']}\"{man_txt} Numerology is a reflective guide, not a prediction.", s_cmp),
+            ])
+
+        self.story.append(Spacer(1, 6))
+        t_layer = Table(rows, colWidths=[135, 381])
+        t_layer.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), colors.white),
+            ('BOX', (0, 0), (-1, -1), 0.8, COLOR_BORDER),
+            ('INNERGRID', (0, 0), (-1, -1), 0.4, COLOR_BORDER),
+            ('TOPPADDING', (0, 0), (-1, -1), 2.5),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2.5),
+            ('LEFTPADDING', (0, 0), (-1, -1), 5),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+        ]))
+        self.story.append(t_layer)
+
 
 def generate_customised_pdf_report(
     name: str = "Seeker",
@@ -2321,6 +2430,20 @@ def generate_customised_pdf_report(
         gender=gender,
         edition=edition
     )
+    from app.engine.indications_engine import compute_full_indications_bundle, is_layers_2_3_enabled
+    if is_layers_2_3_enabled():
+        calc_data["indications_bundle"] = compute_full_indications_bundle(
+            day=day,
+            month=month,
+            year=year,
+            gender=gender,
+            calling_name=name,
+            target_year=purchase_year or 2026,
+            care_guide_year=2027,
+            edition=edition,
+            tier=tier,
+            entitlement_tier=tier,
+        )
 
     builder = NumerosPdfReportBuilder(calc_data, tier=tier, topic_id=topic_id)
     pdf_bytes = builder.build()

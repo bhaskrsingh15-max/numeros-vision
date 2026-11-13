@@ -1107,7 +1107,7 @@ async function runTestSuite() {
       ['https://numerosvision.com/reports.html', 'https://numerosvision.com/reports/'],
       ['https://numerosvision.com/charm_ai.html', 'https://numerosvision.com/charm-ai/'],
       ['https://numerosvision.com/privacy-policy/', 'https://numerosvision.com/privacy/'],
-      ['https://numerosvision.com/sample-report/', 'https://numerosvision.com/sample_roadmap/'],
+      ['https://numerosvision.com/sample-report/', 'https://numerosvision.com/sample/'],
       ['http://numerosvision.com/', 'https://numerosvision.com/'],
       ['https://www.numerosvision.com/', 'https://numerosvision.com/'],
       ['http://www.numerosvision.com/tools/lucky-number/', 'https://numerosvision.com/calculators/favourable-numbers/'],

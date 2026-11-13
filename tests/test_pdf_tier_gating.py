@@ -72,11 +72,12 @@ class TestPdfTierGating(unittest.TestCase):
         full_text = "\n".join(page.extract_text() for page in reader.pages)
         norm_text = re.sub(r"\s+", " ", full_text)
 
-        # 1. Must include renamed Basic heading & canonical pack name "Basic Report"
+        # 1. Must include Basic heading & single-digit 1..9 reduction (never 33/6)
         self.assertIn("ELEMENT BALANCING & FOUNDATIONAL BLUEPRINT", norm_text)
-        self.assertIn("BASIC REPORT", norm_text.upper())
-        self.assertIn("33/6", norm_text)
-        self.assertIn("Lo Shu Grid", norm_text)
+        self.assertIn("BASIC NUMEROLOGY REPORT", norm_text.upper())
+        self.assertIn("6 · SHUKRA (VENUS)", norm_text.upper())
+        self.assertNotIn("33/6", norm_text)
+        self.assertIn("LO SHU GRID", norm_text.upper())
         self.assertIn("8 ELEMENTAL PLANES", norm_text)
         self.assertIn("5-ELEMENT ACTIONS & 90-DAY PLAN", norm_text)
 

@@ -49,16 +49,12 @@ def calculate_blessing_years(
     - Calendar year reduction == Driver or Conductor
     - Personal Year == Driver or Conductor
     """
+    from app.engine.digit_root import calc_bhagyank, calc_driver, calc_personal_year, digit_root
     # Calculate Driver
-    driver = sum(int(d) for d in str(day))
-    while driver > 9:
-        driver = sum(int(d) for d in str(driver))
+    driver = calc_driver(day)
 
     # Calculate Conductor
-    dob_digits = [int(d) for d in f"{day:02d}{month:02d}{birth_year}"]
-    conductor = sum(dob_digits)
-    while conductor > 9:
-        conductor = sum(int(d) for d in str(conductor))
+    conductor = calc_bhagyank(day, month, birth_year)
 
     # Core friendly numbers
     d_prof = get_number_profile(driver) or {}
@@ -77,20 +73,13 @@ def calculate_blessing_years(
     for age in range(18, max_age + 1):
         cal_year = birth_year + age
         # Age reduction
-        age_reduced = age
-        while age_reduced > 9:
-            age_reduced = sum(int(d) for d in str(age_reduced))
+        age_reduced = digit_root(age)
 
         # Year reduction
-        yr_reduced = sum(int(d) for d in str(cal_year))
-        while yr_reduced > 9:
-            yr_reduced = sum(int(d) for d in str(yr_reduced))
+        yr_reduced = digit_root(cal_year)
 
         # Personal Year
-        py_sum = day + month + sum(int(d) for d in str(cal_year))
-        py = py_sum
-        while py > 9:
-            py = sum(int(d) for d in str(py))
+        py = calc_personal_year(day, month, cal_year)
 
         is_age_core = age_reduced in (driver, conductor)
         is_year_core = yr_reduced in (driver, conductor)

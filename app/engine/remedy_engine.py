@@ -64,19 +64,16 @@ MISSING_NUMBER_REMEDIES_DATABASE = {
     9: {"element": "Fire", "direction": "South", "remedy": "Donate red items, sweets, maintain good relations with siblings.", "planet": "Mars"}
 }
 
+from app.engine.digit_root import digit_root
+
 def calculate_name_number(name: str) -> int:
     clean_name = "".join(c.upper() for c in name if c.isalpha())
     total = sum(CHALDEAN_LETTER_VALUES.get(c, 0) for c in clean_name)
-    while total > 9 and total not in [11, 22, 33]:
-        total = sum(int(d) for d in str(total))
-    return total
+    return digit_root(total)
 
 def calculate_mobile_number_sum(mobile_str: str) -> int:
     digits = [int(d) for d in mobile_str if d.isdigit()]
-    total = sum(digits)
-    while total > 9:
-        total = sum(int(d) for d in str(total))
-    return total
+    return digit_root(sum(digits))
 
 def get_vedic_crystal_remedies(driver_num: int, missing_nums: List[int]) -> List[Dict[str, Any]]:
     crystal_remedies = []

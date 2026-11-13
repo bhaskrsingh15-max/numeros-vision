@@ -59,33 +59,21 @@ ARROWS_OF_WEAKNESS = {
 
 def build_birth_date_grid(day: int, month: int, year: int) -> Dict[str, Any]:
     """
-    Constructs the pure birth-date Lo Shu grid with explicit source attribution.
-    Does NOT mix in name letters or external digits.
+    Constructs the pure birth-date Lo Shu grid from non-zero DDMMYYYY digits ONLY.
+    Mulank (Driver), Bhagyank (Conductor), and Kua are NOT added to the grid.
     """
-    dob_digits = [int(d) for d in f"{day:02d}{month:02d}{year}" if d != '0']
-    
-    # Calculate Driver and Conductor
-    driver = sum(int(d) for d in str(day))
-    while driver > 9: driver = sum(int(d) for d in str(driver))
-    
-    total_conductor = sum(int(d) for d in str(day)) + sum(int(d) for d in str(month)) + sum(int(d) for d in str(year))
-    conductor = total_conductor
-    while conductor > 9: conductor = sum(int(d) for d in str(conductor))
-    
-    all_raw_digits = dob_digits + [driver, conductor]
-    
+    from app.engine.digit_root import calc_bhagyank, calc_driver
+    dob_digits = [int(d) for d in f"{day:02d}{month:02d}{year:04d}" if d != '0']
+
+    driver = calc_driver(day)
+    conductor = calc_bhagyank(day, month, year)
+
     counts: Dict[int, int] = {i: 0 for i in range(1, 10)}
     digit_sources: Dict[int, List[str]] = {i: [] for i in range(1, 10)}
-    
+
     for d in dob_digits:
         counts[d] += 1
         digit_sources[d].append("dob_raw")
-        
-    counts[driver] += 1
-    digit_sources[driver].append("driver_mulank")
-    
-    counts[conductor] += 1
-    digit_sources[conductor].append("conductor_bhagyank")
     
     # Evaluate Planes
     planes_eval = {}

@@ -11,13 +11,19 @@
  * 4. Derive element, trigram, and East/West group from the final Kua number.
  * 5. Missing or unrecognized gender returns display='Kua needs gender' — never guesses.
  */
+/* global module */
 (function (root, factory) {
   var api = factory();
-  root.NVKua = api;
-  if (typeof window === 'undefined' && root) {
+  if (root) {
+    root.NVKua = api;
+    root.NVDigitRoot = api.digitRoot;
+  }
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = api;
+  } else if (typeof window === 'undefined' && root) {
     Object.keys(api).forEach(function (k) { root[k] = api[k]; });
   }
-})(typeof window !== 'undefined' ? window : this, function () {
+})(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : this), function () {
   'use strict';
 
   var KUA_RULE_TEXT = 'Calculated from your birth year and gender';
@@ -130,17 +136,136 @@
     }
   };
 
-  function reduceSingleDigit(num) {
-    var n = Math.abs(parseInt(num, 10) || 0);
-    while (n > 9) {
-      var sum = 0;
-      var s = String(n);
-      for (var i = 0; i < s.length; i++) {
-        sum += parseInt(s.charAt(i), 10) || 0;
+  var CHALDEAN_MAP = {
+    A: 1, I: 1, J: 1, Q: 1, Y: 1,
+    B: 2, C: 2, K: 2, R: 2,
+    G: 3, L: 3, S: 3,
+    D: 4, M: 4, T: 4,
+    E: 5, H: 5, N: 5, X: 5,
+    U: 6, V: 6, W: 6,
+    O: 7, Z: 7,
+    F: 8, P: 8
+  };
+
+  var PYTHAGOREAN_MAP = {
+    A: 1, J: 1, S: 1,
+    B: 2, K: 2, T: 2,
+    C: 3, L: 3, U: 3,
+    D: 4, M: 4, V: 4,
+    E: 5, N: 5, W: 5,
+    F: 6, O: 6, X: 6,
+    G: 7, P: 7, Y: 7,
+    H: 8, Q: 8, Z: 8,
+    I: 9, R: 9
+  };
+
+  /**
+   * Canonical single-digit reduction:
+   *   digitRoot(n) = 1 + (n - 1) % 9   for n > 0
+   *   digitRoot(n) = 0                 for n <= 0
+   * Master numbers (11, 22, 33) are NEVER preserved.
+   */
+  function digitRoot(num) {
+    var val = Math.trunc(Number(num) || 0);
+    return val > 0 ? 1 + ((val - 1) % 9) : 0;
+  }
+
+  function sumDigits(text) {
+    var s = String(text === null || text === undefined ? '' : text);
+    var total = 0;
+    for (var i = 0; i < s.length; i++) {
+      var code = s.charCodeAt(i);
+      if (code >= 48 && code <= 57) {
+        total += code - 48;
       }
-      n = sum;
     }
-    return n;
+    return total;
+  }
+
+  function calcDriver(day) {
+    return digitRoot(parseInt(day, 10) || 0);
+  }
+
+  function calcBhagyank(day, month, year) {
+    var dStr = String(parseInt(day, 10) || 0).padStart(2, '0');
+    var mStr = String(parseInt(month, 10) || 0).padStart(2, '0');
+    var yStr = String(parseInt(year, 10) || 0).padStart(4, '0');
+    return digitRoot(sumDigits(dStr + mStr + yStr));
+  }
+
+  function calcPersonalYear(day, month, targetYear) {
+    var yr = targetYear ? (parseInt(targetYear, 10) || new Date().getFullYear()) : new Date().getFullYear();
+    var dStr = String(parseInt(day, 10) || 0).padStart(2, '0');
+    var mStr = String(parseInt(month, 10) || 0).padStart(2, '0');
+    var yStr = String(yr).padStart(4, '0');
+    return digitRoot(sumDigits(dStr + mStr + yStr));
+  }
+
+  function calcPersonalMonth(personalYear, calendarMonth) {
+    return digitRoot((parseInt(personalYear, 10) || 0) + (parseInt(calendarMonth, 10) || 0));
+  }
+
+  function calcPersonalDay(personalYear, personalMonth, targetDay, targetMonth, targetYear) {
+    var dStr = String(parseInt(targetDay, 10) || 0).padStart(2, '0');
+    var mStr = String(parseInt(targetMonth, 10) || 0).padStart(2, '0');
+    var yStr = String(parseInt(targetYear, 10) || 0).padStart(4, '0');
+    return digitRoot((parseInt(personalYear, 10) || 0) + (parseInt(personalMonth, 10) || 0) + sumDigits(dStr + mStr + yStr));
+  }
+
+  function calcPersonalCyclesForDate(birthDay, birthMonth, targetDay, targetMonth, targetYear) {
+    var py = calcPersonalYear(birthDay, birthMonth, targetYear);
+    var pm = calcPersonalMonth(py, targetMonth);
+    var pd = calcPersonalDay(py, pm, targetDay, targetMonth, targetYear);
+    return {
+      label: 'Personal Year / Month / Day',
+      personalYear: py,
+      personalMonth: pm,
+      personalDay: pd
+    };
+  }
+
+  function calcLoShuDobOnly(day, month, year) {
+    var dobStr = String(parseInt(day, 10) || 0).padStart(2, '0')
+      + String(parseInt(month, 10) || 0).padStart(2, '0')
+      + String(parseInt(year, 10) || 0).padStart(4, '0');
+    var counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+    for (var i = 0; i < dobStr.length; i++) {
+      var ch = dobStr.charAt(i);
+      if (ch >= '1' && ch <= '9') counts[parseInt(ch, 10)]++;
+    }
+    var present = [];
+    var missing = [];
+    var repeated = {};
+    for (var d = 1; d <= 9; d++) {
+      if (counts[d] > 0) present.push(d);
+      else missing.push(d);
+      if (counts[d] >= 2) repeated[d] = counts[d];
+    }
+    return { dobDigitsStr: dobStr, counts: counts, present: present, missing: missing, repeated: repeated };
+  }
+
+  function calcChaldeanNameNumber(name) {
+    var s = String(name || '').toUpperCase();
+    var compound = 0;
+    for (var i = 0; i < s.length; i++) {
+      var ch = s.charAt(i);
+      if (CHALDEAN_MAP[ch]) compound += CHALDEAN_MAP[ch];
+    }
+    return { compound: compound, root: digitRoot(compound) };
+  }
+
+  function calcPythagoreanNameNumber(name) {
+    var s = String(name || '').toUpperCase();
+    var compound = 0;
+    for (var i = 0; i < s.length; i++) {
+      var ch = s.charAt(i);
+      if (PYTHAGOREAN_MAP[ch]) compound += PYTHAGOREAN_MAP[ch];
+    }
+    return { compound: compound, root: digitRoot(compound) };
+  }
+
+  function reduceSingleDigit(num) {
+    return digitRoot(Math.abs(parseInt(num, 10) || 0));
   }
 
   function normalizeGender(gender) {
@@ -260,6 +385,19 @@
     KUA_RULE_TEXT: KUA_RULE_TEXT,
     KUA_NEEDS_GENDER_TEXT: KUA_NEEDS_GENDER_TEXT,
     KUA_METADATA: KUA_METADATA,
+    CHALDEAN_MAP: CHALDEAN_MAP,
+    PYTHAGOREAN_MAP: PYTHAGOREAN_MAP,
+    digitRoot: digitRoot,
+    sumDigits: sumDigits,
+    calcDriver: calcDriver,
+    calcBhagyank: calcBhagyank,
+    calcPersonalYear: calcPersonalYear,
+    calcPersonalMonth: calcPersonalMonth,
+    calcPersonalDay: calcPersonalDay,
+    calcPersonalCyclesForDate: calcPersonalCyclesForDate,
+    calcLoShuDobOnly: calcLoShuDobOnly,
+    calcChaldeanNameNumber: calcChaldeanNameNumber,
+    calcPythagoreanNameNumber: calcPythagoreanNameNumber,
     normalizeGender: normalizeGender,
     calculateKuaDetails: calculateKuaDetails,
     calculateKua: calculateKua

@@ -86,7 +86,7 @@
 
       modal.innerHTML = `
 
-        <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:14px; max-width:440px; width:100%; padding:24px; box-shadow:0 12px 36px rgba(0,0,0,0.25); font-family:system-ui,-apple-system,sans-serif; color:#523E28;">
+        <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:14px; max-width:440px; width:100%; padding:24px; box-shadow:0 12px 36px rgba(0,0,0,0.25); color:#523E28;">
 
           <h3 style="margin:0 0 10px 0; color:#8B6914; font-size:1.15rem; font-weight:700; display:flex; align-items:center; gap:8px;">
 
@@ -543,7 +543,7 @@
 
       modal.innerHTML = `
 
-        <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:14px; max-width:440px; width:100%; padding:26px; text-align:center; box-shadow:0 12px 36px rgba(0,0,0,0.25); font-family:system-ui,-apple-system,sans-serif; color:#523E28;">
+        <div style="background:#FFFDF7; border:2px solid #C9A227; border-radius:14px; max-width:440px; width:100%; padding:26px; text-align:center; box-shadow:0 12px 36px rgba(0,0,0,0.25); color:#523E28;">
 
           <div style="width:56px; height:56px; background:#FAF3E0; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 14px auto; font-size:1.6rem; color:#8B6914;">
 

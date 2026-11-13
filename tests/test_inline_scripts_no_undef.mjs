@@ -89,6 +89,8 @@ const BROWSER_GLOBALS = {
   HTMLInputElement: 'readonly',
   EventTarget: 'readonly',
   AbortController: 'readonly',
+  AbortSignal: 'readonly',
+  ReadableStream: 'readonly',
   // Vendor SDK globals expected on window:
   Razorpay: 'readonly',
   turnstile: 'readonly',

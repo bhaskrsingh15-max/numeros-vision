@@ -43,7 +43,7 @@ async function runTests() {
     const packsCatalog = JSON.parse(jsonMatchPacks[1]);
 
     // Extract PACK_CATALOG from _worker.js
-    const workerCatalogMatch = workerContent.match(/const PACK_CATALOG\s*=\s*({[\s\S]*?});\s*function getPackById/);
+    const workerCatalogMatch = workerContent.match(/const PACK_CATALOG\s*=\s*({[\s\S]*?});\s*function (?:resolveServerLaunchOfferState|getPackById)/);
     if (!workerCatalogMatch) throw new Error('Could not parse PACK_CATALOG from _worker.js');
     
     // Evaluate worker catalog safely
@@ -207,6 +207,8 @@ async function runTests() {
 
     const mockEnv = {
       ENVIRONMENT: 'test',
+      NV_LAUNCH_STARTS_AT: '2026-01-01T00:00:00+05:30',
+      NV_LAUNCH_ENDS_AT: '2027-12-31T23:59:59+05:30',
       RAZORPAY_KEY_ID: 'rzp_test_MOCK_JOURNEY_KEY',
       RAZORPAY_KEY_SECRET: 'test_secret_for_journey_payments',
       OTP_HMAC_SECRET: 'test_otp_hmac_secret_32b_journey',
@@ -295,6 +297,8 @@ async function runTests() {
 
     const mockEnv = {
       ENVIRONMENT: 'test',
+      NV_LAUNCH_STARTS_AT: '2026-01-01T00:00:00+05:30',
+      NV_LAUNCH_ENDS_AT: '2027-12-31T23:59:59+05:30',
       RAZORPAY_KEY_ID: 'rzp_test_MOCK_JOURNEY_KEY',
       RAZORPAY_KEY_SECRET: 'test_secret_for_journey_payments',
       OTP_HMAC_SECRET: 'test_otp_hmac_secret_32b_journey',

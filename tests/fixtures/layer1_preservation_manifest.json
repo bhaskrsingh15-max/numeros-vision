@@ -1,0 +1,143 @@
+{
+  "version": "1.1.0",
+  "description": "Sections 2.a, 15.1 & 16.A Preservation Manifest: every existing function, constant, data file, data key, planet benefic/malefic & repetition module, report section title, UI block ID, and test file for Layer 1. Removing or renaming any item fails the build.",
+  "python_modules": {
+    "app.engine.lo_shu": [
+      "LO_SHU_GRID_TEMPLATE",
+      "PLANES",
+      "analyze_lo_shu_grid",
+      "generate_loshu_grid_markdown"
+    ],
+    "app.engine.enhanced_lo_shu_engine": [
+      "PLANES_SPEC",
+      "ARROWS_OF_STRENGTH",
+      "ARROWS_OF_WEAKNESS",
+      "build_birth_date_grid",
+      "build_name_derived_grid",
+      "compare_name_change_grids",
+      "build_combined_overlay_grid"
+    ],
+    "app.engine.core_matrix_engine": [
+      "PLANETARY_MATRIX",
+      "ELEMENT_RULES",
+      "calculate_driver",
+      "calculate_conductor",
+      "calculate_conductor_details",
+      "calculate_kua_number",
+      "get_kua_profile",
+      "calculate_chaldean_name",
+      "calculate_dasha_cycles",
+      "analyze_elements_balancing",
+      "analyze_repeat_numbers",
+      "analyze_missing_numbers",
+      "assess_karmic_and_master",
+      "generate_full_numerology_matrix"
+    ],
+    "app.engine.charm_oracle_synthesizer": [
+      "PLANETARY_INFO",
+      "NUMBER_DUAL_ATTRIBUTES",
+      "classify_digit_degree"
+    ],
+    "app.engine.number_characteristics_registry": [
+      "NUMBER_REGISTRY"
+    ],
+    "app.engine.unified_planetary_numerology_engine": [
+      "UNIFIED_81_MATRIX",
+      "PLANETARY_RELATIONS"
+    ],
+    "app.engine.rule_governance": [
+      "rule_governance"
+    ],
+    "app.engine.complementary_poorak_engine": [
+      "calculate_complementary_poorak",
+      "evaluate_grid_complementary_support"
+    ],
+    "app.engine.remedy_engine": [
+      "MISSING_NUMBER_REMEDIES_DATABASE",
+      "calculate_name_number",
+      "get_vedic_crystal_remedies"
+    ]
+  },
+  "data_files": {
+    "app/data/content_library_v2.json": {
+      "required_topic_keys": [
+        "birth_day",
+        "life_path",
+        "name_number",
+        "driver_conductor",
+        "planes",
+        "elements",
+        "ninety_day_plan"
+      ],
+      "required_element_keys": [
+        "Wood",
+        "Fire",
+        "Earth",
+        "Metal",
+        "Water"
+      ],
+      "required_plane_keys": [
+        "mental",
+        "emotional",
+        "practical",
+        "thought",
+        "will",
+        "action",
+        "golden_raj_yoga",
+        "silver_raj_yoga"
+      ]
+    },
+    "app/data/terminology_geo.json": {
+      "required_keys": [
+        "driver",
+        "conductor",
+        "kua",
+        "loshu_grid",
+        "missing_numbers",
+        "personal_year",
+        "golden_raj_yoga",
+        "silver_raj_yoga"
+      ]
+    },
+    "data/knowledge_base/day7_loshu_rules.json": {
+      "required_top_keys": [
+        "repetition_degrees"
+      ]
+    },
+    "data/knowledge_base/missing_number_rules.json": {
+      "required_top_keys": [
+        "missing_numbers"
+      ]
+    }
+  },
+  "basic_pdf_section_titles": [
+    "ANVEIL MY ALIGNMENTS · ELEMENT BALANCING & FOUNDATIONAL BLUEPRINT",
+    "LO SHU GRID & ELEMENTAL FREQUENCIES",
+    "MISSING NUMBERS OVERVIEW",
+    "8 PLANES OF LO SHU GRID & 5-ELEMENT AUDIT",
+    "5-ELEMENT EQUILIBRIUM AUDIT",
+    "5-ELEMENT ACTIONS & 90-DAY PLAN",
+    "RANKED 5-ELEMENT HABITS",
+    "90-DAY PRACTICAL PLAN"
+  ],
+  "ui_blocks_your_reading": [
+    "summary-driver",
+    "summary-conductor",
+    "summary-kua",
+    "summary-personal-year",
+    "loshu-interactive-grid",
+    "loshu-planes-row",
+    "loshu-teaser-box",
+    "core-tiers-grid"
+  ],
+  "existing_test_files": [
+    "tests/test_loshu_parity_200.py",
+    "tests/test_loshu_grid_canon_200_dobs.mjs",
+    "tests/test_loshu_curiosity_and_notify_flag.py",
+    "tests/test_pdf_tier_gating.py",
+    "tests/test_planner_2027_engine.py",
+    "tests/test_charm_ai_fixes_suite.py",
+    "tests/test_numerology_suite_v2.py",
+    "tests/test_full_suite.py"
+  ]
+}

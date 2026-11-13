@@ -180,10 +180,11 @@ def build_calculation_data_from_view(view: Dict[str, Any], pack_id: str, topic_i
     else:
         day, month, year = 15, 8, 1990
 
-    driver = int(calc.get("driver") or 1)
-    conductor_raw = int(calc.get("conductorRaw") or calc.get("conductor") or 1)
-    conductor_root = int(calc.get("conductor") or 1)
-    conductor_display = str(calc.get("conductorDisplay") or (f"{conductor_raw}/{conductor_root}" if conductor_raw in (11, 22, 33) else str(conductor_root)))
+    from app.engine.digit_root import digit_root, calc_driver, calc_bhagyank, calc_personal_year
+    driver = digit_root(int(calc.get("driver") or calc_driver(day))) or 1
+    conductor_root = digit_root(int(calc.get("conductor") or calc_bhagyank(day, month, year))) or 1
+    conductor_raw = conductor_root
+    conductor_display = str(conductor_root)
 
     raw_counts = calc.get("counts") or {}
     counts = {i: int(raw_counts.get(str(i), raw_counts.get(i, 0))) for i in range(1, 10)}
@@ -207,9 +208,8 @@ def build_calculation_data_from_view(view: Dict[str, Any], pack_id: str, topic_i
     c_root = chaldean_res.get("root_number", 5)
 
     def _red(n: int) -> int:
-        while n > 9:
-            n = sum(int(d) for d in str(n))
-        return n if n > 0 else 9
+        val = digit_root(abs(int(n)))
+        return val if val > 0 else 9
 
     subject_gender = subj.get("gender") or calc.get("gender")
     kua_details = calculate_kua_details(year, subject_gender)
@@ -525,15 +525,11 @@ async def handle_charm_chat_service(request: Request) -> Dict[str, Any]:
     m = body.get("month") or 1
     y = body.get("year") or 1990
 
-    def red(n: int) -> int:
-        while n > 9:
-            n = sum(int(c) for c in str(n))
-        return n
-
-    driver = red(int(d))
-    conductor = red(int(d) + int(m) + int(y))
+    from app.engine.digit_root import calc_driver, calc_bhagyank, calc_personal_year
+    driver = calc_driver(int(d))
+    conductor = calc_bhagyank(int(d), int(m), int(y))
     current_year = datetime.datetime.now().year
-    personal_year = red(driver + red(int(m)) + red(current_year))
+    personal_year = calc_personal_year(int(d), int(m), current_year)
 
     planets = {
         1: "Sun (Surya) — Sovereign Leadership & High Vitality",

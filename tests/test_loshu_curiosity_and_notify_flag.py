@@ -115,9 +115,12 @@ class TestLoShuCuriosityAndNotifyMeFlag(unittest.TestCase):
         for price_tok in ("199", "399", "510", "1,020", "1020", "1,050", "1050", "2,100", "2100"):
             self.assertNotIn(price_tok, curiosity_markup)
 
-        # Verify high-to-low three-card ladder with waitlist labels on Advanced/Premium and unset regular ₹399 on Basic
-        self.assertIn('id="price-report_premium" style="font-size:1.35rem;">Coming soon, notify me', html)
-        self.assertIn('id="price-report_advanced" style="font-size:1.35rem;">Coming soon, notify me', html)
+        # Verify high-to-low three-card ladder with hidden prices + waitlist CTAs on Advanced/Premium and unset regular ₹399 on Basic
+        self.assertIn('id="price-report_premium" style="display:none;"></div>', html)
+        self.assertIn('id="price-report_advanced" style="display:none;"></div>', html)
+        self.assertIn('id="btn-select-report_premium" onclick="openNotifyMeModal(\'report_premium\')">', html)
+        self.assertIn('id="btn-select-report_advanced" onclick="openNotifyMeModal(\'report_advanced\')">', html)
+        self.assertGreaterEqual(html.count("Coming soon, notify me"), 2)
         self.assertIn('id="price-report_basic">₹399', html)
         self.assertLess(html.index('id="tier-card-premium"'), html.index('id="tier-card-advanced"'))
         self.assertLess(html.index('id="tier-card-advanced"'), html.index('id="tier-card-basic"'))

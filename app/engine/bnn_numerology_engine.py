@@ -438,10 +438,9 @@ def _get_fallback_pair(num1: int, num2: int) -> Dict[str, Any]:
     p1 = PLANET_NUMBER_MAP.get(num1, PLANET_NUMBER_MAP[1])
     p2 = PLANET_NUMBER_MAP.get(num2, PLANET_NUMBER_MAP[2])
     
+    from app.engine.digit_root import digit_root, calc_driver, calc_bhagyank
     comp = num1 * 10 + num2
-    reduced = (num1 + num2)
-    while reduced > 9 and reduced not in (11, 22, 33):
-        reduced = sum(int(d) for d in str(reduced))
+    reduced = digit_root(num1 + num2)
         
     title = f"{p1['planet']} - {p2['planet']} ({p1['hindi']} - {p2['hindi']}) · Compound {comp} / {reduced}"
     archetype = f"The {p1['planet']} Leader guided by {p2['planet']} Energy"
@@ -514,19 +513,11 @@ def evaluate_bnn_numerology_profile(day: int, month: int, year: int, name: str =
     4. Saturn Karma / Profession Profile (using Video 2 principles)
     5. Video 3 Accuracy & Cross-check Verification
     """
-    # Driver (Day reduction)
+    from app.engine.digit_root import calc_driver, calc_bhagyank
     day_digits = [int(d) for d in str(day)]
-    driver = sum(day_digits)
-    while driver > 9:
-        driver = sum(int(d) for d in str(driver))
-        
-    # Conductor (Total reduction)
-    all_digits = [int(d) for d in f"{day}{month}{year}" if d.isdigit()]
-    total = sum(all_digits)
-    conductor = total
-    while conductor > 9 and conductor not in (11, 22, 33):
-        conductor = sum(int(d) for d in str(conductor))
-    conductor_single = conductor if conductor <= 9 else (2 if conductor == 11 else (4 if conductor == 22 else 6))
+    driver = calc_driver(day)
+    conductor = calc_bhagyank(day, month, year)
+    conductor_single = conductor
     
     # Primary Pair: Driver + Conductor
     primary_pair_data = get_bnn_numerology_pair(driver, conductor_single)

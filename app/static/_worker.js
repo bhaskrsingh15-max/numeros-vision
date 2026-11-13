@@ -49,7 +49,8 @@ const DANGEROUS_FLAGS = [
   'ALLOW_TEST_TOKENS',
   'ALLOW_STAGING_TEST_BYPASS',
   'NV_ALLOW_UNAUTHENTICATED_LOCAL',
-  'PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW'
+  'PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW',
+  'NV_FORCE_LAUNCH_MODE'
 ];
 
 function getDetectedDangerousFlags(env) {
@@ -918,7 +919,7 @@ const PACK_CATALOG = {
 function resolveServerLaunchOfferState(env = null, nowMs = null, packId = null) {
   const lo = PACK_CATALOG.launch_offer || {};
   if (lo.enabled === false) {
-    return { active: false, configured: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
+    return { active: false, configured: false, forced: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
   }
   const tierEnvMap = {
     report_basic: ['NV_LAUNCH_BASIC_STARTS_AT', 'NV_LAUNCH_BASIC_ENDS_AT'],
@@ -946,12 +947,29 @@ function resolveServerLaunchOfferState(env = null, nowMs = null, packId = null) 
       ? String(env.NV_LAUNCH_ENDS_AT).trim()
       : '');
   if (!rawStarts || !rawEnds) {
-    return { active: false, configured: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
+    const envName = (env && env.ENVIRONMENT ? String(env.ENVIRONMENT).trim().toLowerCase() : '');
+    const rawForce = (env && env.NV_FORCE_LAUNCH_MODE !== undefined && env.NV_FORCE_LAUNCH_MODE !== null)
+      ? String(env.NV_FORCE_LAUNCH_MODE).trim().toLowerCase()
+      : '';
+    if (envName !== 'production' && (rawForce === '1' || rawForce === 'true' || rawForce === 'yes' || rawForce === 'on')) {
+      return {
+        active: true,
+        configured: true,
+        forced: true,
+        startedAt: null,
+        endsAt: null,
+        rawStartsAt: '',
+        rawEndsAt: '',
+        untilDate: '',
+        fromDate: ''
+      };
+    }
+    return { active: false, configured: false, forced: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
   }
   const startMs = Date.parse(rawStarts);
   const endMs = Date.parse(rawEnds);
   if (Number.isNaN(startMs) || Number.isNaN(endMs) || endMs <= startMs) {
-    return { active: false, configured: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
+    return { active: false, configured: false, forced: false, startedAt: null, endsAt: null, untilDate: '', fromDate: '' };
   }
   const currentMs = typeof nowMs === 'number' ? nowMs : Date.now();
   const active = currentMs >= startMs && currentMs <= endMs;
@@ -965,11 +983,12 @@ function resolveServerLaunchOfferState(env = null, nowMs = null, packId = null) 
     ? `${uIst.getUTCDate()} ${months[uIst.getUTCMonth()]} ${uIst.getUTCFullYear()}, ${pad2(uIst.getUTCHours())}:${pad2(uIst.getUTCMinutes())} IST`
     : `${uIst.getUTCDate()} ${months[uIst.getUTCMonth()]} ${uIst.getUTCFullYear()}`;
   const fromDate = isShortWindow
-    ? `${fIst.getUTCDate()} ${months[fIst.getUTCMonth()]} ${fIst.getUTCFullYear()}, ${pad2(fIst.getUTCHours())}:${pad2(fIst.getUTCMinutes())} IST`
+    ? `${fIst.getUTCDate()} ${months[fIst.getUTCMonth()]} ${fIst.getUTCFullYear()}, ${pad2(fIst.getUTCHours())}:${pad2(fIst.getUTMinutes ? fIst.getUTMinutes() : fIst.getUTCMinutes())} IST`
     : `${fIst.getUTCDate()} ${months[fIst.getUTCMonth()]} ${fIst.getUTCFullYear()}`;
   return {
     active,
     configured: true,
+    forced: false,
     startedAt: new Date(startMs).toISOString(),
     endsAt: new Date(endMs).toISOString(),
     rawStartsAt: rawStarts,
@@ -1023,6 +1042,8 @@ function getPackById(packId, env = null, nowMs = null) {
       waitlist_only: true,
       display_price_label: waitlistLabel,
       waitlist_caption: waitlistCaption,
+      price_inr: null,
+      amount_paise: null,
       struck_mrp_inr: null,
       launch_offer_active: false,
       launch_offer_copy: ''
@@ -1042,11 +1063,14 @@ function getPackById(packId, env = null, nowMs = null) {
         launch_offer_copy: ''
       });
     }
+    const mrpFormatted = Number(base.mrp_inr).toLocaleString('en-IN');
     const copyTpl = (PACK_CATALOG.launch_offer && PACK_CATALOG.launch_offer.copy_template) || 'Launch price until {until_date}. Regular price ₹{mrp_formatted} from {from_date}.';
-    const launchCopy = copyTpl
-      .replace('{until_date}', launchState.untilDate)
-      .replace('{mrp_formatted}', Number(base.mrp_inr).toLocaleString('en-IN'))
-      .replace('{from_date}', launchState.fromDate);
+    const launchCopy = (launchState.forced && !launchState.untilDate)
+      ? `Launch price active during the launch window. Regular price ₹${mrpFormatted} thereafter.`
+      : copyTpl
+        .replace('{until_date}', launchState.untilDate)
+        .replace('{mrp_formatted}', mrpFormatted)
+        .replace('{from_date}', launchState.fromDate);
     return Object.assign({}, base, {
       waitlist_only: false,
       launch_price_inr: base.price_inr,
@@ -1057,6 +1081,19 @@ function getPackById(packId, env = null, nowMs = null) {
     });
   }
   return base;
+}
+
+function resolveEffectivePackPricePaise(packId, env = null, nowMs = null) {
+  const pack = getPackById(packId, env, nowMs);
+  return pack && typeof pack.amount_paise === 'number' ? pack.amount_paise : 0;
+}
+
+function isLayers23Enabled(env = null) {
+  if (!env || String(env.ENVIRONMENT || 'production').trim().toLowerCase() === 'production') {
+    return false;
+  }
+  const raw = env.NV_ENABLE_LAYERS_2_3 ? String(env.NV_ENABLE_LAYERS_2_3).trim().toLowerCase() : '0';
+  return raw === '1' || raw === 'true' || raw === 'yes' || raw === 'on';
 }
 
 function isNotifyMeHigherTiersEnabled(env) {
@@ -1906,14 +1943,134 @@ const KUA_METADATA = {
   9: { element: 'Fire', trigram: 'Li', group: 'East Group', groupShort: 'East', elementGroup: 'Fire · Li (East Group)', directionSummary: 'Fire · Li (East Group · E / SE / N / S)', deskDirection: 'East' }
 };
 
-function calculateCanonicalKuaDetails(birthYear, gender) {
-  function reduce1(num) {
-    let n = Math.abs(parseInt(num, 10) || 0);
-    while (n > 9) {
-      n = String(n).split('').reduce((acc, d) => acc + (parseInt(d, 10) || 0), 0);
-    }
-    return n;
+const CHALDEAN_WORKER_MAP = {
+  A: 1, I: 1, J: 1, Q: 1, Y: 1,
+  B: 2, C: 2, K: 2, R: 2,
+  G: 3, L: 3, S: 3,
+  D: 4, M: 4, T: 4,
+  E: 5, H: 5, N: 5, X: 5,
+  U: 6, V: 6, W: 6,
+  O: 7, Z: 7,
+  F: 8, P: 8
+};
+
+const PYTHAGOREAN_WORKER_MAP = {
+  A: 1, J: 1, S: 1,
+  B: 2, K: 2, T: 2,
+  C: 3, L: 3, U: 3,
+  D: 4, M: 4, V: 4,
+  E: 5, N: 5, W: 5,
+  F: 6, O: 6, X: 6,
+  G: 7, P: 7, Y: 7,
+  H: 8, Q: 8, Z: 8,
+  I: 9, R: 9
+};
+
+/**
+ * Canonical single-digit reduction shared across all Numeros Vision runtimes:
+ *   digitRoot(n) = 1 + (n - 1) % 9   for n > 0
+ *   digitRoot(n) = 0                 for n <= 0
+ * Master numbers (11, 22, 33) are NEVER preserved.
+ */
+function digitRoot(num) {
+  const val = Math.trunc(Number(num) || 0);
+  return val > 0 ? 1 + ((val - 1) % 9) : 0;
+}
+
+function sumDigitsStr(text) {
+  const s = String(text === null || text === undefined ? '' : text);
+  let total = 0;
+  for (let i = 0; i < s.length; i++) {
+    const code = s.charCodeAt(i);
+    if (code >= 48 && code <= 57) total += code - 48;
   }
+  return total;
+}
+
+function calcDriver(day) {
+  return digitRoot(parseInt(day, 10) || 0);
+}
+
+function calcBhagyank(day, month, year) {
+  const dStr = String(parseInt(day, 10) || 0).padStart(2, '0');
+  const mStr = String(parseInt(month, 10) || 0).padStart(2, '0');
+  const yStr = String(parseInt(year, 10) || 0).padStart(4, '0');
+  return digitRoot(sumDigitsStr(dStr + mStr + yStr));
+}
+
+function calcPersonalYear(day, month, targetYear) {
+  const yr = targetYear ? (parseInt(targetYear, 10) || new Date().getFullYear()) : new Date().getFullYear();
+  const dStr = String(parseInt(day, 10) || 0).padStart(2, '0');
+  const mStr = String(parseInt(month, 10) || 0).padStart(2, '0');
+  const yStr = String(yr).padStart(4, '0');
+  return digitRoot(sumDigitsStr(dStr + mStr + yStr));
+}
+
+function calcPersonalMonth(personalYear, calendarMonth) {
+  return digitRoot((parseInt(personalYear, 10) || 0) + (parseInt(calendarMonth, 10) || 0));
+}
+
+function calcPersonalDay(personalYear, personalMonth, targetDay, targetMonth, targetYear) {
+  const dStr = String(parseInt(targetDay, 10) || 0).padStart(2, '0');
+  const mStr = String(parseInt(targetMonth, 10) || 0).padStart(2, '0');
+  const yStr = String(parseInt(targetYear, 10) || 0).padStart(4, '0');
+  return digitRoot((parseInt(personalYear, 10) || 0) + (parseInt(personalMonth, 10) || 0) + sumDigitsStr(dStr + mStr + yStr));
+}
+
+function calcPersonalCyclesForDate(birthDay, birthMonth, targetDay, targetMonth, targetYear) {
+  const py = calcPersonalYear(birthDay, birthMonth, targetYear);
+  const pm = calcPersonalMonth(py, targetMonth);
+  const pd = calcPersonalDay(py, pm, targetDay, targetMonth, targetYear);
+  return {
+    label: 'Personal Year / Month / Day',
+    personal_year: py,
+    personal_month: pm,
+    personal_day: pd
+  };
+}
+
+function calcLoShuDobOnly(day, month, year) {
+  const dobStr = String(parseInt(day, 10) || 0).padStart(2, '0') +
+                 String(parseInt(month, 10) || 0).padStart(2, '0') +
+                 String(parseInt(year, 10) || 0).padStart(4, '0');
+  const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+  for (let i = 0; i < dobStr.length; i++) {
+    const code = dobStr.charCodeAt(i);
+    if (code >= 49 && code <= 57) counts[code - 48] += 1;
+  }
+  const present = [];
+  const missing = [];
+  const repeated = {};
+  for (let d = 1; d <= 9; d++) {
+    if (counts[d] > 0) present.push(d);
+    else missing.push(d);
+    if (counts[d] >= 2) repeated[d] = counts[d];
+  }
+  return { dob_digits_str: dobStr, counts, present, missing, repeated };
+}
+
+function calcChaldeanNameNumber(name) {
+  const s = String(name || '').toUpperCase();
+  let compound = 0;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s.charAt(i);
+    if (CHALDEAN_WORKER_MAP[ch]) compound += CHALDEAN_WORKER_MAP[ch];
+  }
+  return { compound, root: digitRoot(compound) };
+}
+
+function calcPythagoreanNameNumber(name) {
+  const s = String(name || '').toUpperCase();
+  let compound = 0;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s.charAt(i);
+    if (PYTHAGOREAN_WORKER_MAP[ch]) compound += PYTHAGOREAN_WORKER_MAP[ch];
+  }
+  return { compound, root: digitRoot(compound) };
+}
+
+function calculateCanonicalKuaDetails(birthYear, gender) {
+  const reduce1 = (num) => digitRoot(Math.abs(parseInt(num, 10) || 0));
   const yr = parseInt(birthYear, 10);
   const gRaw = (gender === null || gender === undefined) ? '' : String(gender).trim().toLowerCase();
   const normGender = (gRaw === 'male' || gRaw === 'm') ? 'male' : ((gRaw === 'female' || gRaw === 'f') ? 'female' : null);
@@ -2030,20 +2187,16 @@ async function viewFor(user, subject, env, targetPackId = null) {
   const year = dobInfo.year;
   const formattedDob = dobInfo.dob;
 
-  function reduceToSingle(num, preserveMaster = false) {
-    let n = Math.abs(num);
-    while (n > 9) {
-      if (preserveMaster && (n === 11 || n === 22 || n === 33)) return n;
-      n = String(n).split('').reduce((acc, d) => acc + parseInt(d, 10), 0);
-    }
-    return n === 0 ? 9 : n;
+  function reduceToSingle(num) {
+    const n = Math.abs(Math.trunc(Number(num) || 0));
+    return n === 0 ? 9 : digitRoot(n);
   }
 
-  const driver = reduceToSingle(day, false);
+  const driver = calcDriver(day);
   const totalDobDigits = `${String(day).padStart(2, '0')}${String(month).padStart(2, '0')}${String(year).padStart(4, '0')}`;
-  const conductorRaw = reduceToSingle(totalDobDigits.split('').reduce((acc, d) => acc + parseInt(d, 10), 0), true);
-  const conductor = reduceToSingle(conductorRaw, false);
-  const conductorDisplay = conductorRaw > 9 ? `${conductorRaw}/${conductor}` : `${conductor}`;
+  const conductor = calcBhagyank(day, month, year);
+  const conductorRaw = conductor;
+  const conductorDisplay = `${conductor}`;
 
   const PLANETS = {
     1: { name: 'Sun', sanskrit: 'Surya', element: 'Water', quality: 'Leadership & Vitality' },
@@ -2481,6 +2634,72 @@ async function getPrivateR2Report(env, r2Key) {
   throw new Error('Private R2 bucket binding (REPORTS_BUCKET) is not configured.');
 }
 
+const REPORT_STAGE_DASHBOARD_LABELS = {
+  queued: 'Step 1 of 5: reading your birth date',
+  calculate: 'Step 1 of 5: reading your birth date',
+  analyse: 'Step 2 of 5: checking your grid and cycles',
+  consolidate: 'Step 3 of 5: putting your reading together',
+  write: 'Step 4 of 5: writing your reading',
+  check_deliver: 'Step 5 of 5: preparing your PDF',
+  completed: 'Ready to download'
+};
+
+const REPORT_DELAYED_MESSAGE = 'This is taking a little longer than usual. Your report will appear here when it is ready.';
+
+function formatReportJobProgress(job, nowMs) {
+  const nowVal = typeof nowMs === 'number' ? nowMs : Date.now();
+  if (!job) {
+    return {
+      currentStage: 'queued',
+      progressLine: REPORT_STAGE_DASHBOARD_LABELS.queued,
+      delayedNotice: null
+    };
+  }
+  const st = String(job.status || 'QUEUED').toUpperCase();
+  const curStage = String(job.current_stage || 'queued').toLowerCase();
+  if (st === 'COMPLETED' || st === 'DOWNLOADED' || job.r2_key || job.download_url) {
+    return {
+      currentStage: 'completed',
+      progressLine: 'Ready to download',
+      delayedNotice: null
+    };
+  }
+  if (st === 'FAILED' || (job.attempts || 0) >= 3) {
+    return {
+      currentStage: curStage,
+      progressLine: 'We’re checking this order.',
+      delayedNotice: null
+    };
+  }
+  const progressLine = REPORT_STAGE_DASHBOARD_LABELS[curStage] || REPORT_STAGE_DASHBOARD_LABELS.queued;
+  const created = typeof job.created_at === 'number' ? job.created_at : nowVal;
+  const delayedNotice = (nowVal - created >= 45000) ? REPORT_DELAYED_MESSAGE : null;
+  return {
+    currentStage: curStage,
+    progressLine,
+    delayedNotice
+  };
+}
+
+async function tryUpdateReportJobStageColumns(env, job, stageName, lastDone, timestampsObj, errorCode = null) {
+  const tsJson = JSON.stringify(timestampsObj || {});
+  if (job) {
+    job.current_stage = stageName;
+    if (lastDone !== undefined) job.last_completed_stage = lastDone;
+    job.stage_timestamps_json = tsJson;
+    job.error_code = errorCode;
+  }
+  if (env && env.DB && job && job.id) {
+    try {
+      await env.DB.prepare(
+        'UPDATE report_jobs SET current_stage = ?, last_completed_stage = ?, stage_timestamps_json = ?, error_code = ? WHERE id = ?'
+      ).bind(stageName, lastDone || null, tsJson, errorCode, job.id).run();
+    } catch (_colErr) {
+      // Pre-0012 D1 schema fallback: core status columns remain authoritative
+    }
+  }
+}
+
 async function dispatchReportJob(jobId, env) {
   const pdfServiceSecret = requireSecret(env, 'PDF_SERVICE_SECRET');
   const now = Date.now();
@@ -2502,13 +2721,20 @@ async function dispatchReportJob(jobId, env) {
     return { ok: false, status: 409, jobStatus: 'FAILED', attempts: job.attempts || 3, error: job.last_error || 'Maximum 3 retries exhausted.' };
   }
 
-  // 1. Transition QUEUED -> PROCESSING
+  const stageTs = {};
+  try {
+    if (job.stage_timestamps_json) Object.assign(stageTs, JSON.parse(job.stage_timestamps_json));
+  } catch (_e) {}
+
+  // 1. Transition QUEUED -> PROCESSING (Stage: calculate)
   if (env && env.DB) {
     await env.DB.prepare("UPDATE report_jobs SET status = 'PROCESSING', updated_at = ? WHERE id = ?").bind(now, job.id).run();
   } else {
     job.status = 'PROCESSING';
     job.updated_at = now;
   }
+  stageTs.calculate = { started_at: now };
+  await tryUpdateReportJobStageColumns(env, job, 'calculate', job.last_completed_stage || null, stageTs, null);
 
   try {
     // 2. Load subject and compute sanitized viewFor(user, subject, env, job.pack_id)
@@ -2529,6 +2755,12 @@ async function dispatchReportJob(jobId, env) {
       throw new Error(`No active paid entitlement found for subject ${job.subject_id} and pack ${job.pack_id}.`);
     }
 
+    const tConsol = Date.now();
+    stageTs.calculate.completed_at = tConsol;
+    stageTs.analyse = { started_at: tConsol, completed_at: tConsol };
+    stageTs.consolidate = { started_at: tConsol };
+    await tryUpdateReportJobStageColumns(env, job, 'consolidate', 'analyse', stageTs, null);
+
     // Strip any contact PII; pass ONLY sanitized viewFor output to the Python generator
     const sanitizedView = sanitizeViewForGenerator(fullView);
     const requestPayload = JSON.stringify({
@@ -2536,6 +2768,11 @@ async function dispatchReportJob(jobId, env) {
       pack_id: job.pack_id,
       view: sanitizedView
     });
+
+    const tWrite = Date.now();
+    stageTs.consolidate.completed_at = tWrite;
+    stageTs.write = { started_at: tWrite };
+    await tryUpdateReportJobStageColumns(env, job, 'write', 'consolidate', stageTs, null);
 
     const timestampSec = Math.floor(now / 1000);
     const signatureHex = await signPdfServiceRequest(requestPayload, timestampSec, pdfServiceSecret);
@@ -2574,9 +2811,14 @@ async function dispatchReportJob(jobId, env) {
     }
 
     const r2Key = `reports/${job.user_id}/${job.subject_id}/${job.pack_id}/${job.id}.pdf`;
+    stageTs.write.completed_at = Date.now();
+    stageTs.check_deliver = { started_at: Date.now() };
+    await tryUpdateReportJobStageColumns(env, job, 'check_deliver', 'write', stageTs, null);
     await putPrivateR2Report(env, r2Key, pdfBytes);
 
     const doneAt = Date.now();
+    stageTs.check_deliver.completed_at = doneAt;
+    await tryUpdateReportJobStageColumns(env, job, 'completed', 'check_deliver', stageTs, null);
     if (env && env.DB) {
       await env.DB.prepare(
         "UPDATE report_jobs SET status = 'COMPLETED', r2_key = ?, completed_at = ?, updated_at = ?, last_error = NULL WHERE id = ?"
@@ -2798,7 +3040,7 @@ function isValidRelativeReturnTo(returnTo) {
   return true;
 }
 
-async function callCharmBackendService(payload, env) {
+async function callCharmBackendService(payload, env, endpointPath = '/api/charm/chat') {
   const charmSecret = (env && env.CHARM_SERVICE_SECRET || '').trim();
   if (!charmSecret) {
     throw new Error('CHARM_SERVICE_SECRET_UNSET');
@@ -2814,14 +3056,15 @@ async function callCharmBackendService(payload, env) {
     headers: {
       'Content-Type': 'application/json',
       'X-NV-Charm-Secret': charmSecret,
-      'X-NV-Upstream-Metered': '1'
+      'X-NV-Upstream-Metered': '1',
+      'X-NV-Charm-Entitlement': (payload && payload._charm_entitlement) ? String(payload._charm_entitlement) : 'charm_free'
     },
     body: JSON.stringify(payload)
   };
   if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function' && timeoutMs > 0) {
     fetchOpts.signal = AbortSignal.timeout(timeoutMs);
   }
-  return await fetch(`${backendUrl}/api/charm/chat`, fetchOpts);
+  return await fetch(`${backendUrl}${endpointPath}`, fetchOpts);
 }
 
 function sanitizeReturnToUrl(returnTo, defaultUrl = '/dashboard/') {
@@ -2846,6 +3089,7 @@ export {
   createSignedDownloadToken,
   verifySignedDownloadToken,
   dispatchReportJob,
+  formatReportJobProgress,
   retryPendingReportJobsForUser,
   REPORT_JOB_STATUS,
   REPORT_EXISTS_OR_SERVED_STATUSES,
@@ -2864,6 +3108,7 @@ export {
   deleteWaitlistNotifyMe,
   buildWaitlistNotificationEmail,
   dispatchWaitlistNotificationsForPack,
+  PACK_CATALOG,
   memoryStore
 };
 function isPreviewRequest(request, env) {
@@ -2890,18 +3135,19 @@ function escapeHtmlAttr(val) {
 function buildPreviewLaunchBannerHtml(launchState, basicPack) {
   const configured = Boolean(launchState && launchState.configured);
   const active = Boolean(launchState && launchState.active);
-  const startsRaw = configured ? (launchState.rawStartsAt || launchState.startedAt) : 'unset';
-  const endsRaw = configured ? (launchState.rawEndsAt || launchState.endsAt) : 'unset';
+  const forced = Boolean(launchState && launchState.forced);
+  const startsRaw = forced ? 'forced_preview' : (configured ? (launchState.rawStartsAt || launchState.startedAt) : 'unset');
+  const endsRaw = forced ? 'forced_preview' : (configured ? (launchState.rawEndsAt || launchState.endsAt) : 'unset');
   const currentPriceLabel = active
     ? `Launch price active: ₹${basicPack.price_inr} (regular ₹${basicPack.struck_mrp_inr || basicPack.mrp_inr})`
     : `Regular price active: ₹${basicPack.price_inr}`;
-  return `<div id="nv-preview-launch-banner" role="region" aria-label="Preview launch window status" data-launch-configured="${configured ? 'true' : 'false'}" data-launch-active="${active ? 'true' : 'false'}" data-starts-at="${escapeHtmlAttr(startsRaw)}" data-ends-at="${escapeHtmlAttr(endsRaw)}" style="background:#FFFDF7;border-bottom:2px solid #C9A227;color:#523E28;padding:8px 16px;font-family:Inter,system-ui,sans-serif;font-size:12.5px;line-height:1.45;text-align:center;position:relative;z-index:9999;">` +
+  return `<div id="nv-preview-launch-banner" role="region" aria-label="Preview launch window status" data-launch-configured="${configured ? 'true' : 'false'}" data-launch-active="${active ? 'true' : 'false'}" data-launch-forced="${forced ? 'true' : 'false'}" data-starts-at="${escapeHtmlAttr(startsRaw)}" data-ends-at="${escapeHtmlAttr(endsRaw)}" style="background:#FFFDF7;border-bottom:2px solid #C9A227;color:#523E28;padding:8px 16px;font-family:Inter,system-ui,sans-serif;font-size:12.5px;line-height:1.45;text-align:center;position:relative;z-index:9999;">` +
     `<strong style="color:#8B6914;letter-spacing:0.06em;text-transform:uppercase;">Preview Window</strong> &middot; ` +
     `<span>NV_LAUNCH_STARTS_AT: <code>${escapeHtmlAttr(startsRaw)}</code></span> &middot; ` +
     `<span>NV_LAUNCH_ENDS_AT: <code>${escapeHtmlAttr(endsRaw)}</code></span> &middot; ` +
     `<strong id="nv-preview-launch-state" style="color:${active ? '#16835B' : '#8B6914'};">${escapeHtmlAttr(currentPriceLabel)}</strong>` +
     `<span id="nv-preview-launch-countdown" style="margin-left:6px;color:#7A654D;"></span>` +
-    `<script>(function(){var elCnt=document.getElementById('nv-preview-launch-countdown');var elSt=document.getElementById('nv-preview-launch-state');var sRaw=${JSON.stringify(configured ? (launchState.startedAt || '') : '')};var eRaw=${JSON.stringify(configured ? (launchState.endsAt || '') : '')};if(!sRaw||!eRaw||!elCnt)return;var sMs=Date.parse(sRaw),eMs=Date.parse(eRaw);if(isNaN(sMs)||isNaN(eMs))return;var wasActive=(Date.now()>=sMs&&Date.now()<=eMs);function tick(){var now=Date.now();var isAct=(now>=sMs&&now<=eMs);if(isAct){var rem=Math.max(0,Math.ceil((eMs-now)/1000));var m=Math.floor(rem/60),s=rem%60;elCnt.textContent='(switches to regular ₹399 in '+m+'m '+String(s).padStart(2,'0')+'s)';}else if(now<sMs){var wait=Math.max(0,Math.ceil((sMs-now)/1000));elCnt.textContent='(starts in '+wait+'s)';}else{elCnt.textContent='(window ended — regular price ₹399 active)';}if(isAct!==wasActive){wasActive=isAct;if(elSt){elSt.textContent=isAct?'Launch price active: ₹199 (regular ₹399)':'Regular price active: ₹399';elSt.style.color=isAct?'#16835B':'#8B6914';}try{window.dispatchEvent(new CustomEvent('nv:launch-window-changed',{detail:{active:isAct}}));}catch(_){}}}tick();setInterval(tick,1000);})();</script>` +
+    `<script>(function(){var elCnt=document.getElementById('nv-preview-launch-countdown');var elSt=document.getElementById('nv-preview-launch-state');var sRaw=${JSON.stringify((configured && !forced) ? (launchState.startedAt || '') : '')};var eRaw=${JSON.stringify((configured && !forced) ? (launchState.endsAt || '') : '')};if(!sRaw||!eRaw||!elCnt)return;var sMs=Date.parse(sRaw),eMs=Date.parse(eRaw);if(isNaN(sMs)||isNaN(eMs))return;var wasActive=(Date.now()>=sMs&&Date.now()<=eMs);function tick(){var now=Date.now();var isAct=(now>=sMs&&now<=eMs);if(isAct){var rem=Math.max(0,Math.ceil((eMs-now)/1000));var m=Math.floor(rem/60),s=rem%60;elCnt.textContent='(switches to regular ₹399 in '+m+'m '+String(s).padStart(2,'0')+'s)';}else if(now<sMs){var wait=Math.max(0,Math.ceil((sMs-now)/1000));elCnt.textContent='(starts in '+wait+'s)';}else{elCnt.textContent='(window ended — regular price ₹399 active)';}if(isAct!==wasActive){wasActive=isAct;if(elSt){elSt.textContent=isAct?'Launch price active: ₹199 (regular ₹399)':'Regular price active: ₹399';elSt.style.color=isAct?'#16835B':'#8B6914';}try{window.dispatchEvent(new CustomEvent('nv:launch-window-changed',{detail:{active:isAct}}));}catch(_){}}}tick();setInterval(tick,1000);})();</script>` +
     `</div>`;
 }
 
@@ -2943,8 +3189,9 @@ export default {
         const rawHtml = await response.text();
         const launchState = resolveServerLaunchOfferState(env);
         const notifyFlag = isNotifyMeHigherTiersEnabled(env);
+        const layers23Flag = isLayers23Enabled(env);
         const basicPack = getPackById('report_basic', env);
-        const cfgScript = `<script id="nv-server-launch-config">window.__NV_LAUNCH_STARTS_AT=${JSON.stringify(launchState.configured ? launchState.rawStartsAt : null)};window.__NV_LAUNCH_ENDS_AT=${JSON.stringify(launchState.configured ? launchState.rawEndsAt : null)};window.__NV_NOTIFY_ME_HIGHER_TIERS=${JSON.stringify(notifyFlag)};window.__NV_IS_PREVIEW=${JSON.stringify(isPreview)};</script>`;
+        const cfgScript = `<script id="nv-server-launch-config">window.__NV_LAUNCH_STARTS_AT=${JSON.stringify((launchState.configured && !launchState.forced) ? launchState.rawStartsAt : null)};window.__NV_LAUNCH_ENDS_AT=${JSON.stringify((launchState.configured && !launchState.forced) ? launchState.rawEndsAt : null)};window.__NV_FORCE_LAUNCH_MODE=${JSON.stringify(Boolean(launchState.forced))};window.__NV_NOTIFY_ME_HIGHER_TIERS=${JSON.stringify(notifyFlag)};window.__NV_IS_PREVIEW=${JSON.stringify(isPreview)};window.__NV_ENABLE_LAYERS_2_3=${JSON.stringify(layers23Flag)};</script>`;
         let modifiedHtml = rawHtml;
         if (!modifiedHtml.includes('id="nv-server-launch-config"')) {
           if (/<\/head>/i.test(modifiedHtml)) {
@@ -3008,7 +3255,8 @@ export default {
   },
 
   async _handleRequest(request, env, ctx) {
-        const url = new URL(request.url);
+    assertNoDangerousFlagsInProduction(env, request);
+    const url = new URL(request.url);
 
     // CSRF Protection: Verify Origin on state-changing POST endpoints
     if (request.method === 'POST' && (url.pathname.startsWith('/api/v1/auth/') || url.pathname.startsWith('/api/v1/payments/') || url.pathname === '/api/create-order' || url.pathname === '/api/verify-payment' || url.pathname === '/api/planner-2027/order' || url.pathname === '/api/planner-2027/verify' || url.pathname === '/api/planner-2027/resend-link')) {
@@ -4377,15 +4625,38 @@ export default {
     return bal;
   }
 
-  function getUtcDayBoundsMs(tsMs = Date.now()) {
-    const dt = new Date(tsMs);
-    const startMs = Date.UTC(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate());
-    const dayKey = dt.toISOString().slice(0, 10);
+  const IST_OFFSET_MS = (5 * 60 + 30) * 60 * 1000;
+  function getIstDayBoundsMs(tsMs = Date.now()) {
+    const istShifted = new Date(tsMs + IST_OFFSET_MS);
+    const istStartShifted = Date.UTC(istShifted.getUTCFullYear(), istShifted.getUTCMonth(), istShifted.getUTCDate());
+    const startMs = istStartShifted - IST_OFFSET_MS;
+    const dayKey = istShifted.toISOString().slice(0, 10);
     return { startMs, dayKey };
   }
+  function getUtcDayBoundsMs(tsMs = Date.now()) {
+    return getIstDayBoundsMs(tsMs);
+  }
 
-  async function getGuestUsage(visitorHash, env) {
-    const { startMs, dayKey } = getUtcDayBoundsMs(Date.now());
+  function resolveCharmEffectiveNowMs(request, env) {
+    const allowTestClock = Boolean(
+      env && (
+        env.ENVIRONMENT === 'local' ||
+        env.__TEST__ === true ||
+        env.NODE_ENV === 'test'
+      )
+    );
+    if (allowTestClock && request && request.headers && typeof request.headers.get === 'function') {
+      const hdr = request.headers.get('X-NV-Test-Now-ISO');
+      if (hdr) {
+        const parsed = Date.parse(String(hdr).trim());
+        if (!Number.isNaN(parsed)) return parsed;
+      }
+    }
+    return Date.now();
+  }
+
+  async function getGuestUsage(visitorHash, env, nowMs = Date.now()) {
+    const { startMs, dayKey } = getUtcDayBoundsMs(nowMs);
     if (env && env.DB) {
       try {
         const row = await env.DB.prepare('SELECT questions_used, updated_at FROM free_chat_usage WHERE visitor_hash = ?').bind(visitorHash).first();
@@ -4402,8 +4673,8 @@ export default {
     return Number(entry.questions_used || 0);
   }
 
-  async function incrementGuestUsage(visitorHash, ipHash, env) {
-    const now = Date.now();
+  async function incrementGuestUsage(visitorHash, ipHash, env, nowMs = Date.now()) {
+    const now = nowMs;
     const { startMs, dayKey } = getUtcDayBoundsMs(now);
     if (env && env.DB) {
       try {
@@ -5048,7 +5319,13 @@ export default {
         }), { status: 409, headers: corsHeaders });
       }
 
-      const amountPaise = pack.amount_paise;
+      const amountPaise = resolveEffectivePackPricePaise(pack.pack_id, env, now);
+      if (!amountPaise || amountPaise <= 0) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: `Invalid effective price for pack "${packId}".`
+        }), { status: 400, headers: corsHeaders });
+      }
       const currency = 'INR';
 
       // 3. Subject verification or creation
@@ -6035,7 +6312,7 @@ export default {
         }
         let job = null;
         if (env.DB) {
-          job = await env.DB.prepare('SELECT id, status, r2_key, download_url, attempts, created_at, updated_at FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(tokenOrder.id).first();
+          job = await env.DB.prepare('SELECT * FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(tokenOrder.id).first();
         } else if (memoryStore && memoryStore.reportJobs) {
           for (const j of memoryStore.reportJobs.values()) {
             if (j.order_id === tokenOrder.id) { job = j; break; }
@@ -6046,7 +6323,7 @@ export default {
           console.log(`[DASHBOARD_SAFETY_NET] Token order ${tokenOrder.id} is PAID but has no report job. Fulfilling idempotently now...`);
           await fulfillPaidOrder(tokenOrder, tokenOrder.rzp_payment_id || 'recovery_payment', tokenOrder.amount_paise, 'recovery', env, Date.now(), 'dashboard_safety_net', request);
           if (env.DB) {
-            job = await env.DB.prepare('SELECT id, status, r2_key, download_url, attempts, created_at, updated_at FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(tokenOrder.id).first();
+            job = await env.DB.prepare('SELECT * FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(tokenOrder.id).first();
           } else if (memoryStore && memoryStore.reportJobs) {
             for (const j of memoryStore.reportJobs.values()) {
               if (j.order_id === tokenOrder.id) { job = j; break; }
@@ -6056,15 +6333,16 @@ export default {
         const pack = getPackById(tokenOrder.pack_id);
         const st = job ? String(job.status || 'QUEUED').toUpperCase() : 'QUEUED';
         const attempts = job ? (job.attempts || 0) : 0;
+        const jobProg = formatReportJobProgress(job, Date.now());
         let displayStatus = 'preparing';
         let statusBadge = 'Payment received, preparing your report';
-        let message = 'Payment received, preparing your report';
+        let message = jobProg.progressLine || 'Payment received, preparing your report';
         let isDownloadable = false;
 
         if (st === 'COMPLETED' || st === 'DOWNLOADED' || (job && (job.r2_key || job.download_url))) {
           displayStatus = 'ready';
           statusBadge = 'Ready';
-          message = 'Your bespoke dossier has been rendered and verified.';
+          message = 'Your report is ready to download.';
           isDownloadable = true;
         } else if (st === 'FAILED' || attempts >= 3) {
           displayStatus = 'needs_attention';
@@ -6080,6 +6358,9 @@ export default {
           status: displayStatus,
           statusBadge: statusBadge,
           message: message,
+          currentStage: jobProg.currentStage,
+          progressLine: jobProg.progressLine,
+          delayedNotice: jobProg.delayedNotice,
           isDownloadable: isDownloadable,
           downloadUrl: (job && job.download_url) ? job.download_url : null,
           createdAt: tokenOrder.created_at,
@@ -6201,7 +6482,7 @@ export default {
       let rawReportJobs = [];
       if (env.DB) {
         const jobRows = await env.DB.prepare(
-          'SELECT id, user_id, subject_id, pack_id, order_id, status, attempts, last_error, r2_key, created_at, completed_at FROM report_jobs WHERE user_id = ? ORDER BY created_at DESC'
+          'SELECT * FROM report_jobs WHERE user_id = ? ORDER BY created_at DESC'
         ).bind(user.user_id).all();
         rawReportJobs = (jobRows && jobRows.results) || [];
       } else if (memoryStore && memoryStore.reportJobs) {
@@ -6244,16 +6525,17 @@ export default {
         const subj = subjects.find(s => s.id === job.subject_id) || activeSubject || { name: 'Member', dob: '' };
         const st = String(job.status || 'QUEUED').toUpperCase();
         const attempts = job.attempts || 0;
+        const jobProg = formatReportJobProgress(job, Date.now());
         
         let displayStatus = 'preparing';
         let statusBadge = 'Payment received, preparing your report';
-        let message = 'Payment received, preparing your report';
+        let message = jobProg.progressLine || 'Payment received, preparing your report';
         let isDownloadable = false;
 
         if (st === 'COMPLETED' || st === 'DOWNLOADED' || job.r2_key) {
           displayStatus = 'ready';
           statusBadge = 'Ready';
-          message = 'Your bespoke dossier has been rendered and verified.';
+          message = 'Your report is ready to download.';
           isDownloadable = true;
         } else if (st === 'FAILED' || attempts >= 3) {
           displayStatus = 'needs_attention';
@@ -6274,6 +6556,9 @@ export default {
           status: displayStatus,
           statusBadge,
           message,
+          currentStage: jobProg.currentStage,
+          progressLine: jobProg.progressLine,
+          delayedNotice: jobProg.delayedNotice,
           attempts,
           isDownloadable,
           downloadUrl: null, // Minted at CLICK time via POST /api/v1/reports/download-token (session-bound 5-min TTL)
@@ -6689,6 +6974,7 @@ export default {
           ...PACK_CATALOG.launch_offer,
           configured: launchState.configured,
           active: launchState.active,
+          forced: Boolean(launchState.forced),
           started_at: launchState.startedAt,
           ends_at: launchState.endsAt,
           until_date_label: launchState.untilDate || null,
@@ -7832,13 +8118,9 @@ export default {
       ];
 
       function generateDeterministicReportText(sku, name, day, month, year) {
-        function r(n) {
-          while (n > 9) n = String(n).split('').reduce((acc, c) => acc + parseInt(c, 10), 0);
-          return n;
-        }
-        const dVal = r(day);
-        const cVal = r(day + month + year);
-        const py = r(dVal + r(month) + r(new Date().getFullYear()));
+        const dVal = calcDriver(day);
+        const cVal = calcBhagyank(day, month, year);
+        const py = calcPersonalYear(day, month, new Date().getFullYear());
         const dobStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const planetMap = {
           1: "Sun (Surya)", 2: "Moon (Chandra)", 3: "Jupiter (Brihaspati)",
@@ -8213,13 +8495,9 @@ export default {
       const d = parseInt(parts[2], 10) || 28;
       const name = url.searchParams.get('name') || (dob === '1981-11-28' ? 'Arun Sharma' : (dob === '1990-01-01' ? 'Priya Patel' : 'Anil Kumar'));
 
-      function r(n) {
-        while (n > 9) n = String(n).split('').reduce((acc, c) => acc + parseInt(c, 10), 0);
-        return n;
-      }
-      const dVal = r(d);
-      const cVal = r(d + m + y);
-      const py = r(dVal + r(m) + r(new Date().getFullYear()));
+      const dVal = calcDriver(d);
+      const cVal = calcBhagyank(d, m, y);
+      const py = calcPersonalYear(d, m, new Date().getFullYear());
       const dobStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const planetMap = {
         1: "Sun (Surya)", 2: "Moon (Chandra)", 3: "Jupiter (Brihaspati)",
@@ -8276,18 +8554,12 @@ export default {
       const m = parseInt(body.month, 10) || 1;
       const y = parseInt(body.year, 10) || 1990;
 
-      // Deterministic reductions
-      function red(n) {
-        while (n > 9) {
-          n = String(n).split('').reduce((a, b) => a + parseInt(b, 10), 0);
-        }
-        return n;
-      }
-      const driver = red(d);
-      const conductor = red(d + m + y);
+      // Deterministic reductions via shared digitRoot
+      const driver = calcDriver(d);
+      const conductor = calcBhagyank(d, m, y);
       const signupKuaDetails = calculateCanonicalKuaDetails(y, body.gender || null);
       const kua = signupKuaDetails.kuaNumber;
-      const personalYear = red(driver + red(m) + red(new Date().getFullYear()));
+      const personalYear = calcPersonalYear(d, m, new Date().getFullYear());
 
       // Lo Shu Grid
       const digits = `${d}${m}${y}`.replace(/\D/g, '');
@@ -8531,10 +8803,13 @@ export default {
           user_id: user.user_id,
           credits_remaining: Math.max(0, bal),
           daily_free_limit: 3,
+          reset_timezone: 'Asia/Kolkata',
+          resets_at_label: 'resets at midnight',
           tier: bal > 0 ? 'paid' : 'exhausted'
         }), { status: 200, headers: corsHeaders });
       } else {
-        const guestUsed = await getGuestUsage(visitorInfo.visitorHash, env);
+        const effNowCredits = resolveCharmEffectiveNowMs(request, env);
+        const guestUsed = await getGuestUsage(visitorInfo.visitorHash, env, effNowCredits);
         const remaining = Math.max(0, 3 - guestUsed);
         return new Response(JSON.stringify({
           authenticated: false,
@@ -8542,13 +8817,15 @@ export default {
           visitor_id: 'vis_' + visitorInfo.visitorHash.slice(0, 16),
           credits_remaining: remaining,
           daily_free_limit: 3,
+          reset_timezone: 'Asia/Kolkata',
+          resets_at_label: 'resets at midnight',
           tier: remaining > 0 ? 'guest' : 'exhausted'
         }), { status: 200, headers: corsHeaders });
       }
     }
 
-    // ── ROUTE: CHARM AI CONSULTATION CHAT (/api/charm/chat & /api/v1/readings/ask) ──
-    if ((url.pathname === '/api/charm/chat' || url.pathname === '/api/v1/readings/ask') && request.method === 'POST') {
+    // ── ROUTE: CHARM AI CONSULTATION CHAT (/api/charm/chat, /api/charm/chat/stream & /api/v1/readings/ask) ──
+    if ((url.pathname === '/api/charm/chat' || url.pathname === '/api/charm/chat/stream' || url.pathname === '/api/v1/readings/ask') && request.method === 'POST') {
       const corsHeaders = {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': getCorsOrigin(request, env),
@@ -8556,6 +8833,12 @@ export default {
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization'
       };
+      const isStreamRoute = (url.pathname === '/api/charm/chat/stream');
+      const sseHeaders = Object.assign({}, corsHeaders, {
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        'X-Accel-Buffering': 'no'
+      });
 
       // Fail-Closed Validation: Outside test environments, strictly require IP_HASH_SALT and D1 DB binding
       const isTestEnv = Boolean(
@@ -8592,9 +8875,9 @@ export default {
         }), { status: 503, headers: corsHeaders });
       }
 
-      // 2. Global Daily Spend Cap Check (Durable across isolates)
-      const now = Date.now();
-      const todayKey = new Date(now).toISOString().slice(0, 10);
+      // 2. Global Daily Spend Cap Check (Durable across isolates, 00:00 IST boundary)
+      const now = resolveCharmEffectiveNowMs(request, env);
+      const todayKey = new Date(now + (5 * 60 + 30) * 60 * 1000).toISOString().slice(0, 10);
       const globalDailyCap = parseInt((env && env.CHARM_GLOBAL_DAILY_CAP) || '500', 10);
       const globalDailyAllowed = await checkDurableRateLimit(env, 'charm_global_daily_' + todayKey, globalDailyCap, 86400000);
       if (!globalDailyAllowed) {
@@ -8605,18 +8888,22 @@ export default {
         }), { status: 429, headers: corsHeaders });
       }
 
-      // 3. Per-IP Daily Cap & Per-IP Burst Limit Check (Durable across isolates)
+      // 3. Per-IP Daily Cap (~100/day, applied ONLY when nv_visitor_id cookie is absent; Indian CGNAT shares IPs) & 5/min Burst Cap
       const ipSalt = (env && env.IP_HASH_SALT ? env.IP_HASH_SALT : '') || 'default_salt_charm_secure';
       const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
       const ipHash = await sha256Hex(clientIp + ipSalt);
+      const incomingVisCookie = getCookie(request, 'nv_visitor_id');
+      const hasValidVisitorCookie = Boolean(incomingVisCookie && incomingVisCookie.startsWith('vis_') && incomingVisCookie.length >= 12);
 
-      const ipDailyAllowed = await checkDurableRateLimit(env, 'charm_ip_daily_' + ipHash + '_' + todayKey, 15, 86400000);
-      if (!ipDailyAllowed) {
-        return new Response(JSON.stringify({
-          success: false,
-          code: 'DAILY_IP_LIMIT_EXCEEDED',
-          error: 'Daily consultation limit reached for this connection. Please try again tomorrow.'
-        }), { status: 429, headers: corsHeaders });
+      if (!hasValidVisitorCookie) {
+        const ipDailyAllowed = await checkDurableRateLimit(env, 'charm_ip_daily_' + ipHash + '_' + todayKey, 100, 86400000);
+        if (!ipDailyAllowed) {
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'DAILY_IP_LIMIT_EXCEEDED',
+            error: 'Daily consultation limit reached for this connection. Please try again after midnight.'
+          }), { status: 429, headers: corsHeaders });
+        }
       }
 
       const ipBurstAllowed = await checkDurableRateLimit(env, 'charm_ip_burst_' + ipHash, 5, 60000);
@@ -8721,7 +9008,7 @@ export default {
         newRemainingCredits = await getUserCreditBalance(user.user_id, env);
       } else {
         // Guest: Atomic conditional check and increment of 3 free questions per day per visitor
-        const guestInc = await incrementGuestUsage(visitorInfo.visitorHash, ipHash, env);
+        const guestInc = await incrementGuestUsage(visitorInfo.visitorHash, ipHash, env, now);
         if (!guestInc.success) {
           return new Response(JSON.stringify({
             success: false,
@@ -8857,6 +9144,18 @@ export default {
             throw new Error('SIMULATED_UPSTREAM_503');
           }
           memoryStore.charmModelInvocations = (memoryStore.charmModelInvocations || 0) + 1;
+          let charmEntitlement = 'charm_free';
+          if (user && env && env.DB) {
+            try {
+              const paidOrdRows = await env.DB.prepare("SELECT pack_id FROM orders WHERE user_id = ? AND status = 'PAID'").bind(user.user_id).all();
+              const ownedPacks = ((paidOrdRows && paidOrdRows.results) || []).map(r => String(r.pack_id || '').toLowerCase());
+              if (ownedPacks.some(p => p.includes('premium') || p.includes('divine') || p.includes('planner_2027'))) {
+                charmEntitlement = 'charm_premium';
+              } else if (ownedPacks.some(p => p.includes('charm_') || p.includes('advanced') || p.includes('master'))) {
+                charmEntitlement = 'charm_paid';
+              }
+            } catch (_entErr) {}
+          }
           const upstreamPayload = {
             message: rawMessage,
             user_id: user ? user.user_id : ('vis_' + visitorInfo.visitorHash.slice(0, 24)),
@@ -8865,9 +9164,11 @@ export default {
             month: m,
             year: y,
             birth_time: body.birth_time || body.birthTime || null,
-            birth_place: body.birth_place || body.birthPlace || null
+            birth_place: body.birth_place || body.birthPlace || null,
+            _charm_entitlement: charmEntitlement
           };
-          const upstreamResp = await callCharmBackendService(upstreamPayload, env);
+          const upstreamPath = isStreamRoute ? '/api/charm/chat/stream' : '/api/charm/chat';
+          const upstreamResp = await callCharmBackendService(upstreamPayload, env, upstreamPath);
           if (!upstreamResp || !upstreamResp.ok) {
             const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
             return new Response(JSON.stringify({
@@ -8877,9 +9178,93 @@ export default {
               credits_remaining: restored
             }), { status: 503, headers: corsHeaders });
           }
+          const upstreamCt = String((upstreamResp.headers && upstreamResp.headers.get && upstreamResp.headers.get('content-type')) || '').toLowerCase();
+          if (isStreamRoute && upstreamCt.includes('text/event-stream') && upstreamResp.body && typeof upstreamResp.body.getReader === 'function') {
+            const encoder = new TextEncoder();
+            const decoder = new TextDecoder('utf-8');
+            const reader = upstreamResp.body.getReader();
+            const liveStream = new ReadableStream({
+              async start(controller) {
+                let buf = '';
+                let refundedAlready = false;
+                try {
+                  while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    buf += decoder.decode(value, { stream: true });
+                    const blocks = buf.split('\n\n');
+                    buf = blocks.pop() || '';
+                    for (const blk of blocks) {
+                      if (!blk.trim()) continue;
+                      const lines = blk.split('\n');
+                      let evType = 'message';
+                      let dataStr = '';
+                      for (const ln of lines) {
+                        if (ln.startsWith('event:')) evType = ln.slice(6).trim();
+                        else if (ln.startsWith('data:')) dataStr += ln.slice(5).trim();
+                      }
+                      if (evType === 'stage') {
+                        // Forward upstream stage event immediately as it arrives (zero buffering, zero timer)
+                        controller.enqueue(encoder.encode(blk + '\n\n'));
+                      } else if (evType === 'result' && dataStr) {
+                        let parsedRes = null;
+                        try { parsedRes = JSON.parse(dataStr); } catch (_pe) {}
+                        if (parsedRes) {
+                          const upStatus = String(parsedRes.status || '').toUpperCase();
+                          if ((upStatus && upStatus !== 'ANSWERED' && upStatus !== 'SUCCESS') || parsedRes.credit_chargeable === false || parsedRes.llm_rejected === true) {
+                            if (!refundedAlready) {
+                              newRemainingCredits = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+                              refundedAlready = true;
+                            }
+                          }
+                          const normalizedFollowUp = parsedRes.follow_up_question || parsedRes.follow_up_prompt || '';
+                          const mergedRes = Object.assign({}, parsedRes, {
+                            credits_remaining: newRemainingCredits,
+                            follow_up_question: normalizedFollowUp
+                          });
+                          delete mergedRes.follow_up_prompt;
+                          controller.enqueue(encoder.encode(`event: result\ndata: ${JSON.stringify(mergedRes)}\n\n`));
+                        } else {
+                          controller.enqueue(encoder.encode(blk + '\n\n'));
+                        }
+                      } else if (evType === 'error') {
+                        if (!refundedAlready) {
+                          newRemainingCredits = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+                          refundedAlready = true;
+                        }
+                        let errObj = { success: false, code: 'CHARM_UNAVAILABLE', error: 'Charm AI is unavailable right now, no credit was used. Try again.', credits_remaining: newRemainingCredits };
+                        try {
+                          const parsedErr = JSON.parse(dataStr);
+                          errObj = Object.assign({}, parsedErr, { credits_remaining: newRemainingCredits });
+                        } catch (_ee) {}
+                        controller.enqueue(encoder.encode(`event: error\ndata: ${JSON.stringify(errObj)}\n\n`));
+                      } else {
+                        controller.enqueue(encoder.encode(blk + '\n\n'));
+                      }
+                    }
+                  }
+                } catch (_streamErr) {
+                  if (!refundedAlready) {
+                    newRemainingCredits = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+                    refundedAlready = true;
+                  }
+                  const errPayload = {
+                    success: false,
+                    code: 'CHARM_UNAVAILABLE',
+                    error: 'Charm AI is unavailable right now, no credit was used. Try again.',
+                    credits_remaining: newRemainingCredits
+                  };
+                  controller.enqueue(encoder.encode(`event: error\ndata: ${JSON.stringify(errPayload)}\n\n`));
+                } finally {
+                  controller.close();
+                }
+              }
+            });
+            return new Response(liveStream, { status: 200, headers: sseHeaders });
+          }
           const upstreamData = await upstreamResp.json();
           const upStatus = String(upstreamData.status || '').toUpperCase();
-          if (upStatus && upStatus !== 'ANSWERED' && upStatus !== 'SUCCESS') {
+          if ((upStatus && upStatus !== 'ANSWERED' && upStatus !== 'SUCCESS') || upstreamData.credit_chargeable === false || upstreamData.llm_rejected === true) {
             newRemainingCredits = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
           }
           const normalizedFollowUp = upstreamData.follow_up_question || upstreamData.follow_up_prompt || '';
@@ -8888,6 +9273,10 @@ export default {
             follow_up_question: normalizedFollowUp
           });
           delete merged.follow_up_prompt;
+          if (isStreamRoute) {
+            const encoder = new TextEncoder();
+            return new Response(encoder.encode(`event: result\ndata: ${JSON.stringify(merged)}\n\n`), { status: 200, headers: sseHeaders });
+          }
           return new Response(JSON.stringify(merged), { status: 200, headers: corsHeaders });
         } catch (upErr) {
           const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
@@ -8920,16 +9309,34 @@ export default {
         }
         memoryStore.charmModelInvocations = (memoryStore.charmModelInvocations || 0) + 1;
 
-        function red(n) {
-          while (n > 9) {
-            n = String(n).split('').reduce((a, b) => a + parseInt(b, 10), 0);
-          }
-          return n === 0 ? 9 : n;
-        }
-        const driver = red(d);
-        const conductor = red(String(d).padStart(2, '0').split('').concat(String(m).padStart(2, '0').split(''), String(y).padStart(4, '0').split('')).reduce((a, b) => a + parseInt(b, 10), 0));
-        const personalYear = red(driver + red(m) + red(new Date().getFullYear()));
+        const localStageEvents = [];
+        const recordStage = (stepIdx, stageId, label, status, t0Ms) => {
+          localStageEvents.push({
+            stage: stageId,
+            label,
+            status,
+            step_index: stepIdx,
+            total_steps: 5,
+            elapsed_ms: Math.max(0, Date.now() - t0Ms)
+          });
+        };
+
+        const s1Start = Date.now();
+        recordStage(1, 'reading_birth_date', 'Reading your birth date', 'started', s1Start);
         const greetingLine = rawName ? `for ${rawName}` : `for DOB ${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}/${y}`;
+        recordStage(1, 'reading_birth_date', 'Reading your birth date', 'completed', s1Start);
+
+        const s2Start = Date.now();
+        recordStage(2, 'mapping_loshu_grid', 'Mapping your Lo Shu grid', 'started', s2Start);
+        const driver = calcDriver(d);
+        const conductor = calcBhagyank(d, m, y);
+        calcLoShuDobOnly(d, m, y);
+        recordStage(2, 'mapping_loshu_grid', 'Mapping your Lo Shu grid', 'completed', s2Start);
+
+        const s3Start = Date.now();
+        recordStage(3, 'checking_cycles', 'Checking your cycles', 'started', s3Start);
+        const personalYear = calcPersonalYear(d, m, new Date().getFullYear());
+        recordStage(3, 'checking_cycles', 'Checking your cycles', 'completed', s3Start);
 
         const planets = {
           1: 'Sun (Surya) — Sovereign Initiative & Clarity',
@@ -9026,6 +9433,8 @@ export default {
           }
         };
 
+        const s4Start = Date.now();
+        recordStage(4, 'putting_reading_together', 'Putting your reading together', 'started', s4Start);
         const tpl = topicTemplates[detectedTopic] || topicTemplates.general;
         const buildCleanReading = () => `### Numerology Synthesis ${greetingLine}
 
@@ -9038,7 +9447,10 @@ export default {
 
 **Topic Assessment (${detectedTopic.replace(/_/g, ' ')}):**
 ${tpl.focusBody}`;
+        recordStage(4, 'putting_reading_together', 'Putting your reading together', 'completed', s4Start);
 
+        const s5Start = Date.now();
+        recordStage(5, 'writing_answer', 'Writing your answer', 'started', s5Start);
         assistantText = buildCleanReading();
         if (body.__simulated_text__ && isTestEnv) {
           assistantText = body.__simulated_text__;
@@ -9053,11 +9465,12 @@ ${tpl.focusBody}`;
         if (assistantText === CHARM_SAFE_FALLBACK_TEXT) {
           newRemainingCredits = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
         }
+        recordStage(5, 'writing_answer', 'Writing your answer', 'completed', s5Start);
 
         const hasFullAstroInputs = Boolean((body.birth_time || body.birthTime) && (body.birth_place || body.birthPlace));
         const consensusStatus = hasFullAstroInputs ? 'VERIFIED_SUPPORTED' : 'NUMEROLOGY_PRIMARY_CORROBORATED';
 
-        return new Response(JSON.stringify({
+        const localResultObj = {
           status: 'ANSWERED',
           topic: detectedTopic,
           credits_remaining: newRemainingCredits,
@@ -9085,7 +9498,21 @@ ${tpl.focusBody}`;
           },
           practical_next_steps: tpl.steps,
           follow_up_question: tpl.followUp
-        }), { status: 200, headers: corsHeaders });
+        };
+        if (!isStreamRoute) {
+          return new Response(JSON.stringify(localResultObj), { status: 200, headers: corsHeaders });
+        }
+        const encoder = new TextEncoder();
+        const localStream = new ReadableStream({
+          start(controller) {
+            for (const ev of localStageEvents) {
+              controller.enqueue(encoder.encode(`event: stage\ndata: ${JSON.stringify(ev)}\n\n`));
+            }
+            controller.enqueue(encoder.encode(`event: result\ndata: ${JSON.stringify(localResultObj)}\n\n`));
+            controller.close();
+          }
+        });
+        return new Response(localStream, { status: 200, headers: sseHeaders });
       } catch (genErr) {
         const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
         return new Response(JSON.stringify({
@@ -9362,4 +9789,4 @@ ${tpl.focusBody}`;
   }
 };
 
-export { calculateCanonicalKuaDetails, KUA_RULE_TEXT, KUA_NEEDS_GENDER_TEXT, WEBHOOK_FALLBACK_WINDOW_MS, reconcileStaleOrderWithRazorpay, isNotifyMeHigherTiersEnabled, resolveServerLaunchOfferState, getPackById };
+export { digitRoot, sumDigitsStr, calcDriver, calcBhagyank, calcPersonalYear, calcPersonalMonth, calcPersonalDay, calcPersonalCyclesForDate, calcLoShuDobOnly, calcChaldeanNameNumber, calcPythagoreanNameNumber, calculateCanonicalKuaDetails, KUA_RULE_TEXT, KUA_NEEDS_GENDER_TEXT, WEBHOOK_FALLBACK_WINDOW_MS, reconcileStaleOrderWithRazorpay, isNotifyMeHigherTiersEnabled, isLayers23Enabled, resolveServerLaunchOfferState, getPackById, resolveEffectivePackPricePaise };

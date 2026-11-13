@@ -170,7 +170,7 @@
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
         opacity: 0;
         pointer-events: none;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: var(--font-body);
       }
       #nv-pwa-banner.nv-pwa-visible {
         transform: translate(-50%, 0);
@@ -214,7 +214,7 @@
         min-width: 0;
       }
       .nv-pwa-title {
-        font-family: 'Cinzel', serif;
+        font-family: var(--font-display);
         font-size: 0.88rem;
         font-weight: 700;
         color: #523E28;
@@ -226,7 +226,7 @@
         gap: 6px;
       }
       .nv-pwa-pill {
-        font-family: 'Inter', sans-serif;
+        font-family: var(--font-body);
         font-size: 0.6rem;
         font-weight: 700;
         background: #C9A227;
@@ -306,7 +306,7 @@
         pointer-events: none;
         transition: opacity 0.3s ease;
         padding: 16px;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: var(--font-body);
       }
       #nv-pwa-ios-modal.nv-modal-open {
         opacity: 1;
@@ -349,7 +349,7 @@
         height: 34px;
       }
       .nv-ios-title {
-        font-family: 'Cinzel', serif;
+        font-family: var(--font-display);
         font-size: 1.15rem;
         font-weight: 700;
         color: #523E28;

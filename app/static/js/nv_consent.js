@@ -101,7 +101,7 @@
         padding: 22px 24px;
         box-shadow: 0 16px 48px rgba(180, 155, 110, 0.28), 0 4px 16px rgba(30, 24, 16, 0.08);
         z-index: 99999;
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-family: var(--font-body);
         color: #523E28;
         display: none;
         opacity: 0;
@@ -229,7 +229,7 @@
         padding: 26px 28px;
         box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
         color: #523E28;
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-family: var(--font-body);
       }
       .nv-consent-modal-header {
         display: flex;
@@ -327,6 +327,17 @@
         .nv-consent-modal-card {
           padding: 20px 18px;
         }
+      }
+      .nv-cookie-pref-btn {
+        display: inline-block;
+        background: none;
+        border: none;
+        color: #8B6914;
+        font-size: 0.75rem;
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 4px 6px;
+        font-family: inherit;
       }
     `;
     document.head.appendChild(style);
@@ -457,7 +468,6 @@
         btn.type = 'button';
         btn.className = 'nv-cookie-pref-btn';
         btn.textContent = 'Cookie Preferences';
-        btn.style.cssText = 'background:none; border:none; color:#8B6914; font-size:0.75rem; text-decoration:underline; cursor:pointer; padding:2px 6px; font-family:inherit;';
         btn.onclick = function (e) {
           window.nvConsent.reopen(e);
         };

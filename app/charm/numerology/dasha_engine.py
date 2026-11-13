@@ -64,11 +64,10 @@ class NumerologyDashaResult(BaseModel):
     career_event_rule: Optional[Dict[str, Any]] = None
 
 def calculate_single_digit_root(num: int) -> int:
-    """Calculates pure digital root reduction to single digit 1-9."""
-    val = abs(num)
-    while val > 9:
-        val = sum(int(d) for d in str(val))
-    return val if val != 0 else 9
+    """Calculates pure digital root reduction to single digit 1-9 via shared digit_root."""
+    from app.engine.digit_root import digit_root
+    res = digit_root(abs(int(num)))
+    return res if res != 0 else 9
 
 class NumerologyDashaEngine:
     def __init__(self, profile_id: str = "TN-PRO-V1"):
@@ -144,12 +143,12 @@ class NumerologyDashaEngine:
             "formula": "Driver = root(day); Conductor = root(sum(all_dob_digits))"
         })
 
-        # 3. Personal Cycles
+        # 3. Personal Year / Month / Day (via shared canonical formula; distinct from 9-year Mahadasha)
+        from app.engine.digit_root import calc_personal_day, calc_personal_month, calc_personal_year
         target_year = target.year
-        py_sum = day + month + sum(int(d) for d in str(target_year))
-        personal_year = calculate_single_digit_root(py_sum)
-        personal_month = calculate_single_digit_root(personal_year + target.month)
-        personal_day = calculate_single_digit_root(personal_month + target.day)
+        personal_year = calc_personal_year(day, month, target_year)
+        personal_month = calc_personal_month(personal_year, target.month)
+        personal_day = calc_personal_day(personal_year, personal_month, target.day, target.month, target_year)
 
         # 4. Chronological Age & Mahadasha / Antardasha Progression
         birth_dt = date(year, month, min(day, 28))

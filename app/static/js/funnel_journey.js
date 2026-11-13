@@ -274,10 +274,10 @@
           <div style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:rgba(201,162,39,0.12);border:1.5px solid var(--gold, #C9A227);font-size:1.3rem;color:#8B6914;margin-bottom:8px;">
             🔒
           </div>
-          <div style="font-family:'Cinzel', serif;font-size:0.70rem;letter-spacing:0.16em;text-transform:uppercase;color:#8B6914;font-weight:700;margin-bottom:4px;">
+          <div style="font-size:0.70rem;letter-spacing:0.16em;text-transform:uppercase;color:#8B6914;font-weight:700;margin-bottom:4px;">
             NUMEROS VISION · ANVEIL EVERY CHARM
           </div>
-          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:#523E28;margin:0 0 8px 0;font-weight:700;">
+          <h3 style="font-size:1.55rem;color:#523E28;margin:0 0 8px 0;font-weight:700;">
             Explore ${prod.plan_name}
           </h3>
           <p style="font-size:0.88rem;color:#7A654D;line-height:1.6;max-width:620px;margin:0 auto;">
@@ -304,7 +304,7 @@
                   Approved Single Investment
                 </div>
                 <div style="display:flex;align-items:baseline;gap:8px;">
-                  <span style="font-size:1.6rem;font-family:'Cormorant Garamond',serif;font-weight:700;color:#8B6914;">
+                  <span style="font-size:1.6rem;font-weight:700;color:#8B6914;">
                     ₹${prod.price_inr.toLocaleString('en-IN')}
                   </span>
                 </div>

@@ -54,9 +54,8 @@ rel = lambda a, b: SC[GRID[a][b - 1]]
 ds = lambda n: sum(map(int, str(n)))
 
 def red(n: int) -> int:
-    while n > 9:
-        n = ds(n)
-    return n
+    from app.engine.digit_root import digit_root
+    return digit_root(n)
 
 CH = dict(zip("ABCDEFGHIJKLMNOPQRSTUVWXYZ", [1, 2, 3, 4, 5, 8, 3, 5, 1, 1, 2, 3, 4, 5, 7, 8, 1, 2, 3, 4, 6, 6, 6, 5, 1, 7]))
 WD = {0: 2, 1: 9, 2: 5, 3: 3, 4: 6, 5: 8, 6: 1}  # Mon..Sun -> ruler number
@@ -569,7 +568,7 @@ def calculate_planner_2027(
 
     all_scores = [d['score'] for d in ys]
 
-    return {
+    result = {
         "subject": {
             "full_name": full_name.strip(),
             "dob": dob_str,
@@ -601,3 +600,26 @@ def calculate_planner_2027(
         "months": months_data,
         "full_calendar_365": full_calendar_365
     }
+
+    from app.engine.indications_engine import compute_full_indications_bundle, is_layers_2_3_enabled
+    if is_layers_2_3_enabled():
+        ind_bundle = compute_full_indications_bundle(
+            day=day,
+            month=month,
+            year=year,
+            calling_name=full_name,
+            care_guide_year=2027,
+            tier="planner_2027",
+            entitlement_tier="planner_2027",
+        )
+        result["care_guide_2027"] = ind_bundle["cycles"]["care_guide_2027"]
+        result["indications_layer"] = {
+            "commanding_planet": ind_bundle["commanding_planet"],
+            "layer_2_neighbour_relations": ind_bundle["layer_2_neighbour_relations"],
+            "layer_3_combined_gap_neighbour_reading": ind_bundle["layer_3_combined_gap_neighbour_reading"],
+            "indication_cards": ind_bundle["indication_cards"],
+        }
+        result["ordered_remedies"] = ind_bundle["remedies"]
+        result["affirmation_and_manifestation"] = ind_bundle["affirmation_and_manifestation"]
+
+    return result

@@ -70,10 +70,9 @@ def audit_mobile_number(mobile_str: str, driver: Optional[int] = None) -> Dict[s
     if len(digits) < 10:
         return {"error": "Invalid mobile number. Must contain at least 10 digits."}
 
+    from app.engine.digit_root import digit_root
     raw_sum = sum(int(d) for d in digits)
-    total_reduced = raw_sum
-    while total_reduced > 9:
-        total_reduced = sum(int(d) for d in str(total_reduced))
+    total_reduced = digit_root(raw_sum)
 
     joined = "".join(digits)
     detected_malefics = []
@@ -134,26 +133,24 @@ def calculate_personal_cycles(day: int, month: int, target_date: Optional[dateti
     t_month = target.month
     t_year = target.year
 
+    from app.engine.digit_root import (
+        PERSONAL_CYCLES_LABEL,
+        calc_personal_day,
+        calc_personal_month,
+        calc_personal_year,
+        digit_root,
+    )
     # Universal Year
-    uy_sum = sum(int(d) for d in str(t_year))
-    while uy_sum > 9:
-        uy_sum = sum(int(d) for d in str(uy_sum))
+    uy_sum = digit_root(t_year)
 
-    # Personal Year = Day + Month + Target Year
-    dob_sum = day + month + sum(int(d) for d in str(t_year))
-    py = dob_sum
-    while py > 9:
-        py = sum(int(d) for d in str(py))
+    # Personal Year = Day + Month + Target Year (digits reduced 1-9)
+    py = calc_personal_year(day, month, t_year)
 
     # Personal Month = Personal Year + Target Month
-    pm = py + t_month
-    while pm > 9:
-        pm = sum(int(d) for d in str(pm))
+    pm = calc_personal_month(py, t_month)
 
-    # Personal Day = Personal Month + Target Day
-    pd = pm + t_day
-    while pd > 9:
-        pd = sum(int(d) for d in str(pd))
+    # Personal Day = Personal Year + Personal Month + Target Date digits (reduced 1-9)
+    pd = calc_personal_day(py, pm, t_day, t_month, t_year)
 
     py_info = PERSONAL_YEAR_INTERPRETATIONS.get(py, {})
 

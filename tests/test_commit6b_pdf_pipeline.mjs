@@ -192,7 +192,7 @@ async function runTests() {
     assert.ok(!rawJsonStr.includes('birth_time_enc'), 'birth_time_enc must NEVER be sent to generator');
     assert.ok(!rawJsonStr.includes('seeker@example.com'), 'user email must NEVER be sent to generator');
     assert.ok(!rawJsonStr.includes('+919876543210'), 'user phone must NEVER be sent to generator');
-    assert.equal(capturedGeneratorRequest.view.calculation.conductorDisplay, '33/6');
+    assert.equal(capturedGeneratorRequest.view.calculation.conductorDisplay, '6');
 
     const jobAfterComplete = memoryStore.reportJobs.get(jobId);
     assert.equal(jobAfterComplete.status, 'COMPLETED');

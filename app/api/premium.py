@@ -288,31 +288,26 @@ async def premium_ask(req: PremiumAskRequest):
 
 # ── Calculation helpers ─────────────────────────────────────────────────────
 
+from app.engine.digit_root import calc_bhagyank, calc_chaldean_name_number, digit_root
+
 def _digit_sum(n: int) -> int:
     return sum(int(d) for d in str(abs(n)))
 
 def _reduce(n: int) -> int:
-    """Reduce to single digit (1–9), respecting master numbers 11, 22, 33."""
-    while n > 9 and n not in (11, 22, 33):
-        n = _digit_sum(n)
-    return n
+    """Reduce strictly to single digit (1–9); master numbers 11, 22, 33 are never retained."""
+    return digit_root(n)
 
 def _calc_life_path(day: int, month: int, year: int) -> int:
-    """Calculate Life Path Number from DOB."""
-    return _reduce(_reduce(day) + _reduce(month) + _reduce(year))
+    """Calculate Life Path / Bhagyank Number from DOB (strict 1–9)."""
+    return calc_bhagyank(day, month, year)
 
 def _check_name_energy(name: str, life_path: int) -> dict:
     """
     Check name vibration vs life path.
     Returns layman-language verdict only — no Chaldean table exposed.
     """
-    CHALDEAN = {
-        'a':1,'b':2,'c':3,'d':4,'e':5,'f':8,'g':3,'h':5,'i':1,'j':1,
-        'k':2,'l':3,'m':4,'n':5,'o':7,'p':8,'q':1,'r':2,'s':3,'t':4,
-        'u':6,'v':6,'w':6,'x':5,'y':1,'z':7
-    }
-    val = sum(CHALDEAN.get(c.lower(), 0) for c in name if c.isalpha())
-    name_num = _reduce(val) if val else life_path
+    _, name_root = calc_chaldean_name_number(name)
+    name_num = name_root if name_root > 0 else life_path
 
     harmony_pairs = {
         1: [1, 3, 5, 9], 2: [2, 4, 6, 8], 3: [1, 3, 6, 9],

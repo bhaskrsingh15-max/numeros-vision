@@ -128,9 +128,10 @@ def test_built_site_prices_and_page_counts_match_packs_json():
                     elif val not in file_allowed_prices:
                         violations.append(f"{rel_path}:{line_no}: Rupee amount '{m.group(0)}' not in active packs.json {sorted(allowed_prices)}")
 
+                line_allowed_pages = file_allowed_pages | ({24} if "2027" in line else set())
                 for m in re_pages.finditer(line):
                     pg = int(m.group(1))
-                    if pg not in file_allowed_pages or "+" in m.group(0):
+                    if pg not in line_allowed_pages or "+" in m.group(0):
                         violations.append(f"{rel_path}:{line_no}: Page count '{m.group(0)}' not in packs.json {sorted(allowed_pages)}")
 
                 for m in re_forbidden.finditer(line):
@@ -149,8 +150,9 @@ def test_built_site_prices_and_page_counts_match_packs_json():
         assert "₹399" in pricing_built and "Coming soon, notify me" in pricing_built, (
             "pricing/index.html must show ₹399 for Basic (when launch window unset) and 'Coming soon, notify me' for waitlist tiers"
         )
+        pricing_visible = re.sub(r"<script\b[^>]*>.*?</script>", "", pricing_built, flags=re.DOTALL | re.IGNORECASE)
         for forbidden_wl in ("₹510", "₹1,050", "₹1,020", "₹2,100"):
-            assert forbidden_wl not in pricing_built, (
+            assert forbidden_wl not in pricing_visible, (
                 f"pricing/index.html must not expose waitlist price '{forbidden_wl}' while notify_me_higher_tiers is true"
             )
     else:

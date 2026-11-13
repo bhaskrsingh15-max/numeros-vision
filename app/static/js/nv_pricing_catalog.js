@@ -918,7 +918,10 @@
         ? startsAtOverride
         : (tierStart || ((typeof window !== 'undefined' && (window.__NV_LAUNCH_STARTS_AT || window.NV_LAUNCH_STARTS_AT || window.__NV_LAUNCH_STARTED_AT)) || ''));
       if (!rawEnd || (!rawStart && endsAtOverride === undefined)) {
-        return { active: false, configured: false, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
+        if (endsAtOverride === undefined && startsAtOverride === undefined && typeof window !== 'undefined' && window.__NV_FORCE_LAUNCH_MODE === true) {
+          return { active: true, configured: true, forced: true, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: 'Launch price active during the launch window.' };
+        }
+        return { active: false, configured: false, forced: false, durationDays, startedAt: null, endsAt: null, untilDate: '', fromDate: '', label: '' };
       }
       const endMs = Date.parse(rawEnd);
       const startMs = rawStart ? Date.parse(rawStart) : (endMs - durationDays * 86400 * 1000);
@@ -963,6 +966,9 @@
       if (!state.configured) return '';
       const mrpFormatted = mrp.toLocaleString('en-IN');
       if (state.active) {
+        if (state.forced && !state.untilDate) {
+          return 'Launch price active during the launch window. Regular price ₹' + mrpFormatted + ' thereafter.';
+        }
         return 'Launch price until ' + state.untilDate + '. Regular price ₹' + mrpFormatted + ' from ' + state.fromDate + '.';
       }
       return 'Regular price ₹' + mrpFormatted + ' (effective ' + state.fromDate + ').';

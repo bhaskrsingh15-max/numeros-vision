@@ -544,13 +544,11 @@ CURATED_CITIES: Dict[str, Dict[str, Any]] = {
 
 
 def calculate_chaldean_vibration(text: str) -> Dict[str, Any]:
-    """Computes exact Chaldean compound number and reduced root digit for any name or city."""
+    """Computes exact Chaldean compound number and single-digit reduced root (1-9) for any name or city."""
+    from app.engine.digit_root import digit_root
     clean_text = re.sub(r'[^A-Za-z]', '', text).upper()
     compound_sum = sum(CHALDEAN_MAP.get(ch, 0) for ch in clean_text)
-    
-    root = compound_sum
-    while root > 9 and root not in (11, 22, 33):
-        root = sum(int(d) for d in str(root))
+    root = digit_root(compound_sum)
         
     archetype = PLANET_ARCHETYPES.get(root, {"planet": "Universal", "energy": "Harmonic Flow", "friendly": "1, 3, 5, 6"})
     return {
@@ -1411,12 +1409,7 @@ def render_city_html(city: Dict[str, Any]) -> str:
       if (!name) {{ alert('Enter your spoken name.'); return; }}
       let sum = 0;
       for (let ch of name) if (cMap[ch]) sum += cMap[ch];
-      let root = sum;
-      while (root > 9 && root !== 11 && root !== 22 && root !== 33) {{
-        let s = 0;
-        for (let d of String(root)) s += parseInt(d, 10);
-        root = s;
-      }}
+      const root = sum > 0 ? (1 + ((sum - 1) % 9)) : 0;
       const friendlySet = "{math['friendly']}".split(',').map(s => parseInt(s.trim(), 10));
       const isHarmonious = friendlySet.includes(root);
       box.style.display = 'block';

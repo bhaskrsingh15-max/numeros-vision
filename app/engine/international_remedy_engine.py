@@ -313,12 +313,12 @@ def analyze_english_name_acoustics(full_name: str) -> Dict[str, Any]:
     if not parts:
         parts = ["Friend"]
 
+    from app.engine.digit_root import digit_root
+
     def calc_word(w: str) -> Dict[str, Any]:
         clean = re.sub(r'[^A-Za-z]', '', w).upper()
         comp = sum(CHALDEAN_MAP.get(c, 0) for c in clean)
-        root = comp
-        while root > 9 and root not in (11, 22, 33):
-            root = sum(int(d) for d in str(root))
+        root = digit_root(comp)
         return {"word": w, "clean": clean, "compound": comp, "root": root}
 
     first_data = calc_word(parts[0])
@@ -329,19 +329,13 @@ def analyze_english_name_acoustics(full_name: str) -> Dict[str, Any]:
     vowels = set("AEIOU")
     clean_all = re.sub(r'[^A-Za-z]', '', full_name).upper()
     vowel_sum = sum(CHALDEAN_MAP.get(c, 0) for c in clean_all if c in vowels)
-    vowel_root = vowel_sum
-    while vowel_root > 9 and vowel_root not in (11, 22, 33):
-        vowel_root = sum(int(d) for d in str(vowel_root))
+    vowel_root = digit_root(vowel_sum)
 
     consonant_sum = sum(CHALDEAN_MAP.get(c, 0) for c in clean_all if c not in vowels)
-    consonant_root = consonant_sum
-    while consonant_root > 9 and consonant_root not in (11, 22, 33):
-        consonant_root = sum(int(d) for d in str(consonant_root))
+    consonant_root = digit_root(consonant_sum)
 
     total_sum = sum(CHALDEAN_MAP.get(c, 0) for c in clean_all)
-    total_root = total_sum
-    while total_root > 9 and total_root not in (11, 22, 33):
-        total_root = sum(int(d) for d in str(total_root))
+    total_root = digit_root(total_sum)
 
     signature_advice = (
         "Sign with an intentional 15-degree upward slope to activate continuous professional elevation. "

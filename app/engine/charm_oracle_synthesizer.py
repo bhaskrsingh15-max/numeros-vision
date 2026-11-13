@@ -190,24 +190,25 @@ CHALDEAN_MAP = {
     'F': 8, 'P': 8
 }
 
+from app.engine.digit_root import (
+    digit_root,
+    calc_driver,
+    calc_bhagyank,
+    calc_personal_year,
+)
+
 def calculate_chaldean_name(name: str) -> Tuple[int, int]:
     clean = re.sub(r'[^A-Za-z]', '', name).upper()
     total = sum(CHALDEAN_MAP.get(ch, 0) for ch in clean)
-    single = total
-    while single > 9 and single not in (11, 22, 33):
-        single = sum(int(d) for d in str(single))
+    single = digit_root(total)
     return total, single
 
 def reduce_digit(n: int) -> int:
-    while n > 9 and n not in (11, 22, 33):
-        n = sum(int(d) for d in str(n))
-    return n
+    return digit_root(int(n))
 
 
 def _base_1_to_9(n: int) -> int:
-    val = abs(int(n))
-    while val > 9:
-        val = sum(int(d) for d in str(val))
+    val = digit_root(abs(int(n)))
     return val if 1 <= val <= 9 else 1
 
 
@@ -327,19 +328,19 @@ class CharmOracleSynthesizer:
         m_val = max(1, min(12, int(month or 1)))
         y_val = max(1900, min(2100, int(year or 2000)))
 
-        driver = reduce_digit(d_val)
-        conductor = reduce_digit(d_val + m_val + y_val)
-        driver_base = _base_1_to_9(driver)
-        conductor_base = _base_1_to_9(conductor)
+        driver = calc_driver(d_val)
+        conductor = calc_bhagyank(d_val, m_val, y_val)
+        driver_base = driver
+        conductor_base = conductor
         
         current_year = datetime.now().year
-        personal_year = _base_1_to_9(reduce_digit(d_val + m_val + current_year))
+        personal_year = calc_personal_year(d_val, m_val, current_year)
 
         is_karmic_debt = d_val in (13, 14, 16, 19)
         karmic_number = d_val if is_karmic_debt else None
         
-        is_master_day = d_val in (11, 22)
-        is_master_path = conductor in (11, 22, 33)
+        is_master_day = False
+        is_master_path = False
 
         # Name vibration
         chaldean_compound, chaldean_single = calculate_chaldean_name(user_name)

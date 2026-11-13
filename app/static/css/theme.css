@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700;800&display=swap');
 
 /* ==========================================================================
    Numeros Vision — Master Unified Theme & Design System (Venus Pearl & Jupiter Gold)
@@ -8,6 +8,8 @@
    ========================================================================== */
 
 :root {
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
   --bg: #FFFDF7;
   --bg-mid: #F7F3EA;
   --bg-card: #FFFFFF;
@@ -188,6 +190,7 @@ textarea:focus-visible,
 html {
   scroll-behavior: smooth;
   background-color: var(--bg);
+  font-family: var(--font-body);
   overflow-x: hidden;
   max-width: 100vw;
 }
@@ -195,7 +198,7 @@ html {
 body {
   background-color: var(--bg);
   color: var(--text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
@@ -203,7 +206,15 @@ body {
   max-width: 100vw;
 }
 
+button, input, select, textarea, optgroup, option, code, pre, kbd, samp {
+  font-family: inherit;
+}
+
 /* Responsive Fluid Typography & Overflow Safeguards */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+}
+
 h1, h2, h3, h4, h5, h6,
 .hero-title, .section-title, .tool-title, .brand-title {
   color: #8B6914;
@@ -212,7 +223,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 h1, .hero-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(2rem, 6vw, 4.2rem);
   line-height: 1.15;
   letter-spacing: 0.01em;
@@ -234,20 +245,20 @@ h1, .hero-title {
 }
 
 h2, .section-title, .tool-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.65rem, 4.5vw, 2.8rem);
   line-height: 1.2;
   letter-spacing: 0.01em;
 }
 
 h3 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.25rem, 3.5vw, 1.8rem);
   line-height: 1.25;
 }
 
 h4 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.05rem, 2.5vw, 1.4rem);
   line-height: 1.3;
 }
@@ -310,7 +321,7 @@ header.site-header {
 }
 
 .brand-title {
-  font-family: 'Cormorant Garamond', 'Cinzel', Georgia, serif;
+  font-family: var(--font-display);
   font-size: 1.36rem;
   font-weight: 700;
   color: #9E7B15;
@@ -332,7 +343,7 @@ header.site-header {
 }
 
 .brand-tagline {
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.68rem;
   font-weight: 700;
   color: #16835B;
@@ -384,7 +395,7 @@ header.site-header {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   white-space: nowrap;
   text-decoration: none;
 }
@@ -451,7 +462,7 @@ header.site-header {
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   white-space: nowrap;
   text-decoration: none;
 }
@@ -477,7 +488,7 @@ header.site-header {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   text-decoration: none;
   margin-left: 4px;
 }
@@ -562,7 +573,7 @@ header.site-header {
   letter-spacing: 0.02em;
   cursor: pointer;
   background: none;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   border-radius: 6px 6px 0 0;
   flex-shrink: 0;
 }
@@ -680,7 +691,7 @@ header.site-header {
   background: none;
   border: none;
   border-radius: 6px 6px 0 0;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   flex-shrink: 0;
 }
 
@@ -767,7 +778,7 @@ header.site-header {
   width: 100%;
   text-align: left;
   box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
 }
 
 .nav-dropdown-link-content {
@@ -778,7 +789,7 @@ header.site-header {
 }
 
 .nav-dropdown-link-title {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
   font-size: 0.84rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -787,7 +798,7 @@ header.site-header {
 }
 
 .nav-dropdown-link-desc {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
   font-size: 0.74rem;
   color: #6A6052;
   font-weight: 400;
@@ -855,7 +866,7 @@ header.site-header {
   border-radius: 8px;
   text-decoration: none;
   color: #3D3124 !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
   font-size: 0.80rem !important;
   font-weight: 500 !important;
   transition: all 0.18s ease;
@@ -877,7 +888,7 @@ header.site-header {
   flex-shrink: 0;
 }
 .dropdown-item .item-title {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
   font-size: 0.80rem !important;
   font-weight: 600 !important;
   line-height: 1.25 !important;
@@ -889,7 +900,7 @@ header.site-header {
   text-underline-offset: 3px;
 }
 .dropdown-item .item-sub {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
   font-size: 0.69rem !important;
   color: #7A7060 !important;
   font-weight: 400 !important;
@@ -910,7 +921,7 @@ header.site-header {
   padding: 13px 20px;
   background: none;
   border: none;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -955,7 +966,7 @@ header.site-header {
   gap: 10px;
   padding: 9px 12px;
   border-radius: 8px;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
   font-size: 0.80rem;
   font-weight: 500;
   color: #3A3225;
@@ -965,7 +976,7 @@ header.site-header {
 }
 
 .acc-link-text {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
 }
 
 .drawer-accordion-link:hover {
@@ -999,7 +1010,7 @@ header.site-header {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   white-space: nowrap;
 }
 .nav-tab-table-btn:hover, .nav-tab-table-btn.active, .nav-dropdown-wrapper.open .nav-tab-table-btn {
@@ -1032,7 +1043,7 @@ header.site-header {
   animation: fadeInDown 0.2s ease;
 }
 .dropdown-sec-header {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1058,7 +1069,7 @@ header.site-header {
   width: 100%;
   text-align: left;
   box-sizing: border-box;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
 }
 .dropdown-sec-item:hover {
   background: rgba(201, 162, 39, 0.09);
@@ -1069,7 +1080,7 @@ header.site-header {
   text-decoration-thickness: 1.5px;
 }
 .dropdown-sec-num {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-family: var(--font-body) !important;
   font-size: 0.78rem;
   font-weight: 600;
   color: #8B6914;
@@ -1101,7 +1112,7 @@ header.site-header {
   font-size: 0.62rem;
   font-weight: 700;
   gap: 1px;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
 }
 .back-to-top-btn.visible {
   opacity: 1;
@@ -1167,7 +1178,7 @@ header.site-header {
   color: var(--text-primary);
 }
 .modal-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-display);
   font-size: 1.8rem;
   font-weight: 500;
   color: var(--text-primary);
@@ -1259,7 +1270,7 @@ header.site-header {
 }
 
 .horo-services-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.6rem, 3.2vw, 2.3rem);
   font-weight: 600;
   color: #8B6914;
@@ -1385,7 +1396,7 @@ header.site-header {
 }
 
 .horo-service-name {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 700;
   color: #8B6914;
@@ -1733,4 +1744,9 @@ footer.site-footer {
 .nv-autolink:hover {
   color: var(--gold, #C9A227);
   text-decoration-color: var(--gold, #C9A227);
+}
+
+.nv-funnel-offer-bridge > div:first-child > div:nth-child(2),
+.nv-funnel-offer-bridge > div:nth-child(2) > div > div:nth-child(2) > div:first-child > div:nth-child(2) > span {
+  font-family: var(--font-display);
 }

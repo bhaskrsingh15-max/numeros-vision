@@ -48,7 +48,7 @@
   <!-- Typography & Styling -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/css/theme.css?v=5.4.0" />
   <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
 
@@ -158,6 +158,8 @@
   <style>
     /* ── PAGE 1 SPECIFIC LUXURY STYLING (VENUS PEARL & JUPITER GOLD) ── */
     :root {
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Inter', system-ui, sans-serif;
       --canvas: #FFFDF7;
       --canvas-card: #FFFFFF;
       --gold-primary: #C9A227;
@@ -173,11 +175,19 @@
     body {
       background-color: var(--canvas);
       color: var(--text-main);
-      font-family: 'Inter', -apple-system, sans-serif;
+      font-family: var(--font-body);
       margin: 0;
       padding: 0;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
     }
 
     .container {
@@ -221,7 +231,7 @@
     }
 
     .hero-h1 {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--font-display);
       font-size: clamp(2.8rem, 6.5vw, 4.6rem);
       font-weight: 500;
       color: var(--gold-dark);
@@ -336,7 +346,7 @@
     }
 
     .sec-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--font-display);
       font-size: clamp(2rem, 4.2vw, 3.2rem);
       color: var(--gold-dark);
       margin: 0 0 14px;
@@ -368,7 +378,7 @@
     }
 
     .cosmic-card-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--font-display);
       font-size: clamp(1.4rem, 2.8vw, 1.85rem);
       color: var(--gold-dark);
       margin: 0 0 6px;
@@ -442,7 +452,7 @@
     }
 
     .nv-explore-section-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--font-display);
       font-size: clamp(1.5rem, 3.2vw, 2.1rem);
       font-weight: 700;
       color: var(--gold-dark);
@@ -496,7 +506,7 @@
     }
 
     .nv-explore-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--font-display);
       font-size: clamp(1.1rem, 2.4vw, 1.35rem);
       font-weight: 700;
       color: var(--gold-dark);
@@ -519,7 +529,7 @@
     }
 
     .nv-next-insight-section-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--font-display);
       font-size: clamp(1.45rem, 3vw, 2rem);
       font-weight: 700;
       color: var(--gold-dark);
@@ -545,7 +555,7 @@
     }
 
     .nv-next-insight-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--font-display);
       font-size: clamp(1.2rem, 2.4vw, 1.45rem);
       font-weight: 700;
       color: var(--gold-dark);
@@ -615,7 +625,7 @@
       border: 1.5px solid rgba(180, 155, 110, 0.35);
       border-radius: 12px;
       padding: 12px 14px;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
       font-size: 0.95rem;
       color: var(--text-main);
       box-sizing: border-box;
@@ -663,7 +673,7 @@
     }
 
     .matrix-box-num {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--font-display);
       font-size: 3.2rem;
       font-weight: 700;
       color: var(--gold-dark);
@@ -713,7 +723,7 @@
       border-radius: 10px;
       font-size: 1.15rem;
       font-weight: 700;
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--font-display);
       border: 1px solid rgba(180, 155, 110, 0.3);
     }
 
@@ -771,7 +781,7 @@
     }
 
     .calc-tool-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--font-display);
       font-size: 1.45rem;
       color: var(--gold-dark);
       margin: 0 0 8px;
@@ -817,7 +827,7 @@
       border-radius: 50%;
       background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
       color: #FFFFFF;
-      font-family: 'Cinzel', serif;
+      font-family: var(--font-display);
       font-size: 1.15rem;
       font-weight: 700;
       display: flex;
@@ -828,7 +838,7 @@
     }
 
     .hiw-step-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--font-display);
       font-size: 1.45rem;
       color: var(--gold-dark);
       margin: 0 0 10px;
@@ -863,7 +873,7 @@
     }
 
     .charm-layer-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--font-display);
       font-size: 1.4rem;
       color: var(--gold-dark);
       margin: 0 0 8px;
@@ -960,7 +970,7 @@
     }
 
     .ai-author-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: var(--font-display);
       font-size: 1.2rem;
       font-weight: 700;
       color: #8B6914;
@@ -1219,7 +1229,7 @@
     }
 
     .price-val {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--font-display);
       font-size: 3rem;
       font-weight: 700;
       color: var(--gold-dark, #8B6914);
@@ -1290,7 +1300,7 @@
     }
 
     .sample-page-thumb div.pg-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--font-display);
       font-size: 0.95rem;
       font-weight: 700;
       color: var(--text-main);
@@ -1317,7 +1327,7 @@
       border: none;
       padding: 20px 24px;
       text-align: left;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
       font-size: 1rem;
       font-weight: 600;
       color: var(--text-main);
@@ -1566,7 +1576,7 @@
     }
     .ls-pitch-pill {
       transition: all 0.2s ease;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
     }
     .ls-pitch-pill:hover, .ls-pitch-pill.active {
       transform: translateY(-2px);
@@ -1608,7 +1618,7 @@
     .ls-cell-tag.missing { color: #8B6914; }
     .ls-cell-tag.active { color: #16835B; }
     .ls-cell-num {
-      font-family: 'Cinzel', serif;
+      font-family: var(--font-display);
       font-size: 1.45rem;
       font-weight: 800;
       line-height: 1.1;
@@ -1635,6 +1645,18 @@
     .ls-grid-cell.active-charm .ls-cell-action {
       color: #16835B;
       background: rgba(22, 131, 91, 0.1);
+    }
+
+    .hero-tagline,
+    #loShuReferenceCard > div:nth-child(2) > div:first-child > div:first-child > div:first-child > div:first-child,
+    #loShuReferenceCard > div:nth-child(2) > div:nth-child(2) > div:first-child,
+    #birth-profile .nv-next-insight-card > div > div > div:nth-child(2),
+    #idxLsDynamicPitchCard > div:first-child > div:last-child > span,
+    #idxLsDynamicPitchCard > button,
+    #chat-box details > div > div:first-child > div > div:first-child > span:first-child,
+    #chat-box .charm-stream-extras > div > div:first-child > div:first-child,
+    .charm-chat-headline {
+      font-family: var(--font-display);
     }
 
   </style>
@@ -1753,7 +1775,7 @@
     <div class="container">
       <span class="hero-eyebrow">✦ PERSONALISED NUMEROLOGY ✦</span>
       <div class="hero-brand">NUMEROS VISION</div>
-      <div class="hero-tagline" style="font-family:'Cinzel',serif; font-size:1.1rem; letter-spacing:0.18em; color:var(--gold-dark); margin-bottom:12px; font-weight:700;">ANVEIL EVERY CHARM</div>
+      <div class="hero-tagline" style="font-size:1.1rem; letter-spacing:0.18em; color:var(--gold-dark); margin-bottom:12px; font-weight:700;">ANVEIL EVERY CHARM</div>
       <h1 class="hero-h1">Discover What Your Numbers Mean</h1>
       <p class="hero-lead">
         Explore numerology through your birth date and name. Calculate your numbers, understand traditional interpretations and find the right report for you.
@@ -1959,7 +1981,7 @@
             <div class="ls-ref-card" id="loShuReferenceCard" style="grid-column: 1 / -1; margin-top: 10px;">
               <!-- Component Header -->
               <div style="border-bottom:1px solid rgba(201,162,39,0.25); padding-bottom:14px; margin-bottom:18px;">
-                <h3 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.55rem; color:#523E28; font-weight:700; margin:0 0 6px;">
+                <h3 style="font-size:1.55rem; color:#523E28; font-weight:700; margin:0 0 6px;">
                   Lo Shu Grid: Natal Matrix &amp; Element Yogas
                 </h3>
                 <p style="font-size:0.86rem; color:#7A654D; margin:0; line-height:1.5;">
@@ -1973,7 +1995,7 @@
                 <div style="background:#FFFFFF; border:1px solid rgba(201,162,39,0.3); border-radius:14px; padding:16px;">
                   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                     <div>
-                      <div style="font-family:'Cinzel',serif; font-size:0.88rem; font-weight:800; color:#523E28; letter-spacing:0.04em;">NATAL LO SHU 3×3 MATRIX</div>
+                      <div style="font-size:0.88rem; font-weight:800; color:#523E28; letter-spacing:0.04em;">NATAL LO SHU 3×3 MATRIX</div>
                       <div style="font-size:0.76rem; color:#7A654D;">Profile: <span id="idxLsGridSeekerName" style="font-weight:700;">—</span> (DOB: <span id="idxLsGridSeekerDob" style="font-weight:700;">—</span>)</div>
                     </div>
                     <span style="font-size:0.70rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.12); padding:3px 9px; border-radius:6px;">Natal Overview</span>
@@ -1996,7 +2018,7 @@
 
                 <!-- RIGHT COLUMN: ELEMENTAL BREAKDOWN -->
                 <div style="background:#FFFFFF; border:1.5px solid rgba(201,162,39,0.3); border-radius:14px; padding:20px; box-shadow:0 4px 16px rgba(201,162,39,0.06);">
-                  <div style="font-family:'Cinzel',serif; font-size:0.88rem; font-weight:800; color:#523E28; letter-spacing:0.04em; margin-bottom:12px;">
+                  <div style="font-size:0.88rem; font-weight:800; color:#523E28; letter-spacing:0.04em; margin-bottom:12px;">
                     ✦ PRESENT POWERS &amp; VOID CHANNELS
                   </div>
                   <div id="idxLoShuSummaryPanel" style="font-size:0.84rem; color:#523E28; line-height:1.6;">
@@ -2058,7 +2080,7 @@
             <div style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem; font-weight:700; color:var(--gold-dark); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">
               <span>✦</span> <span>Find the Right Starting Point</span>
             </div>
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.45rem; color:var(--gold-dark); font-weight:700; margin-bottom:4px;">Not sure which calculator to explore first?</div>
+            <div style="font-size:1.45rem; color:var(--gold-dark); font-weight:700; margin-bottom:4px;">Not sure which calculator to explore first?</div>
             <p style="font-size:0.88rem; color:#7A654D; margin:0; line-height:1.5;">
               Start with your <strong>Mulank (Birth Day number)</strong> and <strong>Bhagyank (Life Path number)</strong> to understand your foundational temperament and trajectory. When ready for multi-page personalised analysis, explore our PDF reports.
             </p>
@@ -2327,7 +2349,7 @@
                   <div style="display:flex; align-items:center; gap:6px;">
                     <span class="ai-author-name">Charm AI</span>
                   </div>
-                  <span style="font-size:0.70rem; font-weight:600; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.28); border-radius:12px; padding:3px 10px;">
+                  <span style="font-size:0.70rem; font-weight:600; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.28); border-radius:12px; padding:3px 10px;">
                     Ready ✦
                   </span>
                 </div>
@@ -2380,7 +2402,7 @@
       <div id="consultation" style="background:#FFFFFF; border:1.5px solid var(--border-amber); border-radius:20px; padding:36px; margin-top:32px; box-shadow:var(--shadow-amber); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;">
         <div style="max-width:640px;">
           <span class="sec-eyebrow">BESPOKE 1-ON-1 GUIDANCE · ENQUIRY-FIRST ADVISORY</span>
-          <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:var(--gold-dark); margin:4px 0 8px;">
+          <h3 style="font-size:1.8rem; color:var(--gold-dark); margin:4px 0 8px;">
             Personalised One-on-One Consultation
           </h3>
           <p style="font-size:0.9rem; color:var(--text-muted); margin:0 0 10px; line-height:1.6;">
@@ -2745,7 +2767,7 @@
   <section class="section-py" id="start-cta" style="background:#FFFDF7; border-top:1.5px solid var(--border-amber); text-align:center;">
     <div class="container" style="max-width:760px; margin:0 auto;">
       <span class="sec-eyebrow">✦ START WITH YOUR NUMBERS ✦</span>
-      <h2 style="font-family:'Cormorant Garamond',serif; font-size:2.4rem; color:var(--gold-dark); margin:8px 0 14px;">
+      <h2 style="font-size:2.4rem; color:var(--gold-dark); margin:8px 0 14px;">
         Start with a Free Calculation
       </h2>
       <p style="font-size:1rem; color:var(--text-muted); line-height:1.75; margin-bottom:28px;">
@@ -2936,7 +2958,7 @@
 
         <div style="font-size:2rem; margin-bottom:8px;">🛡️</div>
 
-        <h3 class="modal-title" style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:var(--gold-dark); margin:0 0 6px;">
+        <h3 class="modal-title" style="font-size:1.8rem; color:var(--gold-dark); margin:0 0 6px;">
 
           Privacy Center &amp; Consent
 
@@ -3034,7 +3056,7 @@
 
         <div style="font-size:1.8rem; margin-bottom:8px;">📜</div>
 
-        <h3 class="modal-title" style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:var(--gold-dark); margin:0 0 6px;">
+        <h3 class="modal-title" style="font-size:1.6rem; color:var(--gold-dark); margin:0 0 6px;">
 
           Terms of Service
 
@@ -3096,7 +3118,7 @@
 
   <!-- ─────────────────── COOKIE POLICY CONSENT BANNER (DPDP ACT 2023 & GDPR) ─────────────────── -->
 
-  <aside class="nv-cookie-banner" id="nv-cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie and Privacy Consent" style="display:none; position:fixed; bottom:24px; left:24px; max-width:480px; width:calc(100% - 48px); background:#FFFDF7; border:1.5px solid rgba(201, 162, 39, 0.45); border-radius:18px; padding:18px 22px; box-shadow:0 12px 36px rgba(180, 155, 110, 0.22), 0 4px 12px rgba(30, 24, 16, 0.08); z-index:99998; font-family:'Inter',system-ui,-apple-system,sans-serif;">
+  <aside class="nv-cookie-banner" id="nv-cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie and Privacy Consent" style="display:none; position:fixed; bottom:24px; left:24px; max-width:480px; width:calc(100% - 48px); background:#FFFDF7; border:1.5px solid rgba(201, 162, 39, 0.45); border-radius:18px; padding:18px 22px; box-shadow:0 12px 36px rgba(180, 155, 110, 0.22), 0 4px 12px rgba(30, 24, 16, 0.08); z-index:99998;">
 
     <button class="nv-cookie-close" onclick="acceptCookieConsent('dismissed')" aria-label="Close cookie notice" title="Dismiss cookie notice" style="position:absolute; top:12px; right:14px; background:transparent; border:none; color:#7A654D; font-size:1.3rem; line-height:1; cursor:pointer; padding:4px;">&times;</button>
 
@@ -3106,7 +3128,7 @@
 
       <div class="nv-cookie-content" style="flex:1;">
 
-        <h4 class="nv-cookie-title" style="margin:0 0 6px 0; font-family:'Cinzel','Cormorant Garamond',Georgia,serif; font-size:1.15rem; font-weight:700; color:#8B6914; letter-spacing:0.04em;">Cookie &amp; Privacy Preferences</h4>
+        <h4 class="nv-cookie-title" style="margin:0 0 6px 0; font-size:1.15rem; font-weight:700; color:#8B6914; letter-spacing:0.04em;">Cookie &amp; Privacy Preferences</h4>
 
         <p class="nv-cookie-text" style="margin:0 0 14px 0; font-size:0.82rem; color:#523E28; line-height:1.55;">
 
@@ -3637,11 +3659,11 @@
               </div>
             </div>
             <div style="text-align:right;">
-              <span style="font-family:'Cinzel',serif; font-size:${_premWait ? '0.92rem' : '1.6rem'}; font-weight:800; color:#8B6914;">${_premStr}</span>
+              <span style="font-size:${_premWait ? '0.92rem' : '1.6rem'}; font-weight:800; color:#8B6914;">${_premStr}</span>
             </div>
           </div>
 
-          <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
+          <h4 style="font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
             ANVEIL EVERY CHARM (COMPLETE NUMEROLOGY REPORT, 32 PAGES)
           </h4>
 
@@ -3661,7 +3683,7 @@
             </ul>
           </div>
 
-          <button type="button" onclick="launchIndexOfferCheckout('report_premium', ${_premAmt}, 'Anveil every charm · Complete Numerology Report, 32 pages')" style="width:100%; padding:14px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(201,162,39,0.35); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+          <button type="button" onclick="launchIndexOfferCheckout('report_premium', ${_premAmt}, 'Anveil every charm · Complete Numerology Report, 32 pages')" style="width:100%; padding:14px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(201,162,39,0.35); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
             ${premCtaLabel}
           </button>
           <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
@@ -3683,11 +3705,11 @@
               </div>
             </div>
             <div style="text-align:right;">
-              <span style="font-family:'Cinzel',serif; font-size:${_advWait ? '0.92rem' : '1.6rem'}; font-weight:800; color:#8B6914;">${_advStr}</span>
+              <span style="font-size:${_advWait ? '0.92rem' : '1.6rem'}; font-weight:800; color:#8B6914;">${_advStr}</span>
             </div>
           </div>
 
-          <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
+          <h4 style="font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
             ANVEIL MY GLOWING CHARMS (ADVANCED NUMEROLOGY REPORT, 12 PAGES)
           </h4>
 
@@ -3706,7 +3728,7 @@
             </ul>
           </div>
 
-          <button type="button" onclick="launchIndexOfferCheckout('report_advanced', ${_advAmt}, 'Anveil my glowing charms · Advanced Numerology Report, 12 pages')" style="width:100%; padding:14px; background:linear-gradient(135deg, #16835B 0%, #0F5C3E 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(22,131,91,0.3); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+          <button type="button" onclick="launchIndexOfferCheckout('report_advanced', ${_advAmt}, 'Anveil my glowing charms · Advanced Numerology Report, 12 pages')" style="width:100%; padding:14px; background:linear-gradient(135deg, #16835B 0%, #0F5C3E 100%); color:#FFFDF7; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(22,131,91,0.3); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
             ${advCtaLabel}
           </button>
           <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
@@ -3725,11 +3747,11 @@
               </div>
             </div>
             <div style="text-align:right;">
-              <span style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:800; color:#8B6914;">${_basPriceHtml}</span>
+              <span style="font-size:1.6rem; font-weight:800; color:#8B6914;">${_basPriceHtml}</span>
               </div>
           </div>
 
-          <h4 style="font-family:'Cormorant Garamond',Georgia,serif; font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
+          <h4 style="font-size:1.35rem; color:#523E28; font-weight:700; margin:10px 0 8px; line-height:1.3;">
             ANVEIL MY ALIGNMENTS (BASIC NUMEROLOGY REPORT, 3 PAGES · ${yogaPct}% ACTIVE)
           </h4>
 
@@ -3748,7 +3770,7 @@
             </ul>
           </div>
 
-          <button type="button" onclick="launchIndexOfferCheckout('report_basic', ${_basAmt}, 'Anveil my alignments · Basic Numerology Report, 3 pages')" style="width:100%; padding:14px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-family:'Cinzel',serif; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(201,162,39,0.35); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+          <button type="button" onclick="launchIndexOfferCheckout('report_basic', ${_basAmt}, 'Anveil my alignments · Basic Numerology Report, 3 pages')" style="width:100%; padding:14px; background:linear-gradient(135deg, #C9A227 0%, #8B6914 100%); color:#FFFDF7; font-size:0.92rem; font-weight:800; letter-spacing:0.04em; border:none; border-radius:10px; cursor:pointer; box-shadow:0 6px 20px rgba(201,162,39,0.35); transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
             ANVEIL MY ALIGNMENTS (${_basStr}) &rarr;
           </button>
           <div style="font-size:0.70rem; color:#7A654D; text-align:center; margin-top:8px;">
@@ -3832,7 +3854,7 @@
                 <span class="ai-author-name">Charm AI</span>
                 ${verifiedHtml}
               </div>
-              <span style="font-size:0.70rem; font-weight:600; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.28); border-radius:12px; padding:3px 10px;" ${traceAttr}>
+              <span style="font-size:0.70rem; font-weight:600; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.28); border-radius:12px; padding:3px 10px;" ${traceAttr}>
                 ${statusText}
               </span>
             </div>
@@ -4048,7 +4070,7 @@
         windowsHtml = primaryWindows.map((w) => `
           <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:10px 14px; margin-top:6px;">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
-              <span style="font-family:'Cinzel',serif; font-size:1.05rem; font-weight:700; color:#8B6914;">
+              <span style="font-size:1.05rem; font-weight:700; color:#8B6914;">
                 ${w.start} &nbsp;➔&nbsp; ${w.end}
               </span>
               <span style="font-size:0.68rem; font-weight:700; color:#16835B; background:rgba(22,131,91,0.1); padding:2px 8px; border-radius:6px;">
@@ -4079,7 +4101,7 @@
       return `
         <div style="margin-top:16px; background:#FFFFFF; border:1.5px solid rgba(201,162,39,0.38); border-radius:14px; padding:18px 22px; box-shadow:0 3px 12px rgba(180,155,110,0.08);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.30rem; font-weight:700; color:#8B6914;">
+            <div style="font-size:1.30rem; font-weight:700; color:#8B6914;">
               ✦ Numerology Dasha Career Timing &amp; Consensus Matrix
             </div>
             <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
@@ -4454,7 +4476,7 @@
           const consensusStatus = data.consensus_status || '';
 
           const headlineHtml = headline
-            ? `<div class="charm-chat-headline" style="font-family:'Cormorant Garamond', serif; font-size:1.25rem; font-weight:700; color:#8B6914; margin-bottom:8px; line-height:1.3;">${escapeHomeChatHtml(headline)}</div>`
+            ? `<div class="charm-chat-headline" style="font-size:1.25rem; font-weight:700; color:#8B6914; margin-bottom:8px; line-height:1.3;">${escapeHomeChatHtml(headline)}</div>`
             : '';
 
           let extrasHtml = '';

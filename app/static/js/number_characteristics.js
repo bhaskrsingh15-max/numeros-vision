@@ -5968,7 +5968,7 @@ function renderFreeCelestialSummaryHtml(driver, conductor, day, missingNumbers, 
         </span>
       </div>
 
-      <h4 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:1.45rem; color:#523E28; margin:0 0 10px 0; font-weight:700;">
+      <h4 style="font-size:1.45rem; color:#523E28; margin:0 0 10px 0; font-weight:700;">
         ${subdate.archetype ? `${subdate.archetype} · Day ${birthDay} Blueprint` : `Innate Core Energy · Day ${birthDay}`}
       </h4>
       <p style="font-size:0.90rem; color:#523E28; line-height:1.65; margin:0 0 16px 0;">
@@ -6024,7 +6024,7 @@ function renderPlanetaryCharacteristicsHtml(driver, conductor, day, missingNumbe
           </span>
           <span style="font-size:0.80rem; color:#7A654D;">Planetary Essence: <strong>${(subdate.planetary_composition || 'Natural Planetary Resonance').replace(/\\(.*?Clash.*?\\)/g, '').replace(/\\(.*?Tension.*?\\)/g, '').trim()}</strong></span>
         </div>
-        <h4 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:1.38rem; color:#523E28; margin:4px 0 8px 0; font-weight:700;">
+        <h4 style="font-size:1.38rem; color:#523E28; margin:4px 0 8px 0; font-weight:700;">
           ${subdate.archetype ? `${subdate.archetype} · Day ${birthDay}` : `Day ${birthDay}: Innate Character`}
         </h4>
         <p style="font-size:0.90rem; color:#523E28; line-height:1.65; margin:0 0 14px 0;">
@@ -6065,7 +6065,7 @@ function renderPlanetaryCharacteristicsHtml(driver, conductor, day, missingNumbe
         </span>
         <div style="font-size:0.85rem; font-weight:700; color:#8B6914;">${starsDisplay} <span style="font-weight:600; color:#7A654D; font-size:0.78rem;">(Natural Synergy)</span></div>
       </div>
-      <h4 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:1.35rem; color:#523E28; margin:4px 0 6px 0; font-weight:700;">
+      <h4 style="font-size:1.35rem; color:#523E28; margin:4px 0 6px 0; font-weight:700;">
         How Your Everyday Mind (${d.planet.split(' ')[0]}) Meets Your Life Trajectory (${c.planet.split(' ')[0]})
       </h4>
       ${friendlyWarning ? `
@@ -6097,7 +6097,7 @@ function renderPlanetaryCharacteristicsHtml(driver, conductor, day, missingNumbe
           ${poorak.poorak_number}
         </div>
       </div>
-      <h4 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:1.32rem; color:#16835B; margin:4px 0 6px 0; font-weight:700;">
+      <h4 style="font-size:1.32rem; color:#16835B; margin:4px 0 6px 0; font-weight:700;">
         Harmonizing with Number ${poorak.poorak_number} (${poorak.poorak_planet})
       </h4>
       <p style="font-size:0.88rem; color:#523E28; line-height:1.6; margin:0 0 10px 0;">${poorak.rationale}</p>
@@ -6113,7 +6113,7 @@ function renderPlanetaryCharacteristicsHtml(driver, conductor, day, missingNumbe
       <div style="font-size:0.74rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#8B6914; margin-bottom:4px;">
         ✦ NATURAL DAILY RHYTHMS ✦
       </div>
-      <h4 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:1.32rem; color:#523E28; margin:0 0 6px 0; font-weight:700;">
+      <h4 style="font-size:1.32rem; color:#523E28; margin:0 0 6px 0; font-weight:700;">
         Simple Habits for Energy Balance &amp; Clarity
       </h4>
       <p style="font-size:0.86rem; color:#7A654D; margin:0 0 14px 0; line-height:1.55;">
@@ -6148,7 +6148,7 @@ function renderPlanetaryCharacteristicsHtml(driver, conductor, day, missingNumbe
     <div style="margin-top:20px; text-align:left;">
       <div style="text-align:center; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid rgba(201,162,39,0.25);">
         <span style="font-size:0.75rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#8B6914;">✦ YOUR PERSONAL NUMEROLOGY BLUEPRINT ✦</span>
-        <h3 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:clamp(1.4rem, 2.4vw, 1.85rem); color:#523E28; margin:4px 0 6px 0; font-weight:700;">
+        <h3 style="font-size:clamp(1.4rem, 2.4vw, 1.85rem); color:#523E28; margin:4px 0 6px 0; font-weight:700;">
           Understanding Your Core Strengths &amp; Direction
         </h3>
         <p style="font-size:0.86rem; color:#7A654D; max-width:640px; margin:0 auto; line-height:1.55;">
@@ -6168,7 +6168,7 @@ function renderPlanetaryCharacteristicsHtml(driver, conductor, day, missingNumbe
           <span style="display:inline-block; align-self:flex-start; font-size:0.72rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:3px 10px; border-radius:14px; margin-bottom:8px; background:rgba(201,162,39,0.12); color:#8B6914; border:1px solid rgba(201,162,39,0.3);">
             INNER DRIVE · MULANK ${driver}
           </span>
-          <h4 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:1.45rem; color:#8B6914; margin:0 0 4px 0; font-weight:700;">${d.planet}</h4>
+          <h4 style="font-size:1.45rem; color:#8B6914; margin:0 0 4px 0; font-weight:700;">${d.planet}</h4>
           <div style="font-size:0.78rem; color:#7A654D; display:flex; gap:8px; align-items:center; margin-bottom:12px;">
             <span><strong>Natural Element:</strong> ${d.element}</span>
             <span>·</span>
@@ -6206,7 +6206,7 @@ function renderPlanetaryCharacteristicsHtml(driver, conductor, day, missingNumbe
           <span style="display:inline-block; align-self:flex-start; font-size:0.72rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:3px 10px; border-radius:14px; margin-bottom:8px; background:rgba(22,131,91,0.12); color:#16835B; border:1px solid rgba(22,131,91,0.25);">
             LIFE DESTINY · BHAGYANK ${conductor}
           </span>
-          <h4 style="font-family:'Cormorant Garamond', Georgia, serif; font-size:1.45rem; color:#16835B; margin:0 0 4px 0; font-weight:700;">${c.planet}</h4>
+          <h4 style="font-size:1.45rem; color:#16835B; margin:0 0 4px 0; font-weight:700;">${c.planet}</h4>
           <div style="font-size:0.78rem; color:#7A654D; display:flex; gap:8px; align-items:center; margin-bottom:12px;">
             <span><strong>Natural Element:</strong> ${c.element}</span>
             <span>·</span>

@@ -1,10 +1,10 @@
 """
-Golden 10-Date Calculation Test (Commit 6a - Item 3)
-====================================================
+Golden 10-Date Calculation Test (Single-Digit 1..9 Contract)
+============================================================
 Verifies that core_matrix_engine.py and pdf_report_generator.py
-produce identical Driver (Mulank), Conductor (Bhagyank with Master Numbers
-displayed as both, e.g., 11/2, 22/4, 33/6), and Planet from the reduced digit
-across all 10 golden dates.
+produce identical single-digit Driver (Mulank 1..9), Conductor (Bhagyank 1..9,
+with master numbers 11/22/33 retained only as intermediate reduction path notes),
+and Planet from the reduced digit across all 10 golden dates.
 """
 import os
 import sys
@@ -25,11 +25,11 @@ GOLDEN_10_DATES = [
     ("15-07-1990", 15, 7, 1990, 6, 5, 5, "5", "Mercury"),
     ("10-08-1990", 10, 8, 1990, 1, 1, 1, "1", "Sun"),
     ("12-03-1982", 12, 3, 1982, 3, 8, 8, "8", "Saturn"),
-    ("01-01-2007", 1, 1, 2007, 1, 11, 2, "11/2", "Moon"),
-    ("14-06-1980", 14, 6, 1980, 5, 11, 2, "11/2", "Moon"),
-    ("02-09-2009", 2, 9, 2009, 2, 22, 4, "22/4", "Rahu"),
+    ("01-01-2007", 1, 1, 2007, 1, 2, 2, "2", "Moon"),
+    ("14-06-1980", 14, 6, 1980, 5, 2, 2, "2", "Moon"),
+    ("02-09-2009", 2, 9, 2009, 2, 4, 4, "4", "Rahu"),
     ("29-11-1999", 29, 11, 1999, 2, 5, 5, "5", "Mercury"),
-    ("15-08-1990", 15, 8, 1990, 6, 33, 6, "33/6", "Venus"),
+    ("15-08-1990", 15, 8, 1990, 6, 6, 6, "6", "Venus"),
     ("24-09-1999", 24, 9, 1999, 6, 7, 7, "7", "Ketu"),
 ]
 

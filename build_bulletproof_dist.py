@@ -87,6 +87,20 @@ for root, _, files in os.walk(DIST_DIR):
             if updated != txt:
                 open(fp, "w", encoding="utf-8").write(updated)
 
+# 1c-bis. Strip Node-unit-test named `export { ... };` blocks from `dist_cloudflare_pages/_worker.js`
+# Cloudflare Pages `workerd` requires entrypoint exports to be functions/classes/`ExportedHandler` (`export default`).
+# Keeping named exports in `app/static/_worker.js` preserves Node ESM unit tests while making `dist` 100% `workerd`-valid.
+_dist_worker_path = os.path.join(DIST_DIR, "_worker.js")
+if os.path.exists(_dist_worker_path):
+    with open(_dist_worker_path, "r", encoding="utf-8") as _wf:
+        _worker_raw = _wf.read()
+    _worker_clean = re.sub(r"\bexport\s*\{[^}]*\}\s*;?", "", _worker_raw)
+    assert "export default" in _worker_clean, "dist _worker.js must retain export default handler"
+    if _worker_clean != _worker_raw:
+        with open(_dist_worker_path, "w", encoding="utf-8") as _wf:
+            _wf.write(_worker_clean)
+        print("PASS: Stripped non-handler named exports from dist_cloudflare_pages/_worker.js for workerd")
+
 # 1d. Inject build-time JSON-LD for 2027 Year Ahead Planner derived from planner_2027_pricing.json
 try:
     from app.config.planner_2027_jsonld import generate_planner_2027_jsonld

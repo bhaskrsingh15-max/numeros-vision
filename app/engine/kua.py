@@ -184,10 +184,8 @@ KUA_METADATA: Dict[int, Dict[str, Any]] = {
 
 
 def _reduce_single_digit(n: int) -> int:
-    n = abs(int(n))
-    while n > 9:
-        n = sum(int(ch) for ch in str(n))
-    return n
+    from app.engine.digit_root import digit_root
+    return digit_root(abs(int(n)))
 
 
 def normalize_kua_gender(gender: Optional[str]) -> Optional[str]:

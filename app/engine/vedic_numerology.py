@@ -37,19 +37,18 @@ ENEMY_NUMBERS = {
     9: [2, 4]
 }
 
+from app.engine.digit_root import calc_bhagyank, calc_driver, digit_root
+
 def reduce_to_single_digit(num: int) -> int:
-    while num > 9:
-        num = sum(int(digit) for digit in str(num))
-    return num
+    return digit_root(num)
 
 def calculate_mulank(day: int) -> int:
-    """Mulank (Driver Number): derived from the day of birth."""
-    return reduce_to_single_digit(day)
+    """Mulank (Driver Number): derived from the day of birth (1-9)."""
+    return calc_driver(day)
 
 def calculate_bhagyank(day: int, month: int, year: int) -> int:
-    """Bhagyank (Conductor Number): derived from full DD/MM/YYYY."""
-    total = day + month + sum(int(d) for d in str(year))
-    return reduce_to_single_digit(total)
+    """Bhagyank (Conductor Number): derived from full DD/MM/YYYY (1-9)."""
+    return calc_bhagyank(day, month, year)
 
 def get_numeros_vision_insights(driver: int, conductor: int) -> List[Dict[str, Any]]:
     query_str = f"Driver {driver} Conductor {conductor} combination career health personality"
