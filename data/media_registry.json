@@ -1,0 +1,463 @@
+{
+  "schema_version": "1.0",
+  "description": "Numeros Vision Visual Media Registry & Provenance Ledger",
+  "last_updated": "2026-10-16T10:52:14.418550+00:00",
+  "assets": [
+    {
+      "media_id": "img_lo-shu-grid-lo-shu-grid-calculator_208f3bb8ee",
+      "seo_filename": "lo-shu-grid-lo-shu-grid-calculator-hero.webp",
+      "image_purpose": "EXPLANATORY_DIAGRAM",
+      "associated_article_url": "/calculators/lo-shu-grid/",
+      "alt_text": "Lo Shu 3x3 Magic Square showing planetary energetic planes and numbers for lo shu grid calculator.",
+      "caption": "Figure: Deterministic 3x3 Lo Shu Energy Matrix and Planes for Lo Shu Grid Calculator.",
+      "credit": "Numeros Vision Deterministic System",
+      "provenance": "DETERMINISTIC_RENDERER",
+      "dimensions": {
+        "hero": [
+          1200,
+          675
+        ],
+        "content": [
+          800,
+          450
+        ],
+        "thumb": [
+          400,
+          225
+        ]
+      },
+      "formats": [
+        "webp",
+        "png"
+      ],
+      "total_size_bytes": 331559,
+      "content_hash": "208f3bb8ee4a7e86852157fa1ca145d3544e393a1e4fa5c4a5e2b803dd471444",
+      "accessibility_reviewed": true,
+      "created_at": "2026-10-16T08:43:05.128321+00:00",
+      "variants": {
+        "hero": {
+          "webp": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-hero.webp",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-hero.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-hero.webp",
+            "size_bytes": 24986
+          },
+          "png": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-hero.png",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-hero.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-hero.png",
+            "size_bytes": 148265
+          }
+        },
+        "content": {
+          "webp": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-content.webp",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-content.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-content.webp",
+            "size_bytes": 14852
+          },
+          "png": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-content.png",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-content.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-content.png",
+            "size_bytes": 100873
+          }
+        },
+        "thumb": {
+          "webp": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-thumb.webp",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-thumb.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-thumb.webp",
+            "size_bytes": 5692
+          },
+          "png": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-thumb.png",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-thumb.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-thumb.png",
+            "size_bytes": 36891
+          }
+        }
+      }
+    },
+    {
+      "media_id": "img_chaldean-sound-matrix-chaldean-numerology-alphabet_69bd52cc87",
+      "seo_filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+      "image_purpose": "DATA_CHART",
+      "associated_article_url": "/blog/chaldean-alphabet",
+      "alt_text": "Chaldean numerology sound and vibration matrix with numbers 1 to 8 and planetary rulers for chaldean numerology alphabet.",
+      "caption": "Figure: Canonical Chaldean 1 to 8 Sound Matrix and Letter Correspondences.",
+      "credit": "Numeros Vision Deterministic System",
+      "provenance": "DETERMINISTIC_RENDERER",
+      "dimensions": {
+        "hero": [
+          1200,
+          675
+        ],
+        "content": [
+          800,
+          450
+        ],
+        "thumb": [
+          400,
+          225
+        ]
+      },
+      "formats": [
+        "webp",
+        "png"
+      ],
+      "total_size_bytes": 411796,
+      "content_hash": "69bd52cc8707f17c19e90b0a2b2ef776f038f5f54894feeb178f3b57f652d370",
+      "accessibility_reviewed": true,
+      "created_at": "2026-10-16T08:54:30.417399+00:00",
+      "variants": {
+        "hero": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "size_bytes": 33534
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "size_bytes": 184727
+          }
+        },
+        "content": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "size_bytes": 18868
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "size_bytes": 125519
+          }
+        },
+        "thumb": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "size_bytes": 5846
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "size_bytes": 43302
+          }
+        }
+      }
+    },
+    {
+      "media_id": "img_chaldean-sound-matrix-chaldean-compound-numbers_a790e988bb",
+      "seo_filename": "chaldean-sound-matrix-chaldean-compound-numbers-he.webp",
+      "image_purpose": "DATA_CHART",
+      "associated_article_url": "/blog/chaldean-compound-numbers-meanings",
+      "alt_text": "Chaldean numerology sound and vibration matrix with numbers 1 to 8 and planetary rulers for chaldean compound numbers.",
+      "caption": "Figure: Canonical Chaldean 1 to 8 Sound Matrix and Letter Correspondences.",
+      "credit": "Numeros Vision Deterministic System",
+      "provenance": "DETERMINISTIC_RENDERER",
+      "dimensions": {
+        "hero": [
+          1200,
+          675
+        ],
+        "content": [
+          800,
+          450
+        ],
+        "thumb": [
+          400,
+          225
+        ]
+      },
+      "formats": [
+        "webp",
+        "png"
+      ],
+      "total_size_bytes": 408615,
+      "content_hash": "a790e988bb30f4107f408212d1c738d927a069eeef01f5ffd797a9aa3a909963",
+      "accessibility_reviewed": true,
+      "created_at": "2026-10-16T08:57:11.052516+00:00",
+      "variants": {
+        "hero": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-he.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-he.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-he.webp",
+            "size_bytes": 33144
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-he.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-he.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-he.png",
+            "size_bytes": 183458
+          }
+        },
+        "content": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-co.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-co.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-co.webp",
+            "size_bytes": 18388
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-co.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-co.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-co.png",
+            "size_bytes": 124608
+          }
+        },
+        "thumb": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-th.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-th.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-th.webp",
+            "size_bytes": 5876
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-th.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-th.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-th.png",
+            "size_bytes": 43141
+          }
+        }
+      }
+    },
+    {
+      "media_id": "img_chaldean-sound-matrix-chaldean-compound-numbers_37a9bd9ed0",
+      "seo_filename": "chaldean-sound-matrix-chaldean-compound-numbers-he.webp",
+      "image_purpose": "DATA_CHART",
+      "associated_article_url": "/blog/chaldean-compound-numbers-meanings",
+      "alt_text": "Chaldean numerology sound and vibration matrix with numbers 1 to 8 and planetary rulers for chaldean compound numbers.",
+      "caption": "Figure: Canonical Chaldean 1 to 8 Sound Matrix and Letter Correspondences.",
+      "credit": "Numeros Vision Deterministic System",
+      "provenance": "DETERMINISTIC_RENDERER",
+      "dimensions": {
+        "hero": [
+          1200,
+          675
+        ],
+        "content": [
+          800,
+          450
+        ],
+        "thumb": [
+          400,
+          225
+        ]
+      },
+      "formats": [
+        "webp",
+        "png"
+      ],
+      "total_size_bytes": 431107,
+      "content_hash": "37a9bd9ed06d2b4aea51d11faec55fa47a94eb9adc8769f64aa160a5be0d02ad",
+      "accessibility_reviewed": true,
+      "created_at": "2026-10-16T10:48:56.662645+00:00",
+      "variants": {
+        "hero": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-he.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-he.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-he.webp",
+            "size_bytes": 34676
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-he.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-he.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-he.png",
+            "size_bytes": 204418
+          }
+        },
+        "content": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-co.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-co.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-co.webp",
+            "size_bytes": 18174
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-co.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-co.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-co.png",
+            "size_bytes": 125687
+          }
+        },
+        "thumb": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-th.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-th.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-th.webp",
+            "size_bytes": 5802
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-compound-numbers-th.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-compound-numbers-th.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-compound-numbers-th.png",
+            "size_bytes": 42350
+          }
+        }
+      }
+    },
+    {
+      "media_id": "img_lo-shu-grid-lo-shu-grid-calculator_fddc63a238",
+      "seo_filename": "lo-shu-grid-lo-shu-grid-calculator-hero.webp",
+      "image_purpose": "EXPLANATORY_DIAGRAM",
+      "associated_article_url": "/calculators/lo-shu-grid/",
+      "alt_text": "Lo Shu 3x3 Magic Square showing planetary energetic planes and numbers for lo shu grid calculator.",
+      "caption": "Figure: Deterministic 3x3 Lo Shu Energy Matrix and Planes for Lo Shu Grid Calculator.",
+      "credit": "Numeros Vision Deterministic System",
+      "provenance": "DETERMINISTIC_RENDERER",
+      "dimensions": {
+        "hero": [
+          1200,
+          675
+        ],
+        "content": [
+          800,
+          450
+        ],
+        "thumb": [
+          400,
+          225
+        ]
+      },
+      "formats": [
+        "webp",
+        "png"
+      ],
+      "total_size_bytes": 324252,
+      "content_hash": "fddc63a23866a75c785e76270a5e4e1782659de2c14ab01a000894ceab9d17b6",
+      "accessibility_reviewed": true,
+      "created_at": "2026-10-16T10:52:13.759986+00:00",
+      "variants": {
+        "hero": {
+          "webp": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-hero.webp",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-hero.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-hero.webp",
+            "size_bytes": 25716
+          },
+          "png": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-hero.png",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-hero.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-hero.png",
+            "size_bytes": 152632
+          }
+        },
+        "content": {
+          "webp": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-content.webp",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-content.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-content.webp",
+            "size_bytes": 14704
+          },
+          "png": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-content.png",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-content.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-content.png",
+            "size_bytes": 93547
+          }
+        },
+        "thumb": {
+          "webp": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-thumb.webp",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-thumb.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-thumb.webp",
+            "size_bytes": 5392
+          },
+          "png": {
+            "filename": "lo-shu-grid-lo-shu-grid-calculator-thumb.png",
+            "rel_path": "/static/images/seo/lo-shu-grid-lo-shu-grid-calculator-thumb.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\lo-shu-grid-lo-shu-grid-calculator-thumb.png",
+            "size_bytes": 32261
+          }
+        }
+      }
+    },
+    {
+      "media_id": "img_chaldean-sound-matrix-chaldean-numerology-alphabet_6ea7e574c8",
+      "seo_filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+      "image_purpose": "DATA_CHART",
+      "associated_article_url": "/blog/chaldean-alphabet",
+      "alt_text": "Chaldean numerology sound and vibration matrix with numbers 1 to 8 and planetary rulers for chaldean numerology alphabet.",
+      "caption": "Figure: Canonical Chaldean 1 to 8 Sound Matrix and Letter Correspondences.",
+      "credit": "Numeros Vision Deterministic System",
+      "provenance": "DETERMINISTIC_RENDERER",
+      "dimensions": {
+        "hero": [
+          1200,
+          675
+        ],
+        "content": [
+          800,
+          450
+        ],
+        "thumb": [
+          400,
+          225
+        ]
+      },
+      "formats": [
+        "webp",
+        "png"
+      ],
+      "total_size_bytes": 431177,
+      "content_hash": "6ea7e574c847279701291aff207ab9f7ac5a29dc6ca5275d011850c08994cf0d",
+      "accessibility_reviewed": true,
+      "created_at": "2026-10-16T10:52:14.418537+00:00",
+      "variants": {
+        "hero": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "size_bytes": 34910
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "size_bytes": 204516
+          }
+        },
+        "content": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "size_bytes": 18430
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "size_bytes": 125378
+          }
+        },
+        "thumb": {
+          "webp": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.webp",
+            "size_bytes": 5856
+          },
+          "png": {
+            "filename": "chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "rel_path": "/static/images/seo/chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "abs_path": "C:\\Users\\Bhaskr Singh\\Downloads\\AI Numrology\\app\\static\\images\\seo\\chaldean-sound-matrix-chaldean-numerology-alphabet.png",
+            "size_bytes": 42087
+          }
+        }
+      }
+    }
+  ]
+}

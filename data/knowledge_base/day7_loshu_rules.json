@@ -1,0 +1,617 @@
+{
+  "rules_count": 20,
+  "rules": [
+    {
+      "rule_id": "RUL-LOSHU-D7-001",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "number_attribute",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number 1 Teaching Module",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        1
+      ],
+      "conditions": {
+        "number": 1
+      },
+      "attribute_name": "Communication",
+      "element": "Water",
+      "element_numbers": [
+        1
+      ],
+      "planetary_association": "Sun",
+      "interpretation": "Number 1 represents Communication, verbal expression, career foundation, and vital fluidity. Associated with the Water element.",
+      "exceptions": "Subject to repetition tier and element balance.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: Number 1 corresponds to Communication and Water element."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-002",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "number_attribute",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number 2 Teaching Module",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        2
+      ],
+      "conditions": {
+        "number": 2
+      },
+      "attribute_name": "Intuition and sensitive power",
+      "element": "Earth",
+      "element_numbers": [
+        2,
+        5,
+        8
+      ],
+      "planetary_association": "Moon",
+      "interpretation": "Number 2 represents Intuition and sensitive power, emotional receptivity, and diplomatic awareness. Associated with the Earth element.",
+      "exceptions": "Excessive repetition leads to hypersensitivity.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: Number 2 corresponds to Intuition/Sensitive Power and Earth element."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-003",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "number_attribute",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number 3 Teaching Module",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        3
+      ],
+      "conditions": {
+        "number": 3
+      },
+      "attribute_name": "Creativity and imagination",
+      "element": "Wood",
+      "element_numbers": [
+        4,
+        3
+      ],
+      "planetary_association": "Jupiter",
+      "interpretation": "Number 3 represents Creativity and imagination, intellectual expansion, and optimistic thinking. Associated with the Wood element.",
+      "exceptions": "Unbalanced repetitions may disperse creative focus.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: Number 3 corresponds to Creativity/Imagination and Wood element."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-004",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "number_attribute",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number 4 Teaching Module",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        4
+      ],
+      "conditions": {
+        "number": 4
+      },
+      "attribute_name": "Discipline and organised power",
+      "element": "Wood",
+      "element_numbers": [
+        4,
+        3
+      ],
+      "planetary_association": "Rahu",
+      "interpretation": "Number 4 represents Discipline and organised power, practical execution, structure, and methodical diligence. Associated with the Wood element.",
+      "exceptions": "Rigidity may emerge under high repetition tiers.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: Number 4 corresponds to Discipline/Organised Power and Wood element."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-005",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "number_attribute",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number 5 Teaching Module",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        5
+      ],
+      "conditions": {
+        "number": 5
+      },
+      "attribute_name": "Balance",
+      "element": "Earth",
+      "element_numbers": [
+        2,
+        5,
+        8
+      ],
+      "planetary_association": "Mercury",
+      "interpretation": "Number 5 represents Balance, adaptability, emotional equilibrium, and central anchoring. Associated with the central Earth element.",
+      "exceptions": "Center of the grid; stabilizes surrounding planes.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: Number 5 corresponds to Balance and central Earth element."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-006",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "number_attribute",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number 6 Teaching Module",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        6
+      ],
+      "conditions": {
+        "number": 6
+      },
+      "attribute_name": "Home, family and love relationships",
+      "element": "Metal",
+      "element_numbers": [
+        7,
+        6
+      ],
+      "planetary_association": "Venus",
+      "interpretation": "Number 6 represents Home, family and love relationships, domestic responsibility, luxury, and artistic beauty. Associated with the Metal element.",
+      "exceptions": "High repetition may create domestic over-protectiveness or worry.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: Number 6 corresponds to Home/Family/Love Relationships and Metal element."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-007",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "number_attribute",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number 7 Teaching Module",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        7
+      ],
+      "conditions": {
+        "number": 7
+      },
+      "attribute_name": "Disappointment, healing, wisdom, spirituality and the divine",
+      "element": "Metal",
+      "element_numbers": [
+        7,
+        6
+      ],
+      "planetary_association": "Ketu",
+      "interpretation": "Number 7 represents Disappointment through worldly attachments turning into healing, wisdom, spirituality, research, and connection to the divine. Associated with the Metal element.",
+      "exceptions": "Initial worldly loss acts as a gateway to spiritual or technical mastery.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: Number 7 corresponds to Disappointment/Healing/Wisdom/Spirituality and Metal element."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-008",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "number_attribute",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number 8 Teaching Module",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        8
+      ],
+      "conditions": {
+        "number": 8
+      },
+      "attribute_name": "Money and finance management",
+      "element": "Earth",
+      "element_numbers": [
+        2,
+        5,
+        8
+      ],
+      "planetary_association": "Saturn",
+      "interpretation": "Number 8 represents Money and finance management, material assets, organizational accountability, perseverance, and karma. Associated with the Earth element.",
+      "exceptions": "Rewards come with methodical diligence; requires proper management structure.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: Number 8 corresponds to Money/Finance Management and Earth element."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-009",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "number_attribute",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number 9 Teaching Module",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        9
+      ],
+      "conditions": {
+        "number": 9
+      },
+      "attribute_name": "Aggression, ego, humanity and humility",
+      "element": "Fire",
+      "element_numbers": [
+        9
+      ],
+      "planetary_association": "Mars",
+      "interpretation": "Number 9 represents Aggression, ego, humanity, idealism, and the cultivation of humility. Associated with the Fire element.",
+      "exceptions": "Higher repetitions elevate ego/temper unless channeled into humanitarian service.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: Number 9 corresponds to Aggression/Ego/Humanity/Humility and Fire element."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-REP-1",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "repetition_framework",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number Repetition Framework",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "conditions": {
+        "frequency": 1
+      },
+      "repetition_category": "Under",
+      "interpretation": "Single occurrence denotes basic or under-expressed potential of the attribute; functional but requires conscious development.",
+      "exceptions": "Depends on the specific number and overall chart harmony.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: 1 occurrence = Under."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-REP-2",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "repetition_framework",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number Repetition Framework",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "conditions": {
+        "frequency": 2
+      },
+      "repetition_category": "Pair",
+      "interpretation": "Two occurrences form a balanced Pair, described by the instructor as the best-performing and most harmonious energetic strength.",
+      "exceptions": "Best performing; balanced expression without excess friction.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: 2 occurrences = Pair (Best-performing)."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-REP-3",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "repetition_framework",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number Repetition Framework",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "conditions": {
+        "frequency": 3
+      },
+      "repetition_category": "Exaggerate",
+      "interpretation": "Three occurrences create an Exaggerate state, where the traits become dominant, vocal, or magnified beyond normal boundaries.",
+      "exceptions": "Not automatically negative; depends on whether supportive elements exist.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: 3 occurrences = Exaggerate."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-REP-4",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "repetition_framework",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number Repetition Framework",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "conditions": {
+        "frequency": 4
+      },
+      "repetition_category": "Reactive",
+      "interpretation": "Four occurrences produce a Reactive condition, marked by sudden behavioral volatility, sensitivity to triggers, or acute defensiveness.",
+      "exceptions": "Requires remedial harmonization to reduce friction.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: 4 occurrences = Reactive."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-REP-5",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "repetition_framework",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Number Repetition Framework",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "conditions": {
+        "frequency": 5
+      },
+      "repetition_category": "Over-reactive",
+      "interpretation": "Five occurrences yield an Over-reactive (or hyper-reactive) intensity, where the native experiences extreme internal or external pressure regarding that number.",
+      "exceptions": "Rare intensity; requires dedicated lifestyle remedies.",
+      "authority_status": "training_transcript_stated",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: 5 occurrences = Over-reactive / Hyper-reactive."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-REP-EXTRAPOLATION",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "repetition_framework",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Boundary Directive",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "conditions": {
+        "frequency_gt": 5
+      },
+      "repetition_category": "PENDING_EVIDENCE",
+      "interpretation": "Frequencies above 5 are explicitly not established in the Day 7 source. The system strictly abstains from extrapolating beyond 5 occurrences.",
+      "exceptions": "Strict abstention boundary.",
+      "authority_status": "documented_limitation",
+      "approval_status": "PENDING_EVIDENCE",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Directive: Do not extrapolate beyond five occurrences until applicable source rule is available."
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-DEF-MISSING",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "missing_numbers_predictions",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Deferred Topics",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "conditions": {
+        "frequency": 0
+      },
+      "interpretation": "Missing number status is detected deterministically (e.g. absent digits in grid). While specific remedial protocols are documented in PDF Chapter 05, complete narrative predictive consequences for all 9 missing numbers are explicitly withheld and safely held as PENDING_EVIDENCE until approved source text is supplied.",
+      "exceptions": "Only missing status is reported; detailed predictions are withheld.",
+      "authority_status": "deferred_topic",
+      "approval_status": "PENDING_EVIDENCE",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript does not provide complete missing-number prediction catalogue.",
+      "source_documents": [
+        "SRC-DAY7-TRANSCRIPT",
+        "SRC-CELESTIAL-BLUEPRINT-PDF"
+      ],
+      "cross_reference": "Transcript Day 7 Deferred Topics & Celestial Blueprint PDF Chapters 04 and 05 (Missing Energy Gaps: 2, 3, 4, 5, 6, 7)"
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-DEF-81-COMBINATIONS",
+      "rule_version": "1.0.0",
+      "domain": "vedic_lo_shu_numerology",
+      "topic": "driver_conductor_combinations",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Deferred Topics",
+      "applicable_system": "lo_shu_and_vedic",
+      "applicable_numbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "conditions": {
+        "type": "all_81_combinations"
+      },
+      "interpretation": "While specific validated pairs (such as Driver 9 + Conductor 2 at 85% harmony) are approved in the Celestial Blueprint PDF, the exhaustive set of all 81 Driver-Conductor permutations is not fully documented in the Day 7 transcript or PDF. Unverified pairs strictly remain safely held as PENDING_EVIDENCE.",
+      "exceptions": "Only approved baseline pairs in corpus are referenced.",
+      "authority_status": "deferred_topic",
+      "approval_status": "PENDING_EVIDENCE",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript does not provide all 81 driver-conductor interpretations.",
+      "source_documents": [
+        "SRC-DAY7-TRANSCRIPT",
+        "SRC-CELESTIAL-BLUEPRINT-PDF"
+      ],
+      "cross_reference": "Transcript Day 7 Deferred Topics & Celestial Blueprint PDF Chapter 03 (Driver 9 + Conductor 2 Synergy)"
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-DEF-PLANETARY-DEGREES",
+      "rule_version": "1.0.0",
+      "domain": "astrological_numerology",
+      "topic": "planetary_power_and_degrees",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Deferred Topics",
+      "applicable_system": "astrological_correlation",
+      "applicable_numbers": [],
+      "conditions": {
+        "type": "planetary_degree_formula"
+      },
+      "interpretation": "Planetary degree calculations and planetary power formulas are absent from both the Day 7 transcript and the Celestial Blueprint PDF. The system strictly refuses to fabricate formulas and safely holds planetary degree power as PENDING_EVIDENCE.",
+      "exceptions": "Calculation disabled until formula confirmed.",
+      "authority_status": "deferred_topic",
+      "approval_status": "PENDING_EVIDENCE",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript does not provide complete planetary-degree formula.",
+      "source_documents": [
+        "SRC-DAY7-TRANSCRIPT",
+        "SRC-CELESTIAL-BLUEPRINT-PDF"
+      ],
+      "cross_reference": "Transcript Day 7 Deferred Topics & Celestial Blueprint PDF Chapters 01 and 02"
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-DEF-NUMEROLOGY-DASHA",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "numerology_dasha_timing",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Deferred Topics",
+      "applicable_system": "lo_shu_dasha",
+      "applicable_numbers": [],
+      "conditions": {
+        "type": "numerology_dasha"
+      },
+      "interpretation": "While annual personal cycles (e.g. Personal Year 2 for 2026) are supported, numerology-specific Dasha timing is absent from both the Day 7 transcript and the Celestial Blueprint PDF. Numerology Dasha calculations remain safely held as PENDING_EVIDENCE.",
+      "exceptions": "Astrological Vimshottari Mahadasha remains separate.",
+      "authority_status": "deferred_topic",
+      "approval_status": "PENDING_EVIDENCE",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript does not provide full numerology dasha methodology.",
+      "source_documents": [
+        "SRC-DAY7-TRANSCRIPT",
+        "SRC-CELESTIAL-BLUEPRINT-PDF"
+      ],
+      "cross_reference": "Transcript Day 7 Deferred Topics & Celestial Blueprint PDF Chapter 09 (Personal Year 2 only)"
+    },
+    {
+      "rule_id": "RUL-LOSHU-D7-FRAMEWORK-135",
+      "rule_version": "1.0.0",
+      "domain": "lo_shu_numerology",
+      "topic": "reading_type_framework",
+      "source_document_id": "SRC-DAY7-TRANSCRIPT",
+      "source_title": "Day 7 Numerology Training Session Transcript",
+      "source_passage_or_timestamp": "Day 7 - Pedagogy Framework",
+      "applicable_system": "lo_shu_grid",
+      "applicable_numbers": [],
+      "conditions": {
+        "framework": "135_readings"
+      },
+      "interpretation": "The 135 reading-type framework is formally qualified as instructor_stated_pedagogy (a pedagogical teaching structure), not an independently scientifically validated or mathematical count of all possible chart permutations.",
+      "exceptions": "Pedagogical reference only.",
+      "authority_status": "instructor_stated_pedagogy",
+      "approval_status": "APPROVED",
+      "effective_date": "2026-10-27",
+      "review_date": "2027-10-27",
+      "provenance": "Day 7 transcript: 135 reading-type framework is instructor pedagogical framework.",
+      "source_documents": [
+        "SRC-DAY7-TRANSCRIPT"
+      ],
+      "cross_reference": "Transcript Day 7 Pedagogy Framework (Absent from Celestial Blueprint PDF)"
+    }
+  ]
+}

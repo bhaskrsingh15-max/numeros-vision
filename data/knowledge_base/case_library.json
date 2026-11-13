@@ -1,0 +1,261 @@
+{
+  "version": "1.0.0",
+  "cases": [
+    {
+      "case_id": "NV-CASE-000001",
+      "case_version": 1,
+      "domain": "career",
+      "source": {
+        "title": "Corporate Executive Name Spelling Alignment Study",
+        "url": "internal://practitioner-records/case-001",
+        "author": "NUMEROS VISION Senior Practitioner Archives",
+        "publication_date": "2024-03-15",
+        "evidence_level": "E3",
+        "verification_status": "unverified"
+      },
+      "inputs": {
+        "date_of_birth": "1988-10-19",
+        "birth_name": "Rohan Verma",
+        "current_name": "Rohann Verma",
+        "question": "Career stagnation, executive board visibility, promotion delay",
+        "observation_period": "18 months (2024-2025)"
+      },
+      "calculations": {
+        "system": "Chaldean",
+        "ruleset_version": "1.0.0",
+        "birth_number": 1,
+        "destiny_number": 1,
+        "name_number": 1,
+        "compound_numbers": [
+          19,
+          37
+        ],
+        "loshu_grid": {
+          "1": 3,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 2,
+          "9": 2
+        }
+      },
+      "interpretations": [
+        {
+          "claim": "Native birth day 19 carries Alpha Solar power (Karmic 19). Triple 1 and double 8 created heavy authority deadlock with institutional superiors.",
+          "rule_reference": "NV-002: Birth Day 19 & Repetitive 1s / 8s friction",
+          "evidence_status": "traditional"
+        }
+      ],
+      "predictions": [
+        {
+          "event": "Corporate promotion or autonomous spin-off opportunity",
+          "start_date": "2024-10-15",
+          "end_date": "2025-04-15",
+          "success_criterion": "Executive title elevation or independent divisional leadership",
+          "recorded_at": "2024-03-20T10:00:00Z",
+          "forecast_status": "reported_favorable"
+        }
+      ],
+      "remedies": [
+        {
+          "type": "Name spelling adjustment to Compound 37 (1) + Copper morning solar water hygiene",
+          "rationale": "Chaldean Compound 37 brings royal friendship and public alliance, softening double 8 friction.",
+          "cost": "Zero cost physical routine",
+          "risks": [
+            "Official legal document update friction"
+          ],
+          "outcome_evidence": "practitioner_observed_only"
+        }
+      ],
+      "outcome": {
+        "observed_result": "Client reported appointment as Vice President in January 2025.",
+        "evidence_source": "Client self-reported follow-up questionnaire",
+        "confounders": [
+          "Macroeconomic hiring surge in tech consulting",
+          "Client completed MBA certification in 2024"
+        ],
+        "independent_review": false
+      },
+      "provenance": {
+        "source_quotes": [
+          "Client reported improved board communication 90 days after adopting balanced signature."
+        ],
+        "reviewer": "Numeros Vision Ethics Review",
+        "last_verified_at": "2026-01-10"
+      }
+    },
+    {
+      "case_id": "NV-CASE-000002",
+      "case_version": 1,
+      "domain": "finance",
+      "source": {
+        "title": "Business Solvency & Mobile Numerology Case Study",
+        "url": "internal://practitioner-records/case-002",
+        "author": "NUMEROS VISION Commercial Advisory",
+        "publication_date": "2023-11-04",
+        "evidence_level": "E3",
+        "verification_status": "unverified"
+      },
+      "inputs": {
+        "date_of_birth": "1979-08-26",
+        "birth_name": "Sanjay Mehta",
+        "current_name": "Sanjay Mehta",
+        "question": "Chronic liquidity blockages, client payment delays in textile export",
+        "observation_period": "12 months"
+      },
+      "calculations": {
+        "system": "Chaldean",
+        "ruleset_version": "1.0.0",
+        "birth_number": 8,
+        "destiny_number": 6,
+        "name_number": 5,
+        "compound_numbers": [
+          26,
+          33
+        ],
+        "loshu_grid": {
+          "1": 1,
+          "2": 2,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 2
+        }
+      },
+      "interpretations": [
+        {
+          "claim": "Birth day 26 (Saturn) with Conductor 6 creates heavy family and business debt burdens. Primary mobile contained malefic 48 anti-pair.",
+          "rule_reference": "Mobile Numerology Rule 2: Anti-pair 48 cash blockage",
+          "evidence_status": "traditional"
+        }
+      ],
+      "predictions": [
+        {
+          "event": "Gradual debt recovery and cash flow normalization",
+          "start_date": "2024-02-01",
+          "end_date": "2024-08-01",
+          "success_criterion": "Recovery of trapped export receivables (>50%)",
+          "recorded_at": "2023-11-10T14:30:00Z",
+          "forecast_status": "reported_favorable"
+        }
+      ],
+      "remedies": [
+        {
+          "type": "Transition primary business mobile ending in 55 (Mercury) + North desk alignment",
+          "rationale": "Number 5 introduces commercial liquidity to dissolve Saturn-Venus debt traps.",
+          "cost": "Cost of secondary telecom SIM",
+          "risks": [
+            "Temporary vendor contact update confusion"
+          ],
+          "outcome_evidence": "practitioner_observed_only"
+        }
+      ],
+      "outcome": {
+        "observed_result": "Recovered 68% of outstanding invoices within 7 months.",
+        "evidence_source": "Accountant confirmation statement",
+        "confounders": [
+          "Implementation of legal demand notices under MSMED Act 2006"
+        ],
+        "independent_review": false
+      },
+      "provenance": {
+        "source_quotes": [
+          "Cash flow stabilized; multiple overdue accounts cleared following communication restructuring."
+        ],
+        "reviewer": "Numeros Vision Audit Board",
+        "last_verified_at": "2024-12-01"
+      }
+    },
+    {
+      "case_id": "NV-CASE-000003",
+      "case_version": 1,
+      "domain": "career",
+      "source": {
+        "title": "Counterexample / Unresolved Prediction Case",
+        "url": "internal://practitioner-records/case-003",
+        "author": "Independent Numerology Evaluation Cohort",
+        "publication_date": "2025-06-20",
+        "evidence_level": "E3",
+        "verification_status": "contradicted"
+      },
+      "inputs": {
+        "date_of_birth": "1994-04-13",
+        "birth_name": "Amit Saxena",
+        "current_name": "Ameet Saxena",
+        "question": "Government examination selection & public administrative career",
+        "observation_period": "24 months"
+      },
+      "calculations": {
+        "system": "Chaldean",
+        "ruleset_version": "1.0.0",
+        "birth_number": 4,
+        "destiny_number": 4,
+        "name_number": 6,
+        "compound_numbers": [
+          13,
+          31
+        ],
+        "loshu_grid": {
+          "1": 3,
+          "2": 0,
+          "3": 1,
+          "4": 2,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 2
+        }
+      },
+      "interpretations": [
+        {
+          "claim": "Traditional forecast predicted state civil service clearance during Personal Year 1 following name change to compound 33.",
+          "rule_reference": "Personal Year 1 initiation rule",
+          "evidence_status": "traditional"
+        }
+      ],
+      "predictions": [
+        {
+          "event": "Civil service examination clearance",
+          "start_date": "2025-01-01",
+          "end_date": "2025-07-01",
+          "success_criterion": "Final selection in state public service commission list",
+          "recorded_at": "2024-11-05T09:00:00Z",
+          "forecast_status": "not_realized"
+        }
+      ],
+      "remedies": [
+        {
+          "type": "Name spelling change to 33 (6) + wearing 6-carat white quartz",
+          "rationale": "Energize Venus to soften double Rahu 4-4 administrative friction.",
+          "cost": "₹3,500 for gemstone and certification",
+          "risks": [
+            "Financial expense with zero guaranteed legal outcome"
+          ],
+          "outcome_evidence": "contradicted_by_outcome"
+        }
+      ],
+      "outcome": {
+        "observed_result": "Candidate did not clear final cutoff; exam selection rate was 0.08% overall.",
+        "evidence_source": "Official commission examination scorecard",
+        "confounders": [
+          "Extreme exam competition ratio (350,000 applicants for 280 seats)"
+        ],
+        "independent_review": true
+      },
+      "provenance": {
+        "source_quotes": [
+          "Predicted success did not manifest; structural competitive baselines overrode symbolic name alignment."
+        ],
+        "reviewer": "Numeros Vision Audit Board",
+        "last_verified_at": "2025-08-15"
+      }
+    }
+  ]
+}

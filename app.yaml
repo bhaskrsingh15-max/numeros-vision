@@ -1,0 +1,14 @@
+runtime: python311
+instance_class: F2
+
+entrypoint: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2
+
+env_variables:
+  ENVIRONMENT: "production"
+
+handlers:
+  - url: /static
+    static_dir: app/static
+
+  - url: /.*
+    script: auto

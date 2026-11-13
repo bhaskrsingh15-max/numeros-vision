@@ -1,0 +1,6 @@
+conflict_id,topic,tradition_a,tradition_b,severity,resolution_policy
+CONF-001,Letter Alphabet Mapping,Chaldean: A-Z mapped 1-8 (9 excluded),Pythagorean: A-Z mapped 1-9 sequentially,High,Strict Isolation: User or route explicitly selects tradition. Never blend mappings.
+CONF-002,Compound Number Reduction,Chaldean: Retains compound number (e.g. 33 24 19) as primary meaning,Pythagorean/Vedic: Reduces immediately to single digit or Master Number,Medium,Dual Display: Display compound vibration first with reduction root as planetary governor.
+CONF-003,Number 4 Planetary Ruler,Vedic: Rahu (North Node of Moon),Pythagorean/Western: Uranus / Sun harmonic,Medium,Tradition-labeled Findings: Clearly label Vedic as Rahu and Western as Uranus.
+CONF-004,Number 7 Planetary Ruler,Vedic: Ketu (South Node of Moon),Pythagorean/Western: Neptune / Spiritual Analyst,Medium,Tradition-labeled Findings: Clearly label Vedic as Ketu and Western as Neptune.
+CONF-005,Master Number Recognition,Pythagorean: Acknowledges 11 22 33 as unreduced master vibrations,Vedic: Reduces all compound dates to single digit 1-9,Low,Contextual Authority: Pythagorean reports retain 11/22/33; Vedic reports display root 2/4/6.

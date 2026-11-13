@@ -1,0 +1,123 @@
+# Kubernetes Enterprise Deployment Manifest for Numeros Vision & Charm AI
+# Zero-Downtime Rolling Update & Horizontal Pod Autoscaling (HPA)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: numeros-vision-agent-engine
+  namespace: default
+  labels:
+    app: numeros-vision
+    tier: ai-agent-core
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: numeros-vision
+  template:
+    metadata:
+      labels:
+        app: numeros-vision
+        tier: ai-agent-core
+    spec:
+      containers:
+      - name: numeros-vision
+        image: gcr.io/numeros-vision-prod/agent-engine:v4.1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http-asgi
+        env:
+        - name: ENV
+          value: "production"
+        - name: WEB_CONCURRENCY
+          value: "5"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: numeros-secrets
+              key: redis-url
+        - name: RAZORPAY_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: numeros-secrets
+              key: razorpay-key-id
+        - name: RAZORPAY_KEY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: numeros-secrets
+              key: razorpay-key-secret
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1024Mi"
+          limits:
+            cpu: "2000m"
+            memory: "2048Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: numeros-vision-service
+  namespace: default
+  labels:
+    app: numeros-vision
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000
+    name: http
+    protocol: TCP
+  selector:
+    app: numeros-vision
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: numeros-vision-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: numeros-vision-agent-engine
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

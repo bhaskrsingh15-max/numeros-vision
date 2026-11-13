@@ -1,0 +1,86 @@
+{
+  "version": "1.0.0",
+  "predictions": [
+    {
+      "ledger_id": "PRED-20261029-00001",
+      "recorded_at": "2026-10-29T08:04:04.799766+00:00",
+      "user_hash": "3622a1bb24b70cf9",
+      "consent_token": "DPDP_CONSENT_EXPLICIT_OPT_IN",
+      "domain": "career",
+      "prediction_mode": "MODE_A_TRADITIONAL",
+      "ruleset_version": "1.0.0",
+      "forecast_text": "Personal Year 1 initiation favoring executive transition.",
+      "target_window": {
+        "start_date": "2026-11-01",
+        "end_date": "2027-04-01"
+      },
+      "success_criterion": "Receiving formal written promotion offer",
+      "status": "VERIFIED_SUCCESS",
+      "post_event_outcome": {
+        "recorded_at": "2026-10-29T08:04:04.801169+00:00",
+        "outcome_status": "VERIFIED_SUCCESS",
+        "observed_result": "User promoted to Director of Engineering in March 2027.",
+        "evidence_source": "Consented user verification submission with offer letter proof",
+        "confounders": [
+          "Organizational restructuring"
+        ],
+        "independent_review": true
+      },
+      "last_reviewed_at": "2026-10-29T08:04:04.801160+00:00"
+    },
+    {
+      "ledger_id": "PRED-20261029-00002",
+      "recorded_at": "2026-10-29T09:19:46.968853+00:00",
+      "user_hash": "3622a1bb24b70cf9",
+      "consent_token": "DPDP_CONSENT_EXPLICIT_OPT_IN",
+      "domain": "career",
+      "prediction_mode": "MODE_A_TRADITIONAL",
+      "ruleset_version": "1.0.0",
+      "forecast_text": "Personal Year 1 initiation favoring executive transition.",
+      "target_window": {
+        "start_date": "2026-11-01",
+        "end_date": "2027-04-01"
+      },
+      "success_criterion": "Receiving formal written promotion offer",
+      "status": "VERIFIED_SUCCESS",
+      "post_event_outcome": {
+        "recorded_at": "2026-10-29T09:19:46.970779+00:00",
+        "outcome_status": "VERIFIED_SUCCESS",
+        "observed_result": "User promoted to Director of Engineering in March 2027.",
+        "evidence_source": "Consented user verification submission with offer letter proof",
+        "confounders": [
+          "Organizational restructuring"
+        ],
+        "independent_review": true
+      },
+      "last_reviewed_at": "2026-10-29T09:19:46.970757+00:00"
+    },
+    {
+      "ledger_id": "PRED-20261029-00003",
+      "recorded_at": "2026-10-29T10:41:21.897320+00:00",
+      "user_hash": "3622a1bb24b70cf9",
+      "consent_token": "DPDP_CONSENT_EXPLICIT_OPT_IN",
+      "domain": "career",
+      "prediction_mode": "MODE_A_TRADITIONAL",
+      "ruleset_version": "1.0.0",
+      "forecast_text": "Personal Year 1 initiation favoring executive transition.",
+      "target_window": {
+        "start_date": "2026-11-01",
+        "end_date": "2027-04-01"
+      },
+      "success_criterion": "Receiving formal written promotion offer",
+      "status": "VERIFIED_SUCCESS",
+      "post_event_outcome": {
+        "recorded_at": "2026-10-29T10:41:21.897830+00:00",
+        "outcome_status": "VERIFIED_SUCCESS",
+        "observed_result": "User promoted to Director of Engineering in March 2027.",
+        "evidence_source": "Consented user verification submission with offer letter proof",
+        "confounders": [
+          "Organizational restructuring"
+        ],
+        "independent_review": true
+      },
+      "last_reviewed_at": "2026-10-29T10:41:21.897823+00:00"
+    }
+  ]
+}

@@ -1,0 +1,612 @@
+{
+  "$schema": "https://numerosvision.com/schemas/formula_registry.v1.json",
+  "version": "1.0.0",
+  "title": "Numeros Vision Master Canonical Formula Registry",
+  "last_updated": "2026-10-29",
+  "formulas": [
+    {
+      "formula_id": "chaldean.name.compound_and_root.v1",
+      "tradition": "Chaldean",
+      "topic": "name_analysis",
+      "name": "Chaldean Name Compound and Root Calculation",
+      "inputs": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Full calling name, first name, or business brand name"
+        }
+      ],
+      "normalization_policy": "strip_accents_uppercase_ascii_alpha_only",
+      "mapping_id": "chaldean.letter_values.v1",
+      "mapping": {
+        "A": 1,
+        "I": 1,
+        "J": 1,
+        "Q": 1,
+        "Y": 1,
+        "B": 2,
+        "C": 2,
+        "K": 2,
+        "R": 2,
+        "G": 3,
+        "L": 3,
+        "S": 3,
+        "D": 4,
+        "M": 4,
+        "T": 4,
+        "E": 5,
+        "H": 5,
+        "N": 5,
+        "X": 5,
+        "U": 6,
+        "V": 6,
+        "W": 6,
+        "O": 7,
+        "Z": 7,
+        "F": 8,
+        "P": 8
+      },
+      "steps": [
+        "Normalize input name to uppercase ASCII alphabetic characters (A-Z). Spaces and non-alpha characters are ignored for value sum.",
+        "Map each character to its Chaldean digit (1-8).",
+        "Sum individual letter values to produce compound_total.",
+        "Sum digits of compound_total iteratively until a single digit (1-9) is reached to produce root_number.",
+        "Preserve compound_total as primary esoteric vibration; root_number as base planetary ruler."
+      ],
+      "reduction_policy": "preserve_compound_then_reduce",
+      "special_cases": [
+        "Digit 9 is sacred in Chaldean tradition and never assigned to individual letters, but compound sums can equal 9 or reduce to 9.",
+        "Preserve compound totals across standard range (10 to 100+) without discarding compound interpretation."
+      ],
+      "output_schema": {
+        "compound_total": "integer",
+        "root_number": "integer",
+        "letter_breakdown": "array of objects",
+        "reduction_path": "array of integers"
+      },
+      "source_ids": [
+        "B1",
+        "B2"
+      ],
+      "source_pages": [
+        "B2 Section 2",
+        "B2 Section 7",
+        "B2 Section 11"
+      ],
+      "status": "approved",
+      "tests": [
+        {
+          "input": {
+            "name": "Bhaskr Singh"
+          },
+          "expected": {
+            "compound_total": 33,
+            "root_number": 6
+          }
+        },
+        {
+          "input": {
+            "name": "Elon Musk"
+          },
+          "expected": {
+            "compound_total": 35,
+            "root_number": 8
+          }
+        },
+        {
+          "input": {
+            "name": "Victor"
+          },
+          "expected": {
+            "compound_total": 22,
+            "root_number": 4
+          }
+        }
+      ]
+    },
+    {
+      "formula_id": "pythagorean.expression.v1",
+      "tradition": "Pythagorean",
+      "topic": "name_analysis",
+      "name": "Pythagorean Expression / Destiny Number",
+      "inputs": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Full birth certificate name"
+        }
+      ],
+      "normalization_policy": "strip_accents_uppercase_ascii_alpha_only",
+      "mapping_id": "pythagorean.letter_values.v1",
+      "mapping": {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4,
+        "E": 5,
+        "F": 6,
+        "G": 7,
+        "H": 8,
+        "I": 9,
+        "J": 1,
+        "K": 2,
+        "L": 3,
+        "M": 4,
+        "N": 5,
+        "O": 6,
+        "P": 7,
+        "Q": 8,
+        "R": 9,
+        "S": 1,
+        "T": 2,
+        "U": 3,
+        "V": 4,
+        "W": 5,
+        "X": 6,
+        "Y": 7,
+        "Z": 8
+      },
+      "steps": [
+        "Normalize input name to uppercase ASCII A-Z.",
+        "Map each character to its sequential Pythagorean digit (1-9).",
+        "Sum letter values per word or name part, reducing each name part, then sum totals.",
+        "Retain Master Numbers 11, 22, 33 during reduction; otherwise reduce to single digit 1-9."
+      ],
+      "reduction_policy": "master_numbers_11_22_33_then_single_digit",
+      "special_cases": [
+        "Master Numbers 11, 22, and 33 are retained and not reduced to 2, 4, or 6 respectively."
+      ],
+      "output_schema": {
+        "expression_number": "integer",
+        "is_master_number": "boolean",
+        "reduction_steps": "array of integers"
+      },
+      "source_ids": [
+        "B2"
+      ],
+      "source_pages": [
+        "B2 Section 3",
+        "B2 Section 10"
+      ],
+      "status": "approved",
+      "tests": [
+        {
+          "input": {
+            "name": "John Doe"
+          },
+          "expected": {
+            "expression_number": 8,
+            "is_master_number": false
+          }
+        }
+      ]
+    },
+    {
+      "formula_id": "pythagorean.life_path.v1",
+      "tradition": "Pythagorean",
+      "topic": "core_numbers",
+      "name": "Pythagorean Life Path Number",
+      "inputs": [
+        {
+          "name": "day",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "month",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "year",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "normalization_policy": "valid_gregorian_date",
+      "mapping_id": "direct_numeric",
+      "steps": [
+        "Reduce month to single digit or Master Number (11).",
+        "Reduce day to single digit or Master Number (11, 22).",
+        "Reduce year digits to single digit or Master Number (11, 22).",
+        "Sum the three reduced values.",
+        "Reduce total to single digit or retain Master Number (11, 22, 33)."
+      ],
+      "reduction_policy": "master_numbers_11_22_33_then_single_digit",
+      "special_cases": [
+        "11, 22, and 33 are protected master vibrations."
+      ],
+      "output_schema": {
+        "life_path_number": "integer",
+        "is_master_number": "boolean"
+      },
+      "source_ids": [
+        "B2"
+      ],
+      "source_pages": [
+        "B2 Section 3",
+        "B2 Section 8"
+      ],
+      "status": "approved",
+      "tests": [
+        {
+          "input": {
+            "day": 28,
+            "month": 11,
+            "year": 1981
+          },
+          "expected": {
+            "life_path_number": 4,
+            "is_master_number": false
+          }
+        }
+      ]
+    },
+    {
+      "formula_id": "vedic.mulank.v1",
+      "tradition": "Vedic",
+      "topic": "core_numbers",
+      "name": "Vedic Mulank (Driver / Psychic / Birth Day Number)",
+      "inputs": [
+        {
+          "name": "day",
+          "type": "integer",
+          "required": true,
+          "description": "Day of birth (1-31)"
+        }
+      ],
+      "normalization_policy": "day_range_1_to_31",
+      "mapping_id": "direct_numeric",
+      "steps": [
+        "Take day integer (1-31).",
+        "If day > 9, sum its constituent digits (e.g., 28 -> 2+8 = 10 -> 1+0 = 1).",
+        "Final value strictly in range 1-9."
+      ],
+      "reduction_policy": "recursive_single_digit",
+      "special_cases": [
+        "Days 1-9 are their own Mulank directly."
+      ],
+      "output_schema": {
+        "mulank": "integer",
+        "ruling_planet": "string"
+      },
+      "source_ids": [
+        "B1",
+        "B2"
+      ],
+      "source_pages": [
+        "B2 Section 5",
+        "B2 Section 6"
+      ],
+      "status": "approved",
+      "tests": [
+        {
+          "input": {
+            "day": 28
+          },
+          "expected": {
+            "mulank": 1,
+            "ruling_planet": "Sun"
+          }
+        },
+        {
+          "input": {
+            "day": 15
+          },
+          "expected": {
+            "mulank": 6,
+            "ruling_planet": "Venus"
+          }
+        },
+        {
+          "input": {
+            "day": 7
+          },
+          "expected": {
+            "mulank": 7,
+            "ruling_planet": "Ketu"
+          }
+        }
+      ]
+    },
+    {
+      "formula_id": "vedic.bhagyank.v1",
+      "tradition": "Vedic",
+      "topic": "core_numbers",
+      "name": "Vedic Bhagyank (Conductor / Destiny / Total Life Number)",
+      "inputs": [
+        {
+          "name": "day",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "month",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "year",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "normalization_policy": "valid_gregorian_date",
+      "mapping_id": "direct_numeric",
+      "steps": [
+        "Sum all digits of the complete Gregorian date: d1+d2 + m1+m2 + y1+y2+y3+y4.",
+        "Sum digits of intermediate sum recursively until single digit (1-9) is reached.",
+        "Final value strictly in range 1-9."
+      ],
+      "reduction_policy": "recursive_single_digit",
+      "special_cases": [
+        "Vedic tradition reduces all compound birth sums to single digit 1-9."
+      ],
+      "output_schema": {
+        "bhagyank": "integer",
+        "ruling_planet": "string"
+      },
+      "source_ids": [
+        "B1",
+        "B2"
+      ],
+      "source_pages": [
+        "B2 Section 5",
+        "B2 Section 8"
+      ],
+      "status": "approved",
+      "tests": [
+        {
+          "input": {
+            "day": 28,
+            "month": 11,
+            "year": 1981
+          },
+          "expected": {
+            "bhagyank": 4,
+            "ruling_planet": "Rahu"
+          }
+        },
+        {
+          "input": {
+            "day": 15,
+            "month": 8,
+            "year": 1947
+          },
+          "expected": {
+            "bhagyank": 8,
+            "ruling_planet": "Saturn"
+          }
+        }
+      ]
+    },
+    {
+      "formula_id": "loshu.grid_and_planes.v1",
+      "tradition": "Chinese",
+      "topic": "grid_analysis",
+      "name": "Lo Shu 3x3 Magic Square Frequency & Plane Analysis",
+      "inputs": [
+        {
+          "name": "dob_digits",
+          "type": "array of integers",
+          "required": true,
+          "description": "Digits extracted from DD-MM-YYYY birth date, plus calculated Mulank and Bhagyank"
+        }
+      ],
+      "normalization_policy": "filter_nonzero_digits_1_to_9",
+      "mapping_id": "loshu_3x3_coordinates",
+      "mapping": {
+        "4": {
+          "row": 0,
+          "col": 0,
+          "plane_row": "Mental",
+          "plane_col": "Thought"
+        },
+        "9": {
+          "row": 0,
+          "col": 1,
+          "plane_row": "Mental",
+          "plane_col": "Will"
+        },
+        "2": {
+          "row": 0,
+          "col": 2,
+          "plane_row": "Mental",
+          "plane_col": "Action"
+        },
+        "3": {
+          "row": 1,
+          "col": 0,
+          "plane_row": "Emotional",
+          "plane_col": "Thought"
+        },
+        "5": {
+          "row": 1,
+          "col": 1,
+          "plane_row": "Emotional",
+          "plane_col": "Will"
+        },
+        "7": {
+          "row": 1,
+          "col": 2,
+          "plane_row": "Emotional",
+          "plane_col": "Action"
+        },
+        "8": {
+          "row": 2,
+          "col": 0,
+          "plane_row": "Practical",
+          "plane_col": "Thought"
+        },
+        "1": {
+          "row": 2,
+          "col": 1,
+          "plane_row": "Practical",
+          "plane_col": "Will"
+        },
+        "6": {
+          "row": 2,
+          "col": 2,
+          "plane_row": "Practical",
+          "plane_col": "Action"
+        }
+      },
+      "steps": [
+        "Count frequency of each digit 1 through 9 from the supplied digits list (0 is ignored as having no cell).",
+        "Check 8 planes for full presence (strength) or complete absence (weakness):",
+        "  - Horizontal Planes: Mental (4,9,2), Emotional (3,5,7), Practical (8,1,6)",
+        "  - Vertical Planes: Thought (4,3,8), Will (9,5,1), Action (2,7,6)",
+        "  - Diagonal Planes: Golden Raj Yoga (4,5,6), Silver Property (2,5,8)",
+        "Identify missing numbers (frequency == 0) and excessive numbers (frequency >= 3)."
+      ],
+      "reduction_policy": "frequency_histogram",
+      "special_cases": [
+        "Digit 0 has no cell in the Lo Shu 3x3 square."
+      ],
+      "output_schema": {
+        "digit_counts": "object",
+        "present_planes": "array of strings",
+        "absent_planes": "array of strings",
+        "missing_digits": "array of integers"
+      },
+      "source_ids": [
+        "B3"
+      ],
+      "source_pages": [
+        "B3 Cover 4-9-2/3-5-7/8-1-6",
+        "B3 Chapter 2"
+      ],
+      "status": "approved",
+      "tests": [
+        {
+          "input": {
+            "dob_digits": [
+              2,
+              8,
+              1,
+              1,
+              1,
+              9,
+              8,
+              1,
+              1,
+              4
+            ]
+          },
+          "expected_missing": [
+            3,
+            5,
+            6,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "formula_id": "numerology.personal_year.v1",
+      "tradition": "Universal",
+      "topic": "timing_cycle",
+      "name": "Personal Year Vibration Cycle",
+      "inputs": [
+        {
+          "name": "birth_day",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "birth_month",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "target_year",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "normalization_policy": "valid_gregorian_day_month_and_year",
+      "mapping_id": "direct_numeric",
+      "steps": [
+        "Sum birth_day digits, birth_month digits, and target_year digits.",
+        "Sum intermediate total digits until single digit (1-9) is reached.",
+        "Result represents current personal year vibration in the 9-year epicycle."
+      ],
+      "reduction_policy": "recursive_single_digit",
+      "special_cases": [
+        "Personal year begins either on Jan 1 or on the individual birth date depending on tradition config; default is Jan 1 with birthdate transit marker."
+      ],
+      "output_schema": {
+        "personal_year": "integer",
+        "cycle_phase": "string"
+      },
+      "source_ids": [
+        "B2",
+        "B3"
+      ],
+      "source_pages": [
+        "B2 Section 22",
+        "B3 Chapter 4"
+      ],
+      "status": "approved",
+      "tests": [
+        {
+          "input": {
+            "birth_day": 28,
+            "birth_month": 11,
+            "target_year": 2026
+          },
+          "expected": {
+            "personal_year": 4
+          }
+        }
+      ]
+    },
+    {
+      "formula_id": "chaldean.first_name_growth.v1",
+      "tradition": "Chaldean",
+      "topic": "name_analysis",
+      "name": "Chaldean First Name (Growth) Number",
+      "inputs": [
+        {
+          "name": "first_name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "normalization_policy": "strip_accents_uppercase_ascii_alpha_only",
+      "mapping_id": "chaldean.letter_values.v1",
+      "steps": [
+        "Extract first word of name.",
+        "Map each character to its Chaldean digit (1-8).",
+        "Sum values to compound total.",
+        "Reduce compound total to single digit (1-9) to produce growth root number."
+      ],
+      "reduction_policy": "preserve_compound_then_reduce",
+      "special_cases": [],
+      "output_schema": {
+        "growth_compound": "integer",
+        "growth_root": "integer"
+      },
+      "source_ids": [
+        "B2"
+      ],
+      "source_pages": [
+        "B2 Section 9"
+      ],
+      "status": "approved",
+      "tests": [
+        {
+          "input": {
+            "first_name": "Bhaskr"
+          },
+          "expected": {
+            "growth_compound": 16,
+            "growth_root": 7
+          }
+        }
+      ]
+    }
+  ]
+}

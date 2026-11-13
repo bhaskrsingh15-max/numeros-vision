@@ -1,0 +1,982 @@
+import os
+
+file_path = os.path.join("app", "static", "tools", "life-path-calculator.html")
+
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Standardized Favicon & Brand Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="/logos/nv-logo-mark.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+
+  <title>Life Path Number Calculator | Free Birth Date Numerology</title>
+  <meta name="description" content="Calculate your Life Path number from your birth date. See the calculation steps and explore its traditional numerology interpretation." />
+  <meta name="keywords" content="life path number calculator, calculate life path number, birth date numerology, free numerology calculator, life path numbers 1 to 9, master numbers" />
+  <link rel="canonical" href="https://numerosvision.com/tools/life-path-calculator/" />
+  
+  <!-- Search Engine Crawl & Indexing Directives -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+  <!-- App Store, PWA & Mobile Web Directives -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Numeros Vision" />
+
+  <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+  <meta property="og:site_name" content="Numeros Vision" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://numerosvision.com/tools/life-path-calculator" />
+  <meta property="og:title" content="Life Path Number Calculator | Free Birth Date Numerology" />
+  <meta property="og:description" content="Calculate your Life Path number from your birth date. See the calculation steps and explore its traditional numerology interpretation." />
+  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+
+  <!-- Twitter Card Directives -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Life Path Number Calculator | Free Birth Date Numerology" />
+  <meta name="twitter:description" content="Calculate your Life Path number from your birth date. See the calculation steps and explore its traditional numerology interpretation." />
+  <meta name="twitter:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+
+  <!-- Master Typography & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/theme.css?v=4.7.3" />
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=4.8.0" />
+
+  <!-- JSON-LD Structured Data (WebApplication + BreadcrumbList + FAQPage) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://numerosvision.com/tools/life-path-calculator#app",
+        "name": "Life Path Number Calculator",
+        "description": "Calculate your Life Path number from your birth date. See the calculation steps and explore its traditional numerology interpretation.",
+        "url": "https://numerosvision.com/tools/life-path-calculator",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "provider": {
+          "@type": "Organization",
+          "name": "Numeros Vision",
+          "url": "https://numerosvision.com"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://numerosvision.com/tools/life-path-calculator#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://numerosvision.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Calculators",
+            "item": "https://numerosvision.com/calculators/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Life Path Number Calculator",
+            "item": "https://numerosvision.com/tools/life-path-calculator"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://numerosvision.com/tools/life-path-calculator#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is a Life Path number?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Your Life Path number is a core numerology number calculated from your full date of birth. It represents traditional symbolic themes, natural tendencies, and life lessons associated with your birth date."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is my Life Path number calculated?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Your day, month, and year of birth are reduced to single digits (or master numbers 11, 22, 33), added together, and reduced again to arrive at a single root number from 1 to 9."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What do Life Path numbers 1 to 9 mean?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Each number from 1 to 9 represents a classical archetype in traditional numerology—such as leadership for 1, diplomacy for 2, creative expression for 3, and discipline for 4. These are symbolic interpretations rather than deterministic predictions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are master numbers in numerology?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Master numbers are double digits (11, 22, and 33) that carry amplified traditional symbolic significance. In many numerology methods, they are preserved without immediate reduction to single digits."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the calculation method affect my result?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Different reduction conventions (such as component reduction vs. direct digit addition) always produce the same final single-digit root, but can produce different intermediate compound numbers (for example, 13 vs. 31)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What does a detailed Life Path report include?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A detailed Life Path report provides multi-page personalized analysis beyond the free calculator summary. It explores Driver and Conductor harmony, personal year cycles, and deeper traditional interpretations."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which Life Path Number is most powerful?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Numerology traditions do not establish one universally superior or most powerful number. Every number from 1 to 9 and each master number carries distinct strengths, challenges, and symbolic attributes."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* Tool Specific Layout (Venus Pearl & Jupiter Gold) */
+    .tool-hero { text-align: center; padding: 50px 20px 32px; max-width: 720px; margin: 0 auto; }
+    .tool-eyebrow { font-size: 0.72rem; letter-spacing: 0.16em; color: var(--gold-dark); text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+    .tool-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 500; line-height: 1.15; margin-bottom: 14px; color: var(--text-primary); }
+    .tool-sub { font-size: 0.96rem; color: var(--text-muted); line-height: 1.75; margin: 0 auto; max-width: 620px; }
+
+    /* Calculator Card */
+    .calc-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 520px;
+      margin: 0 auto 36px;
+      box-shadow: 0 8px 30px rgba(180, 155, 110, 0.1);
+    }
+    .input-row { display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+    .input-group { flex: 1; min-width: 80px; }
+    label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-dark); font-weight: 700; margin-bottom: 8px; }
+    input, select {
+      width: 100%;
+      background: #FFFDF7;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 15px;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.25s ease;
+      font-family: 'Inter', sans-serif;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus {
+      border-color: var(--gold);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.14);
+    }
+    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .btn-calc {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
+      border: 1px solid #C9A227;
+      border-radius: 12px;
+      color: #FFFDF7;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-calc:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(201, 162, 39, 0.35);
+    }
+
+    /* Result Card */
+    #result { display: none; }
+    .result-card {
+      border-radius: 20px;
+      padding: 34px 28px;
+      margin-bottom: 24px;
+      background: #FFFDF7;
+      border: 1.5px solid var(--border-gold);
+      box-shadow: 0 10px 32px rgba(180, 155, 110, 0.1);
+      text-align: center;
+    }
+    .result-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      font-weight: 500;
+      color: var(--gold-dark);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .result-theme {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--text-primary);
+    }
+    .result-insight {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      text-align: left;
+    }
+    .lucky-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .lucky-item {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: left;
+    }
+    .lucky-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-dark); font-weight: 700; margin-bottom: 4px; }
+    .lucky-value { font-size: 0.88rem; color: var(--text-primary); font-weight: 600; }
+
+    /* Supporting Content Section */
+    .tool-content-wrap {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 0 20px 48px;
+    }
+    .tool-content-wrap h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 40px 0 14px;
+      border-bottom: 1px solid rgba(201, 162, 39, 0.22);
+      padding-bottom: 6px;
+    }
+    .tool-content-wrap h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--gold-dark);
+      margin: 22px 0 10px;
+    }
+    .tool-content-wrap p {
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+    .tool-content-wrap strong { color: var(--text-primary); }
+
+    .calc-steps-box {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 22px 20px;
+      margin: 20px 0 26px;
+      box-shadow: 0 4px 18px rgba(180, 155, 110, 0.06);
+    }
+    .step-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .step-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #C9A227 0%, #E2B84B 100%);
+      color: #FFFDF7;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-text {
+      font-size: 0.91rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* Paid Report Showcase Cards */
+    .reports-summary-box {
+      background: linear-gradient(135deg, rgba(201,162,39,0.06) 0%, rgba(22,131,91,0.04) 100%);
+      border: 1.5px solid var(--border-gold);
+      border-radius: 18px;
+      padding: 28px 24px;
+      margin: 26px 0 32px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(180, 155, 110, 0.08);
+    }
+    .reports-summary-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.55rem;
+      color: var(--text-primary);
+      margin: 0 0 10px;
+    }
+    .reports-summary-box p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 20px;
+      line-height: 1.65;
+    }
+    .btn-report-cta {
+      display: inline-block;
+      padding: 13px 28px;
+      background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
+      color: #FFFDF7;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(139, 105, 20, 0.22);
+      transition: transform 0.2s ease;
+    }
+    .btn-report-cta:hover {
+      transform: translateY(-2px);
+      color: #FFFFFF;
+      text-decoration: none;
+    }
+
+    /* FAQ */
+    .faq-section { max-width: 740px; margin: 0 auto 60px; padding: 0 20px; }
+    .faq-title { font-family: 'Cormorant Garamond', serif; font-size: 1.85rem; text-align: center; margin-bottom: 24px; color: var(--text-primary); }
+    .faq-item { border: 1px solid var(--border-gold); border-radius: 12px; margin-bottom: 10px; overflow: hidden; background: #FFFFFF; }
+    .faq-q { padding: 16px 20px; cursor: pointer; font-weight: 600; font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center; color: var(--text-primary); font-family: 'Cormorant Garamond', serif; font-size: 1.22rem; }
+    .faq-q:hover { background: rgba(201, 162, 39, 0.04); }
+    .faq-a { padding: 0 20px 18px; font-size: 0.91rem; color: var(--text-muted); line-height: 1.75; display: none; }
+    .faq-a.open { display: block; }
+
+    /* Related Links */
+    .related-tools-strip {
+      max-width: 740px;
+      margin: 0 auto 70px;
+      padding: 24px 20px 0;
+      border-top: 1px solid var(--border);
+    }
+    .related-tools-strip h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+    }
+    .rel-tool-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .rel-tool-link {
+      padding: 8px 14px;
+      border: 1px solid var(--border-gold);
+      border-radius: 18px;
+      color: var(--gold-dark);
+      background: #FFFFFF;
+      font-size: 0.82rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .rel-tool-link:hover {
+      background: rgba(201, 162, 39, 0.08);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .lucky-grid { grid-template-columns: 1fr; }
+      .calc-card { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KW6GQRVZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Master Unified Site Header -->
+  <header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links matching Master Roadmap IA -->
+      <nav aria-label="Main Navigation">
+        <ul class="nv-nav-menu" id="nvNavMenu">
+          <li class="nv-nav-item">
+            <a href="/about/" class="nv-nav-link" title="About Numeros Vision">About Us</a>
+          </li>
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/tools/baby-naming" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/tools/name-numerology" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/tools/mobile-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/tools/kundali-milan" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Kundali Milan &amp; Synastry</span></a></li>
+              <li><a href="/tools/business-numerology" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/tools/life-path-calculator" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/tools/lo-shu-grid" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/tools/vehicle-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/tools/property-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/tools/blessing-years" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+          <li class="nv-nav-item"><a href="/#charm-ai" class="nv-nav-link">Charm AI</a></li>
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Reports</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/reports/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
+              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
+            </ul>
+          </li>
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Insights</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
+              <li><a href="/blog/what-is-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📖</span> <span>Beginner&#39;s Numerology Guide</span></a></li>
+              <li><a href="/blog/chaldean-compound-numbers-meanings" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Chaldean Compound Numbers</span></a></li>
+              <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
+              <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
+              <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
+            </ul>
+          </li>
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/tools/life-path-calculator" class="nv-btn-cta">Calculate Free ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav(event)" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Semantic Breadcrumbs -->
+  <div class="nv-breadcrumbs" style="max-width:740px; margin:16px auto 0; padding:0 20px; font-size:0.82rem; color:var(--text-muted);">
+    <a href="/" style="color:var(--gold-dark); text-decoration:none;">Home</a>
+    <span style="margin:0 6px; color:var(--border-gold);">/</span>
+    <a href="/calculators/" style="color:var(--gold-dark); text-decoration:none;">Calculators</a>
+    <span style="margin:0 6px; color:var(--border-gold);">/</span>
+    <span>Life Path Number Calculator</span>
+  </div>
+
+  <!-- ───── TOOL HERO ───── -->
+  <div class="tool-hero">
+    <div class="tool-eyebrow">✦ Free Numerology Tool ✦</div>
+    <h1 class="tool-title">Life Path Number Calculator</h1>
+    <p class="tool-sub">
+      Your Life Path number is calculated from your date of birth using a defined numerology method. Enter your birth date to calculate your number and explore its traditional interpretation.
+    </p>
+  </div>
+
+  <!-- ───── CALCULATOR CARD ───── -->
+  <div class="calc-card">
+    <div class="input-row">
+      <div class="input-group" style="flex:0.5;">
+        <label>Day</label>
+        <input type="number" id="lp-day" min="1" max="31" placeholder="DD" />
+      </div>
+      <div class="input-group" style="flex:0.7;">
+        <label>Month</label>
+        <select id="lp-month">
+          <option value="">Month</option>
+          <option value="1">January</option><option value="2">February</option>
+          <option value="3">March</option><option value="4">April</option>
+          <option value="5">May</option><option value="6">June</option>
+          <option value="7">July</option><option value="8">August</option>
+          <option value="9">September</option><option value="10">October</option>
+          <option value="11">November</option><option value="12">December</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Year</label>
+        <input type="number" id="lp-year" min="1900" max="2026" placeholder="YYYY" />
+      </div>
+    </div>
+    <div style="margin-bottom:18px;">
+      <label>Full Name <span style="font-size:0.75rem; font-weight:400; text-transform:none; color:var(--text-muted);">(Optional — for personalized name harmony alignment)</span></label>
+      <input type="text" id="lp-name" placeholder="Enter your name (optional)" />
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
+        Note: Your Life Path number is derived strictly from your birth date. Your name is only used if you explore name-number harmony.
+      </div>
+    </div>
+    <button class="btn-calc" onclick="calculateLifePath()">✦ Calculate My Life Path Number</button>
+  </div>
+
+  <!-- ───── RESULT CONTAINER ───── -->
+  <div id="result" style="max-width:540px;margin:0 auto 36px;padding:0 16px;">
+    <div class="result-card">
+      <div class="result-number" id="res-number"></div>
+      <div class="result-theme" id="res-theme"></div>
+      <div class="result-insight" id="res-insight"></div>
+      <div class="lucky-grid">
+        <div class="lucky-item">
+          <div class="lucky-label">Auspicious Day</div>
+          <div class="lucky-value" id="res-day"></div>
+        </div>
+        <div class="lucky-item">
+          <div class="lucky-label">Harmonic Colours</div>
+          <div class="lucky-value" id="res-colors"></div>
+        </div>
+        <div class="lucky-item">
+          <div class="lucky-label">Ruling Planetary Vector</div>
+          <div class="lucky-value" id="res-planet"></div>
+        </div>
+        <div class="lucky-item">
+          <div class="lucky-label">2026 Personal Year Cycle</div>
+          <div class="lucky-value" id="res-year"></div>
+        </div>
+      </div>
+      <div id="res-diagnostics" style="margin-top:20px;text-align:left;"></div>
+    </div>
+
+    <!-- Verified Report Upgrade Box -->
+    <div class="reports-summary-box">
+      <span style="font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-dark); margin-bottom:6px; display:inline-block;">Verified Dossier</span>
+      <h3>Explore Your Detailed Life Path Report</h3>
+      <p>
+        Your free calculation provides your core Life Path number and primary archetype. A detailed report delivers an in-depth analysis of your Driver and Conductor harmony, 8-plane Lo Shu grid, and multi-year cycle transitions.
+      </p>
+      <div style="margin-bottom:18px;">
+        <span style="font-size:1.5rem; font-weight:800; color:var(--gold-dark);">&#8377;510</span>
+        <span style="font-size:0.85rem; color:var(--text-muted);">/ $14.00 (12-Page Advanced Report)</span>
+      </div>
+      <a href="/reports/" class="btn-report-cta">Explore Your Life Path Report ✦</a>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:10px;">
+        Instant PDF Delivery &bull; Deterministic Engine Precision &bull; Confidential &amp; Secure
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── CONCISE SUPPORTING CONTENT ───── -->
+  <main class="tool-content-wrap">
+    <h2>How Is Your Life Path Number Calculated?</h2>
+    <p>
+      Your birth date is processed using the calculation method selected by the calculator. The resulting number is reduced according to that method's rules. Review the steps to see how your result was obtained.
+    </p>
+
+    <div class="calc-steps-box">
+      <h3 style="margin-top:0; color:var(--gold-dark); font-size:1.15rem;">Example Calculation: 15 June 1990</h3>
+      <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:14px;">
+        Here is how the standard component reduction method calculates the Life Path for <strong>15/06/1990</strong>:
+      </p>
+      <div class="step-item">
+        <div class="step-badge">1</div>
+        <div class="step-text"><strong>Reduce the Day:</strong> 15 &rarr; 1 + 5 = <strong>6</strong></div>
+      </div>
+      <div class="step-item">
+        <div class="step-badge">2</div>
+        <div class="step-text"><strong>Reduce the Month:</strong> June = 06 &rarr; <strong>6</strong></div>
+      </div>
+      <div class="step-item">
+        <div class="step-badge">3</div>
+        <div class="step-text"><strong>Reduce the Year:</strong> 1990 &rarr; 1 + 9 + 9 + 0 = 19 &rarr; 1 + 9 = 10 &rarr; 1 + 0 = <strong>1</strong></div>
+      </div>
+      <div class="step-item">
+        <div class="step-badge">4</div>
+        <div class="step-text"><strong>Sum &amp; Reduce:</strong> 6 + 6 + 1 = <strong>13</strong> &rarr; 1 + 3 = <strong>4</strong> (Life Path 4)</div>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin:12px 0 0;">
+        <em>Alternative reduction:</em> Direct full-digit addition (1+5+0+6+1+9+9+0 = 31 &rarr; 4) arrives at the identical root number 4, with 31 as the intermediate compound instead of 13.
+      </p>
+    </div>
+
+    <h2>What Does Your Life Path Number Mean?</h2>
+    <p>
+      In numerology, each Life Path number is associated with traditional themes and interpretations. These meanings vary between systems and should be understood as symbolic interpretations, not scientifically proven predictions.
+    </p>
+    <ul>
+      <li><strong>Numbers 1 to 9:</strong> Form the foundational archetypes—ranging from independent leadership (1) and diplomatic balance (2) to structural discipline (4) and compassionate completion (9).</li>
+      <li><strong>Master Numbers (11, 22, 33):</strong> Represent intensified traditional symbolic themes that many practitioners analyze both in their compound double-digit form and as reduced root numbers (2, 4, 6).</li>
+    </ul>
+
+    <h2>Explore Your Detailed Life Path Report</h2>
+    <p>
+      Your free result gives you the calculated number and an initial interpretation. A detailed report can provide additional analysis and relevant number relationships supported by the selected product.
+    </p>
+    <p>
+      Our structured report packages extend your calculation with complete 8-plane Lo Shu grid assessments, Driver and Conductor polarity evaluations, and personal cycle projections:
+    </p>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin:20px 0 24px;">
+      <div style="background:#FFFFFF; border:1px solid var(--border-gold); border-radius:12px; padding:18px; text-align:center;">
+        <div style="font-size:0.7rem; font-weight:700; color:var(--gold-dark); text-transform:uppercase;">Basic Report</div>
+        <div style="font-size:1.3rem; font-weight:800; color:var(--gold-dark); margin:4px 0;">&#8377;199 <span style="font-size:0.75rem; font-weight:400; color:var(--text-muted);">/ $5</span></div>
+        <div style="font-size:0.82rem; color:var(--text-muted);">3 Pages &bull; Core Driver &amp; Life Path Analysis</div>
+      </div>
+      <div style="background:#FFFDF7; border:2px solid var(--gold-dark); border-radius:12px; padding:18px; text-align:center;">
+        <div style="font-size:0.7rem; font-weight:700; color:#16835B; text-transform:uppercase;">✦ Advanced Report</div>
+        <div style="font-size:1.3rem; font-weight:800; color:var(--gold-dark); margin:4px 0;">&#8377;510 <span style="font-size:0.75rem; font-weight:400; color:var(--text-muted);">/ $14</span></div>
+        <div style="font-size:0.82rem; color:var(--text-muted);">12 Pages &bull; Lo Shu Grid &amp; Multi-Year Cycles</div>
+      </div>
+      <div style="background:#FFFFFF; border:1px solid var(--border-gold); border-radius:12px; padding:18px; text-align:center;">
+        <div style="font-size:0.7rem; font-weight:700; color:var(--gold-dark); text-transform:uppercase;">Premium Report</div>
+        <div style="font-size:1.3rem; font-weight:800; color:var(--gold-dark); margin:4px 0;">&#8377;1,050 <span style="font-size:0.75rem; font-weight:400; color:var(--text-muted);">/ $28</span></div>
+        <div style="font-size:0.82rem; color:var(--text-muted);">32 Pages &bull; Full Synthesis Master Dossier</div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:14px;">
+      <a href="/reports/" class="btn-report-cta">Explore Your Life Path Report ✦</a>
+    </div>
+  </main>
+
+  <!-- ───── FAQ SECTION ───── -->
+  <div class="faq-section">
+    <h2 class="faq-title">Frequently Asked Questions</h2>
+    
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What is a Life Path number? <span>+</span></div>
+      <div class="faq-a">Your Life Path number is a core numerology number calculated from your full date of birth. It represents traditional symbolic themes, natural tendencies, and life lessons associated with your birth date.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How is my Life Path number calculated? <span>+</span></div>
+      <div class="faq-a">Your day, month, and year of birth are reduced to single digits (or master numbers 11, 22, 33), added together, and reduced again to arrive at a single root number from 1 to 9.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What do Life Path numbers 1 to 9 mean? <span>+</span></div>
+      <div class="faq-a">Each number from 1 to 9 represents a classical archetype in traditional numerology—such as leadership for 1, diplomacy for 2, creative expression for 3, and discipline for 4. These are symbolic interpretations rather than deterministic predictions.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What are master numbers in numerology? <span>+</span></div>
+      <div class="faq-a">Master numbers are double digits (11, 22, and 33) that carry amplified traditional symbolic significance. In many numerology methods, they are preserved without immediate reduction to single digits.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Does the calculation method affect my result? <span>+</span></div>
+      <div class="faq-a">Different reduction conventions (such as component reduction vs. direct digit addition) always produce the same final single-digit root, but can produce different intermediate compound numbers (for example, 13 vs. 31).</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What does a detailed Life Path report include? <span>+</span></div>
+      <div class="faq-a">A detailed Life Path report provides multi-page personalized analysis beyond the free calculator summary. It explores Driver and Conductor harmony, personal year cycles, and deeper traditional interpretations.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Which Life Path Number is most powerful? <span>+</span></div>
+      <div class="faq-a">Numerology traditions do not establish one universally superior or most powerful number. Every number from 1 to 9 and each master number carries distinct strengths, challenges, and symbolic attributes.</div>
+    </div>
+  </div>
+
+  <!-- ───── RELATED TOOLS STRIP ───── -->
+  <div class="related-tools-strip">
+    <h3>Related Numerology Calculators &amp; Guides</h3>
+    <div class="rel-tool-links">
+      <a href="/calculators/birth-number/" class="rel-tool-link">Birth Number (Mulank) Calculator</a>
+      <a href="/tools/name-numerology" class="rel-tool-link">Name Numerology &amp; Balancing</a>
+      <a href="/tools/lo-shu-grid" class="rel-tool-link">Lo Shu Grid 3&times;3 Calculator</a>
+      <a href="/blog/what-is-numerology" class="rel-tool-link">Beginner&#39;s Numerology Guide</a>
+      <a href="/blog/chaldean-compound-numbers-meanings" class="rel-tool-link">Chaldean Compound Numbers</a>
+      <a href="/reports/" class="rel-tool-link">Explore Numerology Reports</a>
+    </div>
+  </div>
+
+  <!-- Master Unified Site Footer -->
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year Calculator</a></li>
+            <li><a href="/calculators/">View All Calculators →</a></li>
+          </ul>
+        </div>
+
+        <div class="nv-footer-col">
+          <h4>Intelligence &amp; Plans</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
+            <li><a href="/sample">Sample Dossier</a></li>
+            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation/">1-on-1 Consultation</a></li>
+          </ul>
+        </div>
+
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/insights/">Insights Learning Hub</a></li>
+            <li><a href="/about/">About Numeros Vision</a></li>
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="/practitioner">Practitioner Portal</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/disclaimer/">Statutory Disclaimer</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="nv-footer-bottom">
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: ANVEIL EVERY CHARM.</div>
+        <div class="nv-footer-legal-inline">
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/disclaimer/">Disclaimer</a>
+          <a href="/cookie-policy/">Cookie Policy</a>
+          <a href="/refund-policy/">Refund Policy</a>
+          <a href="/accessibility/">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/nav.js?v=4.7.3"></script>
+  <script src="/static/js/nv_profile_sync.js?v=3.0.0"></script>
+  <script>
+    const PLANETS = {
+      1:'Sun (Surya) · Creative Authority',
+      2:'Moon (Chandra) · Intuitive Receptivity',
+      3:'Jupiter (Guru) · Expansion & Wisdom',
+      4:'Rahu · Structural Breakthrough',
+      5:'Mercury (Budha) · Commerce & Adaptability',
+      6:'Venus (Shukra) · Opulence & Harmony',
+      7:'Ketu · Mystic Research & Depth',
+      8:'Saturn (Shani) · Karmic Architecture',
+      9:'Mars (Mangal) · Direct Dynamic Force',
+      11:'Master 11 · Illuminated Channel',
+      22:'Master 22 · Sovereign Architect',
+      33:'Master 33 · Universal Guide'
+    };
+
+    const DATA = {
+      themes: {1:'Root 1 — Solar Monad',2:'Root 2 — Lunar Dyad',3:'Root 3 — Jovian Triad',4:'Root 4 — Rahu Tetrad',5:'Root 5 — Mercurial Pentad',6:'Root 6 — Venusian Hexad',7:'Root 7 — Ketu Heptad',8:'Root 8 — Saturnian Octad',9:'Root 9 — Martial Ennead',11:'Master 11 — Spiritual Frequency',22:'Master 22 — Material Master',33:'Master 33 — Conscious Harmony'},
+      days: {1:'Sunday',2:'Monday',3:'Thursday',4:'Saturday',5:'Wednesday',6:'Friday',7:'Monday',8:'Saturday',9:'Tuesday',11:'Monday',22:'Saturday',33:'Friday'},
+      colors: {1:'Gold, Orange, Copper',2:'White, Silver, Cream',3:'Yellow, Gold, Purple',4:'Electric Blue, Grey',5:'Green, Light Blue, White',6:'Pink, Cream, Baby Blue',7:'Lavender, Violet, White',8:'Dark Blue, Deep Navy, Charcoal',9:'Red, Crimson, Coral',11:'Pale White, Silver',22:'Dark Blue, Khaki',33:'Pink, Cream, Rose Gold'},
+      yearThemes: {1:'Cycle 1 (Solar Inception)',2:'Cycle 2 (Lunar Synergies)',3:'Cycle 3 (Jovian Expansion)',4:'Cycle 4 (Foundation Building)',5:'Cycle 5 (Mercurial Pivot)',6:'Cycle 6 (Venusian Family & Wealth)',7:'Cycle 7 (Introspective Alignment)',8:'Cycle 8 (Saturnian Harvest)',9:'Cycle 9 (Karmic Completion)'}
+    };
+
+    function digitSum(n) { return String(Math.abs(n)).split('').reduce((a,c)=>a+parseInt(c),0); }
+    function reduce(n) {
+      while (n > 9 && ![11,22,33].includes(n)) n = digitSum(n);
+      return n;
+    }
+    function calcLP(d,m,y) { return reduce(reduce(d)+reduce(m)+reduce(y)); }
+    function personalYear(d,m) { const cy=new Date().getFullYear(); return reduce(reduce(d)+reduce(m)+digitSum(cy)); }
+
+    function calculateLifePath() {
+      const d = parseInt(document.getElementById('lp-day').value);
+      const m = parseInt(document.getElementById('lp-month').value);
+      const y = parseInt(document.getElementById('lp-year').value);
+      if (!d||!m||!y||d<1||d>31||m<1||m>12||y<1900) {
+        alert('Please fill in a valid date of birth.');
+        return;
+      }
+
+      const personName = document.getElementById('lp-name')?.value?.trim() || 'Seeker';
+      const calcData = {
+        name: personName,
+        day: d,
+        month: m,
+        year: y,
+        category: 'life_path'
+      };
+
+      if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
+        window.nvProfileSync.requireConsentToReveal(calcData, function() {
+          doRenderLifePath(d, m, y);
+        }, 'result');
+      } else {
+        doRenderLifePath(d, m, y);
+      }
+    }
+
+    function doRenderLifePath(d, m, y) {
+      const driver = reduce(d);
+      const lp = calcLP(d,m,y);
+      const py = personalYear(d,m);
+
+      const frictionPairs = [[1,8],[8,1],[2,8],[8,2],[4,8],[8,4],[4,9],[9,4],[1,4],[4,1]];
+      const isFriction = frictionPairs.some(([a,b]) => (driver===a && lp===b) || (driver===b && lp===a));
+      const alignmentStatus = isFriction ? 'Tension Detected (Karmic Friction)' : 'Aligned (Harmonic Resonance)';
+      const alignmentColor = isFriction ? '#C0392B' : '#16835B';
+
+      const dobStr = `${String(d).padStart(2,'0')}${String(m).padStart(2,'0')}${y}`;
+      const counts = {};
+      for (let i=1;i<=9;i++) counts[i]=0;
+      for (const ch of dobStr) { const n=parseInt(ch); if(n>=1&&n<=9) counts[n]++; }
+
+      const missing = [1,2,3,4,5,6,7,8,9].filter(n=>counts[n]===0);
+      const repeating = [1,2,3,4,5,6,7,8,9].filter(n=>counts[n]>1);
+
+      const personName = document.getElementById('lp-name')?.value?.trim() || 'Seeker';
+      try {
+        localStorage.setItem('nv_user_profile', JSON.stringify({
+          name: personName,
+          day: d,
+          month: m,
+          year: y,
+          driver: driver,
+          conductor: lp,
+          loshuCounts: counts
+        }));
+      } catch (e) {}
+
+      document.getElementById('res-number').textContent  = lp;
+      document.getElementById('res-theme').textContent   = DATA.themes[lp] || `Life Path ${lp}`;
+      document.getElementById('res-insight').innerHTML   = `
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;background:${isFriction?'rgba(192,57,43,0.08)':'rgba(22,131,91,0.08)'};border:1px solid ${alignmentColor};color:${alignmentColor};font-weight:700;font-size:0.85rem;margin-bottom:12px;">
+          ✦ Driver (Mulank) ${driver} vs Conductor (Bhagyank) ${lp}: ${alignmentStatus}
+        </div>
+        <p style="font-size:0.88rem;color:var(--text-muted);line-height:1.6;margin:0;">
+          Your date of birth reduces to Root ${lp} governed by ${PLANETS[lp] || 'Cosmic Harmonic'}.
+        </p>
+      `;
+      document.getElementById('res-day').textContent     = DATA.days[lp] || 'Friday';
+      document.getElementById('res-colors').textContent  = DATA.colors[lp] || 'Gold, White';
+      document.getElementById('res-planet').textContent  = PLANETS[lp] || 'Cosmic Planetary Vibration';
+      document.getElementById('res-year').textContent    = DATA.yearThemes[py] ? `Year ${py} — ${DATA.yearThemes[py]}` : 'A year of meaningful shifts';
+
+      document.getElementById('res-diagnostics').innerHTML = `
+        <div style="background:rgba(201,162,39,0.04);border:1px solid var(--border-gold);border-radius:14px;padding:16px;margin-bottom:16px;">
+          <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:#8B6914;font-weight:700;margin-bottom:8px;">
+            ✦ Planetary Matrix Diagnostics
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-primary);line-height:1.6;margin-bottom:6px;">
+            <strong>Driver (Birth Day):</strong> ${driver} &nbsp;|&nbsp; <strong>Conductor (Life Path):</strong> ${lp} &nbsp;|&nbsp; <strong>Alignment:</strong> <span style="color:${alignmentColor};font-weight:700;">${alignmentStatus}</span>
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-muted);line-height:1.6;margin-bottom:6px;">
+            <strong>Missing Energies:</strong> ${missing.length > 0 ? missing.map(n=>`${n} (${PLANETS[n].split('·')[0].trim()})`).join(', ') : 'None (Full Matrix)'}
+          </div>
+          <div style="font-size:0.82rem;color:var(--text-muted);line-height:1.6;">
+            <strong>Repetitive Energies:</strong> ${repeating.length > 0 ? repeating.map(n=>`${n} (×${counts[n]} - ${PLANETS[n].split('·')[0].trim()})`).join(', ') : 'None'}
+          </div>
+        </div>
+      `;
+
+      const el = document.getElementById('result');
+      el.style.display = 'block';
+      el.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    function toggleFaq(el) {
+      const ans = el.nextElementSibling;
+      const isOpen = ans.classList.contains('open');
+      document.querySelectorAll('.faq-a').forEach(a=>a.classList.remove('open'));
+      document.querySelectorAll('.faq-q span').forEach(s=>s.textContent='+');
+      if (!isOpen) { ans.classList.add('open'); el.querySelector('span').textContent='−'; }
+    }
+  </script>
+
+  <!-- Mobile Sticky Navigation Bar -->
+  <nav class="nv-sticky-bottom-nav" aria-label="Mobile and Tablet Sticky Navigation">
+    <a href="/" class="nv-bottom-nav-item" data-nav="home">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/calculators/" class="nv-bottom-nav-item" data-nav="calculators">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Calculators</span>
+    </a>
+    <a href="/tools/baby-naming" class="nv-bottom-nav-item nv-bottom-nav-center" data-nav="baby-naming" title="Auspicious Baby Naming Studio">
+      <div class="nv-bottom-center-btn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <span>Baby Naming</span>
+    </a>
+    <a href="/#charm-ai" class="nv-bottom-nav-item" data-nav="charm-ai">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      <span>Charm AI</span>
+    </a>
+    <button type="button" class="nv-bottom-nav-item nv-bottom-nav-toggle" onclick="toggleMobileNav(event)" aria-label="Open Full Navigation Menu">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span>Menu</span>
+    </button>
+  </nav>
+
+  <script src="/static/js/nav.js?v=4.7.3" defer></script>
+  <script src="/static/js/nv_tracking_config.js?v=4.8.0" defer></script>
+  <script src="/static/js/marketing-analytics.js?v=4.8.0" defer></script>
+  <script src="/static/js/nv_consent.js?v=4.8.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=1.5.0" defer></script>
+</body>
+</html>
+"""
+
+with open(file_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Successfully updated {file_path} (length: {len(html_content)} chars)")

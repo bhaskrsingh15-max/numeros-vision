@@ -1,0 +1,335 @@
+<main class="auth-wrap">
+    <!-- Calculation Profile Detection Notice -->
+    <div id="prefillAlert" class="prefill-banner" style="display: none;">
+      <span class="prefill-icon">✦</span>
+      <div>
+        <strong>Recent Calculation Detected:</strong> We detected your birth numbers for <span id="prefillName" style="font-weight: 700; color: #8B6914;"></span> (<span id="prefillDob"></span>). Review the fields below and create your profile to permanently save your Lo Shu Grid, Dasha timeline, and Charm AI memory.
+      </div>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Monogram" />
+        </div>
+        <h1 class="auth-h1">Create Your Golden Profile</h1>
+        <p class="auth-lead">Free membership to save your celestial matrix, track personal year transits, and consult Charm AI under DPDP privacy safeguards.</p>
+      </div>
+
+      <div id="authAlert" class="auth-alert"></div>
+
+            <!-- Google Identity One-Click Registration -->
+      <div style="margin-bottom: 20px;">
+        <div id="g_id_onload"
+             data-client_id="849204859201-numerosvision.apps.googleusercontent.com"
+             data-callback="handleGoogleIdentityCredential"
+             data-auto_prompt="false">
+        </div>
+        <button type="button" class="btn-google-auth" onclick="triggerGoogleSignIn()">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Continue with Google Identity</span>
+        </button>
+        <div class="auth-divider">
+          <span>or create profile with birth data</span>
+        </div>
+      </div>
+
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <!-- 1. Full Calling Name -->
+        <div class="form-group">
+          <label for="regName">Full Calling Name <span style="color:#C0392B;">*</span></label>
+          <input type="text" id="regName" class="form-input" placeholder="e.g. Bhaskr Singh" required oninput="updateLivePreview()" />
+          <span class="form-hint">Used for Chaldean sound vibration and name balancing calculations.</span>
+        </div>
+
+        <!-- 2. Email & Phone with OTP Verification Service -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="regEmail">Email Address <span style="color:#C0392B;">*</span></label>
+            <input type="email" id="regEmail" class="form-input" placeholder="e.g. name@domain.com" required />
+            <span class="form-hint">For login and confidential dossier delivery.</span>
+          </div>
+          <div class="form-group">
+            <label for="regPhone">WhatsApp / Mobile Number <span style="color:#C0392B;">*</span></label>
+            <input type="tel" id="regPhone" class="form-input" placeholder="e.g. +91 98765 43210" required oninput="auditMobileNumberLive(this.value)" />
+            <span class="form-hint">Mobile number for OTP verification &amp; transit alerts.</span>
+            <!-- Mobile Numerology Alignment Card -->
+            <div id="mobileAuditCard" class="mobile-audit-card" style="display:none; padding:6px 10px; font-size:0.72rem; margin-top:4px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <strong style="color:#8B6914; font-size:0.74rem;">📱 Mobile Alignment Audit</strong>
+                <span id="mobileStatusBadge" class="audit-badge-aligned"></span>
+              </div>
+              <div id="mobileAuditDetails" style="color:#523E28;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ✦ Verified Customer OTP Verification Service ✦ -->
+        <div id="otpServiceCard" style="background:#FAF8F3; border:1px solid rgba(201,162,39,0.35); border-radius:10px; padding:9px 12px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:0.66rem; text-transform:uppercase; font-weight:700; color:#8B6914; letter-spacing:0.06em;">
+              ✦ Customer OTP Verification Service
+            </span>
+            <span id="otpStatusBadge" style="font-size:0.64rem; font-weight:700; padding:2px 8px; border-radius:10px; background:#F2EBD9; color:#8B6914;">
+              Pending Verification
+            </span>
+          </div>
+          <div id="otpActionRow" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button type="button" id="btnSendOtp" onclick="sendOtpVerification()" style="padding:5px 12px; font-size:0.74rem; font-weight:700; border-radius:6px; background:#FFFFFF; border:1.5px solid #C9A227; color:#8B6914; cursor:pointer; transition:all 0.2s;">
+              📲 Send Verification OTP
+            </button>
+            <span style="font-size:0.66rem; color:#7A654D;">Verify mobile or email to Explore verified customer status.</span>
+          </div>
+          <div id="otpInputRow" style="display:none; margin-top:8px; padding-top:8px; border-top:1px dashed rgba(201,162,39,0.25);">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <input type="text" id="otpCodeInput" maxlength="6" placeholder="6-digit OTP" style="width:110px; padding:5px 8px; font-size:0.82rem; letter-spacing:0.16em; font-weight:700; text-align:center; border-radius:6px; border:1.5px solid #C9A227; background:#FFFFFF;" />
+              <button type="button" id="btnVerifyOtp" onclick="verifyOtpCode()" style="padding:5px 14px; font-size:0.74rem; font-weight:700; border-radius:6px; background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFF; border:none; cursor:pointer;">
+                Verify Code
+              </button>
+              <span id="otpTimerSpan" style="font-size:0.66rem; color:#8B6914; font-weight:600;"></span>
+            </div>
+            <div id="otpFeedbackMsg" style="font-size:0.66rem; margin-top:4px; color:#16835B; line-height:1.3;"></div>
+          </div>
+        </div>
+
+        <!-- 3. Date of Birth -->
+        <div class="form-group">
+          <label>Date of Birth <span style="color:#C0392B;">*</span></label>
+          <div class="form-grid-3">
+            <div>
+              <input type="number" id="regDay" class="form-input" placeholder="Day (DD)" min="1" max="31" required oninput="updateLivePreview()" />
+            </div>
+            <div>
+              <select id="regMonth" class="form-select" required onchange="updateLivePreview()">
+                <option value="">Month</option>
+                <option value="1">01 - Jan</option>
+                <option value="2">02 - Feb</option>
+                <option value="3">03 - Mar</option>
+                <option value="4">04 - Apr</option>
+                <option value="5">05 - May</option>
+                <option value="6">06 - Jun</option>
+                <option value="7">07 - Jul</option>
+                <option value="8">08 - Aug</option>
+                <option value="9">09 - Sep</option>
+                <option value="10">10 - Oct</option>
+                <option value="11">11 - Nov</option>
+                <option value="12">12 - Dec</option>
+              </select>
+            </div>
+            <div>
+              <input type="number" id="regYear" class="form-input" placeholder="Year (YYYY)" min="1900" max="2100" required oninput="updateLivePreview()" />
+            </div>
+          </div>
+          <span class="form-hint">Authoritative basis for Driver (Mulank), Conductor (Bhagyank), and Lo Shu Grid.</span>
+        </div>
+
+        <!-- 4. Astrological Precision: Time of Birth (AM/PM) -->
+        <div class="form-group">
+          <label>Time of Birth (Hour, Minute, AM/PM)</label>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:10px;">
+            <div>
+              <select id="regTimeHour" class="form-select">
+                <option value="">Hour</option>
+                <option value="1">01</option><option value="2">02</option>
+                <option value="3">03</option><option value="4">04</option>
+                <option value="5">05</option><option value="6">06</option>
+                <option value="7">07</option><option value="8">08</option>
+                <option value="9">09</option><option value="10">10</option>
+                <option value="11">11</option><option value="12" selected>12</option>
+              </select>
+            </div>
+            <div>
+              <select id="regTimeMinute" class="form-select">
+                <option value="0">00</option><option value="5">05</option>
+                <option value="10">10</option><option value="15">15</option>
+                <option value="20">20</option><option value="25">25</option>
+                <option value="30" selected>30</option><option value="35">35</option>
+                <option value="40">40</option><option value="45">45</option>
+                <option value="50">50</option><option value="55">55</option>
+              </select>
+            </div>
+            <div>
+              <select id="regTimePeriod" class="form-select">
+                <option value="AM">AM (Morning)</option>
+                <option value="PM" selected>PM (Evening / Afternoon)</option>
+              </select>
+            </div>
+          </div>
+          <span class="form-hint">Precision time enables exact KP Sub-Lord, Vedic Lagna, and Dasha onset periods.</span>
+        </div>
+
+        <!-- 5. Place of Birth & Country -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="regPlace">Place of Birth (City / Town) <span style="color:#C0392B;">*</span></label>
+            <input type="text" id="regPlace" list="citySuggestions" class="form-input" placeholder="e.g. New Delhi, Mumbai, Varanasi, London" required oninput="onCityInput(this.value)" autocomplete="off" />
+            <datalist id="citySuggestions"></datalist>
+            <span class="form-hint">Type city name to auto-resolve coordinates &amp; timezone.</span>
+          </div>
+          <div class="form-group">
+            <label for="regCountry">Country <span style="color:#C0392B;">*</span></label>
+            <input type="text" id="regCountry" class="form-input" placeholder="e.g. India" value="India" required />
+            <span class="form-hint">Country of birth.</span>
+          </div>
+        </div>
+
+        <!-- 6. Geographical Coordinates: Latitude, Longitude & Timezone -->
+        <div style="background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:12px; padding:14px; margin-bottom:18px;">
+          <div style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--gold-dark, #8B6914); letter-spacing:0.06em; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+            <span>✦ Coordinates &amp; Timezone Precision</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button type="button" onclick="detectGPSLocation()" style="background:#FFFFFF; border:1px solid var(--gold, #C9A227); color:#8B6914; border-radius:6px; padding:3px 9px; font-size:0.72rem; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:4px; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+                📍 Auto-Detect GPS
+              </button>
+              <span id="coordBadge" style="font-size:0.7rem; color:#16835B; font-weight:600; text-transform:none;">Auto-detected</span>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1.3fr; gap:10px;">
+            <div>
+              <label for="regLatitude" style="font-size:0.68rem; text-transform:uppercase; font-weight:700; color:#7A654D; display:block; margin-bottom:4px;">Latitude (°N/S)</label>
+              <input type="number" step="0.0001" id="regLatitude" class="form-input" placeholder="e.g. 28.6139" value="28.6139" style="padding:9px 10px; font-size:0.86rem;" />
+            </div>
+            <div>
+              <label for="regLongitude" style="font-size:0.68rem; text-transform:uppercase; font-weight:700; color:#7A654D; display:block; margin-bottom:4px;">Longitude (°E/W)</label>
+              <input type="number" step="0.0001" id="regLongitude" class="form-input" placeholder="e.g. 77.2090" value="77.2090" style="padding:9px 10px; font-size:0.86rem;" />
+            </div>
+            <div>
+              <label for="regTimezone" style="font-size:0.68rem; text-transform:uppercase; font-weight:700; color:#7A654D; display:block; margin-bottom:4px;">Timezone</label>
+              <select id="regTimezone" class="form-select" style="padding:9px 10px; font-size:0.84rem;">
+                <option value="Asia/Kolkata" selected>Asia/Kolkata (IST, UTC+05:30)</option>
+                <option value="UTC">UTC / GMT (UTC+00:00)</option>
+                <option value="Europe/London">Europe/London (GMT/BST, UTC+00/01)</option>
+                <option value="America/New_York">America/New_York (EST/EDT, UTC-05:00)</option>
+                <option value="America/Chicago">America/Chicago (CST/CDT, UTC-06:00)</option>
+                <option value="America/Los_Angeles">America/Los_Angeles (PST/PDT, UTC-08:00)</option>
+                <option value="America/Toronto">America/Toronto (EST, UTC-05:00)</option>
+                <option value="Asia/Dubai">Asia/Dubai (GST, UTC+04:00)</option>
+                <option value="Asia/Singapore">Asia/Singapore (SGT, UTC+08:00)</option>
+                <option value="Asia/Tokyo">Asia/Tokyo (JST, UTC+09:00)</option>
+                <option value="Australia/Sydney">Australia/Sydney (AEST, UTC+10:00)</option>
+                <option value="Europe/Paris">Europe/Paris (CET, UTC+01:00)</option>
+                <option value="Europe/Berlin">Europe/Berlin (CET, UTC+01:00)</option>
+              </select>
+            </div>
+          </div>
+          <span class="form-hint" style="margin-top:6px;">Exact geographic coordinates configure astronomical planetary ascendant &amp; house cusps.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="regGender">Gender</label>
+          <select id="regGender" class="form-select" onchange="updateLivePreview()">
+            <option value="prefer_not_to_say">Select Gender (Optional)</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Non-Binary / Other</option>
+          </select>
+          <span class="form-hint">Required for exact Kua number and synastry polarity.</span>
+        </div>
+
+        <!-- 5. Account Password -->
+        <div class="form-group">
+          <label for="regPass">Choose a Secure Password <span style="color:#C0392B;">*</span></label>
+          <input type="password" id="regPass" class="form-input" placeholder="Minimum 6 characters" minlength="6" required />
+        </div>
+
+        <!-- Real-Time Numerical Resonance Preview -->
+        <div id="liveMatrixPreview" class="live-matrix-preview">
+          <div class="matrix-item">
+            <span class="matrix-item-label">Driver (Mulank)</span>
+            <span id="previewDriver" class="matrix-item-val">—</span>
+          </div>
+          <div class="matrix-item">
+            <span class="matrix-item-label">Conductor (Bhagyank)</span>
+            <span id="previewConductor" class="matrix-item-val">—</span>
+          </div>
+          <div class="matrix-item">
+            <span class="matrix-item-label">Kua Number</span>
+            <span id="previewKua" class="matrix-item-val">—</span>
+          </div>
+          <div class="matrix-item">
+            <span class="matrix-item-label">Personal Year</span>
+            <span id="previewPy" class="matrix-item-val">—</span>
+          </div>
+          <div class="matrix-item">
+            <span class="matrix-item-label">Age Number</span>
+            <span id="previewAge" class="matrix-item-val">—</span>
+          </div>
+        </div>
+
+        <!-- 6. Unbundled Statutory DPDP Act 2023 & GDPR Consent Box -->
+        <div class="dpdp-box">
+          <div class="dpdp-box-header">
+            <span>🛡️ Statutory Consent &amp; DPDP Policy</span>
+          </div>
+
+          <!-- Consent 1: Mandatory Chart Processing & Storage -->
+          <div class="dpdp-consent-row">
+            <input type="checkbox" id="consentStorage" required checked />
+            <label for="consentStorage" class="dpdp-consent-label">
+              <strong>Mandatory Profile Processing &amp; Chart Storage Consent:</strong> I explicitly consent to the secure storage and accurate chart processing of my birth profile to generate numerology calculations, Lo Shu grids, predictive consensus, and consultation history in accordance with the <strong>Digital Personal Data Protection (DPDP) Act 2023</strong>, <a href="/privacy-policy/" target="_blank">Privacy Policy</a>, and <a href="/terms/" target="_blank">Terms of Service</a>. <span style="color:#C0392B;">*</span>
+            </label>
+          </div>
+
+          <!-- Consent 2: Optional Consensus Evaluation Flywheel -->
+          <div class="dpdp-consent-row">
+            <input type="checkbox" id="consentEvaluation" />
+            <label for="consentEvaluation" class="dpdp-consent-label">
+              <strong>Consensus Evaluation Flywheel (Optional):</strong> I consent to including my de-identified resonance feedback in versioned offline consensus evaluations to continuously calibrate engine accuracy across classical traditions without training external AI foundation models.
+            </label>
+          </div>
+
+          <!-- Consent 3: Optional Transit & Milestone Communications -->
+          <div class="dpdp-consent-row">
+            <input type="checkbox" id="consentMarketing" />
+            <label for="consentMarketing" class="dpdp-consent-label">
+              <strong>Personal Transit &amp; Dasha Milestone Alerts (Optional):</strong> I wish to receive occasional personalized notifications for Mahadasha transitions, Personal Year shifts, and auspicious dates via WhatsApp or Email. (One-click withdrawal anytime).
+            </label>
+          </div>
+
+          <div class="dpdp-safety-note">
+            ✦ <strong>Numeros Vision Privacy Pledge:</strong> Zero data broker sales. No foundation model training on user charts. Classical algorithms ensure 100% mathematical reproducibility. Exercise your right to data erasure anytime in 1 click.
+          </div>
+        </div>
+
+        <button type="submit" id="btnSubmit" class="btn-auth-submit">
+          <span>Create Account &amp; Save Golden Profile</span>
+          <span>✦</span>
+        </button>
+      </form>
+
+      <div class="auth-footer-links">
+        <div>Already a member? <a href="/login/">Sign In to Your Dashboard Here →</a></div>
+        <div style="margin-top: 6px;"><a href="/#birth-profile">Test Instant Calculations as Guest →</a></div>
+      </div>
+    </div>
+  
+    <!-- Google Fast Connect Fallback Modal -->
+    <div id="googleConnectModal" style="display:none; position:fixed; inset:0; background:rgba(26,23,20,0.72); backdrop-filter:blur(4px); z-index:999999; align-items:center; justify-content:center; padding:14px;">
+      <div style="background:#FFFFFF; border:1.5px solid #C9A227; border-radius:16px; width:100%; max-width:420px; padding:22px 20px; box-shadow:0 16px 40px rgba(0,0,0,0.25); text-align:center;">
+        <div style="width:40px; height:40px; margin:0 auto 10px; border-radius:50%; background:#FAF7F0; display:flex; align-items:center; justify-content:center; border:1px solid #C9A227;">
+          <svg width="22" height="22" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+        </div>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:#8B6914; margin:0 0 6px 0;">Continue with Google Account</h3>
+        <p style="font-size:0.76rem; color:#6B5E4F; margin:0 0 14px 0; line-height:1.4;">Enter your Google email to instantly sign in and synchronize your celestial profile under DPDP privacy safeguards.</p>
+        <div style="margin-bottom:10px; text-align:left;">
+          <label style="font-size:0.65rem; font-weight:700; text-transform:uppercase; color:#8B6914; display:block; margin-bottom:3px;">Google Account Email</label>
+          <input type="email" id="fastGoogleEmail" placeholder="e.g. yourname@gmail.com" class="form-input" style="padding:8px 12px; font-size:0.84rem;" />
+        </div>
+        <div style="display:flex; gap:8px; justify-content:flex-end;">
+          <button type="button" onclick="closeGoogleConnectModal()" style="padding:7px 14px; font-size:0.75rem; border-radius:8px; border:1px solid #CCC; background:#FFF; color:#555; cursor:pointer;">Cancel</button>
+          <button type="button" id="btnFastGoogleSubmit" onclick="submitFastGoogleLogin()" style="padding:7px 16px; font-size:0.75rem; font-weight:700; border-radius:8px; border:none; background:linear-gradient(135deg, #C9A227, #8B6914); color:#FFF; cursor:pointer;">Sign In with Google ✦</button>
+        </div>
+      </div>
+    </div>
+    
+  </main>

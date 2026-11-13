@@ -1,0 +1,380 @@
+[
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Bhrigu Nadi Astrology Insights _ PDF _ Astronomy.pdf",
+    "size_bytes": 55681530,
+    "pages": 95,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "a59f7da7fba745bea224b3ce5029c9cc70195e416137144e574893c35f04d08d"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Bhrigu Nandi Nadi Astrology Basics _ PDF _ Planets In Astrology _ Hindu Astrology.pdf",
+    "size_bytes": 217576,
+    "pages": 19,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "a4fe456221eed1ef6461bf08047d5db4dd339fbd44604f08b2d000274bef16d5"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Bhrigu Nandi Nadi Astrology Overview _ PDF _ Hindu Astrology _ Planets In Astrology.pdf",
+    "size_bytes": 52858134,
+    "pages": 45,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "d0dc0f1d7412191a9ab3b8dd1c6a4c3c5d6f48889d1a9d314854e0e20d3ec9af"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Bhrigu Nandi Nadi Prediction Techniques _ PDF _ Planets _ Zodiac.pdf",
+    "size_bytes": 3752337,
+    "pages": 19,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "07711a08b664ae1258040d60979a9ead8b0616a2651198f87b0d4e08b8c1c54b"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Bhrigu_Nadi_Astrology_Insights_Complete_Pagewise (1).md",
+    "size_bytes": 268125,
+    "pages": "N/A",
+    "extractable": "TEXT_DOCUMENT",
+    "sha256": "cb8f69121aef05b38dde69c08e06ed9278155711de9dfbf82adc3abf43d1d253"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Bhrigu_Nadi_Astrology_Insights_Complete_Pagewise.md",
+    "size_bytes": 268125,
+    "pages": "N/A",
+    "extractable": "TEXT_DOCUMENT",
+    "sha256": "cb8f69121aef05b38dde69c08e06ed9278155711de9dfbf82adc3abf43d1d253"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Bhrigu_Nadi_Astrology_Insights_OCR.md",
+    "size_bytes": 261808,
+    "pages": "N/A",
+    "extractable": "TEXT_DOCUMENT",
+    "sha256": "34baac031adf9ab1a42e9b7b6611b8159b467c76060e6f04a8ffc93edb7be64b"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Nadi Astrology by Numeros Vision Classical Archive - PDF - Astrological Sign - Divination.pdf",
+    "size_bytes": 2751222,
+    "pages": 36,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "ba844bbb8f732f3e5f78a6f3a1ddcccbbca32c035a1b3b3b6ffa90f7bbbc51c5"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Nadi Astrolology Combiations.pdf",
+    "size_bytes": 667787,
+    "pages": 3,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "c5b46d005c818d610cafa78c69594915bd163e65a9a8745ceb08f1fda23cce52"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "Nadi Notes PDF Books Prediction.pdf",
+    "size_bytes": 532979,
+    "pages": 82,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "f8b1c8f95179b9f086c5a9a49f4a91d5b13645159e07d0da39cc7d6b08dbc59a"
+  },
+  {
+    "group": "Nadi & BNN Corpus",
+    "folder": "data/nadi_books",
+    "filename": "nadi-astrology-accurate-predictive-methodology-2013nbsped_compress.pdf",
+    "size_bytes": 5213892,
+    "pages": 277,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "dcf17fb7b08e4b786fd232d3a552d3caa87294e5e5ad8abd0751fee2d2911ec2"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Chaldean Numerology PDF Numbers Pythagoras.pdf",
+    "size_bytes": 13612694,
+    "pages": 133,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "7f7d5eb459955167762949dee2a644918cc8da4df644545415cfd22f8f384654"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Classical Nine-Square Lo Shu System PDF (1).pdf",
+    "size_bytes": 83130171,
+    "pages": 276,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "76b5479793239d35c327294ff2e86ddce4ce30cb897adda804b4f85adbb14724"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Classical Nine-Square Lo Shu System PDF.pdf",
+    "size_bytes": 83130171,
+    "pages": 276,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "76b5479793239d35c327294ff2e86ddce4ce30cb897adda804b4f85adbb14724"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Planetary and Number Symbolism Archive PDF Planets In Astrology Angel (1).pdf",
+    "size_bytes": 42076006,
+    "pages": 116,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "6ce32f269718090f60e8303ae9b780eae003e49f2f9738350357b0a1a352d860"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Planetary and Number Symbolism Archive PDF Planets In Astrology Angel.pdf",
+    "size_bytes": 42076006,
+    "pages": 116,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "6ce32f269718090f60e8303ae9b780eae003e49f2f9738350357b0a1a352d860"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Numeros Vision Classical Numerology Manual 1945 PDF Pi Numbers (1).pdf",
+    "size_bytes": 77688795,
+    "pages": 200,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "9a0f59dbdd5153c6ae34c1b61079cd87bde123c66c70487b7184c395be2397ad"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Numeros Vision Classical Numerology Manual 1945 PDF Pi Numbers.pdf",
+    "size_bytes": 77688795,
+    "pages": 200,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "9a0f59dbdd5153c6ae34c1b61079cd87bde123c66c70487b7184c395be2397ad"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Understanding Numerology Basics PDF (1).pdf",
+    "size_bytes": 71535017,
+    "pages": 148,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "ff4292e1e7bd2e26f6afa93d129b5288cf5ef5c51d169e3c0ff59f9dc5c5fe9b"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Understanding Numerology Basics PDF.pdf",
+    "size_bytes": 71535017,
+    "pages": 148,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "ff4292e1e7bd2e26f6afa93d129b5288cf5ef5c51d169e3c0ff59f9dc5c5fe9b"
+  },
+  {
+    "group": "Core Reference Books",
+    "folder": "data/reference_books",
+    "filename": "Numeros Vision Classical Sound and Name Compendium 2005 PDF Classical Chaldean Tradition.pdf",
+    "size_bytes": 116760700,
+    "pages": 188,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "3f38c7851e0b83a2644c5cbe973ab314140cc6bed221ccefbf2d75ec13f2a474"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "25-Astrology-remedies-kit-io2rbv.pdf",
+    "size_bytes": 3344885,
+    "pages": 1,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "d8ffa1a9930fc8305790e89694ae6e72c7d829af6aa09e45d967591817b81b4e"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "81 Driver Conductor Combinations PDF Planets In Astrology Planets.pdf",
+    "size_bytes": 307866,
+    "pages": 10,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "24efd231365d4e97c6f6987fd65b68e42ad8742042a4af5daf9a02d92f4d3183"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "81 Driver-Conductor Combinations in Numerology PDF Planets In Astrology Wisdom.pdf",
+    "size_bytes": 1992328,
+    "pages": 43,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "b4e1a5ed6bc52d1915db72b351c6397ba002e9352f6e7ede6df57f0cfe4a06c5"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "ADVANCE & PROFESSIONAL COURSE - NOTES.pdf",
+    "size_bytes": 495467,
+    "pages": 25,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "ea752dc99f94e8e61d3c0d35c8cdbc18db45b6133491892b5754fbb869d7bb98"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Advanced_Numerology_Study_Notes___PDF.pdf",
+    "size_bytes": 3530898,
+    "pages": 26,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "0c2456377639b3234d70adf3e6f27c88c83b756184a9a9646cf857448a13a6b0"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Basic Numerology Course - Talking Nummbers.pdf",
+    "size_bytes": 1175624,
+    "pages": 29,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "bf3ddf70f37e4f4b82afdb2c5c6a554f50d6eba55f4c0c774185804049c2c7d5"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Calculating Mahadasha in Vedic Astrology PDF Planets In Astrology Self-Improvement.pdf",
+    "size_bytes": 483594,
+    "pages": 14,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "5224a6e58f1a428a333d0a7f34df3ed25bab1d9c971a8f1096e3159d633ceba4"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Chaldean Numerology Name Analysis PDF Sports & Recreation Wellness.pdf",
+    "size_bytes": 807418,
+    "pages": 10,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "963cc22b03219327bdffe5fadb3dd5a72975b71cf5069d7a8086c3c680d00957"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Cheiro_s_Book_of_Numbers___PDF.pdf",
+    "size_bytes": 176660513,
+    "pages": 195,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "cd5be5487ae9a4f4624b14e5ff84504fbf613f74b79d7fd8d9c38571090b201d"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Driver Conductor Destiny 81 Combinations PDF Planets In Astrology Planets.pdf",
+    "size_bytes": 846480,
+    "pages": 10,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "204cf5a7ab58d9d9f833c5695fec7504c1556fe9f4bc69ae2210a03f60b67687"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Nadi Astrolology Combiations.pdf",
+    "size_bytes": 667787,
+    "pages": 3,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "c5b46d005c818d610cafa78c69594915bd163e65a9a8745ceb08f1fda23cce52"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Traits and Insights of Numerology 1 PDF Leadership Physical Attractiveness.pdf",
+    "size_bytes": 2506215,
+    "pages": 45,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "124c5d82129abf45b77a45e9bfa8423bbce141ddee768c3e217a2c65dd2bd8d7"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Traits of Number 1 in Vedic Numerology PDF.pdf",
+    "size_bytes": 485119,
+    "pages": 15,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "f39f1bf423923228bda4aa499f7c9a805f310c7e7fc242d2a0f05efb3d75b037"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Understanding Mulank 1 in Numerology PDF Leadership Creativity.pdf",
+    "size_bytes": 2374966,
+    "pages": 150,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "ccc504622ba2b9936349e87b658a537cb4ad6c6970807ed48a079cb29ae9e777"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Understanding Name Numbers in Numerology PDF Luck Planets.pdf",
+    "size_bytes": 470049,
+    "pages": 54,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "e970915c68a0bfb87b44d8528e18e68bbfd9e71b74ec37fe3cea5f6163a346ba"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Understanding Numerology Numbers 1-9 PDF.pdf",
+    "size_bytes": 14413,
+    "pages": 16,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "bbef4a232977fbbf8edb4c763ee01df1542b296ba0c4223bcf4ffdecc6af9d60"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Understanding_Compound_Numbers_in_Numerology___PDF___Luck.pdf",
+    "size_bytes": 24891,
+    "pages": 11,
+    "extractable": "NO_IMAGE_SCAN",
+    "sha256": "e40ad35c47a5bfa89aea22abd1117eb60b6cf90c8e58876c5a83bd33686d18e0"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Understanding_Name_Numerology_Numbers___PDF.pdf",
+    "size_bytes": 3118982,
+    "pages": 194,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "5fa1b29a42e7410042da4964b5360316f79a3a34371c6d4603330c0d8d0b12ed"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Vastu_Planning_and_Design_Steps___PDF.pdf",
+    "size_bytes": 1030789,
+    "pages": 8,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "571d101d537bc382e0b68a173ef66054ab82f528263b388c5edacd6f741107c6"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "Vehicle Number Luck Analysis PDF.pdf",
+    "size_bytes": 28138,
+    "pages": 2,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "139662b7fc1911fdae36bc8b2ff5c7972e27ddc244fba97b8041d197f83ccfc2"
+  },
+  {
+    "group": "Legacy Uploaded Books & Notes",
+    "folder": "data/uploaded_books_and_notes",
+    "filename": "nadi-astrology-accurate-predictive-methodology-2013nbsped_compress.pdf",
+    "size_bytes": 5213892,
+    "pages": 277,
+    "extractable": "YES_SEARCHABLE",
+    "sha256": "dcf17fb7b08e4b786fd232d3a552d3caa87294e5e5ad8abd0751fee2d2911ec2"
+  }
+]

@@ -1,0 +1,241 @@
+[
+  {
+    "file": "baby-naming.html",
+    "route": "/tools/baby-naming",
+    "title": "Auspicious Baby Naming Numerology Studio \u2014 Numeros Vision",
+    "meta_description": "Discover auspicious baby names calculated with Chaldean numerology and Lo Shu grid balancing. Harmonize your baby",
+    "canonical": "https://numerosvision.com/tools/baby-naming",
+    "h1": "Auspicious Baby Naming Studio",
+    "input_fields": [
+      "baby-dob",
+      "preferred-letter",
+      "family-surname",
+      "baby-gender"
+    ],
+    "js_functions": [
+      "digitSum",
+      "renderNames",
+      "reduceToSingle",
+      "toggleMobileNav",
+      "calculateBabyNames"
+    ]
+  },
+  {
+    "file": "blessing-years.html",
+    "route": "/tools/blessing-years",
+    "title": "Free Blessing Years & Milestone Timeline Calculator \u2014 Numeros Vision",
+    "meta_description": "Calculate your Supreme Blessing Years and life milestone timeline from age 18 to 75. Discover when universal planetary cycles align with your birth numbers for major career and wealth breakthroughs.",
+    "canonical": "https://numerosvision.com/tools/blessing-years",
+    "h1": "Blessing Years &amp; Milestones Explorer",
+    "input_fields": [
+      "bYear",
+      "bDay",
+      "bMonth"
+    ],
+    "js_functions": [
+      "calculateBlessings",
+      "renderBlessings",
+      "toggleMobileNav"
+    ]
+  },
+  {
+    "file": "compatibility-calculator.html",
+    "route": "/tools/compatibility-calculator",
+    "title": "Free Relationship & Marriage Compatibility Calculator \u2014 Numeros Vision",
+    "meta_description": "Calculate authentic numerology relationship and marriage compatibility. Compare Driver, Conductor, and Lo Shu grid harmony between two partners free.",
+    "canonical": "https://numerosvision.com/tools/compatibility-calculator",
+    "h1": "Relationship &amp; Marriage Compatibility",
+    "input_fields": [
+      "p1-dob",
+      "p1-name",
+      "p2-dob",
+      "p2-name"
+    ],
+    "js_functions": [
+      "calculateSynastry",
+      "digitSum",
+      "reduceToSingle",
+      "toggleMobileNav",
+      "renderSynastry"
+    ]
+  },
+  {
+    "file": "life-path-calculator.html",
+    "route": "/tools/life-path-calculator",
+    "title": "Free Life Path Number Calculator \u2014 Numeros Vision",
+    "meta_description": "Calculate your Life Path Number free instantly. Discover your numerological destiny number, personality traits, lucky colours, and what 2026 holds for you. Powered by Numeros Vision AI.",
+    "canonical": "https://numerosvision.com/tools/life-path-calculator",
+    "h1": "Life Path CalculatorLife Path Number &amp; Destiny Analysis",
+    "input_fields": [
+      "lp-year",
+      "lp-name",
+      "lp-day",
+      "lp-month"
+    ],
+    "js_functions": [
+      "calculateLifePath",
+      "digitSum",
+      "personalYear",
+      "calcLP",
+      "toggleMobileNav",
+      "toggleFaq",
+      "reduce"
+    ]
+  },
+  {
+    "file": "lo-shu-grid.html",
+    "route": "/tools/lo-shu-grid",
+    "title": "Free Lo Shu Grid Calculator \u2014 Numeros Vision",
+    "meta_description": "Generate your personal Lo Shu Grid free. Discover missing numbers, strengths, personality traits, and what your 3\u00d73 magic square reveals about your destiny. Powered by Numeros Vision AI.",
+    "canonical": "https://numerosvision.com/tools/lo-shu-grid",
+    "h1": "Lo Shu GridCalculator",
+    "input_fields": [
+      "ls-day",
+      "ls-month",
+      "ls-year"
+    ],
+    "js_functions": [
+      "generateGrid",
+      "toggleMobileNav",
+      "toggleFaq"
+    ]
+  },
+  {
+    "file": "lucky-number.html",
+    "route": "/tools/lucky-number",
+    "title": "Free Lucky Number Calculator \u2014 Numeros Vision",
+    "meta_description": "Find your lucky numbers free instantly. Calculate your personal lucky number, lucky day, lucky colour, and lucky gemstone from your date of birth. Powered by Numeros Vision AI.",
+    "canonical": "https://numerosvision.com/tools/lucky-number",
+    "h1": "Lucky NumberCalculator",
+    "input_fields": [
+      "ln-name",
+      "ln-month",
+      "ln-year",
+      "ln-day"
+    ],
+    "js_functions": [
+      "chaldean",
+      "digitSum",
+      "calcLucky",
+      "toggleMobileNav",
+      "toggleFaq",
+      "reduce"
+    ]
+  },
+  {
+    "file": "mobile-numerology.html",
+    "route": "/tools/mobile-numerology",
+    "title": "Free Mobile Phone Numerology & Malefic Pairs Checker \u2014 Numeros Vision",
+    "meta_description": "Audit your mobile phone number for malefic pairs (14, 18, 28, 48) and repeating digits. Calculate your phone number compound sum and check compatibility with your Driver number free.",
+    "canonical": "https://numerosvision.com/tools/mobile-numerology",
+    "h1": "Mobile Phone Numerology Checker",
+    "input_fields": [
+      "mobileStr",
+      "condNum",
+      "driverNum"
+    ],
+    "js_functions": [
+      "renderMobileResult",
+      "auditMobileNumber",
+      "toggleMobileNav"
+    ]
+  },
+  {
+    "file": "name-balancing.html",
+    "route": "/tools/name-balancing",
+    "title": "Free Name Balancing & Spelling Optimization Calculator \u2014 Numeros Vision",
+    "meta_description": "Audit and balance your name spelling with Chaldean numerology. Harmonize your name compound with your birth Driver and Conductor numbers to remove karmic delays and activate prosperity.",
+    "canonical": "https://numerosvision.com/tools/name-balancing",
+    "h1": "Name Balancing &amp; Spelling Optimizer",
+    "input_fields": [
+      "fullName",
+      "dobStr"
+    ],
+    "js_functions": [
+      "deriveDriverAndConductor",
+      "onDobChange",
+      "renderResults",
+      "calculateNameBalance",
+      "reduceToSingle",
+      "toggleMobileNav"
+    ]
+  },
+  {
+    "file": "name-numerology.html",
+    "route": "/tools/name-numerology",
+    "title": "Free Name Numerology Calculator \u2014 Chaldean & Pythagorean \u2014 Numeros Vision",
+    "meta_description": "Calculate your name numerology free. Find your Expression Number, Soul Urge, and Personality Number using both Chaldean and Pythagorean systems. Discover if your name vibration supports your destiny.",
+    "canonical": "https://numerosvision.com/tools/name-numerology",
+    "h1": "Name NumerologyCalculator",
+    "input_fields": [
+      "nn-month",
+      "nn-name",
+      "nn-year",
+      "nn-day"
+    ],
+    "js_functions": [
+      "digitSum",
+      "toggleFaq",
+      "calcLP",
+      "setSystem",
+      "toggleMobileNav",
+      "calcForSystem",
+      "calcName",
+      "reduce"
+    ]
+  },
+  {
+    "file": "profession-calculator.html",
+    "route": "/tools/profession-calculator",
+    "title": "Free Career & Profession Numerology Calculator \u2014 Numeros Vision",
+    "meta_description": "Discover your ideal career path, business suitability, and stock market investment style using Driver, Conductor, and BNN Saturn numerology. Free professional vocation calculator.",
+    "canonical": "https://numerosvision.com/tools/profession-calculator",
+    "h1": "Career &amp; Profession Numerology",
+    "input_fields": [
+      "condNum",
+      "driverNum"
+    ],
+    "js_functions": [
+      "renderProfessions",
+      "calculateProfessions",
+      "toggleMobileNav"
+    ]
+  },
+  {
+    "file": "property-numerology.html",
+    "route": "/tools/property-numerology",
+    "title": "Free House & Property Numerology Calculator \u2014 Numeros Vision",
+    "meta_description": "Calculate the numerology of your house, flat, or apartment number. Discover your home",
+    "canonical": "https://numerosvision.com/tools/property-numerology",
+    "h1": "House &amp; Property Numerology",
+    "input_fields": [
+      "owner-dob",
+      "prop-id"
+    ],
+    "js_functions": [
+      "digitSum",
+      "reduceToSingle",
+      "calculateProperty",
+      "toggleMobileNav",
+      "renderProperty"
+    ]
+  },
+  {
+    "file": "vehicle-numerology.html",
+    "route": "/tools/vehicle-numerology",
+    "title": "Free Vehicle Number Numerology & Lucky Color Audit \u2014 Numeros Vision",
+    "meta_description": "Calculate your vehicle registration number numerology free. Check whether your car or bike license plate harmonizes with your Driver number and discover auspicious vehicle colors.",
+    "canonical": "https://numerosvision.com/tools/vehicle-numerology",
+    "h1": "Vehicle Registration Numerology",
+    "input_fields": [
+      "plateStr",
+      "condNum",
+      "driverNum"
+    ],
+    "js_functions": [
+      "renderVehicle",
+      "toggleMobileNav",
+      "calculateVehicle"
+    ]
+  }
+]

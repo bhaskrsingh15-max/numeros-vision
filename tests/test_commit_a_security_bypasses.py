@@ -68,6 +68,16 @@ class TestCommitASecurityBypasses(unittest.TestCase):
             self.assertNotIn("toggleDossierUnlock", html, f"toggleDossierUnlock still present in {path}")
             self.assertNotIn("Practitioner Test Mode", html, f"Practitioner Test Mode still present in {path}")
 
+    def test_zero_unlock_or_test_token_bypasses_across_all_static_pages(self):
+        static_dir = ROOT / "app" / "static"
+        forbidden = ("unlocked=true", "Practitioner Test Mode", "bypassLogoLockForTest", "test_master_pass")
+        for path in static_dir.rglob("*"):
+            if not path.is_file() or path.suffix.lower() not in (".html", ".js"):
+                continue
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            for tok in forbidden:
+                self.assertNotIn(tok, text, f"Forbidden client bypass {tok!r} found in {path}")
+
     def test_server_test_tokens_and_staging_bypasses_fail_closed_in_prod_and_preview(self):
         saved = dict(os.environ)
         try:

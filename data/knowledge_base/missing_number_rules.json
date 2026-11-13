@@ -1,0 +1,138 @@
+{
+  "system": "Lo Shu Grid & Advance Professional Numerology",
+  "source_document_id": "SRC-ADV-PROF-NOTES-DAY8",
+  "source_title": "Professional & Advance Numerology Study Notes & Day 8 Canon (NUMEROS VISION)",
+  "approval_status": "APPROVED",
+  "governance_version": "1.1.0",
+  "effective_date": "2026-10-28",
+  "complimentary_poorak_numbers": {
+    "1": [9],
+    "2": [3, 7],
+    "3": [7],
+    "4": [8],
+    "5": [6],
+    "6": [5],
+    "7": [3],
+    "8": [4, 5],
+    "9": [1]
+  },
+  "day8_quality_specific_mappings": {
+    "1": {
+      "complements": [9],
+      "supported_quality": "Authority supported by a commander or trusted executor (courage, physical action, military execution)",
+      "limitation": "Number 9 provides execution and defense, but cannot replace Sun's sovereign vision or administrative royalty"
+    },
+    "2": {
+      "complements": [3, 7],
+      "supported_quality": "Mind and decision-making supported by knowledge/pedagogy (3) and spiritual thinking/intuition (7)",
+      "limitation": "Numbers 3 and 7 provide intellectual and spiritual clarity, not maternal emotional warmth or diplomatic gentleness"
+    },
+    "3": {
+      "complements": [7],
+      "supported_quality": "Knowledge, education, wisdom, and spirituality supported by deep research and esoteric insight",
+      "limitation": "Number 7 provides solitary introspective depth, but lacks Jupiter's broad public preaching and institutional expansion"
+    },
+    "4": {
+      "complements": [8],
+      "supported_quality": "Discipline and time-related discipline (laborious stamina, legal rigor)",
+      "limitation": "Instructor explicitly limits the 8-to-4 relationship to discipline; Number 8 does NOT replace Rahu's unconventional system engineering"
+    },
+    "5": {
+      "complements": [6],
+      "supported_quality": "Balance and relationship-related support, family stability, and supportive social luxury",
+      "limitation": "Number 6 provides domestic harmony and aesthetic balance, but does not provide Mercury's central Earth axis"
+    },
+    "6": {
+      "complements": [5],
+      "supported_quality": "Balance, commercial agility, and relationship stabilizer when 6 is absent",
+      "limitation": "Number 5 stabilizes relationships through intellect, but cannot manufacture artistic/material luxury without effort"
+    },
+    "7": {
+      "complements": [3],
+      "supported_quality": "Knowledge, wisdom, and positive fulfillment (mentorship, ethical grounding, public guidance)",
+      "limitation": "Number 3 provides outer optimism and guidance, but does not replace Ketu's surgical occult detachment"
+    },
+    "8": {
+      "complements": [4, 5],
+      "supported_quality": "Discipline supported by 4; money management and balance supported by 5",
+      "limitation": "Number 4 provides structural focus and 5 provides financial agility, but neither replaces Saturn's long-term justice karma"
+    },
+    "9": {
+      "complements": [1],
+      "supported_quality": "Execution and leadership supported by the king or authority figure (sovereign direction, administrative status)",
+      "limitation": "Number 1 gives direction and royal status, but lacks Mars's raw battlefield stamina and physical ground defense"
+    }
+  },
+  "master_key_rule_5": {
+    "number": 5,
+    "archetype": "Master Key Number & Fighter Archetype",
+    "description": "If 5 is present in the grid, it acts as an internal resilience anchor conferring persistence, balance, and willpower. Associated with the fighter mindset to navigate challenges without surrender.",
+    "willpower_plane_159": "When 1, 5, and 9 are all present in the grid, it activates the Willpower Plane, conferring light activation of decisive willpower.",
+    "remedy_claim_treatment": "Claims that remedies work faster or produce multiplied results when 5 is present are stored as unverified teaching claims, strictly NOT presented as guaranteed outcomes."
+  },
+  "missing_number_impacts": {
+    "1": {
+      "digit": 1,
+      "element": "Water",
+      "impact": "Difficulty in expressing inner views, always needs emotional or moral support from others, egoless, may stammer at an early age.",
+      "remedy": "Offer water to the rising Sun daily (only if Driver and Conductor are NOT 8); drink plenty of water from a silver or copper vessel.",
+      "yantra_remedy": "Surya Yantra (subject to planetary compatibility)"
+    },
+    "2": {
+      "digit": 2,
+      "element": "Earth",
+      "impact": "Lack of sensitivity and intuition, may disregard other people's feelings, difficulty admitting personal mistakes with tendency to over-justify actions.",
+      "remedy": "Wear crystal bracelet or white quartz mala to ground Earth/water vibrations; respect maternal figures.",
+      "yantra_remedy": "Chandra Yantra on Monday"
+    },
+    "3": {
+      "digit": 3,
+      "element": "Wood",
+      "impact": "Lack of creative drive and imaginative vision; easily surrenders or feels defeated in difficult situations.",
+      "remedy": "Wear Panchmukhi Rudraksha, Tulsi mala, or sandalwood/wooden bracelet; respect teachers and gurus.",
+      "yantra_remedy": "Guru/Brihaspati Yantra on Thursday"
+    },
+    "4": {
+      "digit": 4,
+      "element": "Wood",
+      "impact": "Lack of discipline, chaotic organization, clumsiness with physical tasks or time management.",
+      "remedy": "Wear wooden bracelet or 5-faced Rudraksha; keep workspace tidy; maintain disciplined schedules.",
+      "yantra_remedy": "Rahu Yantra (Driver/Conductor must not conflict with 4/8)"
+    },
+    "5": {
+      "digit": 5,
+      "element": "Earth",
+      "impact": "Lack of central life balance, reduced adaptability, deficiency in drive and versatility needed to reach long-term goals.",
+      "remedy": "Wear natural green aventurine or crystal bracelet; place green plants in center/east.",
+      "yantra_remedy": "Budha Yantra or Surya-Budha Yantra (wear when 5 missing and 6 present, provided D/C is not 8)"
+    },
+    "6": {
+      "digit": 6,
+      "element": "Metal (Gold)",
+      "impact": "Poor bonding with home and family, weak relationship sector, potential marital friction, lack of societal support during crunch periods.",
+      "remedy": "Wear a metal strap golden-colour watch on the left wrist; respect female partners and elders.",
+      "yantra_remedy": "Shukra Yantra / Pyra Yantra (when 6 missing and 5 present, D/C is 8, but not 3)"
+    },
+    "7": {
+      "digit": 7,
+      "element": "Metal (Silver)",
+      "impact": "Lack of spiritual inclination, occult depth, philosophical discernment, or deep educational focus; may overlook emotional needs of peers.",
+      "remedy": "Wear metal strap silver and golden watch or cat's eye stone; practice quiet meditation.",
+      "yantra_remedy": "Ketu Yantra"
+    },
+    "8": {
+      "digit": 8,
+      "element": "Earth",
+      "impact": "Poor financial management, impulsive spending, lack of long-term asset accumulation discipline.",
+      "remedy": "Wear crystal bracelet or dark brown tiger-eye; donate to labor/service workers on Saturdays.",
+      "yantra_remedy": "Shani Yantra"
+    },
+    "9": {
+      "digit": 9,
+      "element": "Fire",
+      "impact": "Low physical stamina or drive, overlooking others' feelings, lacking spontaneous humanitarian compassion.",
+      "remedy": "Wear a consecrated red thread (mauli) on the wrist; stay physically active in sports or martial arts.",
+      "yantra_remedy": "Mangal Yantra"
+    }
+  }
+}

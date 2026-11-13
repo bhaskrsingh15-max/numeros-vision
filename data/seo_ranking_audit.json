@@ -1,0 +1,797 @@
+{
+  "scanned_at": "2026-10-19T06:26:52Z",
+  "total_pages_scanned": 30,
+  "average_rank_readiness_score": 78.2,
+  "tier_distribution": {
+    "tier_1_page_1_potential": 1,
+    "tier_2_top_20_contenders": 23,
+    "tier_3_needs_tuning": 6
+  },
+  "pages": [
+    {
+      "path": "/",
+      "url": "http://127.0.0.1:8000/",
+      "target_keyword": "AI numerology calculator",
+      "status_code": 200,
+      "ttfb_ms": 14.2,
+      "total_words": 1692,
+      "title_length": 47,
+      "meta_desc_length": 162,
+      "h1_count": 1,
+      "h2_count": 8,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 15,
+        "headings": 12,
+        "content_depth": 18,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 86,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/about",
+      "url": "http://127.0.0.1:8000/about",
+      "target_keyword": "numerology research board",
+      "status_code": 200,
+      "ttfb_ms": 2.9,
+      "total_words": 601,
+      "title_length": 49,
+      "meta_desc_length": 26,
+      "h1_count": 1,
+      "h2_count": 2,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 6,
+        "headings": 12,
+        "content_depth": 15,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 74,
+      "predicted_serp_tier": "Tier 3: Optimization Recommended",
+      "recommendations": [
+        "Adjust meta description (26 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/pricing",
+      "url": "http://127.0.0.1:8000/pricing",
+      "target_keyword": "numerology consultation pricing",
+      "status_code": 200,
+      "ttfb_ms": 3.0,
+      "total_words": 498,
+      "title_length": 34,
+      "meta_desc_length": 152,
+      "h1_count": 1,
+      "h2_count": 1,
+      "score_breakdown": {
+        "title": 17,
+        "meta_description": 15,
+        "headings": 10,
+        "content_depth": 12,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 71,
+      "predicted_serp_tier": "Tier 3: Optimization Recommended",
+      "recommendations": [
+        "Adjust title length (34 chars) to 50-65 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero.",
+        "Expand word count (currently 498) to compete with Page 1 average."
+      ]
+    },
+    {
+      "path": "/contact",
+      "url": "http://127.0.0.1:8000/contact",
+      "target_keyword": "numerology support consultation",
+      "status_code": 200,
+      "ttfb_ms": 15.0,
+      "total_words": 425,
+      "title_length": 53,
+      "meta_desc_length": 142,
+      "h1_count": 1,
+      "h2_count": 1,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 15,
+        "headings": 9,
+        "content_depth": 10,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 71,
+      "predicted_serp_tier": "Tier 3: Optimization Recommended",
+      "recommendations": [
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero.",
+        "Expand word count (currently 425) to compete with Page 1 average."
+      ]
+    },
+    {
+      "path": "/privacy",
+      "url": "http://127.0.0.1:8000/privacy",
+      "target_keyword": "numerology privacy data governance",
+      "status_code": 200,
+      "ttfb_ms": 2.9,
+      "total_words": 919,
+      "title_length": 31,
+      "meta_desc_length": 140,
+      "h1_count": 1,
+      "h2_count": 8,
+      "score_breakdown": {
+        "title": 17,
+        "meta_description": 15,
+        "headings": 15,
+        "content_depth": 13,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 77,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust title length (31 chars) to 50-65 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/terms",
+      "url": "http://127.0.0.1:8000/terms",
+      "target_keyword": "numerology terms of service",
+      "status_code": 200,
+      "ttfb_ms": 4.0,
+      "total_words": 872,
+      "title_length": 33,
+      "meta_desc_length": 128,
+      "h1_count": 1,
+      "h2_count": 10,
+      "score_breakdown": {
+        "title": 17,
+        "meta_description": 13,
+        "headings": 13,
+        "content_depth": 13,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 73,
+      "predicted_serp_tier": "Tier 3: Optimization Recommended",
+      "recommendations": [
+        "Adjust title length (33 chars) to 50-65 chars.",
+        "Adjust meta description (128 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/refund-policy",
+      "url": "http://127.0.0.1:8000/refund-policy",
+      "target_keyword": "numerology refund policy",
+      "status_code": 200,
+      "ttfb_ms": 5.4,
+      "total_words": 768,
+      "title_length": 47,
+      "meta_desc_length": 140,
+      "h1_count": 1,
+      "h2_count": 7,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 15,
+        "headings": 15,
+        "content_depth": 12,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 79,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/practitioner",
+      "url": "http://127.0.0.1:8000/practitioner",
+      "target_keyword": "practitioner numerology portal",
+      "status_code": 200,
+      "ttfb_ms": 3.4,
+      "total_words": 472,
+      "title_length": 57,
+      "meta_desc_length": 171,
+      "h1_count": 1,
+      "h2_count": 4,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 9,
+        "headings": 15,
+        "content_depth": 10,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 75,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (171 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero.",
+        "Expand word count (currently 472) to compete with Page 1 average."
+      ]
+    },
+    {
+      "path": "/sample",
+      "url": "http://127.0.0.1:8000/sample",
+      "target_keyword": "sample numerology blueprint report",
+      "status_code": 200,
+      "ttfb_ms": 16.3,
+      "total_words": 377,
+      "title_length": 57,
+      "meta_desc_length": 216,
+      "h1_count": 1,
+      "h2_count": 0,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 10,
+        "headings": 10,
+        "content_depth": 12,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 73,
+      "predicted_serp_tier": "Tier 3: Optimization Recommended",
+      "recommendations": [
+        "Adjust meta description (216 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero.",
+        "Expand word count (currently 377) to compete with Page 1 average."
+      ]
+    },
+    {
+      "path": "/tools/name-balancing",
+      "url": "http://127.0.0.1:8000/tools/name-balancing",
+      "target_keyword": "name balancing calculator",
+      "status_code": 200,
+      "ttfb_ms": 3.3,
+      "total_words": 800,
+      "title_length": 71,
+      "meta_desc_length": 185,
+      "h1_count": 1,
+      "h2_count": 2,
+      "score_breakdown": {
+        "title": 17,
+        "meta_description": 13,
+        "headings": 15,
+        "content_depth": 15,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 77,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust title length (71 chars) to 50-65 chars.",
+        "Adjust meta description (185 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/mobile-numerology",
+      "url": "http://127.0.0.1:8000/tools/mobile-numerology",
+      "target_keyword": "mobile numerology audit",
+      "status_code": 200,
+      "ttfb_ms": 2.5,
+      "total_words": 473,
+      "title_length": 69,
+      "meta_desc_length": 182,
+      "h1_count": 1,
+      "h2_count": 2,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 15,
+        "content_depth": 13,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 78,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (182 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/blessing-years",
+      "url": "http://127.0.0.1:8000/tools/blessing-years",
+      "target_keyword": "blessing years timeline",
+      "status_code": 200,
+      "ttfb_ms": 3.0,
+      "total_words": 505,
+      "title_length": 68,
+      "meta_desc_length": 198,
+      "h1_count": 1,
+      "h2_count": 2,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 15,
+        "content_depth": 16,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 81,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (198 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/profession-calculator",
+      "url": "http://127.0.0.1:8000/tools/profession-calculator",
+      "target_keyword": "career profession numerology",
+      "status_code": 200,
+      "ttfb_ms": 3.0,
+      "total_words": 394,
+      "title_length": 63,
+      "meta_desc_length": 179,
+      "h1_count": 1,
+      "h2_count": 1,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 12,
+        "content_depth": 13,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 75,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (179 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/vehicle-numerology",
+      "url": "http://127.0.0.1:8000/tools/vehicle-numerology",
+      "target_keyword": "vehicle numerology audit",
+      "status_code": 200,
+      "ttfb_ms": 2.7,
+      "total_words": 377,
+      "title_length": 67,
+      "meta_desc_length": 179,
+      "h1_count": 1,
+      "h2_count": 1,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 12,
+        "content_depth": 13,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 75,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (179 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/compatibility-calculator",
+      "url": "http://127.0.0.1:8000/tools/compatibility-calculator",
+      "target_keyword": "relationship marriage compatibility",
+      "status_code": 200,
+      "ttfb_ms": 2.6,
+      "total_words": 331,
+      "title_length": 70,
+      "meta_desc_length": 149,
+      "h1_count": 1,
+      "h2_count": 0,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 15,
+        "headings": 12,
+        "content_depth": 13,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 77,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/property-numerology",
+      "url": "http://127.0.0.1:8000/tools/property-numerology",
+      "target_keyword": "house property numerology",
+      "status_code": 200,
+      "ttfb_ms": 3.6,
+      "total_words": 323,
+      "title_length": 60,
+      "meta_desc_length": 85,
+      "h1_count": 1,
+      "h2_count": 0,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 10,
+        "headings": 12,
+        "content_depth": 13,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 72,
+      "predicted_serp_tier": "Tier 3: Optimization Recommended",
+      "recommendations": [
+        "Adjust meta description (85 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/baby-naming",
+      "url": "http://127.0.0.1:8000/tools/baby-naming",
+      "target_keyword": "auspicious baby naming",
+      "status_code": 200,
+      "ttfb_ms": 4.2,
+      "total_words": 474,
+      "title_length": 57,
+      "meta_desc_length": 113,
+      "h1_count": 1,
+      "h2_count": 1,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 12,
+        "content_depth": 13,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 75,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (113 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/life-path-calculator",
+      "url": "http://127.0.0.1:8000/tools/life-path-calculator",
+      "target_keyword": "life path number calculator",
+      "status_code": 200,
+      "ttfb_ms": 25.4,
+      "total_words": 424,
+      "title_length": 49,
+      "meta_desc_length": 185,
+      "h1_count": 1,
+      "h2_count": 1,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 12,
+        "content_depth": 15,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 81,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (185 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/lo-shu-grid",
+      "url": "http://127.0.0.1:8000/tools/lo-shu-grid",
+      "target_keyword": "lo shu grid calculator",
+      "status_code": 200,
+      "ttfb_ms": 3.6,
+      "total_words": 409,
+      "title_length": 44,
+      "meta_desc_length": 186,
+      "h1_count": 1,
+      "h2_count": 1,
+      "score_breakdown": {
+        "title": 17,
+        "meta_description": 13,
+        "headings": 12,
+        "content_depth": 15,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 78,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust title length (44 chars) to 50-65 chars.",
+        "Adjust meta description (186 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/lucky-number",
+      "url": "http://127.0.0.1:8000/tools/lucky-number",
+      "target_keyword": "lucky number calculator",
+      "status_code": 200,
+      "ttfb_ms": 2.6,
+      "total_words": 597,
+      "title_length": 45,
+      "meta_desc_length": 176,
+      "h1_count": 1,
+      "h2_count": 1,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 10,
+        "content_depth": 17,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 81,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (176 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/tools/name-numerology",
+      "url": "http://127.0.0.1:8000/tools/name-numerology",
+      "target_keyword": "chaldean name numerology",
+      "status_code": 200,
+      "ttfb_ms": 17.0,
+      "total_words": 652,
+      "title_length": 73,
+      "meta_desc_length": 199,
+      "h1_count": 1,
+      "h2_count": 1,
+      "score_breakdown": {
+        "title": 17,
+        "meta_description": 13,
+        "headings": 10,
+        "content_depth": 14,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 75,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust title length (73 chars) to 50-65 chars.",
+        "Adjust meta description (199 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/blog/what-is-numerology",
+      "url": "http://127.0.0.1:8000/blog/what-is-numerology",
+      "target_keyword": "what is numerology",
+      "status_code": 200,
+      "ttfb_ms": 3.7,
+      "total_words": 801,
+      "title_length": 71,
+      "meta_desc_length": 39,
+      "h1_count": 1,
+      "h2_count": 5,
+      "score_breakdown": {
+        "title": 17,
+        "meta_description": 10,
+        "headings": 15,
+        "content_depth": 17,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 76,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust title length (71 chars) to 50-65 chars.",
+        "Adjust meta description (39 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/blog/master-numbers-11-22-33",
+      "url": "http://127.0.0.1:8000/blog/master-numbers-11-22-33",
+      "target_keyword": "master numbers 11 22 33",
+      "status_code": 200,
+      "ttfb_ms": 22.2,
+      "total_words": 694,
+      "title_length": 69,
+      "meta_desc_length": 198,
+      "h1_count": 1,
+      "h2_count": 5,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 15,
+        "content_depth": 15,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 84,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (198 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/blog/chaldean-vs-pythagorean-numerology",
+      "url": "http://127.0.0.1:8000/blog/chaldean-vs-pythagorean-numerology",
+      "target_keyword": "chaldean vs pythagorean numerology",
+      "status_code": 200,
+      "ttfb_ms": 2.9,
+      "total_words": 728,
+      "title_length": 67,
+      "meta_desc_length": 212,
+      "h1_count": 1,
+      "h2_count": 5,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 10,
+        "headings": 15,
+        "content_depth": 17,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 83,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (212 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/blog/lo-shu-grid-8-planes",
+      "url": "http://127.0.0.1:8000/blog/lo-shu-grid-8-planes",
+      "target_keyword": "lo shu grid 8 planes",
+      "status_code": 200,
+      "ttfb_ms": 3.7,
+      "total_words": 793,
+      "title_length": 69,
+      "meta_desc_length": 197,
+      "h1_count": 1,
+      "h2_count": 4,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 15,
+        "content_depth": 17,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 86,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (197 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/blog/mobile-numerology-malefic-pairs",
+      "url": "http://127.0.0.1:8000/blog/mobile-numerology-malefic-pairs",
+      "target_keyword": "mobile numerology malefic pairs",
+      "status_code": 200,
+      "ttfb_ms": 2.7,
+      "total_words": 674,
+      "title_length": 71,
+      "meta_desc_length": 185,
+      "h1_count": 1,
+      "h2_count": 3,
+      "score_breakdown": {
+        "title": 17,
+        "meta_description": 13,
+        "headings": 15,
+        "content_depth": 17,
+        "aeo_geo_snippets": 6,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 83,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust title length (71 chars) to 50-65 chars.",
+        "Adjust meta description (185 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/blog/life-path-numbers-explained",
+      "url": "http://127.0.0.1:8000/blog/life-path-numbers-explained",
+      "target_keyword": "life path numbers explained",
+      "status_code": 200,
+      "ttfb_ms": 4.1,
+      "total_words": 1361,
+      "title_length": 70,
+      "meta_desc_length": 182,
+      "h1_count": 1,
+      "h2_count": 0,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 13,
+        "headings": 12,
+        "content_depth": 18,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 80,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (182 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/blog/gemstone-remedies",
+      "url": "http://127.0.0.1:8000/blog/gemstone-remedies",
+      "target_keyword": "gemstone crystal remedies numerology",
+      "status_code": 200,
+      "ttfb_ms": 3.1,
+      "total_words": 1015,
+      "title_length": 58,
+      "meta_desc_length": 208,
+      "h1_count": 1,
+      "h2_count": 9,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 10,
+        "headings": 15,
+        "content_depth": 18,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 80,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (208 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/blog/vedic-gemstone-remedies",
+      "url": "http://127.0.0.1:8000/blog/vedic-gemstone-remedies",
+      "target_keyword": "vedic gemstone remedies",
+      "status_code": 200,
+      "ttfb_ms": 27.5,
+      "total_words": 1015,
+      "title_length": 58,
+      "meta_desc_length": 208,
+      "h1_count": 1,
+      "h2_count": 9,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 10,
+        "headings": 15,
+        "content_depth": 18,
+        "aeo_geo_snippets": 2,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 80,
+      "predicted_serp_tier": "Tier 2: Strong Top 10-20 Contender",
+      "recommendations": [
+        "Adjust meta description (208 chars) to 140-160 chars.",
+        "Add direct-answer snippet bait box or FAQ schema to capture Position Zero."
+      ]
+    },
+    {
+      "path": "/blog/kua-number-auspicious-directions-and-career-feng-shui",
+      "url": "http://127.0.0.1:8000/blog/kua-number-auspicious-directions-and-career-feng-shui",
+      "target_keyword": "kua number auspicious directions",
+      "status_code": 200,
+      "ttfb_ms": 27.4,
+      "total_words": 1387,
+      "title_length": 65,
+      "meta_desc_length": 154,
+      "h1_count": 0,
+      "h2_count": 6,
+      "score_breakdown": {
+        "title": 20,
+        "meta_description": 15,
+        "headings": 5,
+        "content_depth": 20,
+        "aeo_geo_snippets": 15,
+        "schema_and_technical": 15
+      },
+      "rank_readiness_score": 90,
+      "predicted_serp_tier": "Tier 1: High Page 1 Potential",
+      "recommendations": [
+        "Ensure exactly one <h1> tag is present."
+      ]
+    }
+  ]
+}

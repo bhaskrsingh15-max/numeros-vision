@@ -1,0 +1,10 @@
+# Numeros Vision — Standing Workspace Rules (Sections 0–19)
+
+1. **Additive Preservation First**: Never delete, rename, shorten, or replace Layer 1 Lo Shu, Five-Element balancing, planet repetition logic (`docs/PLANET_LOGIC_SPEC.md`), report page counts (Basic = 3, Advanced = 12, Premium = 32), payment/webhook flows, or pricing without explicit owner instruction. Run the 16-DOB golden snapshot suite (`tests/fixtures/layer1_golden_snapshots_16_dobs.json`) before every commit.
+2. **Single-Digit `1–9` Everywhere**: Every reduced number (`Driver`, `Conductor`, `Kua`, `Name root`, `Personal Year/Month/Day`) is `1–9` across `app/engine/digit_root.py`, `app/static/_worker.js`, `app/static/js/nv_kua.js`, and PDF engines. `11/22/33` and `13/14/16/19` appear only as path notes.
+3. **DOB-Only Lo Shu & Single-Digit Cells**: Natal Lo Shu (`4 9 2 / 3 5 7 / 8 1 6`) counts only `DDMMYYYY` digits (`1–9`). Render single digit + `xN` chip, never `1111`.
+4. **Shared Pipeline & Validator Gate**: All narrative explanations pass through `Calculate -> Analyse -> Consolidate -> Write -> Check -> Deliver` (`app/engine/reading_pipeline.py` + `app/engine/indication_validator.py`). Zero PII enters LLM prompts, stage events, or `report_jobs`. Never stream unvalidated LLM tokens; fall back to plain library text on `Check` failure.
+5. **Draft vs Production Content Gate**: When `ENVIRONMENT=production`, loaders serve `APPROVED` rules/remedies only (`DRAFT` entries in `indication_library.json` and `remedy_library.json` stay hidden until approved line-by-line).
+6. **Server-Side Entitlements (Section 19)**: Enforce Affirmation & Manifestation package entitlements strictly server-side; never render blurred fake content on free/lower tiers.
+7. **Zero Green, Zero `#000000`, Zero Named Persons**: Never use `#16835B` or `#000000` in UI typography/badges; prices use `#8B6914`; keep `scan_repo_for_named_persons()` at `0` hits.
+8. **Deploy Discipline**: Never deploy to preview or production unless the owner explicitly says `"go"`.

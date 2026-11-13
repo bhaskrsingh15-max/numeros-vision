@@ -1,0 +1,6 @@
+gap_id,domain_topic,missing_evidence_description,target_tradition,status,mandatory_abstention_action
+GAP-001,Scanned Book Body Pages,B1 B3 B4 B5 B6 are image scans without validated text layer,All Traditions,PENDING_OCR,Strictly block unreviewed pages from production RAG retrieval
+GAP-002,Exact Birth Time Astrological Ascendant,User has not provided exact hour/minute or timezone of birth,Vedic / KP Astrology,INSUFFICIENT_EVIDENCE,Abstain from calculating Ascendant or KP cusp houses; rely on Driver/Conductor
+GAP-003,Unapproved Sports Rahu/Ketu Hypothesis,Proposal associating sports endurance with Saturn 8 / Ketu 7 lacks validated canon,Vedic Modern,UNCONFIGURED,Do not deploy or assert in client recommendations; retain as DRAFT
+GAP-004,Foreign Name Phonetics Non-Latin,Transliteration of non-Latin scripts (Devanagari Cyrillic Chinese) into English letters,Chaldean / Pythagorean,UNCONFIGURED,Require user-approved Romanized phonetic spelling; do not fabricate transliterations
+GAP-005,Medical Outcome Predictions,Attributing specific diseases or medical diagnoses to missing numbers,All Traditions,PERMANENTLY_BLOCKED,Statutory abstention under Drugs and Magic Remedies Act 1954

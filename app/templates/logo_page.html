@@ -1,0 +1,47 @@
+{% extends "master_header.html" %}
+{% block content %}
+<div class="container">
+  <h1 class="mt-4">Logo Studio &amp; Brand Intelligence</h1>
+  <p class="lead">Generate authentic brand insights and a harmonious logo preview based on your business information.</p>
+
+  {% if error %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="/tools/logo-studio">
+    <div class="mb-3">
+      <label for="business_name" class="form-label">Business Name</label>
+      <input type="text" class="form-control" id="business_name" name="business_name" required value="{{ request_form.business_name|default('') }}">
+    </div>
+    <div class="mb-3">
+      <label for="business_activity" class="form-label">Business Activity / Description</label>
+      <textarea class="form-control" id="business_activity" name="business_activity" rows="3" required>{{ request_form.business_activity|default('') }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label for="founder_dob" class="form-label">Founder DOB (optional, YYYY-MM-DD)</label>
+      <input type="date" class="form-control" id="founder_dob" name="founder_dob" value="{{ request_form.founder_dob|default('') }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Generate Report</button>
+  </form>
+
+  {% if report %}
+    <hr />
+    <h2>Brand Report</h2>
+    <ul class="list-group mb-4">
+      <li class="list-group-item"><strong>Business Name:</strong> {{ report.business_name }}</li>
+      <li class="list-group-item"><strong>Primary Category:</strong> {{ report.taxonomy.primary_category }}</li>
+      <li class="list-group-item"><strong>Chaldean Compound:</strong> {{ report.chaldean.compound }} / Root: {{ report.chaldean.root }}</li>
+      <li class="list-group-item"><strong>Archetype Alignment:</strong> {{ report.aligned | ternary('Aligned ✅','Not Aligned ❌') }}</li>
+    </ul>
+
+    {% if not aligned %}
+      <!-- Curiosity‑based CTA for free users -->
+      <a href="/pricing?plan=free-to-paid" class="btn btn-outline-success">
+        <i class="bi-lock-fill"></i> View Full Brand Insights
+      </a>
+    {% else %}
+      <a href="/tools/logo-studio/download?format=svg" class="btn btn-success">Download SVG Logo</a>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

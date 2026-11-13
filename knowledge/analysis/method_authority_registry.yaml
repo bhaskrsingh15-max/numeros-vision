@@ -1,0 +1,34 @@
+# NUMEROS VISION — METHOD AUTHORITY & SYSTEM PRECEDENCE REGISTRY
+# Version: 1.0.0
+# Last Updated: 2026-10-29
+
+domains:
+  name_analysis_and_balancing:
+    primary_authority: "Chaldean"
+    secondary_authority: "Pythagorean"
+    precedence_rule: "Chaldean compound numbers (1-100) govern name vibration and spelling harmony. Pythagorean expression number provides secondary Western archetype."
+    isolated_mappings: true
+
+  timing_and_forecast_windows:
+    primary_authority: "Numerology Mahadasha (Vedic)"
+    secondary_authority: "Bhrigu Nandi Nadi / Transit Cross-Check"
+    precedence_rule: "Numerological Dasha cycles establish the primary chronological time window. Astrological transits provide independent cross-verification without altering primary windows."
+    abstention_on_missing_birth_time: false
+
+  core_personality_and_destiny:
+    primary_authority: "Vedic Mulank & Bhagyank (81 Combinations)"
+    secondary_authority: "Chaldean Birthday Profile"
+    precedence_rule: "Day of birth (Mulank) and full date of birth (Bhagyank) dictate the 81 driver-conductor archetypes. Chaldean compound birthday vibrations provide specific character nuances."
+    isolated_mappings: true
+
+  spatial_and_elemental_harmony:
+    primary_authority: "Chinese Lo Shu (3x3 Magic Square)"
+    secondary_authority: "Vedic Panch Tattva (Five Elements)"
+    precedence_rule: "The 3x3 Magic Square (4-9-2 / 3-5-7 / 8-1-6) governs spatial directions, missing number remedies (Poorak), and the 8 planes of strength and weakness."
+    isolated_mappings: true
+
+  business_planetary_archetypes:
+    primary_authority: "Contextual Archetype Engine (Section 16)"
+    secondary_authority: "Chaldean Business Name Vibration"
+    precedence_rule: "Evaluate business via contextual causal chain: business activity -> product function -> customer outcome -> candidate planetary archetypes. Never judge a business name or color in isolation."
+    isolated_mappings: true

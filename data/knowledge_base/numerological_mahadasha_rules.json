@@ -1,0 +1,65 @@
+{
+  "system": "Numerological Mahadasha (NUMEROS VISION & Vedic Numerology)",
+  "source_document_id": "SRC-NUMERO-MAHADASHA",
+  "source_title": "Calculating Mahadasha in Vedic Astrology & Numerology (Study Notes)",
+  "approval_status": "APPROVED",
+  "governance_version": "1.0.0",
+  "effective_date": "2026-10-27",
+  "calculation_methodology": {
+    "step_1_starting_cycle": "First Mahadasha starts at Date of Birth. The starting planet is determined by the King (Driver) number.",
+    "step_1_duration": "Duration of the first Mahadasha equals the King (Driver) number in years (e.g. King 4 has 4 years duration).",
+    "step_2_sequence": "Subsequent Mahadashas follow the numerical planetary cycle: 1 (Sun, 1 yr) -> 2 (Moon, 2 yrs) -> 3 (Jupiter, 3 yrs) -> 4 (Rahu, 4 yrs) -> 5 (Mercury, 5 yrs) -> 6 (Venus, 6 yrs) -> 7 (Ketu, 7 yrs) -> 8 (Saturn, 8 yrs) -> 9 (Mars, 9 yrs), wrapping around circularly from 9 to 1.",
+    "period_durations_years": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9
+    }
+  },
+  "rating_criteria": {
+    "criterion_1": "Is MD number present in native's Lo Shu Grid? (+1.0 point if present, 0 if missing)",
+    "criterion_2": "Compatibility of MD planet with native King (Driver) number: +2.0 for Friendly/Compatible, +1.0 for Neutral, 0.0 for Anti/Enemy",
+    "thresholds": {
+      "favorable": "Score 2.5 - 3.0 (Excellent results, smooth progress, opportunities)",
+      "average": "Score 2.0 - 2.5 (Average results, mixed outcomes, steady effort required)",
+      "challenging": "Score below 2.0 (Hurdles, delays, requires active remedial alignment)"
+    }
+  },
+  "hierarchy_of_timing": {
+    "mahadasha": "Longer macro foundation period.",
+    "personal_year_py": "Shorter period; impacts are higher than Mahadasha alone.",
+    "personal_month_pm": "Monthly period; immediate impacts are even higher than PY.",
+    "synthesis_rule": "When both Mahadasha and Personal Year are favorable, they multiply positive results. If both are difficult, extra remedial discipline is necessary."
+  },
+  "crucial_life_events_rules": {
+    "house_property_acquisition": {
+      "favorable_personal_years": [2, 5, 8, 9],
+      "lo_shu_grid_reinforcement": "Presence of 2, 5, 8 (Earth Plane) or 9 (Fire/Mars energy) strongly activates real estate acquisition."
+    },
+    "foreign_travel": {
+      "favorable_personal_years": [5, 6],
+      "king_compatibility_threshold": 80,
+      "lo_shu_numbers": [5, 6],
+      "additional_supporting_numbers": [4, 7]
+    },
+    "job_promotion_and_growth": {
+      "favorable_personal_years": [1, 3, 5, 6],
+      "king_compatibility_threshold": 60,
+      "remedies": "Pay homage to Guru/elders on Thursdays; surround oneself with natural wood."
+    },
+    "job_termination_risk_alert": {
+      "risk_personal_years": [9],
+      "king_compatibility_threshold": 20,
+      "condition": "Personal Year is Anti to King Number and compatibility is below 20%."
+    },
+    "children_conception_or_delivery": {
+      "favorable_personal_years": [1, 2, 3, 5, 6],
+      "king_compatibility_threshold": 60
+    }
+  }
+}

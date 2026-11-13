@@ -844,10 +844,7 @@ function doRenderName(rawName, d, m, y) {
       prof.driver = ((d - 1) % 9) + 1;
       prof.conductor = lp;
     }
-    // Removed legacy localStorage write (DPDP privacy));
-    if (!localStorage.getItem('nv_premium_token')) {
-      localStorage.setItem('nv_premium_token', 'test_master_pass');
-    }
+    // Removed legacy localStorage write (DPDP privacy)
     if (window.nvProfileSync) {
       if (typeof window.nvProfileSync.syncCalculation === 'function') {
         window.nvProfileSync.syncCalculation(prof);

@@ -1,0 +1,1134 @@
+# -*- coding: utf-8 -*-
+"""
+Helper to append 81 DC combinations & 5 Elements Hygiene to generate_all_master_registries.py
+"""
+
+code_to_append = '''
+
+def get_driver_conductor_81_data():
+    """
+    Authoritative 81 Driver-Conductor rules as taught by Dr. Numeros Vision Classical Methodology.
+    Includes exact star rating (out of 5 stars or ? Warning), relationship type,
+    positive traits, negative traits, career alignments, and warnings.
+    """
+    raw_specs = {
+        # ?? DRIVER 1 (SUN / KING) ?????????????????????????????????????????????
+        (1, 1): {
+            "driver": 1, "conductor": 1, "driver_planet": "Sun (Surya)", "conductor_planet": "Sun (Surya)",
+            "planet_combination": "Sun-Sun (King + King)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Strong Synergy)",
+            "synergy_title": "1-1: Two Kings in Conjunction",
+            "positive_traits": ["High executive power", "Natural commanding leadership", "Independent initiative", "Unshakable self-confidence"],
+            "negative_traits": ["Ego clashes with peers", "Resistance to compromise", "Stubbornness", "Difficulty accepting second position"],
+            "recommended_careers": ["Government Administration", "Public Policy", "Executive Directorship", "Political Leadership", "Entrepreneurship"],
+            "warnings_and_cautions": "Dual king energy causes ego friction; one star is dropped due to mutual pride. Must cultivate active listening.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Two Kings: immense executive power and independent authority, but requires conscious humility to avoid ego deadlock."
+        },
+        (1, 2): {
+            "driver": 1, "conductor": 2, "driver_planet": "Sun (Surya)", "conductor_planet": "Moon (Chandra)",
+            "planet_combination": "Sun-Moon (King + Queen)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Royal Harmony)",
+            "synergy_title": "1-2: King and Queen Harmonic Alliance",
+            "positive_traits": ["Balanced authority and empathy", "Diplomatic charm", "High administrative intelligence", "Public popularity"],
+            "negative_traits": ["Mood swings under stress", "Occasional emotional hesitation", "Over-concern with public perception"],
+            "recommended_careers": ["Naval Defense & Maritime Leadership", "Armed Forces (Colonel/Captain)", "Water & Beverage Industries", "Public Diplomacy", "Civil Services"],
+            "warnings_and_cautions": "Water and Fire balance naturally. Because 2 is water-linked, top positions in Navy, maritime, or water resources bring stellar success.",
+            "harmonizing_poorak_number": 9,
+            "fast_summary": "King and Queen: authority tempered by emotional intelligence; supreme aptitude for Navy, defense, and high public administration."
+        },
+        (1, 3): {
+            "driver": 1, "conductor": 3, "driver_planet": "Sun (Surya)", "conductor_planet": "Jupiter (Guru)",
+            "planet_combination": "Sun-Jupiter (King + Dev Guru)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Royal Wisdom)",
+            "synergy_title": "1-3: King Guided by the Divine Counselor",
+            "positive_traits": ["Moral authority", "Visionary wisdom", "High administrative ethics", "Natural counseling ability", "Respected leadership"],
+            "negative_traits": ["Self-righteous dogmatism", "Impatience with corruption", "Tendency to preach without listening"],
+            "recommended_careers": ["Judiciary & Corporate Law", "Higher Education Leadership", "Institutional Governance", "Spiritual Counseling", "Publishing"],
+            "warnings_and_cautions": "A highly fortunate intellectual and ethical pairing. Avoid dogmatic intellectual arrogance.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "King and Dev Guru: wisdom meets command; exceptional for judiciary, higher education, and institutional directorship."
+        },
+        (1, 4): {
+            "driver": 1, "conductor": 4, "driver_planet": "Sun (Surya)", "conductor_planet": "Rahu (North Node)",
+            "planet_combination": "Sun-Rahu (King + Unconventional Architect)", "relationship_type": "Neutral",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Neutral Technical Synergy)",
+            "synergy_title": "1-4: Sovereign Disruptor & Political Strategist",
+            "positive_traits": ["Strategic political acumen", "Out-of-the-box system vision", "High technological focus", "Disruptive innovation"],
+            "negative_traits": ["Sudden career ups and downs", "Friction with conservative authorities", "Secretiveness", "Impulsive decisions"],
+            "recommended_careers": ["Politics & Government Liaison", "Cybersecurity Strategy", "IT Enterprise Leadership", "Structural Engineering", "Public Affairs"],
+            "warnings_and_cautions": "Rahu creates sudden shifts; maintain strict adherence to legal and financial compliance to prevent sudden setbacks.",
+            "harmonizing_poorak_number": 6,
+            "fast_summary": "King and Rahu: bold political and technical strategist; excellent for government liaison, IT systems, and innovative enterprise."
+        },
+        (1, 5): {
+            "driver": 1, "conductor": 5, "driver_planet": "Sun (Surya)", "conductor_planet": "Mercury (Budh)",
+            "planet_combination": "Sun-Mercury (King + Prince / Budhaditya Yoga)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Commercial Sovereign)",
+            "synergy_title": "1-5: The Budhaditya Sovereign & Commercial Master",
+            "positive_traits": ["Supreme business acumen", "Rapid calculation and dealmaking", "Articulate executive communication", "Natural financial magnetism"],
+            "negative_traits": ["Restless desire for constant expansion", "Impatience with routine operational details", "Over-committing"],
+            "recommended_careers": ["Investment Banking", "Venture Capital", "Commercial Trading", "Fintech Enterprise", "Corporate Brokerage"],
+            "warnings_and_cautions": "Forms a classical Budhaditya resonance. Thrives in business, banking, and commerce; keep routine operations grounded.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "King and Prince: supreme commercial instinct and negotiation power; highly favored for banking, trading, and massive business growth."
+        },
+        (1, 6): {
+            "driver": 1, "conductor": 6, "driver_planet": "Sun (Surya)", "conductor_planet": "Venus (Shukra)",
+            "planet_combination": "Sun-Venus (King + Daitya Guru / Luxury)", "relationship_type": "Neutral",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Diplomatic Luxury)",
+            "synergy_title": "1-6: Sovereign of Luxury & Diplomatic Arts",
+            "positive_traits": ["Refined public charisma", "High aesthetic taste", "Luxury lifestyle attraction", "Media and public presence"],
+            "negative_traits": ["Extravagance in spending", "Ego clashes in romance", "Sensory distractions from core mission"],
+            "recommended_careers": ["Luxury Brand Leadership", "Cinematic Arts & Entertainment", "Diplomatic Ambassadorship", "High-End Hospitality", "Cosmetic Real Estate"],
+            "warnings_and_cautions": "Sun and Venus require balance between executive duty and luxury desires. Guard against lifestyle inflation.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "King and Daitya Guru: charismatic, luxurious, and media-savvy; excels in high-end brand leadership, cinema, and luxury enterprise."
+        },
+        (1, 7): {
+            "driver": 1, "conductor": 7, "driver_planet": "Sun (Surya)", "conductor_planet": "Ketu (South Node)",
+            "planet_combination": "Sun-Ketu (King + Mystic Researcher)", "relationship_type": "Neutral",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Mystic Advisory)",
+            "synergy_title": "1-7: The Sovereign Researcher & Occult Master",
+            "positive_traits": ["Deep research intelligence", "Occult and philosophical depth", "Intuitive truth-seeking", "Independent authority"],
+            "negative_traits": ["Spiritual aloofness", "Lack of interest in mundane corporate games", "Feeling misunderstood", "Secretive nature"],
+            "recommended_careers": ["Higher Academic Research", "Occult & Astrology Consultation", "Alternative Healing", "Deep Data Intelligence", "Spiritual Authorship"],
+            "warnings_and_cautions": "Ketu is a body without a head, reducing raw material aggression. If native enters research, occult, or healing, results multiply exponentially.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "King and Ketu: profound researcher and occult healer; excels in higher education, esoteric consultation, and scientific analytics."
+        },
+        (1, 8): {
+            "driver": 1, "conductor": 8, "driver_planet": "Sun (Surya)", "conductor_planet": "Saturn (Shani)",
+            "planet_combination": "Sun-Saturn (Father + Estranged Son / Mutual Enemies)", "relationship_type": "Enemy",
+            "star_rating": 0.5, "star_display": "? WARNING (Karmic Enemy / High Struggle)",
+            "synergy_title": "1-8: The Sun-Saturn Karmic Crucible",
+            "positive_traits": ["Titanic crisis stamina post-mastery", "Ironclad legal and administrative discipline", "Ability to rebuild after devastation"],
+            "negative_traits": ["Severe career and financial struggle", "Sudden massive rise followed by abrupt losses", "Deep marriage discord or late marriage", "Father-son or authority conflicts"],
+            "recommended_careers": ["Corporate Restructuring Law", "Labor Governance", "Mining & Metallurgy", "Forensic Auditing", "Heavy Construction"],
+            "warnings_and_cautions": "CRITICAL LIFETIME WARNING: Sun and Saturn are astrological arch-enemies. Takes native high then drops abruptly. High struggle in marriage and partnerships. Mandatory remedies required.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Permanent Warning: Father and Son clash; intense career and marriage hurdles; requires continuous Panch Tattva hygiene and legal vigilance."
+        },
+        (1, 9): {
+            "driver": 1, "conductor": 9, "driver_planet": "Sun (Surya)", "conductor_planet": "Mars (Mangal)",
+            "planet_combination": "Sun-Mars (King + Senapati / Commander-in-Chief)", "relationship_type": "Friendly",
+            "star_rating": 5.0, "star_display": "?????? (5/5 Stars ? Super Success / Crown Alliance)",
+            "synergy_title": "1-9: Sovereign & Supreme Commander (Super Success)",
+            "positive_traits": ["Unstoppable manifestation power", "Heroic courage", "Supreme administrative status", "Fearless execution", "Radiant public authority"],
+            "negative_traits": ["Hot temper when provoked", "Impatient with slow pace", "High personal expectations causing stress"],
+            "recommended_careers": ["Defense & Military Command", "Civil Police & IPS", "Top-Tier Administration (IAS)", "Surgical Medicine", "Disruptive Industrial Enterprise"],
+            "warnings_and_cautions": "BEST COMBINATION IN NUMEROLOGY. Mars melts its ego before the King, delivering full 5-star super success across all endeavors.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Super Success: King and Commander-in-Chief; five out of five stars; supreme authority, courage, and unstoppable administrative victory."
+        },
+
+        # ?? DRIVER 2 (MOON / QUEEN) ???????????????????????????????????????????
+        (2, 1): {
+            "driver": 2, "conductor": 1, "driver_planet": "Moon (Chandra)", "conductor_planet": "Sun (Surya)",
+            "planet_combination": "Moon-Sun (Queen Backed by King)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Harmonic Alignment)",
+            "synergy_title": "2-1: The Intuitive Sovereign",
+            "positive_traits": ["Diplomatic grace backed by power", "High public empathy", "Creative vision", "Support from influential patrons"],
+            "negative_traits": ["Occasional hesitation before asserting command", "Mood shifts under heavy executive pressure"],
+            "recommended_careers": ["Public Administration", "Arts & Cultural Diplomacy", "Hospitality Management", "Counseling Psychology", "Public Relations"],
+            "warnings_and_cautions": "Queen holds steering but is backed by King's power; delivers steady success when native trusts their inner intuition.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Queen backed by King: intuitive grace supported by executive power; excellent for cultural diplomacy, public service, and counseling."
+        },
+        (2, 2): {
+            "driver": 2, "conductor": 2, "driver_planet": "Moon (Chandra)", "conductor_planet": "Moon (Chandra)",
+            "planet_combination": "Moon-Moon (Dual Queen)", "relationship_type": "Neutral",
+            "star_rating": 2.5, "star_display": "?????? (2.5/5 Stars ? Dual Sensitivity)",
+            "synergy_title": "2-2: Deep Sensitivity & Emotional Mirror",
+            "positive_traits": ["Profound empathy", "High artistic intuition", "Gentle healing nature", "Caring domestic presence"],
+            "negative_traits": ["Chronic indecision", "Hypersensitivity to criticism", "Vulnerability to emotional depression", "Fear of confrontation"],
+            "recommended_careers": ["Creative Arts & Poetry", "Nursing & Pediatric Care", "Culinary Arts", "Interior Decorating", "Child Psychology"],
+            "warnings_and_cautions": "Two Queens struggle to make hard decisions; requires a grounded partner and daily emotional grounding exercises.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Dual Moon: profound artistic empathy, but prone to chronic indecision and mood swings; needs structured daily anchors."
+        },
+        (2, 3): {
+            "driver": 2, "conductor": 3, "driver_planet": "Moon (Chandra)", "conductor_planet": "Jupiter (Guru)",
+            "planet_combination": "Moon-Jupiter (Queen + Dev Guru)", "relationship_type": "Friendly",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Wise Counselor)",
+            "synergy_title": "2-3: Intuitive Wisdom & Graceful Guidance",
+            "positive_traits": ["Warm teaching presence", "High moral empathy", "Creative imagination", "Philosophical optimism"],
+            "negative_traits": ["Over-promising assistance", "Emotional exhaustion from helping others", "Difficulty charging fair commercial fees"],
+            "recommended_careers": ["School & University Counseling", "Creative Writing & Literature", "Social Welfare Leadership", "Holistic Wellness", "Community Arts"],
+            "warnings_and_cautions": "A gentle, nurturing vibration. Guard against financial exploitation by overly relying on trust.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Queen and Dev Guru: warm counseling and creative wisdom; highly suitable for education, counseling, and spiritual literature."
+        },
+        (2, 4): {
+            "driver": 2, "conductor": 4, "driver_planet": "Moon (Chandra)", "conductor_planet": "Rahu (North Node)",
+            "planet_combination": "Moon-Rahu (Eclipse Energy / Grahan Yoga)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Grahan Friction / Depression Risk)",
+            "synergy_title": "2-4: The Eclipse Struggle & Emotional Crucible",
+            "positive_traits": ["Unconventional artistic insight", "Deep interest in psychology", "Ability to perceive hidden realities"],
+            "negative_traits": ["Vulnerability to severe depression and anxiety", "Chronic mental stress", "Over-thinking and restlessness", "Sudden emotional breakdowns"],
+            "recommended_careers": ["Psychological Research", "Subconscious Behavioral Studies", "Alternative Arts", "Forensic Photography"],
+            "warnings_and_cautions": "Forms classical Grahan (Eclipse) energy. Prone to anxiety and emotional depression. Regular meditation and silver water remedies mandatory.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Warning: Moon-Rahu eclipse friction; prone to depression, over-thinking, and mental stress; requires strict emotional grounding."
+        },
+        (2, 5): {
+            "driver": 2, "conductor": 5, "driver_planet": "Moon (Chandra)", "conductor_planet": "Mercury (Budh)",
+            "planet_combination": "Moon-Mercury (Queen + Prince)", "relationship_type": "Friendly",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Commercial Wit)",
+            "synergy_title": "2-5: Intuitive Commerce & Public Communication",
+            "positive_traits": ["Articulate persuasive speech", "Sharp commercial intuition", "Fast adaptability", "Sociable and engaging"],
+            "negative_traits": ["Fickle decision-making", "Restlessness", "Difficulty focusing on long-term routine projects"],
+            "recommended_careers": ["Commercial Banking", "Public Relations", "Media Reporting", "Dairy & Food Trading", "Event Management"],
+            "warnings_and_cautions": "Queen and Prince form a friendly alliance. Good for commercial trading and communication when focus is sustained.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Queen and Prince: sharp communication and commercial instinct; excels in PR, media trading, and financial banking."
+        },
+        (2, 6): {
+            "driver": 2, "conductor": 6, "driver_planet": "Moon (Chandra)", "conductor_planet": "Venus (Shukra)",
+            "planet_combination": "Moon-Venus (Queen + Venus / Luxury Arts)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Luxurious Harmony)",
+            "synergy_title": "2-6: The Sovereign of Beauty, Water & Luxury",
+            "positive_traits": ["Exceptional aesthetic and culinary taste", "Natural luxury attraction", "Deep romantic warmth", "Hospitality genius"],
+            "negative_traits": ["Over-indulgence in comfort", "Susceptibility to emotional heartbreak", "Financial over-spending on luxury"],
+            "recommended_careers": ["Dairy, Water & Beverage Trade", "Luxury Hospitality & Resorts", "Cosmetics & Fine Perfumes", "Fashion Design", "Interior Decor"],
+            "warnings_and_cautions": "Water (2) and Luxury (6) unite. Any profession linked to water, dairy, beverages, cosmetics, or luxury hospitality yields top success.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Queen and Venus: supreme artistic elegance; excels in water-linked businesses, dairy, cosmetics, hospitality, and luxury fashion."
+        },
+        (2, 7): {
+            "driver": 2, "conductor": 7, "driver_planet": "Moon (Chandra)", "conductor_planet": "Ketu (South Node)",
+            "planet_combination": "Moon-Ketu (Intuitive Water & Detachment)", "relationship_type": "Neutral",
+            "star_rating": 2.5, "star_display": "?????? (2.5/5 Stars ? Mystic Intuition)",
+            "synergy_title": "2-7: The Mystic Intuitive & Solitary Healer",
+            "positive_traits": ["Uncanny psychic intuition", "Deep healing touch", "Philosophical contemplation", "Truth-seeking intellect"],
+            "negative_traits": ["Emotional moodiness and withdrawal", "Low confidence in material transactions", "Feeling misunderstood"],
+            "recommended_careers": ["Astrology & Tarot Consultation", "Spiritual Healing & Reiki", "Psychological Research", "Water Conservation", "Esoteric Writing"],
+            "warnings_and_cautions": "Gentle, non-materialistic pairing. Avoid speculative business; focus on consultative, healing, and research roles.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Queen and Ketu: intense psychic intuition and healing talent; best suited for occult consultation, research, and holistic therapy."
+        },
+        (2, 8): {
+            "driver": 2, "conductor": 8, "driver_planet": "Moon (Chandra)", "conductor_planet": "Saturn (Shani)",
+            "planet_combination": "Moon-Saturn (Vish Yoga / Extreme Struggle)", "relationship_type": "Enemy",
+            "star_rating": 1.0, "star_display": "? WARNING (Vish Yoga / Health & Delay)",
+            "synergy_title": "2-8: The Vish Yoga Crucible",
+            "positive_traits": ["Endurance through deep suffering", "Patience with elderly or chronically ill", "Realistic grounding post-mastery"],
+            "negative_traits": ["Severe chronic delays and depression", "Health vulnerabilities (bones, joints, fluids)", "Prolonged struggle in career", "Cold relationship dynamics"],
+            "recommended_careers": ["Geriatric Healthcare", "Palliative Care", "Historical Research", "Mining Safety", "Waste Water Management"],
+            "warnings_and_cautions": "Forms classical Vish Yoga. Heavy struggle and health challenges. Never ignore mental health or joint issues; regular remedies essential.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Warning: Vish Yoga friction; brings health and emotional delays; requires persistent patience, white crystal remedies, and service to elders."
+        },
+        (2, 9): {
+            "driver": 2, "conductor": 9, "driver_planet": "Moon (Chandra)", "conductor_planet": "Mars (Mangal)",
+            "planet_combination": "Moon-Mars (Water vs Fire Clash)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Fire-Water Clash / Marital Friction)",
+            "synergy_title": "2-9: The Stormy Passion & Marital Crucible",
+            "positive_traits": ["Raw emotional drive", "Fierce protection of family", "High creative passion", "Resilience in adversity"],
+            "negative_traits": ["Relationship and marital conflict", "Late marriage or emotional friction", "Impulsive temper conflicting with sensitivity"],
+            "recommended_careers": ["Trauma Medicine & Nursing", "Crisis Response", "Culinary Arts with Fire/Baking", "Maritime Engineering"],
+            "warnings_and_cautions": "Moon (water) and Mars (fire) clash emotionally. Causes marital friction and relationship volatility. Cultivate calm communication.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Warning: Water and Fire contradiction; causes late marriage or relationship friction; requires cooling mindfulness and emotional balance."
+        },
+
+        # ?? DRIVER 3 (JUPITER / DEV GURU) ?????????????????????????????????????
+        (3, 1): {
+            "driver": 3, "conductor": 1, "driver_planet": "Jupiter (Guru)", "conductor_planet": "Sun (Surya)",
+            "planet_combination": "Jupiter-Sun (Dev Guru + King)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Sovereign Wisdom)",
+            "synergy_title": "3-1: The Sovereign Sage & Supreme Mentor",
+            "positive_traits": ["Commanding wisdom", "High administrative ethics", "Visionary mentorship", "Executive respect across institutions"],
+            "negative_traits": ["Intellectual self-righteousness", "Impatience with corruption", "High expectations of peers"],
+            "recommended_careers": ["Judiciary & Supreme Court Law", "University Chancellorship", "National Policy Making", "Religious Leadership", "Executive Advisory"],
+            "warnings_and_cautions": "A noble, victorious combination. Especially powerful after age 40 when Jupiterian wisdom fully aligns with solar command.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Dev Guru backed by King: supreme intellectual authority and administrative respect; thrives in law, higher education, and policy leadership."
+        },
+        (3, 2): {
+            "driver": 3, "conductor": 2, "driver_planet": "Jupiter (Guru)", "conductor_planet": "Moon (Chandra)",
+            "planet_combination": "Jupiter-Moon (Dev Guru + Queen / Gajakesari Energy)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Gentle Sage)",
+            "synergy_title": "3-2: The Gajakesari Harmonics & Peaceful Mentor",
+            "positive_traits": ["Profound emotional wisdom", "Gentle counseling presence", "Creative literary genius", "Public respect and warmth"],
+            "negative_traits": ["Over-generosity leading to personal depletion", "Hesitation in aggressive commercial battles"],
+            "recommended_careers": ["Psychotherapy & Counseling", "Higher Educational Administration", "Literary Publishing", "Holistic Wellness", "Philanthropic Foundations"],
+            "warnings_and_cautions": "Forms classical Gajakesari resonance. Excellent for peace, respect, and counseling; maintain commercial firmness.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Dev Guru and Queen: Gajakesari resonance; brings broad public affection, teaching grace, and deep psychological counseling wisdom."
+        },
+        (3, 3): {
+            "driver": 3, "conductor": 3, "driver_planet": "Jupiter (Guru)", "conductor_planet": "Jupiter (Guru)",
+            "planet_combination": "Jupiter-Jupiter (Dual Guru)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Pure Wisdom)",
+            "synergy_title": "3-3: The Double Temple of Wisdom",
+            "positive_traits": ["Immense philosophical knowledge", "Natural teaching authority", "High ethical stature", "Creative conceptual power"],
+            "negative_traits": ["Dogmatism and intellectual stubbornness", "Preaching rather than acting", "Under-monetization of practical skills"],
+            "recommended_careers": ["Academic Professorship", "Spiritual Authorship", "Theology & Philosophy", "Higher Judiciary", "Master Educational Coaching"],
+            "warnings_and_cautions": "Deeply spiritual and intellectual. Ensure that lofty philosophical ideals are translated into grounded revenue streams.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Dual Jupiter: monumental knowledge and teaching authority; outstanding for professorship, spirituality, and legal jurisprudence."
+        },
+        (3, 4): {
+            "driver": 3, "conductor": 4, "driver_planet": "Jupiter (Guru)", "conductor_planet": "Rahu (North Node)",
+            "planet_combination": "Jupiter-Rahu (Guru-Chandal Tension / Innovative Knowledge)", "relationship_type": "Neutral",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Unconventional Knowledge)",
+            "synergy_title": "3-4: The Unconventional Philosopher & Tech Theorist",
+            "positive_traits": ["Disruptive intellectual models", "Ability to merge ancient wisdom with modern tech", "Sharp strategic analysis"],
+            "negative_traits": ["Intellectual skepticism", "Sudden conflicts with conservative traditions", "Restlessness with routine academia"],
+            "recommended_careers": ["AI Philosophy & Ethics", "Cybersecurity Strategy", "Intellectual Property Law", "Alternative Educational Tech", "Forensic Data Research"],
+            "warnings_and_cautions": "Forms Guru-Chandal undertones. Channel into modern tech ethics or advanced research to avoid ideological conflicts.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Dev Guru and Rahu: bridges ancient wisdom with cutting-edge technology; excels in AI ethics, tech law, and innovative research."
+        },
+        (3, 5): {
+            "driver": 3, "conductor": 5, "driver_planet": "Jupiter (Guru)", "conductor_planet": "Mercury (Budh)",
+            "planet_combination": "Jupiter-Mercury (Dev Guru + Prince)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Commercial Wisdom)",
+            "synergy_title": "3-5: The Strategic Economist & Corporate Advisor",
+            "positive_traits": ["Brilliant commercial logic", "Strategic communication", "Fast deal structuring", "High financial intelligence"],
+            "negative_traits": ["Restlessness to expand too fast", "Over-intellectualizing simple operational issues"],
+            "recommended_careers": ["Corporate Financial Advisory", "Commercial Arbitration", "Wealth Management", "Economic Journalism", "Executive Consulting"],
+            "warnings_and_cautions": "Blends wisdom with commercial speed. Highly successful in business, wealth management, and corporate strategy.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Dev Guru and Prince: wisdom meets mercantile speed; top-tier alignment for wealth management, corporate advisory, and economics."
+        },
+        (3, 6): {
+            "driver": 3, "conductor": 6, "driver_planet": "Jupiter (Guru)", "conductor_planet": "Venus (Shukra)",
+            "planet_combination": "Jupiter-Venus (Dev Guru vs Daitya Guru / 36 ka Aankda)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Opposing Gurus / Health & Marital Caution)",
+            "synergy_title": "3-6: The Opposing Gurus Crucible (36 ka Aankda)",
+            "positive_traits": ["High creative and aesthetic talent", "Sophisticated philosophical taste", "Charismatic speaking"],
+            "negative_traits": ["Relationship and marital conflict", "Ego clashes in partnerships", "Health vulnerabilities (hormonal/digestive)", "Hypocrisy in personal versus public ethics"],
+            "recommended_careers": ["Art History & Curatorial Research", "Creative Media Ethics", "Luxury Philosophy", "Fashion Journalism"],
+            "warnings_and_cautions": "CRITICAL OPPOSING GURUS WARNING: Jupiter and Venus represent conflicting ideological masters (spiritual vs luxury). High risk of marital and health issues. Need careful Lo Shu balancing.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Warning: Opposing Gurus conflict; high potential for marital ego clashes and health vulnerabilities; requires mutual patience and Lo Shu remedies."
+        },
+        (3, 7): {
+            "driver": 3, "conductor": 7, "driver_planet": "Jupiter (Guru)", "conductor_planet": "Ketu (South Node)",
+            "planet_combination": "Jupiter-Ketu (Divine Spiritual Conjunction)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Spiritual Master)",
+            "synergy_title": "3-7: The Divine Connection & Occult Healer",
+            "positive_traits": ["Profound spiritual intuition", "Occult and esoteric mastery", "Natural teaching and coaching authority", "High research genius", "Divine inner connection"],
+            "negative_traits": ["Detachment from mundane material wealth", "Impatience with superficial commercial games"],
+            "recommended_careers": ["Occult & Vedic Astrology", "Spiritual Coaching & Teaching", "Higher Research & Philosophy", "Alternative Medicine & Healing", "Theological Authorship"],
+            "warnings_and_cautions": "One of the most powerful spiritual pairings. Dr. Misra highlights 3-7 for education, occult, healing, research, and divine connection.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Dev Guru and Ketu: four out of five stars; supreme alignment for occult wisdom, spiritual coaching, healing, and higher research."
+        },
+        (3, 8): {
+            "driver": 3, "conductor": 8, "driver_planet": "Jupiter (Guru)", "conductor_planet": "Saturn (Shani)",
+            "planet_combination": "Jupiter-Saturn (Wisdom + Karmic Law)", "relationship_type": "Neutral",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Institutional Law)",
+            "synergy_title": "3-8: The Judicial Pillar & Institutional Arbiter",
+            "positive_traits": ["Steadfast legal discipline", "Long-term institutional governance", "High ethical stamina", "Compounding financial intellect"],
+            "negative_traits": ["Overly serious or stern demeanor", "Slow initial career momentum", "Rigid adherence to doctrine"],
+            "recommended_careers": ["Judiciary & Constitutional Law", "Institutional Regulatory Compliance", "Corporate Governance", "Estate Management", "Historical Academia"],
+            "warnings_and_cautions": "Steady and disciplined. Progress is slow initially but leads to commanding judicial or institutional respect.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Dev Guru and Saturn: ethical wisdom meets karmic discipline; highly suited for judiciary, corporate governance, and institutional law."
+        },
+        (3, 9): {
+            "driver": 3, "conductor": 9, "driver_planet": "Jupiter (Guru)", "conductor_planet": "Mars (Mangal)",
+            "planet_combination": "Jupiter-Mars (Dev Guru + Senapati)", "relationship_type": "Friendly",
+            "star_rating": 4.5, "star_display": "?????? (4.5/5 Stars ? Righteous Champion)",
+            "synergy_title": "3-9: The Righteous Warrior & Medical Leader",
+            "positive_traits": ["Commanding executive energy", "Fearless defense of truth", "High academic and physical discipline", "Inspiring administrative presence"],
+            "negative_traits": ["Fierce indignation against injustice", "Impatience with administrative bureaucracy", "Hot temper when crossed"],
+            "recommended_careers": ["Medical & Surgical Leadership", "Armed Forces Administration (Defense/IPS)", "University Directorship", "Civil Services", "Athletic Directorship"],
+            "warnings_and_cautions": "Combines Jupiterian wisdom with Martian courage. Highly favored for top doctors, surgeons, army officers, and civil administrators.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Dev Guru and Mars: four and a half stars; righteous champion; supreme aptitude for top surgeons, military command, and civil administration."
+        },
+
+        # ?? DRIVER 4 (RAHU / UNCONVENTIONAL ARCHITECT) ????????????????????????
+        (4, 1): {
+            "driver": 4, "conductor": 1, "driver_planet": "Rahu (North Node)", "conductor_planet": "Sun (Surya)",
+            "planet_combination": "Rahu-Sun (Disruptor Backed by Sovereign)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Political Power)",
+            "synergy_title": "4-1: The Political Strategist & System Architect",
+            "positive_traits": ["Acute political and tactical intellect", "Ability to forge government connections", "Unconventional system leadership", "Disruptive ambition"],
+            "negative_traits": ["Sudden friction with superiors", "Tendency to push ethical boundaries", "Secretive power plays"],
+            "recommended_careers": ["Political Strategy & Governance", "Government Liaison & Regulatory Affairs", "Cybersecurity Command", "Disruptive Tech Founder", "Infrastructure Logistics"],
+            "warnings_and_cautions": "Dr. Misra highlights 4-1 for politicians, government officers, or leaders closely connected with political power.",
+            "harmonizing_poorak_number": 6,
+            "fast_summary": "Rahu backed by Sun: sharp political strategist; excels in government liaison, disruptive tech leadership, and infrastructure."
+        },
+        (4, 2): {
+            "driver": 4, "conductor": 2, "driver_planet": "Rahu (North Node)", "conductor_planet": "Moon (Chandra)",
+            "planet_combination": "Rahu-Moon (Eclipse Tension / Depression Risk)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Mental Stress / Depression Risk)",
+            "synergy_title": "4-2: The Restless Mind & Eclipse Friction",
+            "positive_traits": ["Psychological perceptiveness", "Unconventional creative concepts", "Deep emotional complexity"],
+            "negative_traits": ["Vulnerability to depression and anxiety", "Sudden mental panic", "Suspicion and trust issues", "Erratic moods"],
+            "recommended_careers": ["Subconscious Psychology", "Surrealist Arts", "Forensic Mental Health", "Night Operations Logistics"],
+            "warnings_and_cautions": "Rahu eclipses the Moon. Causes depression, emotional anxiety, and erratic sleep. Silver water and grounding essential.",
+            "harmonizing_poorak_number": 6,
+            "fast_summary": "Warning: Rahu-Moon eclipse friction; prone to depression and mental anxiety; requires regular emotional grounding and silver water remedies."
+        },
+        (4, 3): {
+            "driver": 4, "conductor": 3, "driver_planet": "Rahu (North Node)", "conductor_planet": "Jupiter (Guru)",
+            "planet_combination": "Rahu-Jupiter (Unconventional Intellect)", "relationship_type": "Neutral",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Innovative Wisdom)",
+            "synergy_title": "4-3: The Radical Theorist & Systems Philosopher",
+            "positive_traits": ["Unorthodox problem-solving", "Technological foresight", "Ability to challenge outdated dogmas", "Broad systemic vision"],
+            "negative_traits": ["Rebellious cynicism toward tradition", "Impatience with routine academic pace", "Intellectual restlessness"],
+            "recommended_careers": ["AI Architecture", "Data Science & Quantum Computing", "Patent Law", "Alternative Energy Research", "Systems Engineering"],
+            "warnings_and_cautions": "Channel rebellious intellect into cutting-edge technology or patent law rather than ideological debates.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Rahu and Dev Guru: radical intellect; excels in artificial intelligence, patent law, quantum systems, and alternative tech."
+        },
+        (4, 4): {
+            "driver": 4, "conductor": 4, "driver_planet": "Rahu (North Node)", "conductor_planet": "Rahu (North Node)",
+            "planet_combination": "Rahu-Rahu (Permanent Dual Rahu / High Friction)", "relationship_type": "Enemy",
+            "star_rating": 1.0, "star_display": "? WARNING (Extreme Struggle / Accident Risk)",
+            "synergy_title": "4-4: The Permanent Rahu Struggle & High Volatility",
+            "positive_traits": ["Unprecedented technical disruptions", "Genius level out-of-box invention", "Iron resilience under pressure"],
+            "negative_traits": ["Severe career and life instability", "High risk of accidents, surgeries, or sudden reversals", "Extreme rebellious stubbornness", "Chronic misunderstandings"],
+            "recommended_careers": ["Advanced Cybersecurity Forensics", "Extreme Tech R&D", "Demolition & Structural Recovery", "High-Risk Systems Engineering"],
+            "warnings_and_cautions": "LIFETIME STRUGGLE WARNING: Two Rahus create permanent friction. High risk of surgeries, sudden accidents, and disruptions. Daily Wood element hygiene non-negotiable.",
+            "harmonizing_poorak_number": 6,
+            "fast_summary": "Critical Warning: Dual Rahu; high risk of surgeries, sudden disruptions, and severe career struggle; requires continuous Panch Tattva shielding."
+        },
+        (4, 5): {
+            "driver": 4, "conductor": 5, "driver_planet": "Rahu (North Node)", "conductor_planet": "Mercury (Budh)",
+            "planet_combination": "Rahu-Mercury (Sharp Commercial Wit)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Digital Dealmaker)",
+            "synergy_title": "4-5: The Digital Dealmaker & Systems Marketer",
+            "positive_traits": ["Exceptional digital marketing instinct", "Fast algorithmic thinking", "Lucrative commercial networking", "High adaptability"],
+            "negative_traits": ["Temptation to take speculative shortcuts", "Restless financial focus", "Impatience with slow compliance"],
+            "recommended_careers": ["Digital Growth Marketing", "IT Brokerage & SaaS", "E-commerce Logistics", "Data Analytics Trading", "Commercial Tech"],
+            "warnings_and_cautions": "Rahu and Mercury create sharp commercial minds. Ideal for digital marketing, software, and tech trade.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Rahu and Prince: dynamic tech dealmaker; highly successful in digital marketing, e-commerce, SaaS, and algorithmic commerce."
+        },
+        (4, 6): {
+            "driver": 4, "conductor": 6, "driver_planet": "Rahu (North Node)", "conductor_planet": "Venus (Shukra)",
+            "planet_combination": "Rahu-Venus (Glamour & Media Tech)", "relationship_type": "Friendly",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Glamour Tech)",
+            "synergy_title": "4-6: The Media Visionary & Modern Aesthetician",
+            "positive_traits": ["Futuristic aesthetic design", "Glamour and cinematic magnetism", "Luxurious technological vision", "Creative branding"],
+            "negative_traits": ["Extravagant financial spending", "Romantic illusions and complicated attachments", "Hedonistic temptations"],
+            "recommended_careers": ["Cinematography & CGI VFX", "Modern Interior Architecture", "Fashion Tech", "Celebrity Digital Media", "Luxury Gaming"],
+            "warnings_and_cautions": "Rahu expands Venusian desire. Excellent for cinema, animation, and fashion; maintain strict personal financial boundaries.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Rahu and Venus: modern glamour and digital media; excels in cinema, visual effects, luxury gaming, and futuristic design."
+        },
+        (4, 7): {
+            "driver": 4, "conductor": 7, "driver_planet": "Rahu (North Node)", "conductor_planet": "Ketu (South Node)",
+            "planet_combination": "Rahu-Ketu (Head Meets Body / Complete Entity)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Body Completed / High Success)",
+            "synergy_title": "4-7: The Body Completed & Unconventional Master",
+            "positive_traits": ["Complete cosmic entity (Head + Body)", "Phenomenal sales and marketing power", "Deep occult and investigative brilliance", "Global success"],
+            "negative_traits": ["Unconventional lifestyle baffling traditional peers", "Periods of deep withdrawal following public triumphs"],
+            "recommended_careers": ["High-Ticket Marketing & Sales", "International Trade", "Occult & Esoteric Consultation", "Forensic Data Intelligence", "Foreign Relations"],
+            "warnings_and_cautions": "Dr. Misra highlights 4-7: Rahu (head) leading Ketu (body) completes the individual, creating immense success in sales, marketing, and occult.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four stars: Head meets Body; complete entity; immense breakthrough success in sales, marketing, foreign business, and occult sciences."
+        },
+        (4, 8): {
+            "driver": 4, "conductor": 8, "driver_planet": "Rahu (North Node)", "conductor_planet": "Saturn (Shani)",
+            "planet_combination": "Rahu-Saturn (Double Dark Karmic Friction)", "relationship_type": "Enemy",
+            "star_rating": 1.0, "star_display": "? WARNING (Extreme Karmic Struggle & Delays)",
+            "synergy_title": "4-8: The Dark Karmic Crucible & Structural Battle",
+            "positive_traits": ["Ironclad endurance through severe adversity", "Mastery of harsh industrial environments", "Unyielding persistence"],
+            "negative_traits": ["Heavy chronic delays and obstacles", "Litigation and contractual disputes", "Physical bone/joint or systemic strain", "Severe career frustration"],
+            "recommended_careers": ["Heavy Metallurgy & Mining", "Industrial Demolition", "Environmental Hazard Recovery", "Litigation Law"],
+            "warnings_and_cautions": "CRITICAL PERMANENT WARNING: Rahu and Saturn together create extreme karmic delay and structural friction. Regular Saturn/Rahu remedies mandatory.",
+            "harmonizing_poorak_number": 6,
+            "fast_summary": "Permanent Warning: Rahu and Saturn create intense delays and legal/structural struggle; demands continuous patience and ethical rigor."
+        },
+        (4, 9): {
+            "driver": 4, "conductor": 9, "driver_planet": "Rahu (North Node)", "conductor_planet": "Mars (Mangal)",
+            "planet_combination": "Rahu-Mars (Angarak / Surgical-Combat Friction)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Angarak Tension / Surgical Power)",
+            "synergy_title": "4-9: The Angarak Crucible & Master Surgeon",
+            "positive_traits": ["Fearless crisis intervention", "Natural affinity for surgical instruments and blood medicine", "Engineering brilliance under extreme pressure"],
+            "negative_traits": ["High risk of physical accidents and surgeries", "Volcanic rage when provoked", "Fierce disputes with competitors"],
+            "recommended_careers": ["General & Trauma Surgery", "Emergency Medicine", "Military Weapons Engineering", "Forensic Investigation", "Heavy Industrial Mechanics"],
+            "warnings_and_cautions": "Dr. Misra highlights 4-9: Mars and Rahu connection governs blood, surgery, and combat. Risk of accidents or surgery, but makes brilliant surgeons/doctors.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Warning / Dual Destiny: Mars-Rahu Angarak tension; brings accident and surgery risks, but creates world-class trauma surgeons and defense engineers."
+        },
+
+        # ?? DRIVER 5 (MERCURY / PRINCE - FUTURE KING) ?????????????????????????
+        # Five has NO enemies! All pairings are 3.5 to 5.0 stars!
+        (5, 1): {
+            "driver": 5, "conductor": 1, "driver_planet": "Mercury (Budh)", "conductor_planet": "Sun (Surya)",
+            "planet_combination": "Mercury-Sun (Prince Backed by King)", "relationship_type": "Friendly",
+            "star_rating": 4.5, "star_display": "?????? (4.5/5 Stars ? Commercial Sovereign)",
+            "synergy_title": "5-1: The Crowned Commercial Leader",
+            "positive_traits": ["Brilliant business strategy", "Commanding persuasive articulation", "Executive dealmaking", "Rapid market dominance"],
+            "negative_traits": ["Impatience with slow partners", "Tendency to demand immediate commercial results"],
+            "recommended_careers": ["Commercial Enterprise Leadership", "Banking & Finance Directorship", "Corporate Strategy", "High-Tech Trade", "Government Commerce"],
+            "warnings_and_cautions": "God-gifted commercial talent. Mercury leads and the Sun provides sovereign authority; high success across all business lines.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Four and a half stars: Prince backed by King; supreme commercial leadership, banking authority, and rapid enterprise expansion."
+        },
+        (5, 2): {
+            "driver": 5, "conductor": 2, "driver_planet": "Mercury (Budh)", "conductor_planet": "Moon (Chandra)",
+            "planet_combination": "Mercury-Moon (Prince + Queen)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Creative Commerce)",
+            "synergy_title": "5-2: Intuitive Commerce & Public Communications",
+            "positive_traits": ["Empathetic salesmanship", "Articulate communication", "Public charm", "Versatile commercial adaptability"],
+            "negative_traits": ["Mood swings affecting financial focus", "Restless pivoting before project completion"],
+            "recommended_careers": ["Public Relations & Media", "Dairy & Food Industry Trade", "Advertising Copywriting", "Travel Hospitality", "Import/Export"],
+            "warnings_and_cautions": "Combines emotional appeal with sharp wit. Highly successful in PR, creative media, and hospitality trading.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Prince and Queen: intuitive communication and public charm; excels in media, PR, dairy trading, and creative advertising."
+        },
+        (5, 3): {
+            "driver": 5, "conductor": 3, "driver_planet": "Mercury (Budh)", "conductor_planet": "Jupiter (Guru)",
+            "planet_combination": "Mercury-Jupiter (Prince + Dev Guru)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Financial Counselor)",
+            "synergy_title": "5-3: The Strategic Economist & Wealth Counselor",
+            "positive_traits": ["Deep economic intelligence", "High financial advisory ethics", "Clear analytical teaching", "Lucrative commercial publishing"],
+            "negative_traits": ["Over-intellectualizing market trends", "Hesitation to take aggressive speculative risks"],
+            "recommended_careers": ["Wealth Management", "Corporate Law & Compliance", "Economic Journalism", "Higher Commercial Education", "Financial Planning"],
+            "warnings_and_cautions": "A highly respected intellectual-commercial combination. Success in financial consulting, corporate law, and wealth management.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four stars: Prince and Dev Guru; blends commercial agility with deep ethical counsel; top-tier for wealth management and corporate law."
+        },
+        (5, 4): {
+            "driver": 5, "conductor": 4, "driver_planet": "Mercury (Budh)", "conductor_planet": "Rahu (North Node)",
+            "planet_combination": "Mercury-Rahu (Digital Wit & Systems Commerce)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Digital Disruptor)",
+            "synergy_title": "5-4: The Algorithmic Trader & Tech Marketer",
+            "positive_traits": ["Sharp digital marketing instincts", "Fast algorithmic pattern recognition", "Lucrative e-commerce strategy", "High adaptability"],
+            "negative_traits": ["Temptation toward speculative day-trading", "Impatience with slow compliance protocols"],
+            "recommended_careers": ["Algorithmic Trading & Fintech", "Digital Performance Marketing", "E-Commerce Enterprise", "IT Systems Logistics", "Software Sales"],
+            "warnings_and_cautions": "Sharp technical-commercial acumen. Avoid speculative gambling; channel into scalable digital marketing and SaaS.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Prince and Rahu: sharp digital strategist; highly successful in fintech, algorithmic marketing, e-commerce, and software trade."
+        },
+        (5, 5): {
+            "driver": 5, "conductor": 5, "driver_planet": "Mercury (Budh)", "conductor_planet": "Mercury (Budh)",
+            "planet_combination": "Mercury-Mercury (Double Prince / Pure Quicksilver)", "relationship_type": "Friendly",
+            "star_rating": 4.5, "star_display": "?????? (4.5/5 Stars ? Pure Mercantile Genius)",
+            "synergy_title": "5-5: The Master Trader & Quicksilver Genius",
+            "positive_traits": ["Supreme versatility and speed of thought", "Unmatched commercial negotiation", "Natural business magnetism", "Rapid international trade"],
+            "negative_traits": ["Extreme restlessness", "Procrastination when routine sets in", "Difficulty with long stillness"],
+            "recommended_careers": ["International Commodity Brokerage", "High-Volume Trade", "Media Network Ownership", "Venture Building", "Commercial Brokerage"],
+            "warnings_and_cautions": "Dr. Misra highlights 5: God-gifted natural talent for business. With double 5, commercial success is virtually guaranteed if focused.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four and a half stars: Double Mercury; natural mercantile genius; excels in large-scale trade, brokerage, and rapid commercial expansion."
+        },
+        (5, 6): {
+            "driver": 5, "conductor": 6, "driver_planet": "Mercury (Budh)", "conductor_planet": "Venus (Shukra)",
+            "planet_combination": "Mercury-Venus (Prince + Daitya Guru / Luxury Commerce)", "relationship_type": "Friendly",
+            "star_rating": 4.5, "star_display": "?????? (4.5/5 Stars ? Luxury Commercial Star)",
+            "synergy_title": "5-6: The Luxury Merchant & Media Magnate",
+            "positive_traits": ["Effortless luxury brand attraction", "High glamour and persuasive charm", "Lucrative entertainment networking", "Aesthetic commercial taste"],
+            "negative_traits": ["Extravagance in lifestyle spending", "Distraction by luxury indulgences"],
+            "recommended_careers": ["Luxury Brand Ownership", "Cinematic Media Production", "High-End Fashion & Jewelry Trade", "Boutique Hospitality", "Cosmetic Real Estate"],
+            "warnings_and_cautions": "Mercury and Venus form a golden commercial-luxury pairing. Brings immense wealth through fashion, luxury retail, and media arts.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four and a half stars: Prince and Venus; golden luxury alignment; supreme aptitude for high-end fashion, luxury hospitality, and media magnate roles."
+        },
+        (5, 7): {
+            "driver": 5, "conductor": 7, "driver_planet": "Mercury (Budh)", "conductor_planet": "Ketu (South Node)",
+            "planet_combination": "Mercury-Ketu (Analytical Intellect & Occult Trade)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Esoteric Analytics)",
+            "synergy_title": "5-7: The Data Strategist & Occult Commercialist",
+            "positive_traits": ["Deep analytical acumen", "Occult commercialization", "Keen investigative intelligence", "Truth-seeking discernment"],
+            "negative_traits": ["Skeptical hesitation", "Over-analyzing simple financial opportunities"],
+            "recommended_careers": ["Data Science & Analytics", "Occult & Astrology Publishing", "Market Research Intelligence", "Forensic Auditing", "Specialized Consulting"],
+            "warnings_and_cautions": "Combines commercial wit with Ketu's depth. Highly suitable for data analytics, market research, and specialized consultancy.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Prince and Ketu: analytical depth meets commercial wit; excels in market research intelligence, data science, and esoteric consulting."
+        },
+        (5, 8): {
+            "driver": 5, "conductor": 8, "driver_planet": "Mercury (Budh)", "conductor_planet": "Saturn (Shani)",
+            "planet_combination": "Mercury-Saturn (Commercial Prudence & Land)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Grounded Commerce)",
+            "synergy_title": "5-8: The Property Mogul & Pragmatic Trader",
+            "positive_traits": ["Grounded real estate acumen", "Meticulous contractual negotiation", "Long-term wealth compounding", "Agricultural and land intelligence"],
+            "negative_traits": ["Slow commercial turnaround initially", "Over-cautious hesitation during market rallies"],
+            "recommended_careers": ["Real Estate Development & Brokerage", "Agricultural Commerce", "Contractual Trade & Logistics", "Property Valuation", "Asset Management"],
+            "warnings_and_cautions": "Dr. Misra highlights 5-8 for property, land, real estate, and agriculture. Patience yields solid compounding wealth.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Prince and Saturn: grounded commerce and land wealth; highly favored for real estate development, property brokerage, and agriculture."
+        },
+        (5, 9): {
+            "driver": 5, "conductor": 9, "driver_planet": "Mercury (Budh)", "conductor_planet": "Mars (Mangal)",
+            "planet_combination": "Mercury-Mars (Prince + Senapati / Dynamic Commerce)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Dynamic Enterprise)",
+            "synergy_title": "5-9: The High-Speed Industrialist & Sports Marketer",
+            "positive_traits": ["Decisive commercial action", "High energetic drive", "Sports and industrial trade acumen", "Fearless market initiative"],
+            "negative_traits": ["Impulsive business decisions", "Occasional temper flares with partners"],
+            "recommended_careers": ["Manufacturing & Heavy Equipment Trade", "Sports Equipment & Apparel Commerce", "Automotive Brokerage", "Emergency Supply Logistics"],
+            "warnings_and_cautions": "Blends commercial speed with Martian fire. High success in manufacturing, athletic trade, and rapid enterprise scaling.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four stars: Prince and Mars; high-speed dynamic enterprise; excels in manufacturing, athletic commerce, and industrial trade."
+        },
+
+        # ?? DRIVER 6 (VENUS / DAITYA GURU - MATERIAL KING) ????????????????????
+        (6, 1): {
+            "driver": 6, "conductor": 1, "driver_planet": "Venus (Shukra)", "conductor_planet": "Sun (Surya)",
+            "planet_combination": "Venus-Sun (Luxury Backed by Sovereign)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Public Luxury)",
+            "synergy_title": "6-1: The Sovereign of Aesthetics & Public Arts",
+            "positive_traits": ["Dignified public charm", "High executive taste", "Magnetic leadership in creative fields", "Generous philanthropy"],
+            "negative_traits": ["Ego battles in personal romance", "Extravagant expenditures to maintain status"],
+            "recommended_careers": ["Cultural & Heritage Administration", "Luxury Real Estate", "Public Diplomacy", "High-End Media Production", "Fashion Directorship"],
+            "warnings_and_cautions": "Luxury and Authority align. Great for public leadership in aesthetic, cultural, or luxury sectors.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Venus backed by Sun: dignified aesthetic authority; excels in luxury real estate, fashion directorship, and cultural diplomacy."
+        },
+        (6, 2): {
+            "driver": 6, "conductor": 2, "driver_planet": "Venus (Shukra)", "conductor_planet": "Moon (Chandra)",
+            "planet_combination": "Venus-Moon (Double Artistic Grace)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Artistic Harmony)",
+            "synergy_title": "6-2: The Aesthetic Nurturer & Water-Luxury Master",
+            "positive_traits": ["Exquisite aesthetic sensitivity", "Warm domestic hospitality", "Culinary and interior elegance", "Refined artistic gifts"],
+            "negative_traits": ["Emotional vulnerability in love", "Susceptibility to flattering admirers", "Difficulty enforcing tough commercial terms"],
+            "recommended_careers": ["Fine Dining & Culinary Hospitality", "Dairy & Water-Based Luxury Products", "Cosmetic Design", "Interior Architecture", "Fine Arts"],
+            "warnings_and_cautions": "Dr. Misra highlights 6-2 for water-related, dairy, cosmetics, and fine arts. Brings abundant creative wealth.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Venus and Moon: artistic elegance and domestic warmth; top success in fine dining, cosmetic luxury, dairy, and interior architecture."
+        },
+        (6, 3): {
+            "driver": 6, "conductor": 3, "driver_planet": "Venus (Shukra)", "conductor_planet": "Jupiter (Guru)",
+            "planet_combination": "Venus-Jupiter (Daitya Guru vs Dev Guru / 36 ka Aankda)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Opposing Gurus / Health & Marital Caution)",
+            "synergy_title": "6-3: The Dual Mentors Conflict (36 ka Aankda)",
+            "positive_traits": ["High creative and philosophical talent", "Deep appreciation of cultural classics", "Charismatic speaking"],
+            "negative_traits": ["Marital and partnership friction", "Health vulnerabilities (hormonal, liver, digestive)", "Ego clashes between spiritual and material values"],
+            "recommended_careers": ["Cultural Heritage Preservation", "Art History Professorship", "Fashion Ethics Advisory", "Literary Review"],
+            "warnings_and_cautions": "CRITICAL OPPOSING GURUS WARNING: Venus leading Jupiter triggers 36 ka aankda. High friction in marriage and health. Regular Lo Shu remedies required.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Warning: Opposing Gurus conflict; triggers marital discord and health vulnerabilities; requires conscious emotional balance and Lo Shu remedies."
+        },
+        (6, 4): {
+            "driver": 6, "conductor": 4, "driver_planet": "Venus (Shukra)", "conductor_planet": "Rahu (North Node)",
+            "planet_combination": "Venus-Rahu (Amplified Glamour & Media)", "relationship_type": "Friendly",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Glamour Media)",
+            "synergy_title": "6-4: The Cinematic Producer & Modern Stylist",
+            "positive_traits": ["Disruptive modern aesthetic", "Glamour and cinematic media instinct", "Magnetic public presence", "High commercial ambition"],
+            "negative_traits": ["Hedonistic lifestyle temptations", "Complicated romantic relationships", "Financial over-expansion"],
+            "recommended_careers": ["Cinema & Video Production", "VFX & Digital Media Animation", "Modern Fashion & Modeling", "Nightclub & Event Hospitality"],
+            "warnings_and_cautions": "Rahu amplifies Venusian desires. Brilliant for entertainment, cinema, and fashion; guard against complicated relational entanglements.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Venus and Rahu: amplified glamour and cinematic production; excels in cinema, modern fashion, visual arts, and event entertainment."
+        },
+        (6, 5): {
+            "driver": 6, "conductor": 5, "driver_planet": "Venus (Shukra)", "conductor_planet": "Mercury (Budh)",
+            "planet_combination": "Venus-Mercury (Daitya Guru + Prince)", "relationship_type": "Friendly",
+            "star_rating": 4.5, "star_display": "?????? (4.5/5 Stars ? Luxury Commerce Super Star)",
+            "synergy_title": "6-5: The Sovereign Luxury Merchant",
+            "positive_traits": ["Unrivaled commercial charm", "Effortless luxury salesmanship", "Lucrative international networking", "Refined business elegance"],
+            "negative_traits": ["Lavish lifestyle expenses", "Impatience with dry administrative tasks"],
+            "recommended_careers": ["Luxury Brand Directorship", "Fine Jewelry & Gemstone Commerce", "High-End Real Estate", "Boutique Hospitality", "Celebrity Management"],
+            "warnings_and_cautions": "Dr. Misra highlights 6-5: Very rare to find an unsuccessful 6-5 individual. Sky is the limit in luxury commerce and hospitality.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four and a half stars: Daitya Guru and Prince; golden commercial luxury pairing; exceptional for luxury retail, jewelry, and fine hospitality."
+        },
+        (6, 6): {
+            "driver": 6, "conductor": 6, "driver_planet": "Venus (Shukra)", "conductor_planet": "Venus (Shukra)",
+            "planet_combination": "Venus-Venus (Double Shukra / Pure Luxury)", "relationship_type": "Friendly",
+            "star_rating": 5.0, "star_display": "?????? (5/5 Stars ? Super Success / Pure Venusian Glory)",
+            "synergy_title": "6-6: The Emperor of Luxury & Artistic Glory",
+            "positive_traits": ["Supreme aesthetic and artistic genius", "Effortless attraction of luxury and comfort", "Magnetic romantic charisma", "Lavish domestic abundance"],
+            "negative_traits": ["Extreme love of comfort and luxury", "Resistance to austerity or hardship", "Vulnerability to romantic flattery"],
+            "recommended_careers": ["High-End Entertainment & Cinema", "Luxury Fashion Conglomerates", "Super-Luxury Hospitality & Resorts", "Fine Jewelry", "Aesthetic Medicine"],
+            "warnings_and_cautions": "SUPER SUCCESS COMBINATION: Dr. Misra explicitly states: '6-6 is extremely rare to find unsuccessful. Sky is the limit!' Unprecedented wealth in luxury arts.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Super Success: Double Venus; five out of five stars; sky is the limit in entertainment, luxury hospitality, fashion, and lavish material wealth."
+        },
+        (6, 7): {
+            "driver": 6, "conductor": 7, "driver_planet": "Venus (Shukra)", "conductor_planet": "Ketu (South Node)",
+            "planet_combination": "Venus-Ketu (Artistic Detachment & Spiritual Grace)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Mystic Aesthetics)",
+            "synergy_title": "6-7: The Sacred Artist & Esoteric Healer",
+            "positive_traits": ["Deep spiritual beauty", "Occult and aesthetic healing", "Refined artistic contemplation", "Gentle empathetic counseling"],
+            "negative_traits": ["Emotional detachment in close romance", "Periods of dissatisfaction with material pleasures"],
+            "recommended_careers": ["Sacred Arts & Temple Architecture", "Holistic Spa & Healing Resorts", "Jewelry & Crystal Consultation", "Art Therapy", "Herbal Wellness"],
+            "warnings_and_cautions": "Combines Venusian beauty with Ketu's spiritual detachment. Highly suited for sacred arts, holistic wellness, and healing.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Venus and Ketu: sacred art and esoteric healing; excels in wellness resorts, crystal design, art therapy, and holistic aesthetics."
+        },
+        (6, 8): {
+            "driver": 6, "conductor": 8, "driver_planet": "Venus (Shukra)", "conductor_planet": "Saturn (Shani)",
+            "planet_combination": "Venus-Saturn (Luxury + Karmic Discipline)", "relationship_type": "Neutral",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Enduring Luxury)",
+            "synergy_title": "6-8: The Luxury Real Estate Developer & Estate Master",
+            "positive_traits": ["Long-term asset creation", "Patience with high-end architectural builds", "Solid commercial endurance", "Prudent financial management"],
+            "negative_traits": ["Delayed material payoffs initially", "Stern emotional boundaries in romance", "Heavy workload burden"],
+            "recommended_careers": ["Luxury Real Estate & Architecture", "Leather Goods & Textile Manufacturing", "Heavy Asset Management", "Contractual Design Governance"],
+            "warnings_and_cautions": "Brings delayed but solid luxury wealth through real estate, architecture, and leather/textile manufacturing.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Venus and Saturn: enduring luxury through hard work; highly favored for luxury real estate, architecture, and leather/textile enterprises."
+        },
+        (6, 9): {
+            "driver": 6, "conductor": 9, "driver_planet": "Venus (Shukra)", "conductor_planet": "Mars (Mangal)",
+            "planet_combination": "Venus-Mars (Passion vs Fire / Scandal Risk)", "relationship_type": "Enemy",
+            "star_rating": 2.0, "star_display": "? WARNING (Scandal Risk / Passion Friction)",
+            "synergy_title": "6-9: The Passionate Volatility & Scandal Crucible",
+            "positive_traits": ["Charismatic romantic passion", "Artistic vitality and stage energy", "Generous humanitarian giving"],
+            "negative_traits": ["High risk of romantic scandals or controversy", "Marital disputes and volatile temper", "Impulsive expenditures on passion projects"],
+            "recommended_careers": ["Stage & Performing Arts", "Athletic Fashion & Sports Media", "Celebrity Public Relations", "Cosmetic Surgery Support"],
+            "warnings_and_cautions": "Dr. Misra highlights 6-9: Must be extremely careful regarding scandals, controversies, and marriage disputes. Maintain strict ethical clarity.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Warning: Venus-Mars passion clash; high risk of romantic scandals and marital controversy; requires moral vigilance and emotional restraint."
+        },
+
+        # ?? DRIVER 7 (KETU / INTROSPECTIVE MYSTIC) ????????????????????????????
+        (7, 1): {
+            "driver": 7, "conductor": 1, "driver_planet": "Ketu (South Node)", "conductor_planet": "Sun (Surya)",
+            "planet_combination": "Ketu-Sun (Mystic Supported by King)", "relationship_type": "Neutral",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Institutional Research)",
+            "synergy_title": "7-1: The Sovereign Research Advisor",
+            "positive_traits": ["Deep research intelligence", "High administrative counsel", "Objective analytical truth-seeking", "Independent authority"],
+            "negative_traits": ["Social isolation", "Reluctance to engage in public politicking", "Intellectual stubbornness"],
+            "recommended_careers": ["Government Research Institutes", "Higher Scientific Academia", "Occult & Strategic Consulting", "Policy Intelligence"],
+            "warnings_and_cautions": "Ketu lacks a head; Sun provides sovereign direction. Avoid speculative business; focus on consultative and research governance.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Ketu supported by Sun: sovereign research advisor; excels in government research institutes, strategic policy, and occult consultation."
+        },
+        (7, 2): {
+            "driver": 7, "conductor": 2, "driver_planet": "Ketu (South Node)", "conductor_planet": "Moon (Chandra)",
+            "planet_combination": "Ketu-Moon (Mystic Supported by Queen)", "relationship_type": "Neutral",
+            "star_rating": 2.5, "star_display": "?????? (2.5/5 Stars ? Intuitive Healer)",
+            "synergy_title": "7-2: The Intuitive Healer & Subconscious Guide",
+            "positive_traits": ["Deep psychic empathy", "Gentle holistic healing", "Subconscious truth perception", "Spiritual counseling"],
+            "negative_traits": ["Vulnerability to mood swings and melancholy", "Indecisiveness in commercial decisions", "Extreme introversion"],
+            "recommended_careers": ["Spiritual & Energy Healing", "Tarot & Intuitive Reading", "Subconscious Psychology", "Water Therapy", "Poetic Literature"],
+            "warnings_and_cautions": "Highly sensitive and psychic. Requires grounded emotional anchors; avoid commercial businesses with high financial risk.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Ketu and Moon: intense psychic empathy and healing grace; best suited for holistic healing, counseling, and subconscious psychology."
+        },
+        (7, 3): {
+            "driver": 7, "conductor": 3, "driver_planet": "Ketu (South Node)", "conductor_planet": "Jupiter (Guru)",
+            "planet_combination": "Ketu-Jupiter (Mystic Supported by Dev Guru)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Divine Guru)",
+            "synergy_title": "7-3: The Divine Scholar & Master Occultist",
+            "positive_traits": ["Profound spiritual mastery", "Higher academic research brilliance", "Teaching and coaching genius", "Divine intuitive connection"],
+            "negative_traits": ["Detachment from worldly competition", "Impatience with materialistic greed"],
+            "recommended_careers": ["Vedic & Occult Astrology", "Higher University Teaching", "Spiritual Authorship", "Alternative Medicine & Naturopathy", "Theological Research"],
+            "warnings_and_cautions": "Dr. Misra highlights 7-3: Four stars for education, occult, healing, research, and divine connection. Super successful in knowledge fields.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Four stars: Ketu and Dev Guru; divine intellectual alignment; supreme aptitude for occult sciences, higher research, teaching, and spiritual authorship."
+        },
+        (7, 4): {
+            "driver": 7, "conductor": 4, "driver_planet": "Ketu (South Node)", "conductor_planet": "Rahu (North Node)",
+            "planet_combination": "Ketu-Rahu (Body Backed by Head)", "relationship_type": "Neutral",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Tactical Research)",
+            "synergy_title": "7-4: The Technical Forensics & Cyber Intelligence",
+            "positive_traits": ["Acute investigative forensics", "Cybersecurity and intelligence acumen", "Deep technical research", "Unconventional problem-solving"],
+            "negative_traits": ["Feeling alienated or misunderstood", "Sudden detachment from professional networks", "Unorthodox lifestyle friction"],
+            "recommended_careers": ["Cybersecurity Forensics", "Data Intelligence & Surveillance", "Alternative Science R&D", "Forensic Accounting", "Foreign Affairs Analysis"],
+            "warnings_and_cautions": "Ketu (body) leading Rahu (head) has one star less than 4-7 because driver lacks the head. Excellent for technical forensics.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Ketu and Rahu: tactical forensics and cyber intelligence; thrives in technical investigation, cybersecurity, and foreign intelligence."
+        },
+        (7, 5): {
+            "driver": 7, "conductor": 5, "driver_planet": "Ketu (South Node)", "conductor_planet": "Mercury (Budh)",
+            "planet_combination": "Ketu-Mercury (Mystic Backed by Prince)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Commercial Data)",
+            "synergy_title": "7-5: The Data Strategist & Consultative Analyst",
+            "positive_traits": ["Sharp analytical intelligence", "Ability to monetize specialized research", "Prudent commercial advice", "Truth-seeking communication"],
+            "negative_traits": ["Skeptical hesitation before launching deals", "Tendency to isolate when overwhelmed"],
+            "recommended_careers": ["Quantitative Market Research", "Data Strategy & Analytics", "Specialized Consulting", "Esoteric Publishing", "Technical Writing"],
+            "warnings_and_cautions": "Mercury provides the commercial head that Ketu lacks. Excellent for monetizing research, data strategy, and consulting.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Ketu backed by Prince: monetizes analytical research; highly successful in data science, quantitative market research, and consulting."
+        },
+        (7, 6): {
+            "driver": 7, "conductor": 6, "driver_planet": "Ketu (South Node)", "conductor_planet": "Venus (Shukra)",
+            "planet_combination": "Ketu-Venus (Mystic Backed by Luxury)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Luxury Research)",
+            "synergy_title": "7-6: The Luxury Researcher & Aesthetic Healer",
+            "positive_traits": ["Sophisticated aesthetic research", "Occult luxury and jewelry intelligence", "Refined holistic healing", "Subtle artistic elegance"],
+            "negative_traits": ["Romantic detachment", "Perfectionist dissatisfaction with superficial luxury"],
+            "recommended_careers": ["Gemstone & Mineralogy Consultation", "Luxury Spa & Healing Center Directorship", "Fine Antique Appraisal", "Sacred Architecture", "Art Curating"],
+            "warnings_and_cautions": "Venus provides resource power to Ketu. High success in luxury research, gemstone consulting, antique curation, and wellness resorts.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Four stars: Ketu backed by Venus; luxury research and aesthetic healing; excels in antique curation, gemstone consulting, and luxury wellness."
+        },
+        (7, 7): {
+            "driver": 7, "conductor": 7, "driver_planet": "Ketu (South Node)", "conductor_planet": "Ketu (South Node)",
+            "planet_combination": "Ketu-Ketu (Dual Ketu / Extreme Detachment)", "relationship_type": "Neutral",
+            "star_rating": 1.0, "star_display": "? WARNING (Zero Speculative Business / Partnership Risk)",
+            "synergy_title": "7-7: The Pure Ascetic & Solitary Researcher",
+            "positive_traits": ["Monumental psychic and occult depth", "Total immunity to superficial illusions", "Profound meditative genius", "Pure research dedication"],
+            "negative_traits": ["Complete lack of commercial aggression", "Extreme financial vulnerability in partnerships (99-100% loss risk)", "Social isolation"],
+            "recommended_careers": ["Solitary Academic Research", "Occult & Esoteric Healing", "Astrology & Palmistry Mastery", "Deep Science & Philosophy", "Monastic or Spiritual Life"],
+            "warnings_and_cautions": "CRITICAL BUSINESS WARNING: Dr. Misra explicitly states: 'Never do business in partnership—loss is 100% guaranteed. Never do risky business.' Must choose research, occult, or healing.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Critical Warning: Dual Ketu; strictly avoid speculative business and partnerships (100% loss risk); supreme mastery in research, occult, and healing."
+        },
+        (7, 8): {
+            "driver": 7, "conductor": 8, "driver_planet": "Ketu (South Node)", "conductor_planet": "Saturn (Shani)",
+            "planet_combination": "Ketu-Saturn (Ascetic Detachment + Karma)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Isolation & Karmic Burden)",
+            "synergy_title": "7-8: The Solitary Hermit & Karmic Burden",
+            "positive_traits": ["Iron endurance in solitude", "Deep historical and archaeological insight", "Complete lack of fear of hardship"],
+            "negative_traits": ["Severe career delays and feelings of loneliness", "Pessimism and emotional detachment", "Heavy karmic burdens"],
+            "recommended_careers": ["Archaeological Research", "Mining Geology", "Historical Preservation", "Ascetic Philosophy", "Deep Earth Sciences"],
+            "warnings_and_cautions": "Brings heavy isolation and karmic delay. Do not isolate yourself; maintain steady daily connections and practical service.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Warning: Ketu-Saturn karmic isolation; brings delays and solitary burdens; requires conscious social connection and white crystal remedies."
+        },
+        (7, 9): {
+            "driver": 7, "conductor": 9, "driver_planet": "Ketu (South Node)", "conductor_planet": "Mars (Mangal)",
+            "planet_combination": "Ketu-Mars (Mystic + Warrior / Impulsive Fire)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Impulsive Temper & Accident Risk)",
+            "synergy_title": "7-9: The Mystic Combatant & Impulsive Flame",
+            "positive_traits": ["Fearless occult defense", "High martial arts stamina", "Passionate defense of righteousness", "Surgical precision"],
+            "negative_traits": ["Impulsive temper without strategic direction", "Accident vulnerabilities", "Sudden aggressive outbursts followed by regret"],
+            "recommended_careers": ["Martial Arts Mastery", "Alternative Surgical Therapy", "Occult Defense & Security", "Forestry Protection", "Emergency Rescue"],
+            "warnings_and_cautions": "Ketu has no head; Mars provides fiery force. Can lead to headless aggressive actions or accidents. Ground with physical discipline.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Warning: Ketu-Mars headless aggression; risk of impulsive temper and accidents; channel into disciplined martial arts or emergency rescue."
+        },
+
+        # ?? DRIVER 8 (SATURN / SHANI - JUDGE OF KARMA) ????????????????????????
+        (8, 1): {
+            "driver": 8, "conductor": 1, "driver_planet": "Saturn (Shani)", "conductor_planet": "Sun (Surya)",
+            "planet_combination": "Saturn-Sun (Son vs Father / Bitter Enemies)", "relationship_type": "Enemy",
+            "star_rating": 0.5, "star_display": "? CRITICAL WARNING (Karmic Enemy / Rise & Fall Risk)",
+            "synergy_title": "8-1: The Saturn-Sun Sovereign Clash",
+            "positive_traits": ["Titanic crisis stamina", "Mastery of harsh legal and corporate governance", "Iron endurance in adversity"],
+            "negative_traits": ["Severe lifetime career struggle", "High rise followed by catastrophic drop", "Severe marital conflict and divorce risk", "Father-son or legal litigation"],
+            "recommended_careers": ["Corporate Litigation Law", "Labor Dispute Governance", "Heavy Metallurgy & Mining", "Turnaround Restructuring"],
+            "warnings_and_cautions": "CRITICAL LIFETIME WARNING: Saturn and Sun are bitter arch-enemies. Takes native high then drops abruptly. High marriage and partnership friction. Mandatory daily remedies.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Critical Warning: Bitter arch-enemies; brings massive rise and sudden fall; extreme marital friction; mandatory legal and planetary remedies."
+        },
+        (8, 2): {
+            "driver": 8, "conductor": 2, "driver_planet": "Saturn (Shani)", "conductor_planet": "Moon (Chandra)",
+            "planet_combination": "Saturn-Moon (Vish Yoga / Heavy Melancholy)", "relationship_type": "Enemy",
+            "star_rating": 1.0, "star_display": "? WARNING (Vish Yoga / Health & Delay)",
+            "synergy_title": "8-2: The Saturnian Vish Yoga & Emotional Crucible",
+            "positive_traits": ["Endurance through profound hardship", "Patience with chronically distressed people", "Realistic grounding"],
+            "negative_traits": ["Chronic health challenges (joints, fluids, depression)", "Sudden financial setbacks", "Cold emotional atmosphere", "Severe delays in business"],
+            "recommended_careers": ["Geriatric Care Administration", "Waste Water Management", "Historical Archive Governance", "Palliative Healthcare"],
+            "warnings_and_cautions": "Forms Vish Yoga. Dr. Misra warns: Business may go well initially then suddenly health or mental issues disrupt progress. White quartz essential.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Warning: Vish Yoga; causes chronic health and emotional delays; business momentum disrupted by sudden setbacks; requires white crystal hygiene."
+        },
+        (8, 3): {
+            "driver": 8, "conductor": 3, "driver_planet": "Saturn (Shani)", "conductor_planet": "Jupiter (Guru)",
+            "planet_combination": "Saturn-Jupiter (Karmic Judge Guided by Wisdom)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Judicial Wisdom)",
+            "synergy_title": "8-3: The Constitutional Arbiter & Corporate Judge",
+            "positive_traits": ["Monumental legal acumen", "High judicial ethics", "Prudent institutional management", "Compounding wealth intelligence"],
+            "negative_traits": ["Stern demeanor", "Slow early career momentum", "Difficulty expressing informal warmth"],
+            "recommended_careers": ["Judiciary & Supreme Court Law", "Corporate Regulatory Governance", "Institutional Banking Oversight", "Estate Trusts Administration"],
+            "warnings_and_cautions": "Saturn and Jupiter align on justice and law. Slow initial progress matures into supreme judicial or institutional authority.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Saturn and Dev Guru: judicial wisdom meets karmic justice; highly respected in corporate law, judiciary, and institutional compliance."
+        },
+        (8, 4): {
+            "driver": 8, "conductor": 4, "driver_planet": "Saturn (Shani)", "conductor_planet": "Rahu (North Node)",
+            "planet_combination": "Saturn-Rahu (Permanent Dark Karma / Structural Friction)", "relationship_type": "Enemy",
+            "star_rating": 1.0, "star_display": "? WARNING (Heavy Karmic Delays & Litigation)",
+            "synergy_title": "8-4: The Permanent Dark Crucible & Legal Obstacles",
+            "positive_traits": ["Ironclad physical and mental endurance", "Mastery of extreme industrial systems", "Unshakeable persistence under adversity"],
+            "negative_traits": ["Severe career delays and chronic struggle", "Litigation and contractual disputes", "Health strains", "Pessimism and isolation"],
+            "recommended_careers": ["Heavy Infrastructure & Mining", "Industrial Demolition", "Environmental Remediation", "Criminal Law"],
+            "warnings_and_cautions": "CRITICAL PERMANENT WARNING: Saturn and Rahu together create heavy karmic delays and legal hurdles. Daily Panch Tattva hygiene essential.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Permanent Warning: Saturn-Rahu creates chronic delays and legal/structural struggle; requires strict ethical compliance and continuous remedies."
+        },
+        (8, 5): {
+            "driver": 8, "conductor": 5, "driver_planet": "Saturn (Shani)", "conductor_planet": "Mercury (Budh)",
+            "planet_combination": "Saturn-Mercury (Karmic Judge + Prince)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Real Estate & Trade)",
+            "synergy_title": "8-5: The Real Estate Mogul & Pragmatic Financier",
+            "positive_traits": ["Phenomenal property and land acumen", "Meticulous contractual dealmaking", "Steady compounding wealth", "Solid commercial endurance"],
+            "negative_traits": ["Over-calculating risk", "Slow initial execution while verifying details"],
+            "recommended_careers": ["Real Estate Development & Brokerage", "Heavy Industrial Trading", "Agricultural Commerce", "Contractual Logistics", "Asset Management"],
+            "warnings_and_cautions": "Dr. Misra highlights 8-5: Outstanding for property, land, real estate, and finance. Mercury's speed balances Saturn's prudence.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four stars: Saturn and Prince; phenomenal real estate and land wealth; highly favored for property development, commerce, and finance."
+        },
+        (8, 6): {
+            "driver": 8, "conductor": 6, "driver_planet": "Saturn (Shani)", "conductor_planet": "Venus (Shukra)",
+            "planet_combination": "Saturn-Venus (Karmic Discipline + Luxury)", "relationship_type": "Friendly",
+            "star_rating": 3.5, "star_display": "?????? (3.5/5 Stars ? Enduring Luxury)",
+            "synergy_title": "8-6: The Architect of Luxury Estates & Fine Leather",
+            "positive_traits": ["Exceptional architectural and design stamina", "Luxury asset stewardship", "Solid financial patience", "Aesthetic material quality"],
+            "negative_traits": ["Delayed gratification in romance", "Stern domestic rules", "Heavy workload burden"],
+            "recommended_careers": ["Luxury Real Estate & Interior Architecture", "High-End Leather & Metallurgy Goods", "Commercial Asset Management", "Textile Manufacturing"],
+            "warnings_and_cautions": "Saturn and Venus are friendly. Delivers massive compounding wealth through luxury real estate, architecture, and fine manufacturing.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Saturn and Venus: enduring luxury through patience; excels in luxury real estate, architecture, fine leather goods, and manufacturing."
+        },
+        (8, 7): {
+            "driver": 8, "conductor": 7, "driver_planet": "Saturn (Shani)", "conductor_planet": "Ketu (South Node)",
+            "planet_combination": "Saturn-Ketu (Karmic Judge + Mystic Detachment)", "relationship_type": "Neutral",
+            "star_rating": 2.5, "star_display": "?????? (2.5/5 Stars ? Solitary Ascetic)",
+            "synergy_title": "8-7: The Ascetic Researcher & Historical Geologist",
+            "positive_traits": ["Profound research stamina", "Deep detachment from shallow trends", "Historical and geological intelligence", "Philosophical endurance"],
+            "negative_traits": ["Solitary isolation and gloominess", "Slow material compounding", "Emotional coldness toward peers"],
+            "recommended_careers": ["Mining & Geological Survey", "Historical Archaeology", "Deep Philosophy & Theology", "Forensic Data Preservation"],
+            "warnings_and_cautions": "Brings heavy isolation if disconnected from society. Maintain active social ties and avoid melancholy.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Saturn and Ketu: ascetic researcher and deep earth scientist; excels in geological survey, archaeology, and historical research."
+        },
+        (8, 8): {
+            "driver": 8, "conductor": 8, "driver_planet": "Saturn (Shani)", "conductor_planet": "Saturn (Shani)",
+            "planet_combination": "Saturn-Saturn (Double Saturn / Supreme Laborious Karma)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Double Saturn Struggle / Heavy Duty)",
+            "synergy_title": "8-8: The Iron Sovereign of Hard Labor & Justice",
+            "positive_traits": ["Titanic endurance that outlasts all peers", "Unbending devotion to justice and law", "Ability to manage colossal physical systems", "Compounding master"],
+            "negative_traits": ["Prolonged severe struggle and delayed payoffs", "Stern, unapproachable presence", "Workaholism destroying personal health", "Heavy karmic tests"],
+            "recommended_careers": ["High Judiciary & Constitutional Law", "Heavy Metallurgy & Steel Manufacturing", "National Infrastructure & Mining", "Labor Union Governance"],
+            "warnings_and_cautions": "LIFETIME STRUGGLE WARNING: Double Saturn creates monumental labor and delayed success. Victory comes through sheer righteousness and unbending discipline.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Warning: Double Saturn; monumental labor, struggle, and delayed payoffs; master of justice, law, metallurgy, and heavy enterprise."
+        },
+        (8, 9): {
+            "driver": 8, "conductor": 9, "driver_planet": "Saturn (Shani)", "conductor_planet": "Mars (Mangal)",
+            "planet_combination": "Saturn-Mars (Cold Earth vs Fiery Iron / Struggle Tension)", "relationship_type": "Neutral",
+            "star_rating": 2.5, "star_display": "?????? (2.5/5 Stars ? Heavy Engineering / Defense)",
+            "synergy_title": "8-9: The Battle-Hardened Engineer & Armed Protector",
+            "positive_traits": ["Immense physical and structural stamina", "Fearless crisis management in industrial zones", "Command over heavy engineering and defense"],
+            "negative_traits": ["Internal friction between patience and impulsive action", "Stubbornness", "Risk of physical strain or injuries"],
+            "recommended_careers": ["Heavy Machinery & Automotive Engineering", "Armed Forces Logistics", "Orthopedic & Trauma Surgery", "Metallurgy & Defense Production"],
+            "warnings_and_cautions": "Dr. Misra highlights 8-9: Saturn and Mars require proper career alignment (heavy engineering, defense, surgery) to convert struggle into immense strength.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Saturn and Mars: battle-hardened industrial power; supreme aptitude for heavy machinery, defense production, trauma surgery, and metallurgy."
+        },
+
+        # ?? DRIVER 9 (MARS / MANGAL - COMMANDER-IN-CHIEF) ?????????????????????
+        (9, 1): {
+            "driver": 9, "conductor": 1, "driver_planet": "Mars (Mangal)", "conductor_planet": "Sun (Surya)",
+            "planet_combination": "Mars-Sun (Senapati Leading King)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Commanding Leadership)",
+            "synergy_title": "9-1: The Commander-in-Chief & Valiant Sovereign",
+            "positive_traits": ["Fierce executive drive", "Decisive courage", "Natural administrative authority", "Heroic protection of subordinates"],
+            "negative_traits": ["Fiery temper when questioned", "Impatience with slow diplomatic protocols"],
+            "recommended_careers": ["Armed Forces Directorship", "IPS & Civil Police Command", "Trauma & Surgical Directorship", "Top Industrial Executive", "Sports Governance"],
+            "warnings_and_cautions": "Dr. Misra notes: 1-9 is 5 stars (King leading Senapati), while 9-1 is 4 stars because the King prefers being in front. Still a supreme executive combination.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four stars: Commander leading with King's authority; supreme courage, decisive executive leadership, and administrative triumph."
+        },
+        (9, 2): {
+            "driver": 9, "conductor": 2, "driver_planet": "Mars (Mangal)", "conductor_planet": "Moon (Chandra)",
+            "planet_combination": "Mars-Moon (Fiery Commander + Gentle Queen)", "relationship_type": "Enemy",
+            "star_rating": 2.0, "star_display": "? WARNING (Fire-Water Conflict / Marital Friction)",
+            "synergy_title": "9-2: The Fiery Heart & Emotional Clash",
+            "positive_traits": ["Passionate defense of loved ones", "High athletic stamina", "Raw creative energy"],
+            "negative_traits": ["Severe relationship and marital friction", "Volcanic anger clashing with sensitivity", "Impulsive decisions followed by regret"],
+            "recommended_careers": ["Emergency Response & Paramedic Leadership", "Culinary Fire Arts", "Maritime Engineering", "Sports Coaching"],
+            "warnings_and_cautions": "Mars (fire) and Moon (water) clash emotionally. Causes marital friction and relationship volatility. Cultivate calm communication.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Warning: Fire and Water conflict; causes emotional volatility and marital friction; requires cooling mindfulness and gentle communication."
+        },
+        (9, 3): {
+            "driver": 9, "conductor": 3, "driver_planet": "Mars (Mangal)", "conductor_planet": "Jupiter (Guru)",
+            "planet_combination": "Mars-Jupiter (Senapati + Dev Guru)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Righteous Commander)",
+            "synergy_title": "9-3: The Righteous Warrior & Medical Leader",
+            "positive_traits": ["High administrative and moral courage", "Inspirational leadership", "Discipline in higher knowledge and physical arts", "Noble humanitarian defense"],
+            "negative_traits": ["Moral indignation leading to fiery confrontations", "Impatience with bureaucratic corruption"],
+            "recommended_careers": ["Surgical Medicine", "Armed Forces Administration", "University Directorship", "Civil Services", "Athletic Directorship"],
+            "warnings_and_cautions": "Combines Martian courage with Jupiterian wisdom. Highly favored for top doctors, surgeons, army officers, and civil administrators.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four stars: Commander guided by Dev Guru; righteous courage; supreme aptitude for top surgeons, military command, and civil administration."
+        },
+        (9, 4): {
+            "driver": 9, "conductor": 4, "driver_planet": "Mars (Mangal)", "conductor_planet": "Rahu (North Node)",
+            "planet_combination": "Mars-Rahu (Angarak Tension / Surgical Power)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Angarak Tension / Surgical Power)",
+            "synergy_title": "9-4: The Angarak Crucible & Master Surgeon",
+            "positive_traits": ["Fearless crisis intervention", "Natural affinity for surgical instruments and blood medicine", "Engineering brilliance under extreme pressure"],
+            "negative_traits": ["High risk of physical accidents and surgeries", "Volcanic rage when provoked", "Fierce disputes with competitors"],
+            "recommended_careers": ["General & Trauma Surgery", "Emergency Medicine", "Military Weapons Engineering", "Forensic Investigation", "Heavy Industrial Mechanics"],
+            "warnings_and_cautions": "Dr. Misra highlights 9-4: Mars and Rahu connection governs blood, surgery, and combat. Risk of accidents or surgery, but makes brilliant surgeons/doctors.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Warning / Dual Destiny: Mars-Rahu Angarak tension; brings accident and surgery risks, but creates world-class trauma surgeons and defense engineers."
+        },
+        (9, 5): {
+            "driver": 9, "conductor": 5, "driver_planet": "Mars (Mangal)", "conductor_planet": "Mercury (Budh)",
+            "planet_combination": "Mars-Mercury (Senapati + Prince / Dynamic Trade)", "relationship_type": "Friendly",
+            "star_rating": 4.0, "star_display": "?????? (4/5 Stars ? Dynamic Business)",
+            "synergy_title": "9-5: The High-Speed Industrialist & Sports Marketer",
+            "positive_traits": ["Decisive commercial action", "High energetic drive", "Sports and industrial trade acumen", "Fearless market initiative"],
+            "negative_traits": ["Impulsive business decisions", "Occasional temper flares with partners"],
+            "recommended_careers": ["Manufacturing & Heavy Equipment Trade", "Sports Equipment & Apparel Commerce", "Automotive Brokerage", "Emergency Supply Logistics"],
+            "warnings_and_cautions": "Blends commercial speed with Martian fire. High success in manufacturing, athletic trade, and rapid enterprise scaling.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Four stars: Commander and Prince; high-speed dynamic enterprise; excels in manufacturing, athletic commerce, and industrial trade."
+        },
+        (9, 6): {
+            "driver": 9, "conductor": 6, "driver_planet": "Mars (Mangal)", "conductor_planet": "Venus (Shukra)",
+            "planet_combination": "Mars-Venus (Passion vs Luxury / Scandal Risk)", "relationship_type": "Enemy",
+            "star_rating": 2.0, "star_display": "? WARNING (Passion Clash / Scandal Risk)",
+            "synergy_title": "9-6: The Passionate Volatility & Scandal Crucible",
+            "positive_traits": ["Charismatic romantic passion", "Artistic vitality and stage energy", "Generous humanitarian giving"],
+            "negative_traits": ["High risk of romantic scandals or controversy", "Marital disputes and volatile temper", "Impulsive expenditures on passion projects"],
+            "recommended_careers": ["Stage & Performing Arts", "Athletic Fashion & Sports Media", "Celebrity Public Relations", "Cosmetic Surgery Support"],
+            "warnings_and_cautions": "Dr. Misra highlights 9-6: Must be extremely careful regarding scandals, controversies, and marriage disputes. Maintain strict ethical clarity.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Warning: Mars-Venus passion clash; high risk of romantic scandals and marital controversy; requires moral vigilance and emotional restraint."
+        },
+        (9, 7): {
+            "driver": 9, "conductor": 7, "driver_planet": "Mars (Mangal)", "conductor_planet": "Ketu (South Node)",
+            "planet_combination": "Mars-Ketu (Warrior + Mystic / Righteous Force)", "relationship_type": "Friendly",
+            "star_rating": 3.0, "star_display": "?????? (3/5 Stars ? Occult Warrior)",
+            "synergy_title": "9-7: The Righteous Protector & Occult Warrior",
+            "positive_traits": ["Fearless defense of justice", "Spiritual and occult discipline", "High physical and martial stamina", "Intuitive protective reflexes"],
+            "negative_traits": ["Sudden explosive outbursts", "Impatience with deceit", "Tendency to isolate after battles"],
+            "recommended_careers": ["Martial Arts Instruction", "Defense Intelligence", "Occult & Tantric Protection", "Emergency Rescue Leadership", "Surgical Technology"],
+            "warnings_and_cautions": "Dr. Misra highlights 9-7 for occult, teaching, armed forces, and protective leadership. Channel into disciplined martial arts or surgery.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Three stars: Mars and Ketu; occult warrior; excels in martial arts, defense intelligence, emergency rescue, and surgical technology."
+        },
+        (9, 8): {
+            "driver": 9, "conductor": 8, "driver_planet": "Mars (Mangal)", "conductor_planet": "Saturn (Shani)",
+            "planet_combination": "Mars-Saturn (Fiery Iron vs Cold Earth / Heavy Industry)", "relationship_type": "Neutral",
+            "star_rating": 2.5, "star_display": "?????? (2.5/5 Stars ? Heavy Engineering / Struggle)",
+            "synergy_title": "9-8: The Industrial Commander & Structural Builder",
+            "positive_traits": ["Immense physical and mechanical stamina", "Fearless leadership in heavy industrial zones", "Command over metallurgy and defense"],
+            "negative_traits": ["Internal tension between hasty action and slow delay", "Stubbornness", "Risk of physical injury in heavy environments"],
+            "recommended_careers": ["Heavy Metallurgy & Foundry", "Automotive & Heavy Equipment", "Civil Infrastructure Construction", "Military Logistics"],
+            "warnings_and_cautions": "Mars and Saturn require proper career alignment (heavy engineering, metallurgy, infrastructure) to convert friction into monumental achievement.",
+            "harmonizing_poorak_number": 5,
+            "fast_summary": "Mars and Saturn: heavy industrial stamina; excels in automotive engineering, heavy metallurgy, civil infrastructure, and military logistics."
+        },
+        (9, 9): {
+            "driver": 9, "conductor": 9, "driver_planet": "Mars (Mangal)", "conductor_planet": "Mars (Mangal)",
+            "planet_combination": "Mars-Mars (Permanent Double Mars / Volcanic Anger)", "relationship_type": "Enemy",
+            "star_rating": 1.5, "star_display": "? WARNING (Volcanic Temper / Marital Strife)",
+            "synergy_title": "9-9: The Permanent Double Mars & Volcanic Fire",
+            "positive_traits": ["Titanic physical courage and stamina", "Heroic humanitarian protection", "Fearless front-line leadership", "Decisive crisis action"],
+            "negative_traits": ["Volcanic explosive temper", "Severe marital and relationship discord", "Impulsive aggression risking physical injuries", "Intolerance of dissent"],
+            "recommended_careers": ["Special Armed Forces / Commando", "Emergency Trauma Surgery", "High-Risk Fire & Rescue", "Competitive Professional Sports", "Heavy Machinery"],
+            "warnings_and_cautions": "CRITICAL TEMPER & MARITAL WARNING: Dr. Misra highlights 9-9: Permanent relation of double Mars creates extreme temper, anger, fighting, and marital strife. Mandatory cooling exercises and red thread remedies.",
+            "harmonizing_poorak_number": 1,
+            "fast_summary": "Critical Warning: Permanent double Mars; volcanic temper, anger, and marital discord; must channel fire into rigorous sports and emergency surgery."
+        }
+    }
+
+    # Format into canonical dictionary indexed by f"{driver}_{conductor}"
+    formatted = {}
+    for (d, c), data in raw_specs.items():
+        key = f"{d}_{c}"
+        formatted[key] = {
+            "driver": d,
+            "conductor": c,
+            "key": key,
+            "driver_planet": data["driver_planet"],
+            "conductor_planet": data["conductor_planet"],
+            "planet_combination": data["planet_combination"],
+            "relationship_type": data["relationship_type"],
+            "star_rating": data["star_rating"],
+            "star_display": data["star_display"],
+            "synergy_title": data["synergy_title"],
+            "positive_traits": data["positive_traits"],
+            "negative_traits": data["negative_traits"],
+            "recommended_careers": data["recommended_careers"],
+            "warnings_and_cautions": data["warnings_and_cautions"],
+            "harmonizing_poorak_number": data["harmonizing_poorak_number"],
+            "fast_summary": data["fast_summary"],
+            "source": "SRC-DR-CHAITANYAA-MISRA-DAY6-DAY7-LECTURE",
+            "rule_status": "APPROVED"
+        }
+    return formatted
+
+
+def get_five_elements_hygiene_data():
+    """
+    Panch Tattva Basic Hygiene & Bodyguards as taught by Dr. Numeros Vision Classical Methodology.
+    Non-negotiable foundational shielding required before any gemstone or complex ritual.
+    """
+    return {
+        "WOOD": {
+            "element": "Wood",
+            "tattva_hindi": "वृहस्पत / अन्तरिक्ष / वायु (Wood / Growth)",
+            "associated_numbers": [3, 4],
+            "governing_planets": ["Jupiter (Guru / Dev Guru)", "Rahu (North Node / Shadow Architect)"],
+            "governing_cardinal_directions": ["East (Jupiter)", "South-East (Rahu)"],
+            "vital_organs_and_aura": "Heart equilibrium, vital aura shielding, spiritual expansion, personal growth",
+            "hygiene_prescription": {
+                "core_rule": "Must touch physical skin continuously (necklace, bracelet, or bangle).",
+                "item_options": [
+                    "Natural 5-Mukhi Rudraksha bracelet or mala (Universal, highly recommended)",
+                    "Tulsi mala or bracelet (FOR STRICT VEGETARIANS ONLY; do NOT wear if consuming non-vegetarian food)",
+                    "Natural sandalwood (Chandan) beads or wooden bangle"
+                ],
+                "dietary_diet_caveat": "Non-vegetarians must strictly avoid Tulsi beads and use natural Rudraksha or Sandalwood instead.",
+                "why_it_protects": "Acts as your primary vibrational bodyguard for aura expansion and heart protection."
+            }
+        },
+        "EARTH": {
+            "element": "Earth",
+            "tattva_hindi": "पृथ्वी (Earth / Stability)",
+            "associated_numbers": [2, 5, 8],
+            "governing_planets": ["Moon (Chandra)", "Mercury (Budh)", "Saturn (Shani)"],
+            "governing_cardinal_directions": ["South-West (Moon)", "Center / Brahma Sthana (Mercury)", "North-East (Saturn)"],
+            "vital_organs_and_aura": "Blood pressure regulation, anger cooling, mental stability, decisive grounding, electromagnetic balance",
+            "hygiene_prescription": {
+                "core_rule": "Wear a natural Clear White Quartz (Sphatik / White Quartz) bracelet or mala (10mm to 12mm beads).",
+                "properties": "Sphatik remains naturally icy-cold even under direct scorching sunlight, drawing electromagnetic heat out of the body.",
+                "item_options": [
+                    "White Quartz (Sphatik) 10mm-12mm bead bracelet on left or right wrist",
+                    "Sphatik mala worn around the neck touching throat/chest chakra"
+                ],
+                "why_it_protects": "Soothes blood pressure, arrests volcanic aggression, grounds erratic overthinking, and restores earth stability."
+            }
+        },
+        "FIRE": {
+            "element": "Fire",
+            "tattva_hindi": "अग्नि (Fire / Vitality)",
+            "associated_numbers": [9],
+            "governing_planets": ["Mars (Mangal / Senapati)"],
+            "governing_cardinal_directions": ["South (Mars)"],
+            "vital_organs_and_aura": "Cellular vitality, digestive fire (Agni), courage, proactive initiative, immune resistance, Vitamin D synthesis",
+            "hygiene_prescription": {
+                "core_rule": "Tie a sacred red thread (Mauli / Kalawa) on right wrist; apply red tilak (Ashtagandha / Roli); receive morning sunlight.",
+                "item_options": [
+                    "Sacred red cotton thread (Mauli / Kalawa) tied on wrist",
+                    "Red Ashtagandha / Roli tilak on forehead or throat chakra daily",
+                    "15 minutes of early morning natural sunlight exposure (Surya Arghya)"
+                ],
+                "color_caveat": "Even if red is technically not a personal lucky number color, the red thread on wrist is an ELEMENTAL balancer, not a planet garment, so it causes ZERO harm.",
+                "why_it_protects": "Ignites vital stamina, balances inner digestive fire, and wards off lethargy and chronic procrastination."
+            }
+        },
+        "WATER": {
+            "element": "Water",
+            "tattva_hindi": "जल (Water / Flow)",
+            "associated_numbers": [1],
+            "governing_planets": ["Sun (Surya - Life Giver)"],
+            "governing_cardinal_directions": ["North (Water / Career)"],
+            "vital_organs_and_aura": "76% of physical body constitution, cellular hydration, lymphatic purification, kidney vitality, career momentum",
+            "hygiene_prescription": {
+                "core_rule": "Carry a pure Copper bottle or sipper (Tambe ka bartan) and drink water in small mindful sips throughout the day.",
+                "item_options": [
+                    "Pure Copper water bottle / small sipper (250ml - 500ml) carried in daily bag",
+                    "Jal Arghya (offering water in copper lota to morning sun with a pinch of red kumkum)",
+                    "Two daily bathing rituals for aura cleansing"
+                ],
+                "hydration_protocol": "Sipping copper-infused water in controlled small amounts revitalizes cellular energy and strengthens the North-career axis.",
+                "why_it_protects": "Prevents dehydration, flushes cellular toxins, and ensures unobstructed flow in career and life direction."
+            }
+        },
+        "METAL_AIR": {
+            "element": "Metal / Air",
+            "tattva_hindi": "धातु / वायु (Metal / Prana / Cosmic Harmony)",
+            "associated_numbers": [6, 7],
+            "governing_planets": ["Venus (Gold Metal / Shukra)", "Ketu (Silver Metal / Ketu)"],
+            "governing_cardinal_directions": ["North-West (Venus)", "West (Ketu)"],
+            "vital_organs_and_aura": "Nervous transmission, prana breathing, aesthetic grace, strategic detachment, cosmic electromagnetic conductivity",
+            "hygiene_prescription": {
+                "core_rule": "Wear a high-quality metallic chain watch on the wrist (Silver for 7, Gold/Brass for 6, or Dual-Tone for both).",
+                "metal_breakdown": {
+                    "number_7_ketu": "Silver metallic chain watch (Silver represents Ketu and lunar-mental clarity).",
+                    "number_6_venus": "Gold or brass metallic chain watch (Gold represents Venusian luxury, abundance, and grace).",
+                    "dual_balancing": "Dual-Tone (Silver + Gold) metallic watch is universally optimal if seeking balance of both aesthetics and research."
+                },
+                "why_it_protects": "Acts as an electromagnetic antenna, harmonizing subtle air and metal prana throughout the body's nervous meridian system."
+            }
+        }
+    }
+'''
+
+with open('scripts/generate_all_master_registries.py', 'a', encoding='utf-8') as f:
+    f.write(code_to_append)
+
+print("Appended 81 DC and 5 Elements to generate_all_master_registries.py")

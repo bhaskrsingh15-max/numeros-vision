@@ -1,0 +1,692 @@
+{
+  "total_html_files": 67,
+  "thin_pages_under_350": [],
+  "missing_meta_description": [
+    "cdp.html",
+    "demo.html",
+    "logo-preview.html"
+  ],
+  "missing_h1": [
+    "blog/kua-number-auspicious-directions-and-career-feng-shui.html"
+  ],
+  "multiple_h1": [],
+  "missing_canonical": [
+    "cdp.html",
+    "demo.html",
+    "logo-preview.html"
+  ],
+  "pages_with_schema": 58,
+  "duplicate_titles": {},
+  "all_pages": [
+    {
+      "path": "404.html",
+      "title": "Page Not Found | Numeros Vision",
+      "desc_len": 115,
+      "has_desc": true,
+      "words": 704,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/404",
+      "has_schema": false
+    },
+    {
+      "path": "about.html",
+      "title": "About Numeros Vision | Our Approach to Numerology",
+      "desc_len": 152,
+      "has_desc": true,
+      "words": 1224,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/about/",
+      "has_schema": true
+    },
+    {
+      "path": "accessibility.html",
+      "title": "Accessibility Statement | Numeros Vision",
+      "desc_len": 147,
+      "has_desc": true,
+      "words": 740,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/accessibility/",
+      "has_schema": true
+    },
+    {
+      "path": "birth_number_calculator.html",
+      "title": "Birth Number Calculator | Mulank Day Number | Numeros Vision",
+      "desc_len": 146,
+      "has_desc": true,
+      "words": 1908,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/calculators/birth-number/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/chaldean-compound-numbers-meanings.html",
+      "title": "Chaldean Compound Numbers | Numeros Vision Guide",
+      "desc_len": 153,
+      "has_desc": true,
+      "words": 2203,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/blog/chaldean-compound-numbers-meanings",
+      "has_schema": true
+    },
+    {
+      "path": "blog/chaldean-numerology.html",
+      "title": "Chaldean Numerology Explained: Sound Vibrations & Compound Numbers | Numeros Vision",
+      "desc_len": 163,
+      "has_desc": true,
+      "words": 1295,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/chaldean-numerology/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/chaldean-vs-pythagorean-numerology.html",
+      "title": "Chaldean vs Pythagorean Numerology: Complete Guide \u2014 Numeros Vision",
+      "desc_len": 212,
+      "has_desc": true,
+      "words": 1693,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/blog/chaldean-vs-pythagorean-numerology",
+      "has_schema": true
+    },
+    {
+      "path": "blog/gemstone-remedies.html",
+      "title": "Gemstone & Crystal Remedies by Numerology \u2014 Numeros Vision",
+      "desc_len": 208,
+      "has_desc": true,
+      "words": 1961,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/blog/gemstone-remedies",
+      "has_schema": true
+    },
+    {
+      "path": "blog/how-to-calculate-name-numerology.html",
+      "title": "How to Calculate Name Numerology Step-by-Step | Numeros Vision",
+      "desc_len": 155,
+      "has_desc": true,
+      "words": 1488,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/how-to-calculate-name-numerology/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/kua-number-auspicious-directions-and-career-feng-shui.html",
+      "title": "Kua Number Auspicious Directions: Complete Guide \u2014 Numeros Vision",
+      "desc_len": 154,
+      "has_desc": true,
+      "words": 2479,
+      "h1_count": 0,
+      "canonical": "https://numerosvision.com/blog/kua-number-auspicious-directions-and-career-feng-shui",
+      "has_schema": true
+    },
+    {
+      "path": "blog/life-path-numbers-explained.html",
+      "title": "Life Path Numbers 1\u20139 Explained \u2014 Complete Guide 2026 \u2014 Numeros Vision",
+      "desc_len": 182,
+      "has_desc": true,
+      "words": 2402,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/blog/life-path-numbers-explained",
+      "has_schema": true
+    },
+    {
+      "path": "blog/lo-shu-grid-8-planes.html",
+      "title": "Lo Shu Grid 8 Planes Explained: Rajyog & Fate Arrows \u2014 Numeros Vision",
+      "desc_len": 197,
+      "has_desc": true,
+      "words": 1805,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/blog/lo-shu-grid-8-planes",
+      "has_schema": true
+    },
+    {
+      "path": "blog/master-numbers-11-22-33.html",
+      "title": "Master Numbers 11, 22, 33 Explained: Spiritual Paths \u2014 Numeros Vision",
+      "desc_len": 198,
+      "has_desc": true,
+      "words": 1447,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/blog/master-numbers-11-22-33",
+      "has_schema": true
+    },
+    {
+      "path": "blog/mobile-numerology-malefic-pairs.html",
+      "title": "Mobile Numerology Malefic Pairs: Hidden Danger Numbers \u2014 Numeros Vision",
+      "desc_len": 185,
+      "has_desc": true,
+      "words": 1549,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/blog/mobile-numerology-malefic-pairs",
+      "has_schema": true
+    },
+    {
+      "path": "blog/name-vs-date-of-birth-numerology.html",
+      "title": "Name Numerology vs. Date-of-Birth Numerology | Numeros Vision",
+      "desc_len": 164,
+      "has_desc": true,
+      "words": 1264,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/name-vs-date-of-birth-numerology/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-alphabet-chart.html",
+      "title": "Numerology Alphabet Chart: Chaldean vs. Pythagorean Sound Values | Numeros Vision",
+      "desc_len": 158,
+      "has_desc": true,
+      "words": 1555,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-alphabet-chart/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-1.html",
+      "title": "Number 1 in Numerology: Meaning, Personality & Compatibility | Numeros Vision",
+      "desc_len": 155,
+      "has_desc": true,
+      "words": 1065,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-1/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-2.html",
+      "title": "Number 2 in Numerology: Meaning, Personality & Compatibility | Numeros Vision",
+      "desc_len": 158,
+      "has_desc": true,
+      "words": 1054,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-2/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-3.html",
+      "title": "Number 3 in Numerology: Meaning, Personality & Compatibility | Numeros Vision",
+      "desc_len": 171,
+      "has_desc": true,
+      "words": 1062,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-3/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-4.html",
+      "title": "Number 4 in Numerology: Meaning, Personality & Compatibility | Numeros Vision",
+      "desc_len": 167,
+      "has_desc": true,
+      "words": 1057,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-4/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-5.html",
+      "title": "Number 5 in Numerology: Meaning, Personality & Compatibility | Numeros Vision",
+      "desc_len": 158,
+      "has_desc": true,
+      "words": 1061,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-5/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-6.html",
+      "title": "Number 6 in Numerology: Meaning, Personality & Compatibility | Numeros Vision",
+      "desc_len": 158,
+      "has_desc": true,
+      "words": 1070,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-6/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-7.html",
+      "title": "Number 7 in Numerology: Meaning, Personality & Compatibility | Numeros Vision",
+      "desc_len": 167,
+      "has_desc": true,
+      "words": 1064,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-7/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-8.html",
+      "title": "Number 8 in Numerology: Meaning, Personality & Compatibility | Numeros Vision",
+      "desc_len": 158,
+      "has_desc": true,
+      "words": 1073,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-8/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-9.html",
+      "title": "Number 9 in Numerology: Meaning, Personality & Compatibility | Numeros Vision",
+      "desc_len": 157,
+      "has_desc": true,
+      "words": 1065,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-9/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/numerology-number-meanings.html",
+      "title": "Numerology Number Meanings (1\u20139): The Complete Archetype Guide | Numeros Vision",
+      "desc_len": 161,
+      "has_desc": true,
+      "words": 1713,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/guides/numerology-number-meanings/",
+      "has_schema": true
+    },
+    {
+      "path": "blog/vedic-gemstone-remedies.html",
+      "title": "Vedic Gemstone Remedies & Planetary Crystal Guide \u2014 Numeros Vision",
+      "desc_len": 208,
+      "has_desc": true,
+      "words": 1962,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/blog/vedic-gemstone-remedies",
+      "has_schema": true
+    },
+    {
+      "path": "blog/what-is-numerology.html",
+      "title": "What is Numerology? The Complete Beginner's Guide 2026 \u2014 Numeros Vision",
+      "desc_len": 187,
+      "has_desc": true,
+      "words": 1746,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/blog/what-is-numerology",
+      "has_schema": true
+    },
+    {
+      "path": "calculator_hub.html",
+      "title": "Numerology Calculators | Birth, Name, Life Path & More | Numeros Vision",
+      "desc_len": 134,
+      "has_desc": true,
+      "words": 1154,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/calculators/",
+      "has_schema": true
+    },
+    {
+      "path": "cdp.html",
+      "title": "CDP Identity Graph & Audience Taxonomy Console \u2014 Numeros Vision",
+      "desc_len": 0,
+      "has_desc": false,
+      "words": 2873,
+      "h1_count": 1,
+      "canonical": "",
+      "has_schema": false
+    },
+    {
+      "path": "charm_ai.html",
+      "title": "Charm AI | Personalised Numerology Explanations | Numeros Vision",
+      "desc_len": 132,
+      "has_desc": true,
+      "words": 2872,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/charm-ai/",
+      "has_schema": true
+    },
+    {
+      "path": "consultation.html",
+      "title": "Numerology Consultation | Numeros Vision",
+      "desc_len": 159,
+      "has_desc": true,
+      "words": 833,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/consultation/",
+      "has_schema": true
+    },
+    {
+      "path": "contact.html",
+      "title": "Contact Numeros Vision | Customer Support & Inquiries",
+      "desc_len": 142,
+      "has_desc": true,
+      "words": 1599,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/contact/",
+      "has_schema": true
+    },
+    {
+      "path": "cookie_policy.html",
+      "title": "Cookie Policy | Numeros Vision",
+      "desc_len": 136,
+      "has_desc": true,
+      "words": 740,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/cookie-policy/",
+      "has_schema": true
+    },
+    {
+      "path": "dashboard.html",
+      "title": "Your Numeros Dashboard | Numeros Vision",
+      "desc_len": 146,
+      "has_desc": true,
+      "words": 970,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/dashboard/",
+      "has_schema": false
+    },
+    {
+      "path": "demo.html",
+      "title": "Numeros Vision \u2014 Full Platform Demo",
+      "desc_len": 0,
+      "has_desc": false,
+      "words": 2826,
+      "h1_count": 1,
+      "canonical": "",
+      "has_schema": false
+    },
+    {
+      "path": "disclaimer.html",
+      "title": "Numerology Disclaimer | Numeros Vision",
+      "desc_len": 141,
+      "has_desc": true,
+      "words": 2121,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/disclaimer/",
+      "has_schema": true
+    },
+    {
+      "path": "faq.html",
+      "title": "Numerology FAQs | Numeros Vision",
+      "desc_len": 140,
+      "has_desc": true,
+      "words": 1060,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/faq/",
+      "has_schema": true
+    },
+    {
+      "path": "index.html",
+      "title": "Numeros Vision | AI-Powered Numerology Insights",
+      "desc_len": 162,
+      "has_desc": true,
+      "words": 8449,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/",
+      "has_schema": true
+    },
+    {
+      "path": "insights_hub.html",
+      "title": "Numerology Insights and Guides | Numeros Vision",
+      "desc_len": 136,
+      "has_desc": true,
+      "words": 1047,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/insights/",
+      "has_schema": true
+    },
+    {
+      "path": "login.html",
+      "title": "Sign In | Numeros Vision",
+      "desc_len": 124,
+      "has_desc": true,
+      "words": 695,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/login/",
+      "has_schema": false
+    },
+    {
+      "path": "logo-preview.html",
+      "title": "Numeros Vision \u2014 Master Logo Suite & Live Inspection",
+      "desc_len": 0,
+      "has_desc": false,
+      "words": 1488,
+      "h1_count": 1,
+      "canonical": "",
+      "has_schema": false
+    },
+    {
+      "path": "methodology.html",
+      "title": "Numerology Methodology and Calculation Principles | Numeros Vision",
+      "desc_len": 138,
+      "has_desc": true,
+      "words": 891,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/methodology/",
+      "has_schema": true
+    },
+    {
+      "path": "numerology_overview.html",
+      "title": "Numerology Guide: Numbers, Methods and Calculators | Numeros Vision",
+      "desc_len": 159,
+      "has_desc": true,
+      "words": 1077,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/numerology/",
+      "has_schema": true
+    },
+    {
+      "path": "practitioner.html",
+      "title": "Practitioner Portal & Prediction Tracker \u2014 Numeros Vision",
+      "desc_len": 171,
+      "has_desc": true,
+      "words": 1741,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/practitioner",
+      "has_schema": true
+    },
+    {
+      "path": "pricing.html",
+      "title": "Plans and Pricing | Numeros Vision",
+      "desc_len": 152,
+      "has_desc": true,
+      "words": 4547,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/pricing/",
+      "has_schema": true
+    },
+    {
+      "path": "privacy.html",
+      "title": "Privacy Policy | Numeros Vision",
+      "desc_len": 140,
+      "has_desc": true,
+      "words": 1699,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/privacy-policy/",
+      "has_schema": true
+    },
+    {
+      "path": "pythagorean_calculator.html",
+      "title": "Pythagorean Numerology Calculator | Western Method | Numeros Vision",
+      "desc_len": 137,
+      "has_desc": true,
+      "words": 1511,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/calculators/pythagorean-numerology/",
+      "has_schema": true
+    },
+    {
+      "path": "refund.html",
+      "title": "Refund and Cancellation Policy | Numeros Vision",
+      "desc_len": 140,
+      "has_desc": true,
+      "words": 1442,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/refund-policy/",
+      "has_schema": true
+    },
+    {
+      "path": "reports_catalogue.html",
+      "title": "Personalised Numerology Reports | Numeros Vision",
+      "desc_len": 149,
+      "has_desc": true,
+      "words": 985,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/reports/",
+      "has_schema": true
+    },
+    {
+      "path": "sample.html",
+      "title": "Celestial Master Blueprint Sample Report | Numeros Vision",
+      "desc_len": 216,
+      "has_desc": true,
+      "words": 47402,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/sample",
+      "has_schema": true
+    },
+    {
+      "path": "sample2.html",
+      "title": "Numeros Vision | Anveil Every Charm \u2014 Sample 2 UI/UX Architecture (Desktop & Mobile App)",
+      "desc_len": 172,
+      "has_desc": true,
+      "words": 5567,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/sample2",
+      "has_schema": false
+    },
+    {
+      "path": "sample_roadmap.html",
+      "title": "Master Website Roadmap & Sample Blueprint | Numeros Vision",
+      "desc_len": 185,
+      "has_desc": true,
+      "words": 2635,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/sample-roadmap",
+      "has_schema": false
+    },
+    {
+      "path": "signup.html",
+      "title": "Create Your Account | Numeros Vision",
+      "desc_len": 127,
+      "has_desc": true,
+      "words": 760,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/signup/",
+      "has_schema": false
+    },
+    {
+      "path": "terms.html",
+      "title": "Terms of Service | Numeros Vision",
+      "desc_len": 128,
+      "has_desc": true,
+      "words": 1476,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/terms/",
+      "has_schema": true
+    },
+    {
+      "path": "tools/baby-naming.html",
+      "title": "Auspicious Baby Naming Numerology Studio \u2014 Numeros Vision",
+      "desc_len": 175,
+      "has_desc": true,
+      "words": 1552,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/baby-naming",
+      "has_schema": true
+    },
+    {
+      "path": "tools/blessing-years.html",
+      "title": "Free Blessing Years & Milestone Timeline Calculator \u2014 Numeros Vision",
+      "desc_len": 198,
+      "has_desc": true,
+      "words": 1654,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/blessing-years",
+      "has_schema": true
+    },
+    {
+      "path": "tools/compatibility-calculator.html",
+      "title": "Free Relationship & Marriage Compatibility Calculator \u2014 Numeros Vision",
+      "desc_len": 149,
+      "has_desc": true,
+      "words": 1391,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/compatibility-calculator",
+      "has_schema": true
+    },
+    {
+      "path": "tools/life-path-calculator.html",
+      "title": "Free Life Path Number Calculator \u2014 Numeros Vision",
+      "desc_len": 185,
+      "has_desc": true,
+      "words": 2515,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/life-path-calculator",
+      "has_schema": true
+    },
+    {
+      "path": "tools/lo-shu-grid.html",
+      "title": "Free Lo Shu Grid Calculator \u2014 Numeros Vision",
+      "desc_len": 186,
+      "has_desc": true,
+      "words": 2642,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/lo-shu-grid",
+      "has_schema": true
+    },
+    {
+      "path": "tools/lucky-number.html",
+      "title": "Free Lucky Number Calculator \u2014 Numeros Vision",
+      "desc_len": 176,
+      "has_desc": true,
+      "words": 2585,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/lucky-number",
+      "has_schema": true
+    },
+    {
+      "path": "tools/mobile-numerology.html",
+      "title": "Free Mobile Phone Numerology & Malefic Pairs Checker \u2014 Numeros Vision",
+      "desc_len": 182,
+      "has_desc": true,
+      "words": 1661,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/mobile-numerology",
+      "has_schema": true
+    },
+    {
+      "path": "tools/name-balancing.html",
+      "title": "Free Name Balancing & Spelling Optimization Calculator \u2014 Numeros Vision",
+      "desc_len": 185,
+      "has_desc": true,
+      "words": 2778,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/name-balancing",
+      "has_schema": true
+    },
+    {
+      "path": "tools/name-numerology.html",
+      "title": "Free Name Numerology Calculator \u2014 Chaldean & Pythagorean \u2014 Numeros Vision",
+      "desc_len": 199,
+      "has_desc": true,
+      "words": 3051,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/name-numerology",
+      "has_schema": true
+    },
+    {
+      "path": "tools/profession-calculator.html",
+      "title": "Free Career & Profession Numerology Calculator \u2014 Numeros Vision",
+      "desc_len": 179,
+      "has_desc": true,
+      "words": 1377,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/profession-calculator",
+      "has_schema": true
+    },
+    {
+      "path": "tools/property-numerology.html",
+      "title": "Free House & Property Numerology Calculator \u2014 Numeros Vision",
+      "desc_len": 170,
+      "has_desc": true,
+      "words": 1627,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/property-numerology",
+      "has_schema": true
+    },
+    {
+      "path": "tools/vehicle-numerology.html",
+      "title": "Free Vehicle Number Numerology & Lucky Color Audit \u2014 Numeros Vision",
+      "desc_len": 179,
+      "has_desc": true,
+      "words": 1335,
+      "h1_count": 1,
+      "canonical": "https://numerosvision.com/tools/vehicle-numerology",
+      "has_schema": true
+    }
+  ]
+}

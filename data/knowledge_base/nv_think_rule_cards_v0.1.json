@@ -1,0 +1,2132 @@
+{
+  "registry": "numeros_vision_rule_cards",
+  "version": "0.1-draft",
+  "rights_note": "All text is paraphrased in our own words. Source pages are for private cross-checking only. Do not paste source text into the product, do not train or embed these books.",
+  "sources": {
+    "COOP": "D. J. Cooper, Understanding Numerology (Aquarian, 1990) - private study copy",
+    "WEB": "R. Webster, Chinese Numerology (Llewellyn, 1998) - private study copy",
+    "ALEKA": "Aleka Ghose / Eekaparnika, Chaldean course notes (133 pp) - private study copy"
+  },
+  "framework": [
+    "LOGIC",
+    "OBSERVATION",
+    "BEHAVIOUR",
+    "PSYCHOLOGY",
+    "INTERPRETATION",
+    "VALIDATION",
+    "PREDICTION"
+  ],
+  "single_cards": [
+    {
+      "id": "MULANK-1",
+      "number": 1,
+      "kind": "single",
+      "logic": "Mulank = day of birth reduced to one digit (e.g. 28 -> 2+8=10 -> 1). Bhagyank = full date of birth reduced to one digit. Chaldean-Indian planet map used by Numeros Vision.",
+      "observation": {
+        "planet_chaldean_indian": "Sun (Surya)",
+        "planet_cooper": "Sun",
+        "keywords": [
+          "initiative",
+          "leadership",
+          "independence",
+          "originality"
+        ]
+      },
+      "behaviour": {
+        "strengths": [
+          "Self-starting and decisive",
+          "Comfortable leading and building from nothing",
+          "Generous in small, frequent ways (Cooper)"
+        ],
+        "watch_outs": [
+          "Can overrule others or resist advice",
+          "May lean on recognition from others",
+          "Can cool quickly on new ideas"
+        ]
+      },
+      "psychology": "Core drive is to originate and be seen as the source of good ideas. Stress shows up as pride, impatience or going it alone.",
+      "interpretation_draft": "Mulank 1 is traditionally linked with initiative and independence. You tend to start things, lead from the front and trust your own judgement. Your growth edge is listening early and sharing credit.",
+      "validation": {
+        "status": "untested",
+        "testable_statement": "Reports a preference for starting projects rather than joining ones already running.",
+        "method": "Ask consenting users a short self-rating item; compare against a random-number baseline."
+      },
+      "prediction": {
+        "status": "blocked",
+        "note": "Trait text only. No event or timing statement is allowed from this card."
+      },
+      "conflicts": "Planet attribution agrees across sources (Sun).",
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 15-16",
+          "use": "behaviour, psychology (Cooper describes the number dominant in a chart, not the birth-day Mulank)"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 5-8",
+          "use": "Life Path (Bhagyank-style) description"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 20 (1st)",
+          "use": "Day-of-birth (Mulank-style) description"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 10-23",
+          "use": "Chaldean-Indian planet and trait list"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "MULANK-2",
+      "number": 2,
+      "kind": "single",
+      "logic": "Mulank = day of birth reduced to one digit (e.g. 28 -> 2+8=10 -> 1). Bhagyank = full date of birth reduced to one digit. Chaldean-Indian planet map used by Numeros Vision.",
+      "observation": {
+        "planet_chaldean_indian": "Moon (Chandra)",
+        "planet_cooper": "Earth (Cooper explicitly rejects Moon)",
+        "keywords": [
+          "cooperation",
+          "diplomacy",
+          "sensitivity",
+          "patience"
+        ]
+      },
+      "behaviour": {
+        "strengths": [
+          "Tactful, good listener, loyal to people",
+          "Finishes what is started",
+          "Works well in partnership"
+        ],
+        "watch_outs": [
+          "Can depend too much on others' views",
+          "May avoid confrontation and absorb stress",
+          "Mood swings (Chaldean source)"
+        ]
+      },
+      "psychology": "Core drive is harmony and belonging. Stress shows up as withdrawing, self-doubt or over-accommodating.",
+      "interpretation_draft": "Mulank 2 is traditionally linked with cooperation and emotional intelligence. You read people well and build trust. Your growth edge is saying your own preference clearly and early.",
+      "validation": {
+        "status": "untested",
+        "testable_statement": "Reports a preference for supporting or partnering roles over leading alone.",
+        "method": "Ask consenting users a short self-rating item; compare against a random-number baseline."
+      },
+      "prediction": {
+        "status": "blocked",
+        "note": "Trait text only. No event or timing statement is allowed from this card."
+      },
+      "conflicts": "CONFLICT: Cooper says Earth, not Moon. Chaldean-Indian sources say Moon. Product default: Moon.",
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 17-18",
+          "use": "behaviour, psychology (Cooper describes the number dominant in a chart, not the birth-day Mulank)"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 8-9",
+          "use": "Life Path (Bhagyank-style) description"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 20 (2nd)",
+          "use": "Day-of-birth (Mulank-style) description"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 10-23",
+          "use": "Chaldean-Indian planet and trait list"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "MULANK-3",
+      "number": 3,
+      "kind": "single",
+      "logic": "Mulank = day of birth reduced to one digit (e.g. 28 -> 2+8=10 -> 1). Bhagyank = full date of birth reduced to one digit. Chaldean-Indian planet map used by Numeros Vision.",
+      "observation": {
+        "planet_chaldean_indian": "Jupiter (Guru)",
+        "planet_cooper": "Jupiter",
+        "keywords": [
+          "expression",
+          "optimism",
+          "creativity",
+          "sociability"
+        ]
+      },
+      "behaviour": {
+        "strengths": [
+          "Warm, articulate, quick with ideas",
+          "Brings people together",
+          "Finds humour and hope"
+        ],
+        "watch_outs": [
+          "Scattered focus, unfinished projects",
+          "Can talk before thinking",
+          "Needs a practical partner to execute"
+        ]
+      },
+      "psychology": "Core drive is expression and connection. Stress shows up as restlessness, over-promising or avoiding hard conversations.",
+      "interpretation_draft": "Mulank 3 is traditionally linked with creativity, communication and optimism. You light up a room and generate ideas easily. Your growth edge is finishing what you start and choosing fewer priorities.",
+      "validation": {
+        "status": "untested",
+        "testable_statement": "Reports high comfort with speaking or writing and several projects running at once.",
+        "method": "Ask consenting users a short self-rating item; compare against a random-number baseline."
+      },
+      "prediction": {
+        "status": "blocked",
+        "note": "Trait text only. No event or timing statement is allowed from this card."
+      },
+      "conflicts": "Planet agrees (Jupiter). Cooper uses the number 'luck' framing - do not use luck wording in product.",
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 19-20",
+          "use": "behaviour, psychology (Cooper describes the number dominant in a chart, not the birth-day Mulank)"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 9",
+          "use": "Life Path (Bhagyank-style) description"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 20 (3rd)",
+          "use": "Day-of-birth (Mulank-style) description"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 10-23",
+          "use": "Chaldean-Indian planet and trait list"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "MULANK-4",
+      "number": 4,
+      "kind": "single",
+      "logic": "Mulank = day of birth reduced to one digit (e.g. 28 -> 2+8=10 -> 1). Bhagyank = full date of birth reduced to one digit. Chaldean-Indian planet map used by Numeros Vision.",
+      "observation": {
+        "planet_chaldean_indian": "Rahu / Uranus (Chaldean-Indian)",
+        "planet_cooper": "Saturn",
+        "keywords": [
+          "structure",
+          "discipline",
+          "practicality",
+          "order"
+        ]
+      },
+      "behaviour": {
+        "strengths": [
+          "Reliable, thorough, good with detail",
+          "Builds systems and routines",
+          "Strong sense of honesty and proof"
+        ],
+        "watch_outs": [
+          "Rigid or slow to accept change",
+          "Can get stuck in routine",
+          "May struggle with ambiguity"
+        ]
+      },
+      "psychology": "Core drive is security through order. Stress shows up as stubbornness, over-checking or resisting new methods.",
+      "interpretation_draft": "Mulank 4 is traditionally linked with discipline and building solid foundations. You are dependable and detail-aware. Your growth edge is staying flexible when plans change.",
+      "validation": {
+        "status": "untested",
+        "testable_statement": "Reports a strong preference for routine and planning, and slow decisions when stakes are high.",
+        "method": "Ask consenting users a short self-rating item; compare against a random-number baseline."
+      },
+      "prediction": {
+        "status": "blocked",
+        "note": "Trait text only. No event or timing statement is allowed from this card."
+      },
+      "conflicts": "CONFLICT: Cooper = Saturn; Aleka/Chaldean-Indian = Rahu/Uranus. Product default: Rahu/Uranus; do not mix Saturn into 4.",
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 20-22",
+          "use": "behaviour, psychology (Cooper describes the number dominant in a chart, not the birth-day Mulank)"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 10",
+          "use": "Life Path (Bhagyank-style) description"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 20 (4th)",
+          "use": "Day-of-birth (Mulank-style) description"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 10-23",
+          "use": "Chaldean-Indian planet and trait list"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "MULANK-5",
+      "number": 5,
+      "kind": "single",
+      "logic": "Mulank = day of birth reduced to one digit (e.g. 28 -> 2+8=10 -> 1). Bhagyank = full date of birth reduced to one digit. Chaldean-Indian planet map used by Numeros Vision.",
+      "observation": {
+        "planet_chaldean_indian": "Mercury (Budh)",
+        "planet_cooper": "Mercury",
+        "keywords": [
+          "versatility",
+          "curiosity",
+          "communication",
+          "change"
+        ]
+      },
+      "behaviour": {
+        "strengths": [
+          "Quick thinker, adaptable, sociable",
+          "Good at connecting ideas and people",
+          "Enjoys travel and variety"
+        ],
+        "watch_outs": [
+          "Restless, easily bored",
+          "Spread too thin",
+          "May tell people what they want to hear (Cooper)"
+        ]
+      },
+      "psychology": "Core drive is freedom and novelty. Stress shows up as overcommitting, avoiding anchors or fidgeting.",
+      "interpretation_draft": "Mulank 5 is traditionally linked with curiosity, versatility and movement. You learn fast and adapt well. Your growth edge is anchoring a few routines so your energy has somewhere to land.",
+      "validation": {
+        "status": "untested",
+        "testable_statement": "Reports frequent changes of role, place or project and a strong need for variety.",
+        "method": "Ask consenting users a short self-rating item; compare against a random-number baseline."
+      },
+      "prediction": {
+        "status": "blocked",
+        "note": "Trait text only. No event or timing statement is allowed from this card."
+      },
+      "conflicts": "Planet agrees (Mercury).",
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 23-25",
+          "use": "behaviour, psychology (Cooper describes the number dominant in a chart, not the birth-day Mulank)"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 11",
+          "use": "Life Path (Bhagyank-style) description"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 20-21 (5th)",
+          "use": "Day-of-birth (Mulank-style) description"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 10-23",
+          "use": "Chaldean-Indian planet and trait list"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "MULANK-6",
+      "number": 6,
+      "kind": "single",
+      "logic": "Mulank = day of birth reduced to one digit (e.g. 28 -> 2+8=10 -> 1). Bhagyank = full date of birth reduced to one digit. Chaldean-Indian planet map used by Numeros Vision.",
+      "observation": {
+        "planet_chaldean_indian": "Venus (Shukra)",
+        "planet_cooper": "Moon",
+        "keywords": [
+          "care",
+          "harmony",
+          "responsibility",
+          "aesthetics"
+        ]
+      },
+      "behaviour": {
+        "strengths": [
+          "Warm host, family-centred, loyal",
+          "Responsible and artistic",
+          "Builds comfortable, well-ordered spaces"
+        ],
+        "watch_outs": [
+          "Takes on too much for others",
+          "Can be fussy or over-controlling about detail",
+          "Slow to forgive slights (Cooper)"
+        ]
+      },
+      "psychology": "Core drive is nurturing and belonging. Stress shows up as martyrdom, nagging or quiet resentment.",
+      "interpretation_draft": "Mulank 6 is traditionally linked with care, family and beauty. You create warmth and take responsibility for people. Your growth edge is protecting your own time and letting others carry their share.",
+      "validation": {
+        "status": "untested",
+        "testable_statement": "Reports being the person others turn to for support, and strong family responsibilities.",
+        "method": "Ask consenting users a short self-rating item; compare against a random-number baseline."
+      },
+      "prediction": {
+        "status": "blocked",
+        "note": "Trait text only. No event or timing statement is allowed from this card."
+      },
+      "conflicts": "CONFLICT: Cooper = Moon; Chaldean-Indian = Venus. Product default: Venus.",
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 25-27",
+          "use": "behaviour, psychology (Cooper describes the number dominant in a chart, not the birth-day Mulank)"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 11-12",
+          "use": "Life Path (Bhagyank-style) description"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 21 (6th)",
+          "use": "Day-of-birth (Mulank-style) description"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 10-23",
+          "use": "Chaldean-Indian planet and trait list"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "MULANK-7",
+      "number": 7,
+      "kind": "single",
+      "logic": "Mulank = day of birth reduced to one digit (e.g. 28 -> 2+8=10 -> 1). Bhagyank = full date of birth reduced to one digit. Chaldean-Indian planet map used by Numeros Vision.",
+      "observation": {
+        "planet_chaldean_indian": "Ketu / Neptune (Chaldean-Indian)",
+        "planet_cooper": "Venus",
+        "keywords": [
+          "analysis",
+          "introspection",
+          "spirituality",
+          "research"
+        ]
+      },
+      "behaviour": {
+        "strengths": [
+          "Deep thinker, perceptive, independent",
+          "Strong research and reflective ability",
+          "Keeps confidences"
+        ],
+        "watch_outs": [
+          "Can withdraw or feel misunderstood",
+          "Overly private",
+          "May overthink or distrust easily"
+        ]
+      },
+      "psychology": "Core drive is meaning and inner truth. Stress shows up as isolation, secrecy or dry sarcasm.",
+      "interpretation_draft": "Mulank 7 is traditionally linked with reflection, research and inner life. You prefer depth over noise. Your growth edge is letting a few trusted people in and acting on what you understand.",
+      "validation": {
+        "status": "untested",
+        "testable_statement": "Reports needing regular solitude and preferring a few close friends to a large circle.",
+        "method": "Ask consenting users a short self-rating item; compare against a random-number baseline."
+      },
+      "prediction": {
+        "status": "blocked",
+        "note": "Trait text only. No event or timing statement is allowed from this card."
+      },
+      "conflicts": "CONFLICT: Cooper = Venus; Chaldean-Indian = Ketu/Neptune. Product default: Ketu/Neptune.",
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 27-29",
+          "use": "behaviour, psychology (Cooper describes the number dominant in a chart, not the birth-day Mulank)"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 12-13",
+          "use": "Life Path (Bhagyank-style) description"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 21 (7th)",
+          "use": "Day-of-birth (Mulank-style) description"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 10-23",
+          "use": "Chaldean-Indian planet and trait list"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "MULANK-8",
+      "number": 8,
+      "kind": "single",
+      "logic": "Mulank = day of birth reduced to one digit (e.g. 28 -> 2+8=10 -> 1). Bhagyank = full date of birth reduced to one digit. Chaldean-Indian planet map used by Numeros Vision.",
+      "observation": {
+        "planet_chaldean_indian": "Saturn (Shani)",
+        "planet_cooper": "Pluto",
+        "keywords": [
+          "ambition",
+          "organisation",
+          "justice",
+          "responsibility"
+        ]
+      },
+      "behaviour": {
+        "strengths": [
+          "Strong organiser and long-term builder",
+          "Good with money and large structures",
+          "Fair, hard-working"
+        ],
+        "watch_outs": [
+          "Can push others too hard",
+          "Single-minded, may become rigid",
+          "Burden of heavy responsibility (Chaldean source)"
+        ]
+      },
+      "psychology": "Core drive is achievement and rightful reward. Stress shows up as overwork, control or silent endurance.",
+      "interpretation_draft": "Mulank 8 is traditionally linked with structure, ambition and responsibility. You build patiently and take duty seriously. Your growth edge is pacing yourself and recognising others' limits.",
+      "validation": {
+        "status": "untested",
+        "testable_statement": "Reports ambition toward career or financial goals and a habit of taking on heavy responsibility.",
+        "method": "Ask consenting users a short self-rating item; compare against a random-number baseline."
+      },
+      "prediction": {
+        "status": "blocked",
+        "note": "Trait text only. No event or timing statement is allowed from this card."
+      },
+      "conflicts": "CONFLICT: Cooper = Pluto; Chaldean-Indian = Saturn. Product default: Saturn.",
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 29-31",
+          "use": "behaviour, psychology (Cooper describes the number dominant in a chart, not the birth-day Mulank)"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 13-14",
+          "use": "Life Path (Bhagyank-style) description"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 21 (8th)",
+          "use": "Day-of-birth (Mulank-style) description"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 10-23",
+          "use": "Chaldean-Indian planet and trait list"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "MULANK-9",
+      "number": 9,
+      "kind": "single",
+      "logic": "Mulank = day of birth reduced to one digit (e.g. 28 -> 2+8=10 -> 1). Bhagyank = full date of birth reduced to one digit. Chaldean-Indian planet map used by Numeros Vision.",
+      "observation": {
+        "planet_chaldean_indian": "Mars (Mangal)",
+        "planet_cooper": "Mars and Neptune",
+        "keywords": [
+          "compassion",
+          "drive",
+          "idealism",
+          "completion"
+        ]
+      },
+      "behaviour": {
+        "strengths": [
+          "Courageous, generous, broad-minded",
+          "Service-minded and visionary",
+          "Strong sense of fairness"
+        ],
+        "watch_outs": [
+          "Impatient or blunt when frustrated",
+          "Scatter energy across causes",
+          "Can expect others to share their views (Cooper)"
+        ]
+      },
+      "psychology": "Core drive is purpose and service. Stress shows up as temper, disappointment in others or over-giving.",
+      "interpretation_draft": "Mulank 9 is traditionally linked with energy, compassion and a wider cause. You act on conviction and care about fairness. Your growth edge is pacing your energy and accepting that others move differently.",
+      "validation": {
+        "status": "untested",
+        "testable_statement": "Reports volunteering or service activity and strong feelings about fairness.",
+        "method": "Ask consenting users a short self-rating item; compare against a random-number baseline."
+      },
+      "prediction": {
+        "status": "blocked",
+        "note": "Trait text only. No event or timing statement is allowed from this card."
+      },
+      "conflicts": "Planet agrees on Mars; Cooper adds Neptune. Product default: Mars.",
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 31-33",
+          "use": "behaviour, psychology (Cooper describes the number dominant in a chart, not the birth-day Mulank)"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 14-15",
+          "use": "Life Path (Bhagyank-style) description"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 21 (9th)",
+          "use": "Day-of-birth (Mulank-style) description"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 10-23",
+          "use": "Chaldean-Indian planet and trait list"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    }
+  ],
+  "master_cards": [
+    {
+      "id": "MASTER-11",
+      "number": 11,
+      "kind": "master",
+      "reduces_to": 2,
+      "logic": "Keep 11 and 22 as master numbers when Mulank/Bhagyank first arrives at them; also report the reduced digit.",
+      "observation": "Idealistic, intuitive, inspirational; ideas often outrun execution; nervous energy.",
+      "behaviour_watch_outs": "Mood swings, hard to follow through, can idealise or project faults onto others.",
+      "interpretation_draft": "11 is a heightened form of 2: sensitivity plus vision. You inspire others, and your growth edge is turning ideas into steady action.",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 34-35"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 16-17"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-61 (11), 62-63 (22)"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "MASTER-22",
+      "number": 22,
+      "kind": "master",
+      "reduces_to": 4,
+      "logic": "Keep 11 and 22 as master numbers when Mulank/Bhagyank first arrives at them; also report the reduced digit.",
+      "observation": "Large-scale builder; practical dreamer; capable but prone to pressure and ups and downs.",
+      "behaviour_watch_outs": "Nervous tension; selfishness or cynicism if misused; incomplete projects.",
+      "interpretation_draft": "22 is a heightened form of 4: practical vision at scale. Your growth edge is staying grounded and finishing what you build.",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "COOP",
+          "pages": "pp 35-37 (OCR printed '32', read as 22)"
+        },
+        {
+          "src": "WEB",
+          "pages": "p 17-18"
+        },
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-61 (11), 62-63 (22)"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    }
+  ],
+  "compound_cards": [
+    {
+      "id": "COMPOUND-10",
+      "number": 10,
+      "kind": "compound",
+      "reduces_to": 1,
+      "digits": [
+        1,
+        0
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Cycles of rise and renewal; each ending seeds a beginning; progress with steady respect.",
+      "behaviour_day_lens": "Self-assured, persuasive, multitasker, rarely shows true feelings.",
+      "interpretation_draft": "Number 10 points to cycles: endings that open the next chapter. Steady effort tends to be recognised.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-11",
+      "number": 11,
+      "kind": "compound",
+      "reduces_to": 2,
+      "digits": [
+        1,
+        1
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Duality and emotional tests from close people; creative but weak follow-through; strengthens through self-command.",
+      "behaviour_day_lens": "Idea-rich, intuitive, nervous energy, strong mood swings.",
+      "interpretation_draft": "Number 11 highlights sensitivity and vision. The growth work is trusting your own judgement and turning ideas into action.",
+      "sensitivity_flag": "CAUTION",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-12",
+      "number": 12,
+      "kind": "compound",
+      "reduces_to": 3,
+      "digits": [
+        1,
+        2
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Social-cause orientation, public speaking, can sacrifice own balance for others.",
+      "behaviour_day_lens": "Persuasive, imaginative, embellishes stories, impatient.",
+      "interpretation_draft": "Number 12 favours causes, speaking and sharing ideas. Remember to keep your own balance while serving others.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-13",
+      "number": 13,
+      "kind": "compound",
+      "reduces_to": 4,
+      "digits": [
+        1,
+        3
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Change of plans and place; upheaval carries a new beginning; power needs maturity.",
+      "behaviour_day_lens": "Methodical, cautious, tenacious, feels hemmed in at times.",
+      "interpretation_draft": "Number 13 is about change and rebuilding. Accepting change early makes transitions smoother.",
+      "sensitivity_flag": "CAUTION",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-14",
+      "number": 14,
+      "kind": "compound",
+      "reduces_to": 5,
+      "digits": [
+        1,
+        4
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Commerce, adaptation, ambition; risk if overconfident; relationships need balance.",
+      "behaviour_day_lens": "Adventurous, adaptable, easily led, works hard in bursts.",
+      "interpretation_draft": "Number 14 favours business thinking and adaptability. Moderation and prudence keep ambition constructive.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-15",
+      "number": 15,
+      "kind": "compound",
+      "reduces_to": 6,
+      "digits": [
+        1,
+        5
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Magnetism, speech, arts; more than one income stream; avoid over-attachment to material comfort.",
+      "behaviour_day_lens": "Loyal, musical, supportive, keeps some independence.",
+      "interpretation_draft": "Number 15 carries charm and persuasive speech. It is best used with care for others.",
+      "sensitivity_flag": "CAUTION",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-16",
+      "number": 16,
+      "kind": "compound",
+      "reduces_to": 7,
+      "digits": [
+        1,
+        6
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Traditionally the most cautionary compound: a strong start followed by a fall unless humility and integrity are kept.",
+      "behaviour_day_lens": "Reserved, introspective, scientific or technical interest.",
+      "interpretation_draft": "Number 16 often shows a strong start. The tradition cautions that pride or overreach can bring a reversal, and that sudden shocks can follow rushed plans. Humility, integrity and careful planning are the traditional way through. It sits more comfortably with a prominent 2 and needs extra care alongside a prominent 9.",
+      "sensitivity_flag": "SENSITIVE-SOFTENED-WORDING-KEEPS-MEANING",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval",
+      "internal_full_strength_paraphrase": "Good start, poor end; fall from power or position; unexpected shock; warning of fatality and accidents; defeat of plans; escape only through strict virtue. Severe with prominent 9, works with prominent 2.",
+      "internal_note": "Customer wording keeps the source meaning in softened language. Full-strength paraphrase is internal only; never show source words."
+    },
+    {
+      "id": "COMPOUND-17",
+      "number": 17,
+      "kind": "compound",
+      "reduces_to": 8,
+      "digits": [
+        1,
+        7
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Courage and inspiration; rising above difficulty; reputation outlasts the person; may be seen as self-focused.",
+      "behaviour_day_lens": "Good with money, steady, meets setbacks on the way.",
+      "interpretation_draft": "Number 17 is traditionally linked with courage and recovery. Persistence tends to be rewarded.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-18",
+      "number": 18,
+      "kind": "compound",
+      "reduces_to": 9,
+      "digits": [
+        1,
+        8
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Traditionally heavy: conflict, the pull of materialism against spirit; also a healing gift.",
+      "behaviour_day_lens": "Administrative, humanitarian, may neglect personal life.",
+      "interpretation_draft": "Number 18 is traditionally a demanding number: ambition and material pursuits can pull against peace of mind, and disagreements, even within the family, can run hot. Success may feel hollow unless values stay central. It also carries a gift for healing and helping others. Guard your emotional and physical wellbeing and stay close to family. It is a heavier match alongside a prominent 2 or 7.",
+      "sensitivity_flag": "SENSITIVE-SOFTENED-WORDING-KEEPS-MEANING",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval",
+      "internal_full_strength_paraphrase": "Disease, mental instability, decay; materialism against spirit; bitter quarrels incl. family; failure seeded in success; friends become foes; lives far from family; hollow success; healing gift. Very heavy with prominent 2 or 7.",
+      "internal_note": "Customer wording keeps the source meaning in softened language. Full-strength paraphrase is internal only; never show source words."
+    },
+    {
+      "id": "COMPOUND-19",
+      "number": 19,
+      "kind": "compound",
+      "reduces_to": 1,
+      "digits": [
+        1,
+        9
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Sun-linked; independence, clarity, honesty; progress over time.",
+      "behaviour_day_lens": "Responsible, idealistic, emotion often leads logic.",
+      "interpretation_draft": "Number 19 is traditionally seen as bright and independent. Clear values support steady progress.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-20",
+      "number": 20,
+      "kind": "compound",
+      "reduces_to": 2,
+      "digits": [
+        2,
+        0
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Call to a larger purpose; awakening; delays that resolve through inner growth; good counsellor.",
+      "behaviour_day_lens": "Friendly, articulate, quiet life, can be moody.",
+      "interpretation_draft": "Number 20 is linked with purpose and counsel. Patience tends to be part of the path.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-21",
+      "number": 21,
+      "kind": "compound",
+      "reduces_to": 3,
+      "digits": [
+        2,
+        1
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Initiation and mastery; early effort, later recognition; wide reach.",
+      "behaviour_day_lens": "Witty, creative, tends to worry over small things.",
+      "interpretation_draft": "Number 21 is traditionally linked with mastery. Early effort tends to bear fruit later.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-22",
+      "number": 22,
+      "kind": "compound",
+      "reduces_to": 4,
+      "digits": [
+        2,
+        2
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Contested in the tradition: success if grounded and honest; speculation and pressure otherwise.",
+      "behaviour_day_lens": "Capable, intuitive, large swings, later-life gains.",
+      "interpretation_draft": "Number 22 is a builder's number. Staying grounded and finishing projects is the emphasis.",
+      "sensitivity_flag": "CAUTION",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-23",
+      "number": 23,
+      "kind": "compound",
+      "reduces_to": 5,
+      "digits": [
+        2,
+        3
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Communication, support from seniors, wins through aligned people; favourable in the tradition.",
+      "behaviour_day_lens": "Sensitive, independent, versatile, helpful.",
+      "interpretation_draft": "Number 23 is traditionally supportive: good communication and goodwill from mentors.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-24",
+      "number": 24,
+      "kind": "compound",
+      "reduces_to": 6,
+      "digits": [
+        2,
+        4
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Relationships, teamwork, support from people of standing; energy and courage.",
+      "behaviour_day_lens": "Caring, motivated, dramatic in pursuing goals.",
+      "interpretation_draft": "Number 24 is linked with partnerships and teamwork. Trust-building tends to help.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-25",
+      "number": 25,
+      "kind": "compound",
+      "reduces_to": 7,
+      "digits": [
+        2,
+        5
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Strength through experience and observation; trials earlier, support later.",
+      "behaviour_day_lens": "Intuitive, gentle, needs solitude, loyal in friendship.",
+      "interpretation_draft": "Number 25 is about learning by observation. Experience tends to build quiet strength.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-26",
+      "number": 26,
+      "kind": "compound",
+      "reduces_to": 8,
+      "digits": [
+        2,
+        6
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Traditionally warns about partnerships, loans and speculation; prudence is the theme.",
+      "behaviour_day_lens": "Determined, can turn a simple idea into income, generous.",
+      "interpretation_draft": "Number 26 carries a strong caution about partnerships, borrowed money, speculation and other people's advice. Disappointment tends to come through associations, so do careful due diligence before committing. With that care, life can be active and comfortable. It needs extra care alongside a prominent 4.",
+      "sensitivity_flag": "SENSITIVE-SOFTENED-WORDING-KEEPS-MEANING",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval",
+      "internal_full_strength_paraphrase": "Gravest warnings; disaster via associations, bad speculation, unions, advice; partnership a strict no; distinct fatalities; luxury only with caution. Very sad with prominent 4.",
+      "internal_note": "Customer wording keeps the source meaning in softened language. Full-strength paraphrase is internal only; never show source words."
+    },
+    {
+      "id": "COMPOUND-27",
+      "number": 27,
+      "kind": "compound",
+      "reduces_to": 9,
+      "digits": [
+        2,
+        7
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Authority and command; creativity bears fruit; carry out own plans.",
+      "behaviour_day_lens": "Determined, trusting, passionate, service-minded.",
+      "interpretation_draft": "Number 27 is linked with leadership and creative output. Independent planning tends to help.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-28",
+      "number": 28,
+      "kind": "compound",
+      "reduces_to": 1,
+      "digits": [
+        2,
+        8
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Great potential but traditionally flagged for reversals, misplaced trust and legal or ethical tests.",
+      "behaviour_day_lens": "Affectionate, freedom-loving, prefers to be own boss.",
+      "interpretation_draft": "Number 28 holds great potential, but the tradition warns of reversals if trust is misplaced, rivals are underestimated or rules are bent. Gains can be lost and may need rebuilding. Careful choices, legal prudence and sound ethics protect it. It suits a prominent 1 or 4 better than other combinations.",
+      "sensitivity_flag": "SENSITIVE-SOFTENED-WORDING-KEEPS-MEANING",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval",
+      "internal_full_strength_paraphrase": "Not fair for a name; downswings; start again at life's close; potential taken away unless rash ideas avoided; loss via trust, opposition, competition, non-compliance with law. Great for prominent 1 or 4.",
+      "internal_note": "Customer wording keeps the source meaning in softened language. Full-strength paraphrase is internal only; never show source words."
+    },
+    {
+      "id": "COMPOUND-29",
+      "number": 29,
+      "kind": "compound",
+      "reduces_to": 2,
+      "digits": [
+        2,
+        9
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Traditionally flagged for relationship friction and deception; learning discernment.",
+      "behaviour_day_lens": "Up-and-down, inspired dreamer, 11 potential (Webster).",
+      "interpretation_draft": "Number 29 tends toward sharp disagreement and fault-finding, and the tradition links it with difficulty in close relationships. Pausing before reacting and choosing partners carefully help. It is gentler alongside a prominent 7 and needs extra care with a prominent 9.",
+      "sensitivity_flag": "SENSITIVE-SOFTENED-WORDING-KEEPS-MEANING",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval",
+      "internal_full_strength_paraphrase": "Quarrelsome, fault-finding; logic vs emotion; invites ridicule; unfortunate in heart matters; pain and unexpected danger via opposite gender. Fewer ill effects with prominent 7, hazardous with prominent 9.",
+      "internal_note": "Customer wording keeps the source meaning in softened language. Full-strength paraphrase is internal only; never show source words."
+    },
+    {
+      "id": "COMPOUND-30",
+      "number": 30,
+      "kind": "compound",
+      "reduces_to": 3,
+      "digits": [
+        3,
+        0
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Thought, deduction, mental depth; detached from materialism; helps others.",
+      "behaviour_day_lens": "Charming, creative, low motivation unless encouraged.",
+      "interpretation_draft": "Number 30 is intellectual and perceptive. Structure and encouragement help turn ability into results.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-31",
+      "number": 31,
+      "kind": "compound",
+      "reduces_to": 4,
+      "digits": [
+        3,
+        1
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Independent, detail-oriented, mentally aloof; recovers after struggle.",
+      "behaviour_day_lens": "Managerial, climbs steadily, remembers favours and slights.",
+      "interpretation_draft": "Number 31 values freedom and knowledge. Steady rise through effort is the theme.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-32",
+      "number": 32,
+      "kind": "compound",
+      "reduces_to": 5,
+      "digits": [
+        3,
+        2
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Communication, diplomacy, original ideas; listens widely; quiet strategic power.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 32 is linked with communication and diplomacy. Staying open to others' views helps.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-33",
+      "number": 33,
+      "kind": "compound",
+      "reduces_to": 6,
+      "digits": [
+        3,
+        3
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Jupiter doubled; generosity, legacy, wisdom; protective of family.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 33 is traditionally generous and protective. Responsibility to family is a theme.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-34",
+      "number": 34,
+      "kind": "compound",
+      "reduces_to": 7,
+      "digits": [
+        3,
+        4
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Knowledge, clear expression, generosity, perseverance.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 34 favours clear expression and generosity. Perseverance is rewarded.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-35",
+      "number": 35,
+      "kind": "compound",
+      "reduces_to": 8,
+      "digits": [
+        3,
+        5
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Opinions divided: peace and inheritance in one view, financial loss in another; greed is the warning.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 35 asks for restraint with money and ambition.",
+      "sensitivity_flag": "CAUTION",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-36",
+      "number": 36,
+      "kind": "compound",
+      "reduces_to": 9,
+      "digits": [
+        3,
+        6
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Willpower and authority; works best once collaboration is learned.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 36 is linked with willpower and leadership. Learning to work with others strengthens it.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-37",
+      "number": 37,
+      "kind": "compound",
+      "reduces_to": 1,
+      "digits": [
+        3,
+        7
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Early struggle, later standing; charismatic, clear leadership; strong for partnerships.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 37 is traditionally progressive: effort early, standing later.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-38",
+      "number": 38,
+      "kind": "compound",
+      "reduces_to": 2,
+      "digits": [
+        3,
+        8
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Respected, peaceful, spiritually inclined; optimistic.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 38 is linked with integrity and a peaceful presence.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-39",
+      "number": 39,
+      "kind": "compound",
+      "reduces_to": 3,
+      "digits": [
+        3,
+        9
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Helpful, professional, overseas-minded; can seem aloof.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 39 favours professional work and wide connections.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-40",
+      "number": 40,
+      "kind": "compound",
+      "reduces_to": 4,
+      "digits": [
+        4,
+        0
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Authority and success but warns against bending rules; consequences of ethics lapses.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 40 brings authority, recognition and the support of influential friends. The tradition warns that bending rules or leaning on flattery eventually catches up and can bring legal or social consequences. Integrity in using authority protects the gains. It needs extra care alongside a prominent 8.",
+      "sensitivity_flag": "SENSITIVE-SOFTENED-WORDING-KEEPS-MEANING",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval",
+      "internal_full_strength_paraphrase": "Success and fame in business, writing, speaking; wealth; loves flatterers; bends laws with impunity; world catches up; shunned, may land in legal trouble. Severe with prominent 8.",
+      "internal_note": "Customer wording keeps the source meaning in softened language. Full-strength paraphrase is internal only; never show source words."
+    },
+    {
+      "id": "COMPOUND-41",
+      "number": 41,
+      "kind": "compound",
+      "reduces_to": 5,
+      "digits": [
+        4,
+        1
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Leadership; obstacles tend to clear; pride after success is the trap.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 41 is linked with leadership. Humility sustains it.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-42",
+      "number": 42,
+      "kind": "compound",
+      "reduces_to": 6,
+      "digits": [
+        4,
+        2
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Disciplined planner, charismatic, lifelong learner; family settled.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 42 is linked with planning and learning. Discipline pays over time.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-43",
+      "number": 43,
+      "kind": "compound",
+      "reduces_to": 7,
+      "digits": [
+        4,
+        3
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Outspoken and uncompromising; tends to be targeted; conviction at personal cost.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 43 is frank and imaginative and cares about public welfare. Its directness can make the person a target, even for stating the obvious, so words can cost as much as they win. Timing and tone matter. Personal life may feel unsettled. It sits well with a prominent 2.",
+      "sensitivity_flag": "SENSITIVE-SOFTENED-WORDING-KEEPS-MEANING",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval",
+      "internal_full_strength_paraphrase": "Frank, imaginative; directness gets them targeted and hounded; the marked man; words can destroy others and self; shaky personal life; public welfare. Great for prominent 2.",
+      "internal_note": "Customer wording keeps the source meaning in softened language. Full-strength paraphrase is internal only; never show source words."
+    },
+    {
+      "id": "COMPOUND-44",
+      "number": 44,
+      "kind": "compound",
+      "reduces_to": 8,
+      "digits": [
+        4,
+        4
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Financial strategist; temptation and greed are the test.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 44 favours strategy with money. Restraint and integrity matter.",
+      "sensitivity_flag": "CAUTION",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-45",
+      "number": 45,
+      "kind": "compound",
+      "reduces_to": 9,
+      "digits": [
+        4,
+        5
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Oratory and organisation; ethical leadership; composed under pressure.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 45 is linked with speaking, ethics and organisation.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-46",
+      "number": 46,
+      "kind": "compound",
+      "reduces_to": 1,
+      "digits": [
+        4,
+        6
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Knowledge, integrity, fair judgement; sought as arbitrator.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 46 is linked with fair judgement and wisdom.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-47",
+      "number": 47,
+      "kind": "compound",
+      "reduces_to": 2,
+      "digits": [
+        4,
+        7
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Expansion, quick decisions, research, counsel.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 47 is linked with research, counsel and movement.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-48",
+      "number": 48,
+      "kind": "compound",
+      "reduces_to": 3,
+      "digits": [
+        4,
+        8
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Opposed forces (4 and 8) create burden and slow progress in the tradition.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 48 pairs two opposing forces, so progress can feel slow and burdens heavy. The tradition warns of repeated setbacks, living under others' decisions, financial strain and recognition being withheld. Patience, pacing and shared responsibility help. It is hardest alongside a prominent 6 and a little easier with a prominent 3.",
+      "sensitivity_flag": "SENSITIVE-SOFTENED-WORDING-KEEPS-MEANING",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval",
+      "internal_full_strength_paraphrase": "Not good for improving circumstances; 4 (Uranus) and 8 (Saturn) are enemies; failures plague; repeated effort limited; burdens; lives under another's will; financial constraints; recognition denied. Worst for prominent 6, some wind for prominent 3.",
+      "internal_note": "Customer wording keeps the source meaning in softened language. Full-strength paraphrase is internal only; never show source words."
+    },
+    {
+      "id": "COMPOUND-49",
+      "number": 49,
+      "kind": "compound",
+      "reduces_to": 4,
+      "digits": [
+        4,
+        9
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Leader or diplomat; strong with people; tension between expansion and limits.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 49 is linked with leadership among people. Balancing ambition and limits is the work.",
+      "sensitivity_flag": "CAUTION",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-50",
+      "number": 50,
+      "kind": "compound",
+      "reduces_to": 5,
+      "digits": [
+        5,
+        0
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Breakthrough through intelligence and speech; fast thinking; fearless.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 50 is linked with sharp thinking and confident speech.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-51",
+      "number": 51,
+      "kind": "compound",
+      "reduces_to": 6,
+      "digits": [
+        5,
+        1
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Courage with stamina; polite leadership; family or organisation anchor.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 51 is linked with courage and steady leadership.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    },
+    {
+      "id": "COMPOUND-52",
+      "number": 52,
+      "kind": "compound",
+      "reduces_to": 7,
+      "digits": [
+        5,
+        2
+      ],
+      "logic": "Compound = the sum before final reduction. For dates: day of birth 10-31, or the full date-of-birth digit total before reduction. For names: Chaldean letter total (cap 52).",
+      "observation": "Caring, intuitive counsel, arts and nurturing; less suited to aggressive competition.",
+      "behaviour_day_lens": "(Not a calendar day)",
+      "interpretation_draft": "Number 52 favours care, counsel and the arts.",
+      "sensitivity_flag": "none",
+      "validation": {
+        "status": "untested"
+      },
+      "prediction": {
+        "status": "blocked"
+      },
+      "sources": [
+        {
+          "src": "ALEKA",
+          "pages": "pp 59-69 (single and compound number series)",
+          "use": "name-number reading; extended to dates by tradition, needs approval"
+        },
+        {
+          "src": "WEB",
+          "pages": "pp 20-25",
+          "use": "day-of-birth lens for 10-31 only"
+        }
+      ],
+      "review_status": "DRAFT - awaiting Bhaskr approval"
+    }
+  ]
+}

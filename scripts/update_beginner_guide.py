@@ -1,0 +1,1088 @@
+import os
+
+file_path = os.path.join("app", "static", "blog", "what-is-numerology.html")
+
+html_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KW6GQRVZ');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Standardized Favicon & Brand Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="/logos/nv-logo-mark.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+
+  <title>What Is Numerology? A Beginner&#39;s Guide | Numeros Vision</title>
+  <meta name="description" content="Learn what numerology is, how Life Path numbers are calculated, and how Chaldean numerology and the Lo Shu Grid work." />
+  <meta name="keywords" content="what is numerology, how numerology works, numerology numbers 1 to 9, Life Path number calculation, types of numerology, chaldean numerology, lo shu grid" />
+  <link rel="canonical" href="https://numerosvision.com/blog/what-is-numerology/" />
+  <link rel="amphtml" href="https://numerosvision.com/amp/blog/what-is-numerology" />
+  
+  <!-- Search Engine Crawl & Indexing Directives -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+  <!-- App Store, PWA & Mobile Web Directives -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Numeros Vision" />
+
+  <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+  <meta property="og:site_name" content="Numeros Vision" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://numerosvision.com/blog/what-is-numerology" />
+  <meta property="og:title" content="What Is Numerology? A Beginner&#39;s Guide | Numeros Vision" />
+  <meta property="og:description" content="Learn what numerology is, how Life Path numbers are calculated, and how Chaldean numerology and the Lo Shu Grid work." />
+  <meta property="og:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+
+  <!-- Twitter Card Directives -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="What Is Numerology? A Beginner&#39;s Guide | Numeros Vision" />
+  <meta name="twitter:description" content="Learn what numerology is, how Life Path numbers are calculated, and how Chaldean numerology and the Lo Shu Grid work." />
+  <meta name="twitter:image" content="https://numerosvision.com/static/logos/anveil-charm-hero.png" />
+
+  <!-- Master Typography & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/theme.css" />
+  <link rel="stylesheet" href="/static/css/roadmap_components.css?v=4.8.0" />
+
+  <!-- Structured Data (Article + BreadcrumbList + FAQPage) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": "https://numerosvision.com/blog/what-is-numerology#article",
+        "isPartOf": {
+          "@type": "WebPage",
+          "@id": "https://numerosvision.com/blog/what-is-numerology"
+        },
+        "headline": "What Is Numerology? A Beginner's Guide",
+        "description": "Learn what numerology is, how Life Path numbers are calculated, and how Chaldean numerology and the Lo Shu Grid work.",
+        "image": "https://numerosvision.com/static/logos/anveil-charm-hero.png",
+        "datePublished": "2026-01-01T00:00:00+05:30",
+        "dateModified": "2026-10-26T21:20:00+05:30",
+        "author": {
+          "@type": "Organization",
+          "name": "Numeros Vision Research Desk",
+          "url": "https://numerosvision.com/about/"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Numeros Vision",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://numerosvision.com/static/icons/icon-512.png"
+          }
+        },
+        "mainEntityOfPage": "https://numerosvision.com/blog/what-is-numerology"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://numerosvision.com/blog/what-is-numerology#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://numerosvision.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Insights",
+            "item": "https://numerosvision.com/insights/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "What Is Numerology?",
+            "item": "https://numerosvision.com/blog/what-is-numerology"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://numerosvision.com/blog/what-is-numerology#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is numerology?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Numerology is a traditional system that assigns symbolic meanings to numbers derived from names, birth dates, and other inputs. It is best understood as a symbolic framework rather than an empirical predictive science."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I calculate my Life Path number?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Add the digits of your birth day, month, and year. In component reduction, reduce each part to a single digit (or master number), add those digits together, and reduce the sum to a single root number."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is Chaldean numerology?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Chaldean numerology is an ancient tradition that assigns numbers 1 through 8 to letters based on sound values. It places special emphasis on compound numbers from 10 to 52 for name evaluation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the Lo Shu Grid?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Lo Shu Grid is a traditional 3x3 magic square where each row sums to 15. In Chinese numerology, the digits of your birth date are mapped across its eight planes to identify number patterns."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do numerology systems use the same methods?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Different systems use different rules. For instance, Pythagorean numerology assigns letters sequentially from 1 to 9, while Chaldean uses sound vibrations mapped from 1 to 8."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What does a paid numerology report include?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A paid report provides a structured, in-depth dossier extending beyond free single-number calculators. It includes complete multi-system calculations, compound number interpretations, and personal cycle overviews."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is numerology scientifically proven?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Numerology is a traditional belief and symbolic system, not an empirical natural science. While the mathematical calculations are exact and deterministic, the interpretations are philosophical."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* Editorial Layout (Venus Pearl & Jupiter Gold) */
+    .blog-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 44px 20px 80px;
+    }
+    .nv-breadcrumbs {
+      max-width: 760px;
+      margin: 18px auto 0;
+      padding: 0 20px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .nv-breadcrumbs a {
+      color: var(--gold-dark);
+      text-decoration: none;
+    }
+    .nv-breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+    .nv-breadcrumbs-sep {
+      margin: 0 6px;
+      color: var(--border-gold);
+    }
+    .cat-badge {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--gold-dark);
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+    .article-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.1rem, 4.8vw, 3rem);
+      font-weight: 500;
+      line-height: 1.18;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+    .article-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+    }
+    .article-meta span { display: flex; align-items: center; gap: 6px; }
+
+    .article-intro {
+      font-size: 1.04rem;
+      color: var(--text-primary);
+      line-height: 1.8;
+      margin-bottom: 32px;
+      border-left: 3.5px solid var(--gold);
+      padding-left: 18px;
+      background: rgba(201, 162, 39, 0.05);
+      border-radius: 0 10px 10px 0;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    .blog-wrap h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 40px 0 14px;
+      border-bottom: 1px solid rgba(201, 162, 39, 0.22);
+      padding-bottom: 6px;
+    }
+    .blog-wrap h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--gold-dark);
+      margin: 22px 0 10px;
+    }
+    .blog-wrap p {
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+    .blog-wrap strong { color: var(--text-primary); }
+    .blog-wrap ul, .blog-wrap ol {
+      margin: 0 0 18px 22px;
+      color: var(--text-muted);
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+    .blog-wrap li { margin-bottom: 6px; }
+
+    /* Number Grid */
+    .number-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 22px 0 26px;
+    }
+    .ng-cell {
+      padding: 16px 12px;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 14px;
+      background: #FFFFFF;
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(180, 155, 110, 0.06);
+      transition: transform 0.2s ease;
+    }
+    .ng-cell:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(201, 162, 39, 0.14);
+    }
+    .ng-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      color: var(--gold-dark);
+      font-weight: 600;
+      line-height: 1;
+    }
+    .ng-theme {
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      font-weight: 700;
+      margin-top: 5px;
+    }
+    .ng-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    /* Calculation Box */
+    .calc-box {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 22px 20px;
+      margin: 22px 0 28px;
+      box-shadow: 0 4px 18px rgba(180, 155, 110, 0.06);
+    }
+    .calc-box h3 { margin-top: 0; color: var(--gold-dark); font-size: 1.2rem; }
+    .calc-step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .calc-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #C9A227 0%, #E2B84B 100%);
+      color: #FFFDF7;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .calc-step-text {
+      font-size: 0.91rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* Free Calculator Callout Card */
+    .cta-calculator-box {
+      background: linear-gradient(135deg, rgba(201,162,39,0.06) 0%, rgba(22,131,91,0.04) 100%);
+      border: 1.5px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 24px 20px;
+      margin: 28px 0 32px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(180, 155, 110, 0.06);
+    }
+    .cta-calculator-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      color: var(--text-primary);
+      margin: 0 0 8px 0;
+    }
+    .cta-calculator-box p {
+      font-size: 0.91rem;
+      color: var(--text-muted);
+      max-width: 580px;
+      margin: 0 auto 18px;
+      line-height: 1.6;
+    }
+    .btn-calc-cta {
+      display: inline-block;
+      padding: 12px 26px;
+      background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
+      color: #FFFDF7;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(139, 105, 20, 0.18);
+      transition: transform 0.2s ease;
+    }
+    .btn-calc-cta:hover {
+      transform: translateY(-2px);
+      color: #FFFFFF;
+      text-decoration: none;
+    }
+    .calc-sublinks {
+      margin-top: 12px;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+    .calc-sublinks a {
+      color: var(--gold-dark);
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 6px;
+    }
+    .calc-sublinks a:hover {
+      text-decoration: underline;
+    }
+
+    /* Paid Report Offer Cards */
+    .reports-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 24px 0 32px;
+    }
+    .report-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-gold);
+      border-radius: 14px;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 4px 14px rgba(82, 62, 40, 0.04);
+      transition: transform 0.2s ease;
+    }
+    .report-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(201, 162, 39, 0.14);
+    }
+    .report-card.featured {
+      border: 2px solid var(--gold-dark);
+      background: #FFFDF7;
+      position: relative;
+    }
+    .report-badge {
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+    .report-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+      margin: 0 0 8px 0;
+    }
+    .report-price {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--gold-dark);
+      margin-bottom: 2px;
+    }
+    .report-price-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .report-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px 0;
+      font-size: 0.83rem;
+      color: var(--text-primary);
+    }
+    .report-features li {
+      margin-bottom: 7px;
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.45;
+    }
+    .report-features li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #16835B;
+      font-weight: 800;
+    }
+    .report-btn {
+      width: 100%;
+      text-align: center;
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 0.83rem;
+      text-decoration: none;
+      display: inline-block;
+      box-sizing: border-box;
+      transition: background 0.2s ease;
+    }
+    .report-btn-ghost {
+      background: transparent;
+      border: 1.5px solid var(--gold-dark);
+      color: var(--gold-dark);
+    }
+    .report-btn-ghost:hover {
+      background: rgba(201, 162, 39, 0.08);
+      text-decoration: none;
+    }
+    .report-btn-gold {
+      background: linear-gradient(135deg, #C9A227 0%, #8B6914 100%);
+      color: #FFFDF7;
+      border: none;
+    }
+    .report-btn-gold:hover {
+      color: #FFFFFF;
+      text-decoration: none;
+    }
+
+    /* FAQ Section */
+    .faq-container { margin: 20px 0 30px; }
+    .faq-item {
+      border: 1px solid var(--border-gold);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+    .faq-item[open] { border-color: var(--gold-dark); }
+    .faq-summary {
+      padding: 14px 18px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-summary::-webkit-details-marker { display: none; }
+    .faq-summary::after {
+      content: "+";
+      font-size: 1.3rem;
+      color: var(--gold-dark);
+      font-weight: 400;
+    }
+    .faq-item[open] .faq-summary::after { content: "−"; }
+    .faq-content {
+      padding: 0 18px 16px;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* Related Guides Wrap */
+    .related-wrap {
+      margin-top: 42px;
+      padding-top: 26px;
+      border-top: 1px solid var(--border);
+    }
+    .related-wrap h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+    }
+    .rel-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .rel-link {
+      padding: 8px 14px;
+      border: 1px solid var(--border-gold);
+      border-radius: 18px;
+      color: var(--gold-dark);
+      background: #FFFFFF;
+      font-size: 0.81rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .rel-link:hover {
+      background: rgba(201, 162, 39, 0.08);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .number-grid { grid-template-columns: repeat(2, 1fr); }
+      .reports-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .number-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KW6GQRVZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Master Site Header -->
+  <header class="nv-header">
+    <div class="nv-nav-container">
+      <a href="/" class="nv-brand-link" title="Numeros Vision — ANVEIL EVERY CHARM">
+        <div class="nv-brand-seal">
+          <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+        </div>
+        <div class="nv-brand-text">
+          <span class="nv-brand-title">NUMEROS VISION</span>
+          <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links matching Master Roadmap IA -->
+      <nav aria-label="Main Navigation">
+        <ul class="nv-nav-menu" id="nvNavMenu">
+          <li class="nv-nav-item">
+            <a href="/about/" class="nv-nav-link" title="About Numeros Vision">About Us</a>
+          </li>
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Calculators</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/tools/baby-naming" class="nv-submenu-link"><span class="nv-sub-icon">👶</span> <span>Auspicious Baby Naming</span> <span class="nv-sub-tag">Hot</span></a></li>
+              <li><a href="/tools/name-numerology" class="nv-submenu-link"><span class="nv-sub-icon">✍️</span> <span>Name Analysis &amp; Balancing</span></a></li>
+              <li><a href="/tools/mobile-numerology" class="nv-submenu-link"><span class="nv-sub-icon">📱</span> <span>Mobile Number Audit</span></a></li>
+              <li><a href="/tools/kundali-milan" class="nv-submenu-link"><span class="nv-sub-icon">💍</span> <span>Kundali Milan &amp; Synastry</span></a></li>
+              <li><a href="/tools/business-numerology" class="nv-submenu-link"><span class="nv-sub-icon">💼</span> <span>Business &amp; Brand Name</span></a></li>
+              <li><a href="/tools/life-path-calculator" class="nv-submenu-link"><span class="nv-sub-icon">🧭</span> <span>Life Path Calculator</span></a></li>
+              <li><a href="/tools/lo-shu-grid" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Magic Grid</span></a></li>
+              <li><a href="/tools/vehicle-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🚗</span> <span>Vehicle Numerology</span></a></li>
+              <li><a href="/tools/property-numerology" class="nv-submenu-link"><span class="nv-sub-icon">🏠</span> <span>House &amp; Property Audit</span></a></li>
+              <li><a href="/tools/blessing-years" class="nv-submenu-link"><span class="nv-sub-icon">📅</span> <span>Blessing Years Timeline</span></a></li>
+              <li class="nv-submenu-footer"><a href="/calculators/" class="nv-submenu-all">View All 10+ Calculators →</a></li>
+            </ul>
+          </li>
+          <li class="nv-nav-item"><a href="/#charm-ai" class="nv-nav-link">Charm AI</a></li>
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Reports</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/reports/" class="nv-submenu-link"><span class="nv-sub-icon">📜</span> <span>Vedic Destiny Report</span></a></li>
+              <li><a href="/consultation/" class="nv-submenu-link"><span class="nv-sub-icon">👤</span> <span>1-on-1 Consultation</span></a></li>
+              <li><a href="/practitioner/" class="nv-submenu-link"><span class="nv-sub-icon">🧑‍💼</span> <span>Practitioner Workspace CRM</span></a></li>
+            </ul>
+          </li>
+          <li class="nv-nav-item nv-has-dropdown">
+            <button class="nv-nav-link nv-dropdown-toggle" onclick="toggleNavAccordion(this, event)" aria-expanded="false" type="button">
+              <span>Insights</span>
+              <svg class="nv-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="nv-submenu">
+              <li><a href="/insights/" class="nv-submenu-link"><span class="nv-sub-icon">📚</span> <span>Numerology Knowledge Hub</span></a></li>
+              <li><a href="/blog/chaldean-compound-numbers-meanings" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Chaldean Compound Numbers</span></a></li>
+              <li><a href="/blog/master-numbers-11-22-33" class="nv-submenu-link"><span class="nv-sub-icon">🔢</span> <span>Master Numbers 11, 22, 33</span></a></li>
+              <li><a href="/blog/chaldean-vs-pythagorean-numerology" class="nv-submenu-link"><span class="nv-sub-icon">⚖️</span> <span>Chaldean vs Pythagorean</span></a></li>
+              <li><a href="/blog/lo-shu-grid-8-planes" class="nv-submenu-link"><span class="nv-sub-icon">🔲</span> <span>Lo Shu Grid 8 Planes</span></a></li>
+            </ul>
+          </li>
+          <li class="nv-nav-item"><a href="/pricing/" class="nv-nav-link">Pricing</a></li>
+          <li class="nv-nav-item"><a href="/contact/" class="nv-nav-link" title="Contact Us">Contact Us</a></li>
+        </ul>
+      </nav>
+
+      <div class="nv-nav-actions">
+        <a href="/tools/life-path-calculator" class="nv-btn-cta">Calculate Free ✦</a>
+        <button class="nv-mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Semantic Breadcrumbs -->
+  <div class="nv-breadcrumbs">
+    <a href="/">Home</a>
+    <span class="nv-breadcrumbs-sep">/</span>
+    <a href="/insights/">Insights</a>
+    <span class="nv-breadcrumbs-sep">/</span>
+    <span>What Is Numerology?</span>
+  </div>
+
+  <!-- Main Article Wrap -->
+  <main class="blog-wrap">
+    <div class="cat-badge">✦ Numerology Fundamentals</div>
+    <h1 class="article-title">What Is Numerology? A Beginner&#39;s Guide</h1>
+    <div class="article-meta">
+      <span>📅 Updated October 2026</span>
+      <span>⏱ 5 min read</span>
+      <span>✦ Numeros Vision Editorial</span>
+    </div>
+
+    <!-- Opening Paragraph -->
+    <div class="article-intro">
+      <p style="margin-bottom:10px;">
+        Numerology is a traditional system that explores the symbolic meanings of numbers derived from names and birth dates. Different systems use different calculation methods and interpretations.
+      </p>
+      <p style="margin-bottom:0;">
+        This guide explains the basics, shows how to calculate a Life Path number and helps you find a relevant free numerology calculator.
+      </p>
+    </div>
+
+    <!-- What Is Numerology? -->
+    <h2>What Is Numerology?</h2>
+    <p>
+      Numerology assigns symbolic meanings to numbers calculated from names, birth dates and other inputs. Its interpretations vary by tradition and are best understood as a belief system, not a scientifically proven way to predict the future.
+    </p>
+    <p>
+      Practitioners use numbers as a framework for self-reflection and personal inquiry, distinguishing between verifiable arithmetic steps and historical symbolic meanings.
+    </p>
+
+    <!-- How Does Numerology Work? -->
+    <h2>How Does Numerology Work?</h2>
+    <p>
+      A numerology calculation follows a defined method to produce a number. The result is then interpreted according to the selected tradition.
+    </p>
+    <p>
+      For example, a Life Path calculation uses a person's birth date. Name numerology uses letter values assigned by a particular system. You can test your own name using our <a href="/tools/name-numerology" style="color:var(--gold-dark); font-weight:600;">Name Numerology Calculator</a>.
+    </p>
+    <p>
+      Most systems use <strong>digit reduction</strong>: digits in multi-digit totals are added together until they form a single digit from 1 to 9, or a recognized master number such as 11, 22, or 33.
+    </p>
+
+    <!-- The Nine Single-Digit Numbers -->
+    <h2>The Nine Single-Digit Numbers</h2>
+    <p>
+      In many numerology traditions, the single-digit numbers from 1 to 9 are associated with symbolic characteristics. Their exact meanings vary between systems. The descriptions below follow the classical Western Pythagorean archetype model:
+    </p>
+
+    <div class="number-grid">
+      <div class="ng-cell">
+        <div class="ng-num">1</div>
+        <div class="ng-theme">The Pioneer</div>
+        <div class="ng-desc">Initiative, leadership, independence</div>
+      </div>
+      <div class="ng-cell">
+        <div class="ng-num">2</div>
+        <div class="ng-theme">The Peacemaker</div>
+        <div class="ng-desc">Diplomacy, cooperation, balance</div>
+      </div>
+      <div class="ng-cell">
+        <div class="ng-num">3</div>
+        <div class="ng-theme">The Communicator</div>
+        <div class="ng-desc">Creative expression, social warmth</div>
+      </div>
+      <div class="ng-cell">
+        <div class="ng-num">4</div>
+        <div class="ng-theme">The Builder</div>
+        <div class="ng-desc">Practical foundations, discipline, order</div>
+      </div>
+      <div class="ng-cell">
+        <div class="ng-num">5</div>
+        <div class="ng-theme">The Explorer</div>
+        <div class="ng-desc">Adaptability, personal freedom, versatility</div>
+      </div>
+      <div class="ng-cell">
+        <div class="ng-num">6</div>
+        <div class="ng-theme">The Harmonizer</div>
+        <div class="ng-desc">Responsibility, care, family balance</div>
+      </div>
+      <div class="ng-cell">
+        <div class="ng-num">7</div>
+        <div class="ng-theme">The Analyst</div>
+        <div class="ng-desc">Introspection, investigative thought</div>
+      </div>
+      <div class="ng-cell">
+        <div class="ng-num">8</div>
+        <div class="ng-theme">The Strategist</div>
+        <div class="ng-desc">Organization, authority, cause and effect</div>
+      </div>
+      <div class="ng-cell">
+        <div class="ng-num">9</div>
+        <div class="ng-theme">The Humanitarian</div>
+        <div class="ng-desc">Compassion, broader vision, completion</div>
+      </div>
+    </div>
+
+    <!-- How to Calculate Your Life Path Number -->
+    <h2>How to Calculate Your Life Path Number</h2>
+    <p>Calculating a Life Path number involves four simple steps:</p>
+    <ol>
+      <li>Enter your date of birth.</li>
+      <li>Apply the calculation method used by the calculator.</li>
+      <li>Reduce the result according to that method's rules.</li>
+      <li>Review your number and its traditional interpretation.</li>
+    </ol>
+
+    <div class="calc-box">
+      <h3>Worked Example: 15 June 1990</h3>
+      <p style="font-size:0.91rem; color:var(--text-muted); margin-bottom:12px;">
+        For a birth date of <strong>June 15, 1990 (15/06/1990)</strong>, the standard component reduction method works as follows:
+      </p>
+      <div class="calc-step">
+        <div class="calc-step-num">1</div>
+        <div class="calc-step-text"><strong>Reduce the Day:</strong> 15 &rarr; 1 + 5 = <strong>6</strong></div>
+      </div>
+      <div class="calc-step">
+        <div class="calc-step-num">2</div>
+        <div class="calc-step-text"><strong>Reduce the Month:</strong> June = 06 &rarr; <strong>6</strong></div>
+      </div>
+      <div class="calc-step">
+        <div class="calc-step-num">3</div>
+        <div class="calc-step-text"><strong>Reduce the Year:</strong> 1990 &rarr; 1 + 9 + 9 + 0 = 19 &rarr; 1 + 9 = 10 &rarr; 1 + 0 = <strong>1</strong></div>
+      </div>
+      <div class="calc-step">
+        <div class="calc-step-num">4</div>
+        <div class="calc-step-text"><strong>Sum &amp; Reduce:</strong> 6 + 6 + 1 = <strong>13</strong> &rarr; 1 + 3 = <strong>4</strong> (Life Path 4)</div>
+      </div>
+      <p style="font-size:0.86rem; color:var(--text-muted); margin:12px 0 0;">
+        <em>Note on methods:</em> Direct digit addition (1+5+0+6+1+9+9+0 = 31 &rarr; 4) produces the same root number 4, but yields 31 as the intermediate compound instead of 13.
+      </p>
+    </div>
+
+    <!-- Free Calculator CTA -->
+    <div class="cta-calculator-box">
+      <h3>Find Your Personal Numbers</h3>
+      <p>
+        Use our free interactive tool to calculate your Life Path number and view your core archetype summary immediately.
+      </p>
+      <a href="/tools/life-path-calculator" class="btn-calc-cta">Calculate Your Life Path Number Free ✦</a>
+      <div class="calc-sublinks">
+        Related tools: 
+        <a href="/tools/name-numerology">Name Numerology Calculator &rarr;</a>
+        <a href="/tools/lo-shu-grid">Lo Shu Grid Calculator &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Major Numerology Systems -->
+    <h2>Major Numerology Systems</h2>
+    <p>Each major numerology tradition uses distinct rules and inputs:</p>
+
+    <p>
+      <strong>Pythagorean Numerology:</strong> Uses assigned letter values (1–9) and number-reduction rules to interpret names and birth dates. Learn more in our <a href="/blog/chaldean-vs-pythagorean-numerology" style="color:var(--gold-dark); font-weight:600;">Chaldean vs Pythagorean Guide</a> or try the <a href="/tools/life-path-calculator" style="color:var(--gold-dark); font-weight:600;">Life Path Calculator</a>.
+    </p>
+
+    <p>
+      <strong>Chaldean Numerology:</strong> Uses a distinct letter-value mapping (1–8) based on sound vibrations for name-number calculations. Explore our <a href="/blog/chaldean-compound-numbers-meanings" style="color:var(--gold-dark); font-weight:600;">Chaldean Compound Numbers Guide (10–52)</a> or the <a href="/tools/name-numerology" style="color:var(--gold-dark); font-weight:600;">Name Numerology Tool</a>.
+    </p>
+
+    <p>
+      <strong>Lo Shu Grid:</strong> Organises eligible birth-date digits in a traditional 3&times;3 grid for number-pattern interpretations across eight planes. Try the <a href="/tools/lo-shu-grid" style="color:var(--gold-dark); font-weight:600;">Lo Shu Grid Calculator</a>.
+    </p>
+
+    <!-- How Numeros Vision Calculates Your Results -->
+    <h2>How Numeros Vision Calculates Your Results</h2>
+    <p>
+      Numeros Vision uses defined calculation rules for supported numerology tools. Results are calculated first, then explained using the relevant interpretation method.
+    </p>
+    <p>
+      Calculations run on a deterministic Python engine rather than generative language models. We do not make predictive guarantees, promise zero hallucinations, or claim empirical scientific validation.
+    </p>
+
+    <!-- Frequently Asked Questions -->
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-container">
+      <details class="faq-item" open>
+        <summary class="faq-summary">What is numerology?</summary>
+        <div class="faq-content">
+          Numerology is a traditional system that assigns symbolic meanings to numbers derived from names, birth dates, and other inputs. It is best understood as a symbolic framework rather than an empirical predictive science.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">How do I calculate my Life Path number?</summary>
+        <div class="faq-content">
+          Add the digits of your birth day, month, and year. In component reduction, reduce each part to a single digit (or master number), add those digits together, and reduce the sum to a single root number.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">What is Chaldean numerology?</summary>
+        <div class="faq-content">
+          Chaldean numerology is an ancient tradition that assigns numbers 1 through 8 to letters based on sound values. It places special emphasis on compound numbers from 10 to 52 for name evaluation.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">What is the Lo Shu Grid?</summary>
+        <div class="faq-content">
+          The Lo Shu Grid is a traditional 3&times;3 magic square where each row sums to 15. In Chinese numerology, the digits of your birth date are mapped across its eight planes to identify number patterns.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">Do numerology systems use the same methods?</summary>
+        <div class="faq-content">
+          No. Different systems use different rules. For instance, Pythagorean numerology assigns letters sequentially from 1 to 9, while Chaldean uses sound vibrations mapped from 1 to 8.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">What does a paid numerology report include?</summary>
+        <div class="faq-content">
+          A paid report provides a structured, in-depth dossier extending beyond free single-number calculators. It includes complete multi-system calculations, compound number interpretations, and personal cycle overviews.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-summary">Is numerology scientifically proven?</summary>
+        <div class="faq-content">
+          No. Numerology is a traditional belief and symbolic system, not an empirical natural science. While the mathematical calculations are exact and deterministic, the interpretations are philosophical.
+        </div>
+      </details>
+    </div>
+
+    <!-- Explore Your Numerology Report -->
+    <h2>Explore Your Numerology Report</h2>
+    <p>
+      Start with a free calculation. If you want more detail, explore a personalised report with additional interpretations and analysis available for your selected tool:
+    </p>
+
+    <div class="reports-grid">
+      <!-- Basic -->
+      <div class="report-card">
+        <div>
+          <span class="report-badge">Essential Audit</span>
+          <h3>Basic Numerology Report</h3>
+          <div class="report-price">&#8377;199 <span style="font-size:0.82rem; font-weight:400; color:var(--text-muted);">/ $5.00</span></div>
+          <div class="report-price-sub">3 Pages &bull; Instant Delivery</div>
+          <ul class="report-features">
+            <li>Your core results and initial interpretations</li>
+            <li>Primary name and birth number summary</li>
+            <li>Basic favorable day and color indicators</li>
+          </ul>
+        </div>
+        <a href="/reports/" class="report-btn report-btn-ghost">View Basic</a>
+      </div>
+
+      <!-- Advanced -->
+      <div class="report-card featured">
+        <div>
+          <span class="report-badge" style="color:#16835B;">✦ Most Popular</span>
+          <h3>Advanced Numerology Report</h3>
+          <div class="report-price">&#8377;510 <span style="font-size:0.82rem; font-weight:400; color:var(--text-muted);">/ $14.00</span></div>
+          <div class="report-price-sub">12 Pages &bull; In-Depth Analysis</div>
+          <ul class="report-features">
+            <li>Deeper interpretation and supported relationships</li>
+            <li>Chaldean compound numbers (10&ndash;52)</li>
+            <li>Lo Shu Grid energetic assessment</li>
+            <li>12-month personal cycle transition</li>
+          </ul>
+        </div>
+        <a href="/reports/" class="report-btn report-btn-gold">View Advanced</a>
+      </div>
+
+      <!-- Premium -->
+      <div class="report-card">
+        <div>
+          <span class="report-badge">Master Dossier</span>
+          <h3>Premium Numerology Report</h3>
+          <div class="report-price">&#8377;1,050 <span style="font-size:0.82rem; font-weight:400; color:var(--text-muted);">/ $28.00</span></div>
+          <div class="report-price-sub">32 Pages &bull; Full Synthesis</div>
+          <ul class="report-features">
+            <li>The most comprehensive analysis available</li>
+            <li>Multi-system synthesis across major traditions</li>
+            <li>10-year major cycle timeline</li>
+            <li>Name balancing alternatives</li>
+          </ul>
+        </div>
+        <a href="/reports/" class="report-btn report-btn-ghost">View Premium</a>
+      </div>
+    </div>
+
+    <!-- Related Calculators and Guides -->
+    <h2>Related Calculators and Guides</h2>
+    <div class="related-wrap" style="margin-top:16px; padding-top:0; border-top:none;">
+      <div class="rel-links">
+        <a href="/tools/life-path-calculator" class="rel-link">Life Path Number Calculator</a>
+        <a href="/tools/name-numerology" class="rel-link">Name Numerology Calculator</a>
+        <a href="/blog/chaldean-compound-numbers-meanings" class="rel-link">Chaldean Compound Numbers</a>
+        <a href="/tools/lo-shu-grid" class="rel-link">Lo Shu Grid Calculator</a>
+        <a href="/blog/chaldean-vs-pythagorean-numerology" class="rel-link">Chaldean vs Pythagorean</a>
+        <a href="/insights/" class="rel-link">Numerology Knowledge Hub</a>
+        <a href="/reports/" class="rel-link">Numerology Report Packages</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Master Site Footer -->
+  <footer class="nv-footer">
+    <div class="nv-footer-container">
+      <div class="nv-footer-grid">
+        <div class="nv-footer-brand-sec">
+          <a href="/" class="nv-brand-link" style="margin-bottom:12px;">
+            <div class="nv-brand-seal" style="width:38px;height:38px;">
+              <img src="/logos/nv-logo-mark.svg" alt="Numeros Vision Seal" />
+            </div>
+            <div class="nv-brand-text">
+              <span class="nv-brand-title" style="font-size:1.05rem;">NUMEROS VISION</span>
+              <span class="nv-brand-tagline">ANVEIL EVERY CHARM</span>
+            </div>
+          </a>
+          <p>
+            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+          </p>
+        </div>
+
+        <div class="nv-footer-col">
+          <h4>Calculators</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/calculators/birth-number/">Birth Number (Mulank)</a></li>
+            <li><a href="/calculators/life-path-number/">Life Path (Bhagyank)</a></li>
+            <li><a href="/calculators/name-numerology/">Name Balancing</a></li>
+            <li><a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a></li>
+            <li><a href="/calculators/mobile-number-numerology/">Mobile Numerology</a></li>
+            <li><a href="/calculators/personal-year/">Personal Year Calculator</a></li>
+            <li><a href="/calculators/">View All Calculators →</a></li>
+          </ul>
+        </div>
+
+        <div class="nv-footer-col">
+          <h4>Intelligence &amp; Plans</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/charm-ai/">Charm AI Assistant</a></li>
+            <li><a href="/reports/">Reports Catalogue</a></li>
+            <li><a href="/sample">Sample Dossier</a></li>
+            <li><a href="/pricing/">Plans &amp; Pricing</a></li>
+            <li><a href="/consultation/">1-on-1 Consultation</a></li>
+          </ul>
+        </div>
+
+        <div class="nv-footer-col">
+          <h4>Wisdom &amp; Legal</h4>
+          <ul class="nv-footer-links">
+            <li><a href="/insights/">Insights Learning Hub</a></li>
+            <li><a href="/about/">About Numeros Vision</a></li>
+            <li><a href="/contact/">Contact Support</a></li>
+            <li><a href="/practitioner">Practitioner Portal</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/disclaimer/">Statutory Disclaimer</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="nv-footer-bottom">
+        <div>© 2026 Numeros Vision. All rights reserved. Master Brand: Numeros Vision · Tagline: ANVEIL EVERY CHARM.</div>
+        <div class="nv-footer-legal-inline">
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+          <a href="/disclaimer/">Disclaimer</a>
+          <a href="/cookie-policy/">Cookie Policy</a>
+          <a href="/refund-policy/">Refund Policy</a>
+          <a href="/accessibility/">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Sticky Navigation Bar -->
+  <nav class="nv-sticky-bottom-nav" aria-label="Mobile and Tablet Sticky Navigation">
+    <a href="/" class="nv-bottom-nav-item" data-nav="home">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/calculators/" class="nv-bottom-nav-item" data-nav="calculators">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Calculators</span>
+    </a>
+    <a href="/tools/baby-naming" class="nv-bottom-nav-item nv-bottom-nav-center" data-nav="baby-naming" title="Auspicious Baby Naming Studio">
+      <div class="nv-bottom-center-btn">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <span>Baby Naming</span>
+    </a>
+    <a href="/#charm-ai" class="nv-bottom-nav-item" data-nav="charm-ai">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      <span>Charm AI</span>
+    </a>
+    <button type="button" class="nv-bottom-nav-item nv-bottom-nav-toggle" onclick="toggleMobileNav(event)" aria-label="Open Full Navigation Menu">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span>Menu</span>
+    </button>
+  </nav>
+
+  <script src="/static/js/nav.js" defer></script>
+  <script src="/static/js/nv_tracking_config.js?v=4.8.0" defer></script>
+  <script src="/static/js/marketing-analytics.js?v=4.8.0" defer></script>
+  <script src="/static/js/nv_profile_sync.js?v=4.8.0" defer></script>
+  <script src="/static/js/nv_consent.js?v=4.8.0" defer></script>
+  <script src="/static/js/funnel_journey.js?v=1.5.0" defer></script>
+</body>
+</html>
+"""
+
+with open(file_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Successfully refined {file_path} (length: {len(html_content)} chars)")

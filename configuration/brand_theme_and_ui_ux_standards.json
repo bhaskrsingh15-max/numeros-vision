@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Numeros Vision Master Brand, UI/UX & Navigation Design System",
+  "version": "1.0.0",
+  "mandatory_rules": {
+    "brand_name": "Numeros Vision",
+    "exact_tagline": "Anveil Every Charm",
+    "brand_lockup": {
+      "title": "NUMEROS VISION",
+      "tagline": "ANVEIL EVERY CHARM",
+      "logo_svg": "/logos/nv-logo-mark.svg",
+      "logo_alt": "Numeros Vision Seal",
+      "href": "/"
+    },
+    "color_palette": {
+      "canvas_primary": "#FFFDF7",
+      "canvas_warm": "#F7F3EA",
+      "canvas_card": "#FFFFFF",
+      "jupiter_gold_primary": "#C9A227",
+      "jupiter_gold_dark": "#8B6914",
+      "jupiter_gold_light": "#E2B84B",
+      "jupiter_gold_amber": "#9E7B15",
+      "mercury_emerald": "#16835B",
+      "sandalwood_text_primary": "#523E28",
+      "sandalwood_text_muted": "#7A654D",
+      "border_gold": "rgba(201, 162, 39, 0.38)",
+      "border_amber": "rgba(180, 155, 110, 0.22)",
+      "strict_prohibitions": [
+        "Zero raw pitch black (#000000) allowed on icons, avatars, cards, or backgrounds",
+        "Zero unapproved alternate logos (e.g. standalone Charm AI logo without Numeros Vision master mark)"
+      ]
+    },
+    "typography": {
+      "headings_and_display": "'Cormorant Garamond', Georgia, serif",
+      "brand_and_eyebrows": "'Cinzel', serif",
+      "body_and_ui": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    },
+    "required_stylesheets": [
+      "/static/css/theme.css",
+      "/static/css/roadmap_components.css"
+    ],
+    "master_header_spec": {
+      "html_tag": "header.nv-header",
+      "container_class": "nv-nav-container",
+      "brand_link_class": "nv-brand-link",
+      "brand_seal_class": "nv-brand-seal",
+      "brand_text_class": "nv-brand-text",
+      "brand_title_class": "nv-brand-title",
+      "brand_tagline_class": "nv-brand-tagline",
+      "nav_menu_id": "nvNavMenu",
+      "required_nav_links": [
+        {"title": "Calculators", "href": "/calculators/"},
+        {"title": "Charm AI", "href": "/charm-ai/"},
+        {"title": "Reports", "href": "/reports/"},
+        {"title": "Methodology", "href": "/methodology/"},
+        {"title": "Insights", "href": "/insights/"},
+        {"title": "Pricing", "href": "/pricing/"},
+        {"title": "About", "href": "/about/"}
+      ],
+      "cta_button": {
+        "class": "nv-btn-cta",
+        "text": "Discover My Numbers ✦",
+        "href": "/#birth-profile"
+      },
+      "mobile_toggle": {
+        "class": "nv-mobile-toggle",
+        "onclick": "toggleMobileNav()"
+      }
+    },
+    "master_footer_spec": {
+      "html_tag": "footer.nv-footer",
+      "container_class": "nv-footer-container",
+      "grid_class": "nv-footer-grid",
+      "columns": [
+        {
+          "type": "brand_summary",
+          "logo": "/logos/nv-logo-mark.svg",
+          "title": "NUMEROS VISION",
+          "tagline": "ANVEIL EVERY CHARM",
+          "description": "AI-powered numerological intelligence combining deterministic Vedic, Chaldean, and Lo Shu mathematical frameworks. Unveil every charm with clarity, mathematical rigor, and ethical privacy."
+        },
+        {
+          "heading": "Calculators",
+          "links": [
+            {"title": "Birth Number (Mulank)", "href": "/calculators/birth-number/"},
+            {"title": "Life Path (Bhagyank)", "href": "/calculators/life-path-number/"},
+            {"title": "Name Balancing", "href": "/calculators/name-numerology/"},
+            {"title": "Lo Shu 3×3 Grid", "href": "/calculators/lo-shu-grid/"},
+            {"title": "Mobile Numerology", "href": "/calculators/mobile-number-numerology/"},
+            {"title": "Personal Year 2026", "href": "/calculators/personal-year/"},
+            {"title": "View All Calculators →", "href": "/calculators/"}
+          ]
+        },
+        {
+          "heading": "Intelligence & Plans",
+          "links": [
+            {"title": "Charm AI Assistant", "href": "/charm-ai/"},
+            {"title": "Reports Catalogue", "href": "/reports/"},
+            {"title": "Sample Dossier", "href": "/sample"},
+            {"title": "Plans & Pricing", "href": "/pricing/"},
+            {"title": "1-on-1 Consultation", "href": "/consultation/"},
+            {"title": "Methodology & Math", "href": "/methodology/"}
+          ]
+        },
+        {
+          "heading": "Wisdom & Legal",
+          "links": [
+            {"title": "Insights Learning Hub", "href": "/insights/"},
+            {"title": "About Numeros Vision", "href": "/about/"},
+            {"title": "Contact Support", "href": "/contact/"},
+            {"title": "Practitioner Portal", "href": "/practitioner"},
+            {"title": "Privacy Policy", "href": "/privacy-policy/"},
+            {"title": "Statutory Disclaimer", "href": "/disclaimer/"},
+            {"title": "Terms of Service", "href": "/terms/"}
+          ]
+        }
+      ],
+      "bottom_legal_links": [
+        {"title": "Privacy Policy", "href": "/privacy-policy/"},
+        {"title": "Terms", "href": "/terms/"},
+        {"title": "Disclaimer", "href": "/disclaimer/"},
+        {"title": "Cookie Policy", "href": "/cookie-policy/"},
+        {"title": "Refund Policy", "href": "/refund-policy/"},
+        {"title": "Accessibility", "href": "/accessibility/"}
+      ]
+    }
+  }
+}

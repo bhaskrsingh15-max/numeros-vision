@@ -1,0 +1,2295 @@
+{
+  "clusters": [
+    {
+      "cluster_name": "Name numerology",
+      "total_keywords": 35,
+      "total_volume": 2276080,
+      "keywords": [
+        {
+          "keyword": "numerology calculator by name",
+          "volume": 201000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator for name",
+          "volume": 201000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator for names",
+          "volume": 201000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator of name",
+          "volume": 201000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator with name",
+          "volume": 201000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology how to calculate name",
+          "volume": 201000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology name calculator",
+          "volume": 201000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology of name calculator",
+          "volume": 201000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator name",
+          "volume": 165000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology with name calculator",
+          "volume": 165000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology and names",
+          "volume": 40500,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology by name",
+          "volume": 40500,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology in name",
+          "volume": 40500,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology of name",
+          "volume": 40500,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology with name",
+          "volume": 40500,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology and name",
+          "volume": 33100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology for name",
+          "volume": 33100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology for names",
+          "volume": 33100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology lucky name calculator",
+          "volume": 12100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator with name and birthdate",
+          "volume": 9900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator name and date of birth",
+          "volume": 8100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology and name correction",
+          "volume": 5400,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator by date of birth and name",
+          "volume": 480,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "which numerology number is best for name",
+          "volume": 210,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "which numerology number is good for name",
+          "volume": 50,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology using name",
+          "volume": 20,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "how to numerology calculator name",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology padi peyar vaipathu eppadi",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "name numerology calculator 6",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "name numerology calculator good or bad",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "name numerology calculator kaise kare",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "name numerology calculator with dob",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator without name",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology name calculator 5",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "which name numerology calculator is best",
+          "volume": 0,
+          "intent": "Commercial"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Calculators (hub)",
+      "total_keywords": 20,
+      "total_volume": 169530,
+      "keywords": [
+        {
+          "keyword": "numerology calculator",
+          "volume": 135000,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerologycalculator",
+          "volume": 33100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "how to numerology calculator",
+          "volume": 880,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator india",
+          "volume": 260,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator online free",
+          "volume": 210,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "369 numerology calculator",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator excel",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator excel sheet",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator number 5",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator number 6",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator number 8",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator year",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "which numerology calculator is best",
+          "volume": 10,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "951 numerology calculator",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator 1 to 9",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator 10",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator email",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator occult",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator with initial or without initial",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator xls",
+          "volume": 0,
+          "intent": "Transactional"
+        }
+      ]
+    },
+    {
+      "cluster_name": "What is numerology & credibility",
+      "total_keywords": 39,
+      "total_volume": 83050,
+      "keywords": [
+        {
+          "keyword": "numerology",
+          "volume": 74000,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology what is it",
+          "volume": 3600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology is real",
+          "volume": 1000,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "how numerology is calculated",
+          "volume": 880,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology what is my number",
+          "volume": 590,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology and the divine triangle",
+          "volume": 390,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "what is numerology number",
+          "volume": 390,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology vastu shastra",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology vs astrology",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "how numerology works",
+          "volume": 210,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology and the bible",
+          "volume": 210,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "what is numerology in hindi",
+          "volume": 210,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology is real or fake",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology quotes",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "81 combination of numerology",
+          "volume": 90,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology vs astrology which is better",
+          "volume": 90,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "who created numerology",
+          "volume": 90,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "who invented numerology",
+          "volume": 90,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "why numerology is wrong",
+          "volume": 90,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology or astrology which is better",
+          "volume": 50,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "can numerology predict future",
+          "volume": 30,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology quotes in hindi",
+          "volume": 30,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology real or fake",
+          "volume": 30,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "can numerology predict death",
+          "volume": 20,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology when will i get married",
+          "volume": 20,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "who invented numerology in india",
+          "volume": 20,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "why numerology is important",
+          "volume": 20,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "are angel numbers numerology",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology is good or bad",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology uk",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology vs gematria",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "what is numerology calculator",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "where did numerology come from",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "where did numerology originate",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "where does numerology come from",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "why is numerology important",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "why numerology is fake",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology or astrology",
+          "volume": 0,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology vs kundali",
+          "volume": 0,
+          "intent": "Informational"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Number meanings (0-9, 24, master)",
+      "total_keywords": 56,
+      "total_volume": 298510,
+      "keywords": [
+        {
+          "keyword": "numerology number",
+          "volume": 33100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology for number 9",
+          "volume": 18100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 4",
+          "volume": 14800,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 7 number",
+          "volume": 14800,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 8 number",
+          "volume": 14800,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology for number 8",
+          "volume": 14800,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology number 5",
+          "volume": 14800,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology of 4",
+          "volume": 14800,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology of number 4",
+          "volume": 14800,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 2 number",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 5 number",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 9",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology for number 2",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology number 2",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology of number 2",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 6",
+          "volume": 9900,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 3",
+          "volume": 8100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 3 number",
+          "volume": 8100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology of 3",
+          "volume": 8100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 1 number",
+          "volume": 6600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 6 number",
+          "volume": 5400,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerologynumber",
+          "volume": 3600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 9 number",
+          "volume": 2900,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 8",
+          "volume": 1900,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 2",
+          "volume": 1600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 4 number",
+          "volume": 1600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 1",
+          "volume": 1300,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 3 personality",
+          "volume": 1300,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 7 personality",
+          "volume": 1300,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology number 24",
+          "volume": 1300,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 2 personality",
+          "volume": 1000,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 4 personality",
+          "volume": 1000,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 5 personality",
+          "volume": 1000,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 6 personality",
+          "volume": 1000,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 9 personality",
+          "volume": 1000,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 10",
+          "volume": 390,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 11",
+          "volume": 390,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "24 numerology",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 24",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 3 meaning",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 4 meaning",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 5 meaning",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 0",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 1 to 9",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 55",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology number 0",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology zero",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 88",
+          "volume": 110,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "what numerology says about number 2",
+          "volume": 50,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 96",
+          "volume": 40,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "24 numerology number",
+          "volume": 30,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 0 meaning",
+          "volume": 30,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 01",
+          "volume": 30,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 09",
+          "volume": 30,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 0909",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 1 or 8",
+          "volume": 0,
+          "intent": "Informational"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Lo Shu grid & numerology chart",
+      "total_keywords": 6,
+      "total_volume": 32080,
+      "keywords": [
+        {
+          "keyword": "numerology chart",
+          "volume": 27100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology chart calculator",
+          "volume": 2400,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology grid",
+          "volume": 880,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "loshu grid numerology",
+          "volume": 720,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology lo shu grid",
+          "volume": 720,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology grid calculator",
+          "volume": 260,
+          "intent": "Transactional"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Alphabet & letter values",
+      "total_keywords": 13,
+      "total_volume": 104240,
+      "keywords": [
+        {
+          "keyword": "numerology alphabet number",
+          "volume": 14800,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology alphabets number",
+          "volume": 14800,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology alphabet",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology alphabet numbers",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology alphabets",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology and alphabets",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology for alphabets",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology numbers for alphabet",
+          "volume": 12100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator alphabet",
+          "volume": 1300,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology word calculator",
+          "volume": 390,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator letters",
+          "volume": 260,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology a to z numbers",
+          "volume": 70,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology to alphabet",
+          "volume": 20,
+          "intent": "Informational"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Date of birth & core numbers",
+      "total_keywords": 35,
+      "total_volume": 124140,
+      "keywords": [
+        {
+          "keyword": "numerology calculator by date of birth",
+          "volume": 12100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator date of birth",
+          "volume": 12100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator with date of birth",
+          "volume": 12100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology date of birth calculator",
+          "volume": 12100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology according to date of birth",
+          "volume": 8100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology date of birth",
+          "volume": 8100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology with date of birth",
+          "volume": 8100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology birth date",
+          "volume": 6600,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology by date of birth",
+          "volume": 6600,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology dob",
+          "volume": 6600,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology using birth date",
+          "volume": 6600,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator life path number",
+          "volume": 5400,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology life path number calculator",
+          "volume": 5400,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator life path",
+          "volume": 4400,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology life path calculator",
+          "volume": 3600,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "how can i find my numerology number",
+          "volume": 1300,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "how to calculate numerology number",
+          "volume": 1300,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology how to calculate your number",
+          "volume": 1300,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "dob numerology calculator",
+          "volume": 880,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "what are my numerology numbers",
+          "volume": 480,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "what are numerology numbers",
+          "volume": 480,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology destiny number",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator destiny number",
+          "volume": 70,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology expression number",
+          "volume": 50,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator dob",
+          "volume": 40,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "what numerology number am i",
+          "volume": 20,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "how numerology calculator birth date",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator karmic debt",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology essence calculator",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology without date of birth",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "what are the numbers in numerology",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "what is my numerology calculator",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator destiny",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator life path 8 meaning",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology without time of birth",
+          "volume": 0,
+          "intent": "Informational"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Business & brand names",
+      "total_keywords": 8,
+      "total_volume": 35830,
+      "keywords": [
+        {
+          "keyword": "numerology calculator company name",
+          "volume": 12100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator business name",
+          "volume": 9900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator for company name",
+          "volume": 9900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator for business",
+          "volume": 2400,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology for business",
+          "volume": 720,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology visiting card",
+          "volume": 720,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "signature numerology calculator",
+          "volume": 90,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "how to design signature as per numerology",
+          "volume": 0,
+          "intent": "Commercial"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Numerology systems (Chaldean, Pythagorean, Vedic)",
+      "total_keywords": 24,
+      "total_volume": 35520,
+      "keywords": [
+        {
+          "keyword": "chaldean numerology calculator",
+          "volume": 9900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator chaldean",
+          "volume": 9900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator pythagorean",
+          "volume": 5400,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology astrology",
+          "volume": 2400,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology vedic",
+          "volume": 1900,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator vedic",
+          "volume": 1600,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "vedic numerology calculator",
+          "volume": 1600,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology planets",
+          "volume": 1000,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 1 to 9 planet",
+          "volume": 720,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology and colors",
+          "volume": 320,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "hebrew numerology calculator",
+          "volume": 260,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology kabbalah",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "greek numerology calculator",
+          "volume": 70,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator hindu",
+          "volume": 70,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology zodiac signs",
+          "volume": 70,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "jain numerology calculator",
+          "volume": 20,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator gematria",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "quantum numerology",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "quantum numerology calculator",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "how is chaldean numerology calculator",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology and chinese zodiac calculator",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology with tantra, ayurveda, and astrology",
+          "volume": 0,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "quantum numerology calculator free",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "zoroastrian numerology calculator",
+          "volume": 0,
+          "intent": "Transactional"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Mobile, vehicle & house numbers",
+      "total_keywords": 23,
+      "total_volume": 52800,
+      "keywords": [
+        {
+          "keyword": "numerology calculator for mobile number",
+          "volume": 8100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator mobile number",
+          "volume": 8100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology in mobile number",
+          "volume": 8100,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology mobile number",
+          "volume": 8100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology mobile number calculator",
+          "volume": 8100,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "mobile numerology",
+          "volume": 2400,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology vehicle number",
+          "volume": 2400,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator vehicle number",
+          "volume": 1900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology vehicle number calculator",
+          "volume": 1900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator phone number",
+          "volume": 1300,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology phone number calculator",
+          "volume": 1300,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology 6 house",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology house number 8",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator house number",
+          "volume": 170,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology house number calculator",
+          "volume": 170,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "as per numerology which mobile number is best",
+          "volume": 70,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator for vehicle number",
+          "volume": 70,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology ke anusar mobile number",
+          "volume": 70,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator home address",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology when buying a house",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology where to live",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator mobile no",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator where to live",
+          "volume": 0,
+          "intent": "Transactional"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Reports, readings & local services",
+      "total_keywords": 14,
+      "total_volume": 14480,
+      "keywords": [
+        {
+          "keyword": "numerology near me",
+          "volume": 6600,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology free report",
+          "volume": 1900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology report free",
+          "volume": 1900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology reading",
+          "volume": 1300,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "best numerology near me",
+          "volume": 720,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerologyreport",
+          "volume": 720,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology expert",
+          "volume": 480,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology software",
+          "volume": 480,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology report online",
+          "volume": 260,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology expert in india",
+          "volume": 90,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "best numerology calculator app",
+          "volume": 10,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology calculator software",
+          "volume": 10,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology calculator software free download",
+          "volume": 10,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology near me online",
+          "volume": 0,
+          "intent": "Commercial"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Best & lucky numbers",
+      "total_keywords": 9,
+      "total_volume": 16410,
+      "keywords": [
+        {
+          "keyword": "numerology best number",
+          "volume": 3600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology good numbers",
+          "volume": 3600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology which number is best",
+          "volume": 3600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology lucky numbers",
+          "volume": 2400,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "according to numerology which number is best",
+          "volume": 1600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "which numerology number is best",
+          "volume": 1300,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "which numerology is best",
+          "volume": 170,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology unlucky numbers",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "why is 13 unlucky in numerology",
+          "volume": 0,
+          "intent": "Informational"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Learn numerology & books",
+      "total_keywords": 23,
+      "total_volume": 8060,
+      "keywords": [
+        {
+          "keyword": "numerology book",
+          "volume": 2900,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology course",
+          "volume": 1900,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology learning",
+          "volume": 720,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "how to learn numerology",
+          "volume": 390,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology job",
+          "volume": 390,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "best numerology book in hindi",
+          "volume": 260,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology jobs",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology kaise sikhe",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "chaldean numerology books",
+          "volume": 170,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology books in marathi",
+          "volume": 170,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "unlock numerology",
+          "volume": 170,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology made easy",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology symbols",
+          "volume": 110,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology workshop",
+          "volume": 50,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "vedic numerology book in hindi",
+          "volume": 50,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology for beginners",
+          "volume": 40,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology questions",
+          "volume": 30,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "where to learn numerology",
+          "volume": 30,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology keywords",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "top 10 numerology books",
+          "volume": 10,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "loshu grid numerology books in hindi",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology books in hindi best seller",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology new books paperback english",
+          "volume": 0,
+          "intent": "Commercial"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Regional languages",
+      "total_keywords": 21,
+      "total_volume": 18420,
+      "keywords": [
+        {
+          "keyword": "numerology hindi meaning",
+          "volume": 2900,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology hindi",
+          "volume": 2400,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator in tamil",
+          "volume": 1900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator tamil",
+          "volume": 1900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology in hindi",
+          "volume": 1900,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology tamil calculator",
+          "volume": 1900,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology in tamil",
+          "volume": 1300,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology tamil",
+          "volume": 880,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology telugu",
+          "volume": 880,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology in telugu",
+          "volume": 590,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology marathi",
+          "volume": 590,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator hindi",
+          "volume": 480,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology kannada",
+          "volume": 390,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator in telugu",
+          "volume": 260,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology name calculator in telugu",
+          "volume": 70,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator name tamil",
+          "volume": 40,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator urdu",
+          "volume": 20,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "name numerology calculator urdu",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator tamil name",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "chaldean numerology name calculator malayalam",
+          "volume": 0,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "name numerology calculator in kannada",
+          "volume": 0,
+          "intent": "Transactional"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Predictions, daily & personal year",
+      "total_keywords": 15,
+      "total_volume": 7820,
+      "keywords": [
+        {
+          "keyword": "numerology predictions",
+          "volume": 2400,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology today",
+          "volume": 1600,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology horoscope today",
+          "volume": 1300,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 2026",
+          "volume": 880,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology horoscope",
+          "volume": 720,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator personal year",
+          "volume": 260,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology daily predictions",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology personal year calculator",
+          "volume": 260,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology year",
+          "volume": 40,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology jathagam",
+          "volume": 30,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator and predictions",
+          "volume": 20,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology year prediction",
+          "volume": 20,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator 2025",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator year 2025",
+          "volume": 10,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology year 1",
+          "volume": 10,
+          "intent": "Informational"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Compatibility & relationships",
+      "total_keywords": 14,
+      "total_volume": 3690,
+      "keywords": [
+        {
+          "keyword": "numerology calculator compatibility",
+          "volume": 720,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology calculator match",
+          "volume": 720,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology matching for marriage",
+          "volume": 720,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 3 and 7 compatibility",
+          "volume": 320,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 7 and 3 compatibility",
+          "volume": 320,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 8 and 8 compatibility",
+          "volume": 260,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 6 and 9 compatibility",
+          "volume": 210,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 8 and 9 compatibility",
+          "volume": 170,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 7 and 8 compatibility",
+          "volume": 140,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology 4 and 8 compatibility",
+          "volume": 70,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "numerology calculator relationship",
+          "volume": 30,
+          "intent": "Transactional"
+        },
+        {
+          "keyword": "numerology who is my soulmate",
+          "volume": 10,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "how can i find my soulmate with numerology",
+          "volume": 0,
+          "intent": "Informational"
+        },
+        {
+          "keyword": "when will i meet my twin flame numerology",
+          "volume": 0,
+          "intent": "Informational"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Remedies & products",
+      "total_keywords": 17,
+      "total_volume": 1330,
+      "keywords": [
+        {
+          "keyword": "numerology yantra",
+          "volume": 720,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology remedies",
+          "volume": 320,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology bracelet",
+          "volume": 260,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology ring",
+          "volume": 30,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "24 number numerology keychain",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "4 no rahu numerology bracelet",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology 4 bracelet",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology 6 number stone bracelet combo",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology 9 bracelet",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology bracelet 7",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology bracelet mulank 5",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology bracelet mulank 6",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology bracelet mulank 7",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology bracelet number 5 communication adaptability",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology number 3 bracelet",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology number 6 bracelet shri yantra n clear quartz",
+          "volume": 0,
+          "intent": "Commercial"
+        },
+        {
+          "keyword": "numerology number 8 bracelet",
+          "volume": 0,
+          "intent": "Commercial"
+        }
+      ]
+    },
+    {
+      "cluster_name": "Excluded (brand / author / off-topic)",
+      "total_keywords": 61,
+      "total_volume": 2060,
+      "keywords": [
+        {
+          "keyword": "numerology jumaani",
+          "volume": 390,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology watch",
+          "volume": 390,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology swetta jumaani",
+          "volume": 320,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator arviend sud",
+          "volume": 210,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator github",
+          "volume": 140,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology english",
+          "volume": 110,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator vedic rishi",
+          "volume": 70,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology sign",
+          "volume": 70,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology ebook",
+          "volume": 40,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "pandit sethuraman numerology book in tamil",
+          "volume": 40,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "indian numerology book",
+          "volume": 30,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "will plane numerology",
+          "volume": 30,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "format numerology book",
+          "volume": 20,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator astro seek",
+          "volume": 20,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator prokerala",
+          "volume": 20,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator team 9",
+          "volume": 20,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology graph",
+          "volume": 20,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "classical vedic numerology books",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "kero numerology book",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "matthew oliver goodwin numerology the complete guide",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "name numerology calculator arun pandit",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "name numerology calculator jumaani",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "name numerology calculator kari samuels",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator 3.41",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator reddit",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator sanjay jumaani",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator token rock",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology rahman",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "the complete book of numerology david a. phillips",
+          "volume": 10,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "advance astro and numerology ook",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "book on numerology yaduvir",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "haxiwa x15 analog watch - for men astrology and numerology",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "i like numerology",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "izaarworld",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "mansha.tarot",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "name numerology calculator arviend sud",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "nikola tesla 369 numerology book",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology and destiny preshi",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology bracelet number 9 soul magik",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology by jean simpson",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology calculator grade x meaning",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology unfold the self",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology wallet",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "classical ayurvedic numerology reference",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology x files",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology x number",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology xeyal memmedov",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology x\u0259yal m\u0259mm\u0259dov",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerology zen",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerologycalculator1",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerologycalculatorbydateofbirth",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerologycalculatornumerologyforweddings",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "numerologycalculatorpro",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "people who can tell your future by numerology",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "saef quraishi numerology",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "soul magik numerology ring 1",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "thearcheekaarora",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "things like numerology",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "classical nadi astrology books",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "when a person engages in numerology",
+          "volume": 0,
+          "intent": "Navigational"
+        },
+        {
+          "keyword": "will of name numerology",
+          "volume": 0,
+          "intent": "Navigational"
+        }
+      ]
+    }
+  ]
+}
