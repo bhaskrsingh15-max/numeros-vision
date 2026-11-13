@@ -506,11 +506,17 @@ async def handle_render_planner_2027(request: Request) -> Response:
 
 
 @app.post("/api/charm/chat")
-async def handle_charm_chat_service(request: Request) -> Dict[str, Any]:
+async def handle_charm_chat_service(request: Request):
     """
-    Charm AI consultation endpoint.
+    Charm AI deterministic consultation endpoint (delegates to charm_deterministic_service).
     Enforces fail-closed authentication via CHARM_SERVICE_SECRET.
     """
+    from fastapi.responses import JSONResponse
+    from app.services.charm_deterministic_service import (
+        CharmInputError,
+        run_deterministic_charm_consultation,
+    )
+
     allow_unauth_local = os.getenv("NV_ALLOW_UNAUTHENTICATED_LOCAL", "").lower() in ("true", "1")
     if not allow_unauth_local:
         expected_secret = os.getenv("CHARM_SERVICE_SECRET")
@@ -521,67 +527,18 @@ async def handle_charm_chat_service(request: Request) -> Dict[str, Any]:
             raise HTTPException(status_code=403, detail="Access Denied: Invalid or missing Charm service authorization.")
 
     body = await request.json()
-    name = body.get("name") or "Seeker"
-    message = body.get("message") or body.get("question") or "Career consultation"
-    d = body.get("day") or 1
-    m = body.get("month") or 1
-    y = body.get("year") or 1990
-
-    from app.engine.digit_root import calc_driver, calc_bhagyank, calc_personal_year
-    driver = calc_driver(int(d))
-    conductor = calc_bhagyank(int(d), int(m), int(y))
-    current_year = datetime.datetime.now().year
-    personal_year = calc_personal_year(int(d), int(m), current_year)
-
-    planets = {
-        1: "Sun (Surya) — Sovereign Leadership & High Vitality",
-        2: "Moon (Chandra) — Deep Intuition & Diplomatic Harmony",
-        3: "Jupiter (Brihaspati) — Wisdom, Advisory & Expansion",
-        4: "Rahu (North Node) — Strategic Innovation & Breakthrough Execution",
-        5: "Mercury (Budh) — Analytical Speed, Commerce & Negotiation",
-        6: "Venus (Shukra) — Creative Refinement, Harmony & Abundance",
-        7: "Ketu (South Node) — Technical Depth, Research & Intuition",
-        8: "Saturn (Shani) — Structural Mastery, Discipline & Enduring Wealth",
-        9: "Mars (Mangal) — Direct Courage, Initiative & Decisive Action",
-    }
-
-    assistant_text = (
-        f"### ✦ Classical Astrological & Numerological Reading for {name}\n\n"
-        f"**Query Analysis:** \"{message}\"\n\n"
-        f"**Core Planetary Architecture:**\n"
-        f"- **Driver (Mulank {driver}):** Ruled by {planets.get(driver, 'Sun')}. "
-        f"You carry an innate capacity for visionary independence and decisive strategic focus.\n"
-        f"- **Conductor (Bhagyank {conductor}):** Governed by {planets.get(conductor, 'Rahu')}. "
-        f"Your overarching life trajectory unfolds through systematic building, technical foresight, and calculated pivots.\n"
-        f"- **Current Cycle:** Operating in **Personal Year {personal_year}** (Foundation & Structural Consolidation).\n\n"
-        f"**Timing Window & Strategic Corridors:**\n"
-        f"- **Active Execution Window:** The planetary dasha indicates favorable momentum building from early Q2 through late Q3 2026. "
-        f"This period strongly supports career elevation, commercial negotiations, and institutional positioning.\n"
-        f"- **Vigilance Corridors:** Maintain clear written contracts during transit inflection points; avoid impulsive verbal commitments when Mars transits neutral sectors.\n\n"
-        f"**Governed Harmonizers & Remedial Actions:**\n"
-        f"1. **Directional Focus:** Place your primary workstation facing **East or South-East** to maximize mental clarity and executive vitality.\n"
-        f"2. **Harmonizing Colors:** Integrate **Gold, Warm Amber, and Forest Green** into high-stakes meetings and formal presentations.\n"
-        f"3. **Daily Alignment:** Begin high-priority strategic initiatives during morning hours (08:00 AM – 10:30 AM) to capitalize on dominant Solar and Mercurial frequencies."
-    )
-
-    return {
-        "status": "success",
-        "consensus_status": "VERIFIED_SUPPORTED",
-        "audit_trace_id": f"NV-TRC-{hashlib.sha256(f'{name}{message}{time.time()}'.encode()).hexdigest()[:8].upper()}",
-        "prediction_id": f"pred_{int(time.time())}",
-        "assistant_message": {
-            "text": assistant_text
-        },
-        "career_event_assessment": {
-            "event_type": "CAREER_PROGRESSION_AND_ELEVATION",
-            "direction": "FAVORABLE"
-        },
-        "human_friendly_summary": {
-            "headline": "High-Impact Career Momentum Identified",
-            "supported_by_report": f"Driver {driver} and Conductor {conductor} synergize to unlock executive breakthroughs in Personal Year {personal_year}."
-        },
-        "numerology_dasha_result": {
-            "active_window": "2026 Q2 – 2026 Q4 (Peak Consolidation Corridor)",
-            "primary_method": "NUMEROLOGY_DASHA"
-        }
-    }
+    entitlement = str(body.get("_charm_entitlement") or "charm_free")
+    try:
+        result = run_deterministic_charm_consultation(body, entitlement_tier=entitlement)
+    except CharmInputError as exc:
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "status": "INSUFFICIENT_EVIDENCE",
+                "code": exc.code,
+                "error": exc.message,
+                "credit_chargeable": False,
+            },
+        )
+    return JSONResponse(status_code=200, content=result)

@@ -111,7 +111,7 @@ async function run() {
     }),
     baseEnv
   );
-  assert.equal(missingDobResp.status, 200);
+  assert.equal(missingDobResp.status, 400);
   const missingDobJson = await missingDobResp.json();
   assert.equal(missingDobJson.status, 'INSUFFICIENT_EVIDENCE');
   assert.equal(missingDobJson.code, 'DOB_REQUIRED');

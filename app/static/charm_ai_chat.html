@@ -13,7 +13,7 @@
   <link rel="shortcut icon" href="/favicon.ico" />
 
   <title>Charm AI Chat Session | Numeros Vision</title>
-  <meta name="description" content="Ask Charm AI about your Life Path, Dasha timing cycles, authentic remedial guidance, and career transits. Classical Scriptural with classical precision." />
+  <meta name="description" content="Ask Charm AI about your Life Path, personal timing cycles, structured remedial guidance, and career pacing." />
   <!-- Search Engine Crawl & Indexing Directives (Interactive Chat Session - Noindex) -->
   <meta name="robots" content="noindex, nofollow" />
 
@@ -27,13 +27,13 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://numerosvision.com/charm-ai/chat/" />
   <meta property="og:title" content="Charm AI | Personalised Numerology Explanations | Numeros Vision" />
-  <meta property="og:description" content="Ask Charm AI about your Life Path, Dasha timing cycles, authentic remedial guidance, and career transits. Classical Scriptural with classical precision." />
+  <meta property="og:description" content="Ask Charm AI about your Life Path, personal timing cycles, structured remedial guidance, and career pacing." />
   <meta property="og:image" content="https://numerosvision.com/assets/brand/og-default-1200x630.png" />
 
   <!-- Twitter Card Directives -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Charm AI | Personalised Numerology Explanations | Numeros Vision" />
-  <meta name="twitter:description" content="Ask Charm AI about your Life Path, Dasha timing cycles, authentic remedial guidance, and career transits. Classical Scriptural with classical precision." />
+  <meta name="twitter:description" content="Ask Charm AI about your Life Path, personal timing cycles, structured remedial guidance, and career pacing." />
   <meta name="twitter:image" content="https://numerosvision.com/assets/brand/og-default-1200x630.png" />
 
   <link rel="manifest" href="/manifest.json" />
@@ -363,7 +363,7 @@
       <span class="ai-eyebrow">GROUNDED CONVERSATIONAL INTELLIGENCE</span>
       <h1 class="ai-h1">Ask Charm AI About Your Numbers</h1>
       <p class="ai-lead">
-        Consult Charm AI, your trusted conversational numerology advisor. Ask open questions about your career timing, relationship harmony, or personal milestones with authentic classical wisdom.
+        Consult Charm AI, your conversational numerology guide. Ask open questions about career pacing, marriage or relationship harmony, property numbers, financial discipline, or daily habits grounded in classical numerology frameworks.
       </p>
     </div>
 
@@ -398,7 +398,7 @@
 
       <!-- Quick Suggestion Pills -->
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;">
-        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('Is 2026 favorable for my career progression and promotions?')">✦ Career &amp; Work Timing</button>
+        <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('What do my birth numbers and Personal Year indicate for career focus and work habits?')">✦ Career &amp; Work Timing</button>
         <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('How do my numbers influence marriage timing and relationship harmony?')">✦ Marriage &amp; Love</button>
         <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('How should I pace my savings, cashflow, and financial commitments this year?')">✦ Money &amp; Finances</button>
         <button type="button" class="ai-suggestion-pill" onclick="setQueryAndSubmit('Which flat number and Vastu direction suit my birth numbers?')">✦ Property &amp; Vastu</button>
@@ -431,7 +431,7 @@
                 Ready ✦
               </span>
             </div>
-            <div class="ai-author-sub">Deterministic Numerological &amp; Dasha Synthesis</div>
+            <div class="ai-author-sub">Deterministic Numerology Synthesis</div>
           </div>
         </div>
         <div style="font-size:0.92rem; line-height:1.7; color:#523E28;">
@@ -458,7 +458,7 @@
             </div>
           </a>
           <p>
-            AI-powered numerological intelligence combining authentic classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
+            Deterministic numerological intelligence combining traditional classical Vedic, Chaldean, and Lo Shu frameworks. ANVEIL EVERY CHARM with clarity, mathematical rigor, and ethical privacy.
           </p>
         </div>
 
@@ -860,7 +860,7 @@
               Enter Your Date of Birth First
             </div>
             <p style="color:#523E28; font-size:0.92rem; line-height:1.65; margin:0;">
-              Please enter your complete <strong>Date of Birth (DD-MM-YYYY)</strong> above so Charm AI can calculate your Mulank (Birth Day number), Bhagyank (Life Path number), and Numerology Dasha cycles accurately. No credit was used.
+              Please enter your complete <strong>Date of Birth (DD-MM-YYYY)</strong> above so Charm AI can calculate your Mulank (Birth Day number), Bhagyank (Life Path number), Lo Shu grid counts, and Personal Year cycles accurately. No credit was used.
             </p>
           </div>
         `;
@@ -1038,6 +1038,24 @@
             _cachedCharmCredits = data.credits_remaining;
             syncCharmAiGatingUi();
           }
+        } else if (resp.status === 400) {
+          clearTimeout(slowNoticeTimer);
+          const errData = await resp.json().catch(() => ({}));
+          if (errData.credits_remaining !== undefined) {
+            _cachedCharmCredits = errData.credits_remaining;
+            syncCharmAiGatingUi();
+          }
+          panel.innerHTML = `
+            <div id="charmInputPromptCard" style="background:#FFFDF7; border:1.5px solid #C9A227; border-radius:14px; padding:24px 22px;">
+              <div style="font-family:'Cormorant Garamond', serif; font-size:1.35rem; font-weight:700; color:#8B6914; margin:0 0 8px;">
+                Check Your Birth Date &amp; Question
+              </div>
+              <p style="color:#523E28; font-size:0.92rem; line-height:1.65; margin:0;">
+                ${escapeCharmHtml(errData.error || 'Please enter a complete Date of Birth (DD-MM-YYYY) and your question. No question credit was used.')}
+              </p>
+            </div>
+          `;
+          return;
         } else if (resp.status === 402) {
           clearTimeout(slowNoticeTimer);
           const errData = await resp.json().catch(() => ({}));
@@ -1097,10 +1115,7 @@
         }
 
         const traceId = data.audit_trace_id || ('NV-TRC-' + Math.random().toString(36).substring(2, 9).toUpperCase());
-        const topicTitle = data.topic_display
-          || ((data.career_event_assessment && data.career_event_assessment.event_type)
-            ? data.career_event_assessment.event_type.replace(/_/g, ' ')
-            : 'Personal Guidance');
+        const topicTitle = data.topic_display || 'Personal Guidance';
 
         // Requirement 1: Render strictly from canonical backend contract fields
         const hfSummary = data.human_friendly_summary || {};
@@ -1110,10 +1125,9 @@
         const followUpQuestion = data.follow_up_question || '';
         const creditsRemaining = data.credits_remaining;
 
-        // Requirement 7 & Section 17.C: Show cross-check badge ONLY when consensus_status === 'VERIFIED_SUPPORTED' (gold palette, never "Verified")
-        const isVerifiedSupported = data.consensus_status === 'VERIFIED_SUPPORTED';
-        const verifiedBadgeHtml = isVerifiedSupported
-          ? `<span class="ai-verified-icon" title="Multi-Cycle Alignment" aria-label="Cross-Checked" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:rgba(201,162,39,0.14); border:1px solid #C9A227; color:#8B6914; font-size:0.72rem; font-weight:700;">✦ Cross-Checked</span>`
+        const isMultiSystemAligned = data.consensus_status === 'MULTI_SYSTEM_ALIGNED';
+        const alignmentBadgeHtml = isMultiSystemAligned
+          ? `<span class="ai-aligned-icon" title="Multi-Cycle Alignment" aria-label="Cross-Checked" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:rgba(201,162,39,0.14); border:1px solid #C9A227; color:#8B6914; font-size:0.72rem; font-weight:700;">✦ Multi-System Aligned</span>`
           : `<span style="display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.3); color:#7A654D; font-size:0.70rem; font-weight:600;">Numerology Synthesis</span>`;
 
         const creditsChipHtml = creditsRemaining !== undefined
@@ -1151,12 +1165,16 @@
 
         // Prepare charm consensus card when supported
         const isUnsupported = data.code === 'UNSUPPORTED_TOPIC' || data.consensus_status === 'UNSUPPORTED_TOPIC';
+        const hasDashaCalculated = Boolean(data.numerology_dasha_result && data.numerology_dasha_result.active_window);
+        const personalCyclesObj = (data.engine_outputs && data.engine_outputs.personal_cycles) || null;
         const charmObj = isUnsupported ? null : {
           topic_label: topicTitle,
           verification_status: data.consensus_status,
-          event_assessment: data.career_event_assessment ? data.career_event_assessment.direction : 'NEUTRAL',
+          event_assessment: 'NEUTRAL',
           human_friendly: hfSummary,
-          primary_windows: (data.numerology_dasha_result && data.numerology_dasha_result.active_window) ? [data.numerology_dasha_result.active_window] : [],
+          has_dasha: hasDashaCalculated,
+          active_dasha_window: hasDashaCalculated ? data.numerology_dasha_result.active_window : '',
+          personal_cycles: personalCyclesObj,
           missing_requirements: data.missing_requirements,
           practical_steps: nextSteps,
           follow_up_question: followUpQuestion
@@ -1197,7 +1215,7 @@
               <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                   <span class="ai-author-name">Charm AI</span>
-                  ${verifiedBadgeHtml}
+                  ${alignmentBadgeHtml}
                 </div>
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                   ${creditsChipHtml}
@@ -1206,7 +1224,7 @@
                   </span>
                 </div>
               </div>
-              <div class="ai-author-sub">Deterministic Numerological &amp; Dasha Synthesis</div>
+              <div class="ai-author-sub">${hasDashaCalculated ? 'Deterministic Numerology &amp; Sidereal Dasha Synthesis' : 'Deterministic Numerology Synthesis'}</div>
             </div>
           </div>
 
@@ -1360,11 +1378,12 @@
       return out.join('');
     }
 
-    // ── CHARM AI DETERMINISTIC CONSENSUS & DASHA CARD RENDERER ──
+    // ── CHARM AI DETERMINISTIC CONSENSUS CARD RENDERER ──
     function renderCharmAiCard(charm) {
       if (!charm) return '';
       const statusLabels = {
-        'VERIFIED_SUPPORTED': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Cross-Checked' },
+        'MULTI_SYSTEM_ALIGNED': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Multi-System Aligned' },
+        'NUMEROLOGY_CALCULATION_READY': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Numerology Synthesis' },
         'NUMEROLOGY_PRIMARY_CORROBORATED': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Multi-Cycle Alignment' },
         'NUMEROLOGY_PRIMARY_PARTIALLY_CORROBORATED': { bg: 'rgba(201,162,39,0.15)', border: '#C9A227', text: '#8B6914', label: '✦ Partial Cycle Alignment' },
         'NUMEROLOGY_PRIMARY_CONFLICTED': { bg: 'rgba(184,93,25,0.12)', border: '#B85D19', text: '#B85D19', label: '✦ Methodological Contrast' },
@@ -1386,7 +1405,7 @@
       const assessBadge = assessmentLabels[eAssessment] || assessmentLabels['NEUTRAL'];
 
       const hf = charm.human_friendly || {};
-      const takeaway = hf.takeaway || hf.headline || charm.numerology_summary || 'Analyzed through deterministic Numerology Dasha timing cycles.';
+      const takeaway = hf.takeaway || hf.headline || charm.numerology_summary || 'Analyzed through deterministic numerology timing cycles.';
       const supported = hf.supported_by_report || 'Core birth numbers establish your foundational rhythm.';
       const unconcluded = hf.unconcluded_aspects || 'Real-world outcomes depend on personal choices, dialogue, and practical execution alongside cyclical timing.';
       const missingExpl = hf.missing_inputs_explanation || 'Date-of-birth numerology inputs processed.';
@@ -1394,13 +1413,12 @@
       const followupQ = hf.followup_question || charm.follow_up_question || '';
 
       const reqHorizon = (charm.requested_horizon || 'current_cycle').replace(/_/g, ' ');
-      const primaryWindows = charm.primary_windows || [];
-      let acuteWindowStr = 'Pending complete birth inputs';
-      if (primaryWindows.length > 0) {
-        acuteWindowStr = `${primaryWindows[0].start} ➔ ${primaryWindows[0].end} (${primaryWindows[0].ruling_planet || 'Active Ruler'})`;
-      } else if (vStatus === 'INSUFFICIENT_EVIDENCE') {
-        acuteWindowStr = 'Abstained (Date of birth missing or incomplete)';
-      }
+      const hasDasha = Boolean(charm.has_dasha && charm.active_dasha_window);
+      const pc = charm.personal_cycles || null;
+      const cycleHeadingLabel = hasDasha ? 'Calculated Sidereal Dasha Window:' : 'Calculated Personal Cycle:';
+      const cycleValueStr = hasDasha
+        ? charm.active_dasha_window
+        : (pc ? `PY ${pc.personal_year} · PM ${pc.personal_month} · PD ${pc.personal_day}` : 'Personal Year / Month / Day');
 
       const isInsufficient = (vStatus === 'INSUFFICIENT_EVIDENCE');
       const missingReqs = charm.missing_requirements || {};
@@ -1415,7 +1433,7 @@
               ${missingInputsList}
             </div>
             <div style="font-size:0.80rem; color:#523E28; line-height:1.5; margin-bottom:6px;">
-              <strong>Why Required:</strong> ${missingReqs.why_required || 'Date of birth is mandatory to calculate cyclical Dasha epicycles.'}
+              <strong>Why Required:</strong> ${missingReqs.why_required || 'Date of birth is mandatory to calculate personal timing cycles.'}
             </div>
           </div>
         `;
@@ -1427,35 +1445,14 @@
         `;
       }
 
-      let windowsHtml = '';
-      if (primaryWindows.length > 0) {
-        windowsHtml = primaryWindows.map((w) => `
-          <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:10px 14px; margin-top:6px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
-              <span style="font-family:'Cinzel',serif; font-size:1.05rem; font-weight:700; color:#8B6914;">
-                ${w.start} &nbsp;➔&nbsp; ${w.end}
-              </span>
-              <span style="font-size:0.72rem; color:#8B6914; background:rgba(201,162,39,0.12); padding:2px 8px; border-radius:6px; font-weight:700;">${w.ruling_planet || 'Active Cycle'}</span>
-            </div>
-            <div style="font-size:0.80rem; color:#523E28; margin-top:4px; font-weight:500;">
-              ${w.label || ''}
-            </div>
-          </div>
-        `).join('');
-      } else {
-        windowsHtml = `
-          <div style="font-size:0.82rem; color:#7A654D; padding:8px 12px; font-style:italic;">
-            Primary Dasha windows appear once complete birth date inputs are calculated.
-          </div>
-        `;
-      }
+      const windowsHtml = hasDasha
+        ? `<div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:8px; padding:10px 14px; margin-top:6px;"><strong style="color:#8B6914;">${escapeCharmHtml(charm.active_dasha_window)}</strong></div>`
+        : `<div style="font-size:0.82rem; color:#7A654D; padding:8px 12px;">${escapeCharmHtml(cycleValueStr)}</div>`;
 
       const methodLabelMap = {
-        'NUMEROLOGY_DASHA': 'Primary Dasha Epicycle',
         'PYTHAGOREAN': 'Pythagorean Harmonic Vibration',
         'VEDIC_NUMEROLOGY': 'Vedic Planetary Numerology',
         'CHALDEAN_SOUND': 'Chaldean Name Frequency',
-        'KP_ASTROLOGY': 'Dasha Temporal Rhythm',
         'BNN_ADAPTER': 'Planetary Conjunction Dynamics',
         'BNN_NUMEROLOGY': 'Planetary Conjunction Dynamics',
         'VEDIC_ASTROLOGY': 'Vedic Planetary Vibrations',
@@ -1489,7 +1486,7 @@
       `).join('');
 
       const predId = charm.prediction_id || ('PRED-' + Date.now());
-      const cardHeading = escapeCharmHtml(charm.topic_label || 'Numerology Dasha Synthesis');
+      const cardHeading = escapeCharmHtml(charm.topic_label || 'Numerology Synthesis');
 
       return `
         <details style="margin-top:16px; background:#FFFFFF; border:1.5px solid rgba(201,162,39,0.38); border-radius:14px; padding:14px 18px; box-shadow:0 3px 12px rgba(180,155,110,0.08);">
@@ -1525,12 +1522,12 @@
                 <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:8px 12px;">
                   <span style="font-size:0.72rem; color:#7A654D; text-transform:uppercase; display:block;">Requested Horizon:</span>
                   <strong style="color:#8B6914; font-size:0.90rem;">${escapeCharmHtml(reqHorizon)}</strong>
-                  <span style="display:block; font-size:0.68rem; color:#7A654D; margin-top:2px;">(Evaluated separately from calculated Dasha)</span>
+                  <span style="display:block; font-size:0.68rem; color:#7A654D; margin-top:2px;">(Evaluated separately from calculated cycle)</span>
                 </div>
                 <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.2); border-radius:8px; padding:8px 12px;">
-                  <span style="font-size:0.72rem; color:#7A654D; text-transform:uppercase; display:block;">Calculated Dasha Window:</span>
-                  <strong style="color:#8B6914; font-size:0.90rem;">${escapeCharmHtml(acuteWindowStr)}</strong>
-                  <span style="display:block; font-size:0.68rem; color:#7A654D; margin-top:2px;">(Deterministic calendar epicycle)</span>
+                  <span style="font-size:0.72rem; color:#7A654D; text-transform:uppercase; display:block;">${cycleHeadingLabel}</span>
+                  <strong style="color:#8B6914; font-size:0.90rem;">${escapeCharmHtml(cycleValueStr)}</strong>
+                  <span style="display:block; font-size:0.68rem; color:#7A654D; margin-top:2px;">(Deterministic calendar calculation)</span>
                 </div>
               </div>
             </div>
@@ -1587,14 +1584,14 @@
           <!-- Expandable Technical Calculations & Citations -->
           <div style="margin-top:14px; background:#FAF6EE; border:1px solid rgba(201,162,39,0.3); border-radius:10px; padding:12px 14px;">
             <div style="font-weight:700; font-size:0.82rem; color:#8B6914;">
-              ✦ Detailed Dasha Cycles &amp; Alignment Notes
+              ✦ ${hasDasha ? 'Detailed Sidereal Dasha &amp; Cycle Notes' : 'Detailed Personal Cycle &amp; Alignment Notes'}
             </div>
             
             <div style="margin-top:12px;">
               <!-- Primary Event Windows -->
               <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.25); border-radius:8px; padding:10px 12px; margin-bottom:10px;">
                 <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A654D;">
-                  ✦ Primary Calculated Event Windows
+                  ✦ Active Calculated Cycle
                 </div>
                 ${windowsHtml}
               </div>
@@ -1602,7 +1599,7 @@
               <!-- Multi-Method Analysis -->
               <div style="margin-bottom:12px;">
                 <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#7A654D; margin-bottom:6px;">
-                  ✦ Multi-Cycle Numerological Comparison (Dasha, Lo Shu, Chaldean)
+                  ✦ Multi-Cycle Numerological Comparison (Lo Shu, Chaldean, Personal Year)
                 </div>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:8px;">
                   ${methodsHtml}
@@ -2180,15 +2177,16 @@
               });
               const verifyData = await verifyRes.json();
               if (verifyRes.ok && (verifyData.success || verifyData.status === 'ok' || verifyData.status === 'PAID' || verifyData.status === 'PAYMENT_VERIFIED')) {
-                alert('✦ Payment verified! Your 5 In-Depth Questions activate automatically upon Razorpay confirmation.');
                 document.getElementById('charmPaywallModal').style.display = 'none';
                 await initCharmAiSession();
+                const statusEl = document.getElementById('aiStatusPill');
+                if (statusEl) statusEl.textContent = '✦ Payment confirmed! Your 5 Charm AI questions are ready.';
                 setTimeout(() => { syncCharmAiCreditsFromServer(); }, 2500);
               } else {
-                alert(verifyData.error || 'Payment verification encountered a delay.');
+                if (payBtn) { payBtn.disabled = false; payBtn.textContent = verifyData.error || 'Payment confirmation delayed — Try again'; }
               }
             } catch(e) {
-              alert('Payment verification connection error.');
+              if (payBtn) { payBtn.disabled = false; payBtn.textContent = 'Connection error — Try again'; }
             }
           },
           modal: {
@@ -2201,8 +2199,7 @@
         const rzp = new window.Razorpay(options);
         rzp.open();
       } catch (e) {
-        alert('Network error connecting to payment gateway.');
-        if (payBtn) { payBtn.disabled = false; payBtn.textContent = 'Proceed to Pay ₹199 ✦'; }
+        if (payBtn) { payBtn.disabled = false; payBtn.textContent = 'Network error — Try again'; }
       }
     }
   </script>

@@ -606,8 +606,8 @@ async function runTests() {
     const balRow = realDb._rawDb.prepare('SELECT SUM(delta) as bal FROM credit_ledger WHERE user_id = ?').get(userId);
     assert.equal(balRow.bal, 1, 'Net balance must remain 1 after refund');
 
-    // Verify retry did NOT double-count against CHARM_GLOBAL_DAILY_CAP
-    const todayKey = new Date().toISOString().slice(0, 10);
+    // Verify retry did NOT double-count against CHARM_GLOBAL_DAILY_CAP (keyed on 00:00 IST boundary)
+    const todayKey = new Date(Date.now() + (5 * 60 + 30) * 60 * 1000).toISOString().slice(0, 10);
     const rateRow = realDb._rawDb.prepare('SELECT count FROM charm_rate_limits WHERE key = ?').get('charm_global_daily_' + todayKey);
     assert.ok(rateRow, 'Daily rate limit record must exist');
     assert.equal(rateRow.count, 1, `Global daily spend cap was incremented ${rateRow.count} times! Expected strictly 1.`);

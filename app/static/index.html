@@ -3842,8 +3842,8 @@
 
     function renderCharmAiBubbleHeader(statusText = 'Ready ✦', traceId = '', consensusStatus = '') {
       const traceAttr = traceId ? `data-trace-id="${traceId}" title="Audit Reference: ${traceId}"` : '';
-      const verifiedHtml = consensusStatus === 'VERIFIED_SUPPORTED'
-        ? `<span class="ai-verified-icon" title="Multi-Method Cross-Verified" aria-label="Verified" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:rgba(22,131,91,0.12); border:1px solid #16835B; color:#16835B; font-size:0.70rem; font-weight:700;">✓ Verified</span>`
+      const alignedHtml = consensusStatus === 'MULTI_SYSTEM_ALIGNED'
+        ? `<span class="ai-aligned-icon" title="Multi-System Aligned" aria-label="Multi-System Aligned" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:rgba(201,162,39,0.14); border:1px solid #C9A227; color:#8B6914; font-size:0.70rem; font-weight:700;">✦ Cross-Checked</span>`
         : '';
       return `
         <div class="ai-msg-header">
@@ -3852,13 +3852,13 @@
             <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
               <div style="display:flex; align-items:center; gap:6px;">
                 <span class="ai-author-name">Charm AI</span>
-                ${verifiedHtml}
+                ${alignedHtml}
               </div>
               <span style="font-size:0.70rem; font-weight:600; color:#8B6914; background:rgba(201,162,39,0.12); border:1px solid rgba(201,162,39,0.28); border-radius:12px; padding:3px 10px;" ${traceAttr}>
                 ${statusText}
               </span>
             </div>
-            <div class="ai-author-sub">Deterministic Numerological &amp; Dasha Synthesis</div>
+            <div class="ai-author-sub">Deterministic Numerology Synthesis</div>
           </div>
         </div>
       `;
@@ -3916,7 +3916,7 @@
 
               <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
 
-                <button type="button" style="background:#FAF6EE; border:1px solid #C9A227; color:#8B6914; border-radius:16px; padding:5px 12px; font-size:0.78rem; cursor:pointer; font-weight:600;" onclick="sendQuickQuery('Is 2026 favorable for my career progression and financial expansion?')">✦ 2026 Career &amp; Finances</button>
+                <button type="button" style="background:#FAF6EE; border:1px solid #C9A227; color:#8B6914; border-radius:16px; padding:5px 12px; font-size:0.78rem; cursor:pointer; font-weight:600;" onclick="sendQuickQuery('What do my birth numbers and Personal Year indicate for career focus and financial discipline?')">✦ Career &amp; Finances</button>
 
                 <button type="button" style="background:#FAF6EE; border:1px solid #C9A227; color:#8B6914; border-radius:16px; padding:5px 12px; font-size:0.78rem; cursor:pointer; font-weight:600;" onclick="sendQuickQuery('Which flat number and Vastu direction suit my birth numbers?')">✦ Property &amp; Vastu</button>
 
@@ -3991,7 +3991,8 @@
     function renderCharmAiCard(charm) {
       if (!charm) return '';
       const statusLabels = {
-        'VERIFIED_SUPPORTED': { bg: 'rgba(22,131,91,0.12)', border: '#16835B', text: '#16835B', label: '✓ Verified' },
+        'MULTI_SYSTEM_ALIGNED': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Multi-System Aligned' },
+        'NUMEROLOGY_CALCULATION_READY': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Numerology Synthesis' },
         'NUMEROLOGY_PRIMARY_CORROBORATED': { bg: 'rgba(201,162,39,0.14)', border: '#C9A227', text: '#8B6914', label: '✦ Multi-Cycle Alignment' },
         'NUMEROLOGY_PRIMARY_PARTIALLY_CORROBORATED': { bg: 'rgba(201,162,39,0.15)', border: '#C9A227', text: '#8B6914', label: '✦ Balanced Perspective' },
         'NUMEROLOGY_PRIMARY_CONFLICTED': { bg: 'rgba(184,93,25,0.12)', border: '#B85D19', text: '#B85D19', label: '✦ Multi-Layered Dynamics' },
@@ -4461,10 +4462,7 @@
         const typingEl = document.getElementById(typingId);
         if (res.ok) {
           const data = await res.json();
-          const topicBadge = data.topic_display
-            || ((data.career_event_assessment && data.career_event_assessment.event_type)
-              ? data.career_event_assessment.event_type.replace(/_/g, ' ')
-              : 'Personal Guidance');
+          const topicBadge = data.topic_display || 'Personal Guidance';
 
           // Requirement 1: Render strictly from canonical backend contract fields
           const hfSummary = data.human_friendly_summary || {};
@@ -4515,6 +4513,14 @@
           `;
           const streamEl = document.getElementById(`stream-${typingId}`);
           typeCharmMessage(streamEl, answerText, extrasHtml);
+        } else if (res.status === 400) {
+          const errData = await res.json().catch(() => ({}));
+          typingEl.innerHTML = `
+            ${renderCharmAiBubbleHeader('Input Needed')}
+            <div style="font-size:0.92rem; line-height:1.65; color:#523E28;">
+              ${escapeHomeChatHtml(errData.error || 'Please enter a valid Date of Birth (DD-MM-YYYY) and your question. No credit was used.')}
+            </div>
+          `;
         } else if (res.status === 402) {
           const errData = await res.json().catch(() => ({}));
           const offer = errData.upgrade_offer || {};

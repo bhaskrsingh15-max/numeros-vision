@@ -9497,9 +9497,13 @@ export default {
         const [py, pm, pd] = body.dob.trim().split('-').map(Number);
         y = py; m = pm; d = pd;
       }
-      const hasValidDob = Number.isInteger(d) && d >= 1 && d <= 31 &&
-                          Number.isInteger(m) && m >= 1 && m <= 12 &&
-                          Number.isInteger(y) && y >= 1900 && y <= 2100;
+      const isValidGregorianDob = (dayVal, monthVal, yearVal) => {
+        if (!Number.isInteger(dayVal) || !Number.isInteger(monthVal) || !Number.isInteger(yearVal)) return false;
+        if (yearVal < 1900 || yearVal > 2100 || monthVal < 1 || monthVal > 12 || dayVal < 1 || dayVal > 31) return false;
+        const dt = new Date(Date.UTC(yearVal, monthVal - 1, dayVal));
+        return dt.getUTCFullYear() === yearVal && (dt.getUTCMonth() + 1) === monthVal && dt.getUTCDate() === dayVal;
+      };
+      const hasValidDob = isValidGregorianDob(d, m, y);
 
       // 4. Identity & Credit Gate (Atomic reservation + guaranteed refund on non-ANSWERED outcomes)
       const user = await authenticateUser(request, env);
@@ -9615,12 +9619,14 @@ export default {
         }), { status: 400, headers: corsHeaders });
       }
 
-      // 6. Mandatory Date of Birth Gate — Never fabricate a default profile; refund credit immediately
+      // 6. Mandatory Date of Birth Gate — Never fabricate a default profile; refund credit & return 400
       if (!hasValidDob) {
         const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
         return new Response(JSON.stringify({
+          success: false,
           status: 'INSUFFICIENT_EVIDENCE',
           code: 'DOB_REQUIRED',
+          error: 'Please enter a valid Date of Birth (day, month, and year) before asking a question. No question credit was used.',
           consensus_status: 'INSUFFICIENT_EVIDENCE',
           credits_remaining: restored,
           missing_requirements: {
@@ -9628,7 +9634,7 @@ export default {
           },
           human_friendly_summary: {
             headline: 'Enter Your Date of Birth First',
-            supported_by_report: 'Charm AI calculates Mulank (Birth Day number), Bhagyank (Life Path number), and Numerology Dasha cycles deterministically from your Date of Birth.'
+            supported_by_report: 'Charm AI calculates Mulank (Birth Day number), Bhagyank (Life Path number), Lo Shu grid counts, and Personal Year cycles deterministically from your Date of Birth.'
           },
           assistant_message: {
             text: 'Please enter your **Date of Birth (DD / MM / YYYY)** before asking a question so Charm AI can calculate your Mulank (Birth Day number), Bhagyank (Life Path number), and Personal Year cycle. **No question credit was used.**'
@@ -9638,7 +9644,7 @@ export default {
             'Re-send your question once your Date of Birth is set.'
           ],
           follow_up_question: 'What is your Date of Birth (DD / MM / YYYY)?'
-        }), { status: 200, headers: corsHeaders });
+        }), { status: 400, headers: corsHeaders });
       }
 
       // 7. Topic Classifier & Unsupported-Topic Honesty Gate (No credit used on unsupported topics)
@@ -9729,6 +9735,15 @@ export default {
           };
           const upstreamPath = isStreamRoute ? '/api/charm/chat/stream' : '/api/charm/chat';
           const upstreamResp = await callCharmBackendService(upstreamPayload, env, upstreamPath);
+          if (upstreamResp && upstreamResp.status === 400) {
+            const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
+            const badData = await upstreamResp.json().catch(() => ({}));
+            return new Response(JSON.stringify(Object.assign({
+              success: false,
+              code: 'INVALID_INPUT',
+              error: 'Please check your question and Date of Birth inputs. No credit was used.'
+            }, badData, { credits_remaining: restored })), { status: 400, headers: corsHeaders });
+          }
           if (!upstreamResp || !upstreamResp.ok) {
             const restored = await refundCharmReservation(user, userReservationId, visitorInfo.visitorHash, env, now);
             return new Response(JSON.stringify({
@@ -9890,7 +9905,12 @@ export default {
         recordStage(2, 'mapping_loshu_grid', 'Mapping your Lo Shu grid', 'started', s2Start);
         const driver = calcDriver(d);
         const conductor = calcBhagyank(d, m, y);
-        calcLoShuDobOnly(d, m, y);
+        const loshuDob = calcLoShuDobOnly(d, m, y);
+        const loshuNonZero = {};
+        for (let k = 1; k <= 9; k++) {
+          const cnt = (loshuDob && loshuDob.counts && loshuDob.counts[k]) || 0;
+          if (cnt > 0) loshuNonZero[String(k)] = cnt;
+        }
         recordStage(2, 'mapping_loshu_grid', 'Mapping your Lo Shu grid', 'completed', s2Start);
 
         const s3Start = Date.now();
@@ -10028,7 +10048,7 @@ ${tpl.focusBody}`;
         recordStage(5, 'writing_answer', 'Writing your answer', 'completed', s5Start);
 
         const hasFullAstroInputs = Boolean((body.birth_time || body.birthTime) && (body.birth_place || body.birthPlace));
-        const consensusStatus = hasFullAstroInputs ? 'VERIFIED_SUPPORTED' : 'NUMEROLOGY_PRIMARY_CORROBORATED';
+        const consensusStatus = hasFullAstroInputs ? 'MULTI_SYSTEM_ALIGNED' : 'NUMEROLOGY_CALCULATION_READY';
 
         const localResultObj = {
           status: 'ANSWERED',
@@ -10037,9 +10057,12 @@ ${tpl.focusBody}`;
           consensus_status: consensusStatus,
           audit_trace_id: traceId,
           prediction_id: predId,
-          career_event_assessment: {
-            event_type: tpl.eventType,
-            direction: 'SUPPORTED'
+          engine_outputs: {
+            driver,
+            conductor,
+            loshu_counts: loshuDob.counts,
+            loshu_nonzero_counts: loshuNonZero,
+            personal_year: personalYear
           },
           assistant_message: {
             text: assistantText
@@ -10047,11 +10070,6 @@ ${tpl.focusBody}`;
           human_friendly_summary: {
             headline: tpl.headline,
             supported_by_report: `Mulank (Birth Day number) ${driver} and Bhagyank (Life Path number) ${conductor} evaluated within Personal Year ${personalYear}.`
-          },
-          numerology_dasha_result: {
-            active_window: `Personal Year ${personalYear} Active Cycle`,
-            mahadasha_planet: (planets[driver] || 'Sun').split(' ')[0],
-            antardasha_planet: (planets[conductor] || 'Mercury').split(' ')[0]
           },
           missing_requirements: {
             missing_inputs: hasFullAstroInputs ? [] : ['birth_time', 'birth_place']

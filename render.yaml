@@ -1,6 +1,6 @@
 services:
   # =========================================================================
-  # PREVIEW SERVICE (Active target for Preview testing)
+  # PREVIEW PDF SERVICE (Active target for Preview testing)
   # =========================================================================
   - type: web
     name: numeros-pdf-preview
@@ -19,7 +19,7 @@ services:
         sync: false
 
   # =========================================================================
-  # PRODUCTION SERVICE (Prepared — do not create until instructed)
+  # PRODUCTION PDF SERVICE (Prepared — do not create until instructed)
   # =========================================================================
   - type: web
     name: numeros-pdf-prod
@@ -37,4 +37,48 @@ services:
       - key: PLANNER_2027_ALLOW_PLACEHOLDER_ON_PREVIEW
         value: "false"
       - key: PDF_SERVICE_SECRET
+        sync: false
+
+  # =========================================================================
+  # PREVIEW DETERMINISTIC ENGINE SERVICE (Charm AI + Tool Services + Logo Intelligence)
+  # =========================================================================
+  - type: web
+    name: numeros-engine-preview
+    runtime: docker
+    dockerfilePath: ./engine_service/Dockerfile
+    dockerContext: .
+    region: singapore
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: preview
+      - key: CHARM_SERVICE_SECRET
+        sync: false
+      - key: ENGINE_SERVICE_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+
+  # =========================================================================
+  # PRODUCTION DETERMINISTIC ENGINE SERVICE (Prepared — wait for owner "go")
+  # =========================================================================
+  - type: web
+    name: numeros-engine-prod
+    runtime: docker
+    dockerfilePath: ./engine_service/Dockerfile
+    dockerContext: .
+    region: singapore
+    plan: starter
+    autoDeploy: false
+    maxShutdownDelaySeconds: 30
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: CHARM_SERVICE_SECRET
+        sync: false
+      - key: ENGINE_SERVICE_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
         sync: false
