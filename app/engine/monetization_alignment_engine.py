@@ -308,25 +308,25 @@ def analyze_user_alignment_and_gaps(
 
 def is_staging_bypass_authorized(request_headers: Dict[str, str], query_params: Dict[str, str], token: Optional[str] = None) -> bool:
     """
-    Rule 3: Determines if the caller is authorized for Staging Replica Preview mode.
-    Strictly disallowed in production unless authorized staging header or token is present.
+    Rule 3: Determines if the caller is authorized for local QA / Staging Replica Preview mode.
+    Unconditionally disallowed in production and preview environments.
     """
     env = os.getenv("ENVIRONMENT", "development").lower()
-    if env == "production":
+    if env in ("production", "preview"):
         return False
-    
-    # 1. Master test tokens allow bypass in non-production
+
+    is_local_dev = env in ("development", "test", "local")
+
+    # 1. Master test tokens allow QA access only in local dev or with explicit flag outside prod/preview
     if token in ("test_master_pass", "test_token", "staging_preview_token", "admin_test") or (token and token.startswith("test_")):
-        if env != "production" or os.getenv("ALLOW_TEST_TOKENS", "false").lower() == "true":
+        if is_local_dev or os.getenv("ALLOW_TEST_TOKENS", "false").lower() == "true":
             return True
 
-    # 2. Check for explicit Staging host, header or query param
-    host = request_headers.get("host", "").lower()
-    is_staging_host = "staging.numerosvision.com" in host or host.endswith(":8001")
+    # 2. Explicit QA header or query param — only honored in local dev or with explicit flag outside prod/preview
     staging_header = request_headers.get("x-staging-test-bypass", "").lower() in ("true", "1")
     staging_query = query_params.get("staging_preview", "").lower() in ("true", "1")
 
-    if (is_staging_host or staging_header or staging_query or env == "staging") and (env != "production" or os.getenv("ALLOW_STAGING_TEST_BYPASS", "false").lower() == "true"):
+    if (staging_header or staging_query) and (is_local_dev or os.getenv("ALLOW_STAGING_TEST_BYPASS", "false").lower() == "true"):
         return True
 
     return False

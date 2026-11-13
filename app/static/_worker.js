@@ -3255,7 +3255,6 @@ export default {
   },
 
   async _handleRequest(request, env, ctx) {
-    assertNoDangerousFlagsInProduction(env, request);
     const url = new URL(request.url);
 
     // CSRF Protection: Verify Origin on state-changing POST endpoints
@@ -3519,6 +3518,8 @@ export default {
         }
       });
     }
+
+    assertNoDangerousFlagsInProduction(env, request);
 
     // Rewrite /static/reports/ to /reports/
     // Direct static reports rewrite removed for security lockdown

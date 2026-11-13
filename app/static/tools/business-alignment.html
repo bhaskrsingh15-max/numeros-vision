@@ -1381,20 +1381,6 @@
       `).join('');
     }
 
-    
-    function toggleDossierUnlock(wrapId, btn) {
-      const wrap = document.getElementById(wrapId);
-      if (!wrap) return;
-      const isLocked = wrap.classList.contains('locked');
-      if (isLocked) {
-        wrap.classList.remove('locked');
-        if (btn) btn.innerHTML = '<span>🔒 Re-lock Dossier</span>';
-      } else {
-        wrap.classList.add('locked');
-        if (btn) btn.innerHTML = '<span>👁️ Preview Complete Dossier (Practitioner Test Mode)</span>';
-      }
-    }
-
     async function handleStartupSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('btnStartup');
@@ -1615,9 +1601,6 @@
               <a href="${checkoutUrl}" class="btn-lock-cta">
                 <span>🔒 ${lockTaglineAction} · Explore Report (₹${entryPrice}) ✦</span>
               </a>
-              <button type="button" class="btn-preview-demo" onclick="toggleDossierUnlock('gatedDetailedReportStartup', this)">
-                <span>👁️ Preview Complete Dossier (Practitioner Test Mode)</span>
-              </button>
             </div>
 
             <div class="lock-legal-guarantee">
@@ -1788,9 +1771,6 @@
               <a href="${checkoutUrl}" class="btn-lock-cta">
                 <span>🔒 ${lockTaglineAction} · Explore Corporate Dossier (₹${entryPrice}) ✦</span>
               </a>
-              <button type="button" class="btn-preview-demo" onclick="toggleDossierUnlock('gatedDetailedReportExisting', this)">
-                <span>👁️ Preview Complete Dossier (Practitioner Test Mode)</span>
-              </button>
             </div>
 
             <div class="lock-legal-guarantee">

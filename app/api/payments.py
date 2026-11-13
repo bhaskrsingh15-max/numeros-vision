@@ -1596,12 +1596,16 @@ def get_session_info(token: str) -> Optional[dict]:
     """Retrieve session info for a given premium/subscription token."""
     if not token:
         return None
-    # Universal Test & Staging access for full workable testing of all calculators and packages
+    # Local QA test tokens — unconditionally rejected in production and preview
     if token in ("test_master_pass", "test_token", "demo_mode", "admin_test") or token.startswith("test_"):
-        is_prod = os.getenv("ENVIRONMENT", "development").lower() == "production"
-        allow_test = os.getenv("ALLOW_TEST_TOKENS", "true" if not is_prod else "false").lower() == "true"
-        if is_prod and not allow_test:
-            # In strict live production, reject hardcoded test tokens to prevent outer bypass
+        env_mode = os.getenv("ENVIRONMENT", "development").lower()
+        if env_mode in ("production", "preview"):
+            return None
+        allow_test = (
+            env_mode in ("development", "test", "local")
+            or os.getenv("ALLOW_TEST_TOKENS", "false").lower() == "true"
+        )
+        if not allow_test:
             return None
 
         return {

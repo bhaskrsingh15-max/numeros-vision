@@ -326,7 +326,7 @@ def ask_question(req: OpenEndedQuestionRequest, request: Request = None):
                 "remedies": []
             })
         
-        # Check if user has an active paid subscription or test mode access
+        # Check if user has an active paid subscription or authorized local QA access
         from app.api.payments import get_session_info, consume_question
         from app.engine.monetization_alignment_engine import is_staging_bypass_authorized, analyze_user_alignment_and_gaps
         
