@@ -23,7 +23,6 @@ import subprocess
 import sys
 from typing import Any, Dict, List
 
-from fastapi.testclient import TestClient
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -312,21 +311,85 @@ def run_worker_audit(samples: List[Dict[str, Any]]) -> Dict[str, Any]:
             os.remove(manifest_tmp)
 
 
+def _asgi_post_json(asgi_app: Any, path: str, payload: Dict[str, Any]) -> tuple[int, bytes]:
+    """Zero-socket synchronous ASGI POST helper (compatible with isolated sandboxes)."""
+    body = json.dumps(payload).encode("utf-8")
+    sent: List[Dict[str, Any]] = []
+    req_sent = False
+
+    async def receive() -> Dict[str, Any]:
+        nonlocal req_sent
+        if not req_sent:
+            req_sent = True
+            return {"type": "http.request", "body": body, "more_body": False}
+        return {"type": "http.disconnect"}
+
+    async def send(message: Dict[str, Any]) -> None:
+        sent.append(message)
+
+    scope = {
+        "type": "http",
+        "asgi": {"version": "3.0"},
+        "http_version": "1.1",
+        "method": "POST",
+        "scheme": "http",
+        "path": path,
+        "raw_path": path.encode("ascii"),
+        "query_string": b"",
+        "headers": [
+            (b"content-type", b"application/json"),
+            (b"content-length", str(len(body)).encode("ascii")),
+            (b"accept", b"application/json"),
+        ],
+    }
+    coro = asgi_app(scope, receive, send)
+    try:
+        while True:
+            coro.send(None)
+    except StopIteration:
+        pass
+
+    status_code = 500
+    body_chunks: List[bytes] = []
+    for msg in sent:
+        if msg.get("type") == "http.response.start":
+            status_code = int(msg["status"])
+        elif msg.get("type") == "http.response.body":
+            body_chunks.append(msg.get("body", b""))
+    return status_code, b"".join(body_chunks)
+
+
 def run_render_pdf_service_audit(samples: List[Dict[str, Any]]) -> Dict[str, Any]:
     manifest_tmp = os.path.join(FIXTURE_DIR, "_render_manifest_tmp.json")
     with open(manifest_tmp, "w", encoding="utf-8") as f:
         json.dump(samples, f)
     probe_code = (
-        "import json, sys\n"
-        "from fastapi.testclient import TestClient\n"
+        "import json, os, sys\n"
+        "sys.path.insert(0, os.getcwd())\n"
         "from app.services.internal_pdf_worker_service import app as render_app\n"
+        "def post(path, payload):\n"
+        "    body = json.dumps(payload).encode('utf-8')\n"
+        "    sent, done = [], False\n"
+        "    async def recv():\n"
+        "        nonlocal done\n"
+        "        if not done: done = True; return {'type':'http.request','body':body,'more_body':False}\n"
+        "        return {'type':'http.disconnect'}\n"
+        "    async def send(m): sent.append(m)\n"
+        "    scope = {'type':'http','asgi':{'version':'3.0'},'http_version':'1.1','method':'POST','scheme':'http',\n"
+        "             'path':path,'raw_path':path.encode(),'query_string':b'',\n"
+        "             'headers':[(b'content-type',b'application/json'),(b'content-length',str(len(body)).encode())]}\n"
+        "    c = render_app(scope, recv, send)\n"
+        "    try:\n"
+        "        while True: c.send(None)\n"
+        "    except StopIteration: pass\n"
+        "    return next(m['status'] for m in sent if m['type']=='http.response.start')\n"
         "samples = json.load(open(sys.argv[1], encoding='utf-8'))\n"
-        "client = TestClient(render_app)\n"
         "out = {}\n"
         "for s in samples:\n"
-        "    rp = client.post('/api/v1/logo/preview', json=s['preview_payload'])\n"
-        "    ra = client.post('/api/v1/logo/analyze-existing', json=s['analyze_payload'])\n"
-        "    out[s['id']] = {'preview_status': rp.status_code, 'analyze_status': ra.status_code}\n"
+        "    out[s['id']] = {\n"
+        "        'preview_status': post('/api/v1/logo/preview', s['preview_payload']),\n"
+        "        'analyze_status': post('/api/v1/logo/analyze-existing', s['analyze_payload']),\n"
+        "    }\n"
         "sys.stdout.write(json.dumps(out))\n"
     )
     try:
@@ -351,14 +414,13 @@ def run_local_prototype_audit(samples: List[Dict[str, Any]]) -> Dict[str, Any]:
 
     proto_app = FastAPI()
     proto_app.include_router(local_logo_router)
-    client = TestClient(proto_app)
 
     out: Dict[str, Any] = {}
     for s in samples:
-        r_prev = client.post("/api/v1/logo/preview", json=s["preview_payload"])
-        r_anal = client.post("/api/v1/logo/analyze-existing", json=s["analyze_payload"])
-        prev_json = r_prev.json() if r_prev.status_code == 200 else {"error": r_prev.text}
-        anal_json = r_anal.json() if r_anal.status_code == 200 else {"error": r_anal.text}
+        prev_status, prev_bytes = _asgi_post_json(proto_app, "/api/v1/logo/preview", s["preview_payload"])
+        anal_status, anal_bytes = _asgi_post_json(proto_app, "/api/v1/logo/analyze-existing", s["analyze_payload"])
+        prev_json = json.loads(prev_bytes.decode("utf-8")) if prev_status == 200 else {"error": prev_bytes.decode("utf-8", errors="replace")}
+        anal_json = json.loads(anal_bytes.decode("utf-8")) if anal_status == 200 else {"error": anal_bytes.decode("utf-8", errors="replace")}
 
         m = anal_json.get("measurable_design_checks", {})
         val = prev_json.get("validation", {})
@@ -389,11 +451,11 @@ def run_local_prototype_audit(samples: List[Dict[str, Any]]) -> Dict[str, Any]:
             )
 
         out[s["id"]] = {
-            "preview_status": r_prev.status_code,
+            "preview_status": prev_status,
             "preview_contrast": val.get("contrast_ratio"),
             "preview_passed": val.get("passed"),
             "preview_chaldean": f"{num.get('compound_sum')}/{num.get('single_root')}",
-            "analyze_status": r_anal.status_code,
+            "analyze_status": anal_status,
             "analyze_is_vector": m.get("is_vector"),
             "analyze_extracted_text": m.get("extracted_text"),
             "analyze_contrast": m.get("contrast_ratio"),

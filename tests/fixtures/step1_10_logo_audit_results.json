@@ -1,0 +1,414 @@
+{
+  "step": "Step 1 \u2014 10-Logo Endpoint & Prototype Audit",
+  "sample_count": 10,
+  "svg_count": 5,
+  "png_count": 5,
+  "production_worker_all_405": true,
+  "render_pdf_service_all_404": true,
+  "worker_results": {
+    "01_nv_full_lockup.svg": {
+      "id": "01_nv_full_lockup.svg",
+      "format": "SVG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    },
+    "02_nv_refined_brand.svg": {
+      "id": "02_nv_refined_brand.svg",
+      "format": "SVG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    },
+    "03_aura_peak_gold_low_contrast.svg": {
+      "id": "03_aura_peak_gold_low_contrast.svg",
+      "format": "SVG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    },
+    "04_apex_stencil_cut_letters.svg": {
+      "id": "04_apex_stencil_cut_letters.svg",
+      "format": "SVG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    },
+    "05_fake_vector_raster_and_script.svg": {
+      "id": "05_fake_vector_raster_and_script.svg",
+      "format": "SVG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    },
+    "06_nv_horizontal_lockup.png": {
+      "id": "06_nv_horizontal_lockup.png",
+      "format": "PNG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    },
+    "07_nv_refined_mark.png": {
+      "id": "07_nv_refined_mark.png",
+      "format": "PNG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    },
+    "08_pwa_app_icon_512.png": {
+      "id": "08_pwa_app_icon_512.png",
+      "format": "PNG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    },
+    "09_de_wow_wafel_demo.png": {
+      "id": "09_de_wow_wafel_demo.png",
+      "format": "PNG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    },
+    "10_tiny_32px_favicon.png": {
+      "id": "10_tiny_32px_favicon.png",
+      "format": "PNG",
+      "preview": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      },
+      "analyze_existing": {
+        "status": 405,
+        "contentType": "",
+        "bodyLength": 0,
+        "bodyPreview": ""
+      }
+    }
+  },
+  "render_pdf_service_results": {
+    "01_nv_full_lockup.svg": {
+      "preview_status": 404,
+      "analyze_status": 404
+    },
+    "02_nv_refined_brand.svg": {
+      "preview_status": 404,
+      "analyze_status": 404
+    },
+    "03_aura_peak_gold_low_contrast.svg": {
+      "preview_status": 404,
+      "analyze_status": 404
+    },
+    "04_apex_stencil_cut_letters.svg": {
+      "preview_status": 404,
+      "analyze_status": 404
+    },
+    "05_fake_vector_raster_and_script.svg": {
+      "preview_status": 404,
+      "analyze_status": 404
+    },
+    "06_nv_horizontal_lockup.png": {
+      "preview_status": 404,
+      "analyze_status": 404
+    },
+    "07_nv_refined_mark.png": {
+      "preview_status": 404,
+      "analyze_status": 404
+    },
+    "08_pwa_app_icon_512.png": {
+      "preview_status": 404,
+      "analyze_status": 404
+    },
+    "09_de_wow_wafel_demo.png": {
+      "preview_status": 404,
+      "analyze_status": 404
+    },
+    "10_tiny_32px_favicon.png": {
+      "preview_status": 404,
+      "analyze_status": 404
+    }
+  },
+  "local_prototype_results": {
+    "01_nv_full_lockup.svg": {
+      "preview_status": 200,
+      "preview_contrast": 5.0,
+      "preview_passed": true,
+      "preview_chaldean": "55/1",
+      "analyze_status": 200,
+      "analyze_is_vector": true,
+      "analyze_extracted_text": "N V NUMEROS VISION ANVEIL EVERY CHARM",
+      "analyze_contrast": 1.29,
+      "analyze_dominant_colors": [
+        "#C9A227",
+        "#E2B84B",
+        "#16835B",
+        "#F3CA52",
+        "#9E7B15"
+      ],
+      "defects_observed": [
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')"
+      ]
+    },
+    "02_nv_refined_brand.svg": {
+      "preview_status": 200,
+      "preview_contrast": 9.93,
+      "preview_passed": true,
+      "preview_chaldean": "35/8",
+      "analyze_status": 200,
+      "analyze_is_vector": true,
+      "analyze_extracted_text": "[No vector text elements detected; graphical glyphs only]",
+      "analyze_contrast": 1.87,
+      "analyze_dominant_colors": [
+        "#B08A2E",
+        "#D9C48A",
+        "#F6A64B",
+        "#E2552B",
+        "#B8261C"
+      ],
+      "defects_observed": [
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')",
+        "Client-side JS Chaldean diverges from canonical server engine (server compound=35)"
+      ]
+    },
+    "03_aura_peak_gold_low_contrast.svg": {
+      "preview_status": 200,
+      "preview_contrast": 9.93,
+      "preview_passed": true,
+      "preview_chaldean": "26/8",
+      "analyze_status": 200,
+      "analyze_is_vector": true,
+      "analyze_extracted_text": "AURA PEAK",
+      "analyze_contrast": 2.38,
+      "analyze_dominant_colors": [
+        "#C9A227",
+        "#FFFDF7"
+      ],
+      "defects_observed": [
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')",
+        "Analyze measured low contrast (2.38:1) with no pass/fail gate",
+        "Preview silently swapped text fill to pass (9.93:1) while leaving symbol stroke `#C9A227` at 2.38:1"
+      ]
+    },
+    "04_apex_stencil_cut_letters.svg": {
+      "preview_status": 200,
+      "preview_contrast": 9.93,
+      "preview_passed": true,
+      "preview_chaldean": "44/8",
+      "analyze_status": 200,
+      "analyze_is_vector": true,
+      "analyze_extracted_text": "APEX FORGE",
+      "analyze_contrast": 9.93,
+      "analyze_dominant_colors": [
+        "#FFFDF7",
+        "#523E28"
+      ],
+      "defects_observed": [
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')",
+        "Stencil slice & unclosed path not detected (`nothing_cut` gate absent)"
+      ]
+    },
+    "05_fake_vector_raster_and_script.svg": {
+      "preview_status": 200,
+      "preview_contrast": 4.66,
+      "preview_passed": false,
+      "preview_chaldean": "39/3",
+      "analyze_status": 200,
+      "analyze_is_vector": true,
+      "analyze_extracted_text": "[No vector text elements detected; graphical glyphs only]",
+      "analyze_contrast": 5.0,
+      "analyze_dominant_colors": [
+        "#C9A227",
+        "#FFFDF7"
+      ],
+      "defects_observed": [
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')",
+        "CRITICAL: Fake `.svg` with embedded `<image>` PNG + `<script>` falsely marked `is_vector: True`",
+        "Client-side JS Chaldean diverges from canonical server engine (server compound=39)"
+      ]
+    },
+    "06_nv_horizontal_lockup.png": {
+      "preview_status": 200,
+      "preview_contrast": 5.0,
+      "preview_passed": true,
+      "preview_chaldean": "55/1",
+      "analyze_status": 200,
+      "analyze_is_vector": false,
+      "analyze_extracted_text": null,
+      "analyze_contrast": 1.01,
+      "analyze_dominant_colors": [
+        "#FBF8EF",
+        "#FCF9F1",
+        "#FCF9F0",
+        "#F7F2E5"
+      ],
+      "defects_observed": [
+        "Raster PNG upload returns zero OCR text (`extracted_text` key absent)",
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')"
+      ]
+    },
+    "07_nv_refined_mark.png": {
+      "preview_status": 200,
+      "preview_contrast": 9.93,
+      "preview_passed": true,
+      "preview_chaldean": "43/7",
+      "analyze_status": 200,
+      "analyze_is_vector": false,
+      "analyze_extracted_text": null,
+      "analyze_contrast": 1.0,
+      "analyze_dominant_colors": [
+        "#FBF8EF",
+        "#FBF8F0",
+        "#FCF9F1",
+        "#FCF9F0"
+      ],
+      "defects_observed": [
+        "Raster PNG upload returns zero OCR text (`extracted_text` key absent)",
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')",
+        "Client-side JS Chaldean diverges from canonical server engine (server compound=43)"
+      ]
+    },
+    "08_pwa_app_icon_512.png": {
+      "preview_status": 200,
+      "preview_contrast": 4.66,
+      "preview_passed": false,
+      "preview_chaldean": "26/8",
+      "analyze_status": 200,
+      "analyze_is_vector": false,
+      "analyze_extracted_text": null,
+      "analyze_contrast": 19.78,
+      "analyze_dominant_colors": [
+        "#FBF8EF",
+        "#000000",
+        "#FDFBF4",
+        "#FEFCF6"
+      ],
+      "defects_observed": [
+        "Raster PNG upload returns zero OCR text (`extracted_text` key absent)",
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')"
+      ]
+    },
+    "09_de_wow_wafel_demo.png": {
+      "preview_status": 200,
+      "preview_contrast": 4.66,
+      "preview_passed": true,
+      "preview_chaldean": "51/6",
+      "analyze_status": 200,
+      "analyze_is_vector": false,
+      "analyze_extracted_text": null,
+      "analyze_contrast": 1.01,
+      "analyze_dominant_colors": [
+        "#FFFDF7",
+        "#FFFEF8",
+        "#FFFFFC",
+        "#FFFFFB"
+      ],
+      "defects_observed": [
+        "Raster PNG upload returns zero OCR text (`extracted_text` key absent)",
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')"
+      ]
+    },
+    "10_tiny_32px_favicon.png": {
+      "preview_status": 200,
+      "preview_contrast": 10.18,
+      "preview_passed": true,
+      "preview_chaldean": "19/1",
+      "analyze_status": 200,
+      "analyze_is_vector": false,
+      "analyze_extracted_text": null,
+      "analyze_contrast": 1.01,
+      "analyze_dominant_colors": [
+        "#FBF8EF",
+        "#FCF9F1",
+        "#FBF8F0",
+        "#FBF9F0"
+      ],
+      "defects_observed": [
+        "Raster PNG upload returns zero OCR text (`extracted_text` key absent)",
+        "Backend returns `dominant_colors` while UI reads `m.palette_sampled` (always shows 'Standard palette')",
+        "32x32 tiny icon accepted with no app-icon/small-size legibility warning",
+        "Client-side JS Chaldean diverges from canonical server engine (server compound=19)"
+      ]
+    }
+  }
+}
