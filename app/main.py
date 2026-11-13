@@ -801,6 +801,25 @@ async def route_identity_otp_login(req: Request, response: Response):
     otp_req = OTPLoginRequest(**body)
     return await api_otp_login(otp_req, req, response)
 
+
+@app.post("/api/v1/internal/email/send", include_in_schema=False)
+async def route_internal_smtp_email_send(req: Request):
+    from app.api.charm_ai import verify_charm_service_auth
+    from app.services.otp_dispatcher import send_transactional_email_smtp
+
+    verify_charm_service_auth(req)
+    body = await req.json()
+    result = send_transactional_email_smtp(
+        to_email=str(body.get("to") or ""),
+        subject=str(body.get("subject") or ""),
+        text_body=str(body.get("text") or ""),
+        html_body=str(body.get("html") or ""),
+        from_header=str(body.get("from") or ""),
+    )
+    if not result.get("delivered"):
+        return JSONResponse(status_code=503, content={"success": False, "error": result.get("error") or "SMTP send failed."})
+    return {"success": True, "id": f"smtp_{int(time.time() * 1000)}", "provider": "smtp"}
+
 @app.get("/dashboard", include_in_schema=False)
 @app.get("/dashboard/", include_in_schema=False)
 def page_dashboard():
@@ -1151,8 +1170,11 @@ async def api_submit_contact(request: Request):
         if not name or not email or not message:
             return JSONResponse({"status": "error", "message": "Name, email, and message are required."}, status_code=400)
         import random
+        import re as _re
         ticket_id = f"NV-TICK-{random.randint(100000, 999999)}"
-        logger.info(f"[LEAD_INQUIRY] Ticket: {ticket_id} | Name: {name} | Email: {email} | Phone: {phone} | Category: {category} | OrderRef: {order}")
+        _ph_digits = _re.sub(r"\D", "", phone)
+        _masked_phone = f"********{_ph_digits[-2:]}" if len(_ph_digits) >= 2 else ("none" if not phone else "********")
+        logger.info(f"[LEAD_INQUIRY] Ticket: {ticket_id} | Category: {category} | PhoneMasked: {_masked_phone} | OrderRef: {order}")
 
         # Capture and stitch lead into CDP Identity Graph
         try:

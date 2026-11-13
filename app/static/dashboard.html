@@ -891,7 +891,7 @@
       const uEmailEl = document.getElementById('dashUserEmail');
       const uPhoneEl = document.getElementById('dashUserPhone');
       if (uEmailEl) uEmailEl.textContent = user.email || 'Not connected';
-      if (uPhoneEl) uPhoneEl.textContent = user.phone || 'Verified via OTP';
+      if (uPhoneEl) uPhoneEl.textContent = user.phone || 'Not provided';
     }
 
     let _dashboardPollTimer = null;

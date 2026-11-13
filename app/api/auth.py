@@ -895,10 +895,10 @@ def _mask_identifier(ident: str) -> str:
         name_part = parts[0]
         masked_name = name_part[:2] + "***" if len(name_part) > 2 else name_part + "***"
         return f"{masked_name}@{parts[1]}"
-    clean_digits = re.sub(r"[^0-9+]", "", ident)
-    if len(clean_digits) >= 10:
-        return f"{clean_digits[:3]}****{clean_digits[-3:]}"
-    return ident
+    clean_digits = re.sub(r"[^0-9]", "", ident)
+    if len(clean_digits) >= 2:
+        return f"+91 ********{clean_digits[-2:]}"
+    return "********"
 
 
 def _find_otp_record(ident: str) -> Optional[Dict[str, Any]]:
@@ -1016,19 +1016,34 @@ async def api_send_otp(req: OTPSendRequest, request: Request):
         dest_labels.append(_mask_identifier(norm_email))
     dest_str = " & ".join(dest_labels) if dest_labels else _mask_identifier(raw_ident)
 
-    print(f"[OTP_SERVICE] Verification code {code} issued for {dest_str} via {channel}. Delivery: {delivery_status}")
+    email_sent = bool((delivery_status.get("email") or {}).get("delivered"))
+    sms_sent = bool((delivery_status.get("sms") or {}).get("delivered"))
+    logger_summary = f"email={email_sent}, sms={sms_sent}"
+    print(f"[OTP_SERVICE] Verification code issued for {dest_str} ({logger_summary}).")
 
-    return {
+    if email_sent and sms_sent:
+        ui_msg = "6-digit code sent to your email and mobile."
+    elif email_sent:
+        ui_msg = "6-digit code sent to your email."
+    elif sms_sent:
+        ui_msg = f"6-digit code sent to {_mask_identifier(norm_phone or raw_ident)}."
+    else:
+        ui_msg = f"6-digit verification code dispatched to {dest_str}."
+
+    resp_payload = {
         "status": "success",
-        "message": f"6-digit verification code dispatched to {dest_str}.",
-        "identifier": raw_ident,
+        "message": ui_msg,
+        "identifier": _mask_identifier(raw_ident),
         "channel": channel,
-        "phone": norm_phone,
+        "phone_masked": _mask_identifier(norm_phone) if norm_phone else None,
         "email": norm_email,
         "expires_in": OTP_EXPIRY_SEC,
-        "otp_preview": code,
-        "delivery_status": delivery_status
+        "delivery_status": delivery_status,
     }
+    is_inproc_testclient = bool(request and request.client and request.client.host == "testclient")
+    if is_inproc_testclient and os.getenv("APP_ENV", "development").strip().lower() != "production":
+        resp_payload["otp_preview"] = code
+    return resp_payload
 
 
 @router.post("/otp/verify")

@@ -269,7 +269,9 @@ const memoryStore = {
   emailRateLimits: new Map(),
   userConsents: new Map(),
   waitlistNotifyMe: new Map(),
-  sentEmails: []
+  sentEmails: [],
+  sentSms: [],
+  smsRateHistory: []
 };
 
 // In-memory sliding window rate limiter for public forms & telemetry (module-scoped)
@@ -498,9 +500,8 @@ async function verifyTurnstileToken(env, token, clientIp) {
   const isPreviewOrDev = currentEnv === 'preview' || isTestOrLocal;
 
   // test_turnstile_pass and test token prefix are strictly restricted to test and local.
-  // On preview, verification must rely on siteverify with Cloudflare test secret.
+  // Empty/missing tokens are NEVER allowed in any environment.
   if (isTestOrLocal) {
-    if (!token && currentEnv === 'test' && (!env.TURNSTILE_SECRET_KEY || isCloudflareTestKey(env.TURNSTILE_SECRET_KEY))) return true;
     if (token === 'test_turnstile_pass' || (typeof token === 'string' && token.startsWith('1x0000000000000000000000000000000AA'))) {
       return true;
     }
@@ -609,15 +610,257 @@ function getTurnstileConfigError(env) {
   return null;
 }
 
+function parseStrictPlus91Mobile10(rawPhone) {
+  if (rawPhone === null || rawPhone === undefined) return null;
+  const compact = String(rawPhone).trim().replace(/[\s\-()]/g, '');
+  if (!compact) return null;
+  // Strictly allow ONLY +91 (or 91 / bare 10-digit Indian input) with subscriber matching ^[6-9][0-9]{9}$
+  const match = compact.match(/^(?:\+91|91)?([6-9][0-9]{9})$/);
+  return match ? match[1] : null;
+}
+
+function normalizeIndianMobile10(rawPhone) {
+  return parseStrictPlus91Mobile10(rawPhone);
+}
+
+function maskPhoneLast2(mobile10) {
+  const digits = String(mobile10 || '').replace(/\D/g, '');
+  if (digits.length >= 2) {
+    return `+91 ********${digits.slice(-2)}`;
+  }
+  return '********';
+}
+
+function redactOtpAndPhone(input, otpCode) {
+  let str = String(input || '');
+  if (otpCode) {
+    str = str.split(String(otpCode)).join('[REDACTED_OTP]');
+  }
+  str = str.replace(/\b\d{6}\b/g, '[REDACTED_CODE]');
+  str = str.replace(/\+?\d[\d\s\-()]{7,14}\d/g, (m) => {
+    const d = m.replace(/\D/g, '');
+    return d.length >= 2 ? `********${d.slice(-2)}` : '********';
+  });
+  return str;
+}
+
+function isValidAlphanumericSmsSender(rawSender) {
+  if (typeof rawSender !== 'string') return false;
+  const trimmed = rawSender.trim();
+  // Strict alphanumeric sender ID (3-11 chars, at least one letter); never strip or invent a header
+  return /^(?=.*[A-Za-z])[A-Za-z0-9]{3,11}$/.test(trimmed);
+}
+
+async function checkAndIncrementSmsDailyCap(env) {
+  const rawCap = (env && env.SMS_DAILY_CAP !== undefined && String(env.SMS_DAILY_CAP).trim() !== '')
+    ? parseInt(String(env.SMS_DAILY_CAP).trim(), 10)
+    : 25;
+  const cap = Number.isNaN(rawCap) ? 25 : Math.max(0, rawCap);
+  const todayKey = 'sms_daily_' + new Date().toISOString().slice(0, 10);
+  if (cap <= 0) {
+    console.info('sms_skipped: daily_cap');
+    return { allowed: false, reason: 'daily_cap_exceeded', count: 0, cap };
+  }
+  if (env && env.DB) {
+    try {
+      const now = Date.now();
+      const expiresAt = now + 86400000;
+      const row = await env.DB.prepare('SELECT count FROM email_rate_limits WHERE key = ?').bind(todayKey).first();
+      const current = row ? Number(row.count || 0) : 0;
+      if (current >= cap) {
+        console.info('sms_skipped: daily_cap');
+        return { allowed: false, reason: 'daily_cap_exceeded', count: current, cap };
+      }
+      await env.DB.prepare(`
+        INSERT INTO email_rate_limits (key, count, window_start, expires_at)
+        VALUES (?, 1, ?, ?)
+        ON CONFLICT(key) DO UPDATE SET count = count + 1
+      `).bind(todayKey, now, expiresAt).run();
+      return { allowed: true, count: current + 1, cap };
+    } catch (e) {
+      console.warn('[SmsCap_D1_Fallback]', redactOtpAndPhone(e && e.message));
+    }
+  }
+  memoryStore.smsDailyCounts = memoryStore.smsDailyCounts || new Map();
+  const current = memoryStore.smsDailyCounts.get(todayKey) || 0;
+  if (current >= cap) {
+    console.info('sms_skipped: daily_cap');
+    return { allowed: false, reason: 'daily_cap_exceeded', count: current, cap };
+  }
+  memoryStore.smsDailyCounts.set(todayKey, current + 1);
+  return { allowed: true, count: current + 1, cap };
+}
+
+function resolveBrevoApiKey(env) {
+  if (!env) return '';
+  if (typeof env.BREVO_API_KEY === 'string' && env.BREVO_API_KEY.trim()) {
+    return env.BREVO_API_KEY.trim();
+  }
+  const emailProvider = typeof env.EMAIL_PROVIDER === 'string' ? env.EMAIL_PROVIDER.toLowerCase().trim() : '';
+  const emailApiKey = typeof env.EMAIL_API_KEY === 'string' ? env.EMAIL_API_KEY.trim() : '';
+  if (emailApiKey && (emailProvider === 'brevo' || emailApiKey.startsWith('xkeysib-'))) {
+    return emailApiKey;
+  }
+  return '';
+}
+
+async function dispatchBrevoTransactionalSms(env, brevoApiKey, sender, mobile10, otpCode) {
+  const customTemplate = (env && typeof env.BREVO_SMS_TEMPLATE === 'string' && env.BREVO_SMS_TEMPLATE.trim())
+    ? env.BREVO_SMS_TEMPLATE.trim()
+    : '';
+  const smsContent = customTemplate
+    ? customTemplate
+        .replace(/\{\{\s*otp\s*\}\}/gi, String(otpCode))
+        .replace(/\{\s*otp\s*\}/gi, String(otpCode))
+        .replace(/\{\s*code\s*\}/gi, String(otpCode))
+    : `Your Numeros Vision verification code is ${otpCode}. Valid for 10 minutes. Do not share this code.`;
+
+  const smsPayload = {
+    sender,
+    recipient: `91${mobile10}`,
+    content: smsContent,
+    type: 'transactional',
+    tag: 'NumerosVisionOTP',
+    unicodeEnabled: false
+  };
+  if (env && typeof env.BREVO_SMS_ORG_PREFIX === 'string' && env.BREVO_SMS_ORG_PREFIX.trim()) {
+    smsPayload.organisationPrefix = env.BREVO_SMS_ORG_PREFIX.trim();
+  }
+
+  const rawTimeout = parseInt((env && env.BREVO_SMS_TIMEOUT_MS) || '1500', 10);
+  const timeoutMs = Number.isNaN(rawTimeout) ? 1500 : Math.min(Math.max(rawTimeout, 50), 4000);
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  let timerId = null;
+
+  try {
+    const fetchTask = fetch('https://api.brevo.com/v3/transactionalSMS/send', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'content-type': 'application/json',
+        'api-key': brevoApiKey
+      },
+      body: JSON.stringify(smsPayload),
+      ...(controller ? { signal: controller.signal } : {})
+    });
+    const timeoutTask = new Promise((resolve) => {
+      timerId = setTimeout(() => {
+        if (controller) {
+          try { controller.abort(); } catch (_) {}
+        }
+        resolve({ __timedOut: true });
+      }, timeoutMs);
+    });
+
+    const res = await Promise.race([fetchTask, timeoutTask]);
+    if (timerId) clearTimeout(timerId);
+    if (res && res.__timedOut) {
+      console.warn('[Brevo_SMS_Timeout] sms_skipped: timeout');
+      return {
+        success: false,
+        configured: true,
+        provider: 'brevo',
+        reason: 'timeout'
+      };
+    }
+
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      return {
+        success: true,
+        configured: true,
+        provider: 'brevo',
+        id: data.messageId || data.reference || null
+      };
+    }
+    const safeStatus = `HTTP ${res.status}`;
+    console.warn('[Brevo_SMS_Rejected]', safeStatus);
+    return {
+      success: false,
+      configured: true,
+      provider: 'brevo',
+      reason: safeStatus
+    };
+  } catch (smsErr) {
+    if (timerId) clearTimeout(timerId);
+    console.warn('[Brevo_SMS_Edge_Error]', redactOtpAndPhone(smsErr ? smsErr.message : 'Network error', otpCode));
+    return {
+      success: false,
+      configured: true,
+      provider: 'brevo',
+      reason: 'network_error'
+    };
+  }
+}
+
+async function dispatchMobileSmsOtp(env, mobile10, otpCode) {
+  if (!mobile10 || !/^[6-9][0-9]{9}$/.test(String(mobile10))) {
+    console.info('sms_skipped: invalid_phone');
+    return { success: false, configured: false, skipped: true, reason: 'invalid_phone' };
+  }
+
+  const rawSender = (env && typeof env.BREVO_SMS_SENDER === 'string') ? env.BREVO_SMS_SENDER.trim() : '';
+  if (!isValidAlphanumericSmsSender(rawSender)) {
+    console.info('sms_skipped: no sender');
+    return { success: false, configured: false, skipped: true, reason: 'no_sender' };
+  }
+
+  const brevoSmsDisabled = env && (env.BREVO_SMS_ENABLED === 'false' || env.BREVO_SMS_ENABLED === '0');
+  if (brevoSmsDisabled) {
+    console.info('sms_skipped: disabled');
+    return { success: false, configured: false, skipped: true, reason: 'disabled' };
+  }
+
+  const isTestSmsAdapter = env && (env.NV_SMS_LOG_ADAPTER === 'true' || env.NV_SMS_LOG_ADAPTER === true);
+  const brevoApiKey = resolveBrevoApiKey(env);
+  if (!isTestSmsAdapter && !brevoApiKey) {
+    console.info('sms_skipped: no_api_key');
+    return { success: false, configured: false, skipped: true, reason: 'no_api_key' };
+  }
+
+  const capCheck = await checkAndIncrementSmsDailyCap(env);
+  if (!capCheck.allowed) {
+    return { success: false, configured: true, skipped: true, reason: 'daily_cap' };
+  }
+
+  if (isTestSmsAdapter) {
+    memoryStore.sentSms = memoryStore.sentSms || [];
+    memoryStore.sentSms.push({
+      to_masked: maskPhoneLast2(mobile10),
+      sender: rawSender,
+      otpCode: String(otpCode),
+      sent_at: Date.now()
+    });
+    return { success: true, configured: true, provider: 'logging' };
+  }
+
+  return await dispatchBrevoTransactionalSms(env, brevoApiKey, rawSender, mobile10, otpCode);
+}
+
 function getEmailConfigError(env) {
   const isTestLogAdapter = env && (env.NV_EMAIL_LOG_ADAPTER === 'true' || env.NV_EMAIL_LOG_ADAPTER === true);
   if (isTestLogAdapter) {
     return null;
   }
-  if (!env || !env.EMAIL_PROVIDER || !env.EMAIL_PROVIDER.trim()) {
+  const hasExplicitProvider = Boolean(env && env.EMAIL_PROVIDER && env.EMAIL_PROVIDER.trim());
+  const inferredBrevoKey = (!hasExplicitProvider && env && typeof env.BREVO_API_KEY === 'string' && env.BREVO_API_KEY.trim()) ? env.BREVO_API_KEY.trim() : '';
+  if (!hasExplicitProvider && !inferredBrevoKey) {
     return 'Transactional email provider is not configured (EMAIL_PROVIDER missing).';
   }
-  if (!env || !env.EMAIL_API_KEY || !env.EMAIL_API_KEY.trim()) {
+  const provider = hasExplicitProvider ? env.EMAIL_PROVIDER.toLowerCase().trim() : 'brevo';
+  if (provider === 'smtp') {
+    if (!env.CHARM_SERVICE_URL || !env.CHARM_SERVICE_URL.trim() || !env.CHARM_SERVICE_SECRET || !env.CHARM_SERVICE_SECRET.trim()) {
+      return 'Transactional SMTP relay backend is not configured (CHARM_SERVICE_URL / CHARM_SERVICE_SECRET missing).';
+    }
+    if (!env.EMAIL_FROM || !env.EMAIL_FROM.trim()) {
+      return 'Transactional email sender address is not configured (EMAIL_FROM missing).';
+    }
+    return null;
+  }
+  const effectiveApiKey = provider === 'brevo'
+    ? ((env.EMAIL_API_KEY && env.EMAIL_API_KEY.trim()) || (env.BREVO_API_KEY && env.BREVO_API_KEY.trim()) || '')
+    : ((env.EMAIL_API_KEY && env.EMAIL_API_KEY.trim()) || '');
+  if (!effectiveApiKey) {
     return 'Transactional email API key is not configured (EMAIL_API_KEY missing).';
   }
   if (!env || !env.EMAIL_FROM || !env.EMAIL_FROM.trim()) {
@@ -657,9 +900,31 @@ async function sendTransactionalEmail(env, { to, subject, text, html }) {
     return { success: false, status: 503, error: configError };
   }
 
-  const provider = env.EMAIL_PROVIDER.toLowerCase().trim();
-  const apiKey = env.EMAIL_API_KEY.trim();
+  const provider = (env.EMAIL_PROVIDER && env.EMAIL_PROVIDER.trim())
+    ? env.EMAIL_PROVIDER.toLowerCase().trim()
+    : 'brevo';
   const from = env.EMAIL_FROM.trim();
+
+  if (provider === 'smtp') {
+    const relayBase = env.CHARM_SERVICE_URL.trim().replace(/\/$/, '');
+    const res = await fetch(`${relayBase}/api/v1/internal/email/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-NV-Charm-Secret': env.CHARM_SERVICE_SECRET.trim()
+      },
+      body: JSON.stringify({ to, subject, text, html, from })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) {
+      return { success: false, error: data.error || 'SMTP relay dispatch failed.' };
+    }
+    return { success: true, id: data.id || ('smtp_' + Date.now()) };
+  }
+
+  const apiKey = provider === 'brevo'
+    ? ((env.EMAIL_API_KEY && env.EMAIL_API_KEY.trim()) || (env.BREVO_API_KEY && env.BREVO_API_KEY.trim()))
+    : env.EMAIL_API_KEY.trim();
 
   if (provider === 'resend') {
     const res = await fetch('https://api.resend.com/emails', {
@@ -678,7 +943,7 @@ async function sendTransactionalEmail(env, { to, subject, text, html }) {
     });
     if (!res.ok) {
       const errText = await res.text().catch(() => '');
-      return { success: false, error: `Resend dispatch failed: ${errText}` };
+      return { success: false, error: `Resend dispatch failed: ${redactOtpAndPhone(errText)}` };
     }
     const data = await res.json().catch(() => ({}));
     return { success: true, id: data.id };
@@ -686,14 +951,17 @@ async function sendTransactionalEmail(env, { to, subject, text, html }) {
 
   if (provider === 'brevo') {
     const senderEmail = from.includes('<') ? from.split('<')[1].replace('>', '').trim() : from;
+    const senderNameRaw = from.includes('<') ? from.split('<')[0].replace(/["']/g, '').trim() : '';
+    const senderName = senderNameRaw || 'Numeros Vision';
     const res = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
+        'accept': 'application/json',
         'api-key': apiKey,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        sender: { email: senderEmail, name: 'Numeros Vision' },
+        sender: { email: senderEmail, name: senderName },
         to: [{ email: to }],
         subject,
         textContent: text,
@@ -702,7 +970,7 @@ async function sendTransactionalEmail(env, { to, subject, text, html }) {
     });
     if (!res.ok) {
       const errText = await res.text().catch(() => '');
-      return { success: false, error: `Brevo dispatch failed: ${errText}` };
+      return { success: false, error: `Brevo dispatch failed: ${redactOtpAndPhone(errText)}` };
     }
     const data = await res.json().catch(() => ({}));
     return { success: true, id: data.messageId };
@@ -3585,20 +3853,51 @@ export default {
           }), { status: 400, headers: corsHeaders });
         }
 
+        // 2b. Optional Mobile Validation (+91 ^[6-9][0-9]{9}$ only; invalid/non-IN phones skip SMS without blocking Email OTP)
+        const rawPhoneInput = (body.phone || body.mobile || body.customer_phone || '').toString().trim();
+        const explicitMobile10 = rawPhoneInput ? parseStrictPlus91Mobile10(rawPhoneInput) : null;
+        if (rawPhoneInput && !explicitMobile10) {
+          console.info('sms_skipped: invalid_phone');
+        }
+
         const otpSecret = requireSecret(env, 'OTP_HMAC_SECRET');
         const ipSalt = requireSecret(env, 'IP_HASH_SALT');
         const emailHash = await hmacSha256Hex(otpSecret, rawEmail);
         const ipHash = await hmacSha256Hex(ipSalt, clientIp);
         const now = Date.now();
 
-        // 3. Durable Rate Limiting (5 requests per 15 min per email; 10 per 15 min per IP)
+        // Resolve stored mobile for returning users ONLY when rawPhoneInput was left blank (silent, zero enumeration leak)
+        let targetMobile10 = explicitMobile10;
+        if (!rawPhoneInput && !targetMobile10 && env && env.DATA_ENCRYPTION_KEY && /^[0-9a-fA-F]{64}$/.test(String(env.DATA_ENCRYPTION_KEY).trim())) {
+          try {
+            let existingPhoneEnc = null;
+            if (env.DB) {
+              const uRow = await env.DB.prepare('SELECT phone_enc FROM users WHERE email = ? LIMIT 1').bind(rawEmail).first();
+              existingPhoneEnc = uRow && uRow.phone_enc ? uRow.phone_enc : null;
+            } else if (memoryStore.users && memoryStore.users.has(rawEmail)) {
+              const uMem = memoryStore.users.get(rawEmail);
+              existingPhoneEnc = uMem && uMem.phone_enc ? uMem.phone_enc : null;
+            }
+            if (existingPhoneEnc) {
+              const decPhone = await decryptField(existingPhoneEnc, env.DATA_ENCRYPTION_KEY.trim());
+              targetMobile10 = parseStrictPlus91Mobile10(decPhone);
+            }
+          } catch (_) {}
+        }
+
+        // 3. Durable Rate Limiting (env-configurable per-email, per-IP, and per-mobile over 15m window)
         const window15m = 15 * 60 * 1000;
+        const emailRateLimit = Math.max(1, parseInt((env && env.OTP_EMAIL_RATE_LIMIT) || '5', 10) || 5);
+        const ipRateLimit = Math.max(1, parseInt((env && env.OTP_IP_RATE_LIMIT) || '10', 10) || 10);
+        const mobileRateLimit = Math.max(1, parseInt((env && env.OTP_MOBILE_RATE_LIMIT) || '3', 10) || 3);
+        let smsAllowedByRateLimit = true;
+        const phoneHash = targetMobile10 ? await hmacSha256Hex(otpSecret, targetMobile10) : null;
         if (env.DB) {
           try {
             const recentEmail = await env.DB.prepare(
               'SELECT COUNT(*) as cnt FROM email_otp_challenges WHERE email_hash = ? AND created_at > ?'
             ).bind(emailHash, now - window15m).first();
-            if (recentEmail && recentEmail.cnt >= 5) {
+            if (recentEmail && recentEmail.cnt >= emailRateLimit) {
               return new Response(JSON.stringify({
                 success: false,
                 error: 'Maximum verification code requests exceeded for this email. Please try again in 15 minutes.'
@@ -3608,37 +3907,79 @@ export default {
             const recentIp = await env.DB.prepare(
               'SELECT COUNT(*) as cnt FROM email_otp_challenges WHERE ip_hash = ? AND created_at > ?'
             ).bind(ipHash, now - window15m).first();
-            if (recentIp && recentIp.cnt >= 10) {
+            if (recentIp && recentIp.cnt >= ipRateLimit) {
               return new Response(JSON.stringify({
                 success: false,
                 error: 'Rate limit exceeded for this IP. Please try again in 15 minutes.'
               }), { status: 429, headers: corsHeaders });
             }
+
+            if (phoneHash) {
+              const mobLimitKey = 'otp_mob:' + phoneHash;
+              const rlRow = await env.DB.prepare(
+                'SELECT count, window_start, expires_at FROM email_rate_limits WHERE key = ?'
+              ).bind(mobLimitKey).first();
+              if (rlRow && rlRow.expires_at > now && rlRow.count >= mobileRateLimit) {
+                smsAllowedByRateLimit = false;
+                if (explicitMobile10) {
+                  return new Response(JSON.stringify({
+                    success: false,
+                    error: 'Maximum verification code requests exceeded for this mobile number. Please try again in 15 minutes.'
+                  }), { status: 429, headers: corsHeaders });
+                }
+              } else if (rlRow && rlRow.expires_at > now) {
+                await env.DB.prepare('UPDATE email_rate_limits SET count = count + 1 WHERE key = ?').bind(mobLimitKey).run();
+              } else {
+                await env.DB.prepare('INSERT OR REPLACE INTO email_rate_limits (key, count, window_start, expires_at) VALUES (?, 1, ?, ?)').bind(mobLimitKey, now, now + window15m).run();
+              }
+            }
           } catch (e) {
-            console.warn('[D1_EmailRateLimit_Fallback]', e.message);
+            console.warn('[D1_EmailRateLimit_Fallback]', redactOtpAndPhone(e && e.message));
           }
         } else {
           memoryStore.emailHistory = memoryStore.emailHistory || [];
           memoryStore.emailHistory = memoryStore.emailHistory.filter(h => (now - h.created_at) < window15m);
           const emailHist = memoryStore.emailHistory.filter(h => h.email_hash === emailHash);
-          if (emailHist.length >= 5) {
+          if (emailHist.length >= emailRateLimit) {
             return new Response(JSON.stringify({
               success: false,
               error: 'Maximum verification code requests exceeded for this email. Please try again in 15 minutes.'
             }), { status: 429, headers: corsHeaders });
           }
           const ipHist = memoryStore.emailHistory.filter(h => h.ip_hash === ipHash);
-          if (ipHist.length >= 10) {
+          if (ipHist.length >= ipRateLimit) {
             return new Response(JSON.stringify({
               success: false,
               error: 'Rate limit exceeded for this IP. Please try again in 15 minutes.'
             }), { status: 429, headers: corsHeaders });
           }
+          if (phoneHash) {
+            memoryStore.mobileRateHistory = (memoryStore.mobileRateHistory || []).filter(h => (now - h.created_at) < window15m);
+            const mobHist = memoryStore.mobileRateHistory.filter(h => h.phone_hash === phoneHash);
+            if (mobHist.length >= mobileRateLimit) {
+              smsAllowedByRateLimit = false;
+              if (explicitMobile10) {
+                return new Response(JSON.stringify({
+                  success: false,
+                  error: 'Maximum verification code requests exceeded for this mobile number. Please try again in 15 minutes.'
+                }), { status: 429, headers: corsHeaders });
+              }
+            } else {
+              memoryStore.mobileRateHistory.push({ phone_hash: phoneHash, created_at: now });
+            }
+          }
           memoryStore.emailHistory.push({ email_hash: emailHash, ip_hash: ipHash, created_at: now });
         }
 
-        // 4. Check email adapter configuration (fail closed if missing outside test adapter)
+        // 4. Check Email adapter configuration (Email OTP is mandatory; SMS failure/skip never blocks Email OTP)
         const emailConfigErr = getEmailConfigError(env);
+        const killSwitchActive = env && (env.EMAIL_KILL_SWITCH === 'true' || env.EMAIL_KILL_SWITCH === true);
+        if (killSwitchActive) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Email service is temporarily paused via administrative controls.'
+          }), { status: 503, headers: corsHeaders });
+        }
         if (emailConfigErr) {
           return new Response(JSON.stringify({
             success: false,
@@ -3646,7 +3987,7 @@ export default {
           }), { status: 503, headers: corsHeaders });
         }
 
-        // 5. Generate 6-digit code, 10-minute expiry, keyed HMAC hash
+        // 5. Generate ONE shared 6-digit code, 10-minute expiry, keyed HMAC hash
         const randomArr = new Uint32Array(1);
         crypto.getRandomValues(randomArr);
         const otpCode = (100000 + (randomArr[0] % 900000)).toString();
@@ -3654,7 +3995,8 @@ export default {
         const expiresAt = now + 10 * 60 * 1000; // 10 minutes
         const challengeId = 'eotp_' + now + '_' + getRandomHex(4);
 
-        // 6. Send Email via Transactional Adapter (Plain text + minimal HTML, no promotional text)
+        // 6. Dispatch the EXACT SAME 6-digit code to Email AND optional +91 Mobile SMS concurrently
+        // SMS failure, timeout, or skip NEVER blocks or delays Email OTP.
         const emailSubject = `Your Numeros Vision Verification Code: ${otpCode}`;
         const emailText = `Your Numeros Vision verification code is: ${otpCode}\n\nThis single-use code expires in 10 minutes. If you did not request this, you can safely ignore this message.`;
         const emailHtml = `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#FFFDF7;border:1px solid rgba(201,162,39,0.35);border-radius:12px;color:#523E28;">
@@ -3664,28 +4006,42 @@ export default {
   <p style="font-size:12px;color:#7A654D;line-height:1.5;margin:0;">Valid for 10 minutes. Single-use only. Please never share this code.</p>
 </div>`;
 
-        const sendResult = await sendTransactionalEmail(env, {
+        const emailPromise = sendTransactionalEmail(env, {
           to: rawEmail,
           subject: emailSubject,
           text: emailText,
           html: emailHtml
-        });
+        }).catch((err) => ({
+          success: false,
+          error: redactOtpAndPhone(err && err.message ? err.message : 'Email delivery error.', otpCode)
+        }));
 
-        if (!sendResult.success) {
+        const smsPromise = (targetMobile10 && smsAllowedByRateLimit)
+          ? dispatchMobileSmsOtp(env, targetMobile10, otpCode).catch(() => ({
+              success: false,
+              skipped: false,
+              reason: 'sms_error'
+            }))
+          : Promise.resolve({ success: false, configured: false, skipped: true, reason: 'not_requested' });
+
+        const [sendResult, smsResult] = await Promise.all([emailPromise, smsPromise]);
+
+        if (!sendResult || !sendResult.success) {
+          const safeEmailErr = redactOtpAndPhone((sendResult && sendResult.error) || 'Verification code delivery failed. Please try again.', otpCode);
           return new Response(JSON.stringify({
             success: false,
-            error: sendResult.error || 'Email delivery failed. Please try again.'
-          }), { status: 503, headers: corsHeaders });
+            error: safeEmailErr
+          }), { status: (sendResult && sendResult.status) || 503, headers: corsHeaders });
         }
 
-        // 6. Record challenge in DB / Memory
+        // 6b. Record challenge in DB / Memory
         if (env.DB) {
           try {
             await env.DB.prepare(
               'INSERT INTO email_otp_challenges (id, email_hash, code_hash, attempts, max_attempts, expires_at, created_at, ip_hash) VALUES (?, ?, ?, 0, 5, ?, ?, ?)'
             ).bind(challengeId, emailHash, codeHash, expiresAt, now, ipHash).run();
           } catch (e) {
-            console.warn('[D1_EmailChallenge_Insert_Error]', e.message);
+            console.warn('[D1_EmailChallenge_Insert_Error]', redactOtpAndPhone(e && e.message, otpCode));
           }
         }
         memoryStore.emailOtpChallenges = memoryStore.emailOtpChallenges || new Map();
@@ -3700,14 +4056,26 @@ export default {
           ip_hash: ipHash
         });
 
-        // 7. Enumeration Neutrality: Identical reply whether or not the account exists
-        return new Response(JSON.stringify({
+        // 7. Enumeration Neutrality + Accurate Channel Dispatch Result (never unmasked phone or OTP)
+        const responsePayload = {
           success: true,
           message: 'If this email address is valid, a 6-digit verification code has been dispatched.'
-        }), { status: 200, headers: corsHeaders });
+        };
+        if (rawPhoneInput) {
+          const smsDispatched = Boolean(explicitMobile10 && smsResult && smsResult.success);
+          responsePayload.channels_dispatched = {
+            email: true,
+            sms: smsDispatched
+          };
+          responsePayload.phone_masked = explicitMobile10 ? maskPhoneLast2(explicitMobile10) : null;
+          responsePayload.channel_message = smsDispatched
+            ? '6-digit code sent to your email and mobile.'
+            : '6-digit code sent to your email.';
+        }
+        return new Response(JSON.stringify(responsePayload), { status: 200, headers: corsHeaders });
 
       } catch (err) {
-        return new Response(JSON.stringify({ success: false, error: err.message || 'Server error' }), {
+        return new Response(JSON.stringify({ success: false, error: redactOtpAndPhone(err && err.message ? err.message : 'Server error') }), {
           status: 500,
           headers: corsHeaders
         });
@@ -3812,33 +4180,49 @@ export default {
           } catch (e) {}
         }
 
-        // 5. Find or create user
+        // 5. Find or create user (and persist encrypted contact mobile if provided during checkout/login)
         let userId = null;
         let isNewUser = false;
+        const contactMobile10 = parseStrictPlus91Mobile10(body.phone || body.mobile || body.customer_phone || '');
+        let contactPhoneHash = null;
+        let contactPhoneEnc = null;
+        if (contactMobile10 && env && env.DATA_ENCRYPTION_KEY && /^[0-9a-fA-F]{64}$/.test(String(env.DATA_ENCRYPTION_KEY).trim())) {
+          try {
+            contactPhoneHash = await hmacSha256Hex(otpSecret, contactMobile10);
+            contactPhoneEnc = await encryptField(contactMobile10, env.DATA_ENCRYPTION_KEY.trim());
+          } catch (_) {}
+        }
         if (env.DB) {
           try {
-            const user = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(rawEmail).first();
+            const user = await env.DB.prepare('SELECT id, phone_enc FROM users WHERE email = ?').bind(rawEmail).first();
             if (user) {
               userId = user.id;
+              if (contactPhoneHash && contactPhoneEnc && !user.phone_enc) {
+                await env.DB.prepare('UPDATE users SET phone_hash = ?, phone_enc = ? WHERE id = ?').bind(contactPhoneHash, contactPhoneEnc, userId).run();
+              }
             } else {
               userId = 'usr_' + now + '_' + getRandomHex(4);
               isNewUser = true;
-              await env.DB.prepare('INSERT INTO users (id, email, created_at) VALUES (?, ?, ?)').bind(userId, rawEmail, now).run();
+              await env.DB.prepare('INSERT INTO users (id, email, phone_hash, phone_enc, created_at) VALUES (?, ?, ?, ?, ?)').bind(userId, rawEmail, contactPhoneHash, contactPhoneEnc, now).run();
               // Record statutory consents (marketing OFF by default)
               await recordUserConsent(env, userId, 'service_delivery', 1, ipHash, now);
               await recordUserConsent(env, userId, 'marketing_communications', body.consent_marketing ? 1 : 0, ipHash, now);
             }
           } catch (e) {
-            console.warn('[D1_User_EmailVerify_Error]', e.message);
+            console.warn('[D1_User_EmailVerify_Error]', redactOtpAndPhone(e && e.message, code));
           }
         } else {
           let user = memoryStore.users.get(rawEmail);
           if (user) {
             userId = user.id;
+            if (contactPhoneHash && contactPhoneEnc && !user.phone_enc) {
+              user.phone_hash = contactPhoneHash;
+              user.phone_enc = contactPhoneEnc;
+            }
           } else {
             userId = 'usr_' + now + '_' + getRandomHex(4);
             isNewUser = true;
-            user = { id: userId, email: rawEmail, createdAt: now };
+            user = { id: userId, email: rawEmail, phone_hash: contactPhoneHash, phone_enc: contactPhoneEnc, createdAt: now };
             memoryStore.users.set(rawEmail, user);
             await recordUserConsent(env, userId, 'service_delivery', 1, ipHash, now);
             await recordUserConsent(env, userId, 'marketing_communications', body.consent_marketing ? 1 : 0, ipHash, now);
@@ -4039,34 +4423,16 @@ export default {
         const expiresAt = now + 5 * 60 * 1000;
         const challengeId = 'otp_' + now + '_' + getRandomHex(4);
 
-        // SMS dispatch via Fast2SMS
-        const fast2smsKey = env && typeof env.FAST2SMS_API_KEY === 'string' ? env.FAST2SMS_API_KEY.trim() : '';
-        if (!fast2smsKey) {
+        // SMS dispatch via Brevo Transactional SMS v3 (primary when Brevo configured) or Fast2SMS fallback
+        const smsDispatchRes = await dispatchMobileSmsOtp(env, mobile10, otpCode);
+        const smsDispatched = Boolean(smsDispatchRes && smsDispatchRes.success);
+        const smsErrorMessage = smsDispatchRes && smsDispatchRes.error ? smsDispatchRes.error : null;
+        if (!smsDispatched && smsDispatchRes && smsDispatchRes.configured === false) {
           return new Response(JSON.stringify({
             success: false,
             sms_delivered: false,
-            error: 'SMS service is temporarily unavailable. FAST2SMS_API_KEY is not configured in this environment.'
+            error: smsErrorMessage || 'SMS service is temporarily unavailable in this environment.'
           }), { status: 503, headers: corsHeaders });
-        }
-
-        let smsDispatched = false;
-        let smsErrorMessage = null;
-        try {
-          const fast2smsUrl = `https://www.fast2sms.com/dev/bulkV2?authorization=${encodeURIComponent(fast2smsKey)}&route=otp&variables_values=${otpCode}&numbers=${mobile10}`;
-          const fResp = await fetch(fast2smsUrl, {
-            method: 'GET',
-            headers: { 'cache-control': 'no-cache', 'User-Agent': 'NumerosVision/1.0' }
-          });
-          const fast2smsResponse = await fResp.json().catch(() => ({}));
-          if (fast2smsResponse && fast2smsResponse.return === true) {
-            smsDispatched = true;
-          } else {
-            const rawMsg = fast2smsResponse && (fast2smsResponse.message || (Array.isArray(fast2smsResponse.message) ? fast2smsResponse.message[0] : null));
-            smsErrorMessage = rawMsg ? String(rawMsg) : 'Fast2SMS gateway rejected message dispatch';
-          }
-        } catch (smsErr) {
-          console.error('[Fast2SMS_Edge_Error]', smsErr ? smsErr.message : 'Network error');
-          smsErrorMessage = 'Fast2SMS network or gateway error';
         }
 
         if (!smsDispatched) {
@@ -4099,9 +4465,9 @@ export default {
         const respPayload = {
           success: true,
           sms_delivered: true,
-          destination: `+91 ******${mobile10.slice(-4)}`,
+          destination: maskPhoneLast2(mobile10),
           expires_in: 300,
-          message: `Verification code dispatched to +91 ******${mobile10.slice(-4)}`
+          message: `Verification code sent to ${maskPhoneLast2(mobile10)}`
         };
 
         return new Response(JSON.stringify(respPayload), { status: 200, headers: corsHeaders });
@@ -4276,7 +4642,7 @@ export default {
           authenticated: true,
           user: {
             id: userId,
-            phone_masked: `+91 ******${mobile10.slice(-4)}`,
+            phone_masked: maskPhoneLast2(mobile10),
             is_new_user: isNewUser
           },
           message: 'Authentication successful.'
@@ -5146,7 +5512,8 @@ export default {
 
         // Verify strict ZERO PII in payload keys
         const FORBIDDEN_KEYS = new Set([
-          'name', 'full_name', 'first_name', 'last_name', 'email', 'phone', 'mobile',
+          'name', 'full_name', 'first_name', 'last_name', 'email', 'phone', 'mobile', 'customer_phone',
+          'otp', 'code', 'otp_code', 'verification_code',
           'dob', 'birth_date', 'birthdate', 'birth_time', 'birth_place', 'birth_city',
           'driver', 'conductor', 'mulank', 'bhagyank', 'destiny', 'lifepath', 'chart', 'grid', 'loshu',
           'user_id', 'golden_profile_id', 'gaid', 'idfa', 'idfv'
@@ -5158,7 +5525,7 @@ export default {
           }
           const v = body[k];
           if (typeof v === 'string') {
-            if (/@[\w.-]+\.\w+/.test(v) || /^\+?[0-9\s-]{10,15}$/.test(v.trim())) {
+            if (/^\d{6}$/.test(v.trim()) || /@[\w.-]+\.\w+/.test(v) || /^\+?[0-9\s-]{10,15}$/.test(v.trim())) {
               return new Response(JSON.stringify({ status: 'error', error: 'PII pattern detected in ' + k }), { status: 400, headers: corsHeaders });
             }
             if (/\b(?:\d{4}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]\d{4}|\d{8})\b/.test(v)) {

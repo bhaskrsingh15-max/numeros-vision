@@ -43,9 +43,10 @@
       // Strict ALLOWLIST: Any key not explicitly in ALLOWED_TELEMETRY_KEYS is dropped immediately
       if (!ALLOWED_TELEMETRY_KEYS.has(lowerKey)) continue;
 
-      // Secondary value-level privacy verification: drop any string value matching email, phone, or date pattern
+      // Secondary value-level privacy verification: drop any string value matching OTP, email, phone, or date pattern
       if (typeof val === 'string') {
         const trimmed = val.trim();
+        if (/^\d{6}$/.test(trimmed)) continue;
         if (/@[\w.-]+\.\w+/.test(trimmed)) continue;
         if (/^\+?[0-9\s-]{10,15}$/.test(trimmed)) continue;
         // Strict Calendar / Birth Date Rejection (YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, DD/MM/YYYY, DDMMYYYY, YYYYMMDD)

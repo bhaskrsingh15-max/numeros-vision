@@ -1548,8 +1548,8 @@
             <input type="email" id="checkout-email" class="checkout-input" placeholder="name@example.com" required oninput="onCheckoutEmailInput()" />
           </div>
           <div>
-            <label class="checkout-field-label" for="checkout-mobile">Mobile Number (+91, Optional)</label>
-            <input type="tel" id="checkout-mobile" class="checkout-input" placeholder="9818418039" />
+            <label class="checkout-field-label" for="checkout-mobile">Mobile Number (+91, Optional — SMS copy of code)</label>
+            <input type="tel" id="checkout-mobile" class="checkout-input" placeholder="+91 98XXXXXXXX" maxlength="16" inputmode="tel" autocomplete="tel" />
           </div>
         </div>
 
@@ -1561,7 +1561,7 @@
         <!-- Row 3: Baseline-aligned 6-digit Code & Send Code Button (Zero Overlap, Collapsed Dead Space) -->
         <div class="checkout-otp-row">
           <div>
-            <label class="checkout-field-label" for="checkout-otp-code">Email Verification Code (6 Digits)</label>
+            <label class="checkout-field-label" for="checkout-otp-code">Verification Code (6 Digits — Email &amp; Mobile)</label>
             <input type="text" id="checkout-otp-code" class="checkout-input" maxlength="6" pattern="[0-9]{6}" placeholder="Enter 6-digit code" oninput="onOtpCodeInput()" />
           </div>
           <div>
@@ -3060,7 +3060,7 @@
               if (emailInput.value.trim().toLowerCase() === _authenticatedSessionEmail) {
                 _isEmailVerified = true;
                 try {
-                  trackFunnelEvent('otp_verified', { email: _authenticatedSessionEmail });
+                  trackFunnelEvent('otp_verified', {});
                 } catch (_) {}
                 const statusEl = document.getElementById('checkout-otp-status');
                 if (statusEl) {
@@ -3101,9 +3101,19 @@
       if (modal) modal.classList.remove('active');
     }
 
-    // Email Code Dispatch
+    function normalizeStageBMobile10(rawPhone) {
+      const trimmed = (rawPhone || '').toString().trim();
+      if (!trimmed) return { empty: true, mobile10: '', raw: '' };
+      const compact = trimmed.replace(/[\s\-()]/g, '');
+      const m = compact.match(/^(?:\+91|91)?([6-9][0-9]{9})$/);
+      if (m) return { empty: false, mobile10: m[1], raw: '+91' + m[1] };
+      return { empty: false, mobile10: null, raw: trimmed };
+    }
+
+    // Dual-Channel Email + Optional +91 Mobile SMS Code Dispatch (Same 6-Digit OTP)
     async function sendStageBEmailCode() {
       const emailInput = document.getElementById('checkout-email');
+      const mobileInput = document.getElementById('checkout-mobile');
       const statusEl = document.getElementById('checkout-otp-status');
       const btn = document.getElementById('btn-checkout-send-code');
 
@@ -3116,6 +3126,9 @@
         if (emailInput) emailInput.focus();
         return;
       }
+
+      const mobileParsed = normalizeStageBMobile10(mobileInput ? mobileInput.value : '');
+      const cleanMobile10 = mobileParsed.mobile10 || '';
 
       let turnstileToken = '';
       if (window.turnstile && _stageBTurnstileWidgetId !== undefined) {
@@ -3136,17 +3149,20 @@
       }
 
       if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
-      if (statusEl) { statusEl.textContent = 'Sending code to ' + email + '...'; statusEl.style.color = 'var(--ink-muted)'; }
+      if (statusEl) { statusEl.textContent = 'Sending 6-digit verification code...'; statusEl.style.color = 'var(--ink-muted)'; }
 
       try {
+        const reqPayload = {
+          email: email,
+          turnstile_token: turnstileToken
+        };
+        if (!mobileParsed.empty) reqPayload.phone = cleanMobile10 ? ('+91' + cleanMobile10) : mobileParsed.raw;
+
         const res = await fetch('/api/v1/auth/email/send-code', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({
-            email: email,
-            turnstile_token: turnstileToken
-          })
+          body: JSON.stringify(reqPayload)
         });
         const data = await res.json().catch(() => ({}));
         // Reset turnstile widget after every send/resend attempt so a fresh token is required
@@ -3156,7 +3172,13 @@
 
         if (res.ok && data.success) {
           if (statusEl) {
-            statusEl.textContent = '✓ 6-digit code sent to ' + email + '. Enter code below.';
+            const ch = data.channels_dispatched || null;
+            const maskedMob = data.phone_masked || (cleanMobile10 ? ('+91 ********' + cleanMobile10.slice(-2)) : '');
+            if (ch && ch.email && ch.sms) {
+              statusEl.textContent = '✓ 6-digit code sent to your email and mobile (' + maskedMob + '). Enter code below.';
+            } else {
+              statusEl.textContent = '✓ 6-digit code sent to your email (' + email + '). Enter code below.';
+            }
             statusEl.style.color = 'var(--gold-dark)';
           }
           const otpInput = document.getElementById('checkout-otp-code');
@@ -3176,8 +3198,7 @@
           }, 1000);
         } else {
           let msg = data.error || 'Failed to send verification code. Please retry.';
-          if (res.status === 429) msg = 'Rate limit exceeded. Please wait a moment.';
-          else if (res.status === 503) msg = 'Email service daily limit reached. Please try again later.';
+          if (res.status === 429 && !data.error) msg = 'Rate limit exceeded. Please wait a moment.';
           if (statusEl) { statusEl.textContent = msg; statusEl.style.color = '#B91C1C'; }
           if (btn) { btn.disabled = false; btn.textContent = 'Send Code'; }
         }
@@ -3198,16 +3219,19 @@
     async function verifyStageBCode() {
       const email = document.getElementById('checkout-email')?.value?.trim().toLowerCase() || '';
       const code = document.getElementById('checkout-otp-code')?.value?.trim() || '';
+      const mobileParsed = normalizeStageBMobile10(document.getElementById('checkout-mobile')?.value || '');
       const statusEl = document.getElementById('checkout-otp-status');
 
       if (!email || code.length !== 6) return;
 
       try {
+        const verifyPayload = { email: email, code: code, checkout_flow: true };
+        if (mobileParsed.mobile10) verifyPayload.phone = mobileParsed.mobile10;
         const res = await fetch('/api/v1/auth/email/verify-code', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({ email: email, code: code, checkout_flow: true })
+          body: JSON.stringify(verifyPayload)
         });
         const data = await res.json().catch(() => ({}));
 

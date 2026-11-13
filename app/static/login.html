@@ -815,6 +815,14 @@
 
         </div>
 
+        <div class="form-group">
+
+          <label for="loginMobileInput">Mobile Number (+91, Optional — SMS copy of code)</label>
+
+          <input type="tel" id="loginMobileInput" class="form-input" placeholder="e.g. +91 98XXXXXXXX" maxlength="16" inputmode="tel" autocomplete="tel" />
+
+        </div>
+
 
 
         <div style="margin: 14px 0; min-height:65px;">
@@ -1183,10 +1191,29 @@
       } catch (e) {}
     }
     window.renderLoginTurnstile = renderLoginTurnstile;
-    window.addEventListener('DOMContentLoaded', renderLoginTurnstile);
+    window.addEventListener('DOMContentLoaded', () => {
+      renderLoginTurnstile();
+      try {
+        const pending = JSON.parse(sessionStorage.getItem('nv_pending_subject') || '{}');
+        const emEl = document.getElementById('loginEmailInput');
+        const mobEl = document.getElementById('loginMobileInput');
+        if (pending.email && emEl && !emEl.value) emEl.value = pending.email;
+        if (pending.phone && mobEl && !mobEl.value) mobEl.value = pending.phone;
+      } catch (_) {}
+    });
+
+    function normalizeLoginMobile10(rawPhone) {
+      const trimmed = (rawPhone || '').toString().trim();
+      if (!trimmed) return { empty: true, mobile10: '', raw: '' };
+      const compact = trimmed.replace(/[\s\-()]/g, '');
+      const m = compact.match(/^(?:\+91|91)?([6-9][0-9]{9})$/);
+      if (m) return { empty: false, mobile10: m[1], raw: '+91' + m[1] };
+      return { empty: false, mobile10: null, raw: trimmed };
+    }
 
     async function sendLoginEmailCode() {
       const emailInput = document.getElementById('loginEmailInput');
+      const mobileInput = document.getElementById('loginMobileInput');
       const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
       const alertBox = document.getElementById('loginAlert');
       const statusEl = document.getElementById('loginTurnstileStatus');
@@ -1204,6 +1231,9 @@
         }
         return;
       }
+
+      const mobileParsed = normalizeLoginMobile10(mobileInput ? mobileInput.value : '');
+      const cleanMobile10 = mobileParsed.mobile10 || '';
 
       let turnstileToken = '';
       if (window.turnstile && _loginTurnstileWidgetId !== null) {
@@ -1233,18 +1263,31 @@
       } catch (e) {}
 
       try {
+        const reqPayload = { email, turnstile_token: turnstileToken };
+        if (!mobileParsed.empty) reqPayload.phone = cleanMobile10 ? ('+91' + cleanMobile10) : mobileParsed.raw;
+
         const res = await fetch('/api/v1/auth/email/send-code', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({ email, turnstile_token: turnstileToken })
+          body: JSON.stringify(reqPayload)
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.success) {
           document.getElementById('loginEmailCodeInputContainer').style.display = 'block';
           document.getElementById('btnEmailLoginSubmit').style.display = 'flex';
           const feedback = document.getElementById('loginEmailFeedback');
-          if (feedback) feedback.textContent = (data && data.message) || 'If this email address is valid, a 6-digit verification code has been dispatched.';
+          if (feedback) {
+            const ch = data.channels_dispatched || null;
+            const maskedMob = data.phone_masked || (cleanMobile10 ? ('+91 ********' + cleanMobile10.slice(-2)) : '');
+            if (ch && ch.email && ch.sms) {
+              feedback.textContent = '✓ 6-digit code sent to your email and mobile (' + maskedMob + ').';
+            } else if (ch && ch.email && !ch.sms) {
+              feedback.textContent = '✓ 6-digit code sent to your email (' + email + ').';
+            } else {
+              feedback.textContent = (data && data.message) || 'If this email address is valid, a 6-digit verification code has been dispatched.';
+            }
+          }
           btn.textContent = 'Resend Code';
 
           let rem = 60;
@@ -1284,6 +1327,7 @@
       e.preventDefault();
       const email = document.getElementById('loginEmailInput').value.trim().toLowerCase();
       const code = document.getElementById('loginEmailOtpCode').value.trim();
+      const mobileParsed = normalizeLoginMobile10(document.getElementById('loginMobileInput')?.value || '');
       const alertBox = document.getElementById('loginAlert');
       const btn = document.getElementById('btnEmailLoginSubmit');
 
@@ -1291,11 +1335,13 @@
       if (btn) { btn.disabled = true; btn.textContent = 'Signing In... ✦'; }
 
       try {
+        const verifyPayload = { email, code, checkout_flow: false };
+        if (mobileParsed.mobile10) verifyPayload.phone = mobileParsed.mobile10;
         const res = await fetch('/api/v1/auth/email/verify-code', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({ email, code, checkout_flow: false })
+          body: JSON.stringify(verifyPayload)
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.verified && data.authenticated) {
