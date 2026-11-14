@@ -229,15 +229,15 @@ class TestMonetizationAlignmentAndStaging(unittest.TestCase):
         self.assertEqual(s_res.status_code, 200)
         user_token = s_res.json()["session_token"]
 
-        # Call payment verify for 15 questions growth pack with valid HMAC-SHA256 signature
-        ord_id = "order_MOCK_ai_growth_15q_12345"
+        # Call payment verify for Charm AI Starter Pack (charm_single: 5 questions) with valid HMAC-SHA256 signature
+        ord_id = "order_MOCK_charm_single_12345"
         pay_id = "pay_MOCK_12345678"
         valid_sig = hmac.new(RAZORPAY_KEY_SECRET.encode(), f"{ord_id}|{pay_id}".encode(), hashlib.sha256).hexdigest()
         verify_payload = {
             "razorpay_order_id": ord_id,
             "razorpay_payment_id": pay_id,
             "razorpay_signature": valid_sig,
-            "plan": "ai_growth_15q",
+            "plan": "charm_single",
             "email": user_email
         }
         v_res = self.client.post("/api/v1/payments/verify", json=verify_payload)
@@ -248,8 +248,8 @@ class TestMonetizationAlignmentAndStaging(unittest.TestCase):
         self.assertEqual(me_res.status_code, 200)
         me_data = me_res.json()
         entitlements = me_data.get("entitlements", {})
-        self.assertIn("ai_growth_15q", entitlements.get("purchased_plans", []))
-        self.assertGreaterEqual(entitlements.get("charm_credits_remaining", 0), 15)
+        self.assertIn("charm_single", entitlements.get("purchased_plans", []))
+        self.assertGreaterEqual(entitlements.get("charm_credits_remaining", 0), 5)
 
     # ── RULE 3: STAGING REPLICA TEST MODE ───────────────────────────────────
 

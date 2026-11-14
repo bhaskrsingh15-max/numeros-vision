@@ -1,127 +1,170 @@
 """
-NUMEROS VISION — CENTRAL AUTHORITATIVE PRICING ARCHITECTURE (v2.2.0)
+NUMEROS VISION — CENTRAL AUTHORITATIVE PRICING ARCHITECTURE (v2.3.0)
 Tagline: ANVEIL EVERY CHARM
 
-Single server-side source of truth for all pricing across the website, app,
-calculators, checkout, payment webhooks, and PDF report delivery.
-
-Enforces:
-1. Four Distinct Product Families:
-   - Standalone Reports (Anveil every charm ₹1,050 / Anveil my glowing charms ₹510 / Anveil my alignments ₹199)
-   - Multi-Report Bundles (Starter / Discovery / Comprehensive · Coming soon)
-   - Charm AI Access (Free ₹0 / Starter ₹199)
-   - Human Consultation (Standard 1-on-1 Session ₹1,050)
-2. Topic-Independent Pricing:
-   - The topic determines content; the tier determines depth, deliverables, and price.
-3. Server-Side Validation:
-   - Client prices are strictly rejected; the server resolves payable amounts from this catalog.
-4. Deterministic Digit Root Verification:
-   - Offer prices: 1050 (root 6), 510 (root 6), 199 (root 1).
-   - Launch MRPs: 2100 (root 3), 1020 (root 3), 399 (root 3).
-   - Charm AI: 199 (root 1), 399 (root 3), 699 (root 6).
+Single server-side source of truth: reads `app/config/packs.json` directly
+(the exact same canonical pack catalog used by the Cloudflare Worker).
+Zero second price tables or hardcoded fallback amounts exist in Python.
 """
 
 from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta, timezone
 import json
 import os
 
-CURRENCY = "INR"
-LADDER_ORDER: List[str] = ["report_premium", "report_advanced", "report_basic"]
-LAUNCH_OFFER_DURATION_DAYS: int = 7
-LAUNCH_OFFER_DURATION_SECONDS: int = 7 * 24 * 3600
-LAUNCH_OFFER_STARTED_AT_DEFAULT: Optional[str] = None
-LAUNCH_OFFER_ENDS_AT_DEFAULT: Optional[str] = None
-WAITLIST_DISPLAY_LABEL: str = "Coming soon, notify me"
-WAITLIST_LAUNCH_CAPTION: str = "When this report opens, it starts at a launch price for its first 7 days. We\u2019ll email you the day it opens."
+PACKS_JSON_PATH = os.path.join(os.path.dirname(__file__), "packs.json")
 IST_TZ = timezone(timedelta(hours=5, minutes=30))
 
-# ── 1. PRODUCT FAMILY A: STANDALONE REPORTS (3 UNIFIED TIERS) ────────────────
-REPORT_TIERS: Dict[str, Dict[str, Any]] = {
-    "premium": {
-        "tier_id": "premium",
-        "name": "Anveil every charm",
-        "descriptor": "Complete Numerology Report, 32 pages",
-        "display_name": "Anveil every charm · Complete Numerology Report, 32 pages",
-        "pages": 32,
-        "page_target": "32-page PDF",
-        "price_inr": 1050,
-        "amount_paise": 105000,
-        "mrp_inr": 2100,
-        "mrp_paise": 210000,
-        "digital_root": 6,
-        "mrp_digital_root": 3,
-        "best_value": True,
-        "purpose": "The complete 32-page roadmap covering every glowing and veiled charm, dual-system synthesis, practical habits, and timing.",
-        "deliverables": [
-            "32-Page Complete Numerology Report PDF (all 9 glowing & veiled positions)",
-            "Everything in the 12-Page Report + Missing numbers (Open grid cells) & Poorak Numbers",
-            "81-Pair Mulank–Bhagyank Matrix & Chaldean + Pythagorean Dual Synthesis",
-            "Calling Name Spelling Alignment, Mobile/Email/PIN & Property/Vehicle Checks",
-            "Month-by-Month Personal Timing Calendar, Blessing Years & 4-Stage Pinnacles"
-        ],
-        "depth_level": "Comprehensive",
-        "comparisons": "Integrated across all supported modules",
-        "methodology": "Deterministic formula steps & engine version trace",
-        "guidance": "Consolidated lifetime reference & strategic roadmap"
-    },
-    "advanced": {
-        "tier_id": "advanced",
-        "name": "Anveil my glowing charms",
-        "descriptor": "Advanced Numerology Report, 12 pages",
-        "display_name": "Anveil my glowing charms · Advanced Numerology Report, 12 pages",
-        "pages": 12,
-        "page_target": "12-page PDF",
-        "price_inr": 510,
-        "amount_paise": 51000,
-        "mrp_inr": 1020,
-        "mrp_paise": 102000,
-        "digital_root": 6,
-        "mrp_digital_root": 3,
-        "popular": True,
-        "purpose": "Expanded 12-page analysis of your glowing charms, supporting calculations, comparisons, and structured guidance.",
-        "deliverables": [
-            "12-Page Personalised Glowing Charms PDF",
-            "Everything in the 3-Page Report + Present & Repeated Digits Analysis",
-            "Benefic vs Mindful Operating Matrix & Career/Relationship Priority Chapters",
-            "Interpersonal Synergy, Co-Founder Matching & Auspicious Monthly Dates",
-            "Vedic Household (Gharelu) Habits, 40-Day Routine & Full Kua Directional Table"
-        ],
-        "depth_level": "Expanded",
-        "comparisons": "Multiple, where supported",
-        "methodology": "Expanded with calculation steps",
-        "guidance": "Structured guidance & auspicious windows"
-    },
-    "basic": {
-        "tier_id": "basic",
-        "name": "Anveil my alignments",
-        "descriptor": "Basic Numerology Report, 3 pages",
-        "display_name": "Anveil my alignments · Basic Numerology Report, 3 pages",
-        "pages": 3,
-        "page_target": "3-page PDF",
-        "price_inr": 199,
-        "amount_paise": 19900,
-        "mrp_inr": 399,
-        "mrp_paise": 39900,
-        "digital_root": 1,
-        "mrp_digital_root": 3,
-        "purpose": "A focused 3-page reading of your core alignments with essential calculations and practical daily habits.",
-        "deliverables": [
-            "3-Page Personalised Alignments PDF",
-            "Mulank (Birth Day number), Bhagyank (Life Path number) & Calling Name number",
-            "Lo Shu Grid (Lo Shu Square), 8 Planes & 5-Element Balance Audit",
-            "Kua number (Vastu direction number) & Desk Orientation",
-            "Top-3 Practical Everyday Habits & 90-Day Action Plan (no gemstones or rituals)"
-        ],
-        "depth_level": "Focused",
-        "comparisons": "Essential",
-        "methodology": "Included",
-        "guidance": "Key takeaways & practical daily habits"
-    }
-}
 
-# ── 2. SUPPORTED REPORT TOPICS (CATALOGUE TOPICS) ────────────────────────────
+def load_packs_json() -> Dict[str, Any]:
+    """Loads the canonical `app/config/packs.json` catalog."""
+    with open(PACKS_JSON_PATH, "r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _build_report_tiers(packs_data: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    tiers: Dict[str, Dict[str, Any]] = {}
+    waitlist_label = (
+        packs_data.get("feature_flags", {}).get("waitlist_display_label")
+        or "Coming soon, notify me"
+    )
+    for pack_id, pack in (packs_data.get("core_reports") or {}).items():
+        tier_id = str(pack.get("tier_id") or pack_id.replace("report_", "")).strip()
+        pages = int(pack.get("pages") or 0)
+        tiers[tier_id] = {
+            "pack_id": pack_id,
+            "tier_id": tier_id,
+            "name": pack["name"],
+            "descriptor": pack.get("descriptor", ""),
+            "display_name": pack.get("display_name", pack["name"]),
+            "pages": pages,
+            "page_target": f"{pages}-page PDF" if pages else "PDF",
+            "price_inr": pack.get("price_inr"),
+            "amount_paise": pack.get("amount_paise"),
+            "mrp_inr": pack.get("mrp_inr"),
+            "mrp_paise": pack.get("mrp_paise"),
+            "digital_root": pack.get("digital_root"),
+            "mrp_digital_root": pack.get("mrp_digital_root"),
+            "status": pack.get("status", "coming_soon"),
+            "waitlist_only": bool(pack.get("waitlist_only", pack.get("price_inr") is None)),
+            "display_price_label": pack.get("display_price_label")
+            or (waitlist_label if pack.get("price_inr") is None else f"₹{int(pack['price_inr']):,}"),
+            "deliverables": list(pack.get("deliverables") or []),
+            "progressive_unlock": pack.get("progressive_unlock", ""),
+        }
+    return tiers
+
+
+def _build_bundles(packs_data: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    bundles: Dict[str, Dict[str, Any]] = {}
+    waitlist_label = (
+        packs_data.get("feature_flags", {}).get("waitlist_display_label")
+        or "Coming soon, notify me"
+    )
+    for b_id, bundle in (packs_data.get("bundles") or {}).items():
+        vouchers = bundle.get("voucher_allocation") or {}
+        bundles[b_id] = {
+            "bundle_id": b_id,
+            "pack_id": bundle.get("pack_id", b_id),
+            "name": bundle["name"],
+            "display_name": bundle.get("display_name", bundle["name"]),
+            "basic_report_count": int(vouchers.get("basic_vouchers", 0)),
+            "advanced_report_count": int(vouchers.get("advanced_vouchers", 0)),
+            "premium_report_count": int(vouchers.get("premium_vouchers", 0)),
+            "price_inr": bundle.get("price_inr"),
+            "bundle_price_inr": bundle.get("price_inr"),
+            "amount_paise": bundle.get("amount_paise"),
+            "status": bundle.get("status", "coming_soon"),
+            "waitlist_only": bool(bundle.get("waitlist_only", bundle.get("price_inr") is None)),
+            "display_price_label": bundle.get("display_price_label", waitlist_label),
+            "deliverables": list(bundle.get("deliverables") or []),
+        }
+    return bundles
+
+
+def _build_charm_ai_packs(packs_data: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    charm: Dict[str, Dict[str, Any]] = {}
+    for p_id, pack in (packs_data.get("charm_ai") or {}).items():
+        q_count = int(pack.get("questions_count") or 0)
+        charm[p_id] = {
+            "pack_id": pack.get("pack_id", p_id),
+            "name": pack["name"],
+            "descriptor": pack.get("descriptor", ""),
+            "display_name": pack.get("display_name", pack["name"]),
+            "price_inr": pack.get("price_inr"),
+            "amount_paise": pack.get("amount_paise"),
+            "questions_count": q_count,
+            "digital_root": pack.get("digital_root"),
+            "has_remedies": bool(p_id != "charm_free" and q_count > 3),
+            "status": pack.get("status", "inactive"),
+            "deliverables": list(pack.get("deliverables") or []),
+        }
+    return charm
+
+
+def _build_annual_planners(packs_data: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    planners: Dict[str, Dict[str, Any]] = {}
+    waitlist_label = (
+        packs_data.get("feature_flags", {}).get("waitlist_display_label")
+        or "Coming soon, notify me"
+    )
+    for pl_id, pl in (packs_data.get("annual_planners") or {}).items():
+        planners[pl_id] = {
+            "pack_id": pl.get("pack_id", pl_id),
+            "tier_id": pl.get("tier_id", pl_id),
+            "name": pl["name"],
+            "display_name": pl.get("display_name", pl["name"]),
+            "pages": int(pl.get("pages") or 24),
+            "price_inr": pl.get("price_inr"),
+            "amount_paise": pl.get("amount_paise"),
+            "list_price_inr": pl.get("list_price_inr"),
+            "list_price_paise": pl.get("list_price_paise"),
+            "offer_price_inr": pl.get("offer_price_inr"),
+            "offer_price_paise": pl.get("offer_price_paise"),
+            "offer_ends_at": pl.get("offer_ends_at"),
+            "status": pl.get("status", "coming_soon"),
+            "waitlist_only": bool(pl.get("waitlist_only", pl.get("price_inr") is None)),
+            "display_price_label": pl.get("display_price_label", waitlist_label),
+            "deliverables": list(pl.get("deliverables") or []),
+        }
+    return planners
+
+
+_INITIAL_PACKS = load_packs_json()
+CURRENCY: str = str(_INITIAL_PACKS.get("currency", "INR"))
+LADDER_ORDER: List[str] = list(
+    _INITIAL_PACKS.get("ladder_order", ["report_premium", "report_advanced", "report_basic"])
+)
+LAUNCH_OFFER_DURATION_DAYS: int = int(
+    (_INITIAL_PACKS.get("launch_offer") or {}).get("duration_days", 7)
+)
+LAUNCH_OFFER_DURATION_SECONDS: int = LAUNCH_OFFER_DURATION_DAYS * 24 * 3600
+LAUNCH_OFFER_STARTED_AT_DEFAULT: Optional[str] = (
+    _INITIAL_PACKS.get("launch_offer") or {}
+).get("started_at")
+LAUNCH_OFFER_ENDS_AT_DEFAULT: Optional[str] = (
+    _INITIAL_PACKS.get("launch_offer") or {}
+).get("ends_at")
+WAITLIST_DISPLAY_LABEL: str = str(
+    (_INITIAL_PACKS.get("feature_flags") or {}).get(
+        "waitlist_display_label", "Coming soon, notify me"
+    )
+)
+WAITLIST_LAUNCH_CAPTION: str = str(
+    (_INITIAL_PACKS.get("feature_flags") or {}).get(
+        "waitlist_launch_caption",
+        "When this report opens, it starts at a launch price for its first 7 days. We\u2019ll email you the day it opens.",
+    )
+)
+
+# Derived strictly from app/config/packs.json (zero second price table)
+REPORT_TIERS: Dict[str, Dict[str, Any]] = _build_report_tiers(_INITIAL_PACKS)
+BUNDLES: Dict[str, Dict[str, Any]] = _build_bundles(_INITIAL_PACKS)
+CHARM_AI_PACKS: Dict[str, Dict[str, Any]] = _build_charm_ai_packs(_INITIAL_PACKS)
+ANNUAL_PLANNERS: Dict[str, Dict[str, Any]] = _build_annual_planners(_INITIAL_PACKS)
+CONSULTATION_PACKS: Dict[str, Dict[str, Any]] = {}
+
+# ── SUPPORTED REPORT TOPICS (TOPIC METADATA ONLY — ZERO PRICES) ──────────────
 SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
     "love_romance": {
         "id": "love_romance",
@@ -130,7 +173,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "💖",
         "purpose": "Uncovers your relationship blueprint, emotional attraction triggers, and partnership style.",
         "tags": ["Love", "Relationships", "Partnership"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "marriage_union": {
         "id": "marriage_union",
@@ -139,7 +182,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "💍",
         "purpose": "Evaluates auspicious union windows, spousal harmony factors, and long-term marital alignment.",
         "tags": ["Marriage", "Timing", "Harmony"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "partner_compatibility": {
         "id": "partner_compatibility",
@@ -148,7 +191,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "⚖️",
         "purpose": "Dual-chart synastry comparing Driver, Conductor, and Lo Shu grid polarities between two individuals.",
         "tags": ["Compatibility", "Synastry", "Dating"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "love_or_arrange": {
         "id": "love_or_arrange",
@@ -157,7 +200,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🕊️",
         "purpose": "Identifies numerical indicators of self-chosen versus family-facilitated marriage harmony.",
         "tags": ["Marriage", "Decision", "Family"],
-        "recommended_tier": "basic"
+        "recommended_tier": "basic",
     },
     "spouse_personality": {
         "id": "spouse_personality",
@@ -166,7 +209,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🔮",
         "purpose": "Archetypal profile of probable spouse traits, vocational leanings, and life temperament.",
         "tags": ["Spouse", "Traits", "Alignment"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "family_harmony": {
         "id": "family_harmony",
@@ -175,7 +218,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🏡",
         "purpose": "Examines interpersonal family dynamics, domestic peace, and emotional grounding strategies.",
         "tags": ["Family", "In-laws", "Peace"],
-        "recommended_tier": "basic"
+        "recommended_tier": "basic",
     },
     "wealth_abundance": {
         "id": "wealth_abundance",
@@ -184,7 +227,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "💰",
         "purpose": "Identifies your financial growth catalysts, wealth retention numbers, and prosperity cycles.",
         "tags": ["Money", "Wealth", "Finance"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "billionaire_potential": {
         "id": "billionaire_potential",
@@ -193,7 +236,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🏛️",
         "purpose": "Explores enterprise scale capacity, high-stakes decision cycles, and institutional wealth vectors.",
         "tags": ["Enterprise", "Scale", "Ambition"],
-        "recommended_tier": "premium"
+        "recommended_tier": "premium",
     },
     "career_growth": {
         "id": "career_growth",
@@ -202,7 +245,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "💼",
         "purpose": "Maps your optimal vocational pathways, promotion cycles, and leadership strengths.",
         "tags": ["Career", "Job", "Promotion"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "business_venture": {
         "id": "business_venture",
@@ -211,7 +254,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🚀",
         "purpose": "Evaluates venture launch timings, commercial partnerships, and brand numerical resonance.",
         "tags": ["Business", "Startup", "Founder"],
-        "recommended_tier": "premium"
+        "recommended_tier": "premium",
     },
     "job_interview_tactics": {
         "id": "job_interview_tactics",
@@ -220,7 +263,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🎯",
         "purpose": "Pinpoints high-conversion application windows, interview days, and personal presentation styles.",
         "tags": ["Job Search", "Interview", "Career"],
-        "recommended_tier": "basic"
+        "recommended_tier": "basic",
     },
     "core_blueprint": {
         "id": "core_blueprint",
@@ -229,7 +272,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "☀️",
         "purpose": "Comprehensive baseline assessment of your life purpose, hidden strengths, and karmic lessons.",
         "tags": ["Destiny", "Life Purpose", "Core"],
-        "recommended_tier": "premium"
+        "recommended_tier": "premium",
     },
     "name_spelling_calibration": {
         "id": "name_spelling_calibration",
@@ -238,7 +281,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "✍️",
         "purpose": "Chaldean vibrational analysis of your calling name to calibrate harmonious compound resonances.",
         "tags": ["Name Correction", "Spelling", "Vibration"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "personal_year_radar": {
         "id": "personal_year_radar",
@@ -247,7 +290,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "📅",
         "purpose": "Month-by-month cosmic timing roadmap detailing auspicious initiation and consolidation months.",
         "tags": ["Timing", "Personal Year", "Transit"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "vedic_destiny": {
         "id": "vedic_destiny",
@@ -256,7 +299,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🕉️",
         "purpose": "Deterministic Driver & Conductor synthesis, Dasha timing, and karmic life roadmap.",
         "tags": ["Vedic", "Destiny", "Driver-Conductor"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "career_wealth_forecast": {
         "id": "career_wealth_forecast",
@@ -265,7 +308,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "💼",
         "purpose": "Comprehensive vocational mapping, business expansion windows, and wealth accumulation vectors.",
         "tags": ["Career", "Wealth", "Timing"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "name_balancing": {
         "id": "name_balancing",
@@ -274,7 +317,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "✍️",
         "purpose": "Chaldean vibrational harmony analysis to optimize personal or legal calling name.",
         "tags": ["Name Balancing", "Chaldean", "Acoustics"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "lo_shu_grid": {
         "id": "lo_shu_grid",
@@ -283,7 +326,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🔢",
         "purpose": "3x3 Chinese Sacred Square analysis, 8 Planes of Expression, and missing number remedies.",
         "tags": ["Lo Shu", "Planes", "Elements"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "business_brand_alignment": {
         "id": "business_brand_alignment",
@@ -292,7 +335,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🏢",
         "purpose": "Commercial archetype resonance, legal entity name scoring, and brand color harmony.",
         "tags": ["Business", "Brand", "Commercial"],
-        "recommended_tier": "premium"
+        "recommended_tier": "premium",
     },
     "mobile_numerology": {
         "id": "mobile_numerology",
@@ -301,7 +344,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "📱",
         "purpose": "Analysis of paired combinations, root sums, and planetary resonance of your phone number.",
         "tags": ["Mobile", "Pairs", "Communication"],
-        "recommended_tier": "basic"
+        "recommended_tier": "basic",
     },
     "relationship_compatibility": {
         "id": "relationship_compatibility",
@@ -310,7 +353,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "❤️",
         "purpose": "In-depth dual chart comparison across Vedic numbers, Lo Shu planes, and acoustic harmony.",
         "tags": ["Compatibility", "Synastry", "Marriage"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "baby_naming": {
         "id": "baby_naming",
@@ -319,7 +362,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "👶",
         "purpose": "Auspicious starting sounds (Nakshatra / acoustic) and compound number optimization for newborns.",
         "tags": ["Baby Naming", "Auspicious", "Family"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "property_numerology": {
         "id": "property_numerology",
@@ -328,7 +371,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🏠",
         "purpose": "House and flat number vibrational resonance with personal Driver and Conductor energies.",
         "tags": ["Property", "Real Estate", "Silver Rajyog"],
-        "recommended_tier": "basic"
+        "recommended_tier": "basic",
     },
     "vehicle_numerology": {
         "id": "vehicle_numerology",
@@ -337,7 +380,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "🚗",
         "purpose": "License plate digit reduction and planetary harmony check for safety and auspicious travel.",
         "tags": ["Vehicle", "Travel", "Safety"],
-        "recommended_tier": "basic"
+        "recommended_tier": "basic",
     },
     "bundle_starter": {
         "id": "bundle_starter",
@@ -346,7 +389,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "📦",
         "purpose": "Two focused Basic reports covering foundational core life areas.",
         "tags": ["Bundle", "Starter", "Savings"],
-        "recommended_tier": "basic"
+        "recommended_tier": "basic",
     },
     "bundle_discovery": {
         "id": "bundle_discovery",
@@ -355,7 +398,7 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "📦",
         "purpose": "Three multi-system reports synthesizing career, love, and personal timing.",
         "tags": ["Bundle", "Discovery", "Trio"],
-        "recommended_tier": "advanced"
+        "recommended_tier": "advanced",
     },
     "bundle_comprehensive": {
         "id": "bundle_comprehensive",
@@ -364,175 +407,8 @@ SUPPORTED_REPORT_TOPICS: Dict[str, Dict[str, Any]] = {
         "icon": "👑",
         "purpose": "All-inclusive complete lifetime numerological dossier covering every supported domain.",
         "tags": ["Bundle", "Master", "Sovereign"],
-        "recommended_tier": "premium"
-    }
-}
-
-# ── 3. PRODUCT FAMILY B: MULTI-REPORT BUNDLES ────────────────────────────────
-BUNDLES: Dict[str, Dict[str, Any]] = {
-    "starter_bundle": {
-        "bundle_id": "starter_bundle",
-        "name": "Starter Bundle",
-        "display_name": "Starter Bundle · 2 Basic Reports",
-        "included_reports_description": "Two Basic reports of your choice",
-        "basic_report_count": 2,
-        "advanced_report_count": 0,
-        "premium_report_count": 0,
-        "standalone_total_inr": 398,
-        "bundle_price_inr": 339,
-        "amount_paise": 33900,
-        "savings_inr": 59,
-        "savings_percent": 15,
-        "digital_root": 6,
-        "purpose": "Ideal for exploring two connected life domains (e.g. Love Style + Career Direction).",
-        "deliverables": [
-            "2 Complete 3-Page Basic PDF Reports",
-            "Choose any two topics across Love, Money, Work, or Growth",
-            "Full calculation breakdown and practical remedies",
-            "Ready within minutes in your account dashboard with archival PDF download"
-        ]
+        "recommended_tier": "premium",
     },
-    "discovery_bundle": {
-        "bundle_id": "discovery_bundle",
-        "name": "Discovery Bundle",
-        "display_name": "Discovery Bundle · 3 Advanced Reports",
-        "included_reports_description": "Three Advanced reports of your choice",
-        "basic_report_count": 0,
-        "advanced_report_count": 3,
-        "premium_report_count": 0,
-        "standalone_total_inr": 1530,
-        "bundle_price_inr": 1299,
-        "amount_paise": 129900,
-        "savings_inr": 231,
-        "savings_percent": 15,
-        "digital_root": 3,
-        "popular": True,
-        "purpose": "Broad 3-domain diagnostic covering Relationships, Career, and Wealth foundations.",
-        "deliverables": [
-            "3 Complete 12-Page Advanced Master Reports",
-            "Choose any three topics from the entire catalogue",
-            "Enabled Numbers in Depth & Auspicious Initiation Windows for each topic",
-            "7-Layer safe planetary remedy protocols for selected domains"
-        ]
-    },
-    "comprehensive_bundle": {
-        "bundle_id": "comprehensive_bundle",
-        "name": "Comprehensive Bundle",
-        "display_name": "Comprehensive Bundle · 5 Advanced Reports",
-        "included_reports_description": "Five 12-page Advanced reports across major life pillars",
-        "basic_report_count": 0,
-        "advanced_report_count": 5,
-        "premium_report_count": 0,
-        "standalone_total_inr": 2550,
-        "bundle_price_inr": 1999,
-        "amount_paise": 199900,
-        "savings_inr": 551,
-        "savings_percent": 22,
-        "digital_root": 1,
-        "purpose": "Deep exploration for seekers making major life decisions across multiple domains.",
-        "deliverables": [
-            "5 Complete 12-Page Advanced Master Reports",
-            "Complete multi-domain lifetime clarity across Love, Career, Wealth & Family",
-            "Enabled Numbers in Depth & Auspicious Initiation Windows for each domain",
-            "7-Layer safe planetary remedy protocols & auspicious timing windows"
-        ]
-    }
-}
-
-# ── 4. PRODUCT FAMILY C: CHARM AI ACCESS ────────────────────────────────────
-CHARM_AI_PACKS: Dict[str, Dict[str, Any]] = {
-    "charm_free": {
-        "pack_id": "charm_free",
-        "name": "Free Preview",
-        "descriptor": "Free Exploratory Numerology Q&A, 3 questions",
-        "display_name": "Charm AI · Free Exploratory Numerology Q&A, 3 questions",
-        "price_inr": 0,
-        "amount_paise": 0,
-        "questions_count": 3,
-        "has_remedies": False,
-        "purpose": "Experience conversational Charm AI intelligence with 3 free exploratory inquiries daily.",
-        "deliverables": [
-            "3 Free Exploratory Inquiries After Verified Sign-In",
-            "Instant Mulank (Birth Day number) & Bhagyank (Life Path number) Context",
-            "24/7 Web Access in Charm AI"
-        ]
-    },
-    "charm_single": {
-        "pack_id": "charm_single",
-        "name": "Charm AI Starter Pack",
-        "descriptor": "Guided Numerology Q&A Pack, 5 questions",
-        "display_name": "Charm AI Starter Pack · Guided Numerology Q&A Pack, 5 questions",
-        "price_inr": 199,
-        "amount_paise": 19900,
-        "questions_count": 5,
-        "has_remedies": True,
-        "digital_root": 1,
-        "purpose": "Focused query resolution for immediate decision crossroads.",
-        "deliverables": [
-            "5 Guided Numerology Q&A Inquiries across Career, Relationships, or Timing",
-            "Deterministic Dasha & Personal Year Window Context",
-            "Grounded, Non-Fatalistic Practical Reflection Points",
-            "Credits Valid for 6 Months in Your Private Dashboard"
-        ]
-    },
-    "charm_multi": {
-        "pack_id": "charm_multi",
-        "name": "Multi-Reading Pack",
-        "display_name": "Charm AI · Multi-Reading Pack",
-        "price_inr": 399,
-        "amount_paise": 39900,
-        "questions_count": 10,
-        "has_remedies": True,
-        "popular": True,
-        "purpose": "Ongoing strategic guidance covering career, relationships, and finance.",
-        "deliverables": [
-            "10 Detailed Question Predictions",
-            "Customised 7-Layer safe remedies for all queries",
-            "Auspicious date selection & Muhurat guidance",
-            "Priority engine response queue",
-            "Credits valid for 12 months"
-        ]
-    },
-    "charm_extended": {
-        "pack_id": "charm_extended",
-        "name": "Extended Reading Pack",
-        "display_name": "Charm AI · Extended Pack",
-        "price_inr": 699,
-        "amount_paise": 69900,
-        "questions_count": 25,
-        "has_remedies": True,
-        "purpose": "Comprehensive conversational companion for active founders and decision-makers.",
-        "deliverables": [
-            "25 Deep In-Depth Predictions",
-            "Interactive chart companion with transit radar",
-            "Multi-profile synastry consultation capability",
-            "Downloadable consultation transcript",
-            "Credits valid for 12 months with rollover"
-        ]
-    }
-}
-
-# ── 5. PRODUCT FAMILY D: HUMAN CONSULTATION ──────────────────────────────────
-CONSULTATION_PACKS: Dict[str, Dict[str, Any]] = {
-    "consultation_standard": {
-        "consult_id": "consultation_standard",
-        "name": "1-on-1 Expert Consultation",
-        "display_name": "1-on-1 Expert Consultation",
-        "price_inr": 1050,
-        "amount_paise": 105000,
-        "duration_minutes": 45,
-        "mode": "Private Google Meet / Phone",
-        "practitioner": "Certified Senior Astrologer & Numerologist",
-        "purpose": "In-depth private live consultation for complex life transitions, business launches, and relationship alignment.",
-        "deliverables": [
-            "45-Minute Private 1-on-1 Consultation Session",
-            "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
-            "Comprehensive personal strategy & custom remedial protocols",
-            "Complimentary 12-Page Anveil my glowing charms PDF Dossier (₹510 value)",
-            "Audio recording and written consultation summary",
-            "Free 1-time rescheduling up to 24 hours prior"
-        ]
-    }
 }
 
 
@@ -562,22 +438,23 @@ def resolve_launch_offer_state(
     Resolves the server-configured launch offer window strictly from per-tier
     `NV_LAUNCH_<TIER>_STARTS_AT`/`NV_LAUNCH_<TIER>_ENDS_AT` falling back to
     `NV_LAUNCH_STARTS_AT` (alias `NV_LAUNCH_STARTED_AT`) and `NV_LAUNCH_ENDS_AT`.
-    - Left unset until go-live (`configured=False`, `active=False` -> regular prices apply with zero strike-through).
-    - Within `[starts_at, ends_at]`: `active=True`, launch price applies on purchasable tiers with struck regular MRP.
-    - Outside `[starts_at, ends_at]`: `active=False`, regular price (`mrp_inr`) applies with no strike-through.
     """
     clean_tier = str(tier_id or "").strip().lower().replace("report_", "")
-    tier_alias = {"essential": "basic", "alignments": "basic", "master": "advanced", "glowing": "advanced", "divine": "premium", "every_charm": "premium"}
-    clean_tier = tier_alias.get(clean_tier, clean_tier)
-
     tier_starts = ""
     tier_ends = ""
     if clean_tier in ("basic", "advanced", "premium"):
         upper = clean_tier.upper()
-        tier_starts = (os.getenv(f"NV_LAUNCH_{upper}_STARTS_AT") or os.getenv(f"NV_LAUNCH_{upper}_STARTED_AT") or "").strip()
+        tier_starts = (
+            os.getenv(f"NV_LAUNCH_{upper}_STARTS_AT")
+            or os.getenv(f"NV_LAUNCH_{upper}_STARTED_AT")
+            or ""
+        ).strip()
         tier_ends = (os.getenv(f"NV_LAUNCH_{upper}_ENDS_AT") or "").strip()
 
-    env_starts = tier_starts or (os.getenv("NV_LAUNCH_STARTS_AT") or os.getenv("NV_LAUNCH_STARTED_AT") or "").strip()
+    env_starts = (
+        tier_starts
+        or (os.getenv("NV_LAUNCH_STARTS_AT") or os.getenv("NV_LAUNCH_STARTED_AT") or "").strip()
+    )
     env_ends = tier_ends or (os.getenv("NV_LAUNCH_ENDS_AT") or "").strip()
 
     started_raw: Optional[str] = (
@@ -621,7 +498,11 @@ def resolve_launch_offer_state(
         }
 
     ends_dt = _parse_iso_dt(ends_raw)
-    started_dt = _parse_iso_dt(started_raw) if started_raw else (ends_dt - timedelta(days=LAUNCH_OFFER_DURATION_DAYS))
+    started_dt = (
+        _parse_iso_dt(started_raw)
+        if started_raw
+        else (ends_dt - timedelta(days=LAUNCH_OFFER_DURATION_DAYS))
+    )
     from_dt = ends_dt + timedelta(seconds=1)
     now_dt = _parse_iso_dt(now_iso) if now_iso else datetime.now(timezone.utc)
     is_active = started_dt <= now_dt <= ends_dt
@@ -645,6 +526,18 @@ def resolve_launch_offer_state(
     }
 
 
+def is_notify_me_higher_tiers_enabled() -> bool:
+    """Returns True when the Advanced/Premium 'Notify me' waitlist flag is enabled."""
+    env_val = os.getenv("NV_NOTIFY_ME_HIGHER_TIERS")
+    if env_val is not None and env_val.strip() != "":
+        return env_val.strip().lower() in ("true", "1", "yes")
+    try:
+        packs_data = load_packs_json()
+        return bool(packs_data.get("feature_flags", {}).get("notify_me_higher_tiers", True))
+    except Exception:
+        return True
+
+
 def format_launch_offer_copy(
     sku_or_tier_id: str,
     now_iso: Optional[str] = None,
@@ -652,17 +545,11 @@ def format_launch_offer_copy(
     starts_at_override: Optional[str] = None,
     notify_me_higher_tiers: Optional[bool] = None,
 ) -> str:
-    """
-    Returns launch/regular price notice ONLY for purchasable report SKUs:
-    - Waitlist tiers (`advanced`, `premium` while `notify_me_higher_tiers=True`): returns `""` (no launch-window copy).
-    - Unset launch window (`configured=False`): returns `""`.
-    - Active window: 'Launch price until <date>. Regular price ₹X from <date>.'
-    - Post-window:   'Regular price ₹X (effective <date>).'
-    """
+    """Returns launch/regular price notice ONLY for purchasable report SKUs."""
     tier_key = str(sku_or_tier_id or "").strip().lower().replace("report_", "")
-    alias = {"essential": "basic", "alignments": "basic", "master": "advanced", "glowing": "advanced", "divine": "premium", "every_charm": "premium"}
-    tier_key = alias.get(tier_key, tier_key)
-    tier = REPORT_TIERS.get(tier_key)
+    packs_data = load_packs_json()
+    report_tiers = _build_report_tiers(packs_data)
+    tier = report_tiers.get(tier_key)
     if not tier:
         return ""
     notify_active = (
@@ -670,7 +557,12 @@ def format_launch_offer_copy(
         if notify_me_higher_tiers is None
         else bool(notify_me_higher_tiers)
     )
-    if notify_active and tier_key in ("advanced", "premium"):
+    if (
+        tier.get("waitlist_only")
+        or tier.get("price_inr") is None
+        or tier.get("mrp_inr") is None
+        or (notify_active and tier_key in ("advanced", "premium"))
+    ):
         return ""
     mrp_inr = int(tier["mrp_inr"])
     state = resolve_launch_offer_state(
@@ -697,42 +589,42 @@ def get_all_product_skus(
     notify_me_higher_tiers: Optional[bool] = None,
 ) -> Dict[str, Dict[str, Any]]:
     """
-    Returns a unified flat lookup dictionary of all purchasable SKUs with
-    authoritative time-resolved price and metadata.
-    Waitlist tiers (`advanced`, `premium` while `notify_me_higher_tiers=True`) carry zero
-    launch-window logic/copy and display `'Coming soon, notify me'`.
+    Returns a unified flat lookup dictionary of all SKUs strictly derived from `packs.json`.
     """
+    packs_data = load_packs_json()
+    currency = str(packs_data.get("currency", "INR"))
+    ff = packs_data.get("feature_flags") or {}
+    wl_label = str(ff.get("waitlist_display_label", WAITLIST_DISPLAY_LABEL))
+    wl_caption = str(ff.get("waitlist_launch_caption", WAITLIST_LAUNCH_CAPTION))
+
     skus: Dict[str, Dict[str, Any]] = {}
     notify_active = (
         is_notify_me_higher_tiers_enabled()
         if notify_me_higher_tiers is None
         else bool(notify_me_higher_tiers)
     )
-    launch_state = resolve_launch_offer_state(
-        now_iso=now_iso,
-        ends_at_override=ends_at_override,
-        starts_at_override=starts_at_override,
-    )
-    launch_active = bool(launch_state.get("active"))
 
-    # Standalone report tiers
-    for tier_id, tier in REPORT_TIERS.items():
-        is_waitlist = notify_active and tier_id in ("advanced", "premium")
-        mrp_inr = int(tier.get("mrp_inr", tier["price_inr"]))
-        mrp_paise = int(tier.get("mrp_paise", mrp_inr * 100))
+    # 1. Core reports from packs.json
+    for pack_id, pack in (packs_data.get("core_reports") or {}).items():
+        tier_id = str(pack.get("tier_id") or pack_id.replace("report_", "")).strip()
+        is_waitlist = (
+            bool(pack.get("waitlist_only"))
+            or pack.get("price_inr") is None
+            or (notify_active and tier_id in ("advanced", "premium"))
+        )
         if is_waitlist:
-            skus[f"report_{tier_id}"] = {
-                "sku_id": f"report_{tier_id}",
+            skus[pack_id] = {
+                "sku_id": pack_id,
                 "family": "standalone_report",
-                "name": tier["name"],
-                "descriptor": tier.get("descriptor", ""),
-                "display_name": tier.get("display_name", tier["name"]),
+                "name": pack["name"],
+                "descriptor": pack.get("descriptor", ""),
+                "display_name": pack.get("display_name", pack["name"]),
                 "tier": tier_id,
-                "pages": tier["pages"],
+                "pages": int(pack.get("pages") or 0),
                 "waitlist_only": True,
                 "status": "waitlist",
-                "display_price_label": WAITLIST_DISPLAY_LABEL,
-                "waitlist_caption": WAITLIST_LAUNCH_CAPTION,
+                "display_price_label": pack.get("display_price_label") or wl_label,
+                "waitlist_caption": wl_caption,
                 "launch_price_inr": None,
                 "launch_amount_paise": None,
                 "amount_inr": None,
@@ -744,10 +636,15 @@ def get_all_product_skus(
                 "launch_offer_active": False,
                 "launch_offer_copy": "",
                 "original_price_inr": None,
-                "currency": CURRENCY,
-                "deliverables": tier["deliverables"],
+                "currency": currency,
+                "deliverables": list(pack.get("deliverables") or []),
             }
             continue
+
+        launch_inr = int(pack["price_inr"])
+        launch_paise = int(pack.get("amount_paise") or (launch_inr * 100))
+        mrp_inr = int(pack.get("mrp_inr") if pack.get("mrp_inr") is not None else launch_inr)
+        mrp_paise = int(pack.get("mrp_paise") if pack.get("mrp_paise") is not None else (mrp_inr * 100))
 
         tier_launch_state = resolve_launch_offer_state(
             now_iso=now_iso,
@@ -756,21 +653,22 @@ def get_all_product_skus(
             tier_id=tier_id,
         )
         tier_launch_active = bool(tier_launch_state.get("active"))
-        active_inr = int(tier["price_inr"]) if tier_launch_active else mrp_inr
-        active_paise = int(tier["amount_paise"]) if tier_launch_active else mrp_paise
-        skus[f"report_{tier_id}"] = {
-            "sku_id": f"report_{tier_id}",
+        active_inr = launch_inr if tier_launch_active else mrp_inr
+        active_paise = launch_paise if tier_launch_active else mrp_paise
+
+        skus[pack_id] = {
+            "sku_id": pack_id,
             "family": "standalone_report",
-            "name": tier["name"],
-            "descriptor": tier.get("descriptor", ""),
-            "display_name": tier.get("display_name", tier["name"]),
+            "name": pack["name"],
+            "descriptor": pack.get("descriptor", ""),
+            "display_name": pack.get("display_name", pack["name"]),
             "tier": tier_id,
-            "pages": tier["pages"],
+            "pages": int(pack.get("pages") or 0),
             "waitlist_only": False,
-            "status": "active",
+            "status": str(pack.get("status", "active")),
             "display_price_label": f"₹{active_inr:,}",
-            "launch_price_inr": int(tier["price_inr"]),
-            "launch_amount_paise": int(tier["amount_paise"]),
+            "launch_price_inr": launch_inr,
+            "launch_amount_paise": launch_paise,
             "amount_inr": active_inr,
             "amount_paise": active_paise,
             "mrp_inr": mrp_inr,
@@ -786,90 +684,141 @@ def get_all_product_skus(
                 notify_me_higher_tiers=notify_active,
             ),
             "original_price_inr": mrp_inr,
-            "currency": CURRENCY,
-            "deliverables": tier["deliverables"]
+            "currency": currency,
+            "deliverables": list(pack.get("deliverables") or []),
         }
 
-    # Annual Planners (planner_2027)
+    # 2. Annual Planners from packs.json
     try:
         from app.config.planner_2027_pricing import is_planner_2027_live
         planner_live = is_planner_2027_live()
     except Exception:
         planner_live = False
-    skus["planner_2027"] = {
-        "sku_id": "planner_2027",
-        "family": "annual_planner",
-        "name": "2027 Year Ahead Planner",
-        "descriptor": "Personalized 2027 Annual Numerology Planner, 24 pages",
-        "pages": 24,
-        "waitlist_only": not planner_live,
-        "status": "active" if planner_live else "waitlist",
-        "display_price_label": WAITLIST_DISPLAY_LABEL if not planner_live else None,
-        "waitlist_caption": WAITLIST_LAUNCH_CAPTION if not planner_live else "",
-        "amount_inr": None,
-        "amount_paise": None,
-        "original_price_inr": None,
-        "currency": CURRENCY,
-        "deliverables": [
-            "Personal Year, Universal Year & Monthly Vibrational Forecast for 2027",
-            "12 Month-by-Month Focus Themes, Key Windows & Caution Corridors",
-            "Quarterly Career, Financial & Relationship Pacing Checklists",
-            "Lo Shu Grid & Elemental Rhythm Alignment for 2027",
-            "24-Page Personalized Annual Reference PDF",
-        ],
-    }
 
-    # Bundles (coming_soon per packs.json)
-    for b_id, bundle in BUNDLES.items():
+    for pl_id, pl in (packs_data.get("annual_planners") or {}).items():
+        pl_waitlist = bool(pl.get("waitlist_only")) or pl.get("price_inr") is None or (not planner_live)
+        pl_inr = None if pl_waitlist else int(pl["price_inr"])
+        pl_paise = None if pl_waitlist else int(pl.get("amount_paise") or (pl_inr * 100))
+        skus[pl_id] = {
+            "sku_id": pl_id,
+            "family": "annual_planner",
+            "name": pl["name"],
+            "descriptor": pl.get("descriptor") or pl.get("display_name") or pl["name"],
+            "display_name": pl.get("display_name", pl["name"]),
+            "pages": int(pl.get("pages") or 24),
+            "waitlist_only": pl_waitlist,
+            "status": "waitlist" if pl_waitlist else "active",
+            "display_price_label": (pl.get("display_price_label") or wl_label) if pl_waitlist else f"₹{pl_inr:,}",
+            "waitlist_caption": wl_caption if pl_waitlist else "",
+            "amount_inr": pl_inr,
+            "amount_paise": pl_paise,
+            "original_price_inr": pl.get("list_price_inr") if not pl_waitlist else None,
+            "currency": str(pl.get("currency") or currency),
+            "deliverables": list(pl.get("deliverables") or []),
+        }
+
+    # 3. Bundles from packs.json
+    for b_id, bundle in (packs_data.get("bundles") or {}).items():
+        b_inr = bundle.get("price_inr")
+        b_paise = bundle.get("amount_paise")
+        b_waitlist = bool(bundle.get("waitlist_only", b_inr is None or bundle.get("status") != "active"))
         skus[b_id] = {
             "sku_id": b_id,
             "family": "bundle",
             "name": bundle["name"],
-            "descriptor": bundle.get("included_reports_description", ""),
-            "waitlist_only": False,
-            "status": bundle.get("status", "coming_soon"),
-            "amount_inr": bundle["bundle_price_inr"],
-            "amount_paise": bundle["amount_paise"],
-            "original_price_inr": bundle.get("standalone_total_inr", bundle["bundle_price_inr"]),
-            "currency": CURRENCY,
-            "deliverables": bundle["deliverables"]
+            "descriptor": bundle.get("display_name", bundle["name"]),
+            "display_name": bundle.get("display_name", bundle["name"]),
+            "waitlist_only": b_waitlist,
+            "status": str(bundle.get("status", "coming_soon")),
+            "display_price_label": bundle.get("display_price_label") or (wl_label if b_inr is None else f"₹{int(b_inr):,}"),
+            "amount_inr": int(b_inr) if b_inr is not None else None,
+            "amount_paise": int(b_paise) if b_paise is not None else None,
+            "original_price_inr": int(b_inr) if b_inr is not None else None,
+            "currency": currency,
+            "deliverables": list(bundle.get("deliverables") or []),
         }
 
-    # Charm AI (charm_free & charm_single active; charm_multi & charm_extended inactive per packs.json)
-    active_charm_ids = {"charm_free", "charm_single"}
-    for p_id, pack in CHARM_AI_PACKS.items():
+    # 4. Charm AI packs from packs.json
+    for p_id, pack in (packs_data.get("charm_ai") or {}).items():
+        p_inr = pack.get("price_inr")
+        p_paise = pack.get("amount_paise")
+        q_count = int(pack.get("questions_count") or 0)
         skus[p_id] = {
             "sku_id": p_id,
             "family": "charm_ai",
             "name": pack["name"],
             "descriptor": pack.get("descriptor", ""),
-            "questions_count": pack["questions_count"],
+            "display_name": pack.get("display_name", pack["name"]),
+            "questions_count": q_count,
+            "has_remedies": bool(p_id != "charm_free" and q_count > 3),
             "waitlist_only": False,
-            "status": pack.get("status", "active" if p_id in active_charm_ids else "inactive"),
-            "amount_inr": pack["price_inr"],
-            "amount_paise": pack["amount_paise"],
-            "original_price_inr": pack.get("original_price_inr", pack["price_inr"]),
-            "currency": CURRENCY,
-            "deliverables": pack["deliverables"]
-        }
-
-    # Consultations
-    for c_id, consult in CONSULTATION_PACKS.items():
-        skus[c_id] = {
-            "sku_id": c_id,
-            "family": "consultation",
-            "name": consult["name"],
-            "descriptor": "Private 1-on-1 Numerology Consultation, 45 minutes",
-            "waitlist_only": False,
-            "status": consult.get("status", "active"),
-            "amount_inr": consult["price_inr"],
-            "amount_paise": consult["amount_paise"],
-            "original_price_inr": consult.get("original_price_inr", consult["price_inr"]),
-            "currency": CURRENCY,
-            "deliverables": consult["deliverables"]
+            "status": str(pack.get("status", "inactive")),
+            "amount_inr": int(p_inr) if p_inr is not None else None,
+            "amount_paise": int(p_paise) if p_paise is not None else None,
+            "original_price_inr": int(p_inr) if p_inr is not None else None,
+            "currency": currency,
+            "deliverables": list(pack.get("deliverables") or []),
         }
 
     return skus
+
+
+def build_plans_from_packs_json(
+    now_iso: Optional[str] = None,
+    ends_at_override: Optional[str] = None,
+    starts_at_override: Optional[str] = None,
+    notify_me_higher_tiers: Optional[bool] = None,
+) -> Dict[str, Dict[str, Any]]:
+    """
+    Constructs `app.api.payments.PLANS` strictly from `app/config/packs.json`
+    (via `get_all_product_skus`) with zero second price table.
+    """
+    skus = get_all_product_skus(
+        now_iso=now_iso,
+        ends_at_override=ends_at_override,
+        starts_at_override=starts_at_override,
+        notify_me_higher_tiers=notify_me_higher_tiers,
+    )
+    plans: Dict[str, Dict[str, Any]] = {}
+    category_map = {
+        "standalone_report": "report",
+        "annual_planner": "annual_planner",
+        "bundle": "bundle",
+        "charm_ai": "charm_ai",
+    }
+    for sku_id, sku in skus.items():
+        family = sku.get("family", "")
+        pages = sku.get("pages")
+        q_count = int(sku.get("questions_count") or 0)
+        if pages:
+            period = f"{pages}-Page Personalized PDF"
+        elif family == "charm_ai":
+            period = f"{q_count} Questions"
+        else:
+            period = sku.get("display_name", sku["name"])
+
+        plans[sku_id] = {
+            "pack_id": sku_id,
+            "name": sku["name"],
+            "display_name": sku.get("display_name", sku["name"]),
+            "amount_inr": sku.get("amount_inr"),
+            "original_price_inr": sku.get("original_price_inr"),
+            "amount_paise": sku.get("amount_paise"),
+            "struck_mrp_inr": sku.get("struck_mrp_inr"),
+            "status": sku.get("status", "inactive"),
+            "waitlist_only": bool(sku.get("waitlist_only", False)),
+            "display_price_label": sku.get("display_price_label"),
+            "period": period,
+            "questions_count": q_count,
+            "has_remedies": bool(
+                sku.get("has_remedies", family in ("standalone_report", "annual_planner", "bundle"))
+            ),
+            "category": category_map.get(family, family),
+            "description": sku.get("descriptor", ""),
+            "features": list(sku.get("deliverables") or []),
+            "deliverables": list(sku.get("deliverables") or []),
+        }
+    return plans
 
 
 def resolve_sku_price(
@@ -880,9 +829,10 @@ def resolve_sku_price(
     notify_me_higher_tiers: Optional[bool] = None,
 ) -> Optional[Dict[str, Any]]:
     """
-    Given a SKU ID or legacy plan ID, safely resolves the authoritative server price.
-    Never trusts client input. Switches core reports to regular price (`mrp_inr`) after `ends_at`.
+    Resolves the authoritative server SKU record strictly from `packs.json`.
     """
+    if not sku_or_plan_id or not isinstance(sku_or_plan_id, str):
+        return None
     clean_id = sku_or_plan_id.lower().strip()
     skus = get_all_product_skus(
         now_iso=now_iso,
@@ -890,69 +840,22 @@ def resolve_sku_price(
         starts_at_override=starts_at_override,
         notify_me_higher_tiers=notify_me_higher_tiers,
     )
-
     if clean_id in skus:
         return skus[clean_id]
 
-    # Map legacy aliases safely to unified SKUs
     alias_map = {
-        # Standalone report aliases
         "basic": "report_basic",
-        "starter": "report_basic",
-        "report_essential": "report_basic",
-        "alignments": "report_basic",
         "advanced": "report_advanced",
-        "growth": "report_advanced",
-        "report_master": "report_advanced",
-        "glowing": "report_advanced",
         "premium": "report_premium",
-        "complete": "report_premium",
-        "report_divine": "report_premium",
-        "every_charm": "report_premium",
         "planner-2027": "planner_2027",
         "year_2027": "planner_2027",
         "2027_planner": "planner_2027",
-
-        # Charm AI approved legacy aliases (ai_report_combo, growth_10q, ai_growth_15q, ai_power_35q, complete_report retired/rejected)
-        "starter_5q": "charm_single",
-        "ai_starter_5q": "charm_single",
-
-        # Bundles aliases
-        "bundle_starter": "starter_bundle",
-        "bundle_discovery": "discovery_bundle",
-        "bundle_comprehensive": "comprehensive_bundle",
-
-        # Consultation aliases
-        "consultation": "consultation_standard",
-        "personal_consult": "consultation_standard",
-        "phone_consult": "consultation_standard",
-        "master_consultation": "consultation_standard",
-        "advisory_personal_name": "consultation_standard",
     }
-
-    if clean_id in alias_map:
-        target_sku = alias_map[clean_id]
-        if target_sku in skus:
-            return skus[target_sku]
+    target_sku = alias_map.get(clean_id)
+    if target_sku and target_sku in skus:
+        return skus[target_sku]
 
     return None
-
-
-def is_notify_me_higher_tiers_enabled() -> bool:
-    """
-    Returns True when the Advanced/Premium 'Notify me' waitlist flag is enabled.
-    Defaults to True in packs.json until the 12- and 32-page editions are migrated and approved.
-    """
-    env_val = os.getenv("NV_NOTIFY_ME_HIGHER_TIERS")
-    if env_val is not None and env_val.strip() != "":
-        return env_val.strip().lower() in ("true", "1", "yes")
-    try:
-        packs_path = os.path.join(os.path.dirname(__file__), "packs.json")
-        with open(packs_path, "r", encoding="utf-8") as fh:
-            packs_data = json.load(fh)
-        return bool(packs_data.get("feature_flags", {}).get("notify_me_higher_tiers", True))
-    except Exception:
-        return True
 
 
 def recommend_ladder_tier(
@@ -960,20 +863,7 @@ def recommend_ladder_tier(
     notify_me_higher_tiers: Optional[bool] = None,
     tapped_context: Optional[str] = None,
 ) -> str:
-    """
-    Combined deterministic 3-card report ladder recommendation rule:
-    - When `notify_me_higher_tiers` is True: strictly recommends `report_basic`
-      (Anveil my alignments · ₹199) and never recommends a waitlist tier.
-    - When `notify_me_higher_tiers` is False:
-      1. After tapping a tile (`tapped_context` provided):
-         * 'veiled' / 'missing'   -> `report_premium` (Anveil every charm · ₹1,050)
-         * 'glowing' / 'present'  -> `report_advanced` (Anveil my glowing charms · ₹510)
-         * 'alignment' / 'plane'  -> `report_basic` (Anveil my alignments · ₹199)
-      2. Before first tap: recommends by Lo Shu birth-date gap count (`0..9`):
-         * 0–2 veiled cells -> `report_basic`
-         * 3–5 veiled cells (or unknown) -> `report_advanced`
-         * 6–9 veiled cells -> `report_premium`
-    """
+    """Combined deterministic 3-card report ladder recommendation rule."""
     notify_active = (
         is_notify_me_higher_tiers_enabled()
         if notify_me_higher_tiers is None
@@ -1002,12 +892,18 @@ def recommend_ladder_tier(
 
 
 def export_pricing_catalog_json() -> str:
-    """Exports full public catalog for frontend consumers and API responses."""
+    """Exports full public catalog derived from `packs.json` for API consumers."""
+    packs_data = load_packs_json()
     notify_active = is_notify_me_higher_tiers_enabled()
     launch_offer = resolve_launch_offer_state()
+    report_tiers = _build_report_tiers(packs_data)
+    bundles = _build_bundles(packs_data)
+    charm_ai = _build_charm_ai_packs(packs_data)
+    annual_planners = _build_annual_planners(packs_data)
+
     public_tiers: Dict[str, Dict[str, Any]] = {}
-    for tid, tval in REPORT_TIERS.items():
-        if notify_active and tid in ("advanced", "premium"):
+    for tid, tval in report_tiers.items():
+        if tval.get("waitlist_only") or tval.get("price_inr") is None or (notify_active and tid in ("advanced", "premium")):
             t_copy = dict(tval)
             t_copy["waitlist_only"] = True
             t_copy["status_label"] = WAITLIST_DISPLAY_LABEL
@@ -1020,11 +916,16 @@ def export_pricing_catalog_json() -> str:
             public_tiers[tid] = dict(tval)
 
     catalog = {
-        "currency": CURRENCY,
-        "ladder_order": LADDER_ORDER,
+        "version": packs_data.get("version", "2.2.0"),
+        "currency": str(packs_data.get("currency", CURRENCY)),
+        "ladder_order": list(packs_data.get("ladder_order", LADDER_ORDER)),
         "feature_flags": {
             "notify_me_higher_tiers": notify_active,
-            "notify_me_tiers": ["report_advanced", "report_premium", "planner_2027"],
+            "notify_me_tiers": list(
+                (packs_data.get("feature_flags") or {}).get(
+                    "notify_me_tiers", ["report_advanced", "report_premium", "planner_2027"]
+                )
+            ),
             "waitlist_display_label": WAITLIST_DISPLAY_LABEL,
             "waitlist_launch_caption": WAITLIST_LAUNCH_CAPTION,
         },
@@ -1044,9 +945,10 @@ def export_pricing_catalog_json() -> str:
         },
         "report_tiers": public_tiers,
         "supported_topics": SUPPORTED_REPORT_TOPICS,
-        "bundles": BUNDLES,
-        "charm_ai": CHARM_AI_PACKS,
+        "bundles": bundles,
+        "charm_ai": charm_ai,
+        "annual_planners": annual_planners,
         "consultation": CONSULTATION_PACKS,
-        "all_skus": get_all_product_skus(notify_me_higher_tiers=notify_active)
+        "all_skus": get_all_product_skus(notify_me_higher_tiers=notify_active),
     }
     return json.dumps(catalog, indent=2)

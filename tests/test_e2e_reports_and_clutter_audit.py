@@ -54,6 +54,7 @@ class TestE2EReportsAndAudit(unittest.TestCase):
         self.assertIn("Golden Success Plane (4-5-6)", PLANES)
 
     def test_generate_pdf_endpoint_deliverable(self):
+        from starlette.requests import Request as StarletteRequest
         req = ReportPdfRequest(
             name="Bhaskr Singh",
             day=15,
@@ -62,7 +63,8 @@ class TestE2EReportsAndAudit(unittest.TestCase):
             topic_id="vedic_destiny",
             tier="basic"
         )
-        response = generate_pdf_endpoint(req)
+        mock_request = StarletteRequest({"type": "http", "method": "POST", "path": "/api/v1/reports/generate-pdf", "headers": [], "query_string": b""})
+        response = generate_pdf_endpoint(req, mock_request)
         self.assertEqual(response.media_type, "application/pdf")
         self.assertTrue(len(response.body) > 5000)
         self.assertTrue(response.body.startswith(b"%PDF"))

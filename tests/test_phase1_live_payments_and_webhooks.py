@@ -61,9 +61,9 @@ class TestPhase1LivePaymentsAndWebhooks(unittest.TestCase):
             mock_rzp_cls.return_value.order.create.side_effect = (
                 lambda payload: {"id": f"order_test_{payload['amount']}", **payload}
             )
-            # Canonical Starter Pass ₹199 (`starter_5q`)
+            # Canonical Charm AI Starter Pack ₹199 (`charm_single`)
             resp = self.client.post("/api/v1/payments/create-order", json={
-                "plan": "starter_5q",
+                "plan": "charm_single",
                 "name": "Phase1 Seeker",
                 "email": self.test_email,
                 "mobile": "9876543210"
@@ -75,16 +75,18 @@ class TestPhase1LivePaymentsAndWebhooks(unittest.TestCase):
             self.assertEqual(data["amount"], 19900)
             self.assertEqual(data["currency"], "INR")
 
-            # Growth ₹399
-            resp_g = self.client.post("/api/v1/payments/create-order", json={
-                "plan": "growth_10q",
-                "name": "Phase1 Seeker",
-                "email": self.test_email
-            }, headers=self.auth_headers)
-            self.assertEqual(resp_g.status_code, 200)
-            data_g = resp_g.json()
-            self.assertEqual(data_g["amount_inr"], 399)
-            self.assertEqual(data_g["amount"], 39900)
+            # Canonical Basic Report (`report_basic`: ₹399 regular when launch window unset)
+            with patch.dict(os.environ, {"ENVIRONMENT": "production", "NV_LAUNCH_STARTS_AT": "", "NV_LAUNCH_ENDS_AT": ""}, clear=False):
+                os.environ.pop("NV_FORCE_LAUNCH_MODE", None)
+                resp_g = self.client.post("/api/v1/payments/create-order", json={
+                    "plan": "report_basic",
+                    "name": "Phase1 Seeker",
+                    "email": self.test_email
+                }, headers=self.auth_headers)
+                self.assertEqual(resp_g.status_code, 200)
+                data_g = resp_g.json()
+                self.assertEqual(data_g["amount_inr"], 399)
+                self.assertEqual(data_g["amount"], 39900)
 
     def test_client_verify_payment_and_disk_persistence(self):
         """Verifies payment, checks token, and ensures data/verified_sessions.json persists it."""
@@ -95,7 +97,7 @@ class TestPhase1LivePaymentsAndWebhooks(unittest.TestCase):
             "razorpay_order_id": mock_order_id,
             "razorpay_payment_id": mock_pay_id,
             "razorpay_signature": self._sign_razorpay(mock_order_id, mock_pay_id),
-            "plan": "starter_5q",
+            "plan": "charm_single",
             "email": self.test_email
         }, headers=self.auth_headers)
         self.assertEqual(resp.status_code, 200)
@@ -110,7 +112,7 @@ class TestPhase1LivePaymentsAndWebhooks(unittest.TestCase):
         st_data = st_resp.json()
         self.assertTrue(st_data["active"])
         self.assertEqual(st_data["questions_remaining"], 5)
-        self.assertFalse(st_data["has_remedies"])
+        self.assertTrue(st_data["has_remedies"])
 
         # Check disk file exists and contains the session
         self.assertTrue(os.path.exists(SESSIONS_FILE))
@@ -130,11 +132,11 @@ class TestPhase1LivePaymentsAndWebhooks(unittest.TestCase):
                     "entity": {
                         "id": webhook_pay_id,
                         "order_id": webhook_order_id,
-                        "amount": 39900,
+                        "amount": 19900,
                         "currency": "INR",
                         "status": "captured",
                         "notes": {
-                            "plan": "growth_10q",
+                            "plan": "charm_single",
                             "email": self.test_email,
                             "name": "Auspicious Seeker"
                         }
@@ -159,12 +161,12 @@ class TestPhase1LivePaymentsAndWebhooks(unittest.TestCase):
         self.assertEqual(res_data["event"], "payment.captured")
         session_token = res_data["session_token"]
 
-        # Confirm session is activated with 10 questions and remedies enabled
+        # Confirm session is activated with 5 questions and remedies enabled
         st_resp = self.client.get(f"/api/v1/payments/status/{session_token}")
         self.assertEqual(st_resp.status_code, 200)
         st_data = st_resp.json()
         self.assertTrue(st_data["active"])
-        self.assertEqual(st_data["questions_remaining"], 10)
+        self.assertEqual(st_data["questions_remaining"], 5)
         self.assertTrue(st_data["has_remedies"])
 
     def test_multi_turn_questions_and_history_persistence(self):
@@ -181,7 +183,7 @@ class TestPhase1LivePaymentsAndWebhooks(unittest.TestCase):
             "razorpay_order_id": mt_ord,
             "razorpay_payment_id": mt_pay,
             "razorpay_signature": self._sign_razorpay(mt_ord, mt_pay),
-            "plan": "starter_5q",
+            "plan": "charm_single",
             "email": self.test_email
         }, headers=self.auth_headers)
         token = resp.json()["premium_token"]

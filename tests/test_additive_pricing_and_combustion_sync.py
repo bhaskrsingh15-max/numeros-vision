@@ -27,91 +27,47 @@ class TestAdditivePricingAndCombustionSync(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
 
-    # ── 1. DIGIT ROOT POLICY VERIFICATION ─────────────────────────────────────
+    # ── 1. DIGIT ROOT POLICY VERIFICATION (SINGLE SOURCE: packs.json) ────────
 
-    def test_all_18_screenshot_reports_digit_roots(self):
-        """Verify that all 18 screenshot-based reports have list & offer digit roots in {1, 3, 5, 6}."""
-        reports_18 = [
-            # Love and Marriage
-            "report_love_style", "report_marriage", "report_ideal_partner",
-            "report_love_or_arrange", "report_spouse", "report_in_laws",
-            # Money
-            "report_billionaire_potential", "report_wealth",
-            # Work
-            "report_career", "report_business", "report_job_or_business",
-            "report_govt_job", "report_first_job", "report_job_search",
-            # Self and Growth
-            "report_intelligence", "report_life_guidance", "report_personality",
-            "report_education",
-        ]
+    def test_core_reports_digit_roots_and_waitlist_parity(self):
+        """Verify active core reports in PLANS (from packs.json) obey digit roots {1, 3, 5, 6}."""
+        import os
+        from unittest.mock import patch
+        from app.config.pricing_config import build_plans_from_packs_json
 
-        for rep_id in reports_18:
-            with self.subTest(report_id=rep_id):
-                self.assertIn(rep_id, PLANS, f"Report {rep_id} missing from PLANS")
-                plan = PLANS[rep_id]
-                offer = plan["amount_inr"]
-                list_price = plan.get("original_price_inr", offer)
+        with patch.dict(os.environ, {"ENVIRONMENT": "preview", "NV_FORCE_LAUNCH_MODE": "1"}, clear=False):
+            plans = build_plans_from_packs_json()
+            basic = plans["report_basic"]
+            offer = basic["amount_inr"]
+            list_price = basic["original_price_inr"]
+            self.assertEqual(offer, 199)
+            self.assertEqual(list_price, 399)
+            self.assertIn(digit_root(offer), DEFAULT_ALLOWED_ROOTS)
+            self.assertIn(digit_root(list_price), DEFAULT_ALLOWED_ROOTS)
+            self.assertLess(offer, list_price)
+            self.assertTrue(validate_price_pair(list_price, offer)["valid"])
 
-                # Digit roots
-                offer_root = digit_root(offer)
-                list_root = digit_root(list_price)
-                self.assertIn(offer_root, DEFAULT_ALLOWED_ROOTS, f"{rep_id} offer {offer} root {offer_root} not allowed")
-                self.assertIn(list_root, DEFAULT_ALLOWED_ROOTS, f"{rep_id} list {list_price} root {list_root} not allowed")
+            for wl_id in ("report_advanced", "report_premium", "planner_2027"):
+                self.assertIn(wl_id, plans)
+                self.assertIsNone(plans[wl_id]["amount_inr"])
+                self.assertTrue(plans[wl_id]["waitlist_only"])
 
-                # Genuine discount assertion
-                self.assertLess(offer, list_price, f"{rep_id} offer must be strictly less than list price")
+    def test_report_bundles_waitlist_parity(self):
+        """Verify all bundles in PLANS match packs.json coming_soon / null price state."""
+        for b_id in ("starter_bundle", "discovery_bundle", "comprehensive_bundle"):
+            self.assertIn(b_id, PLANS)
+            self.assertIsNone(PLANS[b_id]["amount_inr"])
+            self.assertTrue(PLANS[b_id]["waitlist_only"])
 
-                # Validate price pair utility
-                val_res = validate_price_pair(list_price, offer)
-                self.assertTrue(val_res["valid"], f"Validation failed for {rep_id}: {val_res}")
-
-    def test_all_8_report_bundles_digit_roots_and_savings(self):
-        """Verify all 8 bundles conform to digit roots and offer real savings."""
-        bundles_8 = [
-            "bundle_love_compatibility", "bundle_marriage_family",
-            "bundle_career_starter", "bundle_career_decision",
-            "bundle_money_wealth", "bundle_self_discovery",
-            "bundle_learning_growth", "bundle_complete_personal_insight"
-        ]
-
-        for b_id in bundles_8:
-            with self.subTest(bundle_id=b_id):
-                self.assertIn(b_id, PLANS, f"Bundle {b_id} missing from PLANS")
-                bundle = PLANS[b_id]
-                offer = bundle["amount_inr"]
-                list_price = bundle.get("original_price_inr", offer)
-
-                # Roots
-                offer_root = digit_root(offer)
-                list_root = digit_root(list_price)
-                self.assertIn(offer_root, DEFAULT_ALLOWED_ROOTS, f"{b_id} offer {offer} root {offer_root} not allowed")
-                self.assertIn(list_root, DEFAULT_ALLOWED_ROOTS, f"{b_id} list {list_price} root {list_root} not allowed")
-
-                # Savings
-                self.assertLess(offer, list_price, f"{b_id} offer must be less than list")
-                self.assertGreater(bundle.get("original_price_inr", 0) - offer, 0)
-
-    def test_all_6_charm_ai_packages_digit_roots(self):
-        """Verify all 6 Charm AI packages conform to digit root rules."""
-        charm_6 = [
-            "charm_quick_insight", "charm_focused_reading",
-            "charm_consensus_reading", "charm_personal_blueprint",
-            "charm_family_compatibility", "charm_career_business_direction"
-        ]
-
-        for c_id in charm_6:
-            with self.subTest(charm_id=c_id):
-                self.assertIn(c_id, PLANS, f"Charm package {c_id} missing from PLANS")
-                pkg = PLANS[c_id]
-                offer = pkg["amount_inr"]
-                list_price = pkg.get("original_price_inr", offer)
-
-                # Roots
-                offer_root = digit_root(offer)
-                list_root = digit_root(list_price)
-                self.assertIn(offer_root, DEFAULT_ALLOWED_ROOTS, f"{c_id} offer {offer} root {offer_root} not allowed")
-                self.assertIn(list_root, DEFAULT_ALLOWED_ROOTS, f"{c_id} list {list_price} root {list_root} not allowed")
-                self.assertLess(offer, list_price)
+    def test_charm_ai_packages_digit_roots(self):
+        """Verify active paid Charm AI pack in PLANS conforms to digit root rules."""
+        self.assertIn("charm_single", PLANS)
+        pkg = PLANS["charm_single"]
+        self.assertEqual(pkg["amount_inr"], 199)
+        self.assertIn(digit_root(pkg["amount_inr"]), DEFAULT_ALLOWED_ROOTS)
+        self.assertEqual(PLANS["charm_free"]["amount_inr"], 0)
+        self.assertIsNone(PLANS["charm_multi"]["amount_inr"])
+        self.assertIsNone(PLANS["charm_extended"]["amount_inr"])
 
     # ── 2. DETERMINISTIC PLANETARY COMBUSTION ─────────────────────────────────
 
@@ -207,30 +163,30 @@ class TestAdditivePricingAndCombustionSync(unittest.TestCase):
     # ── 3. API ENDPOINTS INTEGRATION ──────────────────────────────────────────
 
     def test_api_plans_endpoint(self):
-        """Test GET /api/v1/payments/plans exposes all plans with enriched metadata."""
+        """Test GET /api/v1/payments/plans exposes canonical packs.json plans with enriched metadata."""
         resp = self.client.get("/api/v1/payments/plans")
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertTrue(data.get("success"))
         plans = data.get("plans", {})
 
-        # Test sample reports from all 4 categories exist
-        self.assertIn("report_love_style", plans)
-        self.assertIn("report_billionaire_potential", plans)
-        self.assertIn("report_career", plans)
-        self.assertIn("report_intelligence", plans)
+        for canonical_id in (
+            "report_basic",
+            "report_advanced",
+            "report_premium",
+            "planner_2027",
+            "starter_bundle",
+            "discovery_bundle",
+            "comprehensive_bundle",
+            "charm_free",
+            "charm_single",
+        ):
+            self.assertIn(canonical_id, plans)
 
-        # Test bundle and charm packages exist
-        self.assertIn("bundle_love_compatibility", plans)
-        self.assertIn("charm_quick_insight", plans)
-
-        # Check metadata fields
-        love_plan = plans["report_love_style"]
-        self.assertEqual(love_plan["category_group"], "Love and Marriage")
-        self.assertEqual(love_plan["pricing_personality"], 6)
-        self.assertEqual(love_plan["amount_inr"], 399)
-        self.assertEqual(love_plan["offer_price_root"], 3)
-        self.assertEqual(love_plan["list_price_root"], 6)
+        charm_plan = plans["charm_single"]
+        self.assertEqual(charm_plan["amount_inr"], 199)
+        self.assertEqual(charm_plan["offer_price_root"], 1)
+        self.assertEqual(charm_plan["questions_count"], 5)
 
     def test_api_funnel_products_endpoint(self):
         """Test GET /api/v1/payments/funnel/products includes full funnel hooks."""
@@ -261,18 +217,16 @@ class TestAdditivePricingAndCombustionSync(unittest.TestCase):
                 self.assertIn("text/html", resp.headers.get("content-type", ""))
                 self.assertIn("NUMEROS VISION", resp.text)
                 self.assertIn("ANVEIL EVERY CHARM", resp.text)
-                self.assertIn("Love Style &amp; Romance Profile", resp.text)
-                self.assertIn("nv-sticky-reports-bar", resp.text)
-                self.assertIn("continue-exploration", resp.text)
+                self.assertIn("Anveil my alignments", resp.text)
 
-    def test_bundle_inclusions_completeness(self):
-        """Verify each bundle in PLANS specifies valid included_reports that exist in PLANS."""
+    def test_bundle_deliverables_completeness(self):
+        """Verify each bundle in PLANS (from packs.json) specifies non-empty deliverables and coming_soon status."""
         for k, v in PLANS.items():
             if v.get("category") == "bundle":
-                inclusions = v.get("included_reports", [])
-                self.assertGreater(len(inclusions), 0, f"Bundle {k} has empty included_reports")
-                for rep in inclusions:
-                    self.assertIn(rep, PLANS, f"Bundle {k} references non-existent report {rep}")
+                deliverables = v.get("deliverables", [])
+                self.assertGreater(len(deliverables), 0, f"Bundle {k} has empty deliverables")
+                self.assertTrue(v.get("waitlist_only"), f"Bundle {k} must be waitlisted per packs.json")
+                self.assertIsNone(v.get("amount_inr"), f"Bundle {k} must have null price per packs.json")
 
 
 if __name__ == "__main__":

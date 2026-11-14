@@ -309,7 +309,7 @@ class TestLoShuCuriosityAndNotifyMeFlag(unittest.TestCase):
 import assert from 'node:assert';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import * as workerMod from './app/static/_worker.js';
+import workerMod from './app/static/_worker.js';
 
 const key = '{TEST_HEX_KEY}';
 

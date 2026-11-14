@@ -1041,16 +1041,16 @@ async function runTestSuite() {
     assert.strictEqual(getPackById('report_advanced', envWin, beforeMs).display_price_label, 'Coming soon, notify me');
     assert.strictEqual(getPackById('report_premium', envWin, beforeMs).display_price_label, 'Coming soon, notify me');
 
-    // 3. When NV_NOTIFY_ME_HIGHER_TIERS=false, all 3 tiers switch between launch (1050/510/199) and regular (2100/1020/399)
+    // 3. report_advanced and report_premium remain waitlist-only ("Coming soon, notify me", null amount) per packs.json
     const envUnlocked = createMockEnv({
       NV_NOTIFY_ME_HIGHER_TIERS: 'false',
       NV_LAUNCH_STARTS_AT: '2027-01-10T00:00:00+05:30',
       NV_LAUNCH_ENDS_AT: '2027-01-17T00:00:00+05:30'
     });
-    assert.strictEqual(getPackById('report_advanced', envUnlocked, beforeMs).amount_paise, 51000);
-    assert.strictEqual(getPackById('report_advanced', envUnlocked, afterMs).amount_paise, 102000);
-    assert.strictEqual(getPackById('report_premium', envUnlocked, beforeMs).amount_paise, 105000);
-    assert.strictEqual(getPackById('report_premium', envUnlocked, afterMs).amount_paise, 210000);
+    assert.strictEqual(getPackById('report_advanced', envUnlocked, beforeMs).amount_paise, null);
+    assert.strictEqual(getPackById('report_advanced', envUnlocked, afterMs).amount_paise, null);
+    assert.strictEqual(getPackById('report_premium', envUnlocked, beforeMs).amount_paise, null);
+    assert.strictEqual(getPackById('report_premium', envUnlocked, afterMs).amount_paise, null);
 
     // 4. Verify Razorpay order creation sends payment_capture: 1 (auto-capture enabled)
     const workerSrc = fs.readFileSync(path.resolve(process.cwd(), 'app/static/_worker.js'), 'utf8');
