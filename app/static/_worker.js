@@ -1382,6 +1382,17 @@ function resolveEffectivePackPricePaise(packId, env = null, nowMs = null) {
   return pack && typeof pack.amount_paise === 'number' ? pack.amount_paise : 0;
 }
 
+function isPdfReportPackId(packId) {
+  if (!packId) return false;
+  const pack = getPackById(packId);
+  if (!pack || !pack.pack_id) return false;
+  const key = pack.pack_id;
+  return Boolean(
+    (PACK_CATALOG.core_reports && PACK_CATALOG.core_reports[key]) ||
+    (PACK_CATALOG.annual_planners && PACK_CATALOG.annual_planners[key])
+  );
+}
+
 function isLayers23Enabled(env = null) {
   if (!env || String(env.ENVIRONMENT || 'production').trim().toLowerCase() === 'production') {
     return false;
@@ -1913,10 +1924,12 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
     }
 
     // 3. Grant entitlement strictly using pack and subject from D1 order
-    const entId = 'ent_' + now + '_' + getRandomHex(4);
-    await env.DB.prepare(
-      "INSERT OR IGNORE INTO entitlements (id, user_id, subject_id, pack_id, order_id, granted_at) VALUES (?, ?, ?, ?, ?, ?)"
-    ).bind(entId, order.user_id, order.subject_id, order.pack_id, order.id, now).run();
+    if (order.subject_id) {
+      const entId = 'ent_' + now + '_' + getRandomHex(4);
+      await env.DB.prepare(
+        "INSERT OR IGNORE INTO entitlements (id, user_id, subject_id, pack_id, order_id, granted_at) VALUES (?, ?, ?, ?, ?, ?)"
+      ).bind(entId, order.user_id, order.subject_id, order.pack_id, order.id, now).run();
+    }
 
     // 4. Credit ledger accounting for Charm AI packs (Idempotent unique ref per order)
     if (pack && pack.questions_count) {
@@ -3510,6 +3523,8 @@ export default {
   resolveServerLaunchOfferState,
   getPackById,
   resolveEffectivePackPricePaise,
+  isPdfReportPackId,
+  fulfillPaidOrder,
   async fetch(request, env, ctx) {
     const isPreview = isPreviewRequest(request, env);
     const finalizeResponse = (resp, forceNoCache = false) => {
@@ -5856,6 +5871,19 @@ export default {
             memoryStore.subjects.set(subjectId, { id: subjectId, user_id: user.user_id, name: customerName, dob_hash: dobHash, dob_enc: dobEnc, birth_time_enc: birthTimeEnc, created_at: now });
           }
         }
+      } else if (!isPdfReportPackId(pack.pack_id)) {
+        // Non-PDF credit packs (e.g. charm_single) attach to an existing user subject if present, or remain user-scoped (null subject_id)
+        if (env.DB) {
+          const existingSubj = await env.DB.prepare('SELECT id FROM subjects WHERE user_id = ? ORDER BY created_at ASC LIMIT 1').bind(user.user_id).first();
+          subjectId = existingSubj ? existingSubj.id : null;
+        } else if (typeof memoryStore !== 'undefined' && memoryStore.subjects) {
+          subjectId = null;
+          for (const s of memoryStore.subjects.values()) {
+            if (s.user_id === user.user_id) { subjectId = s.id; break; }
+          }
+        } else {
+          subjectId = null;
+        }
       } else {
         return new Response(JSON.stringify({
           success: false,
@@ -5863,43 +5891,46 @@ export default {
         }), { status: 400, headers: corsHeaders });
       }
 
-      // 3b. Purchase Guard: Prevent purchasing the same pack twice for the same profile
+      // 3b. Purchase Guard: Prevent purchasing the same PDF report pack twice for the same (user, subject, pack)
+      // Repeatable credit packs (charm_single) are intentionally exempt.
       let alreadyPurchased = false;
-      if (env.DB) {
-        const entRow = await env.DB.prepare(`
-          SELECT e.id FROM entitlements e
-          LEFT JOIN orders o ON e.order_id = o.id
-          WHERE e.user_id = ? AND e.subject_id = ? AND e.pack_id = ?
-            AND (o.status IS NULL OR o.status != 'REFUNDED')
-          LIMIT 1
-        `).bind(user.user_id, subjectId, pack.pack_id).first();
-        if (entRow) {
-          alreadyPurchased = true;
-        } else {
-          const paidOrder = await env.DB.prepare(`
-            SELECT id FROM orders
-            WHERE user_id = ? AND subject_id = ? AND pack_id = ? AND status = 'PAID'
+      if (isPdfReportPackId(pack.pack_id)) {
+        if (env.DB) {
+          const entRow = await env.DB.prepare(`
+            SELECT e.id FROM entitlements e
+            LEFT JOIN orders o ON e.order_id = o.id
+            WHERE e.user_id = ? AND e.subject_id = ? AND e.pack_id = ?
+              AND (o.status IS NULL OR o.status != 'REFUNDED')
             LIMIT 1
           `).bind(user.user_id, subjectId, pack.pack_id).first();
-          if (paidOrder) alreadyPurchased = true;
-        }
-      } else if (typeof memoryStore !== 'undefined') {
-        if (memoryStore.entitlements) {
-          for (const ent of memoryStore.entitlements.values()) {
-            if (ent.user_id === user.user_id && ent.subject_id === subjectId && ent.pack_id === pack.pack_id) {
-              const ord = ent.order_id ? memoryStore.orders.get(ent.order_id) : null;
-              if (!ord || ord.status !== 'REFUNDED') {
-                alreadyPurchased = true;
-                break;
+          if (entRow) {
+            alreadyPurchased = true;
+          } else {
+            const paidOrder = await env.DB.prepare(`
+              SELECT id FROM orders
+              WHERE user_id = ? AND subject_id = ? AND pack_id = ? AND status = 'PAID'
+              LIMIT 1
+            `).bind(user.user_id, subjectId, pack.pack_id).first();
+            if (paidOrder) alreadyPurchased = true;
+          }
+        } else if (typeof memoryStore !== 'undefined') {
+          if (memoryStore.entitlements) {
+            for (const ent of memoryStore.entitlements.values()) {
+              if (ent.user_id === user.user_id && ent.subject_id === subjectId && ent.pack_id === pack.pack_id) {
+                const ord = ent.order_id ? memoryStore.orders.get(ent.order_id) : null;
+                if (!ord || ord.status !== 'REFUNDED') {
+                  alreadyPurchased = true;
+                  break;
+                }
               }
             }
           }
-        }
-        if (!alreadyPurchased && memoryStore.orders) {
-          for (const ord of memoryStore.orders.values()) {
-            if (ord.user_id === user.user_id && ord.subject_id === subjectId && ord.pack_id === pack.pack_id && ord.status === 'PAID') {
-              alreadyPurchased = true;
-              break;
+          if (!alreadyPurchased && memoryStore.orders) {
+            for (const ord of memoryStore.orders.values()) {
+              if (ord.user_id === user.user_id && ord.subject_id === subjectId && ord.pack_id === pack.pack_id && ord.status === 'PAID') {
+                alreadyPurchased = true;
+                break;
+              }
             }
           }
         }
@@ -5919,9 +5950,13 @@ export default {
       let existingOrder = null;
 
       if (env.DB) {
-        existingOrder = await env.DB.prepare(
-          "SELECT id, rzp_order_id, amount_paise, status, created_at FROM orders WHERE user_id = ? AND subject_id = ? AND pack_id = ? AND status IN ('CREATED', 'pending') ORDER BY created_at DESC LIMIT 1"
-        ).bind(user.user_id, subjectId, pack.pack_id).first();
+        existingOrder = subjectId
+          ? await env.DB.prepare(
+              "SELECT id, rzp_order_id, amount_paise, status, created_at FROM orders WHERE user_id = ? AND subject_id = ? AND pack_id = ? AND status IN ('CREATED', 'pending') ORDER BY created_at DESC LIMIT 1"
+            ).bind(user.user_id, subjectId, pack.pack_id).first()
+          : await env.DB.prepare(
+              "SELECT id, rzp_order_id, amount_paise, status, created_at FROM orders WHERE user_id = ? AND subject_id IS NULL AND pack_id = ? AND status IN ('CREATED', 'pending') ORDER BY created_at DESC LIMIT 1"
+            ).bind(user.user_id, pack.pack_id).first();
 
         if (existingOrder) {
           const ageMs = now - existingOrder.created_at;

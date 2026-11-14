@@ -134,9 +134,10 @@ def update_user_entitlements(
     email_or_user_id: str,
     plan_id: str,
     credits_to_add: int = 0,
-    unlocked_report: Optional[str] = None
+    unlocked_report: Optional[str] = None,
+    order_id: Optional[str] = None,
 ) -> Optional[Dict[str, Any]]:
-    """Synchronize user purchases, question credits, and unlocked reports."""
+    """Synchronize user purchases, question credits (idempotent per order_id), and unlocked reports."""
     user = get_user_account_by_identifier(email_or_user_id)
     if not user:
         return None
@@ -153,8 +154,15 @@ def update_user_entitlements(
     elif plan_id and plan_id.startswith("report_") and plan_id not in user["unlocked_reports"]:
         user["unlocked_reports"].append(plan_id)
 
-    user["charm_credits_total"] = user.get("charm_credits_total", 0) + credits_to_add
-    user["charm_credits_remaining"] = user.get("charm_credits_remaining", 0) + credits_to_add
+    if "credited_order_ids" not in user or not isinstance(user["credited_order_ids"], list):
+        user["credited_order_ids"] = []
+
+    already_credited = bool(order_id and order_id in user["credited_order_ids"])
+    if credits_to_add and not already_credited:
+        user["charm_credits_total"] = user.get("charm_credits_total", 0) + credits_to_add
+        user["charm_credits_remaining"] = user.get("charm_credits_remaining", 0) + credits_to_add
+        if order_id:
+            user["credited_order_ids"].append(order_id)
     user["updated_at"] = time.time()
 
     _save_user_accounts()

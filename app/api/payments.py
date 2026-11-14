@@ -758,7 +758,8 @@ async def verify_payment(req: VerifyPaymentRequest):
             email_or_user_id=req.email,
             plan_id=plan_key,
             credits_to_add=q_count if q_count < 9999 else 9999,
-            unlocked_report=plan_key if (plan_key.startswith("report_") or plan_key.startswith("bundle_") or plan_key in ["complete_report", "starter_5q", "growth_10q"]) else None
+            unlocked_report=plan_key if (plan_key.startswith("report_") or plan_key.startswith("bundle_")) else None,
+            order_id=req.razorpay_order_id,
         )
 
     # Persist to bookings log
@@ -898,7 +899,8 @@ async def razorpay_webhook(request: Request):
                 email_or_user_id=email,
                 plan_id=plan_id,
                 credits_to_add=q_count if q_count < 9999 else 9999,
-                unlocked_report=plan_id if (plan_id.startswith("report_") or plan_id.startswith("bundle_") or plan_id in ["complete_report", "starter_5q", "growth_10q"]) else None
+                unlocked_report=plan_id if (plan_id.startswith("report_") or plan_id.startswith("bundle_")) else None,
+                order_id=order_id,
             )
 
         # Log to data/payments.jsonl
