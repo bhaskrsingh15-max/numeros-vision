@@ -33,7 +33,7 @@ class TestPhase2PublicPagesAudit(unittest.TestCase):
                         violations.append(f"{rel}: found '{needle}'")
         self.assertEqual(violations, [], f"Static folder contains forbidden Phase 2 patterns: {violations}")
 
-    def test_logo_studio_clean_and_coming_soon(self):
+    def test_logo_studio_clean_and_backed_by_phase5_service(self):
         path = os.path.join(STATIC_DIR, "tools", "logo-intelligence.html")
         with open(path, encoding="utf-8") as fh:
             html = fh.read()
@@ -49,15 +49,16 @@ class TestPhase2PublicPagesAudit(unittest.TestCase):
             "|| 4.5",
             "alert(",
             "/checkout/?plan=report_master",
+            "calculateChaldeanWordmark",
+            "nvLogoStudioComingSoon",
         ]:
             self.assertNotIn(bad, html, f"logo-intelligence.html still contains '{bad}'")
-        self.assertIn('id="nvLogoStudioComingSoon"', html)
-        self.assertIn("data-nv-waitlist-form", html)
-        self.assertIn("nv_tool_coming_soon.js", html)
-        self.assertIn("ROOT_RECOMMENDATION_MAP", html)
+        self.assertIn("nv_tool_runtime.js", html)
+        self.assertIn("nv_logo_studio_v1.js", html)
+        self.assertIn("fourSeparateResultsGrid", html)
 
-    def test_all_unbacked_tools_have_coming_soon_and_no_alerts(self):
-        unbacked_tools = [
+    def test_all_ten_tools_backed_and_have_no_alerts_or_broken_links(self):
+        backed_tools = [
             "logo-intelligence.html",
             "business-alignment.html",
             "mobile-numerology.html",
@@ -69,13 +70,11 @@ class TestPhase2PublicPagesAudit(unittest.TestCase):
             "profession-calculator.html",
             "compatibility-calculator.html",
         ]
-        for fname in unbacked_tools:
+        for fname in backed_tools:
             path = os.path.join(STATIC_DIR, "tools", fname)
             with open(path, encoding="utf-8") as fh:
                 html = fh.read()
-            self.assertIn("data-nv-waitlist-form", html, f"{fname} missing coming-soon waitlist form")
-            self.assertIn("nv-unbacked-hidden", html, f"{fname} missing .nv-unbacked-hidden on unbacked form")
-            self.assertIn("nv_tool_coming_soon.js", html, f"{fname} missing nv_tool_coming_soon.js")
+            self.assertIn("nv_tool_runtime.js", html, f"{fname} missing nv_tool_runtime.js")
             self.assertNotIn("alert(", html, f"{fname} still contains alert()")
             self.assertNotIn("/checkout/?plan=report_master", html, f"{fname} has broken report_master checkout URL")
 

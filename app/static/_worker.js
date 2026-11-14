@@ -3348,6 +3348,12 @@ const PHASE4_ENGINE_ROUTES = new Set([
   '/api/v1/business/startup-evaluate'
 ]);
 
+const PHASE5_LOGO_ROUTES = new Set([
+  '/api/v1/logo/preview',
+  '/api/v1/logo/analyze-existing',
+  '/api/v1/logo/five-layer-evaluate'
+]);
+
 async function callEngineBackendService(rawBody, env, endpointPath, contentType = 'application/json') {
   const engineSecret = ((env && env.ENGINE_SERVICE_SECRET) || '').trim();
   if (!engineSecret) {
@@ -10432,6 +10438,66 @@ ${tpl.focusBody}`;
           success: false,
           code: 'ENGINE_UNAVAILABLE',
           error: 'Calculation engine is temporarily unavailable. Please try again shortly.'
+        }), { status: 502, headers: corsHeaders });
+      }
+    }
+
+    // ── PHASE 5 DETERMINISTIC LOGO INTELLIGENCE PROXY (X-NV-Engine-Secret -> ENGINE_SERVICE_URL) ──
+    if (PHASE5_LOGO_ROUTES.has(normalizedEnginePath)) {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      };
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { status: 204, headers: corsHeaders });
+      }
+      if (request.method !== 'POST') {
+        return new Response(JSON.stringify({
+          ok: false,
+          code: 'METHOD_NOT_ALLOWED',
+          error: 'Method not allowed. Please send a POST request.'
+        }), { status: 405, headers: corsHeaders });
+      }
+      const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+      if (!checkFormRateLimit('logo_' + clientIp, 60, 60000)) {
+        return new Response(JSON.stringify({
+          ok: false,
+          code: 'RATE_LIMITED',
+          error: 'Too many Logo Intelligence requests in a short window. Please wait a moment and retry.'
+        }), { status: 429, headers: corsHeaders });
+      }
+      const incomingContentType = request.headers.get('Content-Type') || 'application/json';
+      const rawBuffer = await request.arrayBuffer();
+      if (rawBuffer && rawBuffer.byteLength > 14 * 1024 * 1024) {
+        return new Response(JSON.stringify({
+          ok: false,
+          code: 'PAYLOAD_TOO_LARGE',
+          error: 'Logo upload exceeds the maximum allowed size.'
+        }), { status: 413, headers: corsHeaders });
+      }
+      try {
+        const upstreamResp = await callEngineBackendService(rawBuffer, env, normalizedEnginePath, incomingContentType);
+        const upstreamText = await upstreamResp.text();
+        return new Response(upstreamText, {
+          status: upstreamResp.status,
+          headers: corsHeaders
+        });
+      } catch (err) {
+        const msg = err && err.message ? String(err.message) : '';
+        if (msg === 'ENGINE_SERVICE_SECRET_UNSET' || msg === 'ENGINE_SERVICE_URL_UNSET') {
+          return new Response(JSON.stringify({
+            ok: false,
+            code: 'ENGINE_UNCONFIGURED',
+            error: 'Logo Intelligence engine is not configured on this environment yet.'
+          }), { status: 503, headers: corsHeaders });
+        }
+        return new Response(JSON.stringify({
+          ok: false,
+          code: 'ENGINE_UNAVAILABLE',
+          error: 'Logo Intelligence engine is temporarily unavailable. Please try again shortly.'
         }), { status: 502, headers: corsHeaders });
       }
     }

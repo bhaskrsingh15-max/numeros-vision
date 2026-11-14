@@ -72,10 +72,10 @@
           },
           {
             "@type": "Question",
-            "name": "Can a numerology-based logo guarantee business success or trademark approval?",
+            "name": "Can a numerology-based logo promise business success or trademark approval?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. Numerology and planetary associations provide symbolic and aesthetic design options. They do not guarantee commercial success, market profitability, legal trademark availability, or intellectual property protection."
+              "text": "No. Numerology and planetary associations provide symbolic and aesthetic design indications. They do not promise commercial success, market profitability, legal trademark availability, or intellectual property protection."
             }
           },
           {
@@ -117,7 +117,7 @@
   <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
 
   <style>
-    /* ── Master Defensive Submenu Immunity (guarantees no bullet leakage) ── */
+    /* ── Master Defensive Submenu Immunity (ensures no bullet leakage) ── */
     .nv-submenu {
       display: none !important;
       list-style: none !important;
@@ -319,7 +319,7 @@
       text-align: left;
     }
 
-    input[type="text"], select, textarea {
+    input[type="text"], input[type="date"], input[type="time"], input[type="number"], input[type="email"], input[type="file"], select, textarea {
       width: 100%;
       background: #FFFDF7;
       border: 1.5px solid var(--border, rgba(201, 162, 39, 0.28));
@@ -431,7 +431,7 @@
       border-radius: 6px;
       overflow: hidden;
       margin-bottom: 8px;
-      border: 1px solid rgba(0,0,0,0.08);
+      border: 1px solid rgba(82, 62, 40, 0.14);
     }
     .palette-swatches div {
       flex: 1;
@@ -793,81 +793,101 @@
       </div>
     </div>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="studio-card" id="nvLogoStudioComingSoon" aria-label="Logo Studio Coming Soon">
-      <span class="section-eyebrow">Coming Soon · Five-Layer Brand Geometry Engine</span>
-      <h2 class="card-heading">Logo Intelligence Studio &amp; Existing Logo Inspection Are Coming Soon</h2>
-      <p style="font-size:0.94rem; color:#523E28; line-height:1.7; margin:0 0 18px;">
-        We are completing the five-layer Logo Intelligence service (business category fit, owner and active-partner numerology profile, colour and shape reconciliation, nine measurable vector quality gates, and Shukla Paksha (waxing lunar fortnight) activation dates). Leave your email below and we will notify you the day the live studio opens.
-      </p>
-      <form data-nv-waitlist-form data-source-page="tool_logo_intelligence" style="display:flex; flex-direction:column; gap:14px; max-width:580px;">
-        <div>
-          <label for="nvLogoWaitlistEmail">Email Address *</label>
-          <input type="email" id="nvLogoWaitlistEmail" placeholder="you@example.com" required style="width:100%; background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.35); border-radius:12px; padding:13px 15px; color:#523E28; font-family:'Inter', sans-serif; font-size:0.95rem; box-sizing:border-box;" />
-        </div>
-        <label style="display:flex; align-items:flex-start; gap:10px; font-size:0.8rem; text-transform:none; letter-spacing:normal; font-weight:500; color:#523E28; line-height:1.55; cursor:pointer;">
-          <input type="checkbox" id="nvLogoWaitlistConsent" style="margin-top:3px; accent-color:#8B6914;" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="btn-calc" style="max-width:320px;">
-          <span>Notify Me When Studio Opens ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" style="display:none; padding:12px 16px; border-radius:10px; border:1px solid rgba(201,162,39,0.35); background:#FFFDF7; font-size:0.86rem; font-weight:600; color:#523E28;"></div>
-      </form>
-      <div style="margin-top:18px; padding-top:14px; border-top:1px dashed rgba(201,162,39,0.28); font-size:0.84rem; color:#7A654D;">
-        Available right now: <a href="/calculators/name-numerology/" style="color:#8B6914; font-weight:700;">Name Numerology Calculator</a> · <a href="/calculators/lo-shu-grid/" style="color:#8B6914; font-weight:700;">Lo Shu 3×3 Grid</a> · <a href="/pricing/" style="color:#8B6914; font-weight:700;">3-Page Basic Numerology Report</a>
-      </div>
-    </section>
-
-    <!-- Mode Selector Tabs -->
-    <div class="studio-tab-wrap nv-unbacked-hidden">
+    <!-- Mode Selector Tabs (Q3: Intake Mode) -->
+    <div class="studio-tab-wrap">
       <div class="studio-tab-pill">
-        <button class="studio-tab-btn active" id="tabCreateBtn" onclick="switchStudioMode('create')">
+        <button type="button" class="studio-tab-btn active" id="tabCreateBtn" onclick="window.nvSwitchStudioMode('new_logo')">
           Create a New Logo
         </button>
-        <button class="studio-tab-btn" id="tabAuditBtn" onclick="switchStudioMode('audit')">
-          Inspect an Existing Logo
+        <button type="button" class="studio-tab-btn" id="tabAuditBtn" onclick="window.nvSwitchStudioMode('audit_existing')">
+          Inspect an Existing Logo (PNG / JPEG / PDF / SVG)
         </button>
       </div>
     </div>
 
-    <!-- Panel 1: Create a New Logo -->
-    <section id="panelCreate" class="nv-unbacked-hidden">
-      <!-- Card A: Brand Definition & Acoustic Profile -->
+    <!-- Unified 17-Question Five-Layer Intake & Upload Studio -->
+    <section id="panelFiveLayerIntake">
+      <!-- Card 1: Existing File Upload (shown when Inspect Existing Logo is active) -->
+      <div class="studio-card" id="existingUploadBlock" style="display:none;">
+        <span class="section-eyebrow">Existing Logo Upload · Vector &amp; Raster Inspection</span>
+        <h2 class="card-heading">Upload PNG, JPEG, PDF, or SVG (or Paste SVG Markup)</h2>
+        <p style="font-size:0.9rem; color:var(--text-muted, #7A654D); line-height:1.65; margin:0 0 18px;">
+          Upload your brand logo file for deterministic contour, contrast, Small-Icon legibility, OCR wordmark extraction, and colour palette sampling. After inspection, you can review the confidence score and override any detected text or hex colour if needed.
+        </p>
+
+        <div class="form-grid">
+          <div class="field-group full-width">
+            <label for="logoUploadFile">Upload Logo File (PNG, JPEG, PDF, or SVG)</label>
+            <input type="file" id="logoUploadFile" accept=".png,.jpg,.jpeg,.pdf,.svg,image/png,image/jpeg,application/pdf,image/svg+xml" />
+          </div>
+
+          <div class="field-group full-width">
+            <label for="auditSvgInput">Or Paste Raw SVG Markup (Optional)</label>
+            <textarea id="auditSvgInput" rows="4" placeholder="&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 320'&gt;..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: 17-Question Business & Partner Intake -->
       <div class="studio-card">
-        <span class="section-eyebrow">Module 1 · Brand Wordmark &amp; Archetype</span>
-        <h2 class="card-heading">Brand Identity &amp; Wordmark Calibration</h2>
+        <span class="section-eyebrow">Layer 1 &amp; Layer 2 · Business Brief &amp; Active Partner Profile</span>
+        <h2 class="card-heading">17-Point Brand, Category &amp; Partner Intake</h2>
 
-                <div class="form-grid">
+        <div class="form-grid">
           <div class="field-group">
-            <label for="businessName">Exact Business Name (Wordmark) *</label>
-            <input type="text" id="businessName" value="" oninput="onBrandDetailsChange()" placeholder="Enter exact business or brand name" required />
+            <label for="businessName">1. Exact Business Name (Wordmark) *</label>
+            <input type="text" id="businessName" value="" placeholder="e.g., DE WOW WAFEL" />
           </div>
 
           <div class="field-group">
-            <label for="brandTagline">Brand Tagline / Slogan</label>
-            <input type="text" id="brandTagline" value="" oninput="onBrandDetailsChange()" placeholder="Optional tagline or descriptor" />
+            <label for="brandTagline">2. Brand Tagline / Descriptor (Optional)</label>
+            <input type="text" id="brandTagline" value="" placeholder="Optional short descriptor" />
           </div>
 
           <div class="field-group">
-            <label for="industrySector">Industry &amp; Offering *</label>
-            <select id="industrySector" onchange="onBrandBriefChange()">
-              <option value="technology" selected>Technology &amp; SaaS</option>
-              <option value="finance">Finance &amp; Wealth Advisory</option>
-              <option value="healthcare">Healthcare &amp; Clinical Wellness</option>
-              <option value="retail">Retail &amp; E-Commerce</option>
-              <option value="luxury">Luxury, Jewelry &amp; Fashion</option>
-              <option value="hospitality">Hospitality &amp; Dining</option>
-              <option value="education">Education &amp; Professional Coaching</option>
-              <option value="sports">Athletics, Fitness &amp; Footwear</option>
-              <option value="services">Professional Consulting &amp; Legal</option>
-              <option value="creative">Creative Media &amp; Architecture</option>
+            <label for="industrySector">4. Business Category *</label>
+            <select id="industrySector">
+              <option value="technology" selected>Technology, AI &amp; Digital</option>
+              <option value="finance">Banking, Finance &amp; Insurance</option>
+              <option value="healthcare_wellness">Healthcare, Pharma &amp; Clinical Wellness</option>
+              <option value="retail_ecommerce">Retail &amp; E-Commerce</option>
+              <option value="luxury_fashion_beauty">Luxury, Fashion &amp; Beauty</option>
+              <option value="hospitality_food">Food, Beverage &amp; Hospitality</option>
+              <option value="children_education">Education, Coaching &amp; Publishing</option>
+              <option value="athletic_footwear">Athletic Footwear &amp; Apparel</option>
+              <option value="sports">Sports, Fitness &amp; Performance</option>
+              <option value="consulting_legal">Consulting, Legal &amp; Advisory</option>
+              <option value="creative_design_media">Creative Design, Architecture &amp; Media</option>
+              <option value="real_estate_infrastructure">Real Estate, Logistics &amp; Infrastructure</option>
             </select>
           </div>
 
           <div class="field-group">
-            <label for="targetAudience">Target Audience *</label>
-            <select id="targetAudience" onchange="onBrandBriefChange()">
+            <label for="marketRegion">9. Primary Market Region *</label>
+            <select id="marketRegion">
+              <option value="INDIA" selected>India</option>
+              <option value="INTERNATIONAL">International</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="businessActivity">5. Core Business Activity</label>
+            <input type="text" id="businessActivity" placeholder="What does the business make, sell, or advise on?" />
+          </div>
+
+          <div class="field-group">
+            <label for="productFunction">6. Product / Service Function</label>
+            <input type="text" id="productFunction" placeholder="How does the customer use the product or service?" />
+          </div>
+
+          <div class="field-group">
+            <label for="customerOutcome">7. Customer Outcome</label>
+            <input type="text" id="customerOutcome" placeholder="What practical outcome does the customer seek?" />
+          </div>
+
+          <div class="field-group">
+            <label for="targetAudience">8. Target Audience</label>
+            <select id="targetAudience">
               <option value="b2c_consumer" selected>Consumer (B2C)</option>
               <option value="b2b_enterprise">Enterprise &amp; Corporate (B2B)</option>
               <option value="premium_hnw">Premium &amp; High Net Worth</option>
@@ -877,252 +897,315 @@
           </div>
 
           <div class="field-group">
-            <label for="brandPersonality">Brand Personality *</label>
-            <select id="brandPersonality" onchange="onBrandBriefChange()">
-              <option value="innovative" selected>Innovative &amp; Dynamic</option>
-              <option value="trustworthy">Trustworthy &amp; Authoritative</option>
-              <option value="elegant">Elegant &amp; Sophisticated</option>
-              <option value="energetic">Energetic &amp; Bold</option>
-              <option value="natural">Natural &amp; Grounded</option>
-              <option value="playful">Playful &amp; Friendly</option>
+            <label for="brandPositioning">10. Price Positioning</label>
+            <select id="brandPositioning">
+              <option value="premium" selected>Premium</option>
+              <option value="mid">Mid-Market</option>
+              <option value="value">Accessible Value</option>
             </select>
           </div>
 
           <div class="field-group">
-            <label for="brandPositioning">Market Positioning *</label>
-            <select id="brandPositioning" onchange="onBrandBriefChange()">
-              <option value="premium" selected>Premium Quality</option>
-              <option value="luxury_heritage">Luxury / Heritage</option>
-              <option value="modern_disruptor">Modern Disruptor</option>
-              <option value="mainstream">Mainstream Accessible</option>
+            <label for="brandStage">11. Brand Stage</label>
+            <select id="brandStage">
+              <option value="startup" selected>New / Startup Brand</option>
+              <option value="established">Established Brand</option>
             </select>
           </div>
 
-          <div class="field-group full-width">
-            <label for="businessActivity">Product Function &amp; Business Activity *</label>
-            <textarea id="businessActivity" rows="2" placeholder="Describe the products or services, usage context, and customer outcomes..." required></textarea>
+          <div class="field-group">
+            <label for="brandPersonality">12. Brand Personality Traits</label>
+            <input type="text" id="brandPersonality" value="trustworthy, innovative" placeholder="e.g., warm, trustworthy, refined, agile" />
+          </div>
+
+          <div class="field-group">
+            <label for="preferredLogoType">13. Preferred Logo Construction</label>
+            <select id="preferredLogoType">
+              <option value="combination_mark" selected>Combination Mark (Symbol + Wordmark)</option>
+              <option value="wordmark">Pure Wordmark</option>
+              <option value="lettermark">Monogram / Lettermark</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="lockupVariant">14. Primary Lockup Orientation</label>
+            <select id="lockupVariant">
+              <option value="horizontal_lockup" selected>Horizontal Lockup</option>
+              <option value="stacked_lockup">Centered Crest (Stacked)</option>
+              <option value="icon">App Icon Badge</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="primaryTouchpoint">15. Primary Brand Touchpoint</label>
+            <select id="primaryTouchpoint">
+              <option value="app_web" selected>Mobile App &amp; Website</option>
+              <option value="packaging_print">Packaging &amp; Labels</option>
+              <option value="signage_retail">Storefront &amp; Signage</option>
+              <option value="corporate_deck">Corporate &amp; Advisory Documents</option>
+            </select>
           </div>
         </div>
 
-        <!-- Live Numerology Intelligence Banner -->
+        <!-- Question 16: Owner + Up to 4 Active Partners -->
+        <div style="margin-top:24px; padding-top:18px; border-top:1px dashed rgba(201,162,39,0.3);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+            <div>
+              <div class="section-eyebrow" style="margin-bottom:2px;">16. Owner &amp; Up to 4 Active Partners (Optional)</div>
+              <div style="font-size:0.83rem; color:#7A654D;">
+                Common friendly colours become the main colour; friendly + neutral colours become accents; any colour enemy to any active partner is excluded and balanced through workspace remedies.
+              </div>
+            </div>
+            <button type="button" class="btn-export" style="padding:9px 14px; font-size:0.76rem;" onclick="window.nvAddPartnerRow()">
+              + Add Active Partner (Max 4)
+            </button>
+          </div>
+
+          <div class="form-grid">
+            <div class="field-group">
+              <label for="ownerName">Primary Owner / Founder Name</label>
+              <input type="text" id="ownerName" placeholder="Founder full name" />
+            </div>
+            <div class="field-group">
+              <label for="ownerDob">Primary Owner Birth Date (YYYY-MM-DD)</label>
+              <input type="date" id="ownerDob" />
+            </div>
+            <div class="field-group">
+              <label for="ownerBirthTime">Optional Birth Time (HH:MM — Cross-System Label Only)</label>
+              <input type="time" id="ownerBirthTime" />
+            </div>
+            <div class="field-group" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <div>
+                <label for="ownerBirthLat">Birth Lat (Opt.)</label>
+                <input type="number" step="0.0001" id="ownerBirthLat" placeholder="28.6139" />
+              </div>
+              <div>
+                <label for="ownerBirthLon">Birth Lon (Opt.)</label>
+                <input type="number" step="0.0001" id="ownerBirthLon" placeholder="77.2090" />
+              </div>
+            </div>
+          </div>
+
+          <div id="partnersContainer"></div>
+        </div>
+
+        <!-- Question 17: DPDP Consent -->
+        <div style="margin-top:18px; padding:12px 16px; border-radius:12px; background:#FFFDF7; border:1px solid rgba(201,162,39,0.28);">
+          <label style="display:flex; align-items:flex-start; gap:10px; font-size:0.82rem; text-transform:none; letter-spacing:normal; font-weight:500; color:#523E28; line-height:1.55; cursor:pointer; margin:0;">
+            <input type="checkbox" id="dpdpConsent" style="margin-top:3px; accent-color:#8B6914;" />
+            <span><strong>17. DPDP Act 2023 Consent:</strong> I consent to Numeros Vision processing the business brief and any supplied owner or partner birth details solely to compute this deterministic five-layer logo evaluation, with zero unsolicited sharing.</span>
+          </label>
+        </div>
+
+        <!-- Server Numerology Readout Banner -->
         <div id="numerologyBriefBox" style="margin-top:18px; background:rgba(201,162,39,0.08); border:1.5px solid var(--border-gold); border-radius:12px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
-            <div style="font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-dark); font-weight:700;">✦ Numerology Calculation</div>
-            <div id="briefNumCalc" style="font-size:0.95rem; font-weight:700; color:#523E28; margin-top:2px;">Enter a business name above to calculate its Chaldean compound and single-digit root (1–9).</div>
+            <div style="font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-dark); font-weight:700;">✦ Server Wordmark &amp; Basis Readout</div>
+            <div id="briefNumCalc" style="font-size:0.94rem; font-weight:700; color:#523E28; margin-top:2px;">Submit your brief below to compute Chaldean compound and single-digit root (1–9) on the server.</div>
           </div>
           <div id="briefRecommendationTag" style="font-size:0.8rem; background:#FFFFFF; border:1px solid var(--border-gold); padding:4px 12px; border-radius:100px; color:#8B6914; font-weight:600;">
-            Awaiting business name input
+            Awaiting evaluation
           </div>
         </div>
 
-        <!-- 2. Sacred Planetary Symbol Selector -->
-        <div style="margin-top: 24px;">
-          <label>Select Sacred Geometry &amp; Planetary Archetype *</label>
-          <div class="symbol-gallery" id="symbolGallery">
-            <!-- 7 Sacred Planetary Geometries -->
-            <div class="symbol-card-item" data-symbol="solar_crest" onclick="selectSymbol('solar_crest')">
-              <div class="symbol-icon">☀️</div>
-              <div>
-                <div class="symbol-title">Solar Suncrest</div>
-                <div class="symbol-meta">Sun 1 · Leadership, Sovereignty, Luxury</div>
+        <!-- Optional Symbol & Palette Override Controls (for Create New Logo mode) -->
+        <div id="newLogoDesignControls">
+          <div style="margin-top: 24px;">
+            <label>Optional Sacred Geometry Override (Leave unselected to let Layer 3 auto-reconcile)</label>
+            <div class="symbol-gallery" id="symbolGallery">
+              <div class="symbol-card-item" data-symbol="solar_crest" onclick="window.nvSelectSymbol('solar_crest')">
+                <div class="symbol-icon">☀️</div>
+                <div>
+                  <div class="symbol-title">Solar Suncrest</div>
+                  <div class="symbol-meta">Surya (Sun) 1 · Closed Circle &amp; Rays</div>
+                </div>
               </div>
-            </div>
-
-            <div class="symbol-card-item" data-symbol="mercury_caduceus" onclick="selectSymbol('mercury_caduceus')">
-              <div class="symbol-icon">☿</div>
-              <div>
-                <div class="symbol-title">Mercury Caduceus</div>
-                <div class="symbol-meta">Mercury 5 · Tech, Commerce, Agility</div>
+              <div class="symbol-card-item" data-symbol="golden_triangle" onclick="window.nvSelectSymbol('golden_triangle')">
+                <div class="symbol-icon">♃</div>
+                <div>
+                  <div class="symbol-title">Golden Triangle</div>
+                  <div class="symbol-meta">Guru (Jupiter) 3 · Ascending Apex</div>
+                </div>
               </div>
-            </div>
-
-            <div class="symbol-card-item" data-symbol="golden_triangle" onclick="selectSymbol('golden_triangle')">
-              <div class="symbol-icon">♃</div>
-              <div>
-                <div class="symbol-title">Golden Triangle</div>
-                <div class="symbol-meta">Jupiter 3 · Wisdom, Finance, EdTech</div>
+              <div class="symbol-card-item" data-symbol="mercury_caduceus" onclick="window.nvSelectSymbol('mercury_caduceus')">
+                <div class="symbol-icon">☿</div>
+                <div>
+                  <div class="symbol-title">Mercury Diamond</div>
+                  <div class="symbol-meta">Budh (Mercury) 5 · Balanced Rhombus</div>
+                </div>
               </div>
-            </div>
-
-            <div class="symbol-card-item" data-symbol="sacred_lotus" onclick="selectSymbol('sacred_lotus')">
-              <div class="symbol-icon">♀</div>
-              <div>
-                <div class="symbol-title">Sacred Lotus</div>
-                <div class="symbol-meta">Venus 6 · Luxury, Beauty, Hospitality</div>
+              <div class="symbol-card-item" data-symbol="sacred_lotus" onclick="window.nvSelectSymbol('sacred_lotus')">
+                <div class="symbol-icon">♀</div>
+                <div>
+                  <div class="symbol-title">Sacred Lotus</div>
+                  <div class="symbol-meta">Shukra (Venus) 6 · Closed Petals</div>
+                </div>
               </div>
-            </div>
-
-            <div class="symbol-card-item selected" data-symbol="ascending_peak" onclick="selectSymbol('ascending_peak')">
-              <div class="symbol-icon">♄</div>
-              <div>
-                <div class="symbol-title">Ascending Peak</div>
-                <div class="symbol-meta">Saturn 8 · Endurance, Infrastructure</div>
+              <div class="symbol-card-item" data-symbol="ascending_peak" onclick="window.nvSelectSymbol('ascending_peak')">
+                <div class="symbol-icon">♄</div>
+                <div>
+                  <div class="symbol-title">Ascending Peak</div>
+                  <div class="symbol-meta">Shani (Saturn) 8 · Structured Octagon</div>
+                </div>
               </div>
-            </div>
-
-            <div class="symbol-card-item" data-symbol="mars_shield" onclick="selectSymbol('mars_shield')">
-              <div class="symbol-icon">♂</div>
-              <div>
-                <div class="symbol-title">Dynamic Shield</div>
-                <div class="symbol-meta">Mars 9 · Sports, Defense, Speed</div>
-              </div>
-            </div>
-
-            <div class="symbol-card-item" data-symbol="geometric_star" onclick="selectSymbol('geometric_star')">
-              <div class="symbol-icon">🌀</div>
-              <div>
-                <div class="symbol-title">Harmonic Octagram</div>
-                <div class="symbol-meta">Universal · Symmetry &amp; Sacred Ratio</div>
+              <div class="symbol-card-item" data-symbol="mars_shield" onclick="window.nvSelectSymbol('mars_shield')">
+                <div class="symbol-icon">♂</div>
+                <div>
+                  <div class="symbol-title">Dynamic Crest</div>
+                  <div class="symbol-meta">Mangal (Mars) 9 · Closed Crest</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- 3. Curated Luxury Palettes -->
-        <div style="margin-top: 24px;">
-          <label>Curated Planetary Brand Palette *</label>
-          <div class="palette-gallery" id="paletteGallery">
-            <div class="palette-item selected" data-primary="#C9A227" data-accent="#16835B" data-bg="#FFFDF7" onclick="selectPalette(this, '#C9A227', '#16835B', '#FFFDF7')">
-              <div class="palette-swatches">
-                <div style="background:#C9A227;"></div>
-                <div style="background:#16835B;"></div>
-                <div style="background:#FFFDF7; border-left:1px solid rgba(0,0,0,0.05);"></div>
+          <div style="margin-top: 24px;">
+            <label>Optional Brand Palette Override (Leave unselected to use Layer 3 partner-reconciled palette)</label>
+            <div class="palette-gallery" id="paletteGallery">
+              <div class="palette-item" onclick="window.nvSelectPalette(this, '#523E28', '#16835B', '#FFFDF7')">
+                <div class="palette-swatches">
+                  <div style="background:#523E28;"></div>
+                  <div style="background:#16835B;"></div>
+                  <div style="background:#FFFDF7; border-left:1px solid rgba(82,62,40,0.12);"></div>
+                </div>
+                <div class="palette-name">Sandalwood &amp; Emerald</div>
+                <div class="palette-sub">High Contrast · AA/AAA Clear</div>
               </div>
-              <div class="palette-name">Jupiter Gold &amp; Pearl</div>
-              <div class="palette-sub">Universal Wealth &amp; Heritage</div>
-            </div>
 
-            <div class="palette-item" data-primary="#16835B" data-accent="#C9A227" data-bg="#FFFDF7" onclick="selectPalette(this, '#16835B', '#C9A227', '#FFFDF7')">
-              <div class="palette-swatches">
-                <div style="background:#16835B;"></div>
-                <div style="background:#C9A227;"></div>
-                <div style="background:#FFFDF7; border-left:1px solid rgba(0,0,0,0.05);"></div>
+              <div class="palette-item" onclick="window.nvSelectPalette(this, '#16835B', '#8B6914', '#FFFDF7')">
+                <div class="palette-swatches">
+                  <div style="background:#16835B;"></div>
+                  <div style="background:#8B6914;"></div>
+                  <div style="background:#FFFDF7; border-left:1px solid rgba(82,62,40,0.12);"></div>
+                </div>
+                <div class="palette-name">Mercury Emerald</div>
+                <div class="palette-sub">Budh (Mercury) · Commerce &amp; Clarity</div>
               </div>
-              <div class="palette-name">Mercury Emerald</div>
-              <div class="palette-sub">Commerce &amp; High Growth</div>
-            </div>
 
-            <div class="palette-item" data-primary="#D97706" data-accent="#8B6914" data-bg="#FFFDF7" onclick="selectPalette(this, '#D97706', '#8B6914', '#FFFDF7')">
-              <div class="palette-swatches">
-                <div style="background:#D97706;"></div>
-                <div style="background:#8B6914;"></div>
-                <div style="background:#FFFDF7; border-left:1px solid rgba(0,0,0,0.05);"></div>
+              <div class="palette-item" onclick="window.nvSelectPalette(this, '#1E3A8A', '#8B6914', '#FFFDF7')">
+                <div class="palette-swatches">
+                  <div style="background:#1E3A8A;"></div>
+                  <div style="background:#8B6914;"></div>
+                  <div style="background:#FFFDF7; border-left:1px solid rgba(82,62,40,0.12);"></div>
+                </div>
+                <div class="palette-name">Deep Sapphire</div>
+                <div class="palette-sub">Institutional Trust &amp; High Contrast</div>
               </div>
-              <div class="palette-name">Royal Sunburst</div>
-              <div class="palette-sub">Solar Authority &amp; Vitality</div>
-            </div>
 
-            <div class="palette-item" data-primary="#1E3A8A" data-accent="#C9A227" data-bg="#FFFDF7" onclick="selectPalette(this, '#1E3A8A', '#C9A227', '#FFFDF7')">
-              <div class="palette-swatches">
-                <div style="background:#1E3A8A;"></div>
-                <div style="background:#C9A227;"></div>
-                <div style="background:#FFFDF7; border-left:1px solid rgba(0,0,0,0.05);"></div>
+              <div class="palette-item" onclick="window.nvSelectPalette(this, '#8B6914', '#523E28', '#FFFDF7')">
+                <div class="palette-swatches">
+                  <div style="background:#8B6914;"></div>
+                  <div style="background:#523E28;"></div>
+                  <div style="background:#FFFDF7; border-left:1px solid rgba(82,62,40,0.12);"></div>
+                </div>
+                <div class="palette-name">Deep Heritage Gold</div>
+                <div class="palette-sub">Guru (Jupiter) · Darker Accessible Gold</div>
               </div>
-              <div class="palette-name">Deep Sapphire</div>
-              <div class="palette-sub">Institutional Trust &amp; Scale</div>
-            </div>
 
-            <div class="palette-item" data-primary="#523E28" data-accent="#C9A227" data-bg="#FFFDF7" onclick="selectPalette(this, '#523E28', '#C9A227', '#FFFDF7')">
-              <div class="palette-swatches">
-                <div style="background:#523E28;"></div>
-                <div style="background:#C9A227;"></div>
-                <div style="background:#FFFDF7; border-left:1px solid rgba(0,0,0,0.05);"></div>
+              <div class="palette-item" onclick="window.nvSelectPalette(this, '#C9A227', '#16835B', '#FFFDF7')">
+                <div class="palette-swatches">
+                  <div style="background:#C9A227;"></div>
+                  <div style="background:#16835B;"></div>
+                  <div style="background:#FFFDF7; border-left:1px solid rgba(82,62,40,0.12);"></div>
+                </div>
+                <div class="palette-name">Light Gold Test (#C9A227)</div>
+                <div class="palette-sub">2.38:1 on Pearl · Flags Contrast Gate</div>
               </div>
-              <div class="palette-name">Sandalwood Luxe</div>
-              <div class="palette-sub">Earth Grounding &amp; Luxury</div>
             </div>
           </div>
         </div>
 
         <div style="margin-top: 26px;">
-          <button type="button" class="btn-calc" id="btnUpdateStudio" onclick="refreshLiveCanvas()">
-            <span>Update Live Studio Canvas ✦</span>
+          <button type="button" class="btn-calc" id="btnRunFiveLayer" onclick="window.nvRunLogoEvaluation(false)">
+            <span id="btnEvaluateLabel">Build Vector Preview &amp; Run 5-Layer Evaluation ✦</span>
           </button>
           <div id="studioInlineNotice" role="status" aria-live="polite" style="display:none; margin-top:12px; padding:12px 16px; border-radius:10px; font-size:0.86rem; font-weight:600;"></div>
         </div>
       </div>
 
-      <!-- Card B: Live Studio Canvas & Multi-Variant Switcher -->
-      <div class="canvas-container" id="canvasBox">
-        <div class="canvas-header-bar">
-          <div>
-            <span class="section-eyebrow">Module 2 · Live Production Deliverable</span>
-            <div style="font-family:'Cormorant Garamond', serif; font-size:1.4rem; font-weight:700; color:#523E28;">
-              Live Interactive Vector Canvas
+      <!-- Complete 5-Layer Results Workspace -->
+      <div id="fiveLayerResultsWrap" style="display:none;">
+        <!-- Upload Confidence & User Override Card -->
+        <div class="studio-card" id="uploadConfidenceCard" style="display:none;">
+          <span class="section-eyebrow">Upload Reading &amp; User Confirmation</span>
+          <h3 class="card-heading" style="font-size:1.35rem; margin-bottom:10px;">Confirm or Correct Extracted Text &amp; Colours</h3>
+          <div id="uploadReadingSummary" style="font-size:0.88rem; color:#523E28; margin-bottom:14px;"></div>
+          <div class="form-grid">
+            <div class="field-group">
+              <label for="overrideConfirmedText">Confirmed Wordmark Text</label>
+              <input type="text" id="overrideConfirmedText" placeholder="Correct detected wordmark if needed" />
+            </div>
+            <div class="field-group">
+              <label for="overridePrimaryHex">Confirmed Primary Hex</label>
+              <input type="text" id="overridePrimaryHex" placeholder="#523E28" />
+            </div>
+            <div class="field-group">
+              <label for="overrideAccentHex">Confirmed Accent Hex</label>
+              <input type="text" id="overrideAccentHex" placeholder="#16835B" />
+            </div>
+            <div class="field-group">
+              <label for="overrideBgHex">Confirmed Background Hex</label>
+              <input type="text" id="overrideBgHex" placeholder="#FFFDF7" />
             </div>
           </div>
-
-          <!-- Variant Switcher -->
-          <div class="canvas-variant-tabs">
-            <button class="canvas-tab-btn active" id="btnVarHoriz" onclick="switchVariant('horizontal_lockup')">Horizontal Lockup</button>
-            <button class="canvas-tab-btn" id="btnVarStacked" onclick="switchVariant('stacked_lockup')">Centered Crest</button>
-            <button class="canvas-tab-btn" id="btnVarIcon" onclick="switchVariant('icon')">App Icon Badge</button>
-          </div>
-        </div>
-
-        <!-- SVG Render Stage -->
-        <div class="svg-stage" id="svgStage">
-          <div style="color:var(--text-muted); font-size:0.9rem;">Enter your business name and click Update Live Studio Canvas to render a server preview.</div>
-        </div>
-
-        <!-- Measurable Quality Checks (shown only after a real server response) -->
-        <div id="qualityAuditSection" style="margin-top: 22px; display: none;">
-          <div style="font-family:'Cormorant Garamond', serif; font-size:1.25rem; font-weight:700; color:#523E28; margin-bottom:10px;">
-            ✦ Measurable Quality &amp; Accessibility Checks
-          </div>
-          <div class="validation-grid" id="validationGrid">
-            <div class="gate-item">
-              <span id="gateExactText"><strong>Exact Wordmark:</strong> Pending server check</span>
-            </div>
-            <div class="gate-item">
-              <span id="gateContrast"><strong>WCAG Contrast:</strong> Pending server check</span>
-            </div>
-            <div class="gate-item">
-              <span id="gateVector"><strong>Vector Structure:</strong> Pending server check</span>
-            </div>
-            <div class="gate-item">
-              <span id="gateChaldean"><strong>Chaldean Name Number:</strong> Pending server check</span>
-            </div>
+          <div style="margin-top:14px;">
+            <button type="button" class="btn-export" onclick="window.nvRunLogoEvaluation(true)">
+              Re-Evaluate With Confirmed Values ✦
+            </button>
           </div>
         </div>
 
-        <!-- Brand Identity Kit Export Grid -->
-        <div class="export-grid">
-          <button class="btn-export" onclick="downloadCurrentSvg()">
-            <span>📥 Download Pure SVG Vector</span>
-          </button>
-          <button class="btn-export" onclick="downloadPngPreview()">
-            <span>🖼️ Export High-Res PNG</span>
-          </button>
-          <button class="btn-export" onclick="downloadDesignSpecJson()">
-            <span>📋 Export Brand Spec (JSON)</span>
-          </button>
-        </div>
-      </div>
-    </section>
+        <!-- Free Scan Banner -->
+        <div class="studio-card" id="freeScanBox"></div>
 
-    <!-- Panel 2: Inspect an Existing Logo -->
-    <section id="panelAudit" class="nv-unbacked-hidden">
-      <div class="studio-card">
-        <span class="section-eyebrow">Module 3 · Existing Logo Inspection</span>
-        <h2 class="card-heading">Existing Brand Logo Inspection &amp; Visual Harmony Review</h2>
-        <p style="font-size:0.9rem; color:var(--text-muted, #7A654D); line-height:1.6; margin-bottom:18px;">
-          Paste your existing SVG markup below to measure WCAG contrast ratios, visible text extraction, and planetary symbol alignment against classical guidelines.
-        </p>
-
-        <div class="field-group full-width">
-          <label for="auditSvgInput">Paste Existing SVG Vector Code *</label>
-          <textarea id="auditSvgInput" rows="6" placeholder="&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'&gt;..."></textarea>
+        <!-- Live Vector Stage -->
+        <div class="canvas-container" id="canvasBox" style="margin-bottom:28px;">
+          <div class="canvas-header-bar">
+            <div>
+              <span class="section-eyebrow">Layer 4 · Deterministic Vector Preview</span>
+              <div style="font-family:'Cormorant Garamond', serif; font-size:1.4rem; font-weight:700; color:#523E28;">
+                Closed-Outline Vector Stage
+              </div>
+            </div>
+            <div class="canvas-variant-tabs">
+              <button type="button" class="canvas-tab-btn active" id="btnVarHoriz" onclick="window.nvSwitchVariant('horizontal_lockup')">Horizontal</button>
+              <button type="button" class="canvas-tab-btn" id="btnVarStacked" onclick="window.nvSwitchVariant('stacked_lockup')">Stacked</button>
+              <button type="button" class="canvas-tab-btn" id="btnVarIcon" onclick="window.nvSwitchVariant('icon')">64px Icon</button>
+              <button type="button" class="canvas-tab-btn" id="btnVarMono" onclick="window.nvSwitchVariant('monochrome')">Monochrome</button>
+            </div>
+          </div>
+          <div class="svg-stage" id="svgStage"></div>
         </div>
 
-        <div style="margin-top: 18px;">
-          <button type="button" class="btn-calc" onclick="handleAuditSubmit()">
-            <span>Inspect Existing Logo Vector ✦</span>
-          </button>
-          <div id="auditInlineNotice" role="status" aria-live="polite" style="display:none; margin-top:12px; padding:12px 16px; border-radius:10px; font-size:0.86rem; font-weight:600;"></div>
+        <!-- Four Separate Results (Never One Blended Score) -->
+        <div style="margin-bottom:28px;">
+          <div class="section-eyebrow">Four Separate Evaluation Pillars (Never Blended Into One Score)</div>
+          <div id="fourSeparateResultsGrid" class="form-grid" style="margin-top:10px;"></div>
         </div>
 
-        <div id="auditResultBox" style="display: none; margin-top:24px;"></div>
+        <!-- All Nine Hard Gates -->
+        <div class="studio-card">
+          <span class="section-eyebrow">Layer 4 · Measurable &amp; Traditional Hard Gates</span>
+          <h3 class="card-heading" style="margin-bottom:14px;">All 9 Hard Gates</h3>
+          <div id="nineHardGatesList" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+        <!-- Layer 5: Shukla Paksha Timing & Ordered Balancing Steps -->
+        <div class="studio-card">
+          <span class="section-eyebrow">Layer 5 · Shukla Paksha (Waxing Lunar Fortnight) &amp; Balancing Steps</span>
+          <h3 class="card-heading" style="margin-bottom:12px;">Three Shukla Paksha Launch Dates &amp; Ordered Balancing Guidance</h3>
+          <div id="shuklaPakshaDatesBox" class="export-grid" style="margin-top:0; margin-bottom:20px;"></div>
+          <div id="orderedRemediesBox" style="display:flex; flex-direction:column; gap:12px;"></div>
+        </div>
+
+        <!-- Paid Tiers (Owner-Reviewed Delivery) -->
+        <div class="studio-card">
+          <span class="section-eyebrow">Owner-Reviewed Brand Deliverables</span>
+          <h3 class="card-heading" style="margin-bottom:8px;">Logo Intelligence Packages</h3>
+          <p style="font-size:0.88rem; color:#7A654D; margin:0 0 18px; line-height:1.6;">
+            Every paid output — Deep Logo Audit, Existing Logo Rework, New Deterministic Brand Logo, and Startup Brand &amp; Name Pack — is personally reviewed by the owner before delivery.
+          </p>
+          <div id="paidTiersGrid" class="form-grid"></div>
+        </div>
       </div>
     </section>
 
@@ -1202,9 +1285,9 @@
         </details>
 
         <details class="faq-item" style="background:#FFFFFF; border:1px solid var(--border); border-radius:12px; padding:16px 20px;">
-          <summary style="font-weight:700; color:#8B6914; cursor:pointer;">Can a numerology-based logo guarantee business success or trademark approval?</summary>
+          <summary style="font-weight:700; color:#8B6914; cursor:pointer;">Can a numerology-based logo promise business success or trademark approval?</summary>
           <p style="margin-top:10px; font-size:0.92rem; color:#523E28; line-height:1.7;">
-            No. Numerology and planetary associations provide symbolic and aesthetic design options. They do not guarantee commercial success, market profitability, legal trademark availability, or intellectual property protection.
+            No. Numerology and planetary associations provide symbolic and aesthetic design indications. They do not promise commercial success, market profitability, legal trademark availability, or intellectual property protection.
           </p>
         </details>
 
@@ -1306,326 +1389,43 @@
     </div>
   </footer>
 
-  <script>
-    // State
-    let pendingDownloadAction = null;
-
-    function openLogoLockModal(actionName) {
-      pendingDownloadAction = actionName;
-      document.getElementById('logoLockModal').style.display = 'flex';
-    }
-
-    function closeLogoLockModal() {
-      document.getElementById('logoLockModal').style.display = 'none';
-      pendingDownloadAction = null;
-    }
-
-    let selectedSymbol = "ascending_peak";
-    let selectedPrimaryColor = "#C9A227";
-    let selectedAccentColor = "#16835B";
-    let selectedBgColor = "#FFFDF7";
-    let currentVariant = "horizontal_lockup";
-    let currentSvgMarkup = "";
-    let debounceTimer = null;
-
-    function switchStudioMode(mode) {
-      if (mode === 'create') {
-        document.getElementById('tabCreateBtn').classList.add('active');
-        document.getElementById('tabAuditBtn').classList.remove('active');
-        document.getElementById('panelCreate').style.display = 'block';
-        document.getElementById('panelAudit').style.display = 'none';
-      } else {
-        document.getElementById('tabAuditBtn').classList.add('active');
-        document.getElementById('tabCreateBtn').classList.remove('active');
-        document.getElementById('panelAudit').style.display = 'block';
-        document.getElementById('panelCreate').style.display = 'none';
-      }
-    }
-
-    function selectSymbol(sym) {
-      selectedSymbol = sym;
-      document.querySelectorAll('#symbolGallery .symbol-card-item').forEach(el => {
-        el.classList.toggle('selected', el.getAttribute('data-symbol') === sym);
-      });
-      refreshLiveCanvas();
-    }
-
-    function selectPalette(el, primary, accent, bg) {
-      selectedPrimaryColor = primary;
-      selectedAccentColor = accent;
-      selectedBgColor = bg;
-      document.querySelectorAll('#paletteGallery .palette-item').forEach(item => item.classList.remove('selected'));
-      el.classList.add('selected');
-      refreshLiveCanvas();
-    }
-
-    function switchVariant(variant) {
-      currentVariant = variant;
-      document.getElementById('btnVarHoriz').classList.toggle('active', variant === 'horizontal_lockup');
-      document.getElementById('btnVarStacked').classList.toggle('active', variant === 'stacked_lockup');
-      document.getElementById('btnVarIcon').classList.toggle('active', variant === 'icon');
-      refreshLiveCanvas();
-    }
-
-    
-    function onBrandBriefChange() {
-      updateNumerologyBrief();
-      onBrandDetailsChange();
-    }
-
-    function calculateChaldeanWordmark(name) {
-      const map = {
-        'A':1,'I':1,'J':1,'Q':1,'Y':1,
-        'B':2,'K':2,'R':2,
-        'C':3,'G':3,'L':3,'S':3,
-        'D':4,'M':4,'T':4,
-        'E':5,'H':5,'N':5,'X':5,
-        'U':6,'V':6,'W':6,
-        'O':7,'Z':7,
-        'F':8,'P':8
-      };
-      const clean = (name || '').toUpperCase().replace(/[^A-Z]/g, '');
-      let compound = 0;
-      for (let i = 0; i < clean.length; i++) {
-        compound += map[clean[i]] || 0;
-      }
-      let root = compound;
-      while (root > 9) {
-        root = String(root).split('').reduce((acc, d) => acc + parseInt(d, 10), 0);
-      }
-      const planets = {
-        1: 'Sun (Surya)',
-        2: 'Moon (Chandra)',
-        3: 'Jupiter (Guru)',
-        4: 'Rahu (North Node)',
-        5: 'Mercury (Budh)',
-        6: 'Venus (Shukra)',
-        7: 'Ketu (South Node)',
-        8: 'Saturn (Shani)',
-        9: 'Mars (Mangal)'
-      };
-      if (!clean) {
-        return { compound: null, root: null, planet: null };
-      }
-      return { compound: compound, root: root, planet: planets[root] || null };
-    }
-
-    function setBoxNotice(elId, msg, tone) {
-      const box = document.getElementById(elId);
-      if (!box) return;
-      if (!msg) {
-        box.style.display = 'none';
-        box.textContent = '';
-        return;
-      }
-      box.style.display = 'block';
-      box.style.background = tone === 'error' ? '#FDF5F3' : tone === 'success' ? '#EFF9F5' : '#FFFDF7';
-      box.style.color = tone === 'error' ? '#9B2C2C' : tone === 'success' ? '#16835B' : '#523E28';
-      box.style.border = tone === 'error'
-        ? '1px solid rgba(180,65,45,0.38)'
-        : tone === 'success'
-        ? '1px solid rgba(22,131,91,0.38)'
-        : '1px solid rgba(201,162,39,0.38)';
-      box.textContent = msg;
-    }
-
-    const ROOT_RECOMMENDATION_MAP = {
-      1: 'Indication (Root 1 · Sun / Surya): Solar Suncrest · Royal Sunburst or Jupiter Gold & Pearl',
-      2: 'Root 2 (Moon / Chandra): Symbol rule not configured · Jupiter Gold & Pearl palette',
-      3: 'Indication (Root 3 · Jupiter / Guru): Golden Triangle · Jupiter Gold & Pearl',
-      4: 'Root 4 (Rahu / North Node): Symbol rule not configured · Deep Sapphire palette',
-      5: 'Indication (Root 5 · Mercury / Budh): Mercury Caduceus · Mercury Emerald',
-      6: 'Indication (Root 6 · Venus / Shukra): Sacred Lotus · Jupiter Gold & Pearl',
-      7: 'Root 7 (Ketu / South Node): Symbol rule not configured · Sandalwood Luxe palette',
-      8: 'Indication (Root 8 · Saturn / Shani): Ascending Peak · Deep Sapphire or Sandalwood Luxe',
-      9: 'Indication (Root 9 · Mars / Mangal): Dynamic Shield · Royal Sunburst'
-    };
-
-    function updateNumerologyBrief() {
-      const name = document.getElementById('businessName').value.trim();
-      const briefEl = document.getElementById('briefNumCalc');
-      const tagEl = document.getElementById('briefRecommendationTag');
-      if (!name) {
-        if (briefEl) briefEl.innerText = 'Enter a business name above to calculate its Chaldean compound and single-digit root (1–9).';
-        if (tagEl) tagEl.innerText = 'Awaiting business name input';
-        return;
-      }
-      const calc = calculateChaldeanWordmark(name);
-      if (!calc.root) {
-        if (briefEl) briefEl.innerText = 'Business name must contain at least one Latin letter (A–Z) for Chaldean calculation.';
-        if (tagEl) tagEl.innerText = 'Calculation not available';
-        return;
-      }
-      if (briefEl) {
-        briefEl.innerText = `Chaldean Wordmark: "${name}" → Compound ${calc.compound} → Root ${calc.root} (${calc.planet})`;
-      }
-      if (tagEl) {
-        tagEl.innerText = ROOT_RECOMMENDATION_MAP[calc.root] || 'Symbol rule not configured';
-      }
-    }
-
-    function onBrandDetailsChange() {
-      updateNumerologyBrief();
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        if (document.getElementById('businessName').value.trim()) {
-          refreshLiveCanvas();
-        }
-      }, 400);
-    }
-
-    async function refreshLiveCanvas() {
-      const name = document.getElementById('businessName').value.trim();
-      const tagline = document.getElementById('brandTagline').value.trim();
-      const auditSec = document.getElementById('qualityAuditSection');
-
-      if (!name) {
-        if (auditSec) auditSec.style.display = 'none';
-        setBoxNotice('studioInlineNotice', 'Please enter your exact business name before updating the studio canvas.', 'error');
-        return;
-      }
-
-      setBoxNotice('studioInlineNotice', 'Calculating wordmark numbers and preparing vector preview...', 'working');
-
-      const payload = {
-        business_name: name,
-        symbol_concept: selectedSymbol,
-        primary_color: selectedPrimaryColor,
-        accent_color: selectedAccentColor,
-        bg_color: selectedBgColor,
-        variant: currentVariant,
-        tagline: tagline
-      };
-
-      try {
-        const res = await fetch('/api/v1/logo/preview', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        if (!res.ok) {
-          throw new Error('Logo preview service is currently coming soon.');
-        }
-
-        const data = await res.json();
-        currentSvgMarkup = data.svg || '';
-        document.getElementById('svgStage').innerHTML = currentSvgMarkup;
-
-        const val = data.validation || {};
-        const num = data.name_numerology || {};
-        const hasContrast = typeof val.contrast_ratio === 'number';
-        const contrastLabel = hasContrast
-          ? `${val.contrast_ratio}:1 (${val.contrast_ratio >= 7.0 ? 'WCAG AAA 7:1+' : (val.contrast_ratio >= 4.5 ? 'WCAG AA 4.5:1+' : 'Below 4.5:1 threshold')})`
-          : 'Not configured';
-        const compoundLabel = typeof num.compound_sum === 'number' ? String(num.compound_sum) : 'Not configured';
-        const rootLabel = typeof num.single_root === 'number' ? String(num.single_root) : 'Not configured';
-
-        document.getElementById('gateExactText').innerHTML = `<strong>Exact Wordmark:</strong> ${val.exact_text_match === true ? 'Character match confirmed' : (val.exact_text_match === false ? 'Mismatch detected' : 'Not configured')}`;
-        document.getElementById('gateContrast').innerHTML = `<strong>WCAG 2.1 Contrast:</strong> ${contrastLabel}`;
-        document.getElementById('gateVector').innerHTML = `<strong>Vector Structure:</strong> ${val.clean_svg === true ? 'Clean SVG paths' : 'Pending inspection'}`;
-        document.getElementById('gateChaldean').innerHTML = `<strong>Chaldean Name Number:</strong> Compound ${compoundLabel} / Root ${rootLabel}`;
-        if (auditSec) auditSec.style.display = 'block';
-        setBoxNotice('studioInlineNotice', '', 'working');
-      } catch (err) {
-        if (auditSec) auditSec.style.display = 'none';
-        setBoxNotice('studioInlineNotice', err.message || 'Logo preview service is not configured right now.', 'error');
-      }
-    }
-
-    function downloadCurrentSvg() {
-      openLogoLockModal('svg');
-    }
-
-    function downloadPngPreview() {
-      openLogoLockModal('png');
-    }
-
-    function downloadDesignSpecJson() {
-      openLogoLockModal('json');
-    }
-
-    async function handleAuditSubmit() {
-      const svgInput = document.getElementById('auditSvgInput').value.trim();
-      const box = document.getElementById('auditResultBox');
-      if (box) box.style.display = 'none';
-
-      if (!svgInput) {
-        setBoxNotice('auditInlineNotice', 'Please paste SVG markup to inspect.', 'error');
-        return;
-      }
-
-      if (/<script|javascript:|onload|onerror/i.test(svgInput)) {
-        setBoxNotice('auditInlineNotice', 'Unsafe script or event attributes were detected in the pasted SVG markup. Please remove executable tags before submitting.', 'error');
-        return;
-      }
-
-      setBoxNotice('auditInlineNotice', 'Analysing SVG geometry, visible text, and contrast ratios...', 'working');
-
-      try {
-        const res = await fetch('/api/v1/logo/analyze-existing', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ svg_content: svgInput })
-        });
-        if (!res.ok) {
-          throw new Error('Logo inspection service is currently coming soon.');
-        }
-        const data = await res.json();
-        const m = data.measurable_design_checks || {};
-        const contrastDisplay = typeof m.contrast_ratio === 'number' ? `${m.contrast_ratio}:1` : 'Not configured';
-        const paletteDisplay = Array.isArray(m.palette_sampled) && m.palette_sampled.length > 0
-          ? m.palette_sampled.join(', ')
-          : 'No colours detected';
-
-        box.innerHTML = `
-          <div style="background:#FFFDF7; border:1px solid rgba(201,162,39,0.3); border-radius:14px; padding:20px;">
-            <div style="font-family:'Cormorant Garamond', serif; font-size:1.3rem; font-weight:700; color:#523E28; margin-bottom:10px;">
-              Existing Logo Inspection Summary
-            </div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; font-size:0.86rem; color:#523E28;">
-              <div><strong>Vector Path Check:</strong> ${m.is_vector === true ? 'Pure geometric vector' : (m.is_vector === false ? 'Raster elements embedded' : 'Not configured')}</div>
-              <div><strong>Detected Wordmark:</strong> ${m.extracted_text || 'No text detected'}</div>
-              <div><strong>Measured Contrast Ratio:</strong> ${contrastDisplay}</div>
-              <div><strong>Sampled Palette:</strong> ${paletteDisplay}</div>
-            </div>
-            <div style="margin-top:12px; font-size:0.78rem; color:var(--text-muted); border-top:1px dashed rgba(201,162,39,0.25); padding-top:8px;">
-              ✦ Note: Contrast and vector checks reflect measurable properties of the submitted SVG markup.
-            </div>
-          </div>
-        `;
-        box.style.display = 'block';
-        setBoxNotice('auditInlineNotice', '', 'working');
-      } catch (err) {
-        setBoxNotice('auditInlineNotice', err.message || 'Inspection could not be completed right now.', 'error');
-      }
-    }
-  </script>
-
-  <!-- Logo Kit Coming Soon Modal Container -->
-  <div class="lock-modal-backdrop nv-unbacked-hidden" id="logoLockModal" style="display: none;">
+  <!-- Owner-Reviewed Package Inquiry Modal -->
+  <div class="lock-modal-backdrop" id="logoLockModal" style="display: none;">
     <div class="lock-modal-box">
-      <button type="button" class="modal-close-btn" onclick="closeLogoLockModal()">✕</button>
+      <button type="button" class="modal-close-btn" onclick="window.nvCloseTierInquiryModal()">✕</button>
 
       <div style="font-family:'Cinzel', serif; font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-dark, #8B6914); font-weight:700; margin-bottom:6px;">
         NUMEROS VISION · ANVEIL EVERY CHARM
       </div>
 
-      <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.65rem; font-weight:700; color:#523E28; margin:0 0 10px; line-height:1.25;">
-        Logo Intelligence Exports Are Coming Soon
+      <h3 id="logoModalHeading" style="font-family:'Cormorant Garamond', serif; font-size:1.6rem; font-weight:700; color:#523E28; margin:0 0 10px; line-height:1.25;">
+        Owner-Reviewed Logo Package
       </h3>
 
-      <p style="font-size:0.88rem; color:var(--text-muted, #7A654D); line-height:1.65; margin:0 auto 18px;">
-        Production SVG, PNG, and brand specification exports will open once the five-layer Logo Intelligence engine completes preview review. Join the update list on this page to be notified when it opens.
+      <p style="font-size:0.88rem; color:var(--text-muted, #7A654D); line-height:1.65; margin:0 auto 16px;">
+        Every paid deliverable (Deep Logo Audit, Existing Logo Rework, New Deterministic Brand Logo, and Startup Brand &amp; Name Pack) is reviewed personally by the owner before final delivery. Leave your email below to receive onboarding instructions.
       </p>
 
-      <div style="font-size:0.72rem; color:var(--text-muted, #7A654D);">
-        Geometric Vector Review · Traditional Numerology Indications · Confidential &amp; Private
-      </div>
+      <form data-nv-waitlist-form data-source-page="logo_tier_inquiry" style="display:flex; flex-direction:column; gap:12px; text-align:left;">
+        <div>
+          <label for="nvTierModalEmail">Email Address *</label>
+          <input type="email" id="nvTierModalEmail" placeholder="you@example.com" required />
+        </div>
+        <label style="display:flex; align-items:flex-start; gap:10px; font-size:0.78rem; text-transform:none; letter-spacing:normal; font-weight:500; color:#523E28; line-height:1.5; cursor:pointer;">
+          <input type="checkbox" style="margin-top:3px; accent-color:#8B6914;" />
+          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to follow up on my requested Logo Intelligence package under the DPDP Act 2023.</span>
+        </label>
+        <button type="submit" class="btn-calc">
+          <span>Request Owner Review &amp; Onboarding ✦</span>
+        </button>
+        <div data-nv-waitlist-status role="status" aria-live="polite" style="display:none; padding:10px 14px; border-radius:10px; border:1px solid rgba(201,162,39,0.35); background:#FFFDF7; font-size:0.84rem; font-weight:600; color:#523E28;"></div>
+      </form>
     </div>
   </div>
 
+  <script src="/static/js/nv_tool_runtime.js?v=1.0.0"></script>
   <script src="/static/js/nv_tool_coming_soon.js?v=1.0.0"></script>
+  <script src="/static/js/nv_logo_studio_v1.js?v=1.0.0"></script>
 
   <script src="/static/js/nav.js?v=5.5.0"></script>
   <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
