@@ -195,7 +195,6 @@
     }
     .aeo-box h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #8B6914; margin-bottom: 8px; }
     .aeo-box p { font-size: 0.94rem; color: var(--text-muted); line-height: 1.7; }
-    .nv-unbacked-hidden { display: none !important; }
     .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
     .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
     .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
@@ -370,31 +369,8 @@
     </p>
   </div>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="Career & Profession Numerology Coming Soon">
-      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
-      <h2 class="nv-cs-heading">Career & Profession Numerology Is Coming Soon</h2>
-      <p class="nv-cs-desc">We are connecting the deterministic 81 Driver–Conductor Career Indication engine (traditional vocational themes for combinations 1–1 through 9–9). Leave your email below to be notified when it opens.</p>
-      <form data-nv-waitlist-form data-source-page="tool_profession_calculator" class="nv-cs-form">
-        <div>
-          <label for="nvWaitlistEmail_profession_calculator" class="nv-cs-label">Email Address *</label>
-          <input type="email" id="nvWaitlistEmail_profession_calculator" placeholder="you@example.com" required class="nv-cs-input" />
-        </div>
-        <label class="nv-cs-consent">
-          <input type="checkbox" id="nvWaitlistConsent_profession_calculator" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="nv-cs-btn">
-          <span>Notify Me When Available ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
-      </form>
-      <div class="nv-cs-links">
-        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
-      </div>
-    </section>
   <!-- Form -->
-  <div class="calc-card nv-unbacked-hidden">
+  <div class="calc-card">
     <form id="prof-form" onsubmit="calculateProfessions(event)">
       <div class="input-row">
         <div class="input-group">
@@ -413,11 +389,11 @@
   </div>
 
   <!-- Results -->
-  <div id="result-view">
+  <div id="result-view" style="display:none;">
     <div class="res-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
         <h2 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; color:#8B6914;" id="res-synthesis-mode">Career Archetype</h2>
-        <span class="badge-score" id="res-relationship-tag">Harmonious</span>
+        <span class="badge-score" id="res-relationship-tag">-</span>
       </div>
       <p id="res-disclosure" style="color:var(--text-muted); line-height:1.6; margin-bottom:24px;"></p>
 
@@ -426,19 +402,27 @@
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:14px; margin-bottom:24px;">
         <div style="background:var(--bg-mid); padding:16px; border-radius:12px; border:1px solid var(--border);">
           <div style="font-size:0.75rem; text-transform:uppercase; color:var(--gold-dark); font-weight:700;">Independent Business</div>
-          <div style="font-size:1.8rem; font-weight:700; color:#8B6914;" id="stat-biz-score">85%</div>
-          <div style="font-size:0.78rem; color:#16835B;" id="stat-biz-status">Highly Recommended</div>
+          <div style="font-size:1.8rem; font-weight:700; color:#8B6914;" id="stat-biz-score">-</div>
+          <div style="font-size:0.78rem; color:#16835B;" id="stat-biz-status">-</div>
         </div>
         <div style="background:var(--bg-mid); padding:16px; border-radius:12px; border:1px solid var(--border);">
           <div style="font-size:0.75rem; text-transform:uppercase; color:var(--gold-dark); font-weight:700;">Corporate Employment</div>
-          <div style="font-size:1.8rem; font-weight:700; color:#8B6914;" id="stat-corp-score">75%</div>
-          <div style="font-size:0.78rem; color:#16835B;" id="stat-corp-status">Viable</div>
+          <div style="font-size:1.8rem; font-weight:700; color:#8B6914;" id="stat-corp-score">-</div>
+          <div style="font-size:0.78rem; color:#16835B;" id="stat-corp-status">-</div>
         </div>
         <div style="background:var(--bg-mid); padding:16px; border-radius:12px; border:1px solid var(--border);">
           <div style="font-size:0.75rem; text-transform:uppercase; color:var(--gold-dark); font-weight:700;">Partnerships</div>
-          <div style="font-size:1.8rem; font-weight:700; color:#8B6914;" id="stat-part-score">60%</div>
-          <div style="font-size:0.78rem; color:#E8751A;" id="stat-part-status">Caution Advised</div>
+          <div style="font-size:1.8rem; font-weight:700; color:#8B6914;" id="stat-part-score">-</div>
+          <div style="font-size:0.78rem; color:#E8751A;" id="stat-part-status">-</div>
         </div>
+      </div>
+
+      <!-- Recommended Vocational Sectors -->
+      <div id="prof-sectors-box" style="margin-bottom:24px; background:var(--bg-mid); padding:18px; border-radius:12px; border:1px solid var(--border);">
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.35rem; color:#8B6914; margin:0 0 10px;">Traditional Vocational Sectors</h3>
+        <div style="font-size:0.88rem; color:#523E28; margin-bottom:10px;"><strong>Primary Domains:</strong> <span id="prof-primary-list">-</span></div>
+        <div style="font-size:0.88rem; color:#523E28; margin-bottom:10px;"><strong>Secondary Pivot Domains:</strong> <span id="prof-secondary-list">-</span></div>
+        <div style="font-size:0.85rem; color:#7A654D;" id="prof-work-style"></div>
       </div>
 
       <!-- Planetary Alignment & Heavy Load Diagnostic -->
@@ -446,12 +430,12 @@
       <div id="prof-diagnostics-box" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin-bottom:24px;">
         <div style="background:var(--bg-mid); padding:14px 16px; border-radius:12px; border:1px solid var(--border);">
           <div style="font-size:0.75rem; text-transform:uppercase; color:var(--gold-dark); font-weight:700;">Driver-Conductor Harmony</div>
-          <div style="font-size:1.1rem; font-weight:700; color:#8B6914; margin:4px 0;" id="stat-harmony-status">Aligned</div>
+          <div style="font-size:1.1rem; font-weight:700; color:#8B6914; margin:4px 0;" id="stat-harmony-status">-</div>
           <div style="font-size:0.78rem; color:var(--text-faint);" id="stat-harmony-desc">Calculation of ruler frequencies</div>
         </div>
         <div style="background:var(--bg-mid); padding:14px 16px; border-radius:12px; border:1px solid var(--border);">
           <div style="font-size:0.75rem; text-transform:uppercase; color:var(--gold-dark); font-weight:700;">Planetary Karma Indicator</div>
-          <div style="font-size:1.1rem; font-weight:700; color:#8B6914; margin:4px 0;" id="stat-karma-load">Saturn / Mercury Vector</div>
+          <div style="font-size:1.1rem; font-weight:700; color:#8B6914; margin:4px 0;" id="stat-karma-load">-</div>
           <div style="font-size:0.78rem; color:var(--text-faint);">Vibrational workload diagnostic</div>
         </div>
       </div>
@@ -620,8 +604,7 @@
 
       const doFetchAndRender = async function() {
         const btn = document.getElementById('btn-submit');
-        btn.innerText = 'Analyzing...';
-        btn.disabled = true;
+        const stopStages = window.nvStartWorkingStages ? window.nvStartWorkingStages(document.getElementById('prof-form'), btn) : null;
 
         try {
           const resp = await fetch('/api/v2/numerology/professions/recommend', {
@@ -630,30 +613,41 @@
             body: JSON.stringify({ driver: d, conductor: c })
           });
           const data = await resp.json();
-          renderProfessions(data.recommendations);
+          if (!resp.ok) {
+            throw new Error(data.error || ('Request failed: ' + resp.status));
+          }
+          renderProfessions(data.recommendations, data.provenance_lines);
         } catch (err) {
-          if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('prof-form'), 'Unable to load career indications right now.', 'error');
+          if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('prof-form'), err.message || 'Unable to load career indications right now.', 'error');
           console.error(err);
         } finally {
-          btn.innerHTML = '<span>✦</span> Analyze Career Blueprint';
-          btn.disabled = false;
+          if (stopStages) stopStages('<span>✦</span> Analyze Career Blueprint');
+          else {
+            btn.innerHTML = '<span>✦</span> Analyze Career Blueprint';
+            btn.disabled = false;
+          }
         }
       };
 
       if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
         window.nvProfileSync.requireConsentToReveal(calcData, doFetchAndRender, 'result-view');
       } else {
-        const qp = new URLSearchParams(calcData).toString();
-        window.location.href = '/signup/?source=calculator_gate&' + qp;
-      
+        doFetchAndRender();
       }
     }
 
-    function renderProfessions(rec) {
+    function renderProfessions(rec, provenanceLines) {
       document.getElementById('result-view').style.display = 'block';
-      document.getElementById('res-synthesis-mode').innerText = rec.synthesis_mode;
-      document.getElementById('res-relationship-tag').innerText = rec.relationship_dynamic;
-      document.getElementById('res-disclosure').innerText = rec.synthesis_disclosure;
+      document.getElementById('res-synthesis-mode').innerText = rec.synthesis_mode || 'Career Archetype';
+      document.getElementById('res-relationship-tag').innerText = rec.relationship_dynamic || '-';
+      document.getElementById('res-disclosure').innerText = rec.synthesis_disclosure || '';
+
+      // Sectors
+      const prim = Array.isArray(rec.primary_recommended_professions) ? rec.primary_recommended_professions : [];
+      const sec = Array.isArray(rec.secondary_pivot_professions) ? rec.secondary_pivot_professions : [];
+      document.getElementById('prof-primary-list').innerText = prim.length ? prim.join(' · ') : 'Not configured';
+      document.getElementById('prof-secondary-list').innerText = sec.length ? sec.join(' · ') : 'Not configured';
+      document.getElementById('prof-work-style').innerText = rec.optimal_work_style || '';
 
       // Matrix
       const sm = rec.suitability_matrix;
@@ -678,6 +672,10 @@
       const karmaEl = document.getElementById('stat-karma-load');
       if (karmaEl) {
         karmaEl.innerText = (sm.independent_business_and_founding.score_pct > 75) ? 'High Leadership Vector' : 'Structured Governance Vector';
+      }
+
+      if (window.nvRenderProvenance) {
+        window.nvRenderProvenance(document.querySelector('#result-view .res-card'), provenanceLines);
       }
 
       document.getElementById('result-view').scrollIntoView({ behavior: 'smooth' });
@@ -710,6 +708,6 @@
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
   <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
-  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
+  <script src="/static/js/nv_tool_runtime.js?v=5.5.0"></script>
 </body>
 </html>

@@ -117,7 +117,7 @@
   <link rel="stylesheet" href="/static/css/roadmap_components.css?v=5.5.0" />
 
   <style>
-    /* ── Master Defensive Submenu Immunity (guarantees no bullet leakage) ── */
+    /* ── Master Defensive Submenu Immunity (prevents bullet leakage) ── */
     .nv-submenu {
       display: none !important;
       list-style: none !important;
@@ -816,7 +816,7 @@
       border-color: var(--gold, #C9A227);
     }
 
-    .lock-legal-guarantee {
+    .lock-legal-notice {
       font-size: 0.72rem;
       color: var(--text-muted, #7A654D);
       margin-top: 4px;
@@ -845,7 +845,6 @@
       z-index: 10;
     }
 
-    .nv-unbacked-hidden { display: none !important; }
     .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
     .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
     .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
@@ -995,32 +994,8 @@
       </div>
     </div>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="Business & Venture Alignment Coming Soon">
-      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
-      <h2 class="nv-cs-heading">Business & Venture Alignment Is Coming Soon</h2>
-      <p class="nv-cs-desc">We are connecting the deterministic Business & Venture Alignment engine (commercial readiness paired separately with Chaldean trading-name and founder birth-number compatibility). Leave your email below and we will write to you as soon as this service opens.</p>
-      <form data-nv-waitlist-form data-source-page="tool_business_alignment" class="nv-cs-form">
-        <div>
-          <label for="nvWaitlistEmail_business_alignment" class="nv-cs-label">Email Address *</label>
-          <input type="email" id="nvWaitlistEmail_business_alignment" placeholder="you@example.com" required class="nv-cs-input" />
-        </div>
-        <label class="nv-cs-consent">
-          <input type="checkbox" id="nvWaitlistConsent_business_alignment" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="nv-cs-btn">
-          <span>Notify Me When Available ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
-      </form>
-      <div class="nv-cs-links">
-        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
-      </div>
-    </section>
-
     <!-- Luxury Tab Switcher -->
-    <div class="tool-tab-wrap nv-unbacked-hidden">
+    <div class="tool-tab-wrap">
       <div class="tool-tab-pill">
         <button class="tool-tab-btn active" id="tabStartupBtn" onclick="switchTab('startup')">
           New Venture Assessment
@@ -1032,7 +1007,7 @@
     </div>
 
     <!-- Panel A: Startup Direction -->
-    <section class="form-card nv-unbacked-hidden" id="panelStartup">
+    <section class="form-card" id="panelStartup">
       <span class="step-badge">Module 1.A · Venture Direction &amp; Name Audit</span>
       <h2 class="step-title">Founder Profile &amp; Candidate Venture Audit</h2>
 
@@ -1044,10 +1019,8 @@
 
         <div class="field-group">
           <label for="founderDob">Founder Date of Birth (For Synergy Matrix)</label>
-          <input type="date" id="founderDob"  onchange="onFounderDobChange()" />
-          <div id="founderDobPreview" class="live-badge-row">
-            ✦ Founder Matrix: Driver 6 (Venus) · Conductor 3 (Jupiter)
-          </div>
+          <input type="date" id="founderDob" onchange="onFounderDobChange()" />
+          <div id="founderDobPreview" class="live-badge-row" style="display:none;"></div>
         </div>
 
         <div class="field-group">
@@ -1102,7 +1075,7 @@
     </section>
 
     <!-- Panel B: Existing Business Alignment -->
-    <section class="form-card nv-unbacked-hidden" id="panelExisting" style="display: none;">
+    <section class="form-card" id="panelExisting" style="display: none;">
       <span class="step-badge">Module 1.B · Operating Business Diagnostic</span>
       <h2 class="step-title">Existing Business Diagnostic &amp; Remedies</h2>
 
@@ -1191,7 +1164,7 @@
               3. Understanding Your Results &amp; Scoring
             </h3>
             <p style="font-size:0.9rem; color:#523E28; line-height:1.7; margin:0;">
-              Commercial findings and numerology interpretations are reported in separate sections. The harmony score reflects alignment within the chosen classical numerological framework, not a statistically validated probability of business revenue or success. Use empirical business evidence, professional counsel, and personal judgment for operational decisions.
+              Commercial findings and numerology interpretations are reported in separate sections. The harmony score reflects alignment within the chosen classical numerological framework, not a statistically established probability of business revenue or success. Use empirical business evidence, professional counsel, and personal judgment for operational decisions.
             </p>
           </div>
         </div>
@@ -1317,43 +1290,17 @@
   </footer>
 
   <script>
-    const PLANET_NAMES = {
-      1: 'Sun (Surya)',
-      2: 'Moon (Chandra)',
-      3: 'Jupiter (Guru)',
-      4: 'Rahu (North Node)',
-      5: 'Mercury (Budh)',
-      6: 'Venus (Shukra)',
-      7: 'Ketu (South Node)',
-      8: 'Saturn (Shani)',
-      9: 'Mars (Mangal)'
-    };
-
-    function reduceToSingle(val) {
-      let n = parseInt(val, 10);
-      while (n > 9) {
-        n = String(n).split('').reduce((acc, d) => acc + parseInt(d, 10), 0);
-      }
-      return n;
-    }
-
     function onFounderDobChange() {
       const dobVal = document.getElementById('founderDob').value;
       const prev = document.getElementById('founderDobPreview');
+      if (!prev) return;
       if (!dobVal) {
-        if (prev) prev.style.display = 'none';
+        prev.style.display = 'none';
+        prev.textContent = '';
         return;
       }
-      const parts = dobVal.split('-');
-      if (parts.length === 3) {
-        const y = parseInt(parts[0], 10);
-        const m = parseInt(parts[1], 10);
-        const d = parseInt(parts[2], 10);
-        const driver = reduceToSingle(d);
-        const conductor = reduceToSingle(`${d}${m}${y}`.split('').reduce((acc, c) => acc + parseInt(c, 10), 0));
-        prev.innerHTML = `✦ Founder Matrix: Driver ${driver} (${PLANET_NAMES[driver]}) · Conductor ${conductor} (${PLANET_NAMES[conductor]})`;
-        prev.style.display = 'inline-flex';
-      }
+      prev.textContent = '✦ Birth date recorded — Mulank (Birth Day number) & Bhagyank (Life Path number) calculated by engine upon submission';
+      prev.style.display = 'inline-flex';
     }
 
     
@@ -1400,15 +1347,16 @@
     }
 
     function renderAcousticTable(words) {
-      if (!words || words.length === 0) return '';
-      return words.map(w => `
+      const list = Array.isArray(words) ? words : (words && Array.isArray(words.words) ? words.words : []);
+      if (!list || list.length === 0) return '';
+      return list.map(w => `
         <div class="word-block">
           <div class="word-header-row">
             <span class="word-title">${w.word}</span>
             <span class="word-subtotal-badge">Subtotal: ${w.compound} → Root ${w.root} (${w.root_planet})</span>
           </div>
           <div class="letter-chips-row">
-            ${w.letters.map(l => `
+            ${(w.letters || []).map(l => `
               <div class="letter-chip" title="${l.char}: Chaldean ${l.val} · ${l.planet}">
                 <span class="chip-char">${l.char}</span>
                 <span class="chip-val">${l.val}</span>
@@ -1422,13 +1370,12 @@
     async function handleStartupSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('btnStartup');
-      btn.disabled = true;
-      btn.innerText = "Assessing Business Factors & Numerology...";
+      const stopStages = window.nvStartWorkingStages ? window.nvStartWorkingStages(document.getElementById('panelStartup'), btn) : null;
 
       const payload = {
         founder_name: document.getElementById('founderName').value.trim(),
         founder_dob: document.getElementById('founderDob').value || null,
-        skills: document.getElementById('founderSkills').value.split(',').map(s => s.trim()),
+        skills: document.getElementById('founderSkills').value.split(',').map(s => s.trim()).filter(Boolean),
         experience_years: 6,
         capital_band: document.getElementById('capitalBand').value,
         location: "Global",
@@ -1449,6 +1396,9 @@
         });
 
         const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || ('Request failed: ' + res.status));
+        }
         const resBox = document.getElementById('startupResult');
 
         const comm = data.commercial_viability;
@@ -1556,7 +1506,7 @@
                       </div>
                     `).join('')}
                   </div>
-                  <p style="font-size:0.78rem; color:var(--text-body, #7A654D); margin-top:6px; line-height:1.4;">Calibrated for WCAG 2.1 AAA accessibility.</p>
+                  <p style="font-size:0.78rem; color:var(--text-body, #7A654D); margin-top:6px; line-height:1.4;">Calibrated for WCAG 2.1 contrast legibility.</p>
                 </div>
 
                 <div class="vastu-card">
@@ -1585,8 +1535,8 @@
         const lockHeadline = mg.lock_headline || "🔒 Unveil Your Complete Business Charm & Operational Blueprint";
         const lockTaglineAction = mg.charm_tagline_action || "ANVEIL Your Business Charm";
         const entryPrice = mg.entry_price_inr || 510;
-        const anchorPrice = mg.anchor_price_inr || 999;
-        const discountBadge = mg.discount_badge || "SAVE 49% · INSTANT ACCESS";
+        const anchorPrice = mg.anchor_price_inr || 1020;
+        const discountBadge = mg.discount_badge || "SAVE 50% · INSTANT ACCESS";
         const checkoutUrl = mg.checkout_url || `/pricing/`;
 
         resBox.innerHTML = `
@@ -1641,7 +1591,7 @@
               </a>
             </div>
 
-            <div class="lock-legal-guarantee">
+            <div class="lock-legal-notice">
               Traditional Classical Numerology · Pure Mathematical Precision · 100% Confidential & Private
             </div>
           </div>
@@ -1703,32 +1653,37 @@
                 ✦ Recommended Commercial Next Steps
               </div>
               <ul style="font-size:0.86rem; color:var(--text-body, #7A654D); margin:10px 0 0; padding-left:20px; line-height:1.65;">
-                ${data.next_steps.map(s => `<li>${s}</li>`).join('')}
+                ${(data.next_steps || []).map(s => `<li>${s}</li>`).join('')}
               </ul>
             </div>
           </div>
 
-          <!-- Statutory Non-Guarantee Notice -->
+          <!-- Statutory Disclosure Notice -->
           <div class="notice-box">
-            ${data.mandatory_disclaimer}
+            ${data.mandatory_disclaimer || ''}
           </div>
         `;
+        if (window.nvRenderProvenance) {
+          window.nvRenderProvenance(resBox, data.provenance_lines);
+        }
         resBox.style.display = 'block';
         resBox.scrollIntoView({ behavior: 'smooth' });
 
       } catch (err) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(btn, "Evaluation failed: " + err.message, "error");
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('panelStartup'), "Evaluation failed: " + err.message, "error");
       } finally {
-        btn.disabled = false;
-        btn.innerText = "Evaluate Commercial Viability & Sacred Synergy ✦";
+        if (stopStages) stopStages('<span>Assess My Business Idea ✦</span>');
+        else {
+          btn.disabled = false;
+          btn.innerHTML = '<span>Assess My Business Idea ✦</span>';
+        }
       }
     }
 
     async function handleExistingSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('btnExisting');
-      btn.disabled = true;
-      btn.innerText = "Running Business Diagnostic...";
+      const stopStages = window.nvStartWorkingStages ? window.nvStartWorkingStages(document.getElementById('panelExisting'), btn) : null;
 
       const payload = {
         legal_name: document.getElementById('legalName').value.trim(),
@@ -1747,10 +1702,13 @@
         });
 
         const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || ('Request failed: ' + res.status));
+        }
         const resBox = document.getElementById('existingResult');
 
-        const legalBreakdown = renderAcousticTable(data.legal_breakdown);
-        const tradingBreakdown = renderAcousticTable(data.trading_breakdown);
+        const legalAcousticHtml = renderAcousticTable(data.legal_breakdown);
+        const tradeAcousticHtml = renderAcousticTable(data.trading_breakdown);
         const adj = data.brand_and_name_adjustments || {};
         const practical = data.practical_improvements_first || [];
         const traditional = data.traditional_remedies || [];
@@ -1760,8 +1718,8 @@
         const lockHeadline = mg.lock_headline || "🔒 Unveil Your Corporate Alignment & Trade Shield Blueprint";
         const lockTaglineAction = mg.charm_tagline_action || "ANVEIL Your Business Charm";
         const entryPrice = mg.entry_price_inr || 510;
-        const anchorPrice = mg.anchor_price_inr || 999;
-        const discountBadge = mg.discount_badge || "SAVE 49% · INSTANT ACCESS";
+        const anchorPrice = mg.anchor_price_inr || 1020;
+        const discountBadge = mg.discount_badge || "SAVE 50% · INSTANT ACCESS";
         const checkoutUrl = mg.checkout_url || `/pricing/`;
 
         resBox.innerHTML = `
@@ -1776,7 +1734,7 @@
               </span>
             </div>
             <p style="font-size:0.92rem; color:var(--text-muted, #7A654D); margin:8px 0 0; line-height:1.6;">
-              ${data.protection_summary}
+              ${data.protection_summary || ''}
             </p>
           </div>
 
@@ -1811,7 +1769,7 @@
               </a>
             </div>
 
-            <div class="lock-legal-guarantee">
+            <div class="lock-legal-notice">
               Traditional Classical Numerology · Pure Mathematical Precision · 100% Confidential & Private
             </div>
           </div>
@@ -1852,17 +1810,23 @@
           </div>
 
           <div class="notice-box">
-            ${data.disclaimer}
+            ${data.disclaimer || ''}
           </div>
         `;
+        if (window.nvRenderProvenance) {
+          window.nvRenderProvenance(resBox, data.provenance_lines);
+        }
         resBox.style.display = 'block';
         resBox.scrollIntoView({ behavior: 'smooth' });
 
       } catch (err) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(btn, "Diagnostic failed: " + err.message, "error");
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('panelExisting'), "Diagnostic failed: " + err.message, "error");
       } finally {
-        btn.disabled = false;
-        btn.innerText = "Run Operating Diagnostic & Remedies ✦";
+        if (stopStages) stopStages('<span>Review My Business ✦</span>');
+        else {
+          btn.disabled = false;
+          btn.innerHTML = '<span>Review My Business ✦</span>';
+        }
       }
     }
   </script>
@@ -1886,6 +1850,6 @@
       <span>Account</span>
     </a>
   </nav>
-  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
+  <script src="/static/js/nv_tool_runtime.js?v=5.5.0"></script>
 </body>
 </html>

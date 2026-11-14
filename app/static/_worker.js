@@ -3335,6 +3335,45 @@ async function callCharmBackendService(payload, env, endpointPath = '/api/charm/
   return await fetch(`${backendUrl}${endpointPath}`, fetchOpts);
 }
 
+const PHASE4_ENGINE_ROUTES = new Set([
+  '/api/v2/numerology/name/balance',
+  '/api/v2/numerology/relationships/synastry',
+  '/api/v2/numerology/assets/mobile',
+  '/api/v2/numerology/assets/vehicle',
+  '/api/v2/numerology/assets/property',
+  '/api/v2/numerology/forecast/blessing-years',
+  '/api/v2/numerology/naming/baby',
+  '/api/v2/numerology/professions/recommend',
+  '/api/v1/business/existing-diagnose',
+  '/api/v1/business/startup-evaluate'
+]);
+
+async function callEngineBackendService(rawBody, env, endpointPath, contentType = 'application/json') {
+  const engineSecret = ((env && env.ENGINE_SERVICE_SECRET) || '').trim();
+  if (!engineSecret) {
+    throw new Error('ENGINE_SERVICE_SECRET_UNSET');
+  }
+  let backendUrl = ((env && env.ENGINE_SERVICE_URL) ? env.ENGINE_SERVICE_URL : '').trim();
+  if (!backendUrl) {
+    throw new Error('ENGINE_SERVICE_URL_UNSET');
+  }
+  backendUrl = backendUrl.replace(/\/+$/, '');
+  const timeoutMs = parseInt((env && env.ENGINE_TIMEOUT_MS) || '15000', 10);
+  const fetchOpts = {
+    method: 'POST',
+    headers: {
+      'Content-Type': contentType || 'application/json',
+      'Accept': 'application/json',
+      'X-NV-Engine-Secret': engineSecret
+    },
+    body: rawBody
+  };
+  if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function' && timeoutMs > 0) {
+    fetchOpts.signal = AbortSignal.timeout(timeoutMs);
+  }
+  return await fetch(`${backendUrl}${endpointPath}`, fetchOpts);
+}
+
 function sanitizeReturnToUrl(returnTo, defaultUrl = '/dashboard/') {
   return isValidRelativeReturnTo(returnTo) ? returnTo.trim() : defaultUrl;
 }
@@ -10335,6 +10374,66 @@ ${tpl.focusBody}`;
         message: 'Outcome recorded successfully. Thank you for contributing to empirical verification.',
         outcome_id: 'out_' + Date.now()
       }), { status: 200, headers: corsHeaders });
+    }
+
+    // ── PHASE 4 DETERMINISTIC TOOL SERVICES PROXY (X-NV-Engine-Secret -> ENGINE_SERVICE_URL) ──
+    const normalizedEnginePath = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, '') : url.pathname;
+    if (PHASE4_ENGINE_ROUTES.has(normalizedEnginePath)) {
+      const corsHeaders = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': getCorsOrigin(request, env),
+        'Vary': 'Origin',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      };
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { status: 204, headers: corsHeaders });
+      }
+      if (request.method !== 'POST') {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'METHOD_NOT_ALLOWED',
+          error: 'Method not allowed. Please send a POST request with a JSON payload.'
+        }), { status: 405, headers: corsHeaders });
+      }
+      const clientIp = request.headers.get('CF-Connecting-IP') || '127.0.0.1';
+      if (!checkFormRateLimit('eng_' + clientIp, 60, 60000)) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'RATE_LIMITED',
+          error: 'Too many calculation requests in a short window. Please pause a moment and try again.'
+        }), { status: 429, headers: corsHeaders });
+      }
+      const rawBody = await request.text();
+      if (rawBody && rawBody.length > 65536) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'PAYLOAD_TOO_LARGE',
+          error: 'Request payload exceeds maximum allowed size.'
+        }), { status: 413, headers: corsHeaders });
+      }
+      try {
+        const upstreamResp = await callEngineBackendService(rawBody, env, normalizedEnginePath, 'application/json');
+        const upstreamText = await upstreamResp.text();
+        return new Response(upstreamText, {
+          status: upstreamResp.status,
+          headers: corsHeaders
+        });
+      } catch (err) {
+        const msg = err && err.message ? String(err.message) : '';
+        if (msg === 'ENGINE_SERVICE_SECRET_UNSET' || msg === 'ENGINE_SERVICE_URL_UNSET') {
+          return new Response(JSON.stringify({
+            success: false,
+            code: 'ENGINE_UNCONFIGURED',
+            error: 'Calculation engine service is not configured on this environment yet.'
+          }), { status: 503, headers: corsHeaders });
+        }
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'ENGINE_UNAVAILABLE',
+          error: 'Calculation engine is temporarily unavailable. Please try again shortly.'
+        }), { status: 502, headers: corsHeaders });
+      }
     }
 
       if (url.pathname === '/dashboard' || url.pathname === '/dashboard/' || url.pathname.startsWith('/dashboard/')) {

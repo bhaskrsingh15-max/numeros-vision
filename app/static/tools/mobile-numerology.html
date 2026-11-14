@@ -85,7 +85,7 @@
             "name": "How can I interpret an unfavorable mobile number?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Start by reviewing the calculation, the number total and the specific number-pair interpretations shown by the tool. If you follow a numerology tradition, you may explore its customary interpretations or optional guidance. You do not need to change your phone number based on a numerological result, and no number can guarantee business success or prevent difficulties."
+              "text": "Start by reviewing the calculation, the number total and the specific number-pair interpretations shown by the tool. If you follow a numerology tradition, you may explore its customary interpretations or optional guidance. You do not need to change your phone number based on a numerological result, and no number can promise business success or prevent difficulties."
             }
           }
         ]
@@ -190,7 +190,6 @@
     }
     details.faq-item summary { font-weight: 700; color: #8B6914; cursor: pointer; }
     details.faq-item p { margin-top: 10px; font-size: 0.94rem; color: #523E28; line-height: 1.7; margin-bottom: 0; }
-    .nv-unbacked-hidden { display: none !important; }
     .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
     .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
     .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
@@ -354,31 +353,8 @@
     </p>
   </div>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="Mobile Number Numerology Coming Soon">
-      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
-      <h2 class="nv-cs-heading">Mobile Number Numerology Is Coming Soon</h2>
-      <p class="nv-cs-desc">We are connecting the deterministic Mobile Number Numerology engine (digit total, single-digit root 1–9, adjacent digit pairs, and Mulank/Bhagyank compatibility). Leave your email below to be notified as soon as it goes live.</p>
-      <form data-nv-waitlist-form data-source-page="tool_mobile_numerology" class="nv-cs-form">
-        <div>
-          <label for="nvWaitlistEmail_mobile_numerology" class="nv-cs-label">Email Address *</label>
-          <input type="email" id="nvWaitlistEmail_mobile_numerology" placeholder="you@example.com" required class="nv-cs-input" />
-        </div>
-        <label class="nv-cs-consent">
-          <input type="checkbox" id="nvWaitlistConsent_mobile_numerology" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="nv-cs-btn">
-          <span>Notify Me When Available ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
-      </form>
-      <div class="nv-cs-links">
-        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
-      </div>
-    </section>
   <!-- Calculator Form -->
-  <div class="calc-card nv-unbacked-hidden">
+  <div class="calc-card">
     <form id="mobile-calc-form" onsubmit="auditMobileNumber(event)">
       <div class="input-row">
         <div class="input-group" style="flex: 2;">
@@ -510,7 +486,7 @@
       <details class="faq-item">
         <summary>How can I interpret an unfavorable mobile number?</summary>
         <p>
-          Start by reviewing the calculation, the number total and the specific number-pair interpretations shown by the tool. If you follow a numerology tradition, you may explore its customary interpretations or optional guidance. You do not need to change your phone number based on a numerological result, and no number can guarantee business success or prevent difficulties.
+          Start by reviewing the calculation, the number total and the specific number-pair interpretations shown by the tool. If you follow a numerology tradition, you may explore its customary interpretations or optional guidance. You do not need to change your phone number based on a numerological result, and no number can promise business success or prevent difficulties.
         </p>
       </details>
     </div>
@@ -622,10 +598,12 @@
       const driver = parseInt(document.getElementById('driverNum').value, 10) || null;
       const cond = parseInt(document.getElementById('condNum').value, 10) || null;
 
+      const formEl = document.getElementById('mobile-calc-form');
       if (!mobile || mobile.replace(/\D/g, '').length < 10) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('mobile-input'), 'Please enter a valid mobile number with at least 10 digits.', 'error');
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, 'Please enter a valid mobile number with at least 10 digits.', 'error');
         return;
       }
+      if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, '', 'info');
 
       // P0 Privacy: Never serialize raw phone number into public URL parameters
       const calcData = {
@@ -648,6 +626,8 @@
     }
 
     async function doScanMobile(mobile, driver, cond, btn) {
+      const formEl = document.getElementById('mobile-calc-form');
+      const stageCtrl = window.nvStartWorkingStages ? window.nvStartWorkingStages(formEl) : null;
       if (btn) {
         btn.innerText = 'Calculating...';
         btn.disabled = true;
@@ -658,18 +638,19 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mobile_number: mobile, driver: driver, conductor: cond })
         });
+        const data = await resp.json().catch(function() { return {}; });
         if (!resp.ok) {
-          throw new Error('API server returned status: ' + resp.status);
+          throw new Error(data.error || ('API server returned status: ' + resp.status));
         }
-        const data = await resp.json();
         if (!data || !data.mobile_audit) {
-          throw new Error('Unrecognized response format from audit engine');
+          throw new Error('Unrecognized response format from mobile engine.');
         }
-        renderMobileResult(data.mobile_audit);
+        renderMobileResult(data.mobile_audit, data.provenance_lines);
       } catch (err) {
-        console.error('[Numeros Vision] Mobile audit error:', err);
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('mobile-input'), 'Unable to complete calculation. Please check your mobile number digits and try again.', 'error');
+        console.error('[Numeros Vision] Mobile calculation error:', err);
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, err.message || 'Unable to complete calculation. Please check your mobile number digits and try again.', 'error');
       } finally {
+        if (stageCtrl) stageCtrl.stop();
         if (btn) {
           btn.innerHTML = '<span>✦</span> Calculate My Mobile Number';
           btn.disabled = false;
@@ -677,7 +658,7 @@
       }
     }
 
-    function renderMobileResult(audit) {
+    function renderMobileResult(audit, provenanceLines) {
       document.getElementById('result-view').style.display = 'block';
       document.getElementById('res-phone-title').innerText = `Phone: ${audit.mobile_number}`;
       
@@ -723,6 +704,10 @@
         });
       }
 
+      if (window.nvRenderProvenance && provenanceLines) {
+        window.nvRenderProvenance(document.querySelector('#result-view .res-card'), provenanceLines);
+      }
+
       document.getElementById('result-view').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
@@ -731,6 +716,6 @@
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
   <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
-  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
+  <script src="/static/js/nv_tool_runtime.js?v=5.5.0"></script>
 </body>
 </html>

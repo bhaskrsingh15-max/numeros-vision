@@ -128,7 +128,6 @@
     .matrix-col { background: #FFFDF7; border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
     .matrix-col h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: #8B6914; margin: 0 0 4px 0; }
     .matrix-col p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
-    .nv-unbacked-hidden { display: none !important; }
     .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
     .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
     .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
@@ -291,30 +290,7 @@
       Evaluate dual-chart synastry, Driver-Conductor resonance, and mutual emotional harmony using ancient Chaldean and Vedic principles.
     </p>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="Relationship & Compatibility Numerology Coming Soon">
-      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
-      <h2 class="nv-cs-heading">Relationship & Compatibility Numerology Is Coming Soon</h2>
-      <p class="nv-cs-desc">We are connecting the deterministic Relationship Compatibility engine (comparing Partner A and Partner B Mulank, Bhagyank, and complementary Lo Shu 3×3 grid numbers). Leave your email below to be notified when it opens.</p>
-      <form data-nv-waitlist-form data-source-page="tool_compatibility_calculator" class="nv-cs-form">
-        <div>
-          <label for="nvWaitlistEmail_compatibility_calculator" class="nv-cs-label">Email Address *</label>
-          <input type="email" id="nvWaitlistEmail_compatibility_calculator" placeholder="you@example.com" required class="nv-cs-input" />
-        </div>
-        <label class="nv-cs-consent">
-          <input type="checkbox" id="nvWaitlistConsent_compatibility_calculator" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="nv-cs-btn">
-          <span>Notify Me When Available ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
-      </form>
-      <div class="nv-cs-links">
-        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
-      </div>
-    </section>
-    <form id="synastry-form" class="nv-unbacked-hidden" onsubmit="calculateSynastry(event)">
+    <form id="synastry-form" onsubmit="calculateSynastry(event)">
       <div class="dual-form">
         <!-- Partner 1 -->
         <div class="partner-card">
@@ -405,7 +381,7 @@
         Kundali Milan vs Numerology Compatibility
       </h3>
       <p style="font-size:0.95rem; color:#523E28; line-height:1.78; margin:0;">
-        Visitors arriving from Kundali Milan searches should note an important methodological distinction. Traditional Vedic <strong>Kundali Milan</strong> (Ashtakoota 36-point Guna Milan and Mangal Dosha review) is an astronomical and astrological system that requires both partners' exact time of birth, birthplace latitude and longitude, and sidereal Moon Nakshatra and Pada ephemeris positions. Numerology compatibility on this page does <strong>not</strong> calculate Moon Nakshatras or Guna points and does not claim to replace a full Vedic horoscope match when birth times are known. Instead, it offers a transparent birth-date and name comparison for reflection on communication styles, household pacing, and practical habit alignment—without guaranteeing relationship outcomes.
+        Visitors arriving from Kundali Milan searches should note an important methodological distinction. Traditional Vedic <strong>Kundali Milan</strong> (Ashtakoota 36-point Guna Milan and Mangal Dosha review) is an astronomical and astrological system that requires both partners' exact time of birth, birthplace latitude and longitude, and sidereal Moon Nakshatra and Pada ephemeris positions. Numerology compatibility on this page does <strong>not</strong> calculate Moon Nakshatras or Guna points and does not claim to replace a full Vedic horoscope match when birth times are known. Instead, it offers a transparent birth-date and name comparison for reflection on communication styles, household pacing, and practical habit alignment—without promising relationship outcomes.
       </p>
     </section>
 
@@ -459,15 +435,17 @@
 
     async function calculateSynastry(e) {
       e.preventDefault();
+      const formEl = document.getElementById('synastry-form');
       const p1Name = document.getElementById('p1-name').value.trim();
       const p1Dob = document.getElementById('p1-dob').value;
       const p2Name = document.getElementById('p2-name').value.trim();
       const p2Dob = document.getElementById('p2-dob').value;
 
-      if (!p1Dob || !p2Dob) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('synastry-form'), 'Please fill in dates of birth for both partners.', 'error');
+      if (!p1Name || !p2Name || !p1Dob || !p2Dob) {
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, 'Please fill in calling names and dates of birth for both partners.', 'error');
         return;
       }
+      if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, '', 'info');
 
       const p1Parts = p1Dob.split('-');
       const p1Day = parseInt(p1Parts[2], 10);
@@ -484,10 +462,31 @@
         partner_dob: p2Dob
       }));
 
-      window.location.href = '/your-reading/?from=compatibility-calculator';
+      const calcData = {
+        tool: 'compatibility_synastry',
+        name: p1Name,
+        dob: p1Dob,
+        summary: `Compatibility Synastry for ${p1Name} & ${p2Name}`
+      };
+
+      if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
+        window.nvProfileSync.requireConsentToReveal(calcData, function() {
+          doCalculateSynastry(p1Name, p1Dob, p2Name, p2Dob);
+        }, 'results');
+      } else {
+        doCalculateSynastry(p1Name, p1Dob, p2Name, p2Dob);
+      }
     }
 
     async function doCalculateSynastry(p1Name, p1Dob, p2Name, p2Dob) {
+      const formEl = document.getElementById('synastry-form');
+      const btn = document.getElementById('btn-calc');
+      const stageCtrl = window.nvStartWorkingStages ? window.nvStartWorkingStages(formEl) : null;
+      if (btn) {
+        btn.innerText = 'Calculating...';
+        btn.disabled = true;
+      }
+
       const p1Parts = p1Dob.split('-');
       const p2Parts = p2Dob.split('-');
       const p1Day = parseInt(p1Parts[2], 10);
@@ -496,11 +495,6 @@
       const p2Day = parseInt(p2Parts[2], 10);
       const p2Month = parseInt(p2Parts[1], 10);
       const p2Year = parseInt(p2Parts[0], 10);
-
-      const d1 = reduceToSingle(p1Day);
-      const c1 = reduceToSingle(p1Day + p1Month + digitSum(p1Year));
-      const d2 = reduceToSingle(p2Day);
-      const c2 = reduceToSingle(p2Day + p2Month + digitSum(p2Year));
 
       try {
         const resp = await fetch('/api/v2/numerology/relationships/synastry', {
@@ -513,52 +507,50 @@
             p2_day: p2Day, p2_month: p2Month, p2_year: p2Year
           })
         });
-        if (resp.ok) {
-          const data = await resp.json();
-          renderSynastry(data.synastry_report);
-          return;
+        const data = await resp.json().catch(function() { return {}; });
+        if (!resp.ok || !data.synastry_report) {
+          throw new Error(data.error || 'Unable to complete compatibility calculation.');
         }
+        renderSynastry(data.synastry_report, data.provenance_lines);
       } catch (err) {
-        console.warn('API fallback to client calculation:', err);
+        console.error('[Numeros Vision] Compatibility calculation error:', err);
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, err.message || 'Unable to complete compatibility calculation. Please check your inputs and try again.', 'error');
+      } finally {
+        if (stageCtrl) stageCtrl.stop();
+        if (btn) {
+          btn.innerText = '✦ Calculate Compatibility Synastry';
+          btn.disabled = false;
+        }
       }
-
-      // Client-side fallback calculation
-      const score = Math.min(95, Math.max(55, 70 + ((d1 + d2) % 25)));
-      renderSynastry({
-        compatibility_score_percentage: score,
-        verdict: score >= 75 ? "Supportive Resonance & Shared Rhythm" : "Complementary Contrast",
-        synthesis: `${p1Name} (Mulank ${d1}/Bhagyank ${c1}) and ${p2Name} (Mulank ${d2}/Bhagyank ${c2}) show a structured numerical pairing where open communication and patience support steady partnership habits.`,
-        driver_harmony: "Benefic Interaction",
-        conductor_harmony: "Harmonious Life Path Alignment",
-        communication_dynamic: "Intuitive & Balanced",
-        actionable_advice: "Encourage independent creative pursuits while practicing joint weekly planning sessions."
-      });
     }
 
-    
-function seeCompatibilityReportOptions() {
-  const p1Name = document.getElementById('p1-name')?.value?.trim() || '';
-  const p1Dob = document.getElementById('p1-dob')?.value?.trim() || '';
-  sessionStorage.setItem('nv_reading_input', JSON.stringify({
-    name: p1Name,
-    dob: p1Dob
-  }));
-  window.location.href = '/your-reading/?from=compatibility';
-}
+    function seeCompatibilityReportOptions() {
+      const p1Name = document.getElementById('p1-name')?.value?.trim() || '';
+      const p1Dob = document.getElementById('p1-dob')?.value?.trim() || '';
+      sessionStorage.setItem('nv_reading_input', JSON.stringify({
+        name: p1Name,
+        dob: p1Dob
+      }));
+      window.location.href = '/your-reading/?from=compatibility';
+    }
 
-function renderSynastry(rep) {
-      document.getElementById('res-score').innerText = (rep.compatibility_score_percentage || 80) + '%';
-      document.getElementById('res-verdict').innerText = rep.verdict || "Deep Resonance";
+    function renderSynastry(rep, provenanceLines) {
+      document.getElementById('res-score').innerText = (rep.compatibility_score_percentage || rep.compatibility_score_pct || 0) + '%';
+      document.getElementById('res-verdict').innerText = rep.verdict || rep.overall_verdict || 'Calculated Pairing';
       
       const dEl = document.getElementById('res-driver-res');
-      if (dEl) dEl.innerText = rep.driver_harmony || "Aligned";
+      if (dEl) dEl.innerText = rep.driver_harmony || 'Calculated';
       const cEl = document.getElementById('res-conductor-res');
-      if (cEl) cEl.innerText = rep.conductor_harmony || "Complementary";
+      if (cEl) cEl.innerText = rep.conductor_harmony || 'Calculated';
       const eEl = document.getElementById('res-comm-res');
-      if (eEl) eEl.innerText = rep.communication_dynamic || "Calculated Vibrational Bond";
+      if (eEl) eEl.innerText = rep.communication_dynamic || 'Calculated Vibrational Bond';
 
-      document.getElementById('results').style.display = 'block';
-      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+      const resContainer = document.getElementById('results');
+      resContainer.style.display = 'block';
+      if (window.nvRenderProvenance && provenanceLines) {
+        window.nvRenderProvenance(resContainer, provenanceLines);
+      }
+      resContainer.scrollIntoView({ behavior: 'smooth' });
     }
   </script>
   <footer class="nv-footer">
@@ -673,6 +665,6 @@ function renderSynastry(rep) {
       } catch (e) {}
     });
   </script>
-  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
+  <script src="/static/js/nv_tool_runtime.js?v=5.5.0"></script>
 </body>
 </html>

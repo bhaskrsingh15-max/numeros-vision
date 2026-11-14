@@ -30,6 +30,7 @@ from app.services.charm_deterministic_service import (
     run_deterministic_charm_consultation,
     validate_and_parse_charm_input,
 )
+from app.services.tool_services_v2 import create_tool_services_router
 
 MAX_CHARM_BODY_BYTES = 65536
 
@@ -97,7 +98,11 @@ async def handle_health() -> Dict[str, Any]:
         "status": "ok",
         "service": "numeros-engine",
         "swisseph_available": SWISSEPH_AVAILABLE,
+        "phase4_tools_mounted": True,
     }
+
+
+app.include_router(create_tool_services_router(verify_engine_secret))
 
 
 async def _parse_json_body(request: Request, max_bytes: int = MAX_CHARM_BODY_BYTES) -> Dict[str, Any]:

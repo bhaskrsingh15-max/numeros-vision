@@ -195,7 +195,6 @@
     }
     .aeo-box h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #8B6914; margin-bottom: 8px; }
     .aeo-box p { font-size: 0.94rem; color: var(--text-muted); line-height: 1.7; }
-    .nv-unbacked-hidden { display: none !important; }
     .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
     .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
     .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
@@ -370,31 +369,8 @@
     </p>
   </div>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="9-Year Personal Cycle & Milestone Years Coming Soon">
-      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
-      <h2 class="nv-cs-heading">9-Year Personal Cycle & Milestone Years Is Coming Soon</h2>
-      <p class="nv-cs-desc">We are connecting the deterministic Personal Year (Varshik Anka — annual cycle number) and milestone-year engine. Leave your email below and we will notify you as soon as this calculator opens.</p>
-      <form data-nv-waitlist-form data-source-page="tool_blessing_years" class="nv-cs-form">
-        <div>
-          <label for="nvWaitlistEmail_blessing_years" class="nv-cs-label">Email Address *</label>
-          <input type="email" id="nvWaitlistEmail_blessing_years" placeholder="you@example.com" required class="nv-cs-input" />
-        </div>
-        <label class="nv-cs-consent">
-          <input type="checkbox" id="nvWaitlistConsent_blessing_years" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="nv-cs-btn">
-          <span>Notify Me When Available ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
-      </form>
-      <div class="nv-cs-links">
-        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
-      </div>
-    </section>
   <!-- Form -->
-  <div class="calc-card nv-unbacked-hidden">
+  <div class="calc-card">
     <form id="blessing-form" onsubmit="calculateBlessings(event)">
       <div class="input-row">
         <div class="input-group">
@@ -589,14 +565,16 @@
     async function calculateBlessings(e) {
       if (e && e.preventDefault) e.preventDefault();
 
-      const d = parseInt(document.getElementById('bDay').value);
-      const m = parseInt(document.getElementById('bMonth').value);
-      const y = parseInt(document.getElementById('bYear').value);
+      const formEl = document.getElementById('blessing-form');
+      const d = parseInt(document.getElementById('bDay').value, 10);
+      const m = parseInt(document.getElementById('bMonth').value, 10);
+      const y = parseInt(document.getElementById('bYear').value, 10);
 
       if (!d || !m || !y || d < 1 || d > 31 || m < 1 || m > 12 || y < 1900) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('blessing-form'), 'Please enter a valid birth date.', 'error');
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, 'Please enter a valid birth date.', 'error');
         return;
       }
+      if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, '', 'info');
 
       const dobStr = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       const calcData = {
@@ -608,6 +586,7 @@
 
       const doFetchAndRender = async function() {
         const btn = document.getElementById('btn-submit');
+        const stageCtrl = window.nvStartWorkingStages ? window.nvStartWorkingStages(formEl) : null;
         btn.innerText = 'Calculating...';
         btn.disabled = true;
 
@@ -617,12 +596,16 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ day: d, month: m, year: y })
           });
-          const data = await resp.json();
-          renderBlessings(data.blessing_years);
+          const data = await resp.json().catch(function() { return {}; });
+          if (!resp.ok || !data.blessing_years) {
+            throw new Error(data.error || 'Unable to calculate timeline right now.');
+          }
+          renderBlessings(data.blessing_years, data.provenance_lines);
         } catch (err) {
-          if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('blessing-form'), 'Unable to calculate timeline right now.', 'error');
+          if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, err.message || 'Unable to calculate timeline right now.', 'error');
           console.error(err);
         } finally {
+          if (stageCtrl) stageCtrl.stop();
           btn.innerHTML = '<span>✦</span> Map Blessing Timeline';
           btn.disabled = false;
         }
@@ -631,9 +614,7 @@
       if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
         window.nvProfileSync.requireConsentToReveal(calcData, doFetchAndRender, 'result-view');
       } else {
-        const qp = new URLSearchParams(calcData).toString();
-        window.location.href = '/signup/?source=calculator_gate&' + qp;
-      
+        doFetchAndRender();
       }
     }
 
@@ -655,7 +636,7 @@
       window.location.href = '/your-reading/?from=personal-year';
     }
 
-    function renderBlessings(b) {
+    function renderBlessings(b, provenanceLines) {
       document.getElementById('result-view').style.display = 'block';
       document.getElementById('res-summary').innerText = b.interpretative_summary;
       document.getElementById('stat-supreme-count').innerText = b.supreme_blessing_years_count;
@@ -702,6 +683,10 @@
         tDiv.appendChild(row);
       });
 
+      if (window.nvRenderProvenance && provenanceLines) {
+        window.nvRenderProvenance(document.querySelector('#result-view .res-card'), provenanceLines);
+      }
+
       document.getElementById('result-view').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
@@ -732,6 +717,6 @@
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
   <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
-  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
+  <script src="/static/js/nv_tool_runtime.js?v=5.5.0"></script>
 </body>
 </html>

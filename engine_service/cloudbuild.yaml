@@ -1,5 +1,18 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_IMAGE}', '-f', 'engine_service/Dockerfile', '.']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - 'docker pull gcr.io/project-b73607a3-4c7a-4120-bbb/numeros-engine-preview:phase3 || true'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--cache-from'
+      - 'gcr.io/project-b73607a3-4c7a-4120-bbb/numeros-engine-preview:phase3'
+      - '-t'
+      - '${_IMAGE}'
+      - '-f'
+      - 'engine_service/Dockerfile'
+      - '.'
 images:
   - '${_IMAGE}'

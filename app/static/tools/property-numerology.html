@@ -123,7 +123,6 @@
     .matrix-col { background: #FFFDF7; border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
     .matrix-col h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: #8B6914; margin: 0 0 4px 0; }
     .matrix-col p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
-    .nv-unbacked-hidden { display: none !important; }
     .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
     .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
     .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
@@ -286,30 +285,7 @@
       Decode the ruling planetary energy of your home, apartment, or commercial office address and harmonize the entrance with customized Vastu color remedies.
     </p>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="House & Property Numerology Coming Soon">
-      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
-      <h2 class="nv-cs-heading">House & Property Numerology Is Coming Soon</h2>
-      <p class="nv-cs-desc">We are connecting the deterministic House & Property Numerology engine (unit-number Chaldean and digit reduction 1–9 matched with resident Mulank and Bhagyank). Leave your email below to receive an update when it opens.</p>
-      <form data-nv-waitlist-form data-source-page="tool_property_numerology" class="nv-cs-form">
-        <div>
-          <label for="nvWaitlistEmail_property_numerology" class="nv-cs-label">Email Address *</label>
-          <input type="email" id="nvWaitlistEmail_property_numerology" placeholder="you@example.com" required class="nv-cs-input" />
-        </div>
-        <label class="nv-cs-consent">
-          <input type="checkbox" id="nvWaitlistConsent_property_numerology" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="nv-cs-btn">
-          <span>Notify Me When Available ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
-      </form>
-      <div class="nv-cs-links">
-        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
-      </div>
-    </section>
-    <div class="form-card nv-unbacked-hidden">
+    <div class="form-card">
       <form id="prop-form" onsubmit="calculateProperty(event)">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
           <div class="form-group">
@@ -377,7 +353,7 @@
         In plain words, the formula is: <strong>House Root = Digital Root(Sum of Unit Digits + Chaldean Value of Unit Letters)</strong>. For example, for apartment <strong>B-402</strong>, the letter B contributes 2, and the digits 4 + 0 + 2 contribute 6, giving a compound total of 8 (Saturn / Shani). For flat <strong>C-1203</strong>, C contributes 3 and 1 + 2 + 0 + 3 contributes 6, giving a House Root of 9 (Mars / Mangal). Punctuation such as hyphens, slashes, and spaces is ignored so formatting differences never alter the mathematical result.
       </p>
       <p style="font-size:0.95rem; color:#523E28; line-height:1.78; margin:0;">
-        Rather than judging any address in isolation, Numeros Vision compares the House Root against the primary resident's <strong>Mulank (Birth Day number)</strong> and <strong>Bhagyank (Life Path number)</strong>, alongside traditional <strong>Vastu (Spatial layout)</strong> and <strong>Kua number (Vastu direction number)</strong> entrance orientation notes. A number such as 4 (Rahu / North Node) or 8 (Saturn) is not inherently unfavourable—it suits structured engineering, accounting, or disciplined research households when paired with compatible birth charts and practical lighting, clutter-free foyers, and calm colour palettes. These traditional associations are offered for spatial planning and reflection, never as a guarantee of property appreciation or domestic outcomes.
+        Rather than judging any address in isolation, Numeros Vision compares the House Root against the primary resident's <strong>Mulank (Birth Day number)</strong> and <strong>Bhagyank (Life Path number)</strong>, alongside traditional <strong>Vastu (Spatial layout)</strong> and <strong>Kua number (Vastu direction number)</strong> entrance orientation notes. A number such as 4 (Rahu / North Node) or 8 (Saturn) is not inherently unfavourable—it suits structured engineering, accounting, or disciplined research households when paired with compatible birth charts and practical lighting, clutter-free foyers, and calm colour palettes. These traditional associations are offered for spatial planning and reflection, never as a promise of property appreciation or domestic outcomes.
       </p>
     </section>
 
@@ -496,17 +472,6 @@
   <script src="/static/js/nav.js?v=5.5.0"></script>
   <script src="/static/js/nv_profile_sync.js?v=5.4.0"></script>
   <script>
-    const CHALDEAN_MAP = {
-      'A':1,'I':1,'J':1,'Q':1,'Y':1,
-      'B':2,'K':2,'R':2,
-      'C':3,'G':3,'L':3,'S':3,
-      'D':4,'M':4,'T':4,
-      'E':5,'H':5,'N':5,'X':5,
-      'U':6,'V':6,'W':6,
-      'O':7,'Z':7,
-      'F':8,'P':8
-    };
-
     function digitSum(n) {
       let sum = 0;
       while (n > 0) { sum += n % 10; n = Math.floor(n / 10); }
@@ -521,13 +486,15 @@
 
     async function calculateProperty(e) {
       if (e && e.preventDefault) e.preventDefault();
+      const formEl = document.getElementById('prop-form');
       const propId = document.getElementById('prop-id').value.trim();
       const dob = document.getElementById('owner-dob').value;
 
       if (!propId || !dob) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('prop-form'), 'Please enter both a property unit number and the owner\'s date of birth.', 'error');
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, 'Please enter both a property unit number and the owner\'s date of birth.', 'error');
         return;
       }
+      if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, '', 'info');
 
       const parts = dob.split('-');
       const day = parseInt(parts[2], 10);
@@ -541,10 +508,16 @@
         tool: 'property_numerology',
         name: 'Homeowner',
         dob: dob || '',
-        summary: `Property Vastu & Numerology Audit for ${propId}`
+        summary: `Property Vastu & Numerology Analysis for ${propId}`
       };
 
       const doProcessProperty = async function() {
+        const btn = document.getElementById('btn-calc');
+        const stageCtrl = window.nvStartWorkingStages ? window.nvStartWorkingStages(formEl) : null;
+        if (btn) {
+          btn.innerText = 'Calculating...';
+          btn.disabled = true;
+        }
         try {
           const resp = await fetch('/api/v2/numerology/assets/property', {
             method: 'POST',
@@ -555,76 +528,55 @@
               conductor: conductor
             })
           });
-          if (resp.ok) {
-            const data = await resp.json();
-            renderProperty(data.property_audit);
-            return;
+          const data = await resp.json().catch(function() { return {}; });
+          if (!resp.ok || !data.property_audit) {
+            throw new Error(data.error || 'Unable to calculate property resonance right now.');
           }
+          renderProperty(data.property_audit, data.provenance_lines);
         } catch (err) {
-          console.warn('API fallback to client calculation:', err);
+          console.error('[Numeros Vision] Property calculation error:', err);
+          if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, err.message || 'Unable to calculate property resonance right now.', 'error');
+        } finally {
+          if (stageCtrl) stageCtrl.stop();
+          if (btn) {
+            btn.innerText = '✦ Audit Property Number Resonance';
+            btn.disabled = false;
+          }
         }
-
-        // Client-side fallback calculation
-        let sum = 0;
-        for (const ch of propId.toUpperCase()) {
-          if (/\d/.test(ch)) sum += parseInt(ch, 10);
-          else if (CHALDEAN_MAP[ch]) sum += CHALDEAN_MAP[ch];
-        }
-        const root = reduceToSingle(sum || 6);
-
-        const PROFILES = {
-          1: { planet: "Sun (Surya) — Independence & Leadership", desc: "A residence fostering ambition, clarity, and bold entrepreneurial focus. Ideal for executives, founders, and solitary visionaries.", vastu: "East / North entrance harmony" },
-          2: { planet: "Moon (Chandra) — Serenity, Peace & Nurture", desc: "A cozy sanctuary enhancing emotional closeness, quiet artistic creativity, and soothing domestic rest.", vastu: "Northwest / North entrance harmony" },
-          3: { planet: "Jupiter (Guru) — Wisdom, Expansion & Good Fortune", desc: "A vibrant home of learning, communication, spiritual discourse, and uplifting social gatherings.", vastu: "Northeast / East entrance harmony" },
-          4: { planet: "Rahu — Structure, Grounding & Unconventional Vision", desc: "A solid, disciplined environment favoring methodical craftsmanship, software engineering, and architectural focus.", vastu: "Southwest balancing required" },
-          5: { planet: "Mercury (Budh) — High Velocity, Commerce & Networking", desc: "An active, energetic space filled with movement, trade, telecommunications, and curious intellectual exploration.", vastu: "North entrance harmony" },
-          6: { planet: "Venus (Shukra) — Luxury, Aesthetics & Family Warmth", desc: "A beautiful space for harmonious hospitality, fine furnishings, domestic peace, and emotional contentment.", vastu: "Southeast / Northwest entrance harmony" },
-          7: { planet: "Ketu — Quiet Contemplation, Research & Spiritual Sanctuary", desc: "A peaceful hermitage perfect for deep meditation, scientific study, book writing, and restorative privacy.", vastu: "Northeast spiritual sanctuary" },
-          8: { planet: "Saturn (Shani) — Material Mastery, Authority & Endurance", desc: "A stately home of hard-earned prosperity, legacy building, and steady perseverance through challenges.", vastu: "West / South entrance grounding" },
-          9: { planet: "Mars (Mangal) — Courage, Dynamic Action & Universal Goodwill", desc: "A powerful, energetic hub inspiring courageous initiative, athletic vitality, and community protection.", vastu: "South entrance harmony" }
-        };
-
-        const prof = PROFILES[root] || PROFILES[6];
-        renderProperty({
-          property_root_number: root,
-          planet_association: prof.planet,
-          vibe_description: prof.desc,
-          resident_compatibility: "Harmonious resonance with your birth Driver",
-          suitable_for: "Creative thinkers, growing families, and commercial pursuits",
-          vastu_remedy: `Install a polished brass nameplate on the main door. Keep entrance clean and well-lit to welcome benefic energy into the ${prof.vastu}.`
-        });
       };
 
       if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
         window.nvProfileSync.requireConsentToReveal(calcData, doProcessProperty, 'results');
       } else {
-        const qp = new URLSearchParams(calcData).toString();
-        window.location.href = '/signup/?source=calculator_gate&' + qp;
-      
+        doProcessProperty();
       }
     }
 
-    function renderProperty(p) {
-      const root = p.property_root_number || 6;
+    function renderProperty(p, provenanceLines) {
+      const root = p.property_root_number || p.property_root || 1;
       document.getElementById('res-root').innerText = root;
       document.getElementById('res-planet').innerText = p.planet_association ? p.planet_association.split('—')[0].trim() : `House Root ${root}`;
       
       const synEl = document.getElementById('res-synergy');
       if (synEl) {
-        synEl.innerText = p.resident_compatibility ? p.resident_compatibility.split('.')[0] : "Calculated Harmony";
+        synEl.innerText = p.resident_compatibility ? p.resident_compatibility.split('.')[0] : 'Calculated Harmony';
       }
       const vasEl = document.getElementById('res-vastu');
       if (vasEl) {
-        vasEl.innerText = p.vastu_sector || "Directional Sector";
+        vasEl.innerText = p.vastu_sector || 'Directional Sector';
       }
       const loadEl = document.getElementById('res-load-status');
       if (loadEl) {
-        loadEl.innerText = (root === 4 || root === 7 || root === 8) ? "Karmic / Heavy Load" : "Benefic Planetary Field";
-        loadEl.style.color = (root === 4 || root === 7 || root === 8) ? "#C0392B" : "#16835B";
+        loadEl.innerText = (root === 4 || root === 7 || root === 8) ? 'Structured / Grounded Field' : 'Supportive Planetary Field';
+        loadEl.style.color = (root === 4 || root === 7 || root === 8) ? '#8B6914' : '#16835B';
       }
 
-      document.getElementById('results').style.display = 'block';
-      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+      const resContainer = document.getElementById('results');
+      resContainer.style.display = 'block';
+      if (window.nvRenderProvenance && provenanceLines) {
+        window.nvRenderProvenance(resContainer, provenanceLines);
+      }
+      resContainer.scrollIntoView({ behavior: 'smooth' });
     }
   </script>
   <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
@@ -654,6 +606,6 @@
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
   <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
-  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
+  <script src="/static/js/nv_tool_runtime.js?v=5.5.0"></script>
 </body>
 </html>

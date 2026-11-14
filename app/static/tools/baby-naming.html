@@ -122,7 +122,6 @@
     .name-badge { font-size: 0.72rem; background: rgba(22, 131, 91, 0.12); color: #16835B; padding: 2px 8px; border-radius: 8px; font-weight: 700; font-family: 'Inter', sans-serif; }
     .name-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
     .name-meaning { font-size: 0.84rem; color: #523E28; line-height: 1.5; margin: 0; }
-    .nv-unbacked-hidden { display: none !important; }
     .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
     .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
     .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
@@ -285,30 +284,7 @@
       Select fortunate baby names synchronized with your newborn's birth Driver and Conductor numbers to bestow lifelong vitality, intellect, and grace.
     </p>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="Baby Naming Numerology Coming Soon">
-      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
-      <h2 class="nv-cs-heading">Baby Naming Numerology Is Coming Soon</h2>
-      <p class="nv-cs-desc">We are connecting the deterministic Baby Naming Numerology engine (harmonious Chaldean single-digit targets 1–9 and starting-sound filters for your child's birth date). Leave your email below to be notified when it opens.</p>
-      <form data-nv-waitlist-form data-source-page="tool_baby_naming" class="nv-cs-form">
-        <div>
-          <label for="nvWaitlistEmail_baby_naming" class="nv-cs-label">Email Address *</label>
-          <input type="email" id="nvWaitlistEmail_baby_naming" placeholder="you@example.com" required class="nv-cs-input" />
-        </div>
-        <label class="nv-cs-consent">
-          <input type="checkbox" id="nvWaitlistConsent_baby_naming" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="nv-cs-btn">
-          <span>Notify Me When Available ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
-      </form>
-      <div class="nv-cs-links">
-        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
-      </div>
-    </section>
-    <div class="form-card nv-unbacked-hidden">
+    <div class="form-card">
       <form id="baby-form" onsubmit="calculateBabyNames(event)">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
           <div class="form-group">
@@ -370,6 +346,9 @@
         </div>
       </div>
 
+      <!-- Curated Name Recommendations List -->
+      <div id="baby-names-list" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:12px; margin-bottom:24px;"></div>
+
       <!-- Consecrated Baby Naming Blueprint Lock Card -->
       <div id="res-funnel-offer-name_numerology"></div>
 <script>
@@ -394,7 +373,7 @@
         Each candidate name is then evaluated with the 1-to-8 Chaldean letter-value table (where number 9 is reserved as sacred and unassigned to individual letters): A, I, J, Q, Y = 1; B, K, R = 2; C, G, L, S = 3; D, M, T = 4; E, H, N, X = 5; U, V, W = 6; O, Z = 7; F, P = 8. In plain words: <strong>Calling Name Compound = Sum of Chaldean Letter Values</strong>, and <strong>Calling Name Root = Digital Root(Compound)</strong>. For example, the given name <strong>ANANYA</strong> sums as A(1) + N(5) + A(1) + N(5) + Y(1) + A(1) = <strong>Compound 14</strong>, reducing to 1 + 4 = <strong>Root 5</strong> (Budh / Mercury). If paired with surname <strong>SEN</strong> (S=3, E=5, N=5 = 13), the full name sums to 14 + 13 = <strong>Compound 27</strong>, reducing to 2 + 7 = <strong>Root 9</strong>.
       </p>
       <p style="font-size:0.95rem; color:#523E28; line-height:1.78; margin:0;">
-        Parents can review whether both the everyday first name and the full legal name sit in friendly planetary harmony with the child's Mulank and Bhagyank, while preserving cultural meaning, family pronunciation, and Nakshatra syllable traditions. Numerology provides a structured, traditional naming lens for family consideration and never guarantees health, academic, or life outcomes.
+        Parents can review whether both the everyday first name and the full legal name sit in friendly planetary harmony with the child's Mulank and Bhagyank, while preserving cultural meaning, family pronunciation, and Nakshatra syllable traditions. Numerology provides a structured, traditional naming lens for family consideration and never promises health, academic, or life outcomes.
       </p>
     </div>
   </section>
@@ -526,27 +505,18 @@
       return n > 9 ? digitSum(n) : n;
     }
 
-    const SAMPLE_NAMES = [
-      { name: "Aarav", gender: "Boy", compound: 15, root: 6, meaning: "Peaceful; wisdom; melodious sound." },
-      { name: "Ananya", gender: "Girl", compound: 19, root: 1, meaning: "Matchless; unique; radiant divine light." },
-      { name: "Reyansh", gender: "Boy", compound: 23, root: 5, meaning: "Ray of light; royal protection and brilliance." },
-      { name: "Diya", gender: "Girl", compound: 14, root: 5, meaning: "Light; source of warmth and creative illumination." },
-      { name: "Vivaan", gender: "Boy", compound: 24, root: 6, meaning: "Full of life; energetic; dawn of prosperity." },
-      { name: "Kiara", gender: "Girl", compound: 15, root: 6, meaning: "Bright; clear; generous and artistically gifted." },
-      { name: "Arjun", gender: "Boy", compound: 19, root: 1, meaning: "Pure; heroic clarity; focused archer of destiny." },
-      { name: "Mira", gender: "Girl", compound: 14, root: 5, meaning: "Prosperity; oceanic depth; devoted spirit." }
-    ];
-
     async function calculateBabyNames(e) {
       if (e && e.preventDefault) e.preventDefault();
+      const formEl = document.getElementById('baby-form');
       const dob = document.getElementById('baby-dob').value;
       const gender = document.getElementById('baby-gender').value;
       const letter = document.getElementById('preferred-letter').value.toUpperCase().trim();
 
       if (!dob) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('baby-form'), 'Please select the baby\'s date of birth.', 'error');
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, 'Please select the baby\'s date of birth.', 'error');
         return;
       }
+      if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, '', 'info');
 
       const parts = dob.split('-');
       const day = parseInt(parts[2], 10);
@@ -558,12 +528,18 @@
 
       const calcData = {
         tool: 'baby_naming',
-        name: 'Little Angel',
+        name: 'Newborn Profile',
         dob: dob,
-        summary: `Baby Naming Auspicious Calculation for ${dob}`
+        summary: `Baby Naming Calculation for ${dob}`
       };
 
       const doProcessBabyNaming = async function() {
+        const btn = document.getElementById('btn-calc');
+        const stageCtrl = window.nvStartWorkingStages ? window.nvStartWorkingStages(formEl) : null;
+        if (btn) {
+          btn.innerText = 'Calculating...';
+          btn.disabled = true;
+        }
         try {
           const resp = await fetch('/api/v2/numerology/naming/baby', {
             method: 'POST',
@@ -575,49 +551,72 @@
               starting_letter: letter || null
             })
           });
-          if (resp.ok) {
-            const data = await resp.json();
-            renderNames(data.baby_name_recommendations, driver, conductor);
-            return;
+          const data = await resp.json().catch(function() { return {}; });
+          if (!resp.ok || !Array.isArray(data.baby_name_recommendations)) {
+            throw new Error(data.error || 'Unable to fetch baby name recommendations right now.');
           }
+          renderNames(data.baby_name_recommendations, driver, conductor, data);
         } catch (err) {
-          console.warn('API fallback to client calculation:', err);
+          console.error('[Numeros Vision] Baby naming error:', err);
+          if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, err.message || 'Unable to fetch baby name recommendations right now.', 'error');
+        } finally {
+          if (stageCtrl) stageCtrl.stop();
+          if (btn) {
+            btn.innerText = '✦ Find Fortunate Baby Names';
+            btn.disabled = false;
+          }
         }
-
-        // Filter sample names based on gender and starting letter
-        let filtered = SAMPLE_NAMES;
-        if (gender !== 'any') {
-          filtered = filtered.filter(n => n.gender.toLowerCase() === gender.toLowerCase());
-        }
-        if (letter) {
-          const sub = filtered.filter(n => n.name.toUpperCase().startsWith(letter));
-          if (sub.length > 0) filtered = sub;
-        }
-        renderNames(filtered, driver, conductor);
       };
 
       if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
         window.nvProfileSync.requireConsentToReveal(calcData, doProcessBabyNaming, 'results');
       } else {
-        const qp = new URLSearchParams(calcData).toString();
-        window.location.href = '/signup/?source=calculator_gate&' + qp;
-      
-      
+        doProcessBabyNaming();
       }
     }
 
-    function renderNames(names, d, c) {
-      document.getElementById('res-matrix-info').innerText = 
-        `Calculated for Driver ${d} and Conductor ${c}. Auspicious Chaldean frequency parameters established.`;
-      
+    function renderNames(names, d, c, data) {
+      document.getElementById('res-matrix-info').innerText =
+        `Calculated for Mulank (Birth Day number) ${d} and Bhagyank (Life Path number) ${c}. Candidate names are filtered from the deterministic Chaldean corpus.`;
+
       const dcEl = document.getElementById('stat-driver-conductor');
       if (dcEl) dcEl.innerText = `Driver ${d} · Conductor ${c}`;
-      
-      const synEl = document.getElementById('stat-synergy-status');
-      if (synEl) synEl.innerText = (d === c || (d + c) % 2 === 0) ? "Harmonic Alignment" : "Dynamic Polar Complement";
 
-      document.getElementById('results').style.display = 'block';
-      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+      const synEl = document.getElementById('stat-synergy-status');
+      if (synEl) synEl.innerText = names.length > 0 ? `${names.length} Curated Matches` : 'Not Configured for Filter';
+
+      const listEl = document.getElementById('baby-names-list');
+      if (listEl) {
+        listEl.innerHTML = '';
+        if (names.length === 0) {
+          listEl.innerHTML = '<div style="grid-column:1/-1; padding:16px; border-radius:12px; background:#F7F3EA; border:1px solid rgba(201,162,39,0.35); color:#523E28; font-size:0.9rem;"><strong>Not configured:</strong> No curated baby names in the deterministic table matched this exact starting-letter and birth-number filter. Try clearing the optional starting letter to view compatible names.</div>';
+        } else {
+          names.forEach(function(item) {
+            const card = document.createElement('div');
+            card.style.padding = '16px';
+            card.style.borderRadius = '12px';
+            card.style.background = '#FFFDF7';
+            card.style.border = '1px solid rgba(201,162,39,0.32)';
+            const compoundVal = item.chaldean_compound || item.compound || '-';
+            const rootVal = item.chaldean_root || item.root || '-';
+            card.innerHTML =
+              '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">' +
+                '<strong style="font-family:\'Cormorant Garamond\',serif; font-size:1.35rem; color:#8B6914;">' + (item.name || '') + '</strong>' +
+                '<span style="font-size:0.74rem; font-weight:700; padding:3px 9px; border-radius:999px; background:#EFF9F5; color:#16835B;">Compound ' + compoundVal + ' → Root ' + rootVal + '</span>' +
+              '</div>' +
+              '<div style="font-size:0.84rem; color:#523E28; line-height:1.5;">' + (item.meaning || '') + '</div>' +
+              '<div style="font-size:0.76rem; color:#7A654D; margin-top:6px;">Gender: ' + (item.gender || 'Any') + (item.driver_harmony ? ' · Mulank Harmony: ' + item.driver_harmony : '') + '</div>';
+            listEl.appendChild(card);
+          });
+        }
+      }
+
+      const resContainer = document.getElementById('results');
+      resContainer.style.display = 'block';
+      if (window.nvRenderProvenance && data && data.provenance_lines) {
+        window.nvRenderProvenance(resContainer, data.provenance_lines);
+      }
+      resContainer.scrollIntoView({ behavior: 'smooth' });
     }
   </script>
   <!-- ── MOBILE 4-ITEM STICKY BOTTOM NAVIGATION BAR ── -->
@@ -647,6 +646,6 @@
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
   <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
-  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
+  <script src="/static/js/nv_tool_runtime.js?v=5.5.0"></script>
 </body>
 </html>

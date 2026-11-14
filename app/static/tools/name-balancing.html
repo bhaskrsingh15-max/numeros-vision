@@ -106,7 +106,7 @@
           },
           {
             "@type": "Question",
-            "name": "Can a name change guarantee success or wealth?",
+            "name": "Can a name change promise success or wealth?",
             "acceptedAnswer": {
               "@type": "Answer",
               "text": "No. Numerology is a traditional symbolic discipline that explores archetypal associations and self-reflection. It does not provide scientific, medical, legal, or promised financial outcomes. Any recommendations provide traditional perspectives to assist personal decision-making."
@@ -318,7 +318,6 @@
       .res-card { padding: 24px 16px; }
       .aeo-box { margin: 20px 12px; padding: 16px 18px; }
     }
-    .nv-unbacked-hidden { display: none !important; }
     .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
     .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
     .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
@@ -492,31 +491,8 @@
     </p>
   </div>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="Chaldean Name Alignment Check Coming Soon">
-      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
-      <h2 class="nv-cs-heading">Chaldean Name Alignment Check Is Coming Soon</h2>
-      <p class="nv-cs-desc">We are connecting the deterministic Chaldean Name Alignment engine (evaluating your current name's compound and single-digit root 1–9 against your birth numbers). Leave your email below to be notified when it opens.</p>
-      <form data-nv-waitlist-form data-source-page="tool_name_balancing" class="nv-cs-form">
-        <div>
-          <label for="nvWaitlistEmail_name_balancing" class="nv-cs-label">Email Address *</label>
-          <input type="email" id="nvWaitlistEmail_name_balancing" placeholder="you@example.com" required class="nv-cs-input" />
-        </div>
-        <label class="nv-cs-consent">
-          <input type="checkbox" id="nvWaitlistConsent_name_balancing" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="nv-cs-btn">
-          <span>Notify Me When Available ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
-      </form>
-      <div class="nv-cs-links">
-        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
-      </div>
-    </section>
   <!-- Centered, Aligned Calculator Form (Current Name & DOB only) -->
-  <div class="calc-card nv-unbacked-hidden">
+  <div class="calc-card">
     <form id="name-calc-form" onsubmit="calculateNameBalance(event)">
       <div class="input-field-group">
         <label for="fullName">Full Current or Legal Name</label>
@@ -756,7 +732,7 @@
         </p>
       </details>
       <details style="background:#FFFFFF; border:1px solid var(--border); border-radius:12px; padding:16px 20px;">
-        <summary style="font-weight:700; color:#8B6914; cursor:pointer;">Can a name change guarantee success or wealth?</summary>
+        <summary style="font-weight:700; color:#8B6914; cursor:pointer;">Can a name change promise success or wealth?</summary>
         <p style="margin-top:10px; font-size:0.92rem; color:var(--text-muted); line-height:1.7;">
           No. Numerology is a traditional symbolic discipline that explores archetypal associations and self-reflection. It does not provide scientific, medical, legal, or promised financial outcomes. Any recommendations provide traditional perspectives to assist personal decision-making.
         </p>
@@ -901,20 +877,22 @@
     async function calculateNameBalance(e) {
       if (e && e.preventDefault) e.preventDefault();
 
+      const formEl = document.getElementById('name-calc-form');
       const name = document.getElementById('fullName').value.trim();
       const dobVal = document.getElementById('dobStr').value;
 
       if (!name) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('name-calc-form'), 'Please enter your full name.', 'error');
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, 'Please enter your full name.', 'error');
         return;
       }
 
       if (!dobVal) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('name-calc-form'), 'Please select your Date of Birth.', 'error');
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, 'Please select your Date of Birth.', 'error');
         return;
       }
 
-      const { driver, conductor } = deriveDriverAndConductor(dobVal);
+      if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, '', 'info');
+      const { driver, conductor, driverPlanet, conductorPlanet } = deriveDriverAndConductor(dobVal);
       const parts = dobVal.split('-');
 
       sessionStorage.setItem('nv_reading_input', JSON.stringify({
@@ -927,35 +905,18 @@
         conductor: conductor
       }));
 
-      window.location.href = '/your-reading/?from=name-balancing';
-      return;
-    }
-
-    async function _legacyCalculateNameBalance(e) {
-
-      const { driver, conductor, driverPlanet, conductorPlanet } = deriveDriverAndConductor(dobVal);
-
       const calcData = {
         tool: 'name_balancing',
         name: name,
         dob: dobVal,
-        summary: `Name Balancing Audit for ${name} (DOB ${dobVal})`
+        summary: `Name Balancing Analysis for ${name} (DOB ${dobVal})`
       };
 
       const doProcessNameBalance = async function() {
         const btn = document.getElementById('btn-submit');
-        btn.innerText = 'Auditing & Calculating...';
+        const stageCtrl = window.nvStartWorkingStages ? window.nvStartWorkingStages(formEl) : null;
+        btn.innerText = 'Calculating...';
         btn.disabled = true;
-
-        // Persist profile to localStorage for direct cross-tool and Charm AI memory
-        const parts = dobVal.split('-');
-        const y = parseInt(parts[0], 10);
-        const m = parseInt(parts[1], 10);
-        const d = parseInt(parts[2], 10);
-        try {
-          // Removed legacy localStorage write (DPDP privacy)
-          // Client-side pass injection removed
-        } catch (e) {}
 
         try {
           const resp = await fetch('/api/v2/numerology/name/balance', {
@@ -968,18 +929,19 @@
               conductor: conductor
             })
           });
+          const data = await resp.json().catch(function() { return {}; });
           if (!resp.ok) {
-            throw new Error('API server returned status: ' + resp.status);
+            throw new Error(data.error || ('API server returned status: ' + resp.status));
           }
-          const data = await resp.json();
           if (!data || !data.current_name_evaluation) {
-            throw new Error('Calculation response format unrecognized');
+            throw new Error('Calculation response format unrecognized.');
           }
-          renderResults(data, driver, conductor, driverPlanet, conductorPlanet);
+          renderResults(data, data.calculated_driver || driver, data.calculated_conductor || conductor, driverPlanet, conductorPlanet);
         } catch (err) {
           console.error('[Numeros Vision] Name balance error:', err);
-          if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('name-calc-form'), 'Unable to complete calculation. Please check your inputs and try again.', 'error');
+          if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, err.message || 'Unable to complete calculation. Please check your inputs and try again.', 'error');
         } finally {
+          if (stageCtrl) stageCtrl.stop();
           btn.innerHTML = '<span>✦</span> Calculate My Name Number';
           btn.disabled = false;
         }
@@ -988,7 +950,6 @@
       if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
         window.nvProfileSync.requireConsentToReveal(calcData, doProcessNameBalance, 'result-view');
       } else {
-        // Fallback: Proceed directly with calculation if sync script is not present
         doProcessNameBalance();
       }
     }
@@ -1125,6 +1086,10 @@ function renderResults(data, driver, conductor, driverPlanet, conductorPlanet) {
         unalignedCard.style.display = 'block';
       }
 
+      if (window.nvRenderProvenance && data.provenance_lines) {
+        window.nvRenderProvenance(document.querySelector('#result-view .res-card'), data.provenance_lines);
+      }
+
       document.getElementById('result-view').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
@@ -1169,6 +1134,6 @@ function renderResults(data, driver, conductor, driverPlanet, conductorPlanet) {
       } catch (e) {}
     });
 </script>
-  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
+  <script src="/static/js/nv_tool_runtime.js?v=5.5.0"></script>
 </body>
 </html>

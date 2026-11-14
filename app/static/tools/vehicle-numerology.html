@@ -187,7 +187,6 @@
     }
     .aeo-box h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #8B6914; margin-bottom: 8px; }
     .aeo-box p { font-size: 0.94rem; color: var(--text-muted); line-height: 1.7; }
-    .nv-unbacked-hidden { display: none !important; }
     .nv-coming-soon-card { max-width: 680px; margin: 24px auto 36px; background: #FFFFFF; border: 1.5px solid rgba(201,162,39,0.35); border-radius: 20px; padding: 30px 28px; box-shadow: 0 10px 30px rgba(82,62,40,0.06); text-align: left; }
     .nv-cs-eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8B6914; margin-bottom: 8px; }
     .nv-cs-heading { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.75rem; font-weight: 700; color: #523E28; margin: 0 0 10px; line-height: 1.25; }
@@ -361,31 +360,8 @@
     </p>
   </div>
 
-    <!-- Phase 2 Coming Soon & Update Sign-Up Panel -->
-    <section class="nv-coming-soon-card" id="nvToolComingSoon" aria-label="Vehicle Registration Numerology Coming Soon">
-      <div class="nv-cs-eyebrow">Coming Soon · Deterministic Calculation Service</div>
-      <h2 class="nv-cs-heading">Vehicle Registration Numerology Is Coming Soon</h2>
-      <p class="nv-cs-desc">We are connecting the deterministic Vehicle Registration Numerology engine (numeric series root 1–9 and full alphanumeric Chaldean sum compared with owner Mulank and Bhagyank). Leave your email below to be notified when it opens.</p>
-      <form data-nv-waitlist-form data-source-page="tool_vehicle_numerology" class="nv-cs-form">
-        <div>
-          <label for="nvWaitlistEmail_vehicle_numerology" class="nv-cs-label">Email Address *</label>
-          <input type="email" id="nvWaitlistEmail_vehicle_numerology" placeholder="you@example.com" required class="nv-cs-input" />
-        </div>
-        <label class="nv-cs-consent">
-          <input type="checkbox" id="nvWaitlistConsent_vehicle_numerology" />
-          <span>I consent to Numeros Vision storing my encrypted email address for 12 months solely to notify me when this feature is available, with the right to delete my email record at any time under the DPDP Act 2023.</span>
-        </label>
-        <button type="submit" class="nv-cs-btn">
-          <span>Notify Me When Available ✦</span>
-        </button>
-        <div data-nv-waitlist-status role="status" aria-live="polite" class="nv-cs-status"></div>
-      </form>
-      <div class="nv-cs-links">
-        Available right now: <a href="/calculators/life-path/">Life Path Calculator</a> · <a href="/calculators/lo-shu-grid/">Lo Shu 3×3 Grid</a> · <a href="/calculators/name-numerology/">Name Numerology</a> · <a href="/pricing/">Basic Report</a>
-      </div>
-    </section>
   <!-- Form -->
-  <div class="calc-card nv-unbacked-hidden">
+  <div class="calc-card">
     <form id="vehicle-form" onsubmit="calculateVehicle(event)">
       <div class="input-row">
         <div class="input-group" style="flex: 2;">
@@ -596,25 +572,32 @@
     async function calculateVehicle(e) {
       if (e && e.preventDefault) e.preventDefault();
 
+      const formEl = document.getElementById('vehicle-form');
       const plate = document.getElementById('plateStr').value.trim();
-      const d = parseInt(document.getElementById('driverNum').value);
-      const c = parseInt(document.getElementById('condNum').value);
+      const d = parseInt(document.getElementById('driverNum').value, 10);
+      const c = parseInt(document.getElementById('condNum').value, 10);
 
       if (!plate) {
-        if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('vehicle-form'), 'Please enter a vehicle registration plate number.', 'error');
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, 'Please enter a vehicle registration plate number.', 'error');
         return;
       }
+      if (!d || d < 1 || d > 9 || !c || c < 1 || c > 9) {
+        if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, 'Please enter valid Driver and Conductor numbers between 1 and 9.', 'error');
+        return;
+      }
+      if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, '', 'info');
 
       const calcData = {
         tool: 'vehicle_numerology',
         name: 'Vehicle Owner',
         dob: '',
-        summary: `Vehicle Audit for Plate ${plate} (Driver ${d || 'N/A'}, Conductor ${c || 'N/A'})`
+        summary: `Vehicle Analysis for Plate ${plate} (Driver ${d}, Conductor ${c})`
       };
 
       const doFetchAndRender = async function() {
         const btn = document.getElementById('btn-submit');
-        btn.innerText = 'Analyzing...';
+        const stageCtrl = window.nvStartWorkingStages ? window.nvStartWorkingStages(formEl) : null;
+        btn.innerText = 'Calculating...';
         btn.disabled = true;
 
         try {
@@ -623,12 +606,16 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ registration_plate: plate, driver: d, conductor: c })
           });
-          const data = await resp.json();
-          renderVehicle(data.vehicle_audit);
+          const data = await resp.json().catch(function() { return {}; });
+          if (!resp.ok || !data.vehicle_audit) {
+            throw new Error(data.error || 'Unable to analyze vehicle registration right now.');
+          }
+          renderVehicle(data.vehicle_audit, data.provenance_lines);
         } catch (err) {
-          if (window.nvShowInlineNotice) window.nvShowInlineNotice(document.getElementById('vehicle-form'), 'Unable to analyze vehicle registration right now.', 'error');
+          if (window.nvShowInlineNotice) window.nvShowInlineNotice(formEl, err.message || 'Unable to analyze vehicle registration right now.', 'error');
           console.error(err);
         } finally {
+          if (stageCtrl) stageCtrl.stop();
           btn.innerHTML = '<span>✦</span> Analyze Vehicle Plate';
           btn.disabled = false;
         }
@@ -637,13 +624,11 @@
       if (window.nvProfileSync && typeof window.nvProfileSync.requireConsentToReveal === 'function') {
         window.nvProfileSync.requireConsentToReveal(calcData, doFetchAndRender, 'result-view');
       } else {
-        const qp = new URLSearchParams(calcData).toString();
-        window.location.href = '/signup/?source=calculator_gate&' + qp;
-      
+        doFetchAndRender();
       }
     }
 
-    function renderVehicle(v) {
+    function renderVehicle(v, provenanceLines) {
       document.getElementById('result-view').style.display = 'block';
       document.getElementById('res-plate-title').innerText = `Plate: ${v.registration_plate}`;
       
@@ -661,11 +646,15 @@
       // Diagnostics
       const synEl = document.getElementById('stat-synergy-diagnostic');
       if (synEl) {
-        synEl.innerText = v.driver_harmony ? `Driver Harmony: ${v.driver_harmony}` : "Aligned";
+        synEl.innerText = v.driver_harmony ? `Driver Harmony: ${v.driver_harmony}` : 'Aligned';
       }
       const riskEl = document.getElementById('stat-risk-diagnostic');
       if (riskEl) {
-        riskEl.innerText = v.safety_and_risk_tier || "Calculated Vibration Status";
+        riskEl.innerText = v.safety_and_risk_tier || 'Calculated Vibration Status';
+      }
+
+      if (window.nvRenderProvenance && provenanceLines) {
+        window.nvRenderProvenance(document.querySelector('#result-view .res-card'), provenanceLines);
       }
 
       document.getElementById('result-view').scrollIntoView({ behavior: 'smooth' });
@@ -698,6 +687,6 @@
   <script src="/static/js/marketing-analytics.js?v=5.4.0" defer></script>
   <script src="/static/js/nv_consent.js?v=5.4.0" defer></script>
   <script src="/static/js/funnel_journey.js?v=5.4.0" defer></script>
-  <script src="/static/js/nv_tool_coming_soon.js?v=5.5.0" defer></script>
+  <script src="/static/js/nv_tool_runtime.js?v=5.5.0"></script>
 </body>
 </html>
