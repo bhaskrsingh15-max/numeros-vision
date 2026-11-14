@@ -396,16 +396,15 @@ def redirect_legacy_sample_urls():
 @app.get("/sample-2", include_in_schema=False)
 @app.get("/sample-2/", include_in_schema=False)
 @app.get("/sample2.html", include_in_schema=False)
-def serve_sample2():
-    path = os.path.join(STATIC_DIR, "sample2.html")
-    headers = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"}
-    return FileResponse(path, media_type="text/html", headers=headers) if os.path.exists(path) else root()
-
+@app.get("/demo", include_in_schema=False)
+@app.get("/demo/", include_in_schema=False)
+@app.get("/demo.html", include_in_schema=False)
 @app.get("/logo-preview", include_in_schema=False)
+@app.get("/logo-preview/", include_in_schema=False)
+@app.get("/logo-preview.html", include_in_schema=False)
 @app.get("/logos", include_in_schema=False)
-def serve_logo_preview():
-    path = os.path.join(STATIC_DIR, "logo-preview.html")
-    return FileResponse(path, media_type="text/html") if os.path.exists(path) else root()
+def reject_archived_prototype_pages():
+    return JSONResponse({"detail": "Not Found"}, status_code=404)
 
 # ── Canonical Roadmap Hub Pages ─────────────────────────────
 @app.get("/numerology-calculators", include_in_schema=False)
@@ -1311,16 +1310,7 @@ def serve_logo(filename: str):
     path = os.path.join(STATIC_DIR, "logos", filename)
     return FileResponse(path) if os.path.exists(path) else JSONResponse({"error": "not found"}, status_code=404)
 
-# ── Logo Preview ──────────────────────────────────────────
-@app.get("/logo-preview", include_in_schema=False)
-def logo_preview():
-    path = os.path.join(STATIC_DIR, "logo-preview.html")
-    return FileResponse(path, media_type="text/html") if os.path.exists(path) else JSONResponse({"error": "not found"}, status_code=404)
-
-@app.get("/demo", include_in_schema=False)
-def demo_page():
-    path = os.path.join(STATIC_DIR, "demo.html")
-    return FileResponse(path, media_type="text/html") if os.path.exists(path) else JSONResponse({"error": "not found"}, status_code=404)
+# ── Archived Prototype Routes Removed (404 enforced above) ──
 
 # ── Health & System Diagnostics ───────────────────────────
 @app.get("/health")

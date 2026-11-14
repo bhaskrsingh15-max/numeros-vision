@@ -156,7 +156,6 @@ ROUTING_MAP = {
     # Canonical /sample/ Report Preview (single 200 OK home; /sample-report* & /sample_roadmap* 301 -> /sample/)
     "sample": "sample.html",
     "year-2027": "year_2027.html",
-    "sample2": "sample2.html",
 
     # Canonical /reports/ Hub & Pricing (200 OK directories — /reports_catalogue/ 301-redirects to /reports/)
     "reports": "reports_catalogue.html",
@@ -307,6 +306,39 @@ for legacy_rep_dir in [
     ldp = os.path.join(DIST_DIR, legacy_rep_dir)
     if os.path.exists(ldp):
         shutil.rmtree(ldp)
+
+# Strictly exclude archived prototype/preview HTML pages and route folders from dist_cloudflare_pages
+for archived_file in [
+    "demo.html",
+    "sample2.html",
+    "logo-preview.html",
+]:
+    for candidate_path in (
+        os.path.join(DIST_DIR, archived_file),
+        os.path.join(DIST_DIR, "static", archived_file),
+    ):
+        if os.path.exists(candidate_path):
+            os.remove(candidate_path)
+for archived_dir in [
+    "demo",
+    "sample2",
+    "sample-2",
+    "logo-preview",
+]:
+    adp = os.path.join(DIST_DIR, archived_dir)
+    if os.path.exists(adp):
+        shutil.rmtree(adp)
+for forbidden_rel in (
+    "demo.html",
+    "demo/index.html",
+    "sample2.html",
+    "sample2/index.html",
+    "logo-preview.html",
+    "logo-preview/index.html",
+):
+    assert not os.path.exists(os.path.join(DIST_DIR, forbidden_rel)), (
+        f"BUILD BLOCKED: Excluded page present in dist_cloudflare_pages: {forbidden_rel}"
+    )
 
 # Clean up tools/*.html -> tools/*/index.html ONLY for unique tools (skipping 301-redirected duplicates)
 tools_dir = os.path.join(DIST_DIR, "tools")

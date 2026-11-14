@@ -53,18 +53,6 @@ URLS_TO_TEST = [
         "forbidden_elements": []
     },
     {
-        "path": "/sample2",
-        "name": "Design: Sample 2 Architecture (Desktop & Mobile App)",
-        "expected_elements": [
-            "Cosmic Geomancy",
-            "The stars wrote it.",
-            "to the degree",
-            "bento-12-grid",
-            "cg-app-bottom-nav"
-        ],
-        "forbidden_elements": []
-    },
-    {
         "path": "/contact",
         "name": "Support: Contact Us",
         "expected_elements": [

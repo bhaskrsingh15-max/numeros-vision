@@ -3909,6 +3909,23 @@ export default {
 
     assertNoDangerousFlagsInProduction(env, request);
 
+    // Strictly return 404 for archived/excluded prototype pages (demo.html, sample2.html, logo-preview.html)
+    const excludedRoutes = new Set([
+      '/demo', '/demo/', '/demo.html', '/static/demo.html',
+      '/sample2', '/sample2/', '/sample2.html', '/sample-2', '/sample-2/', '/static/sample2.html',
+      '/logo-preview', '/logo-preview/', '/logo-preview.html', '/static/logo-preview.html'
+    ]);
+    if (excludedRoutes.has(url.pathname.toLowerCase())) {
+      return new Response('Not Found', {
+        status: 404,
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'X-Robots-Tag': 'noindex'
+        }
+      });
+    }
+
     // Rewrite /static/reports/ to /reports/
     // Direct static reports rewrite removed for security lockdown
 
