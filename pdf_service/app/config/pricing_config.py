@@ -821,6 +821,27 @@ def build_plans_from_packs_json(
     return plans
 
 
+REJECTED_LEGACY_PLAN_IDS = frozenset({
+    "report_essential",
+    "report_master",
+    "report_divine",
+    "essential",
+    "master",
+    "divine",
+    "starter_5q",
+    "ai_starter_5q",
+    "ai_report_combo",
+    "growth_10q",
+    "ai_growth_10q",
+    "ai_growth_15q",
+    "ai_power_35q",
+    "complete_report",
+    "starter",
+    "growth",
+    "complete",
+})
+
+
 def resolve_sku_price(
     sku_or_plan_id: str,
     now_iso: Optional[str] = None,
@@ -830,10 +851,13 @@ def resolve_sku_price(
 ) -> Optional[Dict[str, Any]]:
     """
     Resolves the authoritative server SKU record strictly from `packs.json`.
+    Explicitly rejects retired legacy plan IDs (`REJECTED_LEGACY_PLAN_IDS`).
     """
     if not sku_or_plan_id or not isinstance(sku_or_plan_id, str):
         return None
     clean_id = sku_or_plan_id.lower().strip()
+    if clean_id in REJECTED_LEGACY_PLAN_IDS:
+        return None
     skus = get_all_product_skus(
         now_iso=now_iso,
         ends_at_override=ends_at_override,

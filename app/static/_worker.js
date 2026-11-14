@@ -1278,20 +1278,37 @@ function isPlanner2027Live(env) {
   return v === 'true' || v === '1' || v === 'yes';
 }
 
+const REJECTED_LEGACY_PLAN_IDS = new Set([
+  'report_essential',
+  'report_master',
+  'report_divine',
+  'essential',
+  'master',
+  'divine',
+  'starter_5q',
+  'ai_starter_5q',
+  'ai_report_combo',
+  'growth_10q',
+  'ai_growth_10q',
+  'ai_growth_15q',
+  'ai_power_35q',
+  'complete_report',
+  'starter',
+  'growth',
+  'complete'
+]);
+
 function getPackById(packId, env = null, nowMs = null) {
   if (!packId || typeof packId !== 'string') return null;
   const p = packId.trim().toLowerCase();
+  if (REJECTED_LEGACY_PLAN_IDS.has(p)) return null;
   const aliases = {
     'basic': 'report_basic',
-    'report_essential': 'report_basic',
     'advanced': 'report_advanced',
-    'report_master': 'report_advanced',
     'premium': 'report_premium',
-    'report_divine': 'report_premium',
     'planner-2027': 'planner_2027',
     'year_2027': 'planner_2027',
-    '2027_planner': 'planner_2027',
-    'starter_5q': 'charm_single'
+    '2027_planner': 'planner_2027'
   };
   const key = aliases[p] || p;
   const base = PACK_CATALOG.core_reports[key] || (PACK_CATALOG.annual_planners && PACK_CATALOG.annual_planners[key]) || PACK_CATALOG.charm_ai[key] || PACK_CATALOG.bundles[key] || null;
@@ -5678,6 +5695,14 @@ export default {
       }
 
       const body = await request.json().catch(() => ({}));
+      const rawRequestedPackId = String(body.packId || body.pack_id || body.plan || body.plan_id || '').trim();
+      if (rawRequestedPackId && REJECTED_LEGACY_PLAN_IDS.has(rawRequestedPackId.toLowerCase())) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'LEGACY_PLAN_ID_REJECTED',
+          error: `Legacy plan id "${rawRequestedPackId}" is retired and not accepted.`
+        }), { status: 400, headers: corsHeaders });
+      }
       const email = (body.customer_email || body.email || '').trim().toLowerCase();
       const now = Date.now();
 

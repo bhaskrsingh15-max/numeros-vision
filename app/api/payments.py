@@ -25,6 +25,7 @@ from app.config.pricing_config import (
     resolve_sku_price,
     build_plans_from_packs_json,
     is_notify_me_higher_tiers_enabled,
+    REJECTED_LEGACY_PLAN_IDS,
     REPORT_TIERS,
     BUNDLES,
     CHARM_AI_PACKS,
@@ -566,6 +567,15 @@ async def create_order(req: CreateOrderRequest):
             },
         )
     plan_key = raw_plan.lower()
+    if plan_key in REJECTED_LEGACY_PLAN_IDS:
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "code": "LEGACY_PLAN_ID_REJECTED",
+                "detail": f"Legacy plan_id '{raw_plan}' is retired and not accepted.",
+            },
+        )
     resolved_sku = resolve_sku_price(plan_key)
     if resolved_sku is None:
         return JSONResponse(
