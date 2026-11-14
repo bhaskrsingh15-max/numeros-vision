@@ -255,8 +255,9 @@ async function testGate1PackPriceParityBothModes() {
 
       for (const { bucket, id, entry } of allPlans) {
         const isWaitlistedInScenario =
-          (id === 'planner_2027' && !sc.plannerLive) ||
-          ((id === 'report_advanced' || id === 'report_premium') && sc.notifyHigher);
+          id === 'planner_2027' ||
+          id === 'report_advanced' ||
+          id === 'report_premium';
 
         let expectedHelperPaise = 0;
         if (isWaitlistedInScenario) {

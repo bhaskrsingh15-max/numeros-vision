@@ -28,8 +28,15 @@ async function runSuite() {
   // ---------------------------------------------------------------------------
   console.log('[TEST 1] Testing Reports tier picker prices against PACK_CATALOG...');
   assert.equal(packsJson.core_reports.report_basic.price_inr, 199, 'Basic report must be 199');
-  assert.equal(packsJson.core_reports.report_advanced.price_inr, 510, 'Advanced report must be 510');
-  assert.equal(packsJson.core_reports.report_premium.price_inr, 1050, 'Premium report must be 1050');
+  assert.equal(packsJson.core_reports.report_advanced.price_inr, null, 'Advanced report must be waitlisted (null price)');
+  assert.equal(packsJson.core_reports.report_advanced.waitlist_only, true, 'Advanced report must be waitlist_only');
+  assert.equal(packsJson.core_reports.report_advanced.display_price_label, 'Coming soon, notify me', 'Advanced report label');
+  assert.equal(packsJson.core_reports.report_premium.price_inr, null, 'Premium report must be waitlisted (null price)');
+  assert.equal(packsJson.core_reports.report_premium.waitlist_only, true, 'Premium report must be waitlist_only');
+  assert.equal(packsJson.core_reports.report_premium.display_price_label, 'Coming soon, notify me', 'Premium report label');
+  assert.equal(packsJson.annual_planners.planner_2027.price_inr, null, 'Planner 2027 must be waitlisted (null price)');
+  assert.equal(packsJson.annual_planners.planner_2027.waitlist_only, true, 'Planner 2027 must be waitlist_only');
+  assert.equal(packsJson.annual_planners.planner_2027.display_price_label, 'Coming soon, notify me', 'Planner 2027 label');
 
   // Under Stage A, the 3 tiers exist with exact catalog prices on /your-reading/
   assert.ok(yourReadingHtml.includes('card-report-basic'), 'card-report-basic must exist in your-reading.html');

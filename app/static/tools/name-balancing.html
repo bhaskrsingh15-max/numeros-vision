@@ -588,7 +588,7 @@
       </div>
     </div>
 
-    <!-- CASE A: NAME IS ALIGNED (Harmonious — Push Career, Love, Higher Studies/Foreign, Luxury/Family packages — strictly NO ₹1,050 package) -->
+    <!-- CASE A: NAME IS ALIGNED (Harmonious — report options CTA) -->
     <div id="aligned-card" class="res-card align-success-card" style="display:none; text-align:center;">
       <div class="align-status-icon">✨</div>
       <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:100px;background:rgba(22, 131, 91, 0.12);color:#16835B;font-size:0.78rem;font-weight:700;margin-bottom:12px;">
@@ -612,7 +612,7 @@
 
       </div>
 
-    <!-- CASE B: NAME NOT ALIGNED (Friction / Disharmony — ONLY the ₹1,050 Name Balancing Package Shown) -->
+    <!-- CASE B: NAME NOT ALIGNED (Friction / Disharmony — Waitlisted Name Balancing Consultation) -->
     <div id="unaligned-card" class="res-card unaligned-remedy-card" style="display:none;">
       <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:100px;background:rgba(192, 57, 43, 0.12);color:#C0392B;font-size:0.78rem;font-weight:700;margin-bottom:12px;">
         ⚠️ TRADITIONAL FRICTION IDENTIFIED UNDER CHALDEAN RULES
@@ -630,7 +630,7 @@
         ✦ In-Depth Analysis: Explore Auspicious Spelling Variations in a Personalized 1-on-1 Session.
       </div>
 
-      <!-- Strictly ONLY the ₹1,050 Package Shown -->
+      <!-- Waitlisted Consultation CTA -->
       <div style="display:flex; justify-content:center; align-items:center; gap:14px; flex-wrap:wrap;">
         <a href="/pricing" class="btn-gold" style="text-decoration:none; padding:14px 34px; font-size:0.96rem; font-weight:700; border-radius:100px; box-shadow:0 6px 22px rgba(201,162,39,0.4);">
           ✦ Anveil every charm (32 Pages · Coming soon, notify me) →
@@ -1076,12 +1076,10 @@ function renderResults(data, driver, conductor, driverPlanet, conductorPlanet) {
 
       if (isAligned) {
         // CASE A: NAME IS ALIGNED
-        // Won't show the package of ₹1,050
         alignedCard.style.display = 'block';
         unalignedCard.style.display = 'none';
       } else {
         // CASE B: NAME NOT ALIGNED
-        // ONLY show the package of ₹1,050 Name Balancing package, won't show any other packages
         alignedCard.style.display = 'none';
         unalignedCard.style.display = 'block';
       }

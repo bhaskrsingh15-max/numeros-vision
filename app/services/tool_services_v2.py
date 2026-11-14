@@ -285,9 +285,6 @@ def _prov_line(key: str, label: str, basis: str, detail: str) -> Dict[str, str]:
 
 
 def _compliant_business_monetization_gate(entity_name: str, compound: int, root: int, status: str) -> Dict[str, Any]:
-    # Price digit-root check:
-    # 510 -> 5 + 1 + 0 = 6 (allowed: 1, 3, 5, 6)
-    # 1020 -> 1 + 0 + 2 + 0 = 3 (allowed: 1, 3, 5, 6)
     clean_entity = (entity_name or "Your Venture").strip()
     return {
         "tool_key": "business_alignment",
@@ -295,10 +292,12 @@ def _compliant_business_monetization_gate(entity_name: str, compound: int, root:
         "compound": compound,
         "root": digit_root(root) if root > 0 else 1,
         "status": status,
-        "entry_price_inr": 510,
-        "anchor_price_inr": 1020,
-        "discount_badge": "EXPLORE REPORT OPTIONS",
-        "lock_headline": f"Explore Complete Business Numerology Dossier for {clean_entity}",
+        "entry_price_inr": None,
+        "anchor_price_inr": None,
+        "waitlist_only": True,
+        "display_price_label": "Coming soon, notify me",
+        "discount_badge": "COMING SOON · NOTIFY ME",
+        "lock_headline": f"Explore Business Numerology Options for {clean_entity}",
         "charm_tagline_action": "ANVEIL EVERY CHARM",
         "checkout_url": "/pricing/",
     }

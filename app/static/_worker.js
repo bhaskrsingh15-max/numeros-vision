@@ -1062,12 +1062,12 @@ const PACK_CATALOG = {
       name: "Anveil my glowing charms",
       descriptor: "Advanced Numerology Report, 12 pages",
       pages: 12,
-      price_inr: 510,
-      mrp_inr: 1020,
-      mrp_paise: 102000,
-      amount_paise: 51000,
-      digital_root: 6,
-      mrp_digital_root: 3,
+      price_inr: null,
+      mrp_inr: null,
+      mrp_paise: null,
+      amount_paise: null,
+      waitlist_only: true,
+      display_price_label: "Coming soon, notify me",
       features: [
         "Everything in Basic plus Deep Analysis of All Present Numbers",
         "Repeating Digit Amplifications & Behavioral Tendencies",
@@ -1075,7 +1075,7 @@ const PACK_CATALOG = {
         "Career, Relationship & Financial Archetype Compatibility",
         "12-Page Structured PDF Report with Actionable Daily Habits"
       ],
-      status: "active"
+      status: "waitlist"
     },
     report_premium: {
       pack_id: "report_premium",
@@ -1083,12 +1083,12 @@ const PACK_CATALOG = {
       name: "Anveil every charm",
       descriptor: "Complete Numerology Report, 32 pages",
       pages: 32,
-      price_inr: 1050,
-      mrp_inr: 2100,
-      mrp_paise: 210000,
-      amount_paise: 105000,
-      digital_root: 6,
-      mrp_digital_root: 3,
+      price_inr: null,
+      mrp_inr: null,
+      mrp_paise: null,
+      amount_paise: null,
+      waitlist_only: true,
+      display_price_label: "Coming soon, notify me",
       badge: "Best value",
       features: [
         "Everything in Basic & Advanced plus Missing Numbers (Open Grid Cells) Analysis",
@@ -1097,7 +1097,7 @@ const PACK_CATALOG = {
         "Practical Lifestyle, Color, Directional (Vastu) & Habit Harmonizers",
         "Complete 32-Page Personalized Reference PDF Report"
       ],
-      status: "active"
+      status: "waitlist"
     }
   },
   annual_planners: {
@@ -1145,16 +1145,16 @@ const PACK_CATALOG = {
     charm_multi: {
       pack_id: "charm_multi",
       name: "Multi-Reading Pack",
-      price_inr: 399,
-      amount_paise: 39900,
+      price_inr: null,
+      amount_paise: null,
       questions_count: 10,
       status: "inactive"
     },
     charm_extended: {
       pack_id: "charm_extended",
       name: "Extended Reading Pack",
-      price_inr: 699,
-      amount_paise: 69900,
+      price_inr: null,
+      amount_paise: null,
       questions_count: 25,
       status: "inactive"
     }
@@ -1163,22 +1163,28 @@ const PACK_CATALOG = {
     starter_bundle: {
       pack_id: "starter_bundle",
       name: "Starter Bundle",
-      price_inr: 339,
-      amount_paise: 33900,
+      price_inr: null,
+      amount_paise: null,
+      waitlist_only: true,
+      display_price_label: "Coming soon, notify me",
       status: "coming_soon"
     },
     discovery_bundle: {
       pack_id: "discovery_bundle",
       name: "Discovery Bundle",
-      price_inr: 1299,
-      amount_paise: 129900,
+      price_inr: null,
+      amount_paise: null,
+      waitlist_only: true,
+      display_price_label: "Coming soon, notify me",
       status: "coming_soon"
     },
     comprehensive_bundle: {
       pack_id: "comprehensive_bundle",
       name: "Comprehensive Bundle",
-      price_inr: 1999,
-      amount_paise: 199900,
+      price_inr: null,
+      amount_paise: null,
+      waitlist_only: true,
+      display_price_label: "Coming soon, notify me",
       status: "coming_soon"
     }
   }
@@ -1292,8 +1298,9 @@ function getPackById(packId, env = null, nowMs = null) {
   if (!base) return null;
   const waitlistLabel = (PACK_CATALOG.feature_flags && PACK_CATALOG.feature_flags.waitlist_display_label) || 'Coming soon, notify me';
   const waitlistCaption = (PACK_CATALOG.feature_flags && PACK_CATALOG.feature_flags.waitlist_caption) || 'When this report opens, it starts at a launch price for its first 7 days. We’ll email you the day it opens.';
-  if (key === 'planner_2027' && !isPlanner2027Live(env)) {
+  if (key === 'planner_2027') {
     return Object.assign({}, base, {
+      status: 'waitlist',
       waitlist_only: true,
       display_price_label: waitlistLabel,
       waitlist_caption: waitlistCaption,
@@ -1305,12 +1312,14 @@ function getPackById(packId, env = null, nowMs = null) {
       launch_offer_copy: ''
     });
   }
-  if (isNotifyMeHigherTiersEnabled(env) && (key === 'report_advanced' || key === 'report_premium')) {
+  if (key === 'report_advanced' || key === 'report_premium') {
     return Object.assign({}, base, {
+      status: 'waitlist',
       waitlist_only: true,
       display_price_label: waitlistLabel,
       waitlist_caption: waitlistCaption,
       price_inr: null,
+      mrp_inr: null,
       amount_paise: null,
       struck_mrp_inr: null,
       launch_offer_active: false,
@@ -5726,7 +5735,7 @@ export default {
 
       // 2. Deterministic pack lookup (resolves regular mrp_inr automatically after fixed launch_offer.ends_at)
       const pack = getPackById(packId, env, now);
-      if (pack && pack.pack_id === 'planner_2027' && !isPlanner2027Live(env)) {
+      if (pack && pack.pack_id === 'planner_2027') {
         return new Response(JSON.stringify({
           success: false,
           code: 'PLANNER_WAITLIST_ONLY',
@@ -5735,19 +5744,20 @@ export default {
           error: 'Coming soon, notify me. The 2027 Year Ahead Planner is waitlist-only until its legal disclaimer is approved.'
         }), { status: 409, headers: corsHeaders });
       }
+      if (pack && (pack.pack_id === 'report_advanced' || pack.pack_id === 'report_premium')) {
+        return new Response(JSON.stringify({
+          success: false,
+          code: 'TIER_WAITLIST_ONLY',
+          status: 'waitlist_only',
+          display_label: 'Coming soon, notify me',
+          error: 'Coming soon, notify me. This report edition is currently waitlist-only; Anveil my alignments is open for immediate checkout.'
+        }), { status: 409, headers: corsHeaders });
+      }
       if (!pack || pack.status !== 'active') {
         return new Response(JSON.stringify({
           success: false,
           error: `Invalid or inactive pack "${packId}".`
         }), { status: 400, headers: corsHeaders });
-      }
-
-      if (isNotifyMeHigherTiersEnabled(env) && (pack.pack_id === 'report_advanced' || pack.pack_id === 'report_premium')) {
-        return new Response(JSON.stringify({
-          success: false,
-          code: 'TIER_WAITLIST_ONLY',
-          error: 'Coming soon, notify me. This report edition is currently waitlist-only; Anveil my alignments is open for immediate checkout.'
-        }), { status: 409, headers: corsHeaders });
       }
 
       const amountPaise = resolveEffectivePackPricePaise(pack.pack_id, env, now);
@@ -8426,11 +8436,13 @@ export default {
     // 8i. PREVIEW-ONLY TEST CONSOLE (/admin/test-console & /api/admin/test-console)
     // Guarded strictly by ENVIRONMENT === 'preview' (404 in production) and ADMIN_TOKEN
     // =========================================================================
-    if (url.pathname === '/admin/test-console' || url.pathname === '/api/admin/test-console') {
-      if (env.ENVIRONMENT !== 'preview' && env.ENVIRONMENT !== 'test' && env.ENVIRONMENT !== 'local') {
+    const normalizedAdminConsolePath = url.pathname.replace(/\/+$/, '');
+    if (normalizedAdminConsolePath === '/admin/test-console' || normalizedAdminConsolePath === '/api/admin/test-console') {
+      const consoleEnvMode = String((env && env.ENVIRONMENT) || 'production').trim().toLowerCase();
+      if (consoleEnvMode === 'production' || (consoleEnvMode !== 'preview' && consoleEnvMode !== 'test' && consoleEnvMode !== 'local')) {
         return new Response('Not Found', {
           status: 404,
-          headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+          headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' }
         });
       }
 
@@ -8465,7 +8477,7 @@ export default {
 
       let isAuthorized = Boolean(providedToken && expectedAdminToken && timingSafeEqual(providedToken, expectedAdminToken));
       let qaPostRawBody = null;
-      if (!isAuthorized && url.pathname === '/api/admin/test-console') {
+      if (!isAuthorized && normalizedAdminConsolePath === '/api/admin/test-console') {
         const qaTs = (request.headers.get('X-NV-QA-Timestamp') || '').trim();
         const qaSig = (request.headers.get('X-NV-QA-Signature') || '').trim().toLowerCase();
         const previewQaSecret = ((env && env.PREVIEW_QA_SECRET) || '').trim();
@@ -8483,9 +8495,9 @@ export default {
         }
       }
 
-      const wantsJson = (request.headers.get('Accept') || '').includes('application/json') || url.searchParams.get('format') === 'json' || url.pathname === '/api/admin/test-console';
+      const wantsJson = (request.headers.get('Accept') || '').includes('application/json') || url.searchParams.get('format') === 'json' || normalizedAdminConsolePath === '/api/admin/test-console';
 
-      if (isAuthorized && request.method === 'POST' && url.pathname === '/api/admin/test-console') {
+      if (isAuthorized && request.method === 'POST' && normalizedAdminConsolePath === '/api/admin/test-console') {
         const rawJsonText = qaPostRawBody !== null ? qaPostRawBody : await request.text();
         const qaBody = (() => { try { return JSON.parse(rawJsonText || '{}'); } catch (_) { return {}; } })();
         if (qaBody.action === 'preview_qa_signin') {

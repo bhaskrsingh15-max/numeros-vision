@@ -13,7 +13,7 @@
 (function () {
   'use strict';
 
-  var MAX_PARTNERS = 4;
+  var CONSULTANT_REVIEW_PARTNER_THRESHOLD = 4;
   var state = {
     mode: 'new_logo', // 'new_logo' | 'audit_existing'
     selectedSymbol: 'ascending_peak',
@@ -110,11 +110,14 @@
     var container = document.getElementById('partnersContainer');
     if (!container) return;
     var rows = container.querySelectorAll('.nv-partner-row');
-    if (rows.length >= MAX_PARTNERS) {
-      setStatusNotice('studioInlineNotice', 'Up to 4 active partners can be included alongside the primary owner.', 'error');
-      return;
-    }
     var idx = rows.length + 1;
+    if (idx > CONSULTANT_REVIEW_PARTNER_THRESHOLD) {
+      setStatusNotice(
+        'studioInlineNotice',
+        'More than 4 active partners entered — all partners will be evaluated and flagged for consultant review.',
+        'working'
+      );
+    }
     var row = document.createElement('div');
     row.className = 'nv-partner-row';
     row.style.cssText =
@@ -406,7 +409,9 @@
       }
     }
     if (tagEl && data.four_results && data.four_results.traditional_alignment) {
-      tagEl.textContent = 'Basis: ' + (data.four_results.traditional_alignment.charm_basis_label || 'numerology basis only');
+      tagEl.textContent =
+        data.four_results.traditional_alignment.charm_basis_label ||
+        'Checked Chaldean name and Mulank–Bhagyank numerology tables only (birth time not supplied)';
     }
 
     // 1. Canvas
@@ -542,8 +547,13 @@
         basisBadge(ta.basis) +
         '</div>' +
         '<div style="font-size:0.86rem; color:#523E28; line-height:1.7;">' +
-        '<div><strong>Alignment Status:</strong> ' + esc(ta.status) + ' (' + esc(ta.partner_profiles_evaluated) + ' partner profile(s))</div>' +
-        '<div><strong>Cross-System Label:</strong> <strong>' + esc(ta.charm_basis_label) + '</strong></div>' +
+        '<div><strong>Alignment Status:</strong> ' + esc(ta.status) + ' (' + esc(ta.partner_profiles_evaluated) + ' profile(s))</div>' +
+        (ta.consultant_review_required
+          ? '<div style="margin:4px 0; padding:6px 10px; border-radius:8px; background:rgba(201,162,39,0.12); color:#8B6914; font-weight:700;">Flagged for consultant review: ' +
+            esc(ta.consultant_review_reason || 'More than 4 active partners supplied.') +
+            '</div>'
+          : '') +
+        '<div><strong>Engine Checks:</strong> <strong>' + esc(ta.charm_basis_label) + '</strong></div>' +
         '<div><strong>Reconciled Palette:</strong> Main ' +
         esc(recPal.primary && recPal.primary.hex) +
         ' · Accent ' +
@@ -641,16 +651,14 @@
             return '<li style="margin-bottom:5px;">' + esc(line) + '</li>';
           })
           .join('');
+        var waitlistLabel = t.display_price_label || 'Coming soon, notify me';
         return (
           '<div style="background:#FFFDF7; border:1.5px solid rgba(201,162,39,0.36); border-radius:16px; padding:20px; display:flex; flex-direction:column; justify-content:space-between;">' +
           '<div>' +
           '<div style="font-family:\'Cinzel\',serif; font-size:0.86rem; font-weight:700; color:#523E28;">' + esc(t.name) + '</div>' +
           '<div style="margin:10px 0;">' +
-          '<span style="font-family:\'Cinzel\',serif; font-size:1.45rem; font-weight:800; color:var(--gold-dark, #8B6914);">₹' +
-          Number(t.offer_price_inr).toLocaleString('en-IN') +
-          '</span> ' +
-          '<span style="font-size:0.88rem; text-decoration:line-through; color:var(--gold-dark, #8B6914); opacity:0.72;">₹' +
-          Number(t.list_price_inr).toLocaleString('en-IN') +
+          '<span style="font-family:\'Cinzel\',serif; font-size:1.05rem; font-weight:700; color:var(--gold-dark, #8B6914);">' +
+          esc(waitlistLabel) +
           '</span>' +
           '</div>' +
           '<ul style="padding-left:18px; margin:0 0 12px; font-size:0.82rem; color:#523E28; line-height:1.55;">' +
@@ -665,7 +673,9 @@
           esc(t.tier_id) +
           '\', \'' +
           esc(t.name) +
-          '\')">Request Owner-Reviewed Package →</button>' +
+          '\')">' +
+          esc(waitlistLabel) +
+          '</button>' +
           '</div>' +
           '</div>'
         );

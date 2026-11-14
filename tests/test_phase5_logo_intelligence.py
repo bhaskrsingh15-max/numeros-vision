@@ -207,8 +207,8 @@ class Phase5LogoIntelligenceTests(unittest.TestCase):
         )
         self.assertEqual(r_noconsent.status_code, 400)
 
-        # > 4 active partners -> 400
-        r_too_many = self.client.post(
+        # > 4 active partners -> allowed (200 OK) and flagged for consultant review
+        r_five_partners = self.client.post(
             "/api/v1/logo/five-layer-evaluate",
             json={
                 "business_name": "PRANA LABS",
@@ -218,7 +218,19 @@ class Phase5LogoIntelligenceTests(unittest.TestCase):
             },
             headers=self.headers,
         )
-        self.assertEqual(r_too_many.status_code, 400)
+        self.assertEqual(r_five_partners.status_code, 200)
+        five_body = r_five_partners.json()
+        self.assertEqual(five_body["layers"]["layer2_partner_profiles"]["active_partners_count"], 5)
+        self.assertTrue(five_body["layers"]["layer2_partner_profiles"]["consultant_review_required"])
+        self.assertTrue(five_body["four_results"]["traditional_alignment"]["consultant_review_required"])
+        self.assertEqual(five_body["partner_consent_text"], "{{PARTNER_CONSENT_TEXT_PENDING}}")
+        self.assertEqual(
+            five_body["layers"]["layer2_partner_profiles"]["partner_consent_text"],
+            "{{PARTNER_CONSENT_TEXT_PENDING}}",
+        )
+        self.assertTrue(
+            any("More than 4 active partners" in g for g in five_body["free_scan"]["named_gaps"])
+        )
 
         # Owner + 4 active partners + Charm astrology non-interference check
         base_req = {
@@ -259,12 +271,22 @@ class Phase5LogoIntelligenceTests(unittest.TestCase):
         self.assertEqual(profs[1]["driver_number"], 2)
         self.assertEqual(profs[1]["conductor_number"], 6)
 
-        # Verify Charm label is strictly one of the two allowed values and NEVER alters palette/gates/SVG
-        self.assertEqual(b1["layers"]["layer3_reconciliation"]["charm_basis_label"], "numerology basis only")
+        # Verify Charm label states strictly what the engine checks, never says "both systems agree", and NEVER alters palette/gates/SVG
+        self.assertFalse(b1["layers"]["layer2_partner_profiles"]["consultant_review_required"])
+        self.assertEqual(
+            b1["layers"]["layer3_reconciliation"]["charm_basis_label"],
+            "Checked Chaldean name and Mulank–Bhagyank numerology tables only (birth time not supplied)",
+        )
         self.assertIn(
             b2["layers"]["layer3_reconciliation"]["charm_basis_label"],
-            {"both systems agree", "numerology basis only"},
+            {
+                "Checked owner Mulank (Birth Day number) planet and sidereal Lahiri Moon-sign ruler: friendly planet group (logo rules use numerology only)",
+                "Checked owner Mulank (Birth Day number) planet and sidereal Lahiri Moon-sign ruler: different planet groups (logo rules use numerology only)",
+                "Checked Chaldean name and Mulank–Bhagyank numerology tables only (birth time not supplied)",
+            },
         )
+        self.assertNotIn("both systems agree", json.dumps(b1).lower())
+        self.assertNotIn("both systems agree", json.dumps(b2).lower())
         self.assertEqual(
             b1["layers"]["layer3_reconciliation"]["reconciled_palette"],
             b2["layers"]["layer3_reconciliation"]["reconciled_palette"],
@@ -277,7 +299,7 @@ class Phase5LogoIntelligenceTests(unittest.TestCase):
         self.assertNotIn(rec_pal["primary"]["colour_family"], excluded)
         self.assertNotIn(rec_pal["accent"]["colour_family"], excluded)
 
-    def test_08_shukla_paksha_nov_2026_verified_9_nov_and_compliant_prices(self) -> None:
+    def test_08_shukla_paksha_nov_2026_verified_9_nov_and_waitlist_paid_tiers(self) -> None:
         win = calculate_verified_shukla_paksha_window(datetime.date(2026, 11, 8), ruling_root=6)
         self.assertEqual(win["shukla_paksha_start_date"], "2026-11-09")
         self.assertEqual(len(win["three_shukla_paksha_dates"]), 3)
@@ -294,8 +316,10 @@ class Phase5LogoIntelligenceTests(unittest.TestCase):
         tiers = r.json()["paid_tiers"]
         self.assertEqual([t["tier_id"] for t in tiers], ["deep_audit", "rework", "new_logo", "startup_pack"])
         for t in tiers:
-            self.assertIn(digit_root(t["offer_price_inr"]), {1, 3, 5, 6})
-            self.assertIn(digit_root(t["list_price_inr"]), {1, 3, 5, 6})
+            self.assertIsNone(t["offer_price_inr"])
+            self.assertIsNone(t["list_price_inr"])
+            self.assertTrue(t["waitlist_only"])
+            self.assertEqual(t["display_price_label"], "Coming soon, notify me")
             self.assertTrue(t["owner_review_required"])
 
 

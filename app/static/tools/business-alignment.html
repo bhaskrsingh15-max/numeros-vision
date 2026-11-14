@@ -1026,10 +1026,10 @@
         <div class="field-group">
           <label for="capitalBand">Available Startup Capital Runway *</label>
           <select id="capitalBand">
-            <option value="bootstrapped">Bootstrapped (&lt; $10k)</option>
-            <option value="seed_10k_50k" selected>Seed Stage ($10k – $50k)</option>
-            <option value="growth_50k_250k">Growth Stage ($50k – $250k)</option>
-            <option value="institutional_250k_plus">Institutional Scale (&gt; $250k)</option>
+            <option value="bootstrapped">Bootstrapped / Self-Funded</option>
+            <option value="seed_10k_50k" selected>Seed / Early Stage</option>
+            <option value="growth_50k_250k">Growth / Expansion Stage</option>
+            <option value="institutional_250k_plus">Institutional / Enterprise Scale</option>
           </select>
         </div>
 
@@ -1532,11 +1532,9 @@
         }
 
         const mg = data.monetization_gate || {};
-        const lockHeadline = mg.lock_headline || "🔒 Unveil Your Complete Business Charm & Operational Blueprint";
-        const lockTaglineAction = mg.charm_tagline_action || "ANVEIL Your Business Charm";
-        const entryPrice = mg.entry_price_inr || 510;
-        const anchorPrice = mg.anchor_price_inr || 1020;
-        const discountBadge = mg.discount_badge || "SAVE 50% · INSTANT ACCESS";
+        const lockHeadline = mg.lock_headline || "🔒 Explore Your Business Numerology Options";
+        const lockTaglineAction = mg.charm_tagline_action || "ANVEIL EVERY CHARM";
+        const waitlistLabel = mg.display_price_label || "Coming soon, notify me";
         const checkoutUrl = mg.checkout_url || `/pricing/`;
 
         resBox.innerHTML = `
@@ -1580,14 +1578,12 @@
             </div>
 
             <div class="lock-price-box">
-              
-              <span class="price-active">₹${entryPrice}</span>
-              <span class="price-discount">${discountBadge}</span>
+              <span class="price-active">${waitlistLabel}</span>
             </div>
 
             <div class="lock-actions-row">
               <a href="${checkoutUrl}" class="btn-lock-cta">
-                <span>🔒 ${lockTaglineAction} · Explore Report (₹${entryPrice}) ✦</span>
+                <span>${waitlistLabel} ✦</span>
               </a>
             </div>
 
@@ -1715,11 +1711,9 @@
         const vastu = data.vastu_and_operational_remedies || {};
 
         const mg = data.monetization_gate || {};
-        const lockHeadline = mg.lock_headline || "🔒 Unveil Your Corporate Alignment & Trade Shield Blueprint";
-        const lockTaglineAction = mg.charm_tagline_action || "ANVEIL Your Business Charm";
-        const entryPrice = mg.entry_price_inr || 510;
-        const anchorPrice = mg.anchor_price_inr || 1020;
-        const discountBadge = mg.discount_badge || "SAVE 50% · INSTANT ACCESS";
+        const lockHeadline = mg.lock_headline || "🔒 Explore Your Corporate Numerology Options";
+        const lockTaglineAction = mg.charm_tagline_action || "ANVEIL EVERY CHARM";
+        const waitlistLabel = mg.display_price_label || "Coming soon, notify me";
         const checkoutUrl = mg.checkout_url || `/pricing/`;
 
         resBox.innerHTML = `
@@ -1758,14 +1752,12 @@
             </div>
 
             <div class="lock-price-box">
-              
-              <span class="price-active">₹${entryPrice}</span>
-              <span class="price-discount">${discountBadge}</span>
+              <span class="price-active">${waitlistLabel}</span>
             </div>
 
             <div class="lock-actions-row">
               <a href="${checkoutUrl}" class="btn-lock-cta">
-                <span>🔒 ${lockTaglineAction} · Explore Corporate Dossier (₹${entryPrice}) ✦</span>
+                <span>${waitlistLabel} ✦</span>
               </a>
             </div>
 

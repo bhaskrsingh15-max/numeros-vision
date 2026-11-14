@@ -322,8 +322,10 @@ class Phase4ToolServicesTests(unittest.TestCase):
         self.assertEqual(data["brand_and_name_adjustments"]["trading_name_compound"], 51)
         self.assertEqual(data["brand_and_name_adjustments"]["trading_name_root"], 6)
         mg = data["monetization_gate"]
-        self.assertIn(digit_root(mg["entry_price_inr"]), {1, 3, 5, 6})
-        self.assertIn(digit_root(mg["anchor_price_inr"]), {1, 3, 5, 6})
+        self.assertIsNone(mg["entry_price_inr"])
+        self.assertIsNone(mg["anchor_price_inr"])
+        self.assertTrue(mg["waitlist_only"])
+        self.assertEqual(mg["display_price_label"], "Coming soon, notify me")
         self.assertEqual(mg["checkout_url"], "/pricing/")
 
         self.assertEqual(
@@ -358,8 +360,10 @@ class Phase4ToolServicesTests(unittest.TestCase):
         self.assertEqual(data["traditional_alignment"]["name_compound"], 51)
         self.assertEqual(data["traditional_alignment"]["name_single"], 6)
         mg = data["monetization_gate"]
-        self.assertIn(digit_root(mg["entry_price_inr"]), {1, 3, 5, 6})
-        self.assertIn(digit_root(mg["anchor_price_inr"]), {1, 3, 5, 6})
+        self.assertIsNone(mg["entry_price_inr"])
+        self.assertIsNone(mg["anchor_price_inr"])
+        self.assertTrue(mg["waitlist_only"])
+        self.assertEqual(mg["display_price_label"], "Coming soon, notify me")
 
         self.assertEqual(
             self.client.post("/api/v1/business/startup-evaluate", json={}, headers=self.headers).status_code, 400

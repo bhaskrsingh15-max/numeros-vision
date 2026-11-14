@@ -33,12 +33,13 @@
       "display_name": "Anveil every charm \u00b7 Complete Numerology Report, 32 pages",
       "pages": 32,
       "page_target": "32-page PDF",
-      "price_inr": 1050,
-      "amount_paise": 105000,
-      "mrp_inr": 2100,
-      "mrp_paise": 210000,
-      "digital_root": 6,
-      "mrp_digital_root": 3,
+      "price_inr": null,
+      "amount_paise": null,
+      "mrp_inr": null,
+      "mrp_paise": null,
+      "display_price_label": "Coming soon, notify me",
+      "waitlist_only": true,
+      "status": "coming_soon",
       "best_value": true,
       "purpose": "The complete 32-page roadmap covering every glowing and veiled charm, dual-system synthesis, practical habits, and timing.",
       "deliverables": [
@@ -52,7 +53,7 @@
       "comparisons": "Integrated across all supported modules",
       "methodology": "Deterministic formula steps & engine version trace",
       "guidance": "Consolidated lifetime reference & strategic roadmap",
-      "active": true
+      "active": false
     },
     "advanced": {
       "tier_id": "advanced",
@@ -61,12 +62,13 @@
       "display_name": "Anveil my glowing charms \u00b7 Advanced Numerology Report, 12 pages",
       "pages": 12,
       "page_target": "12-page PDF",
-      "price_inr": 510,
-      "amount_paise": 51000,
-      "mrp_inr": 1020,
-      "mrp_paise": 102000,
-      "digital_root": 6,
-      "mrp_digital_root": 3,
+      "price_inr": null,
+      "amount_paise": null,
+      "mrp_inr": null,
+      "mrp_paise": null,
+      "display_price_label": "Coming soon, notify me",
+      "waitlist_only": true,
+      "status": "coming_soon",
       "popular": true,
       "purpose": "Expanded 12-page analysis of your glowing charms, supporting calculations, comparisons, and structured guidance.",
       "deliverables": [
@@ -80,7 +82,7 @@
       "comparisons": "Multiple, where supported",
       "methodology": "Expanded with calculation steps",
       "guidance": "Structured guidance & auspicious windows",
-      "active": true
+      "active": false
     },
     "basic": {
       "tier_id": "basic",
@@ -303,11 +305,10 @@
       "basic_report_count": 2,
       "advanced_report_count": 0,
       "premium_report_count": 0,
-      "standalone_total_inr": 398,
-      "bundle_price_inr": 339,
-      "amount_paise": 33900,
-      "savings_inr": 49,
-      "savings_percent": 12,
+      "standalone_total_inr": null,
+      "bundle_price_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "purpose": "Ideal for exploring two connected life domains (e.g. Love Style + Career Direction).",
       "deliverables": [
         "2 Complete 3-Page Basic PDF Reports",
@@ -316,7 +317,7 @@
         "Ready within minutes in your account dashboard"
       ],
       "active": false,
-      "status": "paused_for_mvp"
+      "status": "coming_soon"
     },
     "discovery_bundle": {
       "bundle_id": "discovery_bundle",
@@ -326,11 +327,10 @@
       "basic_report_count": 3,
       "advanced_report_count": 0,
       "premium_report_count": 0,
-      "standalone_total_inr": 597,
-      "bundle_price_inr": 1299,
-      "amount_paise": 129900,
-      "savings_inr": 98,
-      "savings_percent": 16,
+      "standalone_total_inr": null,
+      "bundle_price_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "popular": true,
       "purpose": "Broad 3-domain diagnostic covering Relationships, Career, and Wealth foundations.",
       "deliverables": [
@@ -340,7 +340,7 @@
         "Unified dashboard access with download library"
       ],
       "active": false,
-      "status": "paused_for_mvp"
+      "status": "coming_soon"
     },
     "comprehensive_bundle": {
       "bundle_id": "comprehensive_bundle",
@@ -350,11 +350,10 @@
       "basic_report_count": 1,
       "advanced_report_count": 2,
       "premium_report_count": 0,
-      "standalone_total_inr": 1219,
-      "bundle_price_inr": 1999,
-      "amount_paise": 199900,
-      "savings_inr": 220,
-      "savings_percent": 18,
+      "standalone_total_inr": null,
+      "bundle_price_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "purpose": "Deep exploration for seekers making major life decisions across multiple domains.",
       "deliverables": [
         "5 Complete 12-Page Advanced Master Reports",
@@ -363,7 +362,7 @@
         "7-Layer safe planetary remedy protocols for selected domains"
       ],
       "active": false,
-      "status": "paused_for_mvp"
+      "status": "coming_soon"
     }
   },
   "charm_ai": {
@@ -373,27 +372,27 @@
       "display_name": "Charm AI \u00b7 Free Preview",
       "price_inr": 0,
       "amount_paise": 0,
-      "questions_count": 1,
+      "questions_count": 3,
       "has_remedies": false,
-      "purpose": "Experience conversational Charm AI intelligence with one free inquiry.",
+      "purpose": "Experience conversational Charm AI intelligence with three free daily inquiries.",
       "deliverables": [
-        "1 Targeted Question Prediction",
-        "Instant Driver / Conductor token verification",
-        "24/7 web access"
+        "3 Free Exploratory Inquiries per Visitor per Day",
+        "Instant Mulank (Birth Day number) & Bhagyank (Life Path number) Context",
+        "24/7 Web Access in Charm AI"
       ]
     },
     "charm_single": {
       "pack_id": "charm_single",
-      "name": "Charm AI Starter Pass",
-      "display_name": "Charm AI \u00b7 Starter Pass (5 Questions)",
+      "name": "Charm AI Starter Pack",
+      "display_name": "Charm AI \u00b7 Starter Pack (5 Questions)",
       "price_inr": 199,
       "amount_paise": 19900,
       "questions_count": 5,
       "has_remedies": true,
       "purpose": "Focused query resolution for immediate decision crossroads.",
       "deliverables": [
-        "3 In-Depth Question Predictions",
-        "Acute execution timing windows (Hora & transit)",
+        "5 Guided Numerology Q&A Inquiries",
+        "Deterministic Dasha & Personal Year Window Context",
         "Grounded non-fatalistic practical guidance",
         "Credits valid for 6 months"
       ],
@@ -403,8 +402,9 @@
       "pack_id": "charm_multi",
       "name": "Multi-Reading Pack",
       "display_name": "Charm AI \u00b7 Multi-Reading Pack",
-      "price_inr": 399,
-      "amount_paise": 39900,
+      "price_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "questions_count": 10,
       "has_remedies": true,
       "popular": true,
@@ -417,14 +417,15 @@
         "Credits valid for 12 months"
       ],
       "active": false,
-      "status": "paused_for_mvp"
+      "status": "coming_soon"
     },
     "charm_extended": {
       "pack_id": "charm_extended",
       "name": "Extended Reading Pack",
       "display_name": "Charm AI \u00b7 Extended Pack",
-      "price_inr": 699,
-      "amount_paise": 69900,
+      "price_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "questions_count": 25,
       "has_remedies": true,
       "purpose": "Comprehensive conversational companion for active founders and decision-makers.",
@@ -436,7 +437,7 @@
         "Credits valid for 12 months with rollover"
       ],
       "active": false,
-      "status": "paused_for_mvp"
+      "status": "coming_soon"
     }
   },
   "consultation": {
@@ -444,17 +445,19 @@
       "consult_id": "consultation_standard",
       "name": "1-on-1 Expert Consultation",
       "display_name": "1-on-1 Expert Consultation",
-      "price_inr": 1050,
-      "amount_paise": 105000,
+      "price_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
+      "status": "coming_soon",
       "duration_minutes": 45,
       "mode": "Private Google Meet / Phone",
-      "practitioner": "Certified Senior Astrologer & Numerologist",
+      "practitioner": "Senior Astrologer & Numerologist",
       "purpose": "In-depth private live consultation for complex life transitions, business launches, and relationship alignment.",
       "deliverables": [
         "45-Minute Private 1-on-1 Consultation Session",
         "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
         "Comprehensive personal strategy & custom remedial protocols",
-        "Complimentary 12-Page Advanced PDF Dossier (\u20b9510 value)",
+        "Complimentary 12-Page Advanced PDF Dossier",
         "Audio recording and written consultation summary",
         "Free 1-time rescheduling up to 24 hours prior"
       ]
@@ -484,8 +487,10 @@
       "name": "Anveil my glowing charms",
       "tier": "advanced",
       "pages": 12,
-      "amount_inr": 510,
-      "amount_paise": 51000,
+      "amount_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
+      "waitlist_only": true,
       "currency": "INR",
       "deliverables": [
         "Everything in Basic plus Deep Analysis of All Present Numbers",
@@ -501,8 +506,10 @@
       "name": "Anveil every charm",
       "tier": "premium",
       "pages": 32,
-      "amount_inr": 1050,
-      "amount_paise": 105000,
+      "amount_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
+      "waitlist_only": true,
       "currency": "INR",
       "deliverables": [
         "Everything in Basic & Advanced plus Missing Numbers (Open Grid Cells) Analysis",
@@ -516,8 +523,9 @@
       "sku_id": "starter_bundle",
       "family": "bundle",
       "name": "Starter Bundle",
-      "amount_inr": 339,
-      "amount_paise": 33900,
+      "amount_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "currency": "INR",
       "deliverables": [
         "2 Complete 3-Page Basic PDF Reports",
@@ -530,8 +538,9 @@
       "sku_id": "discovery_bundle",
       "family": "bundle",
       "name": "Discovery Bundle",
-      "amount_inr": 1299,
-      "amount_paise": 129900,
+      "amount_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "currency": "INR",
       "deliverables": [
         "3 Complete 12-Page Advanced Master Reports",
@@ -544,8 +553,9 @@
       "sku_id": "comprehensive_bundle",
       "family": "bundle",
       "name": "Comprehensive Bundle",
-      "amount_inr": 1999,
-      "amount_paise": 199900,
+      "amount_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "currency": "INR",
       "deliverables": [
         "5 Complete 12-Page Advanced Master Reports",
@@ -588,8 +598,9 @@
       "family": "charm_ai",
       "name": "Multi-Reading Pack",
       "questions_count": 10,
-      "amount_inr": 399,
-      "amount_paise": 39900,
+      "amount_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "currency": "INR",
       "deliverables": [
         "10 Detailed Question Predictions",
@@ -604,8 +615,9 @@
       "family": "charm_ai",
       "name": "Extended Reading Pack",
       "questions_count": 25,
-      "amount_inr": 699,
-      "amount_paise": 69900,
+      "amount_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "currency": "INR",
       "deliverables": [
         "25 Deep In-Depth Predictions",
@@ -619,14 +631,15 @@
       "sku_id": "consultation_standard",
       "family": "consultation",
       "name": "1-on-1 Expert Consultation",
-      "amount_inr": 1050,
-      "amount_paise": 105000,
+      "amount_inr": null,
+      "amount_paise": null,
+      "display_price_label": "Coming soon, notify me",
       "currency": "INR",
       "deliverables": [
         "45-Minute Private 1-on-1 Consultation Session",
         "Birth Time Rectification (BTR) & Cross-Engine Chart Audit",
         "Comprehensive personal strategy & custom remedial protocols",
-        "Complimentary 12-Page Advanced PDF Dossier (\u20b9510 value)",
+        "Complimentary 12-Page Advanced PDF Dossier",
         "Audio recording and written consultation summary",
         "Free 1-time rescheduling up to 24 hours prior"
       ]
@@ -636,12 +649,10 @@
     "sku_id": "starter_bundle",
     "family": "bundle",
     "name": "Starter Bundle",
-    "amount_inr": 339,
-    "amount_paise": 33900,
+    "amount_inr": null,
+    "amount_paise": null,
+    "display_price_label": "Coming soon, notify me",
     "currency": "INR",
-    "savings_inr": 59,
-    "savings_percent": 15,
-    "digital_root": 6,
     "deliverables": [
       "2 Complete 3-Page Basic PDF Reports",
       "Choose any two topics across Love, Money, Work, or Growth",
@@ -653,12 +664,10 @@
     "sku_id": "discovery_bundle",
     "family": "bundle",
     "name": "Discovery Bundle",
-    "amount_inr": 1299,
-    "amount_paise": 129900,
+    "amount_inr": null,
+    "amount_paise": null,
+    "display_price_label": "Coming soon, notify me",
     "currency": "INR",
-    "savings_inr": 231,
-    "savings_percent": 15,
-    "digital_root": 3,
     "deliverables": [
       "3 Complete 12-Page Advanced Master Reports",
       "Choose any three topics from the entire catalogue",
@@ -670,12 +679,10 @@
     "sku_id": "comprehensive_bundle",
     "family": "bundle",
     "name": "Comprehensive Bundle",
-    "amount_inr": 1999,
-    "amount_paise": 199900,
+    "amount_inr": null,
+    "amount_paise": null,
+    "display_price_label": "Coming soon, notify me",
     "currency": "INR",
-    "savings_inr": 551,
-    "savings_percent": 22,
-    "digital_root": 1,
     "deliverables": [
       "5 Complete 12-Page Advanced Master Reports",
       "Complete multi-domain lifetime clarity across Love, Career, Wealth & Family",
@@ -718,10 +725,10 @@
     "family": "charm_ai",
     "name": "Charm AI Growth Pack",
     "questions_count": 10,
-    "amount_inr": 399,
-    "amount_paise": 39900,
+    "amount_inr": null,
+    "amount_paise": null,
+    "display_price_label": "Coming soon, notify me",
     "currency": "INR",
-    "digital_root": 3,
     "deliverables": [
       "10 Detailed Consultation Inquiries",
       "Customised 7-Layer safe remedies for all queries",
@@ -734,10 +741,10 @@
     "family": "charm_ai",
     "name": "Charm AI Extended Pack",
     "questions_count": 25,
-    "amount_inr": 699,
-    "amount_paise": 69900,
+    "amount_inr": null,
+    "amount_paise": null,
+    "display_price_label": "Coming soon, notify me",
     "currency": "INR",
-    "digital_root": 6,
     "deliverables": [
       "25 Deep Consultation Inquiries",
       "Interactive chart companion with transit radar",
@@ -749,8 +756,6 @@
     "version": "1.0.0",
     "active_skus": [
       "report_basic",
-      "report_advanced",
-      "report_premium",
       "charm_single"
     ],
     "products": {
@@ -761,12 +766,14 @@
       },
       "ADVANCED_REPORT": {
         "sku": "report_advanced",
-        "price_inr": 510,
+        "price_inr": null,
+        "display_price_label": "Coming soon, notify me",
         "pages": 12
       },
       "PREMIUM_REPORT": {
         "sku": "report_premium",
-        "price_inr": 1050,
+        "price_inr": null,
+        "display_price_label": "Coming soon, notify me",
         "pages": 32
       },
       "CHARM_AI_STARTER": {
@@ -809,11 +816,11 @@
       const clean = (skuId || '').toLowerCase();
       if (this.isNotifyMeTier(clean)) return null;
       if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential' || clean === 'alignments') return 199;
-      if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master' || clean === 'glowing') return 510;
-      if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine' || clean === 'every_charm') return 1050;
+      if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master' || clean === 'glowing') return null;
+      if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine' || clean === 'every_charm') return null;
       if (clean === 'charm_single' || clean === 'charm_starter' || clean === 'starter_5q') return 199;
       if (CATALOG.report_tiers[clean]) return CATALOG.report_tiers[clean].price_inr;
-      return 199;
+      return null;
     },
 
     getPrice(skuId, nowMs, endsAtOverride, startsAtOverride) {
@@ -833,8 +840,6 @@
       const clean = (skuId || '').toLowerCase();
       if (this.isNotifyMeTier(clean)) return null;
       if (clean === 'basic' || clean === 'report_basic' || clean === 'report_essential' || clean === 'alignments') return 399;
-      if (clean === 'advanced' || clean === 'report_advanced' || clean === 'report_master' || clean === 'glowing') return 1020;
-      if (clean === 'premium' || clean === 'report_premium' || clean === 'report_divine' || clean === 'every_charm') return 2100;
       return null;
     },
 
@@ -864,31 +869,18 @@
 
     isMvpActive(skuId) {
       const clean = (skuId || '').toLowerCase();
-      return ['report_basic', 'report_advanced', 'report_premium', 'charm_single', 'charm_starter'].includes(clean);
+      return ['report_basic', 'charm_single', 'charm_starter'].includes(clean);
     },
 
     isNotifyMeHigherTiersEnabled() {
-      if (typeof window !== 'undefined' && typeof window.__NV_NOTIFY_ME_HIGHER_TIERS === 'boolean') {
-        return window.__NV_NOTIFY_ME_HIGHER_TIERS;
-      }
-      if (typeof window !== 'undefined' && window.location) {
-        const host = window.location.hostname || '';
-        if (host === 'localhost' || host === '127.0.0.1') {
-          const sp = new URLSearchParams(window.location.search || '');
-          if (sp.get('nv_notify_me_preview') === '1') return true;
-          if (sp.get('nv_notify_me_preview') === '0') return false;
-        }
-      }
-      return Boolean(CATALOG.feature_flags && CATALOG.feature_flags.notify_me_higher_tiers);
+      return true;
     },
 
     isNotifyMeTier(skuId) {
       const clean = (skuId || '').toLowerCase();
       if (clean === 'planner_2027' || clean === 'year_ahead_2027') {
-        if (typeof window !== 'undefined' && window.__NV_PLANNER_2027_LIVE === true) return false;
         return true;
       }
-      if (!this.isNotifyMeHigherTiersEnabled()) return false;
       return ['advanced', 'report_advanced', 'report_master', 'glowing', 'premium', 'report_premium', 'report_divine', 'every_charm'].includes(clean);
     },
 

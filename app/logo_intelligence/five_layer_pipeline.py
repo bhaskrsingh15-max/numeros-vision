@@ -7,10 +7,10 @@ Deterministic 5-Layer Logo Intelligence Pipeline for Numeros Vision (Phase 5).
 Implements:
 - Layer 1: Business & Category Fit (Lülfesmann & Riegel 2022, Jiang 2016, Zeng 2025,
            Luffarelli 2019, Chen 2025, Madden 2000).
-- Layer 2: Read-Only Numerology Profile per Owner & up to 4 Active Partners
-           (single-digit roots 1..9 only; zero 11/22/33 master exceptions).
-- Layer 3: Partner Palette, Shape & Symbol Reconciliation + Charm Basis Label
-           ("both systems agree" or "numerology basis only" — never alters numerology).
+- Layer 2: Read-Only Numerology Profile per Owner & Uncapped Active Partners
+           (> 4 active partners flagged for consultant review; single-digit roots 1..9 only).
+- Layer 3: Partner Palette, Shape & Symbol Reconciliation + Factual Engine-Check Label
+           (states strictly what the engine checked — never alters numerology).
 - Layer 4: Deterministic Vector Template Build / Upload Inspection & All 9 Hard Gates.
 - Layer 5: Shukla Paksha Timing (3 verified IST dates) + Ordered Balancing Remedies
            (1. Element balancing, 2. Planet balancing, 3. Affirmation).
@@ -80,14 +80,17 @@ TAXONOMY_TO_RULEBOOK_CATEGORY: Dict[str, str] = {
     "media_creative_entertainment": "creative_design_media",
 }
 
+PARTNER_CONSENT_TEXT = "{{PARTNER_CONSENT_TEXT_PENDING}}"
+
 PAID_TIERS_CATALOG: List[Dict[str, Any]] = [
     {
         "tier_id": "deep_audit",
         "name": "Deep Logo Audit",
-        "offer_price_inr": 510,
-        "list_price_inr": 1020,
-        "offer_digit_root": 6,
-        "list_digit_root": 3,
+        "offer_price_inr": None,
+        "list_price_inr": None,
+        "status": "waitlist",
+        "waitlist_only": True,
+        "display_price_label": "Coming soon, notify me",
         "owner_review_required": True,
         "delivery_note": "Reviewed personally by the owner before delivery.",
         "includes": [
@@ -99,10 +102,11 @@ PAID_TIERS_CATALOG: List[Dict[str, Any]] = [
     {
         "tier_id": "rework",
         "name": "Existing Logo Rework",
-        "offer_price_inr": 1500,
-        "list_price_inr": 2400,
-        "offer_digit_root": 6,
-        "list_digit_root": 6,
+        "offer_price_inr": None,
+        "list_price_inr": None,
+        "status": "waitlist",
+        "waitlist_only": True,
+        "display_price_label": "Coming soon, notify me",
         "owner_review_required": True,
         "delivery_note": "Reviewed personally by the owner before delivery.",
         "includes": [
@@ -114,10 +118,11 @@ PAID_TIERS_CATALOG: List[Dict[str, Any]] = [
     {
         "tier_id": "new_logo",
         "name": "New Deterministic Brand Logo",
-        "offer_price_inr": 3300,
-        "list_price_inr": 5100,
-        "offer_digit_root": 6,
-        "list_digit_root": 6,
+        "offer_price_inr": None,
+        "list_price_inr": None,
+        "status": "waitlist",
+        "waitlist_only": True,
+        "display_price_label": "Coming soon, notify me",
         "owner_review_required": True,
         "delivery_note": "Reviewed personally by the owner before delivery.",
         "includes": [
@@ -129,14 +134,15 @@ PAID_TIERS_CATALOG: List[Dict[str, Any]] = [
     {
         "tier_id": "startup_pack",
         "name": "Startup Brand & Name Pack",
-        "offer_price_inr": 6000,
-        "list_price_inr": 8700,
-        "offer_digit_root": 6,
-        "list_digit_root": 6,
+        "offer_price_inr": None,
+        "list_price_inr": None,
+        "status": "waitlist",
+        "waitlist_only": True,
+        "display_price_label": "Coming soon, notify me",
         "owner_review_required": True,
         "delivery_note": "Reviewed personally by the owner before delivery.",
         "includes": [
-            "Chaldean & phonetic name alignment across up to 4 active partners",
+            "Chaldean & phonetic name alignment across active partners (more than 4 active partners flagged for consultant review)",
             "Complete pure-SVG logo suite + colour & typography specification",
             "Shukla Paksha (waxing lunar fortnight) activation schedule & workspace balancing guide",
         ],
@@ -233,6 +239,7 @@ def _clean_copy(value: Any, *, key_name: str = "") -> Any:
         "accent_foreground_hex",
         "extracted_text",
         "wordmark",
+        "partner_consent_text",
     }
     if key_name in preserve_keys:
         return value
@@ -372,10 +379,13 @@ def _evaluate_charm_basis_label(
     owner_birth_lon: Optional[float],
 ) -> Dict[str, Any]:
     """
-    Astrology from the Charm backend ONLY adds a label:
-    `"both systems agree"` or `"numerology basis only"`.
-    It NEVER changes any numerology number, palette, shape, or gate decision.
+    States strictly what the engine checks without overclaiming:
+    - Without birth time / Swiss Ephemeris: Chaldean name + Mulank–Bhagyank numerology tables only.
+    - With birth time + Swiss Ephemeris: compares owner Mulank (Birth Day number) friendly-planet
+      table against sidereal Lahiri Moon-sign (Chandra Rashi) ruler as an informational check only;
+      NEVER alters any numerology number, palette, shape, or gate decision.
     """
+    numerology_only_label = "Checked Chaldean name and Mulank–Bhagyank numerology tables only (birth time not supplied)"
     if (
         not owner_dob_tuple
         or not owner_driver_root
@@ -385,9 +395,9 @@ def _evaluate_charm_basis_label(
         or _swe is None
     ):
         return {
-            "charm_basis_label": "numerology basis only",
+            "charm_basis_label": numerology_only_label,
             "astrology_checked": False,
-            "note": "Birth time not supplied or sidereal check not requested; decisions rest on deterministic numerology basis only.",
+            "note": "Birth time not supplied or sidereal Moon-sign check unavailable; engine checked Chaldean name and Mulank–Bhagyank numerology tables only.",
             "basis": "traditional rule",
             "evidence_label": EvidenceLabel.TRADITIONAL_RULE.value,
         }
@@ -395,9 +405,9 @@ def _evaluate_charm_basis_label(
     m = re.fullmatch(r"(\d{1,2}):(\d{2})", str(owner_birth_time).strip())
     if not m:
         return {
-            "charm_basis_label": "numerology basis only",
+            "charm_basis_label": numerology_only_label,
             "astrology_checked": False,
-            "note": "Birth time format not HH:MM; using numerology basis only.",
+            "note": "Birth time format not HH:MM; engine checked Chaldean name and Mulank–Bhagyank numerology tables only.",
             "basis": "traditional rule",
             "evidence_label": EvidenceLabel.TRADITIONAL_RULE.value,
         }
@@ -405,9 +415,9 @@ def _evaluate_charm_basis_label(
     hh, mm = int(m.group(1)), int(m.group(2))
     if not (0 <= hh <= 23 and 0 <= mm <= 59):
         return {
-            "charm_basis_label": "numerology basis only",
+            "charm_basis_label": numerology_only_label,
             "astrology_checked": False,
-            "note": "Birth time out of 00:00–23:59 range; using numerology basis only.",
+            "note": "Birth time out of 00:00–23:59 range; engine checked Chaldean name and Mulank–Bhagyank numerology tables only.",
             "basis": "traditional rule",
             "evidence_label": EvidenceLabel.TRADITIONAL_RULE.value,
         }
@@ -421,11 +431,15 @@ def _evaluate_charm_basis_label(
     moon_ruler_root = RASHI_RULER_ROOT[rashi_idx]
 
     owner_rule = get_rulebook_v1().get_single_digit_numerology_rule(owner_driver_root)
-    agrees = (
+    same_or_friendly = (
         moon_ruler_root == owner_driver_root
         or moon_ruler_root in owner_rule["friendly_numbers"]
     )
-    label = "both systems agree" if agrees else "numerology basis only"
+    label = (
+        "Checked owner Mulank (Birth Day number) planet and sidereal Lahiri Moon-sign ruler: friendly planet group (logo rules use numerology only)"
+        if same_or_friendly
+        else "Checked owner Mulank (Birth Day number) planet and sidereal Lahiri Moon-sign ruler: different planet groups (logo rules use numerology only)"
+    )
     return {
         "charm_basis_label": label,
         "astrology_checked": True,
@@ -433,9 +447,7 @@ def _evaluate_charm_basis_label(
         "moon_rashi_index": rashi_idx + 1,
         "moon_sign_ruler_root": moon_ruler_root,
         "note": (
-            "Sidereal Chandra Rashi (Moon sign) ruler aligns with the numerology profile (`both systems agree`). Astrology adds this confirmation label only and never alters numerology selections."
-            if agrees
-            else "Sidereal chart carries a distinct planetary emphasis (`numerology basis only`); numerology selections remain unchanged."
+            "Engine checked owner Mulank (Birth Day number) friendly-planet table against sidereal Lahiri Chandra Rashi (Moon sign) ruler; logo palette, shape, and gate selections remain governed strictly by numerology."
         ),
         "basis": "calculated",
         "evidence_label": EvidenceLabel.TRADITIONAL_RULE.value,
@@ -450,12 +462,18 @@ def build_partner_profiles_layer2(
     dpdp_consent: bool,
 ) -> Dict[str, Any]:
     """
-    Layer 2: Read-only numerology profiles for Owner + up to 4 Active Partners.
+    Layer 2: Read-only numerology profiles for Owner + uncapped Active Partners.
+    More than 4 active partners are accepted and flagged for consultant review.
     """
     raw_partners = list(partners or [])
     active_partners = [p for p in raw_partners if isinstance(p, dict) and p.get("is_active", True) is not False]
-    if len(active_partners) > 4:
-        raise LogoInputError("Logo Intelligence supports up to 4 active partners in addition to the primary owner.")
+    active_partner_count = len(active_partners)
+    consultant_review_required = active_partner_count > 4
+    consultant_review_reason = (
+        f"More than 4 active partners supplied ({active_partner_count} active partners) — flagged for consultant review."
+        if consultant_review_required
+        else None
+    )
 
     has_any_dob = bool((owner_dob and str(owner_dob).strip()) or any((p.get("dob") or "").strip() for p in active_partners))
     if has_any_dob and not dpdp_consent:
@@ -521,6 +539,10 @@ def build_partner_profiles_layer2(
         return {
             "status": "not configured",
             "profile_count": 0,
+            "active_partners_count": active_partner_count,
+            "consultant_review_required": consultant_review_required,
+            "consultant_review_reason": consultant_review_reason,
+            "partner_consent_text": PARTNER_CONSENT_TEXT,
             "profiles": [],
             "note": "No owner or active partner birth dates supplied; partner numerology profile is marked not configured.",
             "basis": "not configured",
@@ -530,6 +552,10 @@ def build_partner_profiles_layer2(
     return {
         "status": "resolved",
         "profile_count": len(profiles),
+        "active_partners_count": active_partner_count,
+        "consultant_review_required": consultant_review_required,
+        "consultant_review_reason": consultant_review_reason,
+        "partner_consent_text": PARTNER_CONSENT_TEXT,
         "profiles": profiles,
         "basis": "calculated",
         "evidence_label": EvidenceLabel.TRADITIONAL_RULE.value,
@@ -1235,8 +1261,12 @@ def run_five_layer_logo_evaluation(payload: Dict[str, Any], *, uploaded_bytes: O
         },
         "traditional_alignment": {
             "pillar": "Traditional Numerology & Timing Alignment",
-            "status": "aligned" if not has_enemy_conflict else "conflict_detected",
+            "status": "consultant_review_required" if layer2.get("consultant_review_required") else ("aligned" if not has_enemy_conflict else "conflict_detected"),
             "partner_profiles_evaluated": layer2["profile_count"],
+            "active_partners_count": layer2.get("active_partners_count", 0),
+            "consultant_review_required": bool(layer2.get("consultant_review_required")),
+            "consultant_review_reason": layer2.get("consultant_review_reason"),
+            "partner_consent_text": PARTNER_CONSENT_TEXT,
             "reconciled_palette": layer3["reconciled_palette"],
             "excluded_enemy_families": layer3["partner_colour_matrix"]["excluded_enemy_families"],
             "symbol_selection": layer3["symbol_selection"],
@@ -1258,6 +1288,8 @@ def run_five_layer_logo_evaluation(payload: Dict[str, Any], *, uploaded_bytes: O
         named_gaps.append(
             f"Category Fit: `{active_primary_fam}` sits outside `{layer1['category_id']}` norms ({', '.join(cat_allowed[:3])})."
         )
+    if len(named_gaps) < 3 and layer2.get("consultant_review_required") and layer2.get("consultant_review_reason"):
+        named_gaps.append(str(layer2["consultant_review_reason"]))
 
     intake_summary = {
         "q01_business_name": business_name or "not configured",
@@ -1275,8 +1307,10 @@ def run_five_layer_logo_evaluation(payload: Dict[str, Any], *, uploaded_bytes: O
         "q13_preferred_logo_type": preferred_logo_type,
         "q14_lockup_variant": lockup_variant,
         "q15_primary_touchpoint": primary_touchpoint,
-        "q16_active_partners_count": max(0, layer2["profile_count"] - 1),
+        "q16_active_partners_count": layer2.get("active_partners_count", max(0, layer2["profile_count"] - 1)),
+        "q16_consultant_review_required": bool(layer2.get("consultant_review_required")),
         "q17_dpdp_consent": dpdp_consent,
+        "q17_partner_consent_text": PARTNER_CONSENT_TEXT,
     }
 
     result: Dict[str, Any] = {
@@ -1324,6 +1358,7 @@ def run_five_layer_logo_evaluation(payload: Dict[str, Any], *, uploaded_bytes: O
             "layer5_activation": layer5,
         },
         "paid_tiers": PAID_TIERS_CATALOG,
+        "partner_consent_text": PARTNER_CONSENT_TEXT,
         "owner_review_policy": "Every paid output is reviewed by the owner before delivery.",
     }
     if generated_assets is not None:

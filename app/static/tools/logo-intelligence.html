@@ -947,17 +947,17 @@
           </div>
         </div>
 
-        <!-- Question 16: Owner + Up to 4 Active Partners -->
+        <!-- Question 16: Owner + Active Partners (Uncapped; >4 flagged for consultant review) -->
         <div style="margin-top:24px; padding-top:18px; border-top:1px dashed rgba(201,162,39,0.3);">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
             <div>
-              <div class="section-eyebrow" style="margin-bottom:2px;">16. Owner &amp; Up to 4 Active Partners (Optional)</div>
+              <div class="section-eyebrow" style="margin-bottom:2px;">16. Owner &amp; Active Partners (Optional · More than 4 flagged for consultant review)</div>
               <div style="font-size:0.83rem; color:#7A654D;">
-                Common friendly colours become the main colour; friendly + neutral colours become accents; any colour enemy to any active partner is excluded and balanced through workspace remedies.
+                Common friendly colours become the main colour; friendly + neutral colours become accents; any colour enemy to any active partner is excluded and balanced through workspace remedies. More than 4 active partners are flagged for consultant review.
               </div>
             </div>
             <button type="button" class="btn-export" style="padding:9px 14px; font-size:0.76rem;" onclick="window.nvAddPartnerRow()">
-              + Add Active Partner (Max 4)
+              + Add Active Partner
             </button>
           </div>
 
@@ -989,11 +989,11 @@
           <div id="partnersContainer"></div>
         </div>
 
-        <!-- Question 17: DPDP Consent -->
+        <!-- Question 17: Partner & DPDP Consent -->
         <div style="margin-top:18px; padding:12px 16px; border-radius:12px; background:#FFFDF7; border:1px solid rgba(201,162,39,0.28);">
           <label style="display:flex; align-items:flex-start; gap:10px; font-size:0.82rem; text-transform:none; letter-spacing:normal; font-weight:500; color:#523E28; line-height:1.55; cursor:pointer; margin:0;">
             <input type="checkbox" id="dpdpConsent" style="margin-top:3px; accent-color:#8B6914;" />
-            <span><strong>17. DPDP Act 2023 Consent:</strong> I consent to Numeros Vision processing the business brief and any supplied owner or partner birth details solely to compute this deterministic five-layer logo evaluation, with zero unsolicited sharing.</span>
+            <span id="partnerConsentTextLabel">{{PARTNER_CONSENT_TEXT_PENDING}}</span>
           </label>
         </div>
 
