@@ -1863,13 +1863,29 @@ async function reconcileStaleOrderWithRazorpay(order, env, now, request, ctx) {
 async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now, source, request) {
   if (!order || !order.id) return { error: 'Invalid order' };
 
-  // 0. Check for existing report job
+  const pack = getPackById(order.pack_id);
+  const isPdfPack = isPdfReportPackId(order.pack_id);
+
+  // 0. Check for existing fulfillment artifact (report_jobs ONLY for PDF report packs; credit_ledger for credit packs)
   let existingJob = null;
-  if (env && env.DB) {
-    existingJob = await env.DB.prepare('SELECT id, status FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(order.id).first();
-  } else if (typeof memoryStore !== 'undefined' && memoryStore.reportJobs) {
-    for (const j of memoryStore.reportJobs.values()) {
-      if (j.order_id === order.id) { existingJob = j; break; }
+  let creditAlreadyGranted = false;
+  if (isPdfPack) {
+    if (env && env.DB) {
+      existingJob = await env.DB.prepare('SELECT id, status FROM report_jobs WHERE order_id = ? ORDER BY created_at DESC LIMIT 1').bind(order.id).first();
+    } else if (typeof memoryStore !== 'undefined' && memoryStore.reportJobs) {
+      for (const j of memoryStore.reportJobs.values()) {
+        if (j.order_id === order.id) { existingJob = j; break; }
+      }
+    }
+  } else if (pack && pack.questions_count) {
+    const orderRefId = 'order_' + order.id;
+    if (env && env.DB) {
+      const crdRow = await env.DB.prepare('SELECT id FROM credit_ledger WHERE ref_id = ?').bind(orderRefId).first();
+      if (crdRow) creditAlreadyGranted = true;
+    } else if (typeof memoryStore !== 'undefined' && memoryStore.creditLedger) {
+      for (const c of memoryStore.creditLedger.values()) {
+        if (c.ref_id === orderRefId) { creditAlreadyGranted = true; break; }
+      }
     }
   }
 
@@ -1884,19 +1900,20 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
     }
   }
 
+  const fulfillmentArtifactReady = isPdfPack ? Boolean(existingJob) : (!(pack && pack.questions_count) || creditAlreadyGranted);
+
   // Purely idempotent short-circuit: already fulfilled end-to-end
-  if (order.status === 'PAID' && existingJob && emailAlreadySent) {
+  if (order.status === 'PAID' && fulfillmentArtifactReady && emailAlreadySent) {
     return {
       alreadyFulfilled: true,
       orderId: order.id,
       packId: order.pack_id,
       subjectId: order.subject_id,
-      jobId: existingJob.id
+      jobId: existingJob ? existingJob.id : null
     };
   }
 
-  const pack = getPackById(order.pack_id);
-  let createdJobId = existingJob ? existingJob.id : null;
+  let createdJobId = (isPdfPack && existingJob) ? existingJob.id : null;
 
   if (env && env.DB) {
     // 1. Update order status to PAID
@@ -1962,8 +1979,8 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
       }
     }
 
-    // 6. Queue report generation job (Idempotent: exactly once)
-    if (!createdJobId) {
+    // 6. Queue report generation job ONLY for PDF report packs (never for charm_single or other non-PDF packs)
+    if (isPdfPack && !createdJobId) {
       const jobId = 'job_' + now + '_' + getRandomHex(4);
       createdJobId = jobId;
       await env.DB.prepare(
@@ -1982,7 +1999,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
       if (memoryStore.payments && !memoryStore.payments.has(paymentId)) {
         memoryStore.payments.set(paymentId, { id: 'pmt_' + now, order_id: order.id, rzp_payment_id: paymentId, amount_paise: amountPaise || order.amount_paise, status: 'CAPTURED', captured_at: now });
       }
-      if (memoryStore.entitlements) {
+      if (order.subject_id && memoryStore.entitlements) {
         memoryStore.entitlements.set(`${order.user_id}_${order.subject_id}_${order.pack_id}`, {
           user_id: order.user_id,
           subject_id: order.subject_id,
@@ -2014,7 +2031,7 @@ async function fulfillPaidOrder(order, paymentId, amountPaise, method, env, now,
           });
         }
       }
-      if (!createdJobId && memoryStore.reportJobs) {
+      if (isPdfPack && !createdJobId && memoryStore.reportJobs) {
         const jobId = 'job_' + now + '_' + getRandomHex(4);
         createdJobId = jobId;
         memoryStore.reportJobs.set(jobId, {
@@ -3524,7 +3541,6 @@ export default {
   getPackById,
   resolveEffectivePackPricePaise,
   isPdfReportPackId,
-  fulfillPaidOrder,
   async fetch(request, env, ctx) {
     const isPreview = isPreviewRequest(request, env);
     const finalizeResponse = (resp, forceNoCache = false) => {
@@ -6431,6 +6447,33 @@ export default {
       }
 
       if (order.status === 'PAID') {
+        if (!isPdfReportPackId(order.pack_id)) {
+          const orderRefId = 'order_' + order.id;
+          let hasCreditRow = false;
+          if (env.DB) {
+            const crdRow = await env.DB.prepare('SELECT id FROM credit_ledger WHERE ref_id = ?').bind(orderRefId).first();
+            hasCreditRow = Boolean(crdRow);
+          } else if (typeof memoryStore !== 'undefined' && memoryStore.creditLedger) {
+            for (const c of memoryStore.creditLedger.values()) {
+              if (c.ref_id === orderRefId) { hasCreditRow = true; break; }
+            }
+          }
+          if (!hasCreditRow) {
+            await fulfillPaidOrder(order, order.rzp_payment_id || 'recovery_payment', order.amount_paise, 'recovery', env, Date.now(), 'status_poll_safety_net', request);
+          }
+          return new Response(JSON.stringify({
+            orderId: order.id,
+            rzpOrderId: order.rzp_order_id,
+            status: 'paid',
+            packId: order.pack_id,
+            subjectId: order.subject_id,
+            jobId: null,
+            jobStatus: 'NOT_APPLICABLE',
+            reportStatus: 'credits_granted',
+            message: 'Payment received. Your Charm AI question credits have been added.'
+          }), { status: 200, headers: corsHeaders });
+        }
+
         let jobStatus = REPORT_JOB_STATUS.QUEUED;
         let jobId = null;
         if (env.DB) {
@@ -6833,8 +6876,8 @@ export default {
             if (j.order_id === tokenOrder.id) { job = j; break; }
           }
         }
-        // SAFETY NET: If token order is PAID and has no report job, fulfill idempotently now
-        if (tokenOrder.status === 'PAID' && !job) {
+        // SAFETY NET: If token order is PAID PDF report and has no report job, fulfill idempotently now
+        if (tokenOrder.status === 'PAID' && isPdfReportPackId(tokenOrder.pack_id) && !job) {
           console.log(`[DASHBOARD_SAFETY_NET] Token order ${tokenOrder.id} is PAID but has no report job. Fulfilling idempotently now...`);
           await fulfillPaidOrder(tokenOrder, tokenOrder.rzp_payment_id || 'recovery_payment', tokenOrder.amount_paise, 'recovery', env, Date.now(), 'dashboard_safety_net', request);
           if (env.DB) {
@@ -6967,7 +7010,7 @@ export default {
         console.warn('[DASHBOARD_10MIN_FALLBACK_WARN]', reconcileErr);
       }
 
-      // SAFETY NET: If user has any PAID orders with missing report jobs, fulfill them now idempotently
+      // SAFETY NET: If user has any PAID orders missing their expected artifact (report_jobs for PDF packs, credit_ledger for credit packs), fulfill them now idempotently
       try {
         let unfulfilledOrders = [];
         if (env.DB) {
@@ -6975,18 +7018,28 @@ export default {
             SELECT o.* FROM orders o
             WHERE o.user_id = ? AND o.status = 'PAID'
               AND NOT EXISTS (SELECT 1 FROM report_jobs rj WHERE rj.order_id = o.id)
+              AND NOT EXISTS (SELECT 1 FROM credit_ledger cl WHERE cl.ref_id = 'order_' || o.id)
           `).bind(user.user_id).all();
-          unfulfilledOrders = (missingRows && missingRows.results) || [];
+          unfulfilledOrders = ((missingRows && missingRows.results) || []).filter(ord =>
+            isPdfReportPackId(ord.pack_id) || Boolean(getPackById(ord.pack_id)?.questions_count)
+          );
         } else if (typeof memoryStore !== 'undefined' && memoryStore.orders) {
           for (const ord of memoryStore.orders.values()) {
             if (ord.user_id === user.user_id && ord.status === 'PAID') {
-              const hasJob = Array.from(memoryStore.reportJobs.values()).some(j => j.order_id === ord.id);
-              if (!hasJob) unfulfilledOrders.push(ord);
+              if (isPdfReportPackId(ord.pack_id)) {
+                const hasJob = Array.from(memoryStore.reportJobs.values()).some(j => j.order_id === ord.id);
+                if (!hasJob) unfulfilledOrders.push(ord);
+              } else {
+                const hasCredit = memoryStore.creditLedger
+                  ? Array.from(memoryStore.creditLedger.values()).some(c => c.ref_id === 'order_' + ord.id)
+                  : false;
+                if (!hasCredit) unfulfilledOrders.push(ord);
+              }
             }
           }
         }
         for (const uOrd of unfulfilledOrders) {
-          console.log(`[DASHBOARD_SAFETY_NET] User order ${uOrd.id} is PAID but has no report job. Fulfilling idempotently now...`);
+          console.log(`[DASHBOARD_SAFETY_NET] User order ${uOrd.id} is PAID but unfulfilled. Fulfilling idempotently now...`);
           await fulfillPaidOrder(uOrd, uOrd.rzp_payment_id || 'recovery_payment', uOrd.amount_paise, 'recovery', env, Date.now(), 'dashboard_safety_net', request);
         }
       } catch (safetyErr) {
@@ -8949,7 +9002,7 @@ export default {
         }
       }
 
-      // Query PAID but unfulfilled orders (status fields only — ZERO personal data)
+      // Query PAID but unfulfilled orders (status fields only — ZERO personal data; non-PDF packs verify credit_ledger, PDF packs verify report_jobs)
       let paidUnfulfilledOrders = [];
       if (env.DB) {
         try {
@@ -8958,6 +9011,7 @@ export default {
             FROM orders o
             WHERE o.status = 'PAID'
               AND NOT EXISTS (SELECT 1 FROM report_jobs rj WHERE rj.order_id = o.id)
+              AND NOT EXISTS (SELECT 1 FROM credit_ledger cl WHERE cl.ref_id = 'order_' || o.id)
             ORDER BY o.created_at DESC
           `).all();
           paidUnfulfilledOrders = (puRows && puRows.results) || [];
@@ -8965,8 +9019,10 @@ export default {
       } else if (typeof memoryStore !== 'undefined' && memoryStore.orders) {
         for (const o of memoryStore.orders.values()) {
           if (o.status === 'PAID') {
-            const hasJob = Array.from(memoryStore.reportJobs.values()).some(j => j.order_id === o.id);
-            if (!hasJob) {
+            const fulfilled = isPdfReportPackId(o.pack_id)
+              ? Array.from(memoryStore.reportJobs.values()).some(j => j.order_id === o.id)
+              : (memoryStore.creditLedger ? Array.from(memoryStore.creditLedger.values()).some(c => c.ref_id === 'order_' + o.id) : false);
+            if (!fulfilled) {
               paidUnfulfilledOrders.push({
                 id: o.id,
                 pack_id: o.pack_id,

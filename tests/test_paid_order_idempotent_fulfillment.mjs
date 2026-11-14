@@ -103,7 +103,8 @@ function createMockEnv(overrides = {}) {
             for (const o of memoryDB.orders.values()) {
               if (o.user_id === p[0] && o.status === 'PAID') {
                 const hasJob = Array.from(memoryDB.report_jobs.values()).some(j => j.order_id === o.id);
-                if (!hasJob) unfulfilled.push(o);
+                const hasCredit = Array.from(memoryDB.credit_ledger.values()).some(c => c.ref_id === 'order_' + o.id);
+                if (!hasJob && !hasCredit) unfulfilled.push(o);
               }
             }
             return { results: unfulfilled };
@@ -150,7 +151,8 @@ function createMockEnv(overrides = {}) {
             for (const o of memoryDB.orders.values()) {
               if (o.status === 'PAID') {
                 const hasJob = Array.from(memoryDB.report_jobs.values()).some(j => j.order_id === o.id);
-                if (!hasJob) {
+                const hasCredit = Array.from(memoryDB.credit_ledger.values()).some(c => c.ref_id === 'order_' + o.id);
+                if (!hasJob && !hasCredit) {
                   unfulfilled.push({
                     id: o.id,
                     pack_id: o.pack_id,
